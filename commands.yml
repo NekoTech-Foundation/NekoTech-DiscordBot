@@ -1,0 +1,111 @@
+# Use this file to manage the loading of slash commands in your Discord.
+# Set the value to 'true' to enable a command or 'false' to disable it.
+# Changes require a bot restart to take effect.
+
+# Fun Commands - Commonly used and fun commands
+advice: false
+coinflip: true
+darkjoke: true
+fact: false
+fliptext: true
+lennyface: true
+meme: true
+guess: false
+2048: true
+8ball: true
+roll: true
+hangman: true
+slap: true
+kill: true
+hug: true
+kiss: true
+coffee: true
+rizz: true
+pickupline: true
+image: true
+wordle: true
+ascii: true
+quote: true
+roast: true
+compliment: true
+rps: true
+tictactoe: true
+connectfour: false
+balance: true
+beg: true
+blackjack: true
+crime: true
+daily: true
+deposit: true
+rob: true
+slot: true
+transfer: true
+withdraw: true
+work: true
+store: true
+booster: true
+inventory: true
+economy: true
+roulette: true
+fish: true
+play: true
+music: true
+
+# General Commands - Commonly used and fun commands
+help: true
+user: true
+serverinfo: true
+botinfo: true
+snipe: true
+suggestion: true
+Accept: true
+Deny: true
+say: true
+reminder: true
+giveaway: true
+leaderboard: true
+rank: true
+level: true
+General: true
+
+# Moderation Commands - Tools for moderators to manage the server
+role: false
+antihoist: false
+tempban: false
+clearchannel: false
+clearhistory: false
+cleartimeout: false
+history: false
+kick: false
+poll: false
+purge: true
+removerole: false
+timeout: false
+warn: true
+unwarn: false
+slowmode: false
+temprole: false
+nickname: true
+moderation: false
+"Report Message": true
+
+# Utility Commands - Various utility and administrative commands
+tickets: false
+tempvoice: false
+afk: true
+botavatar: true
+invites: false
+inviter: false
+ping: true
+backup: false
+channelstats: false
+autoreact: false
+botactivity: true
+autoresponse: false
+translate: true
+steal: true
+embed: true
+reload: true
+
+# Addon Commands - Commands added by addons
+test: true
