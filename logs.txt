@@ -610,3 +610,3082 @@ Bot Version: 1.8.5[2025-10-12T13:20:49.861Z] [DEBUG] Queue persistence enabled -
 [2025-10-12T13:20:49.960Z] [DEBUG] Initialized MusicManager
 
 [10/12/2025, 8:20:50 PM] [READY] Bot is now online and ready!20:20 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 8:29:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T13:29:17.744Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T13:29:17.745Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T13:29:17.745Z] [DEBUG] Applying voice connection patches
+[2025-10-12T13:29:17.746Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T13:29:17.746Z] [DEBUG] Voice state update handler patched
+[2025-10-12T13:29:17.746Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T13:29:17.831Z] [DEBUG] Registering player events (first time)
+[2025-10-12T13:29:17.831Z] [DEBUG] Registered player event handlers
+[2025-10-12T13:29:17.859Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T13:29:17.860Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 8:29:17 PM] [READY] Bot is now online and ready!20:29 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:00:52 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:00:55.540Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:00:55.540Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:00:55.540Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:00:55.541Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:00:55.541Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:00:55.541Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:00:55.614Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:00:55.615Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:00:55.647Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:00:55.647Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:00:55 PM] [READY] Bot is now online and ready!21:01 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:01:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:01:22.700Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:01:22.701Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:01:22.702Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:01:22.702Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:01:22.702Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:01:22.703Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:01:22.786Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:01:22.786Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:01:22.818Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:01:22.818Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:01:22 PM] [READY] Bot is now online and ready!21:01 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:03:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/12/2025, 9:03:27 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:03:35.396Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:03:35.397Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:03:35.397Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:03:35.397Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:03:35.398Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:03:35.398Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:03:35.494Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:03:35.495Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:03:35.528Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:03:35.528Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:03:35 PM] [READY] Bot is now online and ready!21:03 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:04:34 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:04:42.269Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:04:42.269Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:04:42.270Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:04:42.270Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:04:42.270Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:04:42.271Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:04:46.397Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:04:46.397Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:04:46.432Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:04:46.432Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:04:46 PM] [READY] Bot is now online and ready!21:04 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:05:15 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:05:23.389Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:05:23.390Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:05:23.390Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:05:23.391Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:05:23.391Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:05:23.392Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:05:23.473Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:05:23.473Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:05:23.507Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:05:23.507Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:05:27 PM] [READY] Bot is now online and ready!21:05 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:06:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:06:20.893Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:06:20.894Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:06:20.894Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:06:20.895Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:06:20.895Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:06:20.895Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:06:20.967Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:06:20.967Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:06:20.997Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:06:20.997Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:06:21 PM] [READY] Bot is now online and ready!21:06 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:07:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:07:18.758Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:07:18.758Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:07:18.759Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:07:18.759Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:07:18.759Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:07:18.760Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:07:18.848Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:07:18.848Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:07:18.876Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:07:18.877Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:07:18 PM] [READY] Bot is now online and ready!21:07 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:08:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:08:20.875Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:08:20.876Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:08:20.876Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:08:20.876Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:08:20.876Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:08:20.877Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:08:20.946Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:08:20.946Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:08:20.974Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:08:20.974Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:08:21 PM] [READY] Bot is now online and ready!21:08 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:09:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:09:19.176Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:09:19.177Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:09:19.177Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:09:19.178Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:09:19.178Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:09:19.178Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:09:19.249Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:09:19.249Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:09:19.279Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:09:19.279Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:09:23 PM] [READY] Bot is now online and ready!21:09 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:10:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:10:22.337Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:10:22.337Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:10:22.338Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:10:22.338Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:10:22.338Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:10:22.339Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:10:22.432Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:10:22.432Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:10:22.461Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:10:22.461Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:10:22 PM] [READY] Bot is now online and ready!21:10 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:11:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:11:14.789Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:11:14.790Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:11:14.790Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:11:14.790Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:11:14.790Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:11:14.791Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:11:14.866Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:11:14.866Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:11:14.896Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:11:14.897Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:11:14 PM] [READY] Bot is now online and ready!21:11 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:12:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:12:18.933Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:12:18.934Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:12:18.934Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:12:18.934Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:12:18.934Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:12:18.935Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:12:19.020Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:12:19.020Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:12:19.050Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:12:19.050Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:12:19 PM] [READY] Bot is now online and ready!21:12 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:13:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:13:20.158Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:13:20.159Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:13:20.158Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:13:20.159Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:13:20.159Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:13:20.160Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:13:20.256Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:13:20.256Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:13:20.289Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:13:20.289Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:13:24 PM] [READY] Bot is now online and ready!21:13 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:14:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:14:15.695Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:14:15.696Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:14:15.696Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:14:15.697Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:14:15.697Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:14:15.698Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:14:15.786Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:14:15.786Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:14:15.816Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:14:15.817Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:14:15 PM] [READY] Bot is now online and ready!21:14 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:15:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:15:27.279Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:15:27.280Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:15:27.280Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:15:27.281Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:15:27.281Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:15:27.281Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:15:27.373Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:15:27.373Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:15:27.404Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:15:27.404Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:15:27 PM] [READY] Bot is now online and ready!21:15 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:16:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:16:20.401Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:16:20.402Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:16:20.402Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:16:20.403Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:16:20.403Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:16:20.403Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:16:20.478Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:16:20.478Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:16:20.509Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:16:20.509Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:16:25 PM] [READY] Bot is now online and ready!21:16 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:17:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:17:19.819Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:17:19.820Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:17:19.820Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:17:19.821Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:17:19.821Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:17:19.822Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:17:19.896Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:17:19.896Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:17:24.901Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:17:24.901Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:17:25 PM] [READY] Bot is now online and ready!21:17 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:18:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:18:18.304Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:18:18.304Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:18:18.305Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:18:18.305Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:18:18.305Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:18:18.306Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:18:18.391Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:18:18.391Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:18:18.419Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:18:18.419Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:18:18 PM] [READY] Bot is now online and ready!21:18 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:19:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:19:15.091Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:19:15.091Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:19:15.092Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:19:15.092Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:19:15.092Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:19:15.093Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:19:15.182Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:19:15.182Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:19:15.212Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:19:15.212Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:19:15 PM] [READY] Bot is now online and ready!21:19 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:20:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:20:16.567Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:20:16.568Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:20:16.568Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:20:16.568Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:20:16.568Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:20:16.569Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:20:16.660Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:20:16.660Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:20:16.693Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:20:16.694Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:20:16 PM] [READY] Bot is now online and ready!21:20 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:21:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:21:21.593Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:21:21.594Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:21:21.594Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:21:21.595Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:21:21.595Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:21:21.595Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:21:21.666Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:21:21.666Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:21:21.695Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:21:21.695Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:21:21 PM] [READY] Bot is now online and ready!21:21 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:22:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:22:20.145Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:22:20.146Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:22:20.146Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:22:20.146Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:22:20.146Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:22:20.147Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:22:20.240Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:22:20.240Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:22:20.270Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:22:20.270Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:22:20 PM] [READY] Bot is now online and ready!21:22 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:23:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:23:19.038Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:23:19.039Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:23:19.039Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:23:19.040Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:23:19.040Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:23:19.040Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:23:19.113Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:23:19.113Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:23:19.145Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:23:19.146Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:23:19 PM] [READY] Bot is now online and ready!21:23 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:24:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:24:15.000Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:24:15.001Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:24:15.001Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:24:15.002Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:24:15.002Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:24:15.003Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:24:15.076Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:24:15.076Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:24:15.128Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:24:15.128Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:24:15 PM] [READY] Bot is now online and ready!21:24 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:25:20 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:25:23.583Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:25:23.583Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:25:23.584Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:25:23.584Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:25:23.584Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:25:23.585Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:25:23.655Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:25:23.655Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:25:23.686Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:25:23.686Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:25:23 PM] [READY] Bot is now online and ready!21:25 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:28:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:28:12.494Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:28:12.495Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:28:12.495Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:28:12.496Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:28:12.496Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:28:12.496Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:28:12.599Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:28:12.599Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:28:12.634Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:28:12.635Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:28:12 PM] [READY] Bot is now online and ready!21:28 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:29:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:29:15.333Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:29:15.333Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:29:15.334Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:29:15.334Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:29:15.334Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:29:15.334Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:29:15.428Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:29:15.428Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:29:15.461Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:29:15.461Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:29:15 PM] [READY] Bot is now online and ready!21:29 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:30:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:30:21.949Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:30:21.949Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:30:21.950Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:30:21.950Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:30:21.950Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:30:21.951Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:30:22.037Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:30:22.037Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:30:22.072Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:30:22.072Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:30:26 PM] [READY] Bot is now online and ready!21:30 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:31:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:31:19.390Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:31:19.391Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:31:19.391Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:31:19.392Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:31:19.392Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:31:19.392Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:31:19.483Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:31:19.484Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:31:19.517Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:31:19.517Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:31:19 PM] [READY] Bot is now online and ready!21:31 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:32:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:32:20.210Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:32:20.211Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:32:20.211Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:32:20.211Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:32:20.212Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:32:20.212Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:32:24.297Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:32:24.297Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:32:24.333Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:32:24.333Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:32:24 PM] [READY] Bot is now online and ready!21:32 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:33:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:33:19.869Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:33:19.870Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:33:19.870Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:33:19.871Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:33:19.871Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:33:19.871Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:33:19.949Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:33:19.949Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:33:19.983Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:33:19.983Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:33:20 PM] [READY] Bot is now online and ready!21:33 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:34:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:34:19.873Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:34:19.874Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:34:19.874Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:34:19.875Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:34:19.875Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:34:19.875Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:34:19.943Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:34:19.944Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:34:19.972Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:34:19.972Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:34:20 PM] [READY] Bot is now online and ready!21:34 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:35:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:35:22.518Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:35:22.518Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:35:22.519Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:35:22.519Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:35:22.519Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:35:22.520Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:35:22.592Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:35:22.592Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:35:22.620Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:35:22.620Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:35:22 PM] [READY] Bot is now online and ready!21:35 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:36:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:36:14.069Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:36:14.070Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:36:14.070Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:36:14.071Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:36:14.071Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:36:14.071Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:36:14.142Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:36:14.142Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:36:14.172Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:36:14.172Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:36:14 PM] [READY] Bot is now online and ready!21:36 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:37:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:37:18.208Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:37:18.208Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:37:18.209Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:37:18.209Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:37:18.209Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:37:18.210Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:37:18.280Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:37:18.280Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:37:18.311Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:37:18.311Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:37:18 PM] [READY] Bot is now online and ready!21:37 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:38:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:38:19.907Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:38:19.908Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:38:19.909Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:38:19.909Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:38:19.910Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:38:19.910Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:38:19.987Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:38:19.987Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:38:20.016Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:38:20.016Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:38:20 PM] [READY] Bot is now online and ready!21:38 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:39:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:39:19.400Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:39:19.401Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:39:19.401Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:39:19.402Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:39:19.402Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:39:19.403Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:39:19.501Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:39:19.502Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:39:19.531Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:39:19.531Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:39:19 PM] [READY] Bot is now online and ready!21:39 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:40:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:40:22.136Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:40:22.136Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:40:22.137Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:40:22.137Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:40:22.137Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:40:22.138Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:40:22.215Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:40:22.215Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:40:22.245Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:40:22.245Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:40:22 PM] [READY] Bot is now online and ready!21:40 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:41:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:41:19.244Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:41:19.244Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:41:19.245Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:41:19.245Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:41:19.245Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:41:19.246Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:41:19.315Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:41:19.316Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:41:19.344Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:41:19.344Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:41:19 PM] [READY] Bot is now online and ready!21:41 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:43:00 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:43:03.920Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:43:03.920Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:43:03.921Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:43:03.921Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:43:03.921Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:43:03.921Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:43:04.008Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:43:04.008Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:43:04.038Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:43:04.038Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:43:04 PM] [READY] Bot is now online and ready!
+
+[10/12/2025, 9:43:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:43:18.967Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:43:18.969Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:43:18.969Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:43:18.970Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:43:18.970Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:43:18.970Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:43:19.066Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:43:19.067Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:43:19.100Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:43:19.101Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:43:19 PM] [READY] Bot is now online and ready!21:43 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:44:30 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:44:37.988Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:44:37.988Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:44:37.989Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:44:37.989Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:44:37.989Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:44:37.990Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:44:38.080Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:44:38.080Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:44:38.111Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:44:38.111Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:44:42 PM] [READY] Bot is now online and ready!21:44 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:45:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:45:26.630Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:45:26.630Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:45:26.631Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:45:26.631Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:45:26.631Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:45:26.631Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:45:26.705Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:45:26.705Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:45:26.733Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:45:26.733Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:45:26 PM] [READY] Bot is now online and ready!21:45 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:46:58 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/12/2025, 9:47:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:47:18.498Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:47:18.498Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:47:18.499Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:47:18.499Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:47:18.499Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:47:18.500Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:47:18.586Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:47:18.587Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:47:18.615Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:47:18.616Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:47:18 PM] [READY] Bot is now online and ready!21:47 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:48:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:48:17.916Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:48:17.916Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:48:17.917Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:48:17.917Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:48:17.917Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:48:17.918Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:48:18.004Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:48:18.005Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:48:18.034Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:48:18.034Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:48:18 PM] [READY] Bot is now online and ready!21:48 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:49:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:49:14.932Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:49:14.933Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:49:14.933Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:49:14.933Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:49:14.933Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:49:14.934Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:49:15.016Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:49:15.017Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:49:15.046Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:49:15.046Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:49:15 PM] [READY] Bot is now online and ready!21:49 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:50:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:50:20.485Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:50:20.486Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:50:20.486Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:50:20.486Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:50:20.486Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:50:20.487Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:50:20.584Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:50:20.584Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:50:20.619Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:50:20.619Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:50:20 PM] [READY] Bot is now online and ready!21:50 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:51:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:51:13.762Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:51:13.763Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:51:13.763Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:51:13.763Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:51:13.763Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:51:13.764Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:51:13.849Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:51:13.849Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:51:13.879Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:51:13.879Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:51:13 PM] [READY] Bot is now online and ready!21:51 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:52:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:52:17.668Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:52:17.668Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:52:17.669Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:52:17.669Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:52:17.669Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:52:17.669Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:52:17.736Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:52:17.736Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:52:17.764Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:52:17.764Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:52:17 PM] [READY] Bot is now online and ready!21:52 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:53:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:53:19.378Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:53:19.378Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:53:19.379Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:53:19.379Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:53:19.379Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:53:19.380Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:53:19.474Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:53:19.474Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:53:19.505Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:53:19.505Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:53:19 PM] [READY] Bot is now online and ready!21:53 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:54:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:54:14.715Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:54:14.715Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:54:14.716Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:54:14.716Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:54:14.716Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:54:14.716Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:54:14.796Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:54:14.796Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:54:14.826Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:54:14.826Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:54:14 PM] [READY] Bot is now online and ready!21:54 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:55:16 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:55:24.422Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:55:24.423Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:55:24.423Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:55:24.423Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:55:24.424Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:55:24.424Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:55:24.518Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:55:24.519Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:55:24.549Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:55:24.549Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:55:24 PM] [READY] Bot is now online and ready!21:55 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:56:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:56:20.047Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:56:20.048Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:56:20.048Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:56:20.048Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:56:20.049Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:56:20.049Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:56:20.146Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:56:20.146Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:56:20.178Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:56:20.179Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:56:20 PM] [READY] Bot is now online and ready!21:56 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:57:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:57:14.274Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:57:14.275Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:57:14.275Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:57:14.275Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:57:14.275Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:57:14.276Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:57:14.342Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:57:14.342Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:57:14.370Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:57:14.370Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:57:14 PM] [READY] Bot is now online and ready!21:57 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:58:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:58:14.394Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:58:14.395Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:58:14.395Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:58:14.396Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:58:14.396Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:58:14.396Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:58:14.470Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:58:14.470Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:58:14.499Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:58:14.499Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:58:14 PM] [READY] Bot is now online and ready!21:58 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/12/2025, 9:59:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T14:59:14.727Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T14:59:14.727Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T14:59:14.728Z] [DEBUG] Applying voice connection patches
+[2025-10-12T14:59:14.728Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T14:59:14.728Z] [DEBUG] Voice state update handler patched
+[2025-10-12T14:59:14.728Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T14:59:14.800Z] [DEBUG] Registering player events (first time)
+[2025-10-12T14:59:14.800Z] [DEBUG] Registered player event handlers
+[2025-10-12T14:59:14.829Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T14:59:14.829Z] [DEBUG] Initialized MusicManager
+
+[10/12/2025, 9:59:14 PM] [READY] Bot is now online and ready!21:59 (12-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:01:41 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:01:49.000Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:01:49.001Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:01:49.001Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:01:49.001Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:01:49.002Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:01:49.002Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:01:49.095Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:01:49.096Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:01:49.127Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:01:49.127Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:01:49 AM] [READY] Bot is now online and ready!00:01 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:02:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:02:20.549Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:02:20.550Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:02:20.550Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:02:20.551Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:02:20.551Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:02:20.551Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:02:20.620Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:02:20.620Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:02:20.648Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:02:20.648Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:02:20 AM] [READY] Bot is now online and ready!00:02 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:03:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:03:21.129Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:03:21.129Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:03:21.130Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:03:21.130Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:03:21.130Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:03:21.131Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:03:21.197Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:03:21.197Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:03:21.225Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:03:21.225Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:03:21 AM] [READY] Bot is now online and ready!00:03 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:04:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:04:17.477Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:04:17.478Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:04:17.478Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:04:17.479Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:04:17.479Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:04:17.479Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:04:21.295Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:04:21.295Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:04:21.322Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:04:21.323Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:04:21 AM] [READY] Bot is now online and ready!00:04 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:05:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:05:19.668Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:05:19.668Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:05:19.669Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:05:19.669Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:05:19.669Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:05:19.669Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:05:19.742Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:05:19.742Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:05:19.770Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:05:19.770Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:05:23 AM] [READY] Bot is now online and ready!00:05 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:06:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:06:19.507Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:06:19.508Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:06:19.508Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:06:19.509Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:06:19.509Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:06:19.509Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:06:19.598Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:06:19.598Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:06:19.628Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:06:19.628Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:06:19 AM] [READY] Bot is now online and ready!00:06 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:07:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:07:23.903Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:07:23.904Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:07:23.904Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:07:23.904Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:07:23.904Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:07:23.905Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:07:23.995Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:07:23.995Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:07:24.025Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:07:24.025Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:07:24 AM] [READY] Bot is now online and ready!00:07 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:08:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:08:20.569Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:08:20.570Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:08:20.570Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:08:20.570Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:08:20.570Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:08:20.571Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:08:20.655Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:08:20.655Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:08:20.684Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:08:20.684Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:08:20 AM] [READY] Bot is now online and ready!00:08 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:09:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:09:17.417Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:09:17.418Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:09:17.418Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:09:17.419Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:09:17.419Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:09:17.419Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:09:17.508Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:09:17.509Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:09:17.537Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:09:17.537Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:09:17 AM] [READY] Bot is now online and ready!00:09 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:10:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:10:21.044Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:10:21.045Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:10:21.045Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:10:21.045Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:10:21.045Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:10:21.046Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:10:21.137Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:10:21.137Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:10:21.172Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:10:21.172Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:10:21 AM] [READY] Bot is now online and ready!00:10 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:11:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:11:18.463Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:11:18.463Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:11:18.464Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:11:18.464Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:11:18.464Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:11:18.465Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:11:18.535Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:11:18.536Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:11:18.565Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:11:18.565Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:11:22 AM] [READY] Bot is now online and ready!00:11 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:12:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:12:19.728Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:12:19.728Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:12:19.729Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:12:19.729Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:12:19.729Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:12:19.730Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:12:19.815Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:12:19.815Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:12:19.846Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:12:19.846Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:12:19 AM] [READY] Bot is now online and ready!00:12 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:13:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:13:21.107Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:13:21.108Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:13:21.108Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:13:21.109Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:13:21.109Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:13:21.109Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:13:21.181Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:13:21.181Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:13:21.209Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:13:21.210Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:13:25 AM] [READY] Bot is now online and ready!00:13 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:14:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:14:14.419Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:14:14.419Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:14:14.420Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:14:14.420Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:14:14.420Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:14:14.420Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:14:14.509Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:14:14.509Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:14:14.542Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:14:14.542Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:14:14 AM] [READY] Bot is now online and ready!00:14 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:15:15 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:15:22.272Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:15:22.273Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:15:22.273Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:15:22.273Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:15:22.273Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:15:22.274Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:15:22.343Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:15:22.343Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:15:22.373Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:15:22.373Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:15:22 AM] [READY] Bot is now online and ready!00:15 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:16:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:16:18.171Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:16:18.172Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:16:18.172Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:16:18.173Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:16:18.173Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:16:18.174Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:16:18.241Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:16:18.241Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:16:18.270Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:16:18.270Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:16:18 AM] [READY] Bot is now online and ready!00:16 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:17:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:17:20.635Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:17:20.636Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:17:20.636Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:17:20.637Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:17:20.637Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:17:20.637Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:17:20.732Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:17:20.732Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:17:20.768Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:17:20.768Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:17:24 AM] [READY] Bot is now online and ready!00:17 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:18:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:18:19.132Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:18:19.133Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:18:19.133Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:18:19.134Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:18:19.134Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:18:19.134Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:18:19.230Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:18:19.230Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:18:19.263Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:18:19.263Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:18:19 AM] [READY] Bot is now online and ready!00:18 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:19:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:19:21.143Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:19:21.144Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:19:21.144Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:19:21.144Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:19:21.144Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:19:21.145Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:19:21.232Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:19:21.232Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:19:21.263Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:19:21.263Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:19:21 AM] [READY] Bot is now online and ready!00:19 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:20:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:20:21.196Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:20:21.197Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:20:21.197Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:20:21.198Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:20:21.198Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:20:21.199Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:20:21.292Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:20:21.292Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:20:21.322Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:20:21.322Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:20:21 AM] [READY] Bot is now online and ready!00:20 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:21:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:21:13.438Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:21:13.439Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:21:13.439Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:21:13.439Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:21:13.439Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:21:13.440Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:21:13.506Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:21:13.506Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:21:13.534Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:21:13.535Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:21:13 AM] [READY] Bot is now online and ready!00:21 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:22:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:22:20.119Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:22:20.120Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:22:20.120Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:22:20.121Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:22:20.121Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:22:20.121Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:22:20.213Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:22:20.213Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:22:20.248Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:22:20.248Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:22:24 AM] [READY] Bot is now online and ready!00:22 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:23:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:23:20.966Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:23:20.967Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:23:20.967Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:23:20.968Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:23:20.968Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:23:20.968Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:23:24.731Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:23:24.731Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:23:24.760Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:23:24.761Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:23:24 AM] [READY] Bot is now online and ready!00:23 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:24:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:24:14.085Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:24:14.086Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:24:14.086Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:24:14.086Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:24:14.086Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:24:14.087Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:24:14.165Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:24:14.165Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:24:14.195Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:24:14.195Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:24:14 AM] [READY] Bot is now online and ready!00:24 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:25:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:25:25.187Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:25:25.188Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:25:25.188Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:25:25.189Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:25:25.189Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:25:25.189Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:25:25.258Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:25:25.258Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:25:25.287Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:25:25.287Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:25:25 AM] [READY] Bot is now online and ready!00:25 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:26:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:26:19.421Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:26:19.422Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:26:19.422Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:26:19.423Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:26:19.423Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:26:19.423Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:26:22.901Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:26:22.901Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:26:22.934Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:26:22.934Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:26:22 AM] [READY] Bot is now online and ready!00:26 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:27:15 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:27:22.309Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:27:22.309Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:27:22.309Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:27:22.310Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:27:22.310Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:27:22.310Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:27:22.377Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:27:22.377Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:27:22.404Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:27:22.404Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:27:22 AM] [READY] Bot is now online and ready!00:27 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:28:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:28:20.058Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:28:20.059Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:28:20.059Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:28:20.059Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:28:20.060Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:28:20.060Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:28:20.146Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:28:20.147Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:28:20.177Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:28:20.177Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:28:20 AM] [READY] Bot is now online and ready!00:28 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:29:09 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:29:16.400Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:29:16.400Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:29:16.401Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:29:16.401Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:29:16.401Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:29:16.402Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:29:16.474Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:29:16.474Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:29:16.503Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:29:16.504Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:29:16 AM] [READY] Bot is now online and ready!00:29 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:30:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:30:19.756Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:30:19.756Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:30:19.757Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:30:19.757Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:30:19.757Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:30:19.757Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:30:19.833Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:30:19.833Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:30:19.990Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:30:19.990Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:30:20 AM] [READY] Bot is now online and ready!00:30 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:31:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:31:19.132Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:31:19.133Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:31:19.133Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:31:19.134Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:31:19.134Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:31:19.135Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:31:19.208Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:31:19.209Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:31:19.239Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:31:19.239Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:31:19 AM] [READY] Bot is now online and ready!00:31 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:32:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:32:18.102Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:32:18.102Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:32:18.102Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:32:18.103Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:32:18.103Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:32:18.103Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:32:18.189Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:32:18.190Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:32:18.219Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:32:18.219Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:32:21 AM] [READY] Bot is now online and ready!00:32 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:33:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:33:17.005Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:33:17.006Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:33:17.006Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:33:17.007Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:33:17.007Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:33:17.007Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:33:17.092Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:33:17.092Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:33:17.122Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:33:17.123Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:33:17 AM] [READY] Bot is now online and ready!00:33 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:34:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:34:21.503Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:34:21.503Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:34:21.504Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:34:21.504Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:34:21.504Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:34:21.504Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:34:21.604Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:34:21.604Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:34:21.637Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:34:21.637Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:34:25 AM] [READY] Bot is now online and ready!00:34 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:35:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:35:21.563Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:35:21.564Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:35:21.564Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:35:21.564Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:35:21.565Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:35:21.565Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:35:21.652Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:35:21.652Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:35:21.682Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:35:21.682Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:35:24 AM] [READY] Bot is now online and ready!00:35 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:36:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:36:19.779Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:36:19.780Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:36:19.781Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:36:19.781Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:36:19.781Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:36:19.782Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:36:19.870Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:36:19.870Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:36:19.900Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:36:19.900Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:36:19 AM] [READY] Bot is now online and ready!00:36 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:37:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:37:19.108Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:37:19.108Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:37:19.108Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:37:19.109Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:37:19.109Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:37:19.109Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:37:19.176Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:37:19.176Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:37:19.204Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:37:19.204Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:37:19 AM] [READY] Bot is now online and ready!00:37 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:38:09 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:38:16.694Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:38:16.695Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:38:16.695Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:38:16.696Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:38:16.696Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:38:16.696Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:38:16.800Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:38:16.801Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:38:16.836Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:38:16.836Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:38:16 AM] [READY] Bot is now online and ready!00:38 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:39:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:39:21.367Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:39:21.367Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:39:21.368Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:39:21.368Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:39:21.368Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:39:21.369Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:39:21.446Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:39:21.447Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:39:21.480Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:39:21.480Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:39:21 AM] [READY] Bot is now online and ready!00:39 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:40:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:40:21.140Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:40:21.141Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:40:21.141Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:40:21.142Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:40:21.142Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:40:21.142Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:40:21.238Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:40:21.238Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:40:21.271Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:40:21.271Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:40:21 AM] [READY] Bot is now online and ready!00:40 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:41:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:41:18.480Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:41:18.481Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:41:18.481Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:41:18.481Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:41:18.481Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:41:18.482Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:41:18.571Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:41:18.572Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:41:18.604Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:41:18.604Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:41:18 AM] [READY] Bot is now online and ready!00:41 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:42:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:42:15.825Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:42:15.826Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:42:15.826Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:42:15.826Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:42:15.826Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:42:15.827Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:42:15.901Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:42:15.901Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:42:15.931Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:42:15.931Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:42:16 AM] [READY] Bot is now online and ready!00:42 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:43:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:43:20.561Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:43:20.562Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:43:20.562Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:43:20.563Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:43:20.563Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:43:20.563Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:43:20.653Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:43:20.653Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:43:20.684Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:43:20.684Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:43:20 AM] [READY] Bot is now online and ready!00:43 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:44:09 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:44:12.665Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:44:12.666Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:44:12.666Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:44:12.667Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:44:12.667Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:44:12.667Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:44:12.756Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:44:12.756Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:44:12.785Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:44:12.785Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:44:12 AM] [READY] Bot is now online and ready!00:44 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:45:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:45:17.800Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:45:17.800Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:45:17.800Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:45:17.801Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:45:17.801Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:45:17.801Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:45:17.865Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:45:17.866Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:45:17.893Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:45:17.893Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:45:17 AM] [READY] Bot is now online and ready!00:45 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:46:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:46:19.432Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:46:19.433Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:46:19.434Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:46:19.433Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:46:19.434Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:46:19.434Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:46:19.500Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:46:19.501Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:46:19.529Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:46:19.529Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:46:23 AM] [READY] Bot is now online and ready!00:46 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:47:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:47:18.052Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:47:18.053Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:47:18.053Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:47:18.054Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:47:18.054Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:47:18.054Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:47:18.137Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:47:18.137Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:47:18.166Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:47:18.166Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:47:18 AM] [READY] Bot is now online and ready!00:47 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:48:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:48:14.827Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:48:14.827Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:48:14.828Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:48:14.828Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:48:14.828Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:48:14.828Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:48:14.901Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:48:14.901Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:48:14.931Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:48:14.931Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:48:15 AM] [READY] Bot is now online and ready!00:48 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:49:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:49:15.903Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:49:15.904Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:49:15.904Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:49:15.904Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:49:15.904Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:49:15.904Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:49:15.970Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:49:15.970Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:49:15.997Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:49:15.997Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:49:16 AM] [READY] Bot is now online and ready!00:49 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:50:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:50:19.820Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:50:19.821Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:50:19.821Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:50:19.822Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:50:19.822Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:50:19.822Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:50:19.889Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:50:19.889Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:50:19.917Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:50:19.917Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:50:20 AM] [READY] Bot is now online and ready!00:50 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:51:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:51:18.291Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:51:18.292Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:51:18.292Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:51:18.292Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:51:18.293Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:51:18.293Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:51:18.362Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:51:18.362Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:51:18.391Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:51:18.391Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:51:18 AM] [READY] Bot is now online and ready!00:51 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:52:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:52:18.297Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:52:18.298Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:52:18.298Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:52:18.299Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:52:18.299Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:52:18.299Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:52:18.366Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:52:18.366Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:52:18.394Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:52:18.394Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:52:18 AM] [READY] Bot is now online and ready!00:52 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:53:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:53:20.403Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:53:20.404Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:53:20.404Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:53:20.405Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:53:20.405Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:53:20.405Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:53:20.491Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:53:20.491Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:53:20.524Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:53:20.524Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:53:24 AM] [READY] Bot is now online and ready!00:53 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:54:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:54:18.804Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:54:18.805Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:54:18.805Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:54:18.806Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:54:18.806Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:54:18.806Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:54:18.890Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:54:18.890Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:54:18.918Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:54:18.918Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:54:18 AM] [READY] Bot is now online and ready!00:54 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:55:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:55:20.711Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:55:20.712Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:55:20.712Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:55:20.713Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:55:20.713Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:55:20.713Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:55:20.789Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:55:20.790Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:55:20.819Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:55:20.819Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:55:24 AM] [READY] Bot is now online and ready!00:55 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:56:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:56:18.292Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:56:18.293Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:56:18.294Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:56:18.294Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:56:18.294Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:56:18.295Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:56:18.367Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:56:18.367Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:56:18.396Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:56:18.396Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:56:18 AM] [READY] Bot is now online and ready!00:56 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:57:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:57:19.586Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:57:19.587Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:57:19.587Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:57:19.587Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:57:19.587Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:57:19.588Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:57:19.678Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:57:19.679Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:57:19.710Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:57:19.710Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:57:19 AM] [READY] Bot is now online and ready!00:57 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:58:09 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:58:16.072Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:58:16.072Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:58:16.073Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:58:16.073Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:58:16.073Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:58:16.074Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:58:16.161Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:58:16.161Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:58:16.194Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:58:16.194Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:58:16 AM] [READY] Bot is now online and ready!00:58 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:59:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-12T17:59:18.401Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-12T17:59:18.401Z] [DEBUG] Using existing discord-player instance
+[2025-10-12T17:59:18.401Z] [DEBUG] Applying voice connection patches
+[2025-10-12T17:59:18.402Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-12T17:59:18.402Z] [DEBUG] Voice state update handler patched
+[2025-10-12T17:59:18.402Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-12T17:59:18.473Z] [DEBUG] Registering player events (first time)
+[2025-10-12T17:59:18.473Z] [DEBUG] Registered player event handlers
+[2025-10-12T17:59:18.501Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-12T17:59:18.501Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:59:18 AM] [READY] Bot is now online and ready!00:59 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:00:16 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:00:22.854Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:00:22.855Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:00:22.855Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:00:22.856Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:00:22.856Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:00:22.856Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:00:22.947Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:00:22.947Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:00:22.981Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:00:22.981Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:00:23 AM] [READY] Bot is now online and ready!07:00 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:01:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:01:16.997Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:01:16.998Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:01:16.998Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:01:16.999Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:01:16.999Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:01:16.999Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:01:17.075Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:01:17.075Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:01:17.104Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:01:17.104Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:01:17 AM] [READY] Bot is now online and ready!07:01 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:02:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:02:15.054Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:02:15.055Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:02:15.055Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:02:15.055Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:02:15.055Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:02:15.056Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:02:15.146Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:02:15.146Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:02:15.181Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:02:15.181Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:02:15 AM] [READY] Bot is now online and ready!07:02 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:03:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:03:22.319Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:03:22.320Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:03:22.320Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:03:22.320Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:03:22.320Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:03:22.321Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:03:22.395Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:03:22.396Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:03:22.427Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:03:22.427Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:03:22 AM] [READY] Bot is now online and ready!07:03 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:04:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:04:15.797Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:04:15.798Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:04:15.798Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:04:15.798Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:04:15.798Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:04:15.799Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:04:15.871Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:04:15.871Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:04:15.901Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:04:15.901Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:04:16 AM] [READY] Bot is now online and ready!07:04 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:05:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:05:22.276Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:05:22.277Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:05:22.277Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:05:22.277Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:05:22.277Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:05:22.278Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:05:22.361Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:05:22.361Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:05:22.390Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:05:22.391Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:05:22 AM] [READY] Bot is now online and ready!07:05 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:06:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:06:18.985Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:06:18.985Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:06:18.986Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:06:18.986Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:06:18.986Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:06:18.986Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:06:19.084Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:06:19.084Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:06:19.119Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:06:19.120Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:06:19 AM] [READY] Bot is now online and ready!07:06 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:07:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:07:20.179Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:07:20.180Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:07:20.180Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:07:20.180Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:07:20.180Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:07:20.181Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:07:20.253Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:07:20.253Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:07:20.282Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:07:20.282Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:07:20 AM] [READY] Bot is now online and ready!07:07 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:08:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:08:19.971Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:08:19.971Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:08:19.972Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:08:19.972Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:08:19.972Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:08:19.973Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:08:20.054Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:08:20.054Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:08:20.087Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:08:20.087Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:08:20 AM] [READY] Bot is now online and ready!07:08 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:09:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:09:19.494Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:09:19.495Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:09:19.495Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:09:19.496Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:09:19.496Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:09:19.496Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:09:19.593Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:09:19.593Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:09:19.627Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:09:19.627Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:09:19 AM] [READY] Bot is now online and ready!07:09 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:10:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:10:21.045Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:10:21.045Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:10:21.045Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:10:21.046Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:10:21.046Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:10:21.046Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:10:21.143Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:10:21.144Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:10:21.179Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:10:21.179Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:10:24 AM] [READY] Bot is now online and ready!07:10 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:11:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:11:19.309Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:11:19.309Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:11:19.310Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:11:19.310Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:11:19.310Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:11:19.311Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:11:19.395Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:11:19.395Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:11:19.425Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:11:19.425Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:11:19 AM] [READY] Bot is now online and ready!07:11 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:12:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:12:17.955Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:12:17.956Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:12:17.956Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:12:17.957Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:12:17.957Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:12:17.957Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:12:18.023Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:12:18.023Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:12:18.051Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:12:18.051Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:12:18 AM] [READY] Bot is now online and ready!07:12 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:13:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:13:16.026Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:13:16.026Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:13:16.026Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:13:16.027Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:13:16.027Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:13:16.027Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:13:16.112Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:13:16.113Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:13:16.143Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:13:16.143Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:13:16 AM] [READY] Bot is now online and ready!07:13 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:14:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:14:18.204Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:14:18.205Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:14:18.205Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:14:18.205Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:14:18.205Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:14:18.206Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:14:18.303Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:14:18.303Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:14:18.338Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:14:18.338Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:14:18 AM] [READY] Bot is now online and ready!07:14 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:15:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:15:17.274Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:15:17.275Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:15:17.275Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:15:17.275Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:15:17.275Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:15:17.276Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:15:17.359Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:15:17.359Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:15:17.389Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:15:17.389Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:15:17 AM] [READY] Bot is now online and ready!07:15 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:16:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:16:20.871Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:16:20.872Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:16:20.872Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:16:20.873Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:16:20.873Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:16:20.873Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:16:20.941Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:16:20.941Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:16:20.970Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:16:20.970Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:16:24 AM] [READY] Bot is now online and ready!07:16 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:17:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:17:17.800Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:17:17.801Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:17:17.801Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:17:17.802Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:17:17.802Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:17:17.802Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:17:17.873Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:17:17.873Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:17:17.902Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:17:17.902Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:17:17 AM] [READY] Bot is now online and ready!07:17 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:18:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:18:19.666Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:18:19.667Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:18:19.667Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:18:19.668Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:18:19.668Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:18:19.668Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:18:19.745Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:18:19.746Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:18:19.779Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:18:19.779Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:18:19 AM] [READY] Bot is now online and ready!07:18 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:19:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:19:17.716Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:19:17.716Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:19:17.717Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:19:17.717Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:19:17.717Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:19:17.718Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:19:17.787Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:19:17.787Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:19:17.817Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:19:17.817Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:19:18 AM] [READY] Bot is now online and ready!07:19 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:20:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:20:17.649Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:20:17.650Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:20:17.650Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:20:17.650Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:20:17.650Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:20:17.651Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:20:17.738Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:20:17.738Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:20:17.768Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:20:17.768Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:20:17 AM] [READY] Bot is now online and ready!07:20 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:21:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:21:18.356Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:21:18.356Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:21:18.357Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:21:18.357Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:21:18.357Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:21:18.358Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:21:18.450Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:21:18.450Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:21:18.483Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:21:18.483Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:21:18 AM] [READY] Bot is now online and ready!07:21 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:22:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:22:19.146Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:22:19.147Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:22:19.147Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:22:19.148Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:22:19.148Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:22:19.148Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:22:19.216Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:22:19.216Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:22:19.244Z] [DEBUG] Initialized MusicManager
+[2025-10-13T00:22:19.244Z] [DEBUG] No saved queues found in MongoDB
+
+[10/13/2025, 7:22:19 AM] [READY] Bot is now online and ready!07:22 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:23:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:23:23.156Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:23:23.156Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:23:23.156Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:23:23.157Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:23:23.157Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:23:23.157Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:23:23.239Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:23:23.239Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:23:23.268Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:23:23.268Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:23:23 AM] [READY] Bot is now online and ready!07:23 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:24:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:24:19.833Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:24:19.834Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:24:19.834Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:24:19.834Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:24:19.834Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:24:19.835Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:24:23.622Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:24:23.623Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:24:23.656Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:24:23.656Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:24:23 AM] [READY] Bot is now online and ready!07:24 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:25:15 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:25:18.006Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:25:18.006Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:25:18.007Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:25:18.006Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:25:18.007Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:25:18.007Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:25:18.102Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:25:18.102Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:25:18.137Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:25:18.137Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:25:18 AM] [READY] Bot is now online and ready!07:25 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:26:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:26:15.457Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:26:15.458Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:26:15.458Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:26:15.458Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:26:15.458Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:26:15.458Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:26:15.554Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:26:15.554Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:26:15.588Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:26:15.588Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:26:15 AM] [READY] Bot is now online and ready!07:26 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:27:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:27:15.820Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:27:15.821Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:27:15.821Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:27:15.822Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:27:15.822Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:27:15.822Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:27:15.922Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:27:15.922Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:27:15.955Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:27:15.955Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:27:16 AM] [READY] Bot is now online and ready!07:27 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:28:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:28:23.377Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:28:23.378Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:28:23.378Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:28:23.379Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:28:23.379Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:28:23.379Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:28:23.472Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:28:23.472Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:28:23.506Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:28:23.506Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:28:23 AM] [READY] Bot is now online and ready!07:28 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:29:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:29:16.573Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:29:16.574Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:29:16.574Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:29:16.574Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:29:16.574Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:29:16.575Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:29:16.640Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:29:16.640Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:29:16.668Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:29:16.668Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:29:16 AM] [READY] Bot is now online and ready!07:29 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:30:15 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:30:22.159Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:30:22.160Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:30:22.160Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:30:22.160Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:30:22.160Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:30:22.161Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:30:22.229Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:30:22.229Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:30:22.265Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:30:22.265Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:30:22 AM] [READY] Bot is now online and ready!07:30 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:31:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:31:17.210Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:31:17.211Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:31:17.211Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:31:17.212Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:31:17.212Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:31:17.212Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:31:17.300Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:31:17.300Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:31:17.330Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:31:17.330Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:31:17 AM] [READY] Bot is now online and ready!07:31 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:32:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:32:17.526Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:32:17.526Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:32:17.527Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:32:17.527Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:32:17.527Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:32:17.528Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:32:17.624Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:32:17.624Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:32:17.657Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:32:17.657Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:32:17 AM] [READY] Bot is now online and ready!07:32 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:33:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:33:19.765Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:33:19.766Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:33:19.766Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:33:19.766Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:33:19.766Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:33:19.767Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:33:19.856Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:33:19.856Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:33:19.886Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:33:19.886Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:33:19 AM] [READY] Bot is now online and ready!07:33 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:34:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:34:17.291Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:34:17.292Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:34:17.292Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:34:17.292Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:34:17.292Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:34:17.293Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:34:17.369Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:34:17.369Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:34:17.402Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:34:17.403Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:34:17 AM] [READY] Bot is now online and ready!07:34 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:35:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:35:19.778Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:35:19.778Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:35:19.779Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:35:19.779Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:35:19.779Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:35:19.780Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:35:19.857Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:35:19.857Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:35:19.890Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:35:19.890Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:35:19 AM] [READY] Bot is now online and ready!07:35 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:36:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:36:18.908Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:36:18.909Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:36:18.909Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:36:18.910Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:36:18.910Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:36:18.910Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:36:19.003Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:36:19.003Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:36:19.036Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:36:19.036Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:36:22 AM] [READY] Bot is now online and ready!07:36 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:37:10 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:37:17.585Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:37:17.585Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:37:17.586Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:37:17.586Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:37:17.586Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:37:17.587Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:37:21.190Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:37:21.190Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:37:21.223Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:37:21.224Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:37:21 AM] [READY] Bot is now online and ready!07:37 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:39:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:39:21.901Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:39:21.902Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:39:21.903Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:39:21.903Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:39:21.903Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:39:21.904Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:39:21.999Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:39:21.999Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:39:22.032Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:39:22.032Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:39:22 AM] [READY] Bot is now online and ready!07:39 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:40:44 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:40:57.207Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:40:57.208Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:40:57.208Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:40:57.208Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:40:57.208Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:40:57.209Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:40:57.309Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:40:57.310Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:40:57.343Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:40:57.343Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:40:57 AM] [READY] Bot is now online and ready!07:40 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:41:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:41:24.248Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:41:24.249Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:41:24.249Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:41:24.250Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:41:24.250Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:41:24.250Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:41:24.328Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:41:24.329Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:41:24.363Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:41:24.363Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:41:24 AM] [READY] Bot is now online and ready!07:41 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:42:20 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:42:23.930Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:42:23.930Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:42:23.931Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:42:23.931Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:42:23.931Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:42:23.931Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:42:24.005Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:42:24.006Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:42:24.038Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:42:24.038Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:42:24 AM] [READY] Bot is now online and ready!07:42 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:43:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:43:19.408Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:43:19.409Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:43:19.409Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:43:19.409Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:43:19.409Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:43:19.410Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:43:19.494Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:43:19.494Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:43:19.522Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:43:19.522Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:43:19 AM] [READY] Bot is now online and ready!07:43 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:44:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:44:18.681Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:44:18.681Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:44:18.682Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:44:18.682Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:44:18.682Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:44:18.683Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:44:18.764Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:44:18.764Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:44:18.797Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:44:18.797Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:44:18 AM] [READY] Bot is now online and ready!07:44 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:45:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:45:16.451Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:45:16.452Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:45:16.452Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:45:16.453Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:45:16.453Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:45:16.453Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:45:16.534Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:45:16.534Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:45:16.568Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:45:16.568Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:45:16 AM] [READY] Bot is now online and ready!07:45 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:46:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:46:19.546Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:46:19.547Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:46:19.547Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:46:19.548Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:46:19.548Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:46:19.548Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:46:19.615Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:46:19.616Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:46:19.644Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:46:19.644Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:46:19 AM] [READY] Bot is now online and ready!07:46 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:46:52 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:46:58.763Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:46:58.764Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:46:58.764Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:46:58.764Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:46:58.764Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:46:58.765Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:46:58.858Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:46:58.858Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:46:58.892Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:46:58.892Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:46:58 AM] [READY] Bot is now online and ready!07:47 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:47:11 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:47:18.774Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:47:18.774Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:47:18.775Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:47:18.775Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:47:18.775Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:47:18.776Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:47:22.683Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:47:22.683Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:47:22.718Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:47:22.718Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:47:22 AM] [READY] Bot is now online and ready!07:47 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:48:20 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:48:27.007Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:48:27.007Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:48:27.007Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:48:27.008Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:48:27.008Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:48:27.008Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:48:27.093Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:48:27.094Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:48:27.123Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:48:27.123Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:48:27 AM] [READY] Bot is now online and ready!07:48 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:49:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:49:20.110Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:49:20.110Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:49:20.111Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:49:20.111Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:49:20.111Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:49:20.112Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:49:20.186Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:49:20.187Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:49:20.219Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:49:20.219Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:49:20 AM] [READY] Bot is now online and ready!07:49 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:50:16 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:50:22.633Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:50:22.633Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:50:22.634Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:50:22.634Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:50:22.634Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:50:22.634Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:50:22.700Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:50:22.700Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:50:22.728Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:50:22.728Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:50:22 AM] [READY] Bot is now online and ready!07:50 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:51:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:51:19.091Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:51:19.092Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:51:19.092Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:51:19.092Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:51:19.092Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:51:19.093Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:51:19.176Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:51:19.177Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:51:19.205Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:51:19.205Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:51:19 AM] [READY] Bot is now online and ready!07:51 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:52:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:52:23.898Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:52:23.898Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:52:23.899Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:52:23.899Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:52:23.899Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:52:23.899Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:52:23.965Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:52:23.966Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:52:23.993Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:52:23.993Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:52:24 AM] [READY] Bot is now online and ready!07:52 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:53:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:53:21.539Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:53:21.539Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:53:21.539Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:53:21.540Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:53:21.540Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:53:21.540Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:53:21.629Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:53:21.629Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:53:21.659Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:53:21.659Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:53:21 AM] [READY] Bot is now online and ready!07:53 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:54:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:54:20.011Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:54:20.011Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:54:20.011Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:54:20.012Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:54:20.012Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:54:20.012Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:54:20.098Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:54:20.099Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:54:20.132Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:54:20.132Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:54:20 AM] [READY] Bot is now online and ready!07:54 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:55:14 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:55:21.041Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:55:21.042Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:55:21.042Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:55:21.042Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:55:21.042Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:55:21.043Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:55:21.133Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:55:21.133Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:55:21.167Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:55:21.167Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:55:21 AM] [READY] Bot is now online and ready!07:55 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:56:13 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:56:19.787Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:56:19.787Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:56:19.788Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:56:19.788Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:56:19.788Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:56:19.789Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:56:19.875Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:56:19.875Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:56:19.905Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:56:19.905Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:56:19 AM] [READY] Bot is now online and ready!07:56 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:57:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:57:18.809Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:57:18.810Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:57:18.810Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:57:18.811Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:57:18.811Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:57:18.811Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:57:18.896Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:57:18.896Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:57:18.926Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:57:18.927Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:57:18 AM] [READY] Bot is now online and ready!07:57 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:58:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:58:15.289Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:58:15.290Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:58:15.290Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:58:15.291Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:58:15.291Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:58:15.291Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:58:15.373Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:58:15.373Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:58:15.401Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:58:15.401Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:58:15 AM] [READY] Bot is now online and ready!07:58 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 7:59:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T00:59:19.551Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T00:59:19.552Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T00:59:19.552Z] [DEBUG] Applying voice connection patches
+[2025-10-13T00:59:19.552Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T00:59:19.553Z] [DEBUG] Voice state update handler patched
+[2025-10-13T00:59:19.553Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T00:59:19.638Z] [DEBUG] Registering player events (first time)
+[2025-10-13T00:59:19.638Z] [DEBUG] Registered player event handlers
+[2025-10-13T00:59:19.667Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T00:59:19.667Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 7:59:19 AM] [READY] Bot is now online and ready!07:59 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:18:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:18:18.859Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:18:18.859Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:18:18.860Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:18:18.860Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:18:18.860Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:18:18.861Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:18:18.934Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:18:18.934Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:18:18.963Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:18:18.963Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:18:19 PM] [READY] Bot is now online and ready!12:18 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:24:20 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:24:24.099Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:24:24.100Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:24:24.100Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:24:24.101Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:24:24.101Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:24:24.101Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:24:24.190Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:24:24.190Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:24:24.220Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:24:24.220Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:24:24 PM] [READY] Bot is now online and ready!12:24 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:26:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:26:57.979Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:26:57.980Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:26:57.980Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:26:57.980Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:26:57.980Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:26:57.981Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:26:58.072Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:26:58.072Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:26:58.104Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:26:58.104Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:27:07 PM] [READY] Bot is now online and ready!12:27 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:32:31 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:32:45.189Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:32:45.190Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:32:45.191Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:32:45.191Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:32:45.191Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:32:45.191Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:32:45.283Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:32:45.284Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:32:45.318Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:32:45.318Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:32:45 PM] [READY] Bot is now online and ready!12:32 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:35:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:35:58.097Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:35:58.098Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:35:58.098Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:35:58.099Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:35:58.099Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:35:58.099Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:35:58.191Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:35:58.191Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:35:58.221Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:35:58.222Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:35:58 PM] [READY] Bot is now online and ready!12:36 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:43:47 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:44:00.208Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:44:00.209Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:44:00.209Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:44:00.209Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:44:00.209Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:44:00.210Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:44:00.306Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:44:00.307Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:44:00.341Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:44:00.341Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:44:09 PM] [READY] Bot is now online and ready!12:44 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:47:07 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:47:20.788Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:47:20.789Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:47:20.789Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:47:20.789Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:47:20.790Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:47:20.789Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:47:20.864Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:47:20.864Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:47:20.893Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:47:20.894Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:47:20 PM] [READY] Bot is now online and ready!12:47 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 12:54:34 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T05:54:47.563Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T05:54:47.562Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T05:54:47.563Z] [DEBUG] Applying voice connection patches
+[2025-10-13T05:54:47.564Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T05:54:47.564Z] [DEBUG] Voice state update handler patched
+[2025-10-13T05:54:47.564Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T05:54:47.669Z] [DEBUG] Registering player events (first time)
+[2025-10-13T05:54:47.669Z] [DEBUG] Registered player event handlers
+[2025-10-13T05:54:47.702Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T05:54:47.702Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 12:54:47 PM] [READY] Bot is now online and ready!12:54 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:00:07 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:00:21.667Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:00:21.668Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:00:21.668Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:00:21.668Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:00:21.668Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:00:21.669Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:00:21.738Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:00:21.738Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:00:21.767Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:00:21.767Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:00:21 PM] [READY] Bot is now online and ready!13:00 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:06:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:06:25.547Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:06:25.548Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:06:25.548Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:06:25.548Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:06:25.548Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:06:25.549Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:06:25.642Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:06:25.642Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:06:25.674Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:06:25.674Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:06:35 PM] [READY] Bot is now online and ready!13:06 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:07:07 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:07:20.531Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:07:20.532Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:07:20.532Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:07:20.532Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:07:20.532Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:07:20.533Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:07:20.620Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:07:20.620Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:07:20.649Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:07:20.650Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:07:20 PM] [READY] Bot is now online and ready!13:07 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:13:50 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:14:02.734Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:14:02.735Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:14:02.736Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:14:02.736Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:14:02.736Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:14:02.736Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:14:02.828Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:14:02.829Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:14:02.864Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:14:02.864Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:14:02 PM] [READY] Bot is now online and ready!13:14 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:17:23 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:17:37.258Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:17:37.259Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:17:37.259Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:17:37.259Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:17:37.259Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:17:37.260Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:17:37.349Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:17:37.349Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:17:37.379Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:17:37.380Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:17:37 PM] [READY] Bot is now online and ready!13:17 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:23:35 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:23:50.325Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:23:50.326Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:23:50.326Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:23:50.326Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:23:50.326Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:23:50.327Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:23:50.408Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:23:50.408Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:23:50.442Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:23:50.442Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:23:50 PM] [READY] Bot is now online and ready!13:24 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:24:55 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:25:09.505Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:25:09.506Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:25:09.506Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:25:09.506Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:25:09.506Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:25:09.506Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:25:09.592Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:25:09.592Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:25:09.634Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:25:09.635Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:25:09 PM] [READY] Bot is now online and ready!13:25 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/13/2025, 1:26:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-13T06:26:15.618Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-13T06:26:15.618Z] [DEBUG] Using existing discord-player instance
+[2025-10-13T06:26:15.619Z] [DEBUG] Applying voice connection patches
+[2025-10-13T06:26:15.619Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-13T06:26:15.619Z] [DEBUG] Voice state update handler patched
+[2025-10-13T06:26:15.620Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-13T06:26:15.691Z] [DEBUG] Registering player events (first time)
+[2025-10-13T06:26:15.691Z] [DEBUG] Registered player event handlers
+[2025-10-13T06:26:15.719Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-13T06:26:15.719Z] [DEBUG] Initialized MusicManager
+
+[10/13/2025, 1:26:15 PM] [READY] Bot is now online and ready!13:26 (13-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5

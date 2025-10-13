@@ -17,38 +17,38 @@ const kickLogCache = new Map();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('moderation')
-        .setDescription('Moderation commands')
+        .setDescription('Lệnh Quản Trị')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('ban')
-                .setDescription('Ban a user by mention or ID')
-                .addUserOption(option => option.setName('user').setDescription('The user to ban').setRequired(false))
-                .addStringOption(option => option.setName('user_id').setDescription('The Discord ID of the user to ban').setRequired(false))
-                .addStringOption(option => option.setName('reason').setDescription('The reason for the ban').setRequired(false)))
+                .setDescription('Cấm User bằng Ping hoặc USERID')
+                .addUserOption(option => option.setName('user').setDescription('Chọn Người Dùng').setRequired(false))
+                .addStringOption(option => option.setName('user_id').setDescription('ID Người Dùng').setRequired(false))
+                .addStringOption(option => option.setName('reason').setDescription('Lí do ban').setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('unban')
-                .setDescription('Unban a user')
-                .addStringOption(option => option.setName('userid').setDescription('The user\'s Discord ID').setRequired(true))
-                .addStringOption(option => option.setName('reason').setDescription('The reason for the unban').setRequired(true)))
+                .setDescription('Gỡ cấm User bằng Ping hoặc USERID')
+                .addStringOption(option => option.setName('userid').setDescription('Chọn User (ID)').setRequired(true))
+                .addStringOption(option => option.setName('reason').setDescription('Lí Do Unban').setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('timeout')
-                .setDescription('Timeout a user')
-                .addUserOption(option => option.setName('user').setDescription('The user to timeout').setRequired(true))
-                .addStringOption(option => option.setName('time').setDescription('How long the user should be timed out, for example: 1d, 1h, 1m, or "perm" to perm mute').setRequired(true))
-                .addStringOption(option => option.setName('reason').setDescription('The reason for the timeout').setRequired(true)))
+                .setDescription('Cấm chat User')
+                .addUserOption(option => option.setName('user').setDescription('Chọn User để cấm').setRequired(true))
+                .addStringOption(option => option.setName('time').setDescription('User sẽ bị cấm chat bao lâu? , ví dụ: 1d, 1h, 1m, hoặc "perm" để mute vv').setRequired(true))
+                .addStringOption(option => option.setName('reason').setDescription('Lí do Mute').setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('cleartimeout')
-                .setDescription('Remove timeout from a user')
-                .addUserOption(option => option.setName('user').setDescription('The user to remove the timeout from').setRequired(true)))
+                .setDescription('Gỡ cấm chat User')
+                .addUserOption(option => option.setName('user').setDescription('Chọn User để unmute').setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('warn')
-                .setDescription('Warn a user')
-                .addUserOption(option => option.setName('user').setDescription('The user to warn').setRequired(true))
-                .addStringOption(option => option.setName('reason').setDescription('The reason for the warn').setRequired(true)))
+                .setDescription('Nhắc nhở User')
+                .addUserOption(option => option.setName('user').setDescription('Chọn User để nhắc nhở').setRequired(true))
+                .addStringOption(option => option.setName('reason').setDescription('Lí do nhắc nhở').setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('warnlist')
@@ -57,21 +57,21 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('unwarn')
-                .setDescription('Remove a warning from a user')
+                .setDescription('Gỡ nhắc nhở User')
                 .addUserOption(option =>
                     option.setName('user')
-                        .setDescription('The user to unwarn')
+                        .setDescription('Chọn User để gỡ nhắc nhở')
                         .setRequired(true))
                 .addIntegerOption(option =>
                     option.setName('warning_id')
-                        .setDescription('The ID of the warning to remove')
+                        .setDescription('Ghi ID User để gỡ nhắc nhở')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('kick')
-                .setDescription('Kick a user')
-                .addUserOption(option => option.setName('user').setDescription('The user to kick').setRequired(true))
-                .addStringOption(option => option.setName('reason').setDescription('The reason for the kick').setRequired(true)))
+                .setDescription('Đuổi Người dùng')
+                .addUserOption(option => option.setName('user').setDescription('Chọn User để đuổi').setRequired(true))
+                .addStringOption(option => option.setName('reason').setDescription('Lí do đuổi').setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('nickname')
@@ -87,28 +87,28 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('clearhistory')
-                .setDescription('Clear a user\'s history')
-                .addUserOption(option => option.setName('user').setDescription('The user to clear history from').setRequired(true)))
+                .setDescription('Xóa Lịch sử User')
+                .addUserOption(option => option.setName('user').setDescription('Chọn User').setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('clearchannel')
-                .setDescription('Delete all messages in a channel'))
+                .setDescription('Xóa Tin Nhắn của kênh này'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('history')
-                .setDescription('View a user\'s history')
-                .addUserOption(option => option.setName('user').setDescription('The user to view history').setRequired(true)))
+                .setDescription('Xem lịch sử User ')
+                .addUserOption(option => option.setName('user').setDescription('Chọn User').setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('purge')
-                .setDescription('Purge specific messages in a channel')
+                .setDescription('Xóa Tin Nhắn cụ thể')
                 .addNumberOption(option =>
                     option.setName('amount')
-                        .setDescription('The number of messages to purge')
+                        .setDescription('Số tin nhắn muốn xóa')
                         .setRequired(true))
                 .addStringOption(option =>
                     option.setName('type')
-                        .setDescription('Type of messages to purge')
+                        .setDescription('Thể loại tin nhắn muốn xóa')
                         .addChoices(
                             { name: 'All', value: 'all' },
                             { name: 'Links', value: 'links' },
@@ -124,11 +124,11 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('tempban')
-                .setDescription('Temporarily ban a user')
-                .addStringOption(option => option.setName('duration').setDescription('Ban duration (e.g., 1d 2h 15m)').setRequired(true))
-                .addUserOption(option => option.setName('user').setDescription('The user to ban'))
-                .addStringOption(option => option.setName('userid').setDescription('The user ID to ban'))
-                .addStringOption(option => option.setName('reason').setDescription('Reason for the ban')))
+                .setDescription('Ban có thời hạn User')
+                .addStringOption(option => option.setName('duration').setDescription('Thời hạn (e.g., 1d 2h 15m)').setRequired(true))
+                .addUserOption(option => option.setName('user').setDescription('Chọn Người dùng'))
+                .addStringOption(option => option.setName('userid').setDescription('ID Người dùng'))
+                .addStringOption(option => option.setName('reason').setDescription('Lí do ban')))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('temprole')

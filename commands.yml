@@ -71,26 +71,26 @@ General: true
 # Moderation Commands - Tools for moderators to manage the server
 role: false
 antihoist: false
-tempban: false
-clearchannel: false
-clearhistory: false
-cleartimeout: false
-history: false
-kick: false
-poll: false
+tempban: true
+clearchannel: true
+clearhistory: true
+cleartimeout: true
+history: true
+kick: true
+poll: true
 purge: true
 removerole: false
-timeout: false
+timeout: true
 warn: true
-unwarn: false
+unwarn: true
 slowmode: false
 temprole: false
-nickname: true
+nickname: false
 moderation: false
 "Report Message": true
 
 # Utility Commands - Various utility and administrative commands
-tickets: false
+tickets: true
 tempvoice: false
 afk: true
 botavatar: true

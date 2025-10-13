@@ -22,21 +22,22 @@ ErrorEmbedColor: "#E74C3C"
 Cookie: "" # https://docs.drakodevelopment.net/our-bots/drako-bot/music
 
 Dashboard:
-  Enabled: false
-  ClientID: "CLIENT_ID"
-  ClientSecret: "CLIENT_SECRET"
-  Url: "http://localhost:7000" # http://IP:PORT/api/auth/callback
-  Port: 7000
+  Enabled: true
+  ClientID: "1372420632628822057"
+  ClientSecret: "BzGgQEciW7bfQc1fW0OtlohgSqVhkLql"
+  Url: "http://free01.asakamc.vn:20042" # http://IP:PORT/api/auth/callback
+  Port: 20042
   Auth:
-    JWTSecret: "SECRET" # Make your own, long password
+    JWTSecret: "NekoTechProductions1_G0243R712" # Make your own, long password
     
   Permissions:
     Dashboard:
-      Login: ["ROLE_ID", "ROLE_ID"] # Add your support role IDs here
-      Usage: ["ROLE_ID", "ROLE_ID"] # Add your support role IDs here
-      Settings: ["ROLE_ID", "ROLE_ID"] # Add your support role IDs here
-      Embed: ["ROLE_ID", "ROLE_ID"] # Add your support role IDs here
-      Suggestions: ["ROLE_ID", "ROLE_ID"] # Add your support role IDs here
+      Login: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
+      Usage: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
+      Settings: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
+      Embed: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
+      Suggestions: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
+
 
 # ===========================================================================
 # EVENT LOGS
