@@ -42,7 +42,7 @@ slot: true
 transfer: true
 withdraw: true
 work: true
-store: true
+store: false
 booster: true
 inventory: true
 economy: true

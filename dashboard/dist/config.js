@@ -19,8 +19,8 @@ window.DASHBOARD_CONFIG = {
     TICKETS: {
         TYPES: {
   "TicketType1": {
-    "name": "General Support",
-    "channelName": "{ticket-id}-General-{user}-{priority}",
+    "name": "Hỗ trợ Chung",
+    "channelName": "{ticket-id}-Chung-{user}-{priority}",
     "supportRoles": [
       "ROLE_ID"
     ],
@@ -30,21 +30,21 @@ window.DASHBOARD_CONFIG = {
       "restrictResponse": true,
       "announceClaim": true,
       "button": {
-        "Name": "Claim Ticket",
+        "Name": "Nhận Phiếu",
         "Emoji": "🎫",
         "Style": "Secondary"
       }
     },
     "button": {
-      "Name": "General Support",
+      "Name": "Hỗ trợ Chung",
       "Emoji": "🔍",
       "Style": "Danger",
-      "Description": "Open to receive general support"
+      "Description": "Mở để nhận hỗ trợ chung"
     },
     "questions": [
       {
         "PurchaseID": {
-          "Question": "Do you have a transaction ID?",
+          "Question": "Bạn có mã giao dịch không?",
           "Placeholder": "TBX-wdUGVApxKSMXham",
           "Style": "Short",
           "Required": false,
@@ -54,8 +54,8 @@ window.DASHBOARD_CONFIG = {
     ]
   },
   "TicketType2": {
-    "name": "Technical Support",
-    "channelName": "{ticket-id}-Technical-{user}-{priority}",
+    "name": "Hỗ trợ Kỹ thuật",
+    "channelName": "{ticket-id}-Kythuat-{user}-{priority}",
     "supportRoles": [
       "ROLE_ID"
     ],
@@ -67,16 +67,16 @@ window.DASHBOARD_CONFIG = {
       "restrictResponse": true,
       "announceClaim": true,
       "button": {
-        "Name": "Claim Ticket",
+        "Name": "Nhận Phiếu",
         "Emoji": "🎫",
         "Style": "Secondary"
       }
     },
     "button": {
-      "Name": "Technical Support",
+      "Name": "Hỗ trợ Kỹ thuật",
       "Emoji": "💻",
       "Style": "Primary",
-      "Description": "Technical questions and issues"
+      "Description": "Các câu hỏi và vấn đề kỹ thuật"
     },
     "questions": []
   }

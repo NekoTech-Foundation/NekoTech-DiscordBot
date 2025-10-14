@@ -33,7 +33,7 @@ fs.appendFile("./logs.txt", logMsg, (e) => {
 
 const version = Number(process.version.split('.')[0].replace('v', ''));
 if (version < 18) {
-    console.log(`${colors.red(`[ERROR] Drako Bot requires a NodeJS version of 18 or higher!\nYou can check your NodeJS by running the "node -v" command in your terminal.`)}`);
+    console.log(`${colors.red(`[ERROR] NekoBuckets Bot requires a NodeJS version of 18 or higher!\nYou can check your NodeJS by running the "node -v" command in your terminal.`)}`);
     console.log(`${colors.blue(`\n[INFO] To update Node.js, follow the instructions below for your operating system:`)}`);
     console.log(`${colors.green(`- Windows:`)} Download and run the installer from ${colors.cyan(`https://nodejs.org/`)}`);
     console.log(`${colors.green(`- Ubuntu/Debian:`)} Run the following commands in the Terminal:`);
@@ -43,7 +43,7 @@ if (version < 18) {
     console.log(`${colors.cyan(`  - sudo yum update`)}`);
     console.log(`${colors.cyan(`  - sudo yum install -y nodejs`)}`);
 
-    let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] Drako Bot requires a NodeJS version of 18 or higher!`;
+    let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] NekoBuckets Bot requires a NodeJS version of 18 or higher!`;
     fs.appendFile("./logs.txt", logMsg, (e) => {
         if (e) console.log(e);
     });
@@ -98,7 +98,7 @@ global.client = client;
      }
  })();
  
- const memoryChecker = new MemoryChecker('Drako Bot');
+ const memoryChecker = new MemoryChecker('NekoBuckets Bot');
  const fetch = require('node-fetch');
 //const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
  

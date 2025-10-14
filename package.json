@@ -1,13 +1,13 @@
 {
-    "name": "drakobot",
+    "name": "nekobuckets",
     "version": "1.8.5",
-    "description": "Drako Bot",
+    "description": "NekoBuckets Bot",
     "main": "index.js",
     "engines": {
         "node": ">=18.20.0"
     },
     "scripts": {
-        "start": "cross-env NODE_ENV=production node --expose-gc --optimize-for-size --max-old-space-size=1024 --gc-interval=100 --max-semi-space-size=2 index.js",
+        "start": "cross-env NODE_ENV=production node --expose-gc --optimize-for-size --max-old-space-size=3024 --gc-interval=100 --max-semi-space-size=2 index.js",
         "build": "cd dashboard && npm install && npx vite build",
         "dev": "concurrently \"node index.js\" \"cd dashboard && vite\""
     },

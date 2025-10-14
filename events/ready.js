@@ -230,7 +230,7 @@ async function displayStartupMessage(client) {
             uptimeInfo = ` | ${colors.green('●')} Uptime tracking active`;
         }
 
-        const headerText = 'DRAKO BOT ● POWERED BY DRAKO DEVELOPMENT';
+        const headerText = 'NEKOBUCKETS ● POWERED BY HEIZNERD/NEKOTECH FOUNDATION';
         const boxWidth = 70;
         const contentWidth = boxWidth - 2;
         const leftPadding = Math.floor((contentWidth - headerText.length) / 2);
@@ -240,29 +240,26 @@ async function displayStartupMessage(client) {
         console.log(colors.bold.cyan('║') + colors.bold.white(' '.repeat(leftPadding) + headerText + ' '.repeat(rightPadding)) + colors.bold.cyan('  ║'));
         console.log(colors.bold.cyan('╚══════════════════════════════════════════════════════════════════════╝\n'));
 
-        console.log(colors.bold.blue('┌─ ') + colors.bold.white('SYSTEM INFORMATION ') + colors.bold.blue('──────────────────────────────────────────┐'));
+        console.log(colors.bold.blue('┌─ ') + colors.bold.white('THÔNG TIN PHẦN CỨNG ') + colors.bold.blue('──────────────────────────────────────────┐'));
         console.log(colors.blue('│'));
-        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' Version    : ') + colors.bold.white(`v${packageFile.version}`));
-        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' Node       : ') + colors.bold.white(process.version));
-        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' Start Time : ') + colors.bold.white(startTime.toLocaleString()));
-        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' Memory     : ') + colors.bold.white(`${(used.heapUsed / 1024 / 1024).toFixed(2)} MB`));
+        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' PHIÊN BẢN    : ') + colors.bold.white(`v${packageFile.version}`));
+        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' NODEJS       : ') + colors.bold.white(process.version));
+        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' THỜI GIAN KHỞI ĐỘNG : ') + colors.bold.white(startTime.toLocaleString()));
+        console.log(colors.blue('│  ') + colors.blue('●') + colors.white(' RAM USAGE     : ') + colors.bold.white(`${(used.heapUsed / 1024 / 1024).toFixed(2)} MB`));
         console.log(colors.blue('│'));
 
-        console.log(colors.bold.magenta('├─ ') + colors.bold.white('RESOURCES ') + colors.bold.magenta('───────────────────────────────────────────────────┤'));
+        console.log(colors.bold.magenta('├─ ') + colors.bold.white('THÔNG TIN ADS ') + colors.bold.magenta('───────────────────────────────────────────────────┤'));
         console.log(colors.magenta('│'));
-        console.log(colors.magenta('│  ') + colors.magenta('●') + colors.white(' Support    : ') + colors.bold.white('discord.drakodevelopment.net'));
-        console.log(colors.magenta('│  ') + colors.magenta('●') + colors.white(' Docs       : ') + colors.bold.white('docs.drakodevelopment.net'));
+        console.log(colors.magenta('│  ') + colors.magenta('●') + colors.white(' BOT ĐƯỢC TẠO BỞI    : ') + colors.bold.white('NEKOTECH FOUNDATION'));
         console.log(colors.magenta('│'));
 
         if (config.Statistics !== false) {
-            console.log(colors.bold.yellow('├─ ') + colors.bold.white('BOT STATISTICS ') + colors.bold.yellow('──────────────────────────────────────────────┤'));
+            console.log(colors.bold.yellow('├─ ') + colors.bold.white('THỐNG KÊ MÁY CHỦ ') + colors.bold.yellow('──────────────────────────────────────────────┤'));
             console.log(colors.yellow('│'));
-            console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Users      : ') + colors.bold.white(client.users.cache.size));
+            console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' USER      : ') + colors.bold.white(client.users.cache.size));
             console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Channels   : ') + colors.bold.white(channelCount));
-            console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Commands   : ') + colors.bold.white(client.slashCommands.size));
+            console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' LỆNH HOẠT ĐỘNG   : ') + colors.bold.white(client.slashCommands.size));
             console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Messages   : ') + colors.bold.white(updatedGuildData.totalMessages));
-            console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Tickets    : ') + colors.bold.white(totalTickets));
-            console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Suggestions: ') + colors.bold.white(updatedGuildData.totalSuggestions));
             console.log(colors.yellow('│  ') + colors.yellow('●') + colors.white(' Bot Starts : ') + colors.bold.white(updatedGuildData.timesBotStarted));
             console.log(colors.yellow('│'));
         }
@@ -275,10 +272,10 @@ async function displayStartupMessage(client) {
             console.log(colors.yellow('│'));
         }
 
-        console.log(colors.bold.green('└─ ') + colors.bold.green('STATUS: BOT IS NOW ONLINE AND READY! ') + colors.bold.green('────────────────────────┘'));
+        console.log(colors.bold.green('└─ ') + colors.bold.green('TRẠNG THÁI: BOT ĐÃ HOẠT ĐỘNG! ') + colors.bold.green('────────────────────────┘'));
         console.log('');
 
-        fs.appendFile("./logs.txt", `\n[${new Date().toLocaleString()}] [READY] Bot is now online and ready!`, 
+        fs.appendFile("./logs.txt", `\n[${new Date().toLocaleString()}] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!`, 
             (e) => e && console.error('Error writing to log file:', e));
 
     } catch (error) {

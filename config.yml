@@ -125,7 +125,7 @@ BanLogs:
         - "**📅 Date:** {longtime}, {shorttime}"
         - " "
         - "🚷 You have been banned from the server."
-      Footer: "🔒 Moderation Action | DrakoBot"
+      Footer: "🔒 Moderation Action | NekoBuckets"
       Color: "#1769FF"
   LogsChannelID: "CHANNEL_ID"
   Embed:
@@ -137,7 +137,7 @@ BanLogs:
       - "**📅 Date:** {longtime}, {shorttime}"
       - " "
       - "This ban has been completed."
-    Footer: "🔒 Moderation Action | DrakoBot"
+    Footer: "🔒 Moderation Action | NekoBuckets"
     Color: "#1769FF"
   Thumbnail: true
 
@@ -153,7 +153,7 @@ UnbanLogs:
       - "**📅 Date:** {longtime}, {shorttime}"
       - " "
       - "The user's ban has been lifted, restoring their access to the server."
-    Footer: "🔒 Moderation Action | DrakoBot"
+    Footer: "🔒 Moderation Action | NekoBuckets"
     Color: "#1769FF"
   Thumbnail: true
 
@@ -168,7 +168,7 @@ KickLogs:
         - "**🛠️ Kicked By:** {moderator}"
         - "**📝 Reason:** {reason}"
         - "**📅 Date:** {longTime}, {shortTime}"
-      Footer: "🔒 Moderation Action | DrakoBot"
+      Footer: "🔒 Moderation Action | NekoBuckets"
       Color: "#1769FF"
   LogsChannelID: "CHANNEL_ID"
   Embed:
@@ -178,7 +178,7 @@ KickLogs:
       - "**🔧 Moderator:** {moderator}"
       - "**📝 Reason:** {reason}"
       - "**📅 Date:** {longTime}, {shortTime}"
-    Footer: "🔒 Moderation Action | DrakoBot"
+    Footer: "🔒 Moderation Action | NekoBuckets"
     Color: "#1769FF"
     Thumbnail: true
 
@@ -208,7 +208,7 @@ GiveawayLogs:
         - "**📢 Channel:** {channel}"
         - "**🏆 Winner Count:** `{winnerCount}`"
         - "**⏰  Ends in:** {endsIn}"
-      Footer: "🔒 Giveaway Log | DrakoBot"
+      Footer: "🔒 Giveaway Log | NekoBuckets"
       Color: "#1769FF"
       ThumbnailUrl: "https://i.imgur.com/ewT6bOT.png"
       Thumbnail: true
@@ -222,7 +222,7 @@ GiveawayLogs:
         - "**📢 Channel:** {channel}"
         - "**🏆 Winner Count:** `{winnerCount}`"
         - "**🏆 Winners:** {winners}"
-      Footer: "🔒 Giveaway Log | DrakoBot"
+      Footer: "🔒 Giveaway Log | NekoBuckets"
       Color: "#1769FF"
       ThumbnailUrl: "https://i.imgur.com/ewT6bOT.png"
       Thumbnail: true
@@ -236,7 +236,7 @@ GiveawayLogs:
         - "**📢 Channel:** {channel}"
         - "**🏆 Winner Count:** `{winnerCount}`"
         - "**🏆 New Winners:** {winners}"
-      Footer: "🔒 Giveaway Log | DrakoBot"
+      Footer: "🔒 Giveaway Log | NekoBuckets"
       Color: "#1769FF"
       ThumbnailUrl: "https://i.imgur.com/ewT6bOT.png"
       Thumbnail: true
@@ -246,7 +246,7 @@ GiveawayLogs:
 # TICKET SYSTEM
 # ===========================================================================
 TicketSettings:
-  Enabled: false
+  Enabled: true
   LogsChannelID: "CHANNEL_ID"
   MaxTickets: 1
   DeletionTime: "0"
@@ -280,18 +280,18 @@ TicketSettings:
 
   CloseReasons:
     Enabled: true
-    DefaultReason: "No reason provided"
+    DefaultReason: "Không lí do cụ thể."
     Reasons:
-      - name: "Issue Resolved"
+      - name: "Đã hoàn thành"
         emoji: "✅"
         value: "resolved"
       - name: "User Request"
         emoji: "👋"
         value: "user_request"
-      - name: "Inactive"
+      - name: "Không hoạt động"
         emoji: "⏰"
         value: "inactive"
-      - name: "Invalid"
+      - name: "Không tồn tại"
         emoji: "❌"
         value: "invalid"
     AllowCustomReason: true
@@ -317,8 +317,8 @@ Priority:
       MoveTop: true # Should their ticket be moved to the top of the category?
 
 WorkingHours:
-  Enabled: false
-  Timezone: "Europe/London" # https://gist.github.com/diogocapela/12c6617fc87607d11fd62d2a4f42b02a
+  Enabled: true
+  Timezone: "Asia/Ho_Chi_Minh" # https://gist.github.com/diogocapela/12c6617fc87607d11fd62d2a4f42b02a
   NonWorkingDays: ["Saturday", "Sunday"] # Days that are completely off - no working hours
   Schedule: 
     Monday: "16:00-22:00"
@@ -332,17 +332,17 @@ WorkingHours:
 
 WorkingEmbed: # This will be posted in the ticket if it's raised out of hours
   Embed:
-    Title: "Support Ticket Notice"
+    Title: "Lưu ý cho bạn."
     Description:
-      - "Please note that this ticket has been raised outside of working hours."
-      - "Our response may be delayed."
+      - "Xin lưu ý rằng vé hỗ trợ này được gửi ngoài giờ làm việc."
+      - "Chúng mình có thể reply bạn trễ hoặc không reply."
       - " "
-      - "Our working hours are between {workinghours_start} and {workinghours_end}."
+      - "Khung giờ hoạt động: {workinghours_start} tới {workinghours_end}."
     Footer:
-      Text: "Drako Development | Ticket System"
+      Text: "NekoTech Foundation | Ticket System"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Author:
-      Text: "Drako Development Support"
+      Text: "NekoTech Foundation Support"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Color: "#1769FF"
     Image: "https://images-ext-1.discordapp.net/external/OllWGq5ta58LX6KoA8yEVTMrI9L4BJ0iE_T0pE4TZvw/https/i.imgur.com/LbjDuZ8.png?format=webp&quality=lossless&width=1618&height=403"
@@ -353,15 +353,15 @@ TicketPanelSettings:
     Embed:
       Title: "📩 Support Tickets"
       Description: 
-        - "Please select a category below for assistance."
+        - "Vui lòng chọn một danh mục bên dưới để được hỗ trợ."
         - " "
-        - "🕒 **Standard Working Hours**: {workinghours_start_monday} - {workinghours_end_monday}"
-        - "_Note: We strive to be available outside these hours, but response times may be delayed._"
+        - "🕒 **Giờ hoạt động**: {workinghours_start_monday} - {workinghours_end_monday}"
+        - "_Lưu ý: Chúng tôi cố gắng hỗ trợ ngoài giờ này, nhưng thời gian phản hồi có thể bị chậm trễ._"
       Footer:
-        Text: "Drako Development | Ticket System"
+        Text: "NekoTech Foundation | Ticket System"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Author:
-        Text: "Drako Support Team"
+        Text: "NekoTech Support Team"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#1769FF"
       Image: "https://i.imgur.com/1FGL7XO.png"
@@ -371,31 +371,31 @@ TicketTranscript:
   Type: "TXT" # TXT, WEB
   Save: true
   MinMessages: "1"
-  SavePath: "./transcripts/"  # This will save in a transcripts folder in your bot's root directory
+  SavePath: "./transcripts/"  # Sẽ lưu trong thư mục transcripts ở thư mục gốc của bot
 
-# {ticketType} displays the ticket type
-# {user} is @John James
-# {guild} displays the guild 
-# {question} question array
-# {answer} answer array
-# {userIcon} displays the user's icon
+# {ticketType} hiển thị loại phiếu
+# {user} là @John James
+# {guild} hiển thị máy chủ 
+# {question} mảng câu hỏi
+# {answer} mảng câu trả lời
+# {userIcon} hiển thị icon của người dùng
 TicketCreation:
   Default:
     Followup:
-      Message: "Thank you {user} for reaching out! Please describe your issue in detail."
+      Message: "Cảm ơn {user} đã liên hệ! Vui lòng mô tả chi tiết vấn đề của bạn."
     Embed:
-      Title: "🎫 New Support Ticket"
+      Title: "🎫 Phiếu Hỗ trợ Mới"
       Description:
-        - "Welcome to our Support System, {user}!"
+        - "Chào mừng đến với Hệ thống Hỗ trợ của chúng tôi, {user}!"
         - ""
-        - "**Ticket Type:** {ticketType}"
-        - "**Expected Response Time:** Within 24 hours"
-        - "**Claimed By:** {claimer}"
+        - "**Loại Phiếu:** {ticketType}"
+        - "**Thời gian Phản hồi Dự kiến:** Trong vòng 24 giờ"
+        - "**Được xử lý bởi:** {claimer}"
         - ""
         - "{questions}"
-        - "Our support team will assist you shortly."
+        - "Đội ngũ hỗ trợ của chúng tôi sẽ sớm hỗ trợ bạn."
       Footer:
-        Text: "Drako Development | Ticket System"
+        Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#1769FF"
       Thumbnail: "{userIcon}" 
@@ -405,20 +405,20 @@ TicketCreation:
 
   TicketType1:
     Followup:
-      Message: "Thank you {user} for your purchase inquiry! Our sales team will assist you shortly."
+      Message: "Cảm ơn {user} về yêu cầu mua hàng của bạn! Đội ngũ bán hàng của chúng tôi sẽ sớm hỗ trợ bạn."
     Embed:
-      Title: "️ New Purchase Support Ticket"
+      Title: "️ Phiếu Hỗ trợ Mua hàng Mới"
       Description:
-        - "Welcome to our Sales Support, {user}!"
+        - "Chào mừng đến với bộ phận Hỗ trợ Bán hàng, {user}!"
         - ""
-        - "**Ticket Type:** {ticketType}"
-        - "**Expected Response Time:** Within 12 hours"
-        - "**Claimed By:** {claimer}"
+        - "**Loại Phiếu:** {ticketType}"
+        - "**Thời gian Phản hồi Dự kiến:** Trong vòng 12 giờ"
+        - "**Được xử lý bởi:** {claimer}"
         - ""
         - "{questions}"
-        - "Our sales team will assist you shortly."
+        - "Đội ngũ bán hàng của chúng tôi sẽ sớm hỗ trợ bạn."
       Footer:
-        Text: "Drako Development | Sales Support"
+        Text: "NekoTech | Hỗ trợ Bán hàng"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#00FF00"
       Thumbnail: "{userIcon}"
@@ -428,48 +428,48 @@ TicketCreation:
 
 ArchiveDesign:
   Embed:
-    Title: "Ticket Archived"
+    Title: "Phiếu đã được Lưu trữ"
     Description:
-      - "### 🎫 Ticket Status"
-      - "This ticket has been closed and archived."
+      - "### 🎫 Tình trạng Phiếu"
+      - "Phiếu này đã được đóng và lưu trữ."
       - ""
-      - "### 👤 Details"
-      - "> **Creator:** {userTag}"
-      - "> **Reason:** {reason}"
+      - "### 👤 Chi tiết"
+      - "> **Người tạo:** {userTag}"
+      - "> **Lý do:** {reason}"
       - ""
-      - "### ⚡ Quick Actions"
-      - "• Use the buttons below to manage this ticket"
-      - "• Need help? Create a new ticket"
+      - "### ⚡ Hành động Nhanh"
+      - "• Sử dụng các nút bên dưới để quản lý phiếu này"
+      - "• Cần giúp đỡ? Tạo một phiếu mới"
     Footer:
-      Text: "Drako Development • Ticket System"
+      Text: "NekoTech • Hệ thống Phiếu Hỗ trợ"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Color: "#2B2D31"
     Image: "https://i.imgur.com/LbjDuZ8.png"
     Thumbnail: "https://i.imgur.com/1SbfB8i.png"
     Buttons:
       1:
-        Name: "Reopen"
+        Name: "Mở lại"
         Emoji: "🔓"
         Style: "Primary"
         Type: "REOPEN"
       2:
-        Name: "Transcript"
+        Name: "Bản ghi"
         Emoji: "📑"
         Style: "Secondary"
         Type: "TRANSCRIPT"
       3:
-        Name: "Delete"
+        Name: "Xóa"
         Emoji: "🗑️"
         Style: "Danger"
         Type: "DELETE"
 
 UserLeftDesign:
   Embed:
-    Title: "User Alert"
+    Title: "Cảnh báo Người dùng"
     Description:
-      - "The creator of this ticket, **{user}** has left the server."
+      - "Người tạo phiếu này, **{user}** đã rời khỏi máy chủ."
     Footer:
-      Text: "User ID: {userId}"
+      Text: "ID Người dùng: {userId}"
       Icon: "{userIcon}"
     Author:
       Text: ""
@@ -478,7 +478,7 @@ UserLeftDesign:
     Image: ""
     Thumbnail: "{userIcon}"
   Button:
-    Name: "Delete Ticket"
+    Name: "Xóa Phiếu"
     Emoji: "⛔"
     Style: "Secondary" # Primary, Secondary, Success, Danger
 
@@ -486,12 +486,12 @@ TicketTypes:
   TicketType1:
     Enabled: true
     Panel: "Panel1"
-    Name: "General Support"
-    ChannelName: "{ticket-id}-General-{user}-{priority}"
-    ChannelTopic: "Category: {ticketType} | User: {userid} | Priority: {priority}"
+    Name: "Hỗ trợ Chung"
+    ChannelName: "{ticket-id}-Chung-{user}-{priority}"
+    ChannelTopic: "Danh mục: {ticketType} | Người dùng: {userid} | Ưu tiên: {priority}"
     CategoryID: "CATEGORY_ID"
-    AutoAlert: "12h" # How long until /alert is sent (When the user doesn't respond in the ticket') - Set to 0 to disable
-    ArchiveCategory: "" # Leave blank to delete ticket rather than Archive
+    AutoAlert: "12h" 
+    ArchiveCategory: "" 
     SupportRole: ["ROLE_ID"]
     UserRole: []
     TagSupport: false
@@ -500,51 +500,51 @@ TicketTypes:
     Claiming:
       Enabled: true
       Button:
-        Name: "Claim Ticket"
+        Name: "Nhận Phiếu"
         Emoji: "🎫"
-        Style: "Secondary" # Primary, Secondary, Success, Danger
-      RestrictResponse: true # If true, only the claimer can respond until unclaimed
-      AnnounceClaim: true # Should the ticket be announced to the channel when claimed?
+        Style: "Secondary"
+      RestrictResponse: true
+      AnnounceClaim: true
     Button:
-      Name: "General Support"
+      Name: "Hỗ trợ Chung"
       Emoji: "🔍"
       Style: "Danger"
-      Description: "Open to receive general support"
+      Description: "Mở để nhận hỗ trợ chung"
     Questions: 
       - PurchaseID:
-          Question: "Do you have a transaction ID?"
+          Question: "Bạn có mã giao dịch không?"
           Placeholder: "TBX-wdUGVApxKSMXham"
-          Style: "Short" # Short, Paragraph
+          Style: "Short"
           Required: false
           maxLength: 1000
 
   TicketType2:
     Enabled: true
-    Panel: "Panel1" # Which panel should this type be assigned to? 
-    Name: "Technical Support"
-    ChannelName: "{ticket-id}-Technical-{user}-{priority}"
-    ChannelTopic: "Category: {ticketType} | User: {userid} | Priority: {priority}"
+    Panel: "Panel1"
+    Name: "Hỗ trợ Kỹ thuật"
+    ChannelName: "{ticket-id}-Kythuat-{user}-{priority}"
+    ChannelTopic: "Danh mục: {ticketType} | Người dùng: {userid} | Ưu tiên: {priority}"
     CategoryID: ""
-    AutoAlert: "12h" # How long until /alert is sent (When the user doesn't respond in the ticket') - Set to 0 to disable
+    AutoAlert: "12h"
     ArchiveCategory: ""
     SupportRole: ["ROLE_ID"]
     UserRole: [""] 
     TagSupport: false
     TagCreator: false
-    RestrictDeletion: false # Should the ticket be closable by users?
+    RestrictDeletion: false
     Claiming:
       Enabled: true
       Button:
-        Name: "Claim Ticket"
+        Name: "Nhận Phiếu"
         Emoji: "🎫"
-        Style: "Secondary" # Primary, Secondary, Success, Danger
-      RestrictResponse: true # If true, only the claimer can respond until unclaimed
-      AnnounceClaim: true # Should the ticket be announced to the channel when claimed?
+        Style: "Secondary"
+      RestrictResponse: true
+      AnnounceClaim: true
     Button:
-      Name: "Technical Support"
+      Name: "Hỗ trợ Kỹ thuật"
       Emoji: "💻"
-      Style: "Primary" # Primary, Secondary, Success, Danger
-      Description: "Technical questions and issues"
+      Style: "Primary"
+      Description: "Các câu hỏi và vấn đề kỹ thuật"
     Questions: []
 
 Alert:
@@ -552,77 +552,77 @@ Alert:
   Time: "12h"
   DM:
     Enabled: true
-    LogFailures: false # Whether to log DM failures in the ticket channel
+    LogFailures: false
     Embed:
-      Title: "⚠️ Ticket Alert"
+      Title: "⚠️ Cảnh báo Phiếu"
       Description:
-        - "Hello {user}"
+        - "Chào {user}"
         - " "
-        - "**Ticket Information**"
-        - "> **Server:** {guild}"
-        - "> **Time Until Close:** {time}"
-        - "> **Reason:** {reason}"
+        - "**Thông tin Phiếu**"
+        - "> **Máy chủ:** {guild}"
+        - "> **Thời gian còn lại trước khi đóng:** {time}"
+        - "> **Lý do:** {reason}"
         - " "
-        - "**⚠️ Action Required**"
-        - "Your ticket requires attention and will be automatically closed if no response is received."
-        - "Click the button below to go to your ticket."
+        - "**⚠️ Yêu cầu Hành động**"
+        - "Phiếu của bạn cần được chú ý và sẽ tự động đóng nếu không có phản hồi."
+        - "Nhấp vào nút bên dưới để đến phiếu của bạn."
       Footer:
-        Text: "Drako Development | Ticket System"
+        Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Author:
-        Text: "Ticket Alert System"
+        Text: "Hệ thống Cảnh báo Phiếu"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#FF0000"
       Image: ""
       Thumbnail: ""
     Button:
-      Label: "Go to Ticket"
+      Label: "Đến Phiếu"
       Emoji: "🎫"
 
   Embed:
-    Title: "⚠️ Ticket Alert"
+    Title: "⚠️ Cảnh báo Phiếu"
     Description:
-      - "**Ticket Information**"
-      - "> **User:** {user}"
-      - "> **Time Until Close:** {time}"
-      - "> **Reason:** {reason}"
+      - "**Thông tin Phiếu**"
+      - "> **Người dùng:** {user}"
+      - "> **Thời gian còn lại trước khi đóng:** {time}"
+      - "> **Lý do:** {reason}"
       - " "
-      - "**⚠️ Action Required**"
-      - "This ticket requires attention and will be automatically closed if no response is received."
+      - "**⚠️ Yêu cầu Hành động**"
+      - "Phiếu này cần được chú ý và sẽ tự động đóng nếu không có phản hồi."
     Footer:
-      Text: "Drako Development | Ticket System"
+      Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Author:
-      Text: "Ticket Alert System"
+      Text: "Hệ thống Cảnh báo Phiếu"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Color: "#FF0000"
     Image: ""
     Thumbnail: ""
     Button:
-      Label: "Close Ticket"
+      Label: "Đóng Phiếu"
       Emoji: "🔒"
-      Style: "Danger" # Primary, Secondary, Success, Danger
+      Style: "Danger"
 
 TicketClosureDM:
   Enabled: true
   Transcript: true
   Embed:
-    Title: "Ticket Closure Notification"
+    Title: "Thông báo Đóng Phiếu"
     Description:
-      - "{userTag}, your ticket in {guild} has been closed."
+      - "{userTag}, phiếu của bạn tại {guild} đã được đóng."
       - " "
-      - "**Ticket Summary**"
-      - "> **Messages:** {messageCount}"
-      - "> **Priority:** {priority}"
-      - "> **Handled By:** {claimer}"
-      - "> **Close Reason:** {reason}"
+      - "**Tóm tắt Phiếu**"
+      - "> **Tin nhắn:** {messageCount}"
+      - "> **Ưu tiên:** {priority}"
+      - "> **Xử lý bởi:** {claimer}"
+      - "> **Lý do đóng:** {reason}"
       - " "
-      - "We value your feedback! Please leave us a review below."
+      - "Chúng tôi đánh giá cao phản hồi của bạn! Vui lòng để lại đánh giá cho chúng tôi bên dưới."
     Footer:
-      Text: "Drako Development | Ticket System"
+      Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Author:
-      Text: "Drako Support"
+      Text: "Hỗ trợ Drako"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Color: "#1769FF"
     Image: "https://images-ext-1.discordapp.net/external/OllWGq5ta58LX6KoA8yEVTMrI9L4BJ0iE_T0pE4TZvw/https/i.imgur.com/LbjDuZ8.png?format=webp&quality=lossless&width=1618&height=403"
@@ -631,40 +631,40 @@ TicketClosureDM:
 Reviews:
   Enabled: true
   Emoji: "⭐"
-  Placeholder: "Rate us!"
-  Text: "Stars"
-  askWhy: true # Should the bot ask the user why for the review they gave?
+  Placeholder: "Đánh giá chúng tôi!"
+  Text: "Sao"
+  askWhy: true
 
 Logs:
   Close: 
     Embed:
-      Title: "**Ticket Closure**"
+      Title: "**Đóng Phiếu**"
       Description:
-        - "**Closure**"
-        - "> Ticket has been closed by {userTag}."
-        - "> **Reason:** {reason}"
+        - "**Việc đóng phiếu**"
+        - "> Phiếu đã được đóng bởi {userTag}."
+        - "> **Lý do:** {reason}"
         - " "
-        - "**Information**"
-        - "> **Creator:** {ticketCreator}"
-        - "> **Messages:** {messageCount}"
-        - "> **Priority:** {priority}"
-        - "> **Claimed By:** {claimer}"
+        - "**Thông tin**"
+        - "> **Người tạo:** {ticketCreator}"
+        - "> **Tin nhắn:** {messageCount}"
+        - "> **Ưu tiên:** {priority}"
+        - "> **Xử lý bởi:** {claimer}"
         - " "
-        - "**Ticket Channel**"
+        - "**Kênh Phiếu**"
         - "> {channelName}"
         - " " 
-        - "**Review**"
-        - "> **Rating:** {rating}"
+        - "**Đánh giá**"
+        - "> **Xếp hạng:** {rating}"
       Footer:
-        Text: "Drako Development | Ticket System"
+        Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Author:
-        Text: "Ticket System"
+        Text: "Hệ thống Phiếu Hỗ trợ"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#1769FF"
       Image: "https://images-ext-1.discordapp.net/external/OllWGq5ta58LX6KoA8yEVTMrI9L4BJ0iE_T0pE4TZvw/https/i.imgur.com/LbjDuZ8.png?format=webp&quality=lossless&width=1618&height=403"
       Thumbnail: "https://i.imgur.com/w5XxKpc.png"
-      ReviewFormat: "> **Review:** `{review}`"
+      ReviewFormat: "> **Đánh giá:** `{review}`"
 
 # ===========================================================================
 # LEVELING SYSTEM
@@ -685,14 +685,14 @@ Logs:
 # {guildIcon}: Displays the guilds icon
 
 LevelingSystem:
-  Enabled: false
+  Enabled: true
   ResetDataOnLeave: false # Reset user level and xp if they leave the server?
   MessageXP: "10-20" # Range of XP gained from sending messages
   VoiceXP: "1-3" # Range of XP gained from being in a voice call
   XPNeeded: 150 # XP multiplier each level
-  Permission: ["ROLE_ID", "ROLE_ID"] # Who can use the level admin commands?
+  Permission: ["1388890272766623784"] # Who can use the level admin commands?
   ChannelSettings:
-    LevelUpChannelID: "" # Leave empty for the channel the user is currently in
+    LevelUpChannelID: "1427240930213236809" # Leave empty for the channel the user is currently in
     DisabledChannels: [""] # Users won't gain XP in these channels
     DisabledCategories: [""] # Users won't gain XP in these categories
 
@@ -702,10 +702,10 @@ LevelingSystem:
     VoiceInterval: "10s"
 
   LevelUpMessageSettings:
-    LevelUpMessage: "{user}, you are now level {newLevel}"
+    LevelUpMessage: "{user}, Bạn đã thăng cấp,cấp hiện tại {newLevel}"
     UseEmbed: false
     Embed:
-      Title: "🎉 Level Up!"
+      Title: "🎉 Tăng Cấp!!!"
       Description:
         - "{randomLevelMessage}"
       Footer:
@@ -801,7 +801,7 @@ AutoKick:
        - "🚫 **Notice:** You failed to verify within the given amount of time."
        - "Please rejoin and verify to remain in our server. discord.gg/drakobot"
      Color: "#1769FF"
-     Footer: "Automatic Kick | DrakoBot"
+     Footer: "Automatic Kick | NekoBuckets"
 
 # Alt Prevention System
 AltPrevention:
@@ -878,7 +878,7 @@ BlacklistWords:
         - "🚫 **Action:** Your message was deleted"
         - "**🕰️ Time:** {longtime}, {shorttime}"
       Color: "#1769FF"
-      Footer: "DrakoBot | {shorttime}"
+      Footer: "NekoBuckets | {shorttime}"
       Thumbnail: true
   LogsChannelID: "CHANNEL_ID"
   Embed:
@@ -889,7 +889,7 @@ BlacklistWords:
       - "🚫 **Consequence:** Message was removed"
       - "**🕰️ Timestamp:** {longtime}, {shorttime}"
     Footer:
-      Text: "DrakoBot | {guildName}"
+      Text: "NekoBuckets | {guildName}"
       Icon: "{guildIcon}"
     Author:
       Text: ""
@@ -926,7 +926,7 @@ AntiNuke:
               - "🚫 **Amount:** {threshold_amount}"
               - "**📅 Date:** {timestamp}"
             Color: "#1769FF"
-            Footer: "Anti Nuke | DrakoBot"
+            Footer: "Anti Nuke | NekoBuckets"
             Thumbnail: true
             LogsChannelID: "CHANNEL_ID" # Set to "" to disable
 
@@ -952,7 +952,7 @@ AntiNuke:
               - "🚫 **Amount:** {threshold_amount}"
               - "**📅 Date:** {timestamp}"
             Color: "#1769FF"
-            Footer: "Anti Nuke | DrakoBot"
+            Footer: "Anti Nuke | NekoBuckets"
             Thumbnail: true
             LogsChannelID: "CHANNEL_ID"
 
@@ -973,7 +973,7 @@ AntiHoist:
       - "🟥 **Old Display Name:** `{oldDisplayName}`"
       - "🟩 **New Display Name:** `{newDisplayName}`"
     Color: "#1769FF"
-    Footer: "Anti Hoist System | DrakoBot"
+    Footer: "Anti Hoist System | NekoBuckets"
     Thumbnail: true
 
 # Anti User Mass Mention
@@ -1019,7 +1019,7 @@ Report:
       - "**Reason:** {reason}"
       - "**Date:** {timestamp}"
     Footer:
-      Text: "Report System | DrakoBot"
+      Text: "Report System | NekoBuckets"
       Icon: "{guildIcon}"
     Author:
       Text: ""
@@ -1135,12 +1135,12 @@ LeaveMessage:
 # JOIN ROLE/VERIFICATION CONFIGURATION
 # ===========================================================================
 JoinRoleSettings:
-  Enabled: false
-  JoinRoles: ["ROLE_ID", "ROLE_ID"] # This is the roles users get when they join your discord server, You can add multiple
+  Enabled: true
+  JoinRoles: ["1388890274436223128"] # This is the roles users get when they join your discord server, You can add multiple
   RestoreRoles: # Should the user get back their original roles before leaving the server?
     Enabled: true # Leave below blank to give all roles
-    Blacklist: ["ROLE_ID", "ROLE_ID"] # If used, any roles not in the whitelist won't be given
-    Whitelist: ["ROLE_ID", "ROLE_ID"] # If used, all roles will be given apart from the ones defined
+    Blacklist: ["ROLE_ID"] # If used, any roles not in the whitelist won't be given
+    Whitelist: ["ROLE_ID"] # If used, all roles will be given apart from the ones defined
 
 # Verification Types:
 # BUTTON - When a user clicks the button, they get the specified role
@@ -1148,19 +1148,19 @@ JoinRoleSettings:
 VerificationSettings:
   Enabled: false # Enable users to verify when they join your discord server?
   DeleteAllMessages: true # Delete all user messages in the verification channel?
-  ChannelID: "CHANNEL_ID" # The channel users should verify in
-  VerificationType: "CAPTCHA" # Options: BUTTON, CALCULATOR, CAPTCHA
-  VerifiedRoleID: ["ROLE_ID"] # The roles users get when they successfully verify, You can add multiple
+  ChannelID: "1427241810224218204" # The channel users should verify in
+  VerificationType: "BUTTON" # Options: BUTTON, CALCULATOR, CAPTCHA
+  VerifiedRoleID: ["1423609600795476088"] # The roles users get when they successfully verify, You can add multiple
   RoleToRemove: "" # The role to remove when they successfully verify, Leave blank for none
   EnableUnverifiedRole: false # Enable the Unverified role? (Automatically created and denied access to all channels other than verify channel)
 
 VerificationEmbed:
-  Title: "Verify"
-  Description: "Please verify to get full access to the server.\nClick the **button** below to get verified!"
+  Title: "Xác minh"
+  Description: "Hãy xác minh bạn không phải bot để tham gia vào Trụ Sở NekoTech!.\nNhấn vào nút ở dưới để bắt đầu xác minh!"
   Image: "https://i.imgur.com/R4qVpUy.png"
 
 VerificationButton:
-  Name: "Verify"
+  Name: "Xác Minh"
   Emoji: "✅"
   Color: "Secondary" # Primary, Secondary, Success, Danger
 
@@ -1293,7 +1293,7 @@ CustomCommands:
         - ""
         - "Need further assistance? Don't hesitate to open a support ticket."
       Footer:
-        Text: "Drako Development | MongoDB Setup"
+        Text: "NekoTech | MongoDB Setup"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#1769FF"
       Thumbnail: ""
@@ -1447,7 +1447,7 @@ Music:
 Economy:
   defaultInterestRate: 0.00
   interestInterval: ["10:00"]
-  administrator: ["ROLE_ID", "ROLE_ID"]
+  administrator: ["1388890272766623784", "1388890276382380183"]
   maxInterestEarning: 100000  # Optional: Set to 0 for no limit
 
   Daily:
@@ -1540,82 +1540,89 @@ Economy:
 Store:
   Ranks:
     1:
-      Name: "Example Rank"
-      Description: "-# Gain the supporter role in our server"
+      Name: "Rank [ VIP MEMBERSHIP ]"
+      Description: "-# Rank Thành viên hạng cao,ưu tiên reply ticket"
       Price: "10000"
-      RoleID: ["ROLE_ID", "ROLE_ID"]
-      Limit: "1"
+      RoleID: ["1426889490881843311"]
+      Limit: "10"
     2:
-      Name: "Example Rank with Booster"
-      Description: "-# Gain the supporter role in our server and a 1 day money booster."
+      Name: "Rank [ VIP MEMBERSHIP ],Gói x2 Xu trong 48h"
+      Description: "-# Rank Thành viên hạng cao,ưu tiên reply ticket."
       Price: "20000"
-      RoleID: ["ROLE_ID", "ROLE_ID"]
+      RoleID: ["1426889490881843311"]
       Booster: "Money"
-      Multiplier: "1.5"
-      Duration: "24h"
+      Multiplier: "2.0"
+      Duration: "48h"
       Limit: "1"
 
   Boosters:
     1:
-      Name: "Example Booster"
-      Description: "-# Boost the amount of coins you can earn for 1 day"
+      Name: "X2 Xu (1 Ngày)"
+      Description: "-# Tăng lượng xu kiếm được trong 1 ngày của bạn."
       Price: "15000"
-      RoleID: ["ROLE_ID", "ROLE_ID"]
+      RoleID: ["1427185834909503578"]
       Booster: "Money"
-      Multiplier: "1.5"
+      Multiplier: "2.0"
       Duration: "24h"
     2:
-      Name: "Fishing Luck Booster"
-      Description: "-# Increase your chances of catching rare fish by 20% for 1 day"
+      Name: "Tăng cường XP Câu cá"
+      Description: "-# Tăng 50% XP câu cá nhận được trong 1 ngày"
+      Price: "2500"
+      Booster: "FishingXP"
+      Multiplier: "1.5"
+      Duration: "24h"
+    3:
+      Name: "Tăng cường May mắn Câu cá"
+      Description: "-# Tăng 20% cơ hội bắt được cá hiếm trong 1 ngày"
       Price: "5000"
       Booster: "FishingLuck"
       Multiplier: "1.2"
       Duration: "24h"
 
-  Items:
+  Items: # Vật phẩm
     1:
-      Name: "Bank Interest 0.3%" # Purchasing a higher % one will override this one
-      Description: "-# Increase your bank interest by 0.3%"
+      Name: "Lãi suất Ngân hàng 0.3%" # Mua cái có % cao hơn sẽ ghi đè lên cái này
+      Description: "-# Tăng lãi suất ngân hàng của bạn thêm 0.3%"
       Price: "10000"
       Type: "Interest"
       Interest: "0.3"
-      Limit: "1" # How many of these items can the user purchase? 
+      Limit: "1" # Người dùng có thể mua bao nhiêu vật phẩm này? 
     2:
-      Name: "Fishing Bait"
-      Description: "-# Increases your chances of catching fish"
+      Name: "Mồi câu"
+      Description: "-# Tăng cơ hội bắt được cá của bạn"
       Price: "100"
       Type: "Consumable"
       Uses: 5
       Effect: "FishingCatchBonus"
       Bonus: 1.2
 
-  Equipment:
+  Equipment: # Trang bị
     1:
-      Name: "Basic Fishing Rod"
-      Description: "-# A simple rod for beginners"
+      Name: "Cần câu Cơ bản"
+      Description: "-# Một chiếc cần câu đơn giản cho người mới bắt đầu"
       Price: "1000"
       Type: "FishingRod"
       CatchBonus: 1.1
       DurabilityBonus: 1.0
       LuckBonus: 1.05
-      CooldownReduction: 60000  # 1 minute
+      CooldownReduction: 60000  # 1 phút
     2:
-      Name: "Master Fishing Rod"
-      Description: "-# The best rod money can buy"
+      Name: "Cần câu Bậc thầy"
+      Description: "-# Chiếc cần câu tốt nhất mà tiền có thể mua được"
       Price: "50000"
       Type: "FishingRod"
       CatchBonus: 2.0
       DurabilityBonus: 3.0
       LuckBonus: 1.7
-      CooldownReduction: 900000  # 15 minutes
+      CooldownReduction: 900000  # 15 phút
 
   Embed:
-    Title: "{shopName} Store"
+    Title: "Cửa hàng {shopName}"
     Description:
-      - "{itemCount}: {item} ({price} coins)"
+      - "{itemCount}: {item} ({price} xu)"
       - "{description}"
     Footer:
-      Text: "Page {pageCurrent} of {pageMax}"
+      Text: "Trang {pageCurrent} trên {pageMax}"
       Icon: ""
     Author:
       Text: ""
@@ -1624,7 +1631,7 @@ Store:
     Image: ""
     Thumbnail: ""
   Categories:
-    - "Ranks"
-    - "Boosters"
-    - "Items"
-    - "Equipment"
+    - "Hạng"
+    - "Vật phẩm tăng cường"
+    - "Vật phẩm"
+    - "Trang bị"
