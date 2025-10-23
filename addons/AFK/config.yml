@@ -1,0 +1,89 @@
+enabled: true
+
+# ===========================================
+#  General Settings
+# ===========================================
+settings:
+  # Roles that can use the AFK command (empty = everyone)
+  allowed_roles: [] # ["ROLE_ID", "ROLE_ID"]
+  notification_channel: ""
+  mention_notifications: true
+  default_color: "#ff6b6b"
+  default_thumbnail: ""
+
+# ===========================================
+#  Message Templates
+# ===========================================
+messages:
+  # When someone mentions an AFK user
+  mention:
+    type: "embed"  # embed or text
+    text: "{username} Hiện đang Bận,Lí do: {reason}"
+    embed:
+      color: "#ff6b6b"
+      title: "{username} Hiện đang Bận,Lí do"
+      description: |
+        **Lí do:** {reason}
+        **Quay lại sau:** {return_time}
+        **AFK từ:** {timestamp}
+      footer:
+        text: "Trạng thái treo máy"
+        icon: "{user_avatar}"
+      thumbnail: "{user_avatar}"
+  
+  # When someone goes AFK
+  afk_enabled:
+    type: "embed"  # embed or text
+    text: "{username} Hiện đang AFK"
+    embed:
+      color: "#ff6b6b"
+      title: "⌛ Trạng Thái Treo Máy (Bật)"
+      description: |
+        **Người dùng:** {username}
+        **Lí do:** {reason}
+        **Quay lại sau:** {return_time}
+        **AFK từ:** {timestamp}
+      footer:
+        text: "Sử dụng lệnh /afk để afk giống họ nhé!"
+        icon: "{user_avatar}"
+      thumbnail: "{user_avatar}"
+
+  # When someone returns from AFK
+  afk_disabled:
+    type: "embed"  # embed or text
+    text: "Chào Mừng Trở Lại! {username}! Bạn đã AFK khoảng {duration}"
+    embed:
+      color: "#4CAF50"
+      title: "👋 Chào Mừng Trở Lại!!"
+      description: |
+        **Người dùng:** {username}
+        **Thời hạn:** {duration}
+        **Lí Do:** {reason}
+        **Giai đoạn AFK:** {timestamp} → Đến bây giờ
+      footer:
+        text: "AFK status removed"
+        icon: "{user_avatar}"
+      thumbnail: "{user_avatar}"
+
+# ===========================================
+#  Language Settings
+# ===========================================
+lang:
+  errors:
+    no_permission: "You don't have permission to use this command"
+    invalid_duration: "Sai định dạng,ví dụ: 1h 30m"
+    already_afk: "Đã treo máy!"
+    not_afk: "Hiện không treo máy!"
+  success:
+    afk_enabled: "Đang treo máy!"
+    afk_disabled: "Trạng thái đã được xóa bỏ"
+
+# ===========================================
+#  Available Placeholders
+# ===========================================
+# {username}     - The user's Discord username
+# {user_avatar}  - The user's Discord avatar URL
+# {reason}       - The AFK reason
+# {return_time}  - When the user will return (as Discord timestamp)
+# {timestamp}    - When the user went AFK (as Discord timestamp)
+# {duration}     - How long the user was AFK 

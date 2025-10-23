@@ -42,14 +42,14 @@ slot: true
 transfer: true
 withdraw: true
 work: true
-store: false
+store: true
 booster: true
 inventory: true
 economy: true
 roulette: true
 fish: true
 play: true
-music: true
+music: false
 
 # General Commands - Commonly used and fun commands
 help: true
@@ -83,10 +83,10 @@ removerole: false
 timeout: true
 warn: true
 unwarn: true
-slowmode: false
-temprole: false
-nickname: false
-moderation: false
+slowmode: true
+temprole: true
+nickname: true
+moderation: true
 "Report Message": true
 
 # Utility Commands - Various utility and administrative commands

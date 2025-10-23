@@ -280,6 +280,23 @@ module.exports = {
                                 roleIds: item.RoleID || []
                             });
                         }
+                        // Assign the role(s) to the user if RoleID(s) are present
+                        if (item.RoleID && interaction.member) {
+                            const roleIds = Array.isArray(item.RoleID) ? item.RoleID : [item.RoleID]; // Ensure roleIds is an array
+                            for (const roleId of roleIds) {
+                                try {
+                                    const role = interaction.guild.roles.cache.get(roleId);
+                                    if (role) {
+                                        await interaction.member.roles.add(role);
+                                        console.log(`Assigned role ${role.name} to ${interaction.user.tag}`);
+                                    } else {
+                                        console.warn(`Role with ID ${roleId} not found in guild ${interaction.guild.name}`);
+                                    }
+                                } catch (roleError) {
+                                    console.error(`Error assigning role ${roleId} to ${interaction.user.tag}:`, roleError);
+                                }
+                            }
+                        }
                     } 
                     // Handle Equipment items
                     else if (category === 'Equipment') {

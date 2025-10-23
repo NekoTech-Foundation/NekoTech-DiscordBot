@@ -37,6 +37,7 @@ const { createAutoBackup } = require('./commands/Utility/backup');
 
 client.commands = new Collection();
 client.slashCommands = new Collection();
+client.messageCommands = new Collection();
 client.snipes = new Collection();
 client.commandsReady = false;
 
@@ -688,23 +689,21 @@ async function handleInteractionCreate(interaction) {
             const folderName = file.match(/\/addons\/([^/]+)/) ? file.match(/\/addons\/([^/]+)/)[1] : 'unknown';
 
             try {
-                if (file.includes("cmd_")) {
-                    let comm = require(absolutePath);
-                    if (comm && comm.data && comm.data.toJSON && typeof comm.data.toJSON === 'function') {
-                        global.slashCommands.push(comm.data.toJSON());
-                        client.slashCommands.set(comm.data.name, comm);
+                let addon = require(absolutePath);
+                if (addon.data) { // Slash command or context menu command
+                    if (addon.data.toJSON && typeof addon.data.toJSON === 'function') {
+                        global.slashCommands.push(addon.data.toJSON());
+                        client.slashCommands.set(addon.data.name, addon);
                     }
-                } else if (file.includes("app_")) {
-                    let contextCommand = require(absolutePath);
-                    if (contextCommand && contextCommand.data instanceof ContextMenuCommandBuilder) {
-                        global.slashCommands.push(contextCommand.data.toJSON());
-                        client.slashCommands.set(contextCommand.data.name, contextCommand);
+                } else if (addon.name && addon.run && typeof addon.run === 'function') { // Message command
+                    client.messageCommands.set(addon.name, addon);
+                    if (addon.aliases && Array.isArray(addon.aliases)) {
+                        addon.aliases.forEach(alias => {
+                            client.messageCommands.set(alias, addon);
+                        });
                     }
-                } else {
-                    let event = require(absolutePath);
-                    if (event && event.run && typeof event.run === 'function') {
-                        event.run(client);
-                    }
+                } else if (addon.run && typeof addon.run === 'function') { // Event
+                    addon.run(client);
                 }
             } catch (addonError) {
                 console.error(`[ERROR] ${folderName}: ${addonError.message}`);
@@ -767,6 +766,20 @@ async function handleInteractionCreate(interaction) {
     }
 
     async function registerSlashCommands() {
+        const commandNames = new Set();
+        const duplicates = [];
+        for (const command of global.slashCommands) {
+            if (commandNames.has(command.name)) {
+                duplicates.push(command.name);
+            } else {
+                commandNames.add(command.name);
+            }
+        }
+
+        if (duplicates.length > 0) {
+            console.error(`${colors.red('[ERROR]')} Duplicate slash command names detected:`, duplicates.join(', '));
+        }
+
         const commands = await client.application.commands.fetch();
         for (const command of commands.values()) {
             await client.application.commands.delete(command.id);
@@ -1119,16 +1132,14 @@ async function handleInteractionCreate(interaction) {
         }
     }
 
-    function loadSlashCommands(directory) {
+    function loadSlashCommands(directory, commandNames = new Set(), duplicateCommands = []) {
         const items = fs.readdirSync(directory, { withFileTypes: true });
-        const commandNames = new Set();
-        const duplicateCommands = [];
 
         for (const item of items) {
             const itemPath = path.join(directory, item.name);
 
             if (item.isDirectory()) {
-                loadSlashCommands(itemPath);
+                loadSlashCommands(itemPath, commandNames, duplicateCommands);
             } else if (item.isFile() && item.name.endsWith('.js')) {
                 try {
                     const command = require(itemPath);
@@ -1154,13 +1165,13 @@ async function handleInteractionCreate(interaction) {
                 }
             }
         }
-
-        if (duplicateCommands.length > 0) {
-            console.error(`${colors.red('[ERROR]')} Duplicate command names detected:`, duplicateCommands.join(', '));
-        }
+        return { commandNames, duplicateCommands };
     }
 
-    loadSlashCommands(path.join(__dirname, 'commands'));
+    const { duplicateCommands } = loadSlashCommands(path.join(__dirname, 'commands'));
+    if (duplicateCommands.length > 0) {
+        console.error(`${colors.red('[ERROR]')} Duplicate command names detected:`, duplicateCommands.join(', '));
+    }
 
     function getFilesRecursively(directory, extension = '.js') {
         let results = [];

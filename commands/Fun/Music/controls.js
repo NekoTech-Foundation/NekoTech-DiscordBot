@@ -10,89 +10,89 @@ const { getMusicManager } = require('../../../utils/musicManager');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('music')
-        .setDescription('Điều khiển trình phát nhạc')
+        .setDescription('Control the music player')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('skip')
-                .setDescription('Bỏ qua bài hát hiện tại')
+                .setDescription('Skip the current track')
                 .addIntegerOption(option =>
                     option
                         .setName('to')
-                        .setDescription('Bỏ qua đến một bài hát cụ thể trong hàng đợi')
+                        .setDescription('Skip to a specific track in the queue')
                         .setMinValue(1)
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('stop')
-                .setDescription('Dừng phát và xóa hàng đợi'))
+                .setDescription('Stop playback and clear the queue'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('pause')
-                .setDescription('Tạm dừng bài hát hiện tại'))
+                .setDescription('Pause the current track'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('resume')
-                .setDescription('Tiếp tục phát bài hát hiện tại'))
+                .setDescription('Resume the current track'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('volume')
-                .setDescription('Thay đổi âm lượng trình phát')
+                .setDescription('Change the player volume')
                 .addIntegerOption(option =>
                     option
                         .setName('level')
-                        .setDescription('Mức âm lượng (0-100)')
+                        .setDescription('Volume level (0-100)')
                         .setMinValue(0)
                         .setMaxValue(100)
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('loop')
-                .setDescription('Thiết lập chế độ lặp lại')
+                .setDescription('Set loop mode')
                 .addStringOption(option =>
                     option
                         .setName('mode')
-                        .setDescription('Chế độ lặp lại')
+                        .setDescription('Loop mode')
                         .setRequired(true)
                         .addChoices(
-                            { name: 'Tắt', value: 'off' },
-                            { name: 'Bài hát', value: 'track' },
-                            { name: 'Hàng đợi', value: 'queue' }
+                            { name: 'Off', value: 'off' },
+                            { name: 'Track', value: 'track' },
+                            { name: 'Queue', value: 'queue' }
                         )))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('shuffle')
-                .setDescription('Xáo trộn hàng đợi'))
+                .setDescription('Shuffle the queue'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('nowplaying')
-                .setDescription('Hiển thị thông tin về bài hát hiện tại'))
+                .setDescription('Show information about the current track'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('queue')
-                .setDescription('Hiển thị hàng đợi hiện tại')
+                .setDescription('Show the current queue')
                 .addIntegerOption(option => 
                     option
                         .setName('page')
-                        .setDescription('Số trang để xem')
+                        .setDescription('Page number to view')
                         .setMinValue(1)
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('restart')
-                .setDescription('Khởi động lại hệ thống nhạc mà không dừng bot')),
+                .setDescription('Restart the music system without stopping the bot')),
     
     async execute(interaction) {
         try {
             if (!global.config.Music.Enabled) {
                 return interaction.reply({
-                    content: '❌ Hệ thống nhạc hiện đang bị tắt.',
+                    content: '❌ The music system is currently disabled.',
                     flags: MessageFlags.Ephemeral
                 });
             }
             
             if (global.config.GuildID && interaction.guild.id !== global.config.GuildID) {
                 return interaction.reply({
-                    content: '❌ Bot này chỉ được cấu hình cho một máy chủ cụ thể.',
+                    content: '❌ This bot is configured for a specific server only.',
                     flags: MessageFlags.Ephemeral
                 });
             }
@@ -100,7 +100,7 @@ module.exports = {
             const player = useMainPlayer();
             if (!player) {
                 return interaction.reply({
-                    content: '❌ Trình phát nhạc chưa được khởi tạo.',
+                    content: '❌ Music player is not initialized.',
                     flags: MessageFlags.Ephemeral
                 });
             }
@@ -115,7 +115,7 @@ module.exports = {
 
             if (!queue) {
                 return interaction.reply({
-                    content: '❌ Không có phiên phát nhạc nào đang hoạt động.',
+                    content: '❌ There is no active music session.',
                     flags: MessageFlags.Ephemeral
                 });
             }
@@ -123,7 +123,7 @@ module.exports = {
             const memberVC = interaction.member.voice.channel;
             if (!memberVC) {
                 return interaction.reply({
-                    content: '❌ Bạn phải ở trong một kênh thoại để sử dụng các điều khiển nhạc.',
+                    content: '❌ You must be in a voice channel to use music controls.',
                     flags: MessageFlags.Ephemeral
                 });
             }
@@ -131,7 +131,7 @@ module.exports = {
             const botVC = interaction.guild.members.me.voice.channel;
             if (botVC && memberVC.id !== botVC.id) {
                 return interaction.reply({
-                    content: '❌ Bạn phải ở cùng kênh thoại với bot để sử dụng các điều khiển nhạc.',
+                    content: '❌ You must be in the same voice channel as the bot to use music controls.',
                     flags: MessageFlags.Ephemeral
                 });
             }
@@ -145,7 +145,7 @@ module.exports = {
                 
                 if (!hasRole) {
                     return interaction.reply({
-                        content: '❌ Bạn không có vai trò cần thiết để sử dụng các điều khiển nhạc.',
+                        content: '❌ You do not have the required role to use music controls.',
                         flags: MessageFlags.Ephemeral
                     });
                 }
@@ -174,14 +174,14 @@ module.exports = {
                     return handleRestart(interaction);
                 default:
                     return interaction.reply({
-                        content: '❌ Lệnh phụ không xác định.',
+                        content: '❌ Unknown subcommand.',
                         flags: MessageFlags.Ephemeral
                     });
             }
         } catch (error) {
-            Logger.error('Lỗi trong lệnh điều khiển nhạc:', error);
+            Logger.error('Error in music controls command:', error);
             return interaction.reply({
-                content: `❌ Lỗi: ${error.message}`,
+                content: `❌ Error: ${error.message}`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -191,7 +191,7 @@ module.exports = {
 async function handleSkip(interaction, queue) {
     if (!queue.isPlaying()) {
         return interaction.reply({
-            content: '❌ Hiện không có gì đang phát.',
+            content: '❌ Nothing is currently playing.',
             flags: MessageFlags.Ephemeral
         });
     }
@@ -203,7 +203,7 @@ async function handleSkip(interaction, queue) {
         
         if (skipToIndex > tracks.length) {
             return interaction.reply({
-                content: `❌ Chỉ có ${tracks.length} bài hát trong hàng đợi.`,
+                content: `❌ There are only ${tracks.length} tracks in the queue.`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -214,7 +214,7 @@ async function handleSkip(interaction, queue) {
             await queue.node.jump(skipToIndex - 1);
             
             const reply = await interaction.reply({
-                content: `⏭️ Đã bỏ qua đến bài hát #${skipToIndex}: **${trackTitle}**`,
+                content: `⏭️ Skipped to track #${skipToIndex}: **${trackTitle}**`,
                 flags: MessageFlags.Ephemeral,
                 withResponse: true
             });
@@ -223,9 +223,9 @@ async function handleSkip(interaction, queue) {
             
             return reply;
         } catch (error) {
-            Logger.error('Lỗi khi bỏ qua đến bài hát:', error);
+            Logger.error('Error skipping to track:', error);
             return interaction.reply({
-                content: `❌ Không thể bỏ qua đến bài hát: ${error.message}`,
+                content: `❌ Failed to skip to track: ${error.message}`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -236,7 +236,7 @@ async function handleSkip(interaction, queue) {
             await queue.node.skip();
             
             const reply = await interaction.reply({
-                content: `⏭️ Đã bỏ qua **${currentTrack.title}**`,
+                content: `⏭️ Skipped **${currentTrack.title}**`,
                 flags: MessageFlags.Ephemeral,
                 withResponse: true
             });
@@ -245,9 +245,9 @@ async function handleSkip(interaction, queue) {
             
             return reply;
         } catch (error) {
-            Logger.error('Lỗi khi bỏ qua bài hát:', error);
+            Logger.error('Error skipping track:', error);
             return interaction.reply({
-                content: `❌ Không thể bỏ qua bài hát: ${error.message}`,
+                content: `❌ Failed to skip track: ${error.message}`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -260,7 +260,7 @@ async function handleStop(interaction, queue) {
         const musicManager = getMusicManager();
         
         if (!musicManager) {
-            Logger.error('Không thể lấy trình quản lý nhạc cho lệnh stop');
+            Logger.error('Could not get music manager for stop command');
         } else {
             const channel = interaction.channel;
             
@@ -270,7 +270,7 @@ async function handleStop(interaction, queue) {
                     const message = await channel.messages.fetch(messageId).catch(() => null);
                     
                     if (message) {
-                        Logger.debug('Đang cập nhật canvas Đang phát trước khi dừng hàng đợi');
+                        Logger.debug('Updating Now Playing canvas before stopping queue');
                         
                         const emptyCanvas = await musicManager.createEmptyNowPlayingCanvas();
                         
@@ -285,21 +285,21 @@ async function handleStop(interaction, queue) {
                             .setColor(parseInt((global.config.Music.EmbedColor || '#FF69B4').replace('#', ''), 16))
                             .setImage(`attachment://np_empty_${path.basename(tempFile)}`)
                             .addFields(
-                                { name: 'Trạng thái', value: 'Đã dừng phát', inline: true },
-                                { name: 'Bước tiếp theo', value: 'Dùng /play để thêm nhạc', inline: true }
+                                { name: 'Status', value: 'Playback stopped', inline: true },
+                                { name: 'Next steps', value: 'Use /play to add music', inline: true }
                             )
-                            .setFooter({ text: 'Trình phát nhạc | Chờ bài hát tiếp theo của bạn' });
+                            .setFooter({ text: 'Music Player | Waiting for your next track' });
                         
                         const emptyRow = new ActionRowBuilder().addComponents(
                             new ButtonBuilder()
                                 .setCustomId('music_play')
                                 .setEmoji('▶️')
-                                .setLabel('Thêm nhạc')
+                                .setLabel('Add Music')
                                 .setStyle(ButtonStyle.Success)
                         );
                         
                         await message.edit({
-                            content: '🎵 **Hiện không có gì đang phát**',
+                            content: '🎵 **Nothing currently playing**',
                             embeds: [emptyEmbed],
                             components: [emptyRow],
                             files: [{
@@ -310,24 +310,24 @@ async function handleStop(interaction, queue) {
                         
                         try {
                             fs.unlinkSync(tempFile);
-                            Logger.debug(`Đã xóa tệp tạm: ${tempFile}`);
+                            Logger.debug(`Deleted temp file: ${tempFile}`);
                         } catch (unlinkError) {
-                            Logger.debug(`Không thể xóa tệp tạm ngay lập tức: ${unlinkError.message}`);
+                            Logger.debug(`Failed to delete temp file immediately: ${unlinkError.message}`);
                             
                             setTimeout(() => {
                                 try {
                                     if (fs.existsSync(tempFile)) {
                                         fs.unlinkSync(tempFile);
-                                        Logger.debug(`Đã xóa tệp tạm (trì hoãn): ${tempFile}`);
+                                        Logger.debug(`Deleted temp file (delayed): ${tempFile}`);
                                     }
                                 } catch (error) {
-                                    Logger.debug(`Không thể xóa tệp tạm trong lần thử trì hoãn: ${error.message}`);
+                                    Logger.debug(`Failed to delete temp file in delayed attempt: ${error.message}`);
                                 }
                             }, 5000);
                         }
                     }
                 } catch (error) {
-                    Logger.debug(`Không thể cập nhật tin nhắn Đang phát trước khi dừng: ${error}`);
+                    Logger.debug(`Could not update Now Playing message before stopping: ${error}`);
                 }
             }
         }
@@ -335,13 +335,13 @@ async function handleStop(interaction, queue) {
         queue.delete();
         
         return interaction.reply({
-            content: '⏹️ Đã dừng phát và xóa hàng đợi.',
+            content: '⏹️ Stopped playback and cleared the queue.',
             flags: MessageFlags.Ephemeral
         }).then(autoDeleteReply);
     } catch (error) {
-        Logger.error('Lỗi khi dừng phát:', error);
+        Logger.error('Error stopping playback:', error);
         return interaction.reply({
-            content: `❌ Không thể dừng phát: ${error.message}`,
+            content: `❌ Failed to stop playback: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -350,7 +350,7 @@ async function handleStop(interaction, queue) {
 async function handlePause(interaction, queue) {
     if (queue.node.isPaused()) {
         return interaction.reply({
-            content: '❌ Trình phát đã được tạm dừng.',
+            content: '❌ Playback is already paused.',
             flags: MessageFlags.Ephemeral
         });
     }
@@ -359,13 +359,13 @@ async function handlePause(interaction, queue) {
         queue.node.pause();
         
         return interaction.reply({
-            content: '⏸️ Đã tạm dừng phát.',
+            content: '⏸️ Paused playback.',
             flags: MessageFlags.Ephemeral
         }).then(autoDeleteReply);
     } catch (error) {
-        Logger.error('Lỗi khi tạm dừng phát:', error);
+        Logger.error('Error pausing playback:', error);
         return interaction.reply({
-            content: `❌ Không thể tạm dừng phát: ${error.message}`,
+            content: `❌ Failed to pause playback: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -374,7 +374,7 @@ async function handlePause(interaction, queue) {
 async function handleResume(interaction, queue) {
     if (!queue.node.isPaused()) {
         return interaction.reply({
-            content: '❌ Trình phát đã đang phát.',
+            content: '❌ Playback is already playing.',
             flags: MessageFlags.Ephemeral
         });
     }
@@ -383,13 +383,13 @@ async function handleResume(interaction, queue) {
         queue.node.resume();
         
         return interaction.reply({
-            content: '▶️ Đã tiếp tục phát.',
+            content: '▶️ Resumed playback.',
             flags: MessageFlags.Ephemeral
         }).then(autoDeleteReply);
     } catch (error) {
-        Logger.error('Lỗi khi tiếp tục phát:', error);
+        Logger.error('Error resuming playback:', error);
         return interaction.reply({
-            content: `❌ Không thể tiếp tục phát: ${error.message}`,
+            content: `❌ Failed to resume playback: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -402,7 +402,7 @@ async function handleVolume(interaction, queue) {
         queue.node.setVolume(volume);
         
         const reply = await interaction.reply({
-            content: `🔊 Âm lượng được đặt thành ${volume}%.`,
+            content: `🔊 Volume set to ${volume}%.`,
             flags: MessageFlags.Ephemeral,
             withResponse: true
         });
@@ -411,9 +411,9 @@ async function handleVolume(interaction, queue) {
         
         return reply;
     } catch (error) {
-        Logger.error('Lỗi khi đặt âm lượng:', error);
+        Logger.error('Error setting volume:', error);
         return interaction.reply({
-            content: `❌ Không thể đặt âm lượng: ${error.message}`,
+            content: `❌ Failed to set volume: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -441,19 +441,19 @@ async function handleLoop(interaction, queue) {
         queue.setRepeatMode(repeatMode);
         
         const modeText = {
-            [QueueRepeatMode.OFF]: 'đã tắt',
-            [QueueRepeatMode.TRACK]: 'được đặt để lặp lại bài hát hiện tại',
-            [QueueRepeatMode.QUEUE]: 'được đặt để lặp lại toàn bộ hàng đợi'
+            [QueueRepeatMode.OFF]: 'disabled',
+            [QueueRepeatMode.TRACK]: 'set to repeat current track',
+            [QueueRepeatMode.QUEUE]: 'set to repeat entire queue'
         }[repeatMode];
         
         return interaction.reply({
-            content: `🔄 Chế độ lặp lại ${modeText}.`,
+            content: `🔄 Loop mode ${modeText}.`,
             flags: MessageFlags.Ephemeral
         }).then(autoDeleteReply);
     } catch (error) {
-        Logger.error('Lỗi khi đặt chế độ lặp lại:', error);
+        Logger.error('Error setting loop mode:', error);
         return interaction.reply({
-            content: `❌ Không thể đặt chế độ lặp lại: ${error.message}`,
+            content: `❌ Failed to set loop mode: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -462,7 +462,7 @@ async function handleLoop(interaction, queue) {
 async function handleShuffle(interaction, queue) {
     if (queue.tracks.size === 0) {
         return interaction.reply({
-            content: '❌ Không có bài hát nào trong hàng đợi để xáo trộn.',
+            content: '❌ There are no tracks in the queue to shuffle.',
             flags: MessageFlags.Ephemeral
         });
     }
@@ -471,13 +471,13 @@ async function handleShuffle(interaction, queue) {
         queue.tracks.shuffle();
         
         return interaction.reply({
-            content: '🔀 Đã xáo trộn hàng đợi.',
+            content: '🔀 Shuffled the queue.',
             flags: MessageFlags.Ephemeral
         }).then(autoDeleteReply);
     } catch (error) {
-        Logger.error('Lỗi khi xáo trộn hàng đợi:', error);
+        Logger.error('Error shuffling queue:', error);
         return interaction.reply({
-            content: `❌ Không thể xáo trộn hàng đợi: ${error.message}`,
+            content: `❌ Failed to shuffle queue: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -487,7 +487,7 @@ async function handleNowPlaying(interaction, queue) {
     try {
         if (!queue.isPlaying()) {
             return interaction.reply({
-                content: '❌ Hiện không có gì đang phát.',
+                content: '❌ Nothing is currently playing.',
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -495,99 +495,562 @@ async function handleNowPlaying(interaction, queue) {
         const currentTrack = queue.currentTrack;
         if (!currentTrack) {
             return interaction.reply({
-                content: '❌ Không thể lấy thông tin bài hát hiện tại.',
+                content: '❌ Could not get current track information.',
                 flags: MessageFlags.Ephemeral
             });
         }
         
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
         
-        // ... (Logging logic remains the same)
+        Logger.debug(`Now Playing - Current Track Data:
+${JSON.stringify(currentTrack, null, 2)}`);
+        Logger.debug(`Now Playing - Queue Data:
+${JSON.stringify({
+            guildId: queue.guild.id,
+            channelId: queue.metadata?.channel?.id,
+            isPlaying: queue.isPlaying(),
+            isPaused: queue.node.isPaused(),
+            volume: queue.node.volume,
+            repeatMode: queue.repeatMode,
+            tracksCount: queue.tracks.size
+        }, null, 2)}`);
+        
+        if (!global.musicData) {
+            global.musicData = {};
+        }
+        
+        if (!global.musicData.nowPlayingMessages) {
+            global.musicData.nowPlayingMessages = {};
+        }
+        
+        const guildId = interaction.guild.id;
+        if (!global.musicData.nowPlayingMessages[guildId]) {
+            global.musicData.nowPlayingMessages[guildId] = [];
+        }
         
         try {
             const musicManager = getMusicManager();
+            Logger.debug(`Music Manager available: ${!!musicManager}`);
+            
             if (musicManager) {
+                Logger.debug(`Music Manager methods: ${Object.getOwnPropertyNames(musicManager)}`);
+                Logger.debug(`handleNowPlayingMessage exists: ${typeof musicManager.handleNowPlayingMessage === 'function'}`);
+                Logger.debug(`Queue metadata: ${queue.metadata ? 'exists' : 'missing'}`);
+                
                 const result = await musicManager.handleNowPlayingMessage(queue, currentTrack);
+                Logger.debug(`Result from handleNowPlayingMessage: ${result}`);
+                
                 if (result) {
                     const infoReply = await interaction.editReply({
-                        content: `✅ Đã cập nhật màn hình đang phát.`,
+                        content: `✅ Updated the now playing display.`,
                         flags: MessageFlags.Ephemeral
                     });
-                    autoDeleteReply(infoReply);
+                    
+                    if (global.config.Music.AutoDeleteCommands) {
+                        const deleteDelay = global.config.Music.CommandDeleteDelay || 5000;
+                        setTimeout(() => {
+                            if (infoReply.deletable) {
+                                infoReply.delete().catch(err => {
+                                    Logger.debug(`Failed to auto-delete command response: ${err}`);
+                                });
+                            }
+                        }, deleteDelay);
+                    }
+                    
+                    setTimeout(() => {
+                        try {
+                            fs.unlinkSync(tempFile);
+                        } catch (error) {
+                        }
+                    }, 5000);
+                    
                     return;
                 }
+                
+                Logger.debug(`ERROR: handleNowPlayingMessage returned false or null`);
             }
             
-            // Fallback implementation (slightly simplified for clarity)
+            Logger.debug('Fallback: Using local handleNowPlaying implementation');
+            
             const canvas = await createNowPlayingCanvas(queue, currentTrack);
-            const tempFile = path.join(__dirname, 'temp', `np_${Date.now()}.png`);
-            // ... (file writing logic)
+            
+            const tempDir = path.join(__dirname, 'temp');
+            if (!fs.existsSync(tempDir)) {
+                fs.mkdirSync(tempDir, { recursive: true });
+            }
+            const tempFile = path.join(tempDir, `np_${Date.now()}.png`);
+            fs.writeFileSync(tempFile, canvas.toBuffer());
+            
+            let sourceIcon = '🎵';
+            if (currentTrack?.url?.includes('youtube')) sourceIcon = '🔴';
+            else if (currentTrack?.url?.includes('spotify')) sourceIcon = '🟢';
+            else if (currentTrack?.url?.includes('soundcloud')) sourceIcon = '🟠';
+
+            let requestedBy = 'Unknown';
+            if (currentTrack.requestedBy) {
+                requestedBy = `<@${currentTrack.requestedBy.id || currentTrack.requestedBy}>`;
+            }
             
             const embed = new EmbedBuilder()
                 .setColor(parseInt((global.config.Music.EmbedColor || '#FF69B4').replace('#', ''), 16))
-                .setImage(`attachment://${path.basename(tempFile)}`)
+                .setImage(`attachment://np_${path.basename(tempFile)}`)
                 .addFields(
-                    { name: 'Âm lượng', value: `${queue.node.volume}%`, inline: true },
-                    { name: 'Độ dài hàng đợi', value: `${queue.tracks.size + 1} bài hát`, inline: true },
-                    { name: 'Yêu cầu bởi', value: `<@${currentTrack.requestedBy.id}>`, inline: true }
+                    { name: 'Volume', value: `${queue.node.volume}%`, inline: true },
+                    { name: 'Queue Length', value: `${queue.tracks.size + 1} tracks`, inline: true },
+                    { name: 'Requested By', value: requestedBy, inline: true }
                 );
             
-            const row = new ActionRowBuilder() // ... (Button setup)
+            const row = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId('music_prev')
+                    .setEmoji('⏮️')
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId('music_playpause')
+                    .setEmoji(queue.node.isPaused() ? '▶️' : '⏸️')
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId('music_skip')
+                    .setEmoji('⏭️')
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId('music_shuffle')
+                    .setEmoji('🔀')
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId('music_volume')
+                    .setEmoji('🔊')
+                    .setStyle(ButtonStyle.Secondary)
+            );
             
             const message = await interaction.channel.send({
-                content: `🎵 **Đang phát:** [${currentTrack.title}](${currentTrack.url})`,
+                content: `${sourceIcon} **Now Playing:** [${currentTrack.title}](${currentTrack.url})`,
                 embeds: [embed],
                 components: [row],
-                files: [{ attachment: tempFile, name: path.basename(tempFile) }]
+                files: [{
+                    attachment: tempFile,
+                    name: path.basename(tempFile)
+                }]
             });
             
-            // ... (Interval update logic)
+            global.musicData.nowPlayingMessages[guildId].push(message.id);
+            
+            if (!queue.metadata) {
+                queue.metadata = {};
+            }
+            
+            if (queue.metadata.nowPlayingInterval) {
+                clearInterval(queue.metadata.nowPlayingInterval);
+                queue.metadata.nowPlayingInterval = null;
+            }
+            
+            queue.metadata.nowPlayingInterval = setInterval(async () => {
+                try {
+                    if (!queue.isPlaying() || !message || message.deleted) {
+                        clearInterval(queue.metadata.nowPlayingInterval);
+                        queue.metadata.nowPlayingInterval = null;
+                        return;
+                    }
+                    
+                    const updatedCanvas = await createNowPlayingCanvas(queue, queue.currentTrack);
+                    
+                    const updateTempDir = path.join(__dirname, 'temp');
+                    if (!fs.existsSync(updateTempDir)) {
+                        fs.mkdirSync(updateTempDir, { recursive: true });
+                    }
+                    const updateTempFile = path.join(updateTempDir, `np_update_${Date.now()}.png`);
+                    fs.writeFileSync(updateTempFile, updatedCanvas.toBuffer());
+                    
+                    const updatedEmbed = new EmbedBuilder()
+                        .setColor(parseInt((global.config.Music.EmbedColor || '#FF69B4').replace('#', ''), 16))
+                        .setImage(`attachment://np_update_${path.basename(updateTempFile)}`)
+                        .addFields(
+                            { name: 'Volume', value: `${queue.node.volume}%`, inline: true },
+                            { name: 'Queue Length', value: `${queue.tracks.size + 1} tracks`, inline: true },
+                            { name: 'Requested By', value: requestedBy, inline: true }
+                        );
+                    
+                    const updatedRow = new ActionRowBuilder().addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('music_prev')
+                            .setEmoji('⏮️')
+                            .setStyle(ButtonStyle.Secondary),
+                        new ButtonBuilder()
+                            .setCustomId('music_playpause')
+                            .setEmoji(queue.node.isPaused() ? '▶️' : '⏸️')
+                            .setStyle(ButtonStyle.Secondary),
+                        new ButtonBuilder()
+                            .setCustomId('music_skip')
+                            .setEmoji('⏭️')
+                            .setStyle(ButtonStyle.Secondary),
+                        new ButtonBuilder()
+                            .setCustomId('music_shuffle')
+                            .setEmoji('🔀')
+                            .setStyle(ButtonStyle.Secondary),
+                        new ButtonBuilder()
+                            .setCustomId('music_volume')
+                            .setEmoji('🔊')
+                            .setStyle(ButtonStyle.Secondary)
+                    );
+                    
+                    await message.edit({
+                        content: `${sourceIcon} **Now Playing:** [${queue.currentTrack.title}](${queue.currentTrack.url})`,
+                        embeds: [updatedEmbed],
+                        components: [updatedRow],
+                        files: [{
+                            attachment: updateTempFile,
+                            name: path.basename(updateTempFile)
+                        }]
+                    });
+                    
+                    try {
+                        fs.unlinkSync(updateTempFile);
+                        Logger.debug(`Deleted temp file: ${updateTempFile}`);
+                    } catch (unlinkError) {
+                        Logger.debug(`Failed to delete temp file immediately: ${unlinkError.message}`);
+                        
+                        setTimeout(() => {
+                            try {
+                                if (fs.existsSync(updateTempFile)) {
+                                    fs.unlinkSync(updateTempFile);
+                                    Logger.debug(`Deleted temp file (delayed): ${updateTempFile}`);
+                                }
+                            } catch (error) {
+                                Logger.debug(`Failed to delete temp file in delayed attempt: ${error.message}`);
+                            }
+                        }, 5000);
+                    }
+                } catch (error) {
+                    Logger.error('Error updating now playing message:', error);
+                    clearInterval(queue.metadata.nowPlayingInterval);
+                    queue.metadata.nowPlayingInterval = null;
+                }
+            }, 3000);
             
             const infoReply = await interaction.editReply({
-                content: `✅ Đã cập nhật màn hình đang phát.`,
+                content: `✅ Updated the now playing display.`,
                 flags: MessageFlags.Ephemeral
             });
-            autoDeleteReply(infoReply);
-
+            
+            if (global.config.Music.AutoDeleteCommands) {
+                const deleteDelay = global.config.Music.CommandDeleteDelay || 5000;
+                setTimeout(() => {
+                    if (infoReply.deletable) {
+                        infoReply.delete().catch(err => {
+                            Logger.debug(`Failed to auto-delete command response: ${err}`);
+                        });
+                    }
+                }, deleteDelay);
+            }
+            
+            setTimeout(() => {
+                try {
+                    fs.unlinkSync(tempFile);
+                } catch (error) {
+                }
+            }, 5000);
+            
+            return;
         } catch (error) {
-            Logger.error('Lỗi trong lệnh nowplaying:', error);
+            Logger.error('Error in nowplaying command:', error);
             return interaction.editReply({
-                content: '❌ Đã xảy ra lỗi khi cập nhật màn hình đang phát.',
+                content: '❌ An error occurred while updating the now playing display.',
                 flags: MessageFlags.Ephemeral
             });
         }
     } catch (error) {
-        Logger.error('Lỗi trong lệnh nowplaying:', error);
+        Logger.error('Error in nowplaying command:', error);
         return interaction.editReply({
-            content: '❌ Đã xảy ra lỗi khi xử lý lệnh nowplaying.',
+            content: '❌ An error occurred while handling the nowplaying command.',
             flags: MessageFlags.Ephemeral
         });
     }
 }
 
 async function createNowPlayingCanvas(queue, track) {
-    if (!track) return createEmptyNowPlayingCanvas();
+    if (!track) {
+        const { getMusicManager } = require('../../../utils/musicManager');
+        const musicManager = getMusicManager();
+        
+        if (musicManager) {
+            return await musicManager.createEmptyNowPlayingCanvas();
+        }
+        return createEmptyNowPlayingCanvas();
+    }
 
-    // ... (Canvas drawing logic remains the same, but text needs translation)
-    const canvas = createCanvas(600, 120);
+    const timestamp = queue.node.getTimestamp();
+    let currentPosition = 0;
+    let duration = 0;
+    let progress = 0;
+    
+    if (timestamp) {
+        currentPosition = timestamp.current.value;
+        duration = timestamp.total.value;
+        progress = Math.min(currentPosition / duration, 1);
+    }
+
+    const canvasWidth = 600;
+    const canvasHeight = 120;
+    const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
-    // ...
-    let displayTitle = track?.title || 'Bài hát không xác định';
-    // ... (Title truncation logic)
+    
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    ctx.save();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.beginPath();
+    ctx.roundRect(0, 0, canvasWidth, canvasHeight, 25);
+    ctx.fill();
+    ctx.restore();
+    
+    const imageRadius = 40;
+    const imageX = 60;
+    const imageY = canvasHeight / 2;
+    const progressRadius = 40;
+    const progressThickness = 5;
+    const progressX = canvasWidth - 60;
+    const progressY = canvasHeight / 2;
+    const textX = imageX + imageRadius + 40;
+    const textY = canvasHeight / 2 - 10;
+    const maxTitleWidth = progressX - progressRadius - textX - 20;
+    
+    let thumbnail;
+    try {
+        const currentTrack = queue?.currentTrack || track;
+        
+        let thumbnailUrl = currentTrack?.thumbnail || 'https://i.imgur.com/AfFp7pu.png';
+
+        if (thumbnailUrl) {
+            if (thumbnailUrl.includes('ytimg.com')) {
+                const match = thumbnailUrl.match(/\/vi(?:_webp)?\/([^\/]+)\//);
+                if (match && match[1]) {
+                    const videoId = match[1];
+                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                }
+            }
+            
+            if (thumbnailUrl.endsWith('.webp')) {
+                thumbnailUrl = thumbnailUrl.replace('.webp', '.jpg');
+            }
+        }
+
+        thumbnail = await loadImage(thumbnailUrl);
+    } catch (error) {
+        if (track?.url && track.url.includes('youtube.com')) {
+            try {
+                const videoId = track.url.split('v=')[1]?.split('&')[0];
+                if (videoId) {
+                    const alternateUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                    thumbnail = await loadImage(alternateUrl);
+                } else {
+                    thumbnail = await loadImage('https://i.imgur.com/AfFp7pu.png');
+                }
+            } catch (fallbackError) {
+                thumbnail = await loadImage('https://i.imgur.com/AfFp7pu.png');
+            }
+        } else {
+            thumbnail = await loadImage('https://i.imgur.com/AfFp7pu.png');
+        }
+    }
+
+    ctx.save();
+    
+    ctx.beginPath();
+    ctx.arc(imageX, imageY, imageRadius, 0, Math.PI * 2);
+    ctx.clip();
+    
+    const imgWidth = thumbnail.width;
+    const imgHeight = thumbnail.height;
+    
+    const minDimension = Math.min(imgWidth, imgHeight);
+    
+    const sourceX = (imgWidth - minDimension) / 2;
+    const sourceY = (imgHeight - minDimension) / 2;
+
+    ctx.drawImage(
+        thumbnail,
+        sourceX, sourceY, minDimension, minDimension,
+        imageX - imageRadius, imageY - imageRadius, 
+        imageRadius * 2, imageRadius * 2
+    );
+    
+    ctx.restore();
+    
+    ctx.fillStyle = '#FF69B4';
+    ctx.font = 'bold 18px Arial';
+    
+    let displayTitle = track?.title || 'Unknown Track';
+    let titleWidth = ctx.measureText(displayTitle).width;
+    
+    if (titleWidth > maxTitleWidth) {
+        let ellipsis = '...';
+        let truncated = '';
+        for (let i = 0; i < displayTitle.length; i++) {
+            let testText = displayTitle.substring(0, i) + ellipsis;
+            if (ctx.measureText(testText).width > maxTitleWidth) {
+                break;
+            }
+            truncated = testText;
+        }
+        displayTitle = truncated;
+    }
+
     ctx.fillText(displayTitle, textX, textY);
-    ctx.fillText(track?.author || 'Nghệ sĩ không xác định', textX, textY + 25);
-    // ... (Rest of drawing logic)
+    
+    ctx.fillStyle = '#FFB6C1'; 
+    ctx.font = 'bold 14px Arial';
+    ctx.fillText(track?.author || 'Unknown Artist', textX, textY + 25);
+    
+    ctx.beginPath();
+    ctx.arc(progressX, progressY, progressRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = progressThickness;
+    ctx.stroke();
+    
+    const startAngle = -Math.PI / 2;
+    const endAngle = startAngle + (Math.PI * 2 * progress);
+
+    const gradient = ctx.createLinearGradient(
+        progressX - progressRadius, 
+        progressY - progressRadius, 
+        progressX + progressRadius, 
+        progressY + progressRadius
+    );
+    gradient.addColorStop(0, '#FF1493');
+    gradient.addColorStop(1, '#FF69B4');
+    
+    ctx.beginPath();
+    ctx.arc(progressX, progressY, progressRadius, startAngle, endAngle);
+    ctx.strokeStyle = gradient;
+    ctx.lineWidth = progressThickness;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 16px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const percentText = Math.floor(progress * 100) + '%';
+    ctx.fillText(percentText, progressX, progressY);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    
     return canvas;
 }
 
 async function createEmptyNowPlayingCanvas() {
-    // ... (Canvas drawing logic remains the same, but text needs translation)
-    const canvas = createCanvas(600, 150);
+    const { getMusicManager } = require('../../../utils/musicManager');
+    const musicManager = getMusicManager();
+    
+    if (musicManager) {
+        return musicManager.createEmptyNowPlayingCanvas();
+    }
+
+    const canvasWidth = 600;
+    const canvasHeight = 150;
+    const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
-    // ...
-    ctx.fillText('Không có gì đang phát', textX, mainTextY);
-    ctx.fillText('Dùng /play để bắt đầu hành trình âm nhạc của bạn', textX, mainTextY + 30);
-    // ... (Rest of drawing logic)
+    
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    const gradient = ctx.createLinearGradient(0, 0, canvasWidth, canvasHeight);
+    gradient.addColorStop(0, 'rgba(25, 25, 35, 0.85)');
+    gradient.addColorStop(1, 'rgba(35, 35, 45, 0.85)');
+    
+    ctx.save();
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, canvasWidth, canvasHeight, 20);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 105, 180, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(2, 2, canvasWidth-4, canvasHeight-4, 18);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    const centerY = canvasHeight / 2;
+    const startX = 150;
+    const endX = canvasWidth - 40;
+    const segmentWidth = (endX - startX) / 20;
+    
+    ctx.moveTo(startX, centerY);
+    for (let i = 0; i < 20; i++) {
+        const x = startX + i * segmentWidth;
+        const height = i % 2 === 0 ? 5 : 3;
+        ctx.lineTo(x, centerY - height);
+        ctx.lineTo(x + segmentWidth/2, centerY);
+        ctx.lineTo(x + segmentWidth, centerY - height);
+    }
+    ctx.lineTo(endX, centerY);
+    ctx.stroke();
+    ctx.restore();
+
+    const musicX = 75;
+    const musicY = canvasHeight / 2;
+
+    const circleRadius = 45;
+    ctx.save();
+    const iconGradient = ctx.createRadialGradient(
+        musicX, musicY, 0,
+        musicX, musicY, circleRadius
+    );
+    iconGradient.addColorStop(0, 'rgba(255, 105, 180, 0.15)');
+    iconGradient.addColorStop(1, 'rgba(255, 105, 180, 0.05)');
+    
+    ctx.fillStyle = iconGradient;
+    ctx.beginPath();
+    ctx.arc(musicX, musicY, circleRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(musicX, musicY, circleRadius - 5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.font = '48px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.fillText('♪', musicX - 5, musicY - 5);
+    ctx.restore();
+
+    const textX = musicX + circleRadius + 40;
+    const mainTextY = centerY - 15;
+
+    const textGradient = ctx.createLinearGradient(textX, mainTextY - 20, textX + 300, mainTextY + 20);
+    textGradient.addColorStop(0, '#FF69B4');
+    textGradient.addColorStop(1, '#FFB6C1');
+
+    ctx.save();
+    ctx.font = 'bold 26px Arial';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillText('Nothing Playing', textX + 1, mainTextY + 1);
+
+    ctx.fillStyle = textGradient;
+    ctx.fillText('Nothing Playing', textX, mainTextY);
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.font = '16px Arial';
+    ctx.fillText('Use /play to start your musical journey', textX, mainTextY + 30);
+    ctx.restore();
+    
     return canvas;
 }
 
@@ -595,7 +1058,7 @@ async function handleQueue(interaction, queue) {
     try {
         if (!queue.isPlaying()) {
             return interaction.reply({
-                content: '❌ Hiện không có gì đang phát.',
+                content: '❌ Nothing is currently playing.',
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -612,20 +1075,20 @@ async function handleQueue(interaction, queue) {
 
         let description = '';
         if (tracks.length === 0) {
-            description = 'Không có bài hát nào sắp tới trong hàng đợi.';
+            description = 'No upcoming tracks in the queue.';
         } else {
             description = tracks.slice(startIndex, endIndex).map((track, i) => {
-                return `**${startIndex + i + 1}.** [${track.title}](${track.url}) - ${track.duration} - Yêu cầu bởi <@${track.requestedBy.id}>`;
+                return `**${startIndex + i + 1}.** [${track.title}](${track.url}) - ${track.duration} - Requested by <@${track.requestedBy.id}>`;
             }).join('\n\n');
         }
 
         const embed = {
-            title: '🎵 Hàng đợi',
+            title: '🎵 Queue',
             description: description,
             fields: [
-                { name: 'Đang phát', value: `[${queue.currentTrack.title}](${queue.currentTrack.url}) - ${queue.currentTrack.duration}` },
-                { name: 'Tổng số bài hát', value: `${tracks.length}`, inline: true },
-                { name: 'Trang', value: `${page}/${totalPages}`, inline: true }
+                { name: 'Now Playing', value: `[${queue.currentTrack.title}](${queue.currentTrack.url}) - ${queue.currentTrack.duration}` },
+                { name: 'Total Tracks', value: `${tracks.length}`, inline: true },
+                { name: 'Page', value: `${page}/${totalPages}`, inline: true }
             ],
             color: parseInt((global.config.Music.EmbedColor || '#FF69B4').replace('#', ''), 16)
         };
@@ -638,14 +1101,14 @@ async function handleQueue(interaction, queue) {
                     {
                         type: 2,
                         style: 2,
-                        label: '◀️ Trước',
+                        label: '◀️ Previous',
                         custom_id: 'queue_prev',
                         disabled: page === 1
                     },
                     {
                         type: 2,
                         style: 2,
-                        label: 'Sau ▶️',
+                        label: 'Next ▶️',
                         custom_id: 'queue_next',
                         disabled: page === totalPages
                     }
@@ -660,9 +1123,9 @@ async function handleQueue(interaction, queue) {
             flags: MessageFlags.Ephemeral
         }).then(autoDeleteReply);
     } catch (error) {
-        Logger.error('Lỗi hiển thị hàng đợi:', error);
+        Logger.error('Error displaying queue:', error);
         return interaction.reply({
-            content: `❌ Lỗi hiển thị hàng đợi: ${error.message}`,
+            content: `❌ Error displaying queue: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -670,80 +1133,242 @@ async function handleQueue(interaction, queue) {
 
 function autoDeleteReply(reply) {
     if (!reply) return;
+    
     if (global.config.Music.AutoDeleteCommands) {
         setTimeout(() => {
             if (reply.deletable) {
                 reply.delete().catch(err => {
-                    Logger.debug(`Không thể tự động xóa lệnh điều khiển: ${err}`);
+                    Logger.debug(`Failed to auto-delete control command: ${err}`);
                 });
             }
         }, global.config.Music.CommandDeleteDelay || 5000);
     }
+    
     return reply;
 }
 
 if (!global.musicModalHandlerRegistered) {
     global.musicModalHandlerRegistered = true;
+
     try {
         const client = global.client;
-        if (client) {
+        
+        if (!client) {
+            Logger.error('Failed to get client instance for music modal handler');
+        } else {
+            Logger.debug('Setting up music play modal handler...');
+            
             client.on('interactionCreate', async (interaction) => {
                 try {
                     if (interaction.isButton() && (interaction.customId === 'music_play' || interaction.customId === 'music_play_modal')) {
-                        const voiceChannel = interaction.member.voice.channel;
-                        if (!voiceChannel) {
-                            return interaction.reply({
-                                content: '❌ Bạn cần ở trong một kênh thoại để phát nhạc.',
-                                flags: MessageFlags.Ephemeral
-                            });
+                        try {
+                            const voiceChannel = interaction.member.voice.channel;
+                            if (!voiceChannel) {
+                                return interaction.reply({
+                                    content: '❌ You need to be in a voice channel to play music.',
+                                    flags: MessageFlags.Ephemeral
+                                });
+                            }
+
+                            const botVC = interaction.guild.members.me.voice.channel;
+                            if (botVC) {
+                                if (voiceChannel.id !== botVC.id) {
+                                    return interaction.reply({
+                                        content: '❌ You must be in the same voice channel as the bot to play music.',
+                                        flags: MessageFlags.Ephemeral
+                                    });
+                                }
+                            }
+
+                            const modal = new ModalBuilder()
+                                .setCustomId('music_play_search')
+                                .setTitle('Play Music');
+
+                            const songInput = new TextInputBuilder()
+                                .setCustomId('song_query')
+                                .setLabel("Enter a song name or URL")
+                                .setStyle(TextInputStyle.Short)
+                                .setPlaceholder('Never Gonna Give You Up')
+                                .setRequired(true);
+
+                            const firstActionRow = new ActionRowBuilder().addComponents(songInput);
+                            modal.addComponents(firstActionRow);
+
+                            if (!interaction.replied && !interaction.deferred) {
+                                await interaction.showModal(modal);
+                                Logger.debug('Successfully showed music play modal');
+                            } else {
+                                Logger.warn('Interaction already acknowledged, cannot show modal');
+
+                                if (voiceChannel) {
+                                    const { getMusicManager } = require('../../../utils/musicManager');
+                                    const musicManager = getMusicManager();
+                                    
+                                    if (musicManager) {
+                                        try {
+                                            const { joinVoiceChannel } = require('@discordjs/voice');
+                                            joinVoiceChannel({
+                                                channelId: voiceChannel.id,
+                                                guildId: interaction.guild.id,
+                                                adapterCreator: interaction.guild.voiceAdapterCreator
+                                            });
+                                            
+                                            await interaction.followUp({
+                                                content: '✅ Joined your voice channel. Use the Add Music button again to play music.',
+                                                flags: MessageFlags.Ephemeral
+                                            });
+                                        } catch (joinError) {
+                                            Logger.error(`Failed to join voice channel: ${joinError}`);
+                                            await interaction.followUp({
+                                                content: '❌ Failed to join the voice channel. Please try again.',
+                                                flags: MessageFlags.Ephemeral
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            Logger.error(`Error showing music play modal: ${error.stack || error}`);
+                            if (!interaction.replied && !interaction.deferred) {
+                                try {
+                                    await interaction.reply({
+                                        content: 'An error occurred while opening the play music dialog.',
+                                        flags: MessageFlags.Ephemeral
+                                    });
+                                } catch (replyError) {
+                                    Logger.error(`Failed to reply with error: ${replyError}`);
+                                    try {
+                                        await interaction.followUp({
+                                            content: 'An error occurred while processing your request.',
+                                            flags: MessageFlags.Ephemeral
+                                        });
+                                    } catch (finalError) {
+                                        Logger.error(`Final error attempt failed: ${finalError}`);
+                                    }
+                                }
+                            } else {
+                                try {
+                                    await interaction.followUp({
+                                        content: 'An error occurred while processing your request.',
+                                        flags: MessageFlags.Ephemeral
+                                    });
+                                } catch (followUpError) {
+                                    Logger.error(`Failed to follow up with error: ${followUpError}`);
+                                }
+                            }
                         }
-                        const modal = new ModalBuilder()
-                            .setCustomId('music_play_search')
-                            .setTitle('Phát nhạc');
-                        const songInput = new TextInputBuilder()
-                            .setCustomId('song_query')
-                            .setLabel("Nhập tên bài hát hoặc URL")
-                            .setStyle(TextInputStyle.Short)
-                            .setPlaceholder('VD: Never Gonna Give You Up')
-                            .setRequired(true);
-                        modal.addComponents(new ActionRowBuilder().addComponents(songInput));
-                        await interaction.showModal(modal);
-                        return;
+                        return; 
                     }
 
                     if (interaction.isModalSubmit() && interaction.customId === 'music_play_search') {
-                        const query = interaction.fields.getTextInputValue('song_query');
-                        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                        try {
+                            const query = interaction.fields.getTextInputValue('song_query');
+                            Logger.debug(`Modal submitted with query: ${query}`);
 
-                        const player = useMainPlayer();
-                        const musicManager = getMusicManager();
-                        if (!player || !musicManager) {
-                            return interaction.editReply('❌ Hệ thống nhạc chưa được khởi tạo.');
-                        }
-                        const memberVC = interaction.member.voice.channel;
-                        if (!memberVC) {
-                            return interaction.editReply('❌ Bạn cần ở trong một kênh thoại để phát nhạc.');
-                        }
-                        
-                        let searchResult = await player.search(query, { requestedBy: interaction.user });
-                        if (!searchResult || !searchResult.tracks.length) {
-                            return interaction.editReply(`❌ Không tìm thấy kết quả cho: ${query}!`);
-                        }
+                            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-                        const result = await musicManager.play(memberVC, searchResult, interaction, true, { playTop: false, skipCurrent: false });
-                        if (result.success) {
-                            return interaction.editReply(`✅ Đã thêm bài hát vào hàng đợi`);
-                        } else {
-                            return interaction.editReply(`❌ ${result.message || 'Đã xảy ra lỗi khi phát bài hát.'}`);
+                            const player = useMainPlayer();
+                            const { getMusicManager } = require('../../../utils/musicManager');
+                            const musicManager = getMusicManager();
+                            
+                            if (!player || !musicManager) {
+                                Logger.error('Music player or manager not initialized');
+                                return interaction.editReply('❌ Music system is not initialized.');
+                            }
+
+                            const memberVC = interaction.member.voice.channel;
+                            if (!memberVC) {
+                                Logger.debug('User not in a voice channel');
+                                return interaction.editReply('❌ You need to be in a voice channel to play music.');
+                            }
+
+                            const botVC = interaction.guild.members.me.voice.channel;
+                            if (botVC) {
+                                if (memberVC.id !== botVC.id) {
+                                    return interaction.editReply('❌ You must be in the same voice channel as the bot to play music.');
+                                }
+                            }
+                            
+                            Logger.debug(`Attempting to search for: "${query}" in channel ${memberVC.name}`);
+
+                            let searchResult;
+                            try {
+                                searchResult = await player.search(query, {
+                                    requestedBy: interaction.user,
+                                    searchEngine: 'youtube'
+                                });
+                                
+                                if (!searchResult?.tracks?.length) {
+                                    Logger.debug('No YouTube results, trying SoundCloud...');
+                                    searchResult = await player.search(query, {
+                                        requestedBy: interaction.user,
+                                        searchEngine: 'soundcloud'
+                                    });
+                                }
+
+                                if (!searchResult?.tracks?.length) {
+                                    Logger.debug('No SoundCloud results, trying generic search...');
+                                    searchResult = await player.search(query, {
+                                        requestedBy: interaction.user
+                                    });
+                                }
+
+                                if (!searchResult || !searchResult.tracks.length) {
+                                    return interaction.editReply(`❌ No results found for: ${query}!`);
+                                }
+
+                                Logger.debug(`Search results: ${searchResult?.tracks?.length || 0} tracks found`);
+                                const result = await musicManager.play(memberVC, searchResult, interaction, true, { playTop: false, skipCurrent: false });
+                                
+                                Logger.debug(`Play result: ${JSON.stringify(result)}`);
+                                
+                                if (result.success) {
+                                    return interaction.editReply(`✅ Song Queued`);
+                                } else {
+                                    return interaction.editReply(`❌ ${result.message || 'An error occurred while playing the song.'}`);
+                                }
+                            } catch (error) {
+                                Logger.error(`Error searching for tracks: ${error.stack || error}`);
+                                return interaction.editReply(`❌ Error searching for tracks: ${error.message}`);
+                            }
+                        } catch (error) {
+                            Logger.error(`Error in modal music play handler: ${error.stack || error}`);
+                            try {
+                                if (interaction.deferred) {
+                                    return interaction.editReply('❌ An error occurred while trying to play music.');
+                                } else {
+                                    return interaction.reply({
+                                        content: '❌ An error occurred while trying to play music.',
+                                        flags: MessageFlags.Ephemeral
+                                    });
+                                }
+                            } catch (responseError) {
+                                Logger.error(`Failed to respond with error: ${responseError}`);
+                            }
                         }
+                        return;
                     }
                 } catch (error) {
-                    Logger.error(`Lỗi xử lý tương tác modal nhạc: ${error.stack || error}`);
+                    Logger.error(`Error handling music modal interaction: ${error.stack || error}`);
+                    try {
+                        if (interaction.replied || interaction.deferred) {
+                            await interaction.editReply('An error occurred while processing your request.');
+                        } else {
+                            await interaction.reply({
+                                content: 'An error occurred while processing your request.',
+                                flags: MessageFlags.Ephemeral
+                            });
+                        }
+                    } catch (finalError) {
+                        Logger.error(`Failed to send final error message: ${finalError}`);
+                    }
                 }
             });
+            
+            Logger.debug('Registered music modal handler');
         }
     } catch (error) {
-        Logger.error(`Lỗi thiết lập trình xử lý modal nhạc: ${error.stack || error}`);
+        Logger.error(`Error setting up music modal handler: ${error.stack || error}`);
     }
 }
 
@@ -751,37 +1376,51 @@ async function handleRestart(interaction) {
     try {
         if (!interaction.member.permissions.has("Administrator")) {
             return interaction.reply({
-                content: '❌ Bạn cần quyền quản trị viên để khởi động lại hệ thống nhạc.',
+                content: '❌ You need administrator permissions to restart the music system.',
                 flags: MessageFlags.Ephemeral
             });
         }
+        
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+        const { getMusicManager } = require('../../../utils/musicManager');
         const musicManager = getMusicManager();
+        
         if (!musicManager) {
-            return interaction.editReply('❌ Trình quản lý nhạc chưa được khởi tạo.');
+            return interaction.editReply('❌ Music manager is not initialized.');
         }
+
         await musicManager.saveQueues(true);
-        const playerCount = musicManager.musicSubscriptions.size;
+
+        const players = musicManager.musicSubscriptions;
+        const guildIds = [...players.keys()];
+        const playerCount = guildIds.length;
+        
         if (playerCount === 0) {
-            return interaction.editReply('✅ Không tìm thấy trình phát nhạc nào đang hoạt động. Hệ thống đã sẵn sàng.');
+            return interaction.editReply('✅ No active music players found. System ready.');
         }
-        for (const guildId of [...musicManager.musicSubscriptions.keys()]) {
-            const player = musicManager.musicSubscriptions.get(guildId);
+
+        for (const guildId of guildIds) {
+            const player = players.get(guildId);
             if (player && player.player) {
                 player.player.stop();
-                if (player.connection) player.connection.destroy();
-                musicManager.musicSubscriptions.delete(guildId);
+                if (player.connection) {
+                    player.connection.destroy();
+                }
+                players.delete(guildId);
             }
         }
+
         await musicManager.restoreQueues();
+        
         return interaction.editReply({
-            content: `✅ Hệ thống nhạc đã khởi động lại. Đã hủy ${playerCount} trình phát và cố gắng khôi phục hàng đợi.`,
+            content: `✅ Music system restarted. Destroyed ${playerCount} players and attempted to restore queues.`,
             flags: MessageFlags.Ephemeral
         });
     } catch (error) {
-        Logger.error('Lỗi trong lệnh khởi động lại:', error);
+        Logger.error('Error in restart command:', error);
         return interaction.editReply({
-            content: `❌ Lỗi khởi động lại hệ thống nhạc: ${error.message}`,
+            content: `❌ Error restarting music system: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
@@ -790,42 +1429,100 @@ async function handleRestart(interaction) {
 async function handleEmptyNowPlaying(interaction) {
     try {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+        const { getMusicManager } = require('../../../utils/musicManager');
         const musicManager = getMusicManager();
-        const emptyCanvas = musicManager ? await musicManager.createEmptyNowPlayingCanvas() : await createEmptyNowPlayingCanvas();
-        const tempFile = path.join(__dirname, 'temp', `np_empty_${Date.now()}.png`);
+
+        const emptyCanvas = musicManager 
+            ? await musicManager.createEmptyNowPlayingCanvas()
+            : await createEmptyNowPlayingCanvas();
+
+        const tempDir = path.join(__dirname, 'temp');
+        if (!fs.existsSync(tempDir)) {
+            fs.mkdirSync(tempDir, { recursive: true });
+        }
+        const tempFile = path.join(tempDir, `np_empty_${Date.now()}.png`);
         fs.writeFileSync(tempFile, emptyCanvas.toBuffer());
 
         const emptyEmbed = new EmbedBuilder()
             .setColor(parseInt((global.config.Music.EmbedColor || '#FF69B4').replace('#', ''), 16))
-            .setImage(`attachment://${path.basename(tempFile)}`)
+            .setImage(`attachment://np_empty_${path.basename(tempFile)}`)
             .addFields(
-                { name: 'Trạng thái', value: 'Không có phiên hoạt động', inline: true },
-                { name: 'Bước tiếp theo', value: 'Dùng /play để bắt đầu nghe', inline: true }
+                { name: 'Status', value: 'No active session', inline: true },
+                { name: 'Next steps', value: 'Use /play to start listening', inline: true }
             )
-            .setFooter({ text: 'Trình phát nhạc | Chờ bài hát tiếp theo của bạn' });
+            .setFooter({ text: 'Music Player | Waiting for your next track' });
 
         const emptyRow = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
                 .setCustomId('music_play')
                 .setEmoji('▶️')
-                .setLabel('Thêm nhạc')
+                .setLabel('Add Music')
                 .setStyle(ButtonStyle.Success)
         );
 
         const reply = await interaction.editReply({
-            content: '🎵 **Không có gì đang phát**',
+            content: '🎵 **Nothing Playing**',
             embeds: [emptyEmbed],
             components: [emptyRow],
-            files: [{ attachment: tempFile, name: path.basename(tempFile) }]
+            files: [{
+                attachment: tempFile,
+                name: path.basename(tempFile)
+            }]
         });
-        
-        // ... (File deletion logic)
 
+        try {
+            fs.unlinkSync(tempFile);
+            Logger.debug(`Deleted temp file: ${tempFile}`);
+        } catch (unlinkError) {
+            Logger.debug(`Failed to delete temp file immediately: ${unlinkError.message}`);
+
+            setTimeout(() => {
+                try {
+                    if (fs.existsSync(tempFile)) {
+                        fs.unlinkSync(tempFile);
+                        Logger.debug(`Deleted temp file (delayed): ${tempFile}`);
+                    }
+                } catch (error) {
+                    Logger.debug(`Failed to delete temp file in delayed attempt: ${error.message}`);
+                }
+            }, 5000);
+        }
+
+        try {
+            if (musicManager && reply.id && interaction.guild && interaction.guild.id) {
+                if (!global.musicData) {
+                    global.musicData = {};
+                }
+                
+                if (!global.musicData.nowPlayingMessages) {
+                    global.musicData.nowPlayingMessages = {};
+                }
+                
+                if (!global.musicData.nowPlayingMessages[interaction.guild.id]) {
+                    global.musicData.nowPlayingMessages[interaction.guild.id] = [];
+                }
+
+                global.musicData.nowPlayingMessages[interaction.guild.id].push(reply.id);
+
+                await musicManager.saveNowPlayingMessage(
+                    interaction.guild.id, 
+                    reply.id, 
+                    interaction.channel.id
+                );
+                
+                Logger.debug(`Created empty nowplaying message for guild ${interaction.guild.id}`);
+            }
+        } catch (error) {
+            Logger.error(`Error tracking empty nowplaying message: ${error}`);
+        }
+        
+        return reply;
     } catch (error) {
-        Logger.error('Lỗi tạo màn hình đang phát trống:', error);
+        Logger.error('Error creating empty nowplaying display:', error);
         return interaction.editReply({
-            content: `❌ Lỗi tạo màn hình nhạc: ${error.message}`,
+            content: `❌ Error creating music display: ${error.message}`,
             flags: MessageFlags.Ephemeral
         });
     }
-}
+} 

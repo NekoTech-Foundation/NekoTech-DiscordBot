@@ -5,8 +5,7 @@
 
 # BOT INFORMATION
 Version: "1.8.5" # Don't change this!
-BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.GL_mT_.__e4ZmYFE7mgL116uscFhpxT4qSHY79PlXlo3Q" # If you need help getting your BotToken please open a ticket here: http://discord.drakodevelopment.net
-LicenseKey: "LICENSE_KEY" # Join our discord server and check our #verify-purchase! http://discord.gg/drakobot
+BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.GL_mT_.__e4ZmYFE7mgL116uscFhpxT4qSHY79PlXlo3Q" # If you need help getting your 
 mongoURI: "mongodb+srv://nguyenhuuquy267_db_user:GcaOubv9VThC6xBf@nekocomicsdiscorddb.xhjdqcb.mongodb.net/?retryWrites=true&w=majority&appName=NekoComicsDiscordDB"
 GuildID: "1388889326309605488" # This is your server's ID, Right click on your server icon and copy ID
 BotName: "NekoBuckets"
@@ -251,7 +250,7 @@ TicketSettings:
   MaxTickets: 1
   DeletionTime: "0"
   useSelectMenu: true
-  overFlow: ["CATEGORY_ID", "CATEGORY_ID"] # Tickets will be moved to this category if the main category is full (Left to right)
+  overFlow: ["1427505637105074187"] # Tickets will be moved to this category if the main category is full (Left to right)
 
   DelayedResponse:
     Enabled: false
@@ -321,13 +320,13 @@ WorkingHours:
   Timezone: "Asia/Ho_Chi_Minh" # https://gist.github.com/diogocapela/12c6617fc87607d11fd62d2a4f42b02a
   NonWorkingDays: ["Saturday", "Sunday"] # Days that are completely off - no working hours
   Schedule: 
-    Monday: "16:00-22:00"
-    Tuesday: "16:00-22:00"
-    Wednesday: "16:00-22:00"
-    Thursday: "16:00-22:00"
-    Friday: "16:00-22:00"
-    Saturday: "16:00-22:00"
-    Sunday: "16:00-22:00"
+    Monday: "7:00-22:00"
+    Tuesday: "7:00-22:00"
+    Wednesday: "7:00-22:00"
+    Thursday: "7:00-22:00"
+    Friday: "7:00-22:00"
+    Saturday: "7:00-22:00"
+    Sunday: "7:00-22:00"
   allowOpenTickets: true # Should people be able to open tickets during the off hours? 
 
 WorkingEmbed: # This will be posted in the ticket if it's raised out of hours
@@ -489,14 +488,14 @@ TicketTypes:
     Name: "Hỗ trợ Chung"
     ChannelName: "{ticket-id}-Chung-{user}-{priority}"
     ChannelTopic: "Danh mục: {ticketType} | Người dùng: {userid} | Ưu tiên: {priority}"
-    CategoryID: "CATEGORY_ID"
+    CategoryID: "1427505637105074187"
     AutoAlert: "12h" 
     ArchiveCategory: "" 
-    SupportRole: ["ROLE_ID"]
-    UserRole: []
-    TagSupport: false
+    SupportRole: ["1388890276382380183"]
+    UserRole: ["1388890274436223128"]
+    TagSupport: true
     TagCreator: false
-    RestrictDeletion: false
+    RestrictDeletion: true
     Claiming:
       Enabled: true
       Button:
@@ -512,26 +511,26 @@ TicketTypes:
       Description: "Mở để nhận hỗ trợ chung"
     Questions: 
       - PurchaseID:
-          Question: "Bạn có mã giao dịch không?"
-          Placeholder: "TBX-wdUGVApxKSMXham"
+          Question: "Hãy Miêu tả vấn đề của bạn?"
+          Placeholder: "Miêu tả vấn đề nhé"
           Style: "Short"
-          Required: false
+          Required: true
           maxLength: 1000
 
   TicketType2:
     Enabled: true
     Panel: "Panel1"
-    Name: "Hỗ trợ Kỹ thuật"
-    ChannelName: "{ticket-id}-Kythuat-{user}-{priority}"
+    Name: "Nhận quyền Đăng Truyện"
+    ChannelName: "{ticket-id}-nhanquyendangtruyen-{user}-{priority}"
     ChannelTopic: "Danh mục: {ticketType} | Người dùng: {userid} | Ưu tiên: {priority}"
-    CategoryID: ""
+    CategoryID: "1427505637105074187"
     AutoAlert: "12h"
     ArchiveCategory: ""
-    SupportRole: ["ROLE_ID"]
-    UserRole: [""] 
-    TagSupport: false
+    SupportRole: ["1388890276382380183"]
+    UserRole: ["1388890274436223128"] 
+    TagSupport: true
     TagCreator: false
-    RestrictDeletion: false
+    RestrictDeletion: true
     Claiming:
       Enabled: true
       Button:
@@ -541,11 +540,17 @@ TicketTypes:
       RestrictResponse: true
       AnnounceClaim: true
     Button:
-      Name: "Hỗ trợ Kỹ thuật"
+      Name: "Nhận quyền Đăng Truyện"
       Emoji: "💻"
       Style: "Primary"
-      Description: "Các câu hỏi và vấn đề kỹ thuật"
-    Questions: []
+      Description: "Dành cho Các nhóm dịch có thể yêu cầu Quyền Lợi"
+    Questions: 
+      - RequiredIMG:
+          Question: "Gửi File Drive truyện bạn dịch lên nha!"
+          Placeholder: ""
+          Style: "Short"
+          Required: true
+          maxLength: 1000
 
 Alert:
   Enabled: true
@@ -702,8 +707,8 @@ LevelingSystem:
     VoiceInterval: "10s"
 
   LevelUpMessageSettings:
-    LevelUpMessage: "{user}, Bạn đã thăng cấp,cấp hiện tại {newLevel}"
-    UseEmbed: false
+    LevelUpMessage: "Ting! {user} đã lên cấp {newLevel}! Có vẻ như tất cả việc cày XP đó đều đáng giá, phần nào đó. 🤔"
+    UseEmbed: true
     Embed:
       Title: "🎉 Tăng Cấp!!!"
       Description:
@@ -727,10 +732,10 @@ LevelingSystem:
         roleID: ""
 
     ScaleRewards:
-      StackRewards: false
+      StackRewards: true
       Rewards:
         - level: +1
-          coins: 10
+          coins: 35
 
 RankCard:
   AccentColor: '#1769FF'
@@ -751,30 +756,30 @@ RankCard:
 # MODERATION
 # ===========================================================================
 ModerationRoles: # Who can use these commands?
-  reminder: ["ROLE_ID", "ROLE_ID"] # Allows you to set reminders for other users
-  addrole: ["ROLE_ID", "ROLE_ID"]
-  roleall: ["ROLE_ID", "ROLE_ID"]
-  ban: ["ROLE_ID", "ROLE_ID"]
-  tempban: ["ROLE_ID", "ROLE_ID"]
-  clearchannel: ["ROLE_ID", "ROLE_ID"]
-  clearhistory: ["ROLE_ID", "ROLE_ID"]
-  cleartimeout: ["ROLE_ID", "ROLE_ID"]
-  embed: ["ROLE_ID", "ROLE_ID"]
-  history: ["ROLE_ID", "ROLE_ID"]
-  kick: ["ROLE_ID", "ROLE_ID"]
-  poll: ["ROLE_ID", "ROLE_ID"]
-  purge: ["ROLE_ID", "ROLE_ID"]
-  removerole: ["ROLE_ID", "ROLE_ID"]
-  setnote: ["ROLE_ID", "ROLE_ID"]
+  reminder: ["1388890272766623784", "1388890276382380183"] # Allows you to set reminders for other users
+  addrole: ["1388890272766623784", "1388890276382380183"]
+  roleall: ["1388890272766623784", "1388890276382380183"]
+  ban: ["1388890272766623784", "1388890276382380183"]
+  tempban: ["1388890272766623784", "1388890276382380183"]
+  clearchannel: ["1388890272766623784", "1388890276382380183"]
+  clearhistory: ["1388890272766623784", "1388890276382380183"]
+  cleartimeout: ["1388890272766623784", "1388890276382380183"]
+  embed: ["1388890272766623784", "1388890276382380183"]
+  history: ["1388890272766623784", "1388890276382380183"]
+  kick: ["1388890272766623784", "1388890276382380183"]
+  poll: ["1388890272766623784", "1388890276382380183"]
+  purge: ["1388890272766623784", "1388890276382380183"]
+  removerole: ["1388890272766623784", "1388890276382380183"]
+  setnote: ["1388890272766623784", "1388890276382380183"]
   viewnote: ["1272331356445347840", "ROLE_ID"]
-  slowmode: ["ROLE_ID", "ROLE_ID"]
-  timeout: ["ROLE_ID", "ROLE_ID"]
-  unban: ["ROLE_ID", "ROLE_ID"]
-  warn: ["ROLE_ID", "ROLE_ID"]
-  unwarn: ["ROLE_ID", "ROLE_ID"]
-  temprole: ["ROLE_ID", "ROLE_ID"]
-  nickname: ["ROLE_ID", "ROLE_ID"]
-  blacklist: ["ROLE_ID", "ROLE_ID"]
+  slowmode: ["1388890272766623784", "1388890276382380183"]
+  timeout: ["1388890272766623784", "1388890276382380183"]
+  unban: ["1388890272766623784", "1388890276382380183"]
+  warn: ["1388890272766623784", "1388890276382380183"]
+  unwarn: ["1388890272766623784", "1388890276382380183"]
+  temprole: ["1388890272766623784", "1388890276382380183"]
+  nickname: ["1388890272766623784", "1388890276382380183"]
+  blacklist: ["1388890272766623784", "1388890276382380183"]
 
 PurgeLogChannel: "CHANNEL_ID"
 
@@ -1398,10 +1403,10 @@ Music:
   DefaultVolume: 80  # Default volume (0-100)
   
   # Permissions
-  RequiredRoles: []               # Roles that can use music commands, leave empty for everyone
-  RequiredControlRoles: []        # Roles that can use music control commands (leave empty to use same as RequiredRoles)
+  RequiredRoles: ["1388890274436223128"]               # Roles that can use music commands, leave empty for everyone
+  RequiredControlRoles: ["1388890274436223128"]        # Roles that can use music control commands (leave empty to use same as RequiredRoles)
   AllowedChannels: []             # Channels where music commands can be used, leave empty for all channels
-  AllowedCategories: []           # Categories where voice channels can be used for music
+  AllowedCategories: ["1388890304458784840"]           # Categories where voice channels can be used for music
   
   # Player behavior
   LeaveOnEnd: false               # Whether the bot should leave when the queue ends
@@ -1544,7 +1549,7 @@ Store:
       Description: "-# Rank Thành viên hạng cao,ưu tiên reply ticket"
       Price: "10000"
       RoleID: ["1426889490881843311"]
-      Limit: "10"
+      Limit: "1"
     2:
       Name: "Rank [ VIP MEMBERSHIP ],Gói x2 Xu trong 48h"
       Description: "-# Rank Thành viên hạng cao,ưu tiên reply ticket."
@@ -1635,3 +1640,55 @@ Store:
     - "Vật phẩm tăng cường"
     - "Vật phẩm"
     - "Trang bị"
+
+webhooks:
+  - url: "https://discord.com/api/webhooks/your_webhook_id_1/your_webhook_token_1"
+    embeds:
+      - title: "Embed Title 1 for Webhook 1"
+        description: "Description for Embed 1"
+        images:
+          - "https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
+          - "https://cdn-icons-png.flaticon.com/512/3349/3349798.png"
+        footer: "Footer for Embed 1"
+        interval: "5s"  # Rotates every 5 seconds
+
+  - url: "https://discord.com/api/webhooks/your_webhook_id_2/your_webhook_token_2"
+    embeds:
+      - title: "Embed Title 2 for Webhook 2"
+        description: "Description for Embed 2"
+        images:
+          - "http://example.com/image1.jpg"
+          - "http://example.com/image2.jpg"
+        footer: "Footer for Embed 2"
+        interval: "1m 15s"  # Rotates every 1 minute 15 seconds
+Weather:
+  Embed:
+    Color: "#0099ff"
+    TitleEmoji: "🌍"
+    ShowTimestamp: true
+    ShowFooter: true
+    FooterText: "Powered by OpenWeather | NekoTech Culi"
+    FooterIcon: ""
+
+  Fields:
+    Temperature:
+      Enabled: true
+      Name: "🌡️ Temperature"
+    FeelsLike:
+      Enabled: true
+      Name: "🌞 Feels Like"
+    Weather:
+      Enabled: true
+      Name: "{weatherEmoji} Weather"  # {weatherEmoji} will be replaced with the emoji for the current weather
+    Humidity:
+      Enabled: true
+      Name: "💦 Humidity"
+    Wind:
+      Enabled: true
+      Name: "💨 Wind"
+    SunriseSunset:
+      Enabled: true
+      Name: "🌅Sunrise/🌇Sunset"
+
+  Messages:
+    Error: "Unable to fetch weather data. Please check your location and try again."

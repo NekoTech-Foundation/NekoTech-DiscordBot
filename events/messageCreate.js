@@ -185,10 +185,25 @@ module.exports = async (client, message) => {
     }
 
     if (message.content.startsWith(config.CommandsPrefix)) {
+        const args = message.content.slice(config.CommandsPrefix.length).trim().split(/ +/);
+        const commandName = args.shift().toLowerCase();
+        const command = client.messageCommands.get(commandName);
+
+        if (command) {
+            try {
+                await command.run(client, message, args);
+            } catch (error) {
+                console.error(`Error executing message command ${command.name}:`, error);
+                message.reply('There was an error trying to execute that command!');
+            }
+            return; // Command found and executed, so we stop here.
+        }
+        
+        // If not found in messageCommands, it might be a custom command from config.
         try {
             await processCustomCommands(client, message);
         } catch (error) {
-            console.error('Error in command processing:', error);
+            console.error('Error in custom command processing:', error);
         }
     }
 

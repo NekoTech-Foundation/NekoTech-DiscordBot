@@ -1,7 +1,7 @@
 # ===========================================================================
-# Cấu hình ngôn ngữ cho Drako Bot
+# Cấu hình ngôn ngữ cho NekoBuckets Bot
 # Nếu bạn tìm thấy bất kỳ vấn đề nào, cần hỗ trợ, hoặc có đề xuất cho bot, vui lòng tham gia máy chủ hỗ trợ của chúng tôi và tạo một phiếu hỗ trợ,
-# http://discord.drakodevelopment.net
+# http://discord.NekoBucketsdevelopment.net
 # ===========================================================================
 
 # ===========================================================================
@@ -20,7 +20,7 @@ HelpCommand:
     Description:
       - "Chọn một danh mục từ menu thả xuống để xem các lệnh có sẵn."
     Footer:
-      Text: "Drako Bot"
+      Text: "NekoBuckets Bot"
       Icon: ""
     Author:
       Text: "{user}" # Tên người dùng, {guild} Tên máy chủ
@@ -249,7 +249,7 @@ Hangman:
     - HiepSi
     - RapXiec
     - Discord 
-    - Drako
+    - NekoBuckets
     - PhieuLuu
     - BongBong
     - XeDap
@@ -490,7 +490,7 @@ ErrorGeneric: "Xin lỗi, đã có lỗi với lệnh này."
 Giveaways: # Các biến giữ chỗ: {prize} {serverName} {hostedBy} {whitelistRoles} {blacklistRoles} {channel} {winnerCount}
  EntrySuccessMessage: "🎉 Bạn đã tham gia giveaway do {hostedBy} tổ chức thành công!"
  LeaveSuccessMessage: "👋 Bạn đã rời khỏi giveaway thành công."
- EntryErrorMessage: "Đã xảy ra lỗi khi cố gắng tham gia giveaway. Vui lòng liên hệ Drako Development."
+ EntryErrorMessage: "Đã xảy ra lỗi khi cố gắng tham gia giveaway. Vui lòng liên hệ NekoBuckets Development."
  CheckChance: "{user} bạn có {percent}% cơ hội thắng giveaway này. ({entries} lượt tham gia)"
  NotJoinedGiveaway: "Bạn chưa tham gia giveaway này!"
  CalculationError: "Đã xảy ra lỗi khi tính toán cơ hội của bạn."
@@ -738,7 +738,7 @@ Reminder:
       Description:
         - "Tôi sẽ nhắc nhở {user} sau {time}"
       Footer:
-        Text: "Lời nhắc Drako Bot"
+        Text: "Lời nhắc NekoBuckets Bot"
         Icon: ""
     List:
       Color: "#1769FF"
@@ -995,7 +995,7 @@ Profile:
       - "**🎒 Kho đồ**"
       - "> **📦 Vật phẩm:** {inventoryItems}"
     Footer:
-      Text: "Drako Bot | Thông tin hồ sơ"
+      Text: "NekoBuckets Bot | Thông tin hồ sơ"
       Icon: "{guildIcon}"
     Author:
       Text: "Hồ sơ của {nickname}"
@@ -1062,7 +1062,7 @@ RoleAddLogs:
       - "**🆕 Vai trò đã thêm:** {addedRoleNames}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🛡️ Hành động cập nhật vai trò | DrakoBot"
+      Text: "🛡️ Hành động cập nhật vai trò | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1079,7 +1079,7 @@ RoleRemoveLogs:
       - "**❌ Vai trò đã xóa:** {removedRoleNames}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🛡️ Hành động cập nhật vai trò | DrakoBot"
+      Text: "🛡️ Hành động cập nhật vai trò | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1096,7 +1096,7 @@ ChannelCreatedLogs:
       - "**📺 Tên kênh:** {channelName}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Hành động quản lý | DrakoBot"
+      Text: "🔒 Hành động quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1113,7 +1113,7 @@ ChannelDeletedLogs:
       - "**📺 Tên kênh:** {channelName}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Hành động quản lý | DrakoBot"
+      Text: "🔒 Hành động quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1131,7 +1131,7 @@ UserUpdateLogs:
       - "**🟢 Biệt danh mới:** `{newNickname}`"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Hành động quản lý | DrakoBot"
+      Text: "🔒 Hành động quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1149,7 +1149,7 @@ TimeoutLogs:
       - "**⏰ Thời gian:** {duration}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Hành động quản lý | DrakoBot"
+      Text: "🔒 Hành động quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1166,7 +1166,7 @@ UntimeLogs:
       - "**🛠️ Người quản lý:** {moderator}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Hành động quản lý | DrakoBot"
+      Text: "🔒 Hành động quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1184,7 +1184,7 @@ WarnLogs:
       - "**📅 Lý do:** {reason}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Hành động quản lý | DrakoBot"
+      Text: "🔒 Hành động quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1215,7 +1215,7 @@ GuildUpdateLogs:
       - "**👤 Cập nhật bởi:** {executor}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1233,7 +1233,7 @@ MessageDeleteLogs:
       - "**📺 Kênh:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1253,7 +1253,7 @@ MessageUpdateLogs:
       - "🟢 **Tin nhắn đã cập nhật:** `{newmessage}`"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1273,7 +1273,7 @@ InviteCreateLogs:
       - "**📺 Kênh:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký lời mời | DrakoBot"
+      Text: "🔒 Nhật ký lời mời | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1292,7 +1292,7 @@ InviteDeleteLogs:
       - "**📺 Kênh:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký lời mời | DrakoBot"
+      Text: "🔒 Nhật ký lời mời | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1312,7 +1312,7 @@ InviteJoinLogs:
       - "**📺 Kênh mời:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký lời mời | DrakoBot"
+      Text: "🔒 Nhật ký lời mời | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1329,7 +1329,7 @@ VoiceChannelStreamStop:
       - "**📺 Kênh:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1346,7 +1346,7 @@ VoiceChannelJoin:
       - "**📺 Kênh:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1363,7 +1363,7 @@ VoiceChannelLeave:
       - "**📺 Kênh:** {channel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""
@@ -1381,7 +1381,7 @@ VoiceChannelSwitch:
       - "🟢 **Kênh mới:** {newChannel}"
       - "**📅 Ngày:** {longtime}, {shorttime}"
     Footer:
-      Text: "🔒 Nhật ký quản lý | DrakoBot"
+      Text: "🔒 Nhật ký quản lý | NekoBucketsBot"
       Icon: ""
     Author:
       Text: ""

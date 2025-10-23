@@ -1,59 +1,105 @@
-/*
-  _____            _           ____        _   
- |  __ \          | |         |  _ \      | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |__| | | | (_| |   < (_) | | |_) | (_) | |_ 
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                             
-                                        
- Cảm ơn bạn đã chọn Drako Bot!
-
- Nếu bạn gặp bất kỳ vấn đề nào, cần hỗ trợ, hoặc có đề xuất để cải thiện bot,
- chúng tôi mời bạn kết nối với chúng tôi trên máy chủ Discord và tạo một phiếu hỗ trợ: 
-
- http://discord.drakodevelopment.net
- 
-*/
-
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const fs = require('fs');
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
+const { getConfig } = require('../../utils/configLoader.js');
 
 const config = getConfig();
 
-const hugGifs = [
-    "https://media.tenor.com/oRk6wv13vTAAAAAi/hug.gif",
-    "https://media1.tenor.com/m/BvoOcnjAz1AAAAAC/boo-hug.gif",
-    "https://media1.tenor.com/m/r8J976-gzRYAAAAd/iluvcashew.gif",
-    "https://media1.tenor.com/m/DRgXad_JuuQAAAAC/bobitos-mimis.gif",
-    "https://media1.tenor.com/m/AKcvM9yQRrQAAAAC/hug.gif",
-    "https://media1.tenor.com/m/3OMzo-QSVqEAAAAd/baby-hug.gif",
-    "https://media1.tenor.com/m/9RnLYWZRyDwAAAAd/snuggles-hugs.gif",
-    "https://media1.tenor.com/m/yMjbC5MEv5UAAAAC/hug-squeeze.gif",
-    "https://media1.tenor.com/m/m0DnmklkzAEAAAAd/allex-ano.gif",
-    "https://media1.tenor.com/m/EqG5FatLJpUAAAAC/hug-dogs.gif",
-    "https://media1.tenor.com/m/wlkjEsa1X_wAAAAC/monkeys-monkey.gif"
+// Random data arrays
+const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+const zodiacSigns = [
+    'Bạch Dương', 'Kim Ngưu', 'Song Tử', 'Cự Giải', 
+    'Sư Tử', 'Xử Nữ', 'Thiên Bình', 'Bọ Cạp', 
+    'Nhân Mã', 'Ma Kết', 'Bảo Bình', 'Song Ngư'
 ];
+const superpowers = [
+    'Bay', 'Tàng hình', 'Đọc suy nghĩ', 'Dịch chuyển tức thời',
+    'Siêu tốc độ', 'Siêu sức mạnh', 'Kiểm soát thời gian', 'Biến hình',
+    'Kiểm soát lửa', 'Kiểm soát nước', 'Kiểm soát sấm sét', 'Chữa lành'
+];
+const foods = [
+    'Phở', 'Bánh mì', 'Bún chả', 'Cơm tấm', 'Gỏi cuốn',
+    'Bánh xèo', 'Hủ tiếu', 'Cao lầu', 'Mì Quảng', 'Bún bò Huế',
+    'Pizza', 'Sushi', 'Hamburger', 'Pasta', 'Ramen'
+];
+const animals = [
+    'Chó', 'Mèo', 'Thỏ', 'Cáo', 'Gấu trúc',
+    'Sư tử', 'Hổ', 'Voi', 'Cá heo', 'Chim cánh cụt',
+    'Rồng', 'Phượng hoàng', 'Kỳ lân'
+];
+const hobbies = [
+    'Đọc sách', 'Chơi game', 'Nghe nhạc', 'Xem phim', 'Vẽ tranh',
+    'Chơi thể thao', 'Nấu ăn', 'Du lịch', 'Nhiếp ảnh', 'Viết lách',
+    'Nhảy múa', 'Hát karaoke', 'Chơi nhạc cụ', 'Làm vườn', 'Code'
+];
+
+// Helper function to get random item from array
+function getRandomItem(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+// Helper function to generate random date
+function getRandomDate(year) {
+    const month = Math.floor(Math.random() * 12) + 1;
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const day = Math.floor(Math.random() * daysInMonth) + 1;
+    return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('hug')
-        .setDescription('Gửi một cái ôm cho ai đó để làm ngày của họ tươi sáng hơn!')
+        .setName('age-calculator')
+        .setDescription('Tạo hồ sơ vui vẻ cho người dùng dựa trên tuổi!')
         .addUserOption(option =>
-            option.setName('target')
-                .setDescription('Người dùng để ôm')
-                .setRequired(true)),
+            option.setName('user')
+                .setDescription('Người dùng để tạo hồ sơ')
+                .setRequired(true))
+        .addIntegerOption(option =>
+            option.setName('age')
+                .setDescription('Tuổi của người dùng')
+                .setRequired(true)
+                .setMinValue(1)
+                .setMaxValue(120)),
     category: 'Fun',
     async execute(interaction, client) {
-        const target = interaction.options.getUser('target');
-        const selectedGif = hugGifs[Math.floor(Math.random() * hugGifs.length)];
-
+        const user = interaction.options.getUser('user');
+        const age = interaction.options.getInteger('age');
+        
+        // Calculate birth year
+        const currentYear = new Date().getFullYear();
+        const birthYear = currentYear - age;
+        
+        // Generate random attributes
+        const weight = Math.floor(Math.random() * 60) + 40; // 40-100 kg
+        const footSize = Math.floor(Math.random() * 15) + 20; // 20-35 cm
+        const bloodType = getRandomItem(bloodTypes);
+        const zodiac = getRandomItem(zodiacSigns);
+        const superpower = getRandomItem(superpowers);
+        const height = Math.floor(Math.random() * 60) + 140; // 140-200 cm
+        const food = getRandomItem(foods);
+        const birthDate = getRandomDate(birthYear);
+        const animal = getRandomItem(animals);
+        const hobby = getRandomItem(hobbies);
+        
+        // Create embed
         const embed = new EmbedBuilder()
-            .setDescription(`<@${interaction.user.id}> gửi những cái ôm đến bạn <@${target.id}>.`)
-            .setImage(selectedGif)
+            .setTitle(`📊 Hồ sơ của ${user.username}`)
+            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+            .setDescription([
+                `🎂 **Ngày sinh của bạn là:** ${birthDate}`,
+                `🎈 **Tuổi của bạn là:** ${age}`,
+                `📏 **Chiều cao của bạn là:** ${height} cm`,
+                `⚖️ **Cân nặng của bạn là:** ${weight} kg`,
+                `👟 **Kích thước chân của bạn là:** ${footSize} cm`,
+                `🩸 **Nhóm máu của bạn là:** ${bloodType}`,
+                `♈ **Cung hoàng đạo của bạn là:** ${zodiac}`,
+                `⚡ **Siêu năng lực ưa thích của bạn là:** ${superpower}`,
+                `🍜 **Món ăn yêu thích của bạn là:** ${food}`,
+                `🐾 **Động vật yêu thích của bạn là:** ${animal}`,
+                `🎨 **Sở thích yêu thích của bạn là:** ${hobby}`
+            ].join('\n'))
             .setColor(config.EmbedColors)
-
+            .setFooter({ text: 'Đây là thông tin ngẫu nhiên và chỉ để giải trí!' })
+            .setTimestamp();
+        
         await interaction.reply({ embeds: [embed] });
     }
 };

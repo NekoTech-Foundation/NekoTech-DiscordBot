@@ -1,0 +1,93 @@
+# Core Settings
+enabled: true              # Master switch for the addon
+
+# =============================================================================
+# DISPLAY SETTINGS
+# =============================================================================
+statistics_channel: "1428701971912720384"  # Channel ID to show statistics
+display_mode: "single"     # single: One message with all stats
+                          # multiple: Separate messages for each category
+update_interval: "5m"      # How often to update (format: 5m, 1h, 1d)
+
+# =============================================================================
+# EMBED SETTINGS
+# =============================================================================
+embed:
+  color: "#3498db"        # Main color for all embeds
+  timestamp: true         # Show last update time
+  thumbnail:
+    enabled: true
+    use_server_icon: true # Use server icon as thumbnail
+    custom_url: ""        # Custom thumbnail URL (if not using server icon)
+  footer:
+    enabled: true
+    text: "NekoTech Foundation | Heiznerd.denji"
+    icon_url: ""          # Footer icon URL
+
+# =============================================================================
+# TRACKING OPTIONS
+# =============================================================================
+track:
+  members: true           # Track member counts and status
+  bots: true             # Track bot counts
+  channels: true         # Track all channel types
+  roles: true            # Track role count
+  boosts: true           # Track server boost info
+  emojis: true          # Track emoji statistics and limits
+  stickers: true         # Track sticker count and limits
+  moderation: true      # Track moderation actions
+  messages: true         # Track message statistics
+
+# =============================================================================
+# CUSTOMIZATION
+# =============================================================================
+emojis:
+  members: ""
+  humans: "🙋🏻‍♂️"
+  bots: "🤖"
+  total_users: "👪"
+  online: "🟢"
+  offline: "⚫"
+  channels: ""
+  text: "📝"
+  voice: "🔊"
+  categories: "📂"
+  forum: "💬"
+  serverinfo: ""
+  roles: "🎭"
+  boosts: "⚡"
+  content: ""
+  messages: "💬"
+  normal_emojis: "😄"
+  animated_emojis: "🎭"
+  stickers: "🌟"
+  moderation: ""
+  bans: "🔨"
+  kicks: "👢"
+  timeouts: "⏰"
+  events: "📅"
+
+# =============================================================================
+# MULTIPLE MODE SETTINGS
+# =============================================================================
+categories:
+  members:
+    enabled: true        # Enable/disable category
+    position: 1          # Order of display
+  channels:
+    enabled: true
+    position: 2
+  server:
+    enabled: true
+    position: 3
+  content:
+    enabled: true
+    position: 4
+  moderation:
+    enabled: true
+    position: 5
+
+# =============================================================================
+# DEBUG
+# =============================================================================
+debug: false              # Enable/disable detailed logging

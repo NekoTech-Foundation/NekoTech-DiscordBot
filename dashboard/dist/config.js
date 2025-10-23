@@ -22,9 +22,11 @@ window.DASHBOARD_CONFIG = {
     "name": "Hỗ trợ Chung",
     "channelName": "{ticket-id}-Chung-{user}-{priority}",
     "supportRoles": [
-      "ROLE_ID"
+      "1388890276382380183"
     ],
-    "userRoles": [],
+    "userRoles": [
+      "1388890274436223128"
+    ],
     "claiming": {
       "enabled": true,
       "restrictResponse": true,
@@ -44,23 +46,23 @@ window.DASHBOARD_CONFIG = {
     "questions": [
       {
         "PurchaseID": {
-          "Question": "Bạn có mã giao dịch không?",
-          "Placeholder": "TBX-wdUGVApxKSMXham",
+          "Question": "Hãy Miêu tả vấn đề của bạn?",
+          "Placeholder": "Miêu tả vấn đề nhé",
           "Style": "Short",
-          "Required": false,
+          "Required": true,
           "maxLength": 1000
         }
       }
     ]
   },
   "TicketType2": {
-    "name": "Hỗ trợ Kỹ thuật",
-    "channelName": "{ticket-id}-Kythuat-{user}-{priority}",
+    "name": "Nhận quyền Đăng Truyện",
+    "channelName": "{ticket-id}-nhanquyendangtruyen-{user}-{priority}",
     "supportRoles": [
-      "ROLE_ID"
+      "1388890276382380183"
     ],
     "userRoles": [
-      ""
+      "1388890274436223128"
     ],
     "claiming": {
       "enabled": true,
@@ -73,12 +75,22 @@ window.DASHBOARD_CONFIG = {
       }
     },
     "button": {
-      "Name": "Hỗ trợ Kỹ thuật",
+      "Name": "Nhận quyền Đăng Truyện",
       "Emoji": "💻",
       "Style": "Primary",
-      "Description": "Các câu hỏi và vấn đề kỹ thuật"
+      "Description": "Dành cho Các nhóm dịch có thể yêu cầu Quyền Lợi"
     },
-    "questions": []
+    "questions": [
+      {
+        "RequiredIMG": {
+          "Question": "Gửi File Drive truyện bạn dịch lên nha!",
+          "Placeholder": "",
+          "Style": "Short",
+          "Required": true,
+          "maxLength": 1000
+        }
+      }
+    ]
   }
 }
     }
