@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const botActivitySchema = new mongoose.Schema({
-    guildId: {
+    botId: {
         type: String,
-        required: true,
+        default: 'global_settings',
         unique: true
     },
     activities: [{
@@ -27,7 +27,11 @@ const botActivitySchema = new mongoose.Schema({
                 return this.activityType === 'STREAMING';
             }
         }
-    }]
+    }],
+    lastActivityIndex: {
+        type: Number,
+        default: 0
+    }
 }, {
     timestamps: true
 });

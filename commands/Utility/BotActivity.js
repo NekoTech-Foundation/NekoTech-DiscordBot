@@ -73,11 +73,10 @@ module.exports = {
         }
 
         const subCommand = interaction.options.getSubcommand();
-        const guildId = interaction.guild.id;
-        let botActivityData = await BotActivity.findOne({ guildId });
+        let botActivityData = await BotActivity.findOne({ botId: 'global_settings' });
 
         if (!botActivityData) {
-            botActivityData = new BotActivity({ guildId });
+            botActivityData = new BotActivity({ botId: 'global_settings' });
         }
 
         if (subCommand === 'add') {
