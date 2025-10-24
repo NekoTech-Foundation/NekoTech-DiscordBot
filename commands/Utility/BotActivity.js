@@ -1,21 +1,23 @@
 const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder, Colors, MessageFlags } = require('discord.js');
 const BotActivity = require('../../models/BotActivity');
 
+const ALLOWED_USER_ID = '1316287191634149377';
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('botactivity')
-        .setDescription('Manage the bot activity settings')
+        .setDescription('Quản lý cài đặt hoạt động của bot')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
-                .setDescription('Add or update a bot activity status')
+                .setDescription('Thêm hoặc cập nhật một trạng thái hoạt động của bot')
                 .addStringOption(option =>
                     option.setName('status')
-                        .setDescription('The status message to display (supports placeholders)')
+                        .setDescription('Tin nhắn trạng thái để hiển thị (hỗ trợ các placeholder)')
                         .setRequired(true))
                 .addStringOption(option =>
                     option.setName('activity_type')
-                        .setDescription('The activity type (WATCHING, PLAYING, etc.)')
+                        .setDescription('Loại hoạt động (WATCHING, PLAYING, etc.)')
                         .setRequired(true)
                         .addChoices(
                             { name: 'WATCHING', value: 'WATCHING' },
@@ -25,7 +27,7 @@ module.exports = {
                         ))
                 .addStringOption(option =>
                     option.setName('status_type')
-                        .setDescription('The bot\'s online status (online, dnd, idle, invisible)')
+                        .setDescription('Trạng thái trực tuyến của bot (online, dnd, idle, invisible)')
                         .setRequired(true)
                         .addChoices(
                             { name: 'Online', value: 'online' },
@@ -35,39 +37,38 @@ module.exports = {
                         ))
                 .addStringOption(option =>
                     option.setName('streaming_url')
-                        .setDescription('The streaming URL (only needed if activity type is STREAMING)')
+                        .setDescription('URL streaming (chỉ cần thiết nếu loại hoạt động là STREAMING)')
                         .setRequired(false))
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
-                .setDescription('Remove a bot activity status by its index')
+                .setDescription('Xóa một trạng thái hoạt động của bot theo chỉ mục của nó')
                 .addIntegerOption(option =>
                     option.setName('index')
-                        .setDescription('The index of the status to remove (1-based index)')
+                        .setDescription('Chỉ mục của trạng thái để xóa (chỉ mục dựa trên 1)')
                         .setRequired(true))
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription('List all current bot activity statuses')
+                .setDescription('Liệt kê tất cả các trạng thái hoạt động hiện tại của bot')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('placeholders')
-                .setDescription('List all available placeholders for bot activities')
+                .setDescription('Liệt kê tất cả các placeholder có sẵn cho các hoạt động của bot')
     ),
     category: 'Utility',
     async execute(interaction) {
-        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
+        if (interaction.user.id !== ALLOWED_USER_ID) {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor(Colors.Red)
-                    .setTitle('Permission Denied')
-                    .setDescription('You do not have the required permissions to use this command.')
-                    .setFooter({ text: 'Manage Guild permission required.' })
+                    .setTitle('Từ chối quyền truy cập')
+                    .setDescription('Bạn không có quyền sử dụng lệnh này.')
                 ],
-                flags: MessageFlags.Ephemeral
+                ephemeral: true
             });
         }
 
@@ -97,16 +98,16 @@ module.exports = {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor(Colors.Green)
-                    .setTitle('Bot Activity Added')
-                    .setDescription(`A new bot activity status has been successfully added.`)
+                    .setTitle('Đã thêm hoạt động của bot')
+                    .setDescription(`Một trạng thái hoạt động mới của bot đã được thêm thành công.`)
                     .addFields(
-                        { name: 'Status', value: `\`${status}\``, inline: true },
-                        { name: 'Activity Type', value: `\`${activityType}\``, inline: true },
-                        { name: 'Status Type', value: `\`${statusType}\``, inline: true }
+                        { name: 'Trạng thái', value: `"${status}"`, inline: true },
+                        { name: 'Loại hoạt động', value: `"${activityType}"`, inline: true },
+                        { name: 'Loại trạng thái', value: `"${statusType}"`, inline: true }
                     )
-                    .setFooter({ text: 'Bot activity management' })
+                    .setFooter({ text: 'Quản lý hoạt động của bot' })
                 ],
-                flags: MessageFlags.Ephemeral
+                ephemeral: true
             });
 
         } else if (subCommand === 'remove') {
@@ -116,11 +117,11 @@ module.exports = {
                 return interaction.reply({
                     embeds: [new EmbedBuilder()
                         .setColor(Colors.Red)
-                        .setTitle('Invalid Index')
-                        .setDescription('The provided index is invalid. Please provide a valid status index.')
-                        .setFooter({ text: 'Use the list command to see current statuses.' })
+                        .setTitle('Chỉ mục không hợp lệ')
+                        .setDescription('Chỉ mục được cung cấp không hợp lệ. Vui lòng cung cấp một chỉ mục trạng thái hợp lệ.')
+                        .setFooter({ text: 'Sử dụng lệnh list để xem các trạng thái hiện tại.' })
                     ],
-                    flags: MessageFlags.Ephemeral
+                    ephemeral: true
                 });
             }
 
@@ -130,15 +131,15 @@ module.exports = {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor(Colors.Orange)
-                    .setTitle('Bot Activity Removed')
-                    .setDescription(`The bot activity status has been successfully removed.`)
+                    .setTitle('Đã xóa hoạt động của bot')
+                    .setDescription(`Trạng thái hoạt động của bot đã được xóa thành công.`)
                     .addFields(
-                        { name: 'Removed Status', value: `\`${removedActivity[0].status}\``, inline: true },
-                        { name: 'Activity Type', value: `\`${removedActivity[0].activityType}\``, inline: true }
+                        { name: 'Trạng thái đã xóa', value: `"${removedActivity[0].status}"`, inline: true },
+                        { name: 'Loại hoạt động', value: `"${removedActivity[0].activityType}"`, inline: true }
                     )
-                    .setFooter({ text: 'Bot activity management' })
+                    .setFooter({ text: 'Quản lý hoạt động của bot' })
                 ],
-                flags: MessageFlags.Ephemeral
+                ephemeral: true
             });
 
         } else if (subCommand === 'list') {
@@ -146,22 +147,24 @@ module.exports = {
                 return interaction.reply({
                     embeds: [new EmbedBuilder()
                         .setColor(Colors.Yellow)
-                        .setTitle('No Bot Activities')
-                        .setDescription('No bot activity statuses are currently configured.')
-                        .setFooter({ text: 'Use the add command to configure a new status.' })
+                        .setTitle('Không có hoạt động nào của bot')
+                        .setDescription('Hiện tại không có trạng thái hoạt động nào của bot được cấu hình.')
+                        .setFooter({ text: 'Sử dụng lệnh add để cấu hình một trạng thái mới.' })
                     ],
-                    flags: MessageFlags.Ephemeral
+                    ephemeral: true
                 });
             }
 
             const embed = new EmbedBuilder()
                 .setColor(Colors.Blurple)
-                .setTitle('Configured Bot Activity Statuses')
-                .setDescription('Below are the current bot activity statuses for this server:');
+                .setTitle('Các trạng thái hoạt động của bot đã được cấu hình')
+                .setDescription('Dưới đây là các trạng thái hoạt động hiện tại của bot cho máy chủ này:');
 
             botActivityData.activities.forEach((activity, index) => {
-                let activityDetails = `**Status ${index + 1}:** \`${activity.status}\`\n`;
-                activityDetails += `**Type:** ${activity.activityType} | **Presence:** ${activity.statusType}`;
+                let activityDetails = `**Trạng thái ${index + 1}:** 
+${activity.status}
+`;
+                activityDetails += `**Loại:** ${activity.activityType} | **Hiện diện:** ${activity.statusType}`;
 
                 if (activity.activityType === 'STREAMING' && activity.streamingURL) {
                     activityDetails += ` | **URL:** [Link](${activity.streamingURL})`;
@@ -170,32 +173,32 @@ module.exports = {
                 embed.addFields({ name: '\u200B', value: activityDetails });
             });
 
-            return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            return interaction.reply({ embeds: [embed], ephemeral: true });
 
         } else if (subCommand === 'placeholders') {
-            const placeholderList = `
-**Available Placeholders:**
-\`{total-users}\` - Total members in the server
-\`{total-channels}\` - Total channels in the server
-\`{total-messages}\` - Total messages sent
-\`{online-members}\` - Number of online members
-\`{uptime}\` - Bot's uptime
-\`{total-boosts}\` - Number of server boosts
-\`{total-cases}\` - Total moderation cases handled
-\`{total-suggestions}\` - Total suggestions submitted
-\`{times-bot-started}\` - Number of times the bot has started
-\`{open-tickets}\` - Number of open tickets
-\`{closed-tickets}\` - Number of closed tickets
-\`{deleted-tickets}\` - Number of deleted tickets
-\`{total-tickets}\` - Total tickets created`;
+            const placeholderList = '\n**Các placeholder có sẵn:**\n' + 
+                '`{total-users}` - Tổng số thành viên trong máy chủ\n' + 
+                '`{total-channels}` - Tổng số kênh trong máy chủ\n' + 
+                '`{total-messages}` - Tổng số tin nhắn đã gửi\n' + 
+                '`{online-members}` - Số lượng thành viên trực tuyến\n' + 
+                '`{uptime}` - Thời gian hoạt động của bot\n' + 
+                '`{total-boosts}` - Số lượng boost máy chủ\n' + 
+                '`{total-cases}` - Tổng số trường hợp kiểm duyệt đã xử lý\n' + 
+                '`{total-suggestions}` - Tổng số đề xuất đã gửi\n' + 
+                '`{times-bot-started}` - Số lần bot đã khởi động\n' + 
+                '`{open-tickets}` - Số lượng phiếu đang mở\n' + 
+                '`{closed-tickets}` - Số lượng phiếu đã đóng\n' + 
+                '`{deleted-tickets}` - Số lượng phiếu đã xóa\n' + 
+                '`{total-tickets}` - Tổng số phiếu đã tạo';
+
 
             const embed = new EmbedBuilder()
                 .setColor(Colors.Blurple)
-                .setTitle('Bot Activity Placeholders')
+                .setTitle('Các placeholder hoạt động của bot')
                 .setDescription(placeholderList)
-                .setFooter({ text: 'Use these placeholders in your bot activities' });
+                .setFooter({ text: 'Sử dụng các placeholder này trong các hoạt động của bot của bạn' });
 
-            return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            return interaction.reply({ embeds: [embed], ephemeral: true });
         }
     },
 };

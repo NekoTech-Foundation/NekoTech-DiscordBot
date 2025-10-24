@@ -169,6 +169,12 @@ const checkBlacklistWords = async (message, dmSent) => {
 };
 
 module.exports = async (client, message) => {
+    if (message.mentions.has(client.user.id) && !message.mentions.everyone) {
+        const botPing = Math.round(client.ws.ping);
+        const response = `:small_red_triangle: | ( Shard ${message.guild.shardId}) phản hồi trong (${botPing} ms / trung bình: ${botPing} ms).\n        | Để xem các lệnh có sẵn, sử dụng /help. Để xem các thông tin khác, sử dụng /botinfo`;
+        message.channel.send(response);
+        return;
+    }
     if (!message.guild || !message.member || message.author.bot) {
         return;
     }

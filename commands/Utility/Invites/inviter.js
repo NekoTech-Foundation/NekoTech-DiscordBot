@@ -1,18 +1,17 @@
-const { EmbedBuilder, SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const Invite = require('../../../models/inviteSchema');
-const UserData = require('../../../models/UserData');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('inviter')
-        .setDescription('Displays who invited a specified user')
+        .setDescription('Hiển thị người đã mời một người dùng cụ thể')
         .addUserOption(option =>
             option.setName('user')
-                .setDescription('The user to check inviter for')
+                .setDescription('Người dùng để kiểm tra người mời')
                 .setRequired(false)),
     category: 'Utility',
     async execute(interaction) {
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+        await interaction.deferReply({ ephemeral: true });
 
         const user = interaction.options.getUser('user') || interaction.user;
         const guildId = interaction.guild.id;
@@ -21,21 +20,21 @@ module.exports = {
             const inviteData = await Invite.findOne({ guildID: guildId, 'joinedUsers.userID': user.id });
 
             if (!inviteData) {
-                return interaction.editReply({ content: 'Could not find the inviter for this user.', flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ content: 'Không thể tìm thấy người mời cho người dùng này.', ephemeral: true });
             }
 
             const inviter = await interaction.client.users.fetch(inviteData.inviterID);
 
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
-                .setTitle(`Inviter Information`)
-                .setDescription(`${user.tag} was invited by ${inviter.tag}.`)
+                .setTitle('Thông tin người mời')
+                .setDescription(`${user.tag} được mời bởi ${inviter.tag}.`)
                 .setTimestamp();
 
-            return interaction.editReply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            return interaction.editReply({ embeds: [embed], ephemeral: true });
         } catch (error) {
-            console.error('Error fetching inviter data:', error);
-            return interaction.editReply({ content: 'There was an error fetching the inviter data.', flags: MessageFlags.Ephemeral });
+            console.error('Lỗi khi lấy dữ liệu người mời:', error);
+            return interaction.editReply({ content: 'Đã có lỗi xảy ra khi lấy dữ liệu người mời.', ephemeral: true });
         }
     }
 };

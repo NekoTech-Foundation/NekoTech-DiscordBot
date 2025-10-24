@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField, MessageFlags } = require('discord.js');
 const Reminder = require('../../models/reminder');
-//const fs = require('fs');
-//const yaml = require('js-yaml');
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
+const { getConfig, getLang } = require('../../utils/configLoader.js');
 const config = getConfig();
 const lang = getLang();
 
@@ -27,7 +25,7 @@ function setEmbedProperties(embed, embedConfig) {
         if (!embedConfig.Footer.Icon || embedConfig.Footer.Icon.trim() === '') {
             embed.setFooter({ text: embedConfig.Footer.Text });
         } else {
-            embed.setFooter({ 
+            embed.setFooter({
                 text: embedConfig.Footer.Text,
                 iconURL: embedConfig.Footer.Icon
             });
@@ -38,7 +36,7 @@ function setEmbedProperties(embed, embedConfig) {
         if (!embedConfig.Author.Icon || embedConfig.Author.Icon.trim() === '') {
             embed.setAuthor({ name: embedConfig.Author.Text });
         } else {
-            embed.setAuthor({ 
+            embed.setAuthor({
                 name: embedConfig.Author.Text,
                 iconURL: embedConfig.Author.Icon
             });
@@ -79,27 +77,27 @@ function hexToDecimal(hex) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('reminder')
-        .setDescription('Manage reminders')
+        .setDescription('Quản lý lời nhắc')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('create')
-                .setDescription('Set a new reminder')
+                .setDescription('Đặt một lời nhắc mới')
                 .addStringOption(option =>
                     option.setName('message')
-                        .setDescription('The reminder message')
+                        .setDescription('Tin nhắn nhắc nhở')
                         .setRequired(true))
                 .addStringOption(option =>
                     option.setName('time')
-                        .setDescription('When to remind you (e.g., "10m", "1h", "2d")')
+                        .setDescription('Khi nào cần nhắc bạn (ví dụ: "10m", "1h", "2d")')
                         .setRequired(true))
                 .addUserOption(option =>
                     option.setName('user')
-                        .setDescription('The user to remind')
+                        .setDescription('Người dùng cần nhắc nhở')
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription('List your active reminders')),
+                .setDescription('Liệt kê các lời nhắc đang hoạt động của bạn')),
     category: 'General',
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
@@ -114,10 +112,10 @@ module.exports = {
                 const embed = new EmbedBuilder();
                 setEmbedProperties(embed, {
                     Color: lang.Reminder.Embeds.List.Color,
-                    Description: lang.Reminder.Messages.no_reminders || 'You have no active reminders.'
+                    Description: lang.Reminder.Messages.no_reminders || 'Bạn không có lời nhắc nào đang hoạt động.'
                 });
 
-                await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+                await interaction.reply({ embeds: [embed], ephemeral: true });
                 return;
             }
 
@@ -125,18 +123,18 @@ module.exports = {
                 const timeLeft = reminder.reminderTime - Date.now();
                 const hours = Math.floor(timeLeft / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                return `${index + 1}. "${reminder.message}" - ${hours}h ${minutes}m remaining`;
+                return `${index + 1}. "${reminder.message}" - còn lại ${hours}h ${minutes}m`;
             }).join('\n');
 
             const embed = new EmbedBuilder();
             setEmbedProperties(embed, {
                 Color: lang.Reminder.Embeds.List.Color,
-                Title: lang.Reminder.Embeds.List.Title || 'Your Active Reminders',
+                Title: lang.Reminder.Embeds.List.Title || 'Các lời nhắc đang hoạt động của bạn',
                 Description: reminderList,
                 Footer: lang.Reminder.Embeds.List.Footer
             });
 
-            await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            await interaction.reply({ embeds: [embed], ephemeral: true });
             return;
         }
 
@@ -145,12 +143,12 @@ module.exports = {
         const delay = parseTimeToMs(timeInput);
 
         if (/@everyone|@here|<@&\d+>/.test(message)) {
-            await interaction.reply({ content: lang.Reminder.Messages.invalid_mentions, flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: lang.Reminder.Messages.invalid_mentions || 'Tin nhắn chứa các lượt đề cập không hợp lệ.', ephemeral: true });
             return;
         }
 
         if (!delay) {
-            await interaction.reply({ content: lang.Reminder.Messages.invalid_format, flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: lang.Reminder.Messages.invalid_format || 'Định dạng thời gian không hợp lệ. Vui lòng sử dụng các đơn vị h, m, d.', ephemeral: true });
             return;
         }
 
@@ -163,7 +161,7 @@ module.exports = {
             const isAdministrator = member.permissions.has(PermissionsBitField.Flags.Administrator);
 
             if (!hasModeratorRole && !isAdministrator) {
-                await interaction.reply({ content: lang.Reminder.Messages.permission_denied, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: lang.Reminder.Messages.permission_denied || 'Bạn không có quyền đặt lời nhắc cho người dùng khác.', ephemeral: true });
                 return;
             }
         }
@@ -190,6 +188,6 @@ module.exports = {
         const embed = new EmbedBuilder();
         setEmbedProperties(embed, embedConfig);
 
-        await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+        await interaction.reply({ embeds: [embed], ephemeral: true });
     }
 };

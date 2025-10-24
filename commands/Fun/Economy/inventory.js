@@ -1,193 +1,146 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../../models/UserData');
-const fs = require('fs');
-const yaml = require('js-yaml');
-const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
+const { getConfig } = require('../../../utils/configLoader');
 const config = getConfig();
-const lang = getLang();
-const parseDuration = require('./Utility/parseDuration');
-
-const { replacePlaceholders } = require('./Utility/helpers');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('inventory')
-        .setDescription('Xem và quản lí kho đồ của bạn'),
+        .setDescription('Xem và quản lý kho đồ của bạn')
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('view')
+                .setDescription('Xem kho đồ của bạn')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('use')
+                .setDescription('Sử dụng một vật phẩm từ kho đồ của bạn')
+                .addStringOption(option =>
+                    option.setName('item')
+                        .setDescription('Tên vật phẩm để sử dụng')
+                        .setRequired(true)
+                        .setAutocomplete(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('equip')
+                .setDescription('Trang bị một vật phẩm từ kho đồ của bạn')
+                .addStringOption(option =>
+                    option.setName('item')
+                        .setDescription('Tên vật phẩm để trang bị')
+                        .setRequired(true)
+                        .setAutocomplete(true)
+                )
+        ),
     category: 'Economy',
-    async execute(interaction) {
-        const user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id }, { inventory: 1, boosters: 1, equipment: 1 });
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+        if (!user || !user.inventory) return;
 
-        if (!user || !user.inventory.length) {
-            const embed = new EmbedBuilder()
-                .setDescription(lang.Economy.Other.Inventory.empty)
-                .setColor('#FF0000');
-            return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+        const choices = user.inventory.map(item => item.itemId);
+        const filtered = choices.filter(choice => choice.toLowerCase().startsWith(focusedValue.toLowerCase()));
+        await interaction.respond(
+            filtered.map(choice => ({ name: choice, value: choice })),
+        );
+    },
+    async execute(interaction) {
+        const subcommand = interaction.options.getSubcommand();
+        let user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+
+        if (!user) {
+            user = new User({ userId: interaction.user.id, guildId: interaction.guild.id });
+            await user.save();
         }
 
-        const categories = lang.Economy.Other.Store.Categories;
-        let currentPage = 0;
-        let currentCategory = categories[0];
-        const itemsPerPage = 5;
+        if (subcommand === 'view') {
+            if (!user.inventory || user.inventory.length === 0) {
+                return interaction.reply({ content: 'Kho đồ của bạn trống.', ephemeral: true });
+            }
 
-        const getCategoryItems = category => {
-            if (!config.Store[category]) return [];
-            return user.inventory.filter(userItem => {
-                return Object.values(config.Store[category]).some(storeItem => storeItem.Name === userItem.itemId);
+            const inventoryEmbed = new EmbedBuilder()
+                .setTitle('🎒 Kho đồ của bạn')
+                .setColor('#0099ff');
+
+            let description = '';
+            user.inventory.forEach(item => {
+                description += `**${item.itemId}** (x${item.quantity})\n`;
             });
-        };
+            inventoryEmbed.setDescription(description);
 
-        const updateInventoryMessage = async () => {
-            const categoryItems = getCategoryItems(currentCategory);
-            const start = currentPage * itemsPerPage;
-            const end = start + itemsPerPage;
-            const currentItems = categoryItems.slice(start, end);
+            return interaction.reply({ embeds: [inventoryEmbed], ephemeral: true });
+        } else if (subcommand === 'use') {
+            const itemName = interaction.options.getString('item');
+            const itemInInventory = user.inventory.find(i => i.itemId === itemName);
 
-            const description = currentItems.length
-                ? currentItems.map((item, index) => {
-                    return replacePlaceholders(lang.Economy.Other.Inventory.Embed.Description[0], {
-                        itemNum: start + index + 1,
-                        item: item.itemId,
-                        amount: item.quantity
-                    });
-                }).join('\n')
-                : lang.Economy.Other.Inventory.noItems;
-
-            const embed = new EmbedBuilder()
-                .setTitle(replacePlaceholders(lang.Economy.Other.Inventory.Embed.Title, { category: currentCategory }))
-                .setDescription(description)
-                .setFooter({ text: replacePlaceholders(lang.Economy.Other.Inventory.Embed.Footer.Text, { pageCurrent: currentPage + 1, pageMax: Math.ceil(categoryItems.length / itemsPerPage) }) })
-                .setColor(lang.Economy.Other.Inventory.Embed.Color);
-
-            const components = [
-                new ActionRowBuilder().addComponents(
-                    new StringSelectMenuBuilder()
-                        .setCustomId('category_select')
-                        .setPlaceholder(lang.Economy.Messages.inventoryCategory)
-                        .addOptions(categories.map(category => ({ label: category, value: category })))
-                ),
-                new ActionRowBuilder().addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('prev_page')
-                        .setLabel('Trang Trước')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(currentPage === 0),
-                    ...currentItems.map((item, index) =>
-                        new ButtonBuilder()
-                            .setCustomId(`redeem_${start + index}`)
-                            .setLabel(`${item.itemId} (${item.quantity})`)
-                            .setStyle(ButtonStyle.Secondary)
-                    ),
-                    new ButtonBuilder()
-                        .setCustomId('next_page')
-                        .setLabel('Trang Sau')
-                        .setStyle(ButtonStyle.Primary)
-                        .setDisabled(end >= categoryItems.length)
-                )
-            ];
-
-            try {
-                await interaction.editReply({ content: '', embeds: [embed], components });
-            } catch (error) {
-                console.error('Failed to edit reply:', error);
+            if (!itemInInventory) {
+                return interaction.reply({ content: 'Bạn không có vật phẩm này trong kho.', ephemeral: true });
             }
-        };
 
-        await interaction.reply({ content: 'Loading...', flags: MessageFlags.Ephemeral });
-        await updateInventoryMessage();
-
-        const message = await interaction.fetchReply();
-        const collector = message.createMessageComponentCollector({ time: 60000 });
-
-        collector.on('collect', async i => {
-            if (i.user.id !== interaction.user.id) return;
-
-            if (i.customId === 'category_select') {
-                currentCategory = i.values[0];
-                currentPage = 0;
-                await i.deferUpdate();
-                await updateInventoryMessage();
-            } else if (i.customId === 'prev_page') {
-                currentPage--;
-                await i.deferUpdate();
-                await updateInventoryMessage();
-            } else if (i.customId === 'next_page') {
-                currentPage++;
-                await i.deferUpdate();
-                await updateInventoryMessage();
-            } else if (i.customId.startsWith('redeem_')) {
-                const index = parseInt(i.customId.split('_')[1]);
-                const categoryItems = getCategoryItems(currentCategory);
-                const selectedItem = categoryItems[index - currentPage * itemsPerPage];
-
-                if (selectedItem.quantity > 1) {
-                    selectedItem.quantity--;
-                } else {
-                    user.inventory = user.inventory.filter(item => item.itemId !== selectedItem.itemId);
-                }
-
-                const storeItem = Object.values(config.Store[currentCategory]).find(item => item.Name === selectedItem.itemId);
-                if (storeItem) {
-                    if (storeItem.Booster && storeItem.Duration) {
-                        const duration = parseDuration(storeItem.Duration);
-                        user.boosters.push({
-                            type: storeItem.Booster,
-                            endTime: Date.now() + duration
-                        });
-                    }
-                    if (storeItem.RoleID) {
-                        const member = await interaction.guild.members.fetch(interaction.user.id);
-                        storeItem.RoleID.forEach(async roleId => {
-                            const role = interaction.guild.roles.cache.get(roleId);
-                            if (role) await member.roles.add(role);
-                        });
-                    }
-                    if (currentCategory === 'Equipment') {
-                        if (storeItem.Type === 'FishingRod') {
-                            user.equipment.FishingRod = selectedItem.itemId;
-                        } else if (storeItem.Type === 'HuntingWeapon') {
-                            user.equipment.HuntingWeapon = selectedItem.itemId;
-                        }
+            // Find item details from config
+            let itemDetails = null;
+            for (const category in config.Store) {
+                if (Array.isArray(config.Store[category])) {
+                    const foundItem = config.Store[category].find(i => i.Name === itemName);
+                    if (foundItem) {
+                        itemDetails = foundItem;
+                        break;
                     }
                 }
-
-                await user.save();
-
-                const embed = new EmbedBuilder()
-                    .setDescription(replacePlaceholders(lang.Economy.Other.Inventory.redeem, { item: selectedItem.itemId }))
-                    .setColor('#00FF00');
-                await i.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
-
-                if (!user.inventory.length) {
-                    collector.stop();
-                    const emptyEmbed = new EmbedBuilder()
-                        .setDescription(lang.Economy.Other.Inventory.empty)
-                        .setColor('#FF0000');
-                    try {
-                        await interaction.editReply({ embeds: [emptyEmbed], components: [] });
-                    } catch (error) {
-                        console.error('Failed to edit reply:', error);
-                    }
-                    return;
-                }
-
-                await updateInventoryMessage();
             }
-        });
 
-        collector.on('end', async () => {
-            const components = message.components.map(row => {
-                row.components.forEach(component => {
-                    if (typeof component.setDisabled === 'function') {
-                        component.setDisabled(true);
-                    }
-                });
-                return row;
+            if (!itemDetails || itemDetails.Type !== 'Booster') {
+                return interaction.reply({ content: 'Vật phẩm này không phải là vật phẩm tăng cường.', ephemeral: true });
+            }
+
+            const now = Date.now();
+            const duration = parseDuration(itemDetails.Duration || '0');
+
+            user.boosters.push({
+                type: itemDetails.Booster,
+                endTime: now + duration,
+                multiplier: parseFloat(itemDetails.Multiplier || '1')
             });
-            try {
-                await interaction.editReply({ components });
-            } catch (error) {
-                console.error('Failed to edit message:', error);
+
+            itemInInventory.quantity -= 1;
+            if (itemInInventory.quantity <= 0) {
+                user.inventory = user.inventory.filter(i => i.itemId !== itemName);
             }
-        });
-    },
+
+            await user.save();
+            return interaction.reply({ content: `Bạn đã sử dụng ${itemName}!`, ephemeral: true });
+
+        } else if (subcommand === 'equip') {
+            const itemName = interaction.options.getString('item');
+            const itemInInventory = user.inventory.find(i => i.itemId === itemName);
+
+            if (!itemInInventory) {
+                return interaction.reply({ content: 'Bạn không có vật phẩm này trong kho.', ephemeral: true });
+            }
+
+            let itemDetails = null;
+            if (config.Store.Equipment) {
+                 const foundItem = Object.values(config.Store.Equipment).find(i => i.Name === itemName);
+                 if(foundItem) {
+                    itemDetails = foundItem;
+                 }
+            }
+
+            if (!itemDetails || itemDetails.Type !== 'FishingRod') {
+                return interaction.reply({ content: 'Vật phẩm này không phải là cần câu.', ephemeral: true });
+            }
+
+            user.equipment.FishingRod = itemName;
+
+            itemInInventory.quantity -= 1;
+            if (itemInInventory.quantity <= 0) {
+                user.inventory = user.inventory.filter(i => i.itemId !== itemName);
+            }
+
+            await user.save();
+            return interaction.reply({ content: `Bạn đã trang bị ${itemName}!`, ephemeral: true });
+        }
+    }
 };

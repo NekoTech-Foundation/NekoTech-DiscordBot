@@ -1,7 +1,7 @@
 # ===========================================================================
-# Drako Bot Configuration
+# NekoTechs Bot Configuration
 # If you find any issues, need support, or have a suggestion for the bot, please join our support server and create a ticket, 
-# http://discord.drakodevelopment.net
+# http://discord.NekoTechsdevelopment.net
 
 # BOT INFORMATION
 Version: "1.8.5" # Don't change this!
@@ -18,7 +18,7 @@ SuccessEmbedColor: "#2ecc71"
 ErrorEmbedColor: "#E74C3C"
 
 # Only use this if your music doesn't work normally
-Cookie: "" # https://docs.drakodevelopment.net/our-bots/drako-bot/music
+Cookie: "" # https://docs.NekoTechsdevelopment.net/our-bots/NekoTechs-bot/music
 
 Dashboard:
   Enabled: true
@@ -111,34 +111,6 @@ WarnLogs:
   Enabled: false
   LogsChannelID: "CHANNEL_ID"
 
-BanLogs:
-  Enabled: false
-  DM:
-    Enabled: false
-    Embed:
-      Title: "🚫 Ban Notification"
-      Description:
-        - "**🏰 Guild:** {guildName}"
-        - "**🔨 Banned By:** {moderator}"
-        - "**📝 Reason:** {reason}"
-        - "**📅 Date:** {longtime}, {shorttime}"
-        - " "
-        - "🚷 You have been banned from the server."
-      Footer: "🔒 Moderation Action | NekoBuckets"
-      Color: "#1769FF"
-  LogsChannelID: "CHANNEL_ID"
-  Embed:
-    Title: "🔨 Ban Action | User: {userTag}"
-    Description:
-      - "**👤 User:** {user}"
-      - "**🛠️ Moderator:** {moderator}"
-      - "**📝 Reason:** {reason}"
-      - "**📅 Date:** {longtime}, {shorttime}"
-      - " "
-      - "This ban has been completed."
-    Footer: "🔒 Moderation Action | NekoBuckets"
-    Color: "#1769FF"
-  Thumbnail: true
 
 UnbanLogs:
   Enabled: false
@@ -804,7 +776,7 @@ AutoKick:
      Title: "⚠️ Verification Failure ⚠️"
      Description: 
        - "🚫 **Notice:** You failed to verify within the given amount of time."
-       - "Please rejoin and verify to remain in our server. discord.gg/drakobot"
+       - "Please rejoin and verify to remain in our server. discord.gg/NekoTechsbot"
      Color: "#1769FF"
      Footer: "Automatic Kick | NekoBuckets"
 
@@ -863,7 +835,7 @@ BlacklistWords:
     - "regex:\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"  # Email regex
     - "regex:\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b" # IP Address regex
   WhitelistWords:
-    - "discord.gg/drakobot"
+    - "discord.gg/NekoTechsbot"
   WhitelistChannels: 
     - "CHANNEL_ID"  # IDs of channels that should be exempted
   WhitelistCategories:
@@ -1069,72 +1041,9 @@ Backup:
 # {leaveDate} # Discord timestamp for when they left
 # {leaveTime} # Discord timestamp for when they left
 
-WelcomeMessage:
-  Enabled: true
-  ChannelID: "1388890296003072203"
-  Type: "BOTH" # EMBED, MESSAGE, BOTH (If both are used the message will appear above the embed)
-  Text: "Chào mừng bạn tới **{guildName}**, {userName}"
-  Embed:
-    Title: ""
-    Description:
-      - "Chào mừng bạn tới **{guildName}**, {userName}! Chúng tôi rất vui mừng khi bạn tham gia cộng đồng NekoComics. 🎉"
-      - "" 
-      - "Được mời bởi » {invitedBy} ({invitedByCount} invites)" 
-      - "Ngày tham gia » {joinDate} ({joinTime})" 
-      - "Ngày thành lập TK » {UserCreation}" 
-      - "Thành viên số » {memberCount}" 
-    Footer:
-      Text: "{guildName} • Hôm nay, {shortTime}"
-      Icon: "{guildIcon}"
-    Author:
-      Text: "Chào Mừng tới {guildName}!"
-      Icon: "https://static-00.iconduck.com/assets.00/hand-waving-icon-1875x2048-trzytj43.png"
-    Color: "#1769FF"
-    Image: "{userBanner}" # {userBanner} - Displays the users banner
-    Thumbnail: "{user-avatar}" # {user-avatar} - Displays the users avatar
-  
-  
-  DM:
-    Enabled: false
-    Embed:
-      Title: "Welcomne, {userName}!"
-      Description:
-        - "Welcome to **{guildName}**, {userName}! We're delighted to have you join our community. 🎉"
-        - "You are our {memberCount} member!" 
-      Footer:
-        Text: "{guildName} • Today at {shortTime}"
-        Icon: "{guildIcon}"
-      Author:
-        Text: "Welcome to {guildName}!"
-        Icon: "https://static-00.iconduck.com/assets.00/hand-waving-icon-1875x2048-trzytj43.png"
-      Color: "#1769FF"
-      Image: "{userBanner}" # {userBanner} - Displays the users banner
-      Thumbnail: "{user-avatar}" # {user-avatar} - Displays the users avatar
-      Buttons:
-        - Type: "LINK"
-          Name: "Product"
-          Emoji: "📜"
-          Link: "https://builtbybit.com/resources/drako-bot-multi-purpose-discord-bot.22266/"
 
-LeaveMessage:
-  Enabled: false
-  ChannelID: "CHANNEL_ID"
-  Type: "BOTH" # EMBED, MESSAGE, BOTH (If both are used the message will appear above the embed)
-  Text: "Goodbye, {userName}!"
-  Embed:
-    Title: ""
-    Description:
-      - "Goodbye, {userName}!"
-      - "Hope to see you again soon...."
-    Footer:
-      Text: "{guildName} • {shortTime}"
-      Icon: "{guildIcon}"
-    Author:
-      Text: "👋 See you soon!"
-      Icon: ""
-    Color: "#1769FF"
-    Image: "" # {userBanner} - Displays the users banner
-    Thumbnail: "{user-avatar}" # {user-avatar} - Displays the users avatar
+
+
  
 # ===========================================================================
 # JOIN ROLE/VERIFICATION CONFIGURATION
@@ -1253,7 +1162,7 @@ ReactionRoles:
         - " "
         - "*(( React with the corresponding emoji to get your roles! ))*"
       Footer:
-        Text: "Drako Bot | Reaction Role System"
+        Text: "NekoTechs Bot | Reaction Role System"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Author:
         Text: "Reaction Panel"
@@ -1311,9 +1220,9 @@ CustomCommands:
       - Type: "LINK"
         Name: "MongoDB Setup"
         Emoji: "📑"
-        Link: "https://docs.drakodevelopment.net/misc/mongodb-setup"
+        Link: "https://docs.NekoTechsdevelopment.net/misc/mongodb-setup"
 
- # See https://docs.drakodevelopment.net/our-bots/drako-bot/custom-commands for more examples
+ # See https://docs.NekoTechsdevelopment.net/our-bots/NekoTechs-bot/custom-commands for more examples
 
 # ===========================================================================
 # SUGGESTION SYSTEM
@@ -1337,7 +1246,7 @@ SuggestionSettings:
     1: # Only works if you are using UseQuestionModal true
       ID: "product" # {modal_product}
       Question: "What product is your suggestion for?"
-      Placeholder: "Drako Bot, Drako Tickets, Discord"
+      Placeholder: "NekoTechs Bot, NekoTechs Tickets, Discord"
       Style: "Short" # Short + Paragraph
       Required: true
       maxLength: 1000
@@ -1461,52 +1370,160 @@ Economy:
     maxAmount: 1000
 
   Fishing:
-    cooldown: "30m"
+    cooldown: "15m"
     locations:
-      pond:
-        cost: 50
+      suoi:
+        cost: 20
         fish:
-          - name: "Minnow"
+          - name: "Cá Rô Đồng"
+            chance: 0.40
+            minReward: 10
+            maxReward: 30
+          - name: "Cá Lóc Nhỏ"
             chance: 0.30
+            minReward: 20
+            maxReward: 50
+          - name: "Cá Bống"
+            chance: 0.20
             minReward: 30
             maxReward: 60
-          - name: "Bluegill"
-            chance: 0.25
+          - name: "Lươn Đồng"
+            chance: 0.10
             minReward: 50
             maxReward: 100
-      lake:
+      song:
+        cost: 50
+        fish:
+          - name: "Cá Trắm Cỏ"
+            chance: 0.35
+            minReward: 40
+            maxReward: 80
+          - name: "Cá Chép"
+            chance: 0.30
+            minReward: 50
+            maxReward: 100
+          - name: "Cá Lăng"
+            chance: 0.20
+            minReward: 80
+            maxReward: 150
+          - name: "Cá Hô"
+            chance: 0.05
+            minReward: 200
+            maxReward: 500
+      ao:
+        cost: 30
+        fish:
+          - name: "Cá Diêu Hồng"
+            chance: 0.40
+            minReward: 20
+            maxReward: 40
+          - name: "Cá Rô Phi"
+            chance: 0.35
+            minReward: 25
+            maxReward: 50
+          - name: "Cá Trê"
+            chance: 0.20
+            minReward: 40
+            maxReward: 70
+          - name: "Tôm Càng Xanh"
+            chance: 0.05
+            minReward: 100
+            maxReward: 200
+      ho:
+        cost: 80
+        fish:
+          - name: "Cá Mè"
+            chance: 0.40
+            minReward: 60
+            maxReward: 120
+          - name: "Cá Quả"
+            chance: 0.30
+            minReward: 80
+            maxReward: 160
+          - name: "Cá Vược"
+            chance: 0.20
+            minReward: 100
+            maxReward: 200
+          - name: "Ba Ba"
+            chance: 0.10
+            minReward: 150
+            maxReward: 300
+      vung_vinh:
         cost: 150
         fish:
-          - name: "Pike"
-            chance: 0.15
-            minReward: 250
-            maxReward: 500
-          - name: "Walleye"
-            chance: 0.12
-            minReward: 300
-            maxReward: 600
-      ocean:
-        cost: 300
-        fish:
-          - name: "Mackerel"
-            chance: 0.22
+          - name: "Cá Mú"
+            chance: 0.35
+            minReward: 120
+            maxReward: 250
+          - name: "Cá Hồng"
+            chance: 0.30
+            minReward: 150
+            maxReward: 300
+          - name: "Cá Chim"
+            chance: 0.20
             minReward: 200
             maxReward: 400
-          - name: "Cod"
-            chance: 0.20
-            minReward: 250
-            maxReward: 500
-      deep_sea:
-        cost: 500
-        fish:
-          - name: "Anglerfish"
-            chance: 0.25
+          - name: "Cua Hoàng Đế"
+            chance: 0.05
             minReward: 500
             maxReward: 1000
-          - name: "Giant Squid"
-            chance: 0.12
+      bien:
+        cost: 250
+        fish:
+          - name: "Cá Ngừ"
+            chance: 0.40
+            minReward: 200
+            maxReward: 400
+          - name: "Cá Thu"
+            chance: 0.30
+            minReward: 250
+            maxReward: 500
+          - name: "Cá Kiếm"
+            chance: 0.15
+            minReward: 400
+            maxReward: 800
+          - name: "Mực Ống"
+            chance: 0.15
+            minReward: 300
+            maxReward: 600
+      bien_khoi:
+        cost: 500
+        fish:
+          - name: "Cá Cờ"
+            chance: 0.30
+            minReward: 400
+            maxReward: 800
+          - name: "Cá Mập Vây Xanh"
+            chance: 0.15
+            minReward: 800
+            maxReward: 1500
+          - name: "Cá Voi Sát Thủ"
+            chance: 0.05
             minReward: 2000
             maxReward: 4000
+          - name: "Bạch Tuộc Khổng Lồ"
+            chance: 0.01
+            minReward: 5000
+            maxReward: 10000
+      vuc_tham:
+        cost: 1000
+        fish:
+          - name: "Cá Rồng Đen"
+            chance: 0.25
+            minReward: 800
+            maxReward: 1600
+          - name: "Cá Cần Câu Quỷ"
+            chance: 0.15
+            minReward: 1500
+            maxReward: 3000
+          - name: "Thủy Quái Leviathan"
+            chance: 0.03
+            minReward: 8000
+            maxReward: 15000
+          - name: "Rương Báu Cổ"
+            chance: 0.01
+            minReward: 10000
+            maxReward: 25000
 
   Beg:
     cooldown: "10m"

@@ -1,6 +1,5 @@
 const { MemoryChecker } = require('./utils/memoryChecker.js');
-const { updateDashboardEnv } = require('./utils/dashboardEnv');
-const startDashboardServer = require('./dashboard/server/index.js');
+
 const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
 
 if (process.platform !== "win32") require("child_process").exec("npm install");
@@ -78,25 +77,7 @@ client.setMaxListeners(20);
 
 global.client = client;
 
-(async () => {
-    try {
-         if (config.Dashboard.Enabled) {
-             if (updateDashboardEnv()) {
-                 client.once('ready', () => {
-                     console.log(`${colors.green(`[SUCCESS] Bot is ready. Starting dashboard server...`)}`);
-                     startDashboardServer();
-                 });
-             } else {
-                 console.error(`${colors.red(`[ERROR] Failed to update dashboard environment. Dashboard will not start.`)}`);
-                 process.exit(1);
-             }
-         }
-         
-     } catch (error) {
-         console.error('Error during initialization:', error);
-         process.exit(1);
-     }
- })();
+
  
  const memoryChecker = new MemoryChecker('NekoBuckets Bot');
  const fetch = require('node-fetch');
@@ -113,101 +94,20 @@ global.client = client;
          return;
      }
  
-     try {
-         const dashboardUrl = `http://${config.Dashboard.URL}:${config.Dashboard.Port}/api/memory/bot`;
-         
-         const response = await fetch(dashboardUrl, {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify({ memory: totalMemory }),
-             timeout: 2000
-         });
- 
-         if (!response.ok) {
-             throw new Error(`HTTP error! status: ${response.status}`);
-         }
-     } catch (error) {
-         if (!error.type === 'request-timeout') {
-             console.error("[BOT] Memory update error:", error.message);
-         }
-     }
+
  }
  
  memoryChecker.start();
 
 client.invites = new Map();
 
-const { Player } = require('discord-player');
-const { YoutubeiExtractor } = require('discord-player-youtubei');
-const { Logger } = require('./utils/logger');
-const { disableYoutubeiLogs, disableYouTubeDebugLogs } = require('./utils/disableDebugLogs');
 
-let player = null;
 
-process.env.DISCORD_PLAYER_SILENCE_WARNINGS = 'true';
-disableYoutubeiLogs();
-disableYouTubeDebugLogs();
 
-player = new Player(client, {
-    skipFFmpeg: false, 
-    lagMonitor: 1000,
-    connectionTimeout: 45 * 1000, // 45 seconds
-    leaveOnEnd: config.Music?.LeaveOnEnd === true,
-    leaveOnStop: config.Music?.LeaveOnEnd === true,
-    leaveOnEmpty: config.Music?.LeaveOnEmpty === true,
-    leaveOnEmptyCooldown: config.Music?.LeaveEmptyDelay || 60000,
-});
-
-global.player = player;
-
-async function registerExtractors() {
-    const extractorOptions = {
-      streamOptions: {
-        useClient: "WEB_EMBEDDED",
-      },
-      generateWithPoToken: true,
-      cookie: config.Cookie
-    };
-
-    await player.extractors.register(YoutubeiExtractor, extractorOptions);
-
-    await player.extractors.loadDefault((ext) => !['YouTubeExtractor'].includes(ext));
-}
-
-registerExtractors();
-
-client.once('ready', async () => {
-    try {
-        client.guilds.cache.forEach(async guild => {
-            try {
-                const invites = await guild.invites.fetch();
-                const codeUses = new Map(invites.map(invite => [invite.code, invite.uses]));
-                client.invites.set(guild.id, codeUses);
-
-            } catch (error) {
-                console.error(`Failed to fetch invites or determine existing members for guild ${guild.id}: ${error}`);
-            }
-        });
-
-        if (global.MusicManager) {
-            Logger.log('Music system already initialized, skipping duplicate initialization');
-        } else {
-            const { getMusicManager } = require('./utils/musicManager');
-            global.MusicManager = getMusicManager(client);
-            
-            if (global.MusicManager) {
-              //  Logger.log('✓ Music system initialized successfully.');
-            } else {
-                Logger.error('Failed to initialize music system - manager creation failed');
-            }
-        }
-    } catch (error) {
-        Logger.error(`Error in client ready event: ${error}`);
-    }
-});
 
 client.on('inviteCreate', async invite => {
     try {
+        if (!invite.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageGuild)) return;
         const invites = await invite.guild.invites.fetch();
         const codeUses = new Map(invites.map(invite => [invite.code, invite.uses]));
         client.invites.set(invite.guild.id, codeUses);
@@ -253,5 +153,3 @@ require('./events/antiNuke')(client);
 
 const filePath = './logs.txt';
 const maxLength = 300;
-
-require('@discordjs/voice');

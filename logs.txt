@@ -31539,3 +31539,950 @@ Bot Version: 1.8.5[2025-10-23T10:06:38.576Z] [DEBUG] Setting up music play modal
 [2025-10-23T10:10:56.856Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
 [2025-10-23T10:10:56.856Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
 [2025-10-23T10:10:56.856Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/23/2025, 9:17:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-23T14:17:50.178Z] [DEBUG] Setting up music play modal handler...
+[2025-10-23T14:17:50.179Z] [DEBUG] Registered music modal handler
+[2025-10-23T14:17:53.992Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-23T14:17:53.992Z] [DEBUG] Using existing discord-player instance
+[2025-10-23T14:17:53.992Z] [DEBUG] Applying voice connection patches
+[2025-10-23T14:17:53.993Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-23T14:17:53.993Z] [DEBUG] Voice state update handler patched
+[2025-10-23T14:17:53.994Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-23T14:17:54.152Z] [DEBUG] Registering player events (first time)
+[2025-10-23T14:17:54.152Z] [DEBUG] Registered player event handlers
+[2025-10-23T14:17:54.209Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-23T14:17:54.210Z] [DEBUG] Initialized MusicManager
+
+[10/23/2025, 9:17:54 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!21:17 (23-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-23T14:19:48.735Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-23T14:19:48.735Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-23T14:19:48.743Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-23T14:19:48.743Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-23T14:19:48.743Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/23/2025, 9:19:52 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-23T14:19:56.249Z] [DEBUG] Setting up music play modal handler...
+[2025-10-23T14:19:56.250Z] [DEBUG] Registered music modal handler
+[2025-10-23T14:20:01.183Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-23T14:20:01.184Z] [DEBUG] Using existing discord-player instance
+[2025-10-23T14:20:01.185Z] [DEBUG] Applying voice connection patches
+[2025-10-23T14:20:01.185Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-23T14:20:01.186Z] [DEBUG] Voice state update handler patched
+[2025-10-23T14:20:01.186Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-23T14:20:01.347Z] [DEBUG] Registering player events (first time)
+[2025-10-23T14:20:01.347Z] [DEBUG] Registered player event handlers
+[2025-10-23T14:20:01.406Z] [DEBUG] Initialized MusicManager
+[2025-10-23T14:20:01.406Z] [DEBUG] No saved queues found in MongoDB
+
+[10/23/2025, 9:20:01 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!21:20 (23-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-23T14:21:14.894Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-23T14:21:14.895Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-23T14:21:14.902Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-23T14:21:14.902Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-23T14:21:14.902Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/23/2025, 9:21:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-23T14:21:21.712Z] [DEBUG] Setting up music play modal handler...
+[2025-10-23T14:21:21.712Z] [DEBUG] Registered music modal handler
+[2025-10-23T14:21:26.192Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-23T14:21:26.192Z] [DEBUG] Using existing discord-player instance
+[2025-10-23T14:21:26.193Z] [DEBUG] Applying voice connection patches
+[2025-10-23T14:21:26.193Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-23T14:21:26.194Z] [DEBUG] Voice state update handler patched
+[2025-10-23T14:21:26.197Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-23T14:21:26.349Z] [DEBUG] Registering player events (first time)
+[2025-10-23T14:21:26.349Z] [DEBUG] Registered player event handlers
+[2025-10-23T14:21:26.407Z] [DEBUG] Initialized MusicManager
+[2025-10-23T14:21:26.407Z] [DEBUG] No saved queues found in MongoDB
+
+[10/23/2025, 9:21:26 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!21:21 (23-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 11:41:41 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:41:45.254Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:41:45.255Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:41:48.528Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:41:48.528Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:41:48.529Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:41:48.529Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:41:48.529Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:41:48.530Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:41:48.665Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:41:48.665Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:41:48.734Z] [DEBUG] Initialized MusicManager
+[2025-10-24T04:41:48.734Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 11:41:50 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:41 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:45:13.980Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:45:13.980Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:45:13.984Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:45:13.984Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:45:13.984Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:45:17 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:45:19.845Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:45:19.845Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:45:22.565Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:45:22.565Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:45:22.565Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:45:22.566Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:45:22.566Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:45:22.566Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:45:22.687Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:45:22.687Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:45:22.744Z] [DEBUG] Initialized MusicManager
+[2025-10-24T04:45:22.744Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 11:45:23 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:45 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:46:20.163Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:46:20.164Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:46:20.168Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:46:20.168Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:46:20.168Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:46:23 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:46:25.767Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:46:25.767Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:46:29.610Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:46:29.610Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:46:29.610Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:46:29.611Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:46:29.612Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:46:29.613Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:46:29.741Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:46:29.741Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:46:29.796Z] [DEBUG] Initialized MusicManager
+[2025-10-24T04:46:29.796Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 11:46:29 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:46 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:50:46.459Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:50:46.459Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:50:46.464Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:50:46.464Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:50:46.464Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:50:49 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:50:52.266Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:50:52.265Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:50:55.814Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:50:55.815Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:50:55.815Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:50:55.815Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:50:55.815Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:50:55.816Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:50:55.941Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:50:55.941Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:50:55.997Z] [DEBUG] Initialized MusicManager
+[2025-10-24T04:50:55.997Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 11:50:56 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:50 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:51:53.087Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:51:53.087Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:51:53.094Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:51:53.094Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:51:53.094Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:51:56 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:51:59.222Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:51:59.222Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:52:02.546Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:52:02.547Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:52:02.547Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:52:02.547Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:52:02.547Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:52:02.548Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:52:02.667Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:52:02.668Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:52:02.723Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T04:52:02.723Z] [DEBUG] Initialized MusicManager
+
+[10/24/2025, 11:52:02 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:52 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:53:06.356Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:53:06.357Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:53:06.362Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:53:06.362Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:53:06.362Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:53:09 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:53:12.747Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:53:12.746Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:53:15.403Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:53:15.403Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:53:15.404Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:53:15.404Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:53:15.404Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:53:15.405Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:53:15.534Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:53:15.535Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:53:15.590Z] [DEBUG] Initialized MusicManager
+[2025-10-24T04:53:15.590Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 11:53:15 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:53 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:55:35.235Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:55:35.235Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:55:35.241Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:55:35.241Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:55:35.241Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:55:38 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:55:40.368Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:55:40.369Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:55:43.174Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:55:43.174Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:55:43.174Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:55:43.175Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:55:43.175Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:55:43.175Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:55:43.312Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:55:43.312Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:55:43.368Z] [DEBUG] Initialized MusicManager
+[2025-10-24T04:55:43.368Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 11:55:44 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:55 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T04:55:59.907Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:55:59.907Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T04:55:59.912Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:55:59.912Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T04:55:59.912Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 11:56:03 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T04:56:06.184Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T04:56:06.184Z] [DEBUG] Registered music modal handler
+[2025-10-24T04:56:09.617Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T04:56:09.618Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T04:56:09.618Z] [DEBUG] Applying voice connection patches
+[2025-10-24T04:56:09.619Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T04:56:09.619Z] [DEBUG] Voice state update handler patched
+[2025-10-24T04:56:09.620Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T04:56:09.753Z] [DEBUG] Registering player events (first time)
+[2025-10-24T04:56:09.754Z] [DEBUG] Registered player event handlers
+[2025-10-24T04:56:09.815Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T04:56:09.815Z] [DEBUG] Initialized MusicManager
+
+[10/24/2025, 11:56:09 AM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!11:56 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T05:03:16.371Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:03:16.376Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:03:16.376Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:03:16.376Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:03:16.371Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+
+
+[10/24/2025, 12:03:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:03:22.198Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:03:22.198Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:03:24.753Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:03:24.753Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:03:24.753Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:03:24.754Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:03:24.754Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:03:24.754Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:03:24.976Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:03:24.976Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:03:25.035Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T05:03:25.035Z] [DEBUG] Initialized MusicManager
+
+[10/24/2025, 12:03:25 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!12:03 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T05:08:49.491Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:08:49.496Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:08:49.490Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:08:49.496Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:08:49.496Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 12:08:52 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:08:54.797Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:08:54.798Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:08:57.431Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:08:57.432Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:08:57.432Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:08:57.432Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:08:57.432Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:08:57.433Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:08:57.653Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:08:57.653Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:08:57.709Z] [DEBUG] Initialized MusicManager
+[2025-10-24T05:08:57.709Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 12:08:57 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!12:09 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T05:10:46.546Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:10:46.546Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:10:46.551Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:10:46.551Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:10:46.551Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 12:10:59 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:11:03.853Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:11:03.854Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:11:06.055Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:11:06.055Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:11:06.055Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:11:06.056Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:11:06.056Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:11:06.056Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:11:06.189Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:11:06.189Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:11:06.245Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T05:11:06.245Z] [DEBUG] Initialized MusicManager
+
+[10/24/2025, 12:11:06 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!12:11 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T05:24:46.579Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:24:46.579Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:24:46.586Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:24:46.586Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:24:46.586Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 12:24:52 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:24:56.409Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:24:56.410Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:25:00.490Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:25:00.497Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:25:00.498Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:25:00.500Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:25:00.500Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:25:00.502Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:25:00.909Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:25:00.909Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:25:00.967Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T05:25:00.967Z] [DEBUG] Initialized MusicManager
+
+[10/24/2025, 12:25:01 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!12:25 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T05:34:01.997Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:34:02.002Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:34:01.997Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:34:02.002Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:34:02.002Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 12:34:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:34:12.925Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:34:12.925Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:34:15.923Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:34:15.923Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:34:15.923Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:34:15.924Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:34:15.924Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:34:15.924Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:34:16.050Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:34:16.051Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:34:16.105Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T05:34:16.106Z] [DEBUG] Initialized MusicManager
+
+[10/24/2025, 12:34:16 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!12:34 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T05:35:09.996Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:35:09.996Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T05:35:10.004Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:35:10.004Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T05:35:10.004Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 12:50:31 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Uncaught Exception: C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\utils.js:796
+        } catch (error) {
+          ^^^^^
+
+SyntaxError: Unexpected token 'catch'
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module._compile (node:internal/modules/cjs/loader:1680:20)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\index.js:215:1)
+
+
+[10/24/2025, 12:51:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:51:48.798Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:51:48.797Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:51:52.941Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:51:52.942Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:51:52.942Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:51:52.943Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:51:52.943Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:51:52.944Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:51:53.081Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:51:53.081Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:51:53.142Z] [DEBUG] Initialized MusicManager
+[2025-10-24T05:51:53.142Z] [DEBUG] No saved queues found in MongoDB
+
+[10/24/2025, 12:51:53 PM] [READY] BOT ĐÃ ONLINE VÀ HOẠT ĐỘNG!2025-10-24T05:51:55.824Z - ERROR: DiscordAPIError[10004]: Unknown Guild
+
+
+[10/24/2025, 12:57:31 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:57:38.281Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:57:38.281Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:57:41.653Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:57:41.654Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:57:41.655Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:57:41.655Z] [DEBUG] Voice state update handler patched
+[2025-10-24T05:57:41.654Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:57:41.656Z] [DEBUG] Voice connection patching applied successfully
+2025-10-24T05:57:41.664Z - ERROR: TypeError: Cannot read properties of undefined (reading 'id')
+[2025-10-24T05:57:43.990Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:57:43.996Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:57:44.332Z] [DEBUG] Initialized MusicManager
+[2025-10-24T05:57:44.332Z] [DEBUG] No saved queues found in MongoDB
+
+
+[10/24/2025, 12:59:34 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T05:59:39.172Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T05:59:39.173Z] [DEBUG] Registered music modal handler
+[2025-10-24T05:59:41.977Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T05:59:41.977Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T05:59:41.978Z] [DEBUG] Applying voice connection patches
+[2025-10-24T05:59:41.978Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T05:59:41.978Z] [DEBUG] Voice state update handler patched
+2025-10-24T05:59:41.986Z - ERROR: TypeError: Cannot read properties of undefined (reading 'id')
+[2025-10-24T05:59:41.979Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T05:59:43.599Z] [DEBUG] Registering player events (first time)
+[2025-10-24T05:59:43.599Z] [DEBUG] Registered player event handlers
+[2025-10-24T05:59:43.655Z] [DEBUG] Initialized MusicManager
+[2025-10-24T05:59:43.655Z] [DEBUG] No saved queues found in MongoDB
+
+
+[10/24/2025, 1:00:55 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:01:01.925Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:01:01.927Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:01:06.758Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:01:06.759Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:01:06.758Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:01:06.759Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+2025-10-24T06:01:06.766Z - ERROR: TypeError: Cannot read properties of undefined (reading 'id')
+[2025-10-24T06:01:06.759Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:01:06.760Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:01:08.738Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:01:08.738Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:01:08.793Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T06:01:08.793Z] [DEBUG] Initialized MusicManager
+13:01 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:01:23.760Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:01:23.760Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:01:23.764Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:01:23.764Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:01:23.764Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:01:25 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:01:30.036Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:01:30.037Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:01:33.413Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:01:33.414Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:01:33.415Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:01:33.414Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:01:33.415Z] [DEBUG] Voice state update handler patched
+2025-10-24T06:01:33.420Z - ERROR: TypeError: Cannot read properties of undefined (reading 'id')
+[2025-10-24T06:01:33.416Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:01:34.785Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:01:34.786Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:01:34.843Z] [DEBUG] Initialized MusicManager
+[2025-10-24T06:01:34.843Z] [DEBUG] No saved queues found in MongoDB
+13:01 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:03:59.433Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:03:59.437Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:03:59.433Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:03:59.437Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:03:59.437Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:04:01 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:04:05.306Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:04:05.306Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:04:08.847Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:04:08.847Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:04:08.847Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:04:08.848Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:04:08.848Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:04:08.848Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:04:08.968Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:04:08.968Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:04:09.023Z] [DEBUG] Initialized MusicManager
+[2025-10-24T06:04:09.023Z] [DEBUG] No saved queues found in MongoDB
+13:04 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:07:23 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:07:29.509Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:07:29.510Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:21:01.894Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:21:01.894Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:21:01.902Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:21:01.903Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:21:01.903Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:21:03 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:21:07.592Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:21:07.592Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:21:11.170Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:21:11.170Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:21:11.171Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:21:11.171Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:21:11.171Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:21:11.171Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:21:11.312Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:21:11.312Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:21:11.367Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T06:21:11.367Z] [DEBUG] Initialized MusicManager
+13:21 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:26:03.969Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:26:03.971Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:26:03.973Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:26:07.860Z] [DEBUG] MongoDB connected - queue saves enabled
+[2025-10-24T06:26:07.860Z] [DEBUG] MongoDB reconnected - queue saves re-enabled
+[2025-10-24T06:26:07.860Z] [DEBUG] MongoDB reconnected - queue saves re-enabled
+
+
+[10/24/2025, 1:26:47 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:26:52.305Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:26:52.305Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:26:55.153Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:26:55.154Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:26:55.153Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:26:55.154Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:26:55.154Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:26:55.155Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:26:56.135Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:26:56.135Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:26:56.192Z] [DEBUG] Initialized MusicManager
+[2025-10-24T06:26:56.192Z] [DEBUG] No saved queues found in MongoDB
+13:26 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:27:22.258Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:27:22.259Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:27:22.263Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:27:22.263Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:27:22.263Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:27:23 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:27:28.890Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:27:28.891Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:27:32.929Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:27:32.929Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:27:32.929Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:27:32.930Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:27:32.930Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:27:32.930Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:27:33.053Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:27:33.053Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:27:33.108Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T06:27:33.109Z] [DEBUG] Initialized MusicManager
+13:27 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:28:28 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:28:35.064Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:28:35.065Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:28:39.900Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:28:39.900Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:28:39.901Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:28:39.901Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:28:39.901Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:28:39.902Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:28:40.039Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:28:40.039Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:28:40.100Z] [DEBUG] Initialized MusicManager
+[2025-10-24T06:28:40.100Z] [DEBUG] No saved queues found in MongoDB
+13:28 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:29:25.222Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:29:25.228Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:29:25.222Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:29:25.228Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:29:25.228Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:29:26 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:29:35.465Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:29:35.465Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:29:40.011Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:29:40.011Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:29:40.011Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:29:40.012Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:29:40.012Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:29:40.013Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:29:40.143Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:29:40.143Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:29:40.200Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T06:29:40.200Z] [DEBUG] Initialized MusicManager
+13:29 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:30:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:30:24.616Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:30:24.616Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:30:28.063Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:30:28.063Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:30:28.064Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:30:28.064Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:30:28.064Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:30:28.063Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:30:28.188Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:30:28.188Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:30:28.245Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T06:30:28.245Z] [DEBUG] Initialized MusicManager
+13:30 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:31:17.146Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:31:17.150Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:31:17.151Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:31:17.147Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:31:17.151Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:31:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:31:23.692Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:31:23.693Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:31:26.863Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:31:26.864Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:31:26.865Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:31:26.864Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:31:26.865Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:31:26.865Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:31:27.084Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:31:27.084Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:31:27.139Z] [DEBUG] No saved queues found in MongoDB
+[2025-10-24T06:31:27.140Z] [DEBUG] Initialized MusicManager
+13:31 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:32:24 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:32:32.414Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:32:32.414Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:32:36.197Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:32:36.198Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:32:36.198Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:32:36.199Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:32:36.199Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:32:36.201Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:32:36.391Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:32:36.392Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:32:36.475Z] [DEBUG] Initialized MusicManager
+[2025-10-24T06:32:36.475Z] [DEBUG] No saved queues found in MongoDB
+13:32 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:32:56.590Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:32:56.591Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:32:56.600Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:32:56.600Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:32:56.599Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:32:57 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:33:05.883Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:33:05.883Z] [DEBUG] Registered music modal handler
+[2025-10-24T06:33:10.818Z] [DEBUG] Queue persistence enabled - existing queue data will be preserved
+[2025-10-24T06:33:10.819Z] [DEBUG] Using existing discord-player instance
+[2025-10-24T06:33:10.819Z] [DEBUG] Applying voice connection patches
+[2025-10-24T06:33:10.819Z] [DEBUG] Patched joinVoiceChannel function for connection tracking
+[2025-10-24T06:33:10.820Z] [DEBUG] Voice connection patching applied successfully
+[2025-10-24T06:33:10.820Z] [DEBUG] Voice state update handler patched
+[2025-10-24T06:33:10.952Z] [DEBUG] Registered player event handlers
+[2025-10-24T06:33:10.951Z] [DEBUG] Registering player events (first time)
+[2025-10-24T06:33:11.007Z] [DEBUG] Initialized MusicManager
+[2025-10-24T06:33:11.007Z] [DEBUG] No saved queues found in MongoDB
+13:33 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:35:00 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:35:07.093Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:35:07.093Z] [DEBUG] Registered music modal handler
+13:35 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+[2025-10-24T06:35:53.104Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:35:53.104Z] [DEBUG] SIGINT signal received - graceful shutdown in progress
+[2025-10-24T06:35:53.108Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:35:53.108Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+[2025-10-24T06:35:53.108Z] [DEBUG] MongoDB disconnected - queue saves will be disabled
+
+
+[10/24/2025, 1:35:54 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5[2025-10-24T06:36:00.698Z] [DEBUG] Setting up music play modal handler...
+[2025-10-24T06:36:00.698Z] [DEBUG] Registered music modal handler
+13:36 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:40:16 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Unhandled Rejection at: [object Promise], reason: Error: Cannot find module '../utils/musicManager'
+Require stack:
+- C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\events\musicInteraction.js
+- C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\utils.js
+- C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\events\musicInteraction.js:3:29)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+13:40 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:40:31 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Unhandled Rejection at: [object Promise], reason: Error: Cannot find module '../utils/musicManager'
+Require stack:
+- C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\events\musicInteraction.js
+- C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\utils.js
+- C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\index.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\events\musicInteraction.js:3:29)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+13:40 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:41:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:41 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:42:15 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:42 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:50:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:50 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:50:26 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:50 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+2025-10-24T06:53:04.052Z - ERROR: DiscordAPIError[10004]: Unknown Guild
+2025-10-24T06:53:04.540Z - ERROR: DiscordAPIError[10004]: Unknown Guild
+
+
+[10/24/2025, 1:53:22 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 1:53:27 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:53 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:54:53 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:55 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 1:55:35 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.513:55 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 2:03:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Uncaught Exception: C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\utils.js:378
+    async function handleReactionRoleButton(interaction) {
+    ^^^^^
+
+SyntaxError: Unexpected token 'async'
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module._compile (node:internal/modules/cjs/loader:1680:20)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\index.js:151:1)
+
+
+[10/24/2025, 2:04:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Uncaught Exception: C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\utils.js:378
+    async function handleReactionRoleButton(interaction) {
+    ^^^^^
+
+SyntaxError: Unexpected token 'async'
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module._compile (node:internal/modules/cjs/loader:1680:20)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\index.js:151:1)
+Uncaught Exception: C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\utils.js:378
+    async function handleReactionRoleButton(interaction) {
+    ^^^^^
+
+SyntaxError: Unexpected token 'async'
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module._compile (node:internal/modules/cjs/loader:1680:20)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\index.js:151:1)
+
+
+[10/24/2025, 2:07:56 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:11:01 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:13:56 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:14:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:14:32 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:14:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:15:08 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\operations\execute_operation.js:98:19)
+    at executeOperation (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\operations\execute_operation.js:40:40)
+    at FindCursor._initialize (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\cursor\find_cursor.js:62:73)
+    at FindCursor.cursorInit (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:24)
+    at FindCursor.next (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\cursor\abstract_cursor.js:342:28)
+    at [Symbol.asyncIterator] (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\cursor\abstract_cursor.js:250:45)
+    at AsyncGenerator.next (<anonymous>)
+    at FindCursor.toArray (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongodb\lib\cursor\abstract_cursor.js:422:26)
+    at model.Query._find (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\node_modules\mongoose\lib\query.js:2430:27)
+
+
+[10/24/2025, 2:15:52 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5
+
+[10/24/2025, 2:16:26 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.514:16 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 2:16:46 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.514:16 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 2:22:37 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.514:22 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 2:26:50 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.514:26 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 2:29:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Uncaught Exception: C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\events\interactionCreate.js:944
+        }
+        ^
+
+SyntaxError: Missing catch or finally after try
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module._compile (node:internal/modules/cjs/loader:1680:20)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\Downloads\archive-2025-10-22T135214Z\events\Tickets\checkAlerts.js:4:31)
+
+
+[10/24/2025, 2:29:58 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.514:30 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 3:12:54 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.515:13 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 3:38:16 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.515:38 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 3:39:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.515:39 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/24/2025, 3:47:56 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.515:48 (24-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5

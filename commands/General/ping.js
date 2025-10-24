@@ -1,21 +1,3 @@
-/*
-  _____            _           ____        _   
- |  __ \          | |         |  _ \      | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |__| | | | (_| |   < (_) | | |_) | (_) | |_ 
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                             
-                                        
- Thank you for choosing Drako Bot!
-
- Should you encounter any issues, require assistance, or have suggestions for improving the bot,
- we invite you to connect with us on our Discord server and create a support ticket: 
-
- http://discord.drakodevelopment.net
- 
-*/
-
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
@@ -24,15 +6,14 @@ module.exports = {
         .setDescription('Kiểm tra độ trễ của NekoBuckets.'),
     category: 'General',
     async execute(interaction) {
-        const sent = await interaction.reply({ content: '🏓 18%...36%...67%...100%...', fetchReply: true });
-        const roundTripLatency = sent.createdTimestamp - interaction.createdTimestamp;
+        // The initial reply is not needed as we will just send the final message.
+        await interaction.deferReply();
 
-        const embed = new EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle('🏓 Hoàn tất!')
-            .setDescription(`⏰ Độ Trễ: \`${roundTripLatency}ms\``)
-            .setTimestamp();
+        const botPing = Math.round(interaction.client.ws.ping);
 
-        await interaction.editReply({ content: null, embeds: [embed] });
+        const response = `:small_red_triangle: | ( Shard ${interaction.guild.shardId}) phản hồi trong (${botPing} ms / trung bình: ${botPing} ms).
+        | Để xem các lệnh có sẵn, sử dụng /help. Để xem các thông tin khác, sử dụng /botinfo`;
+
+        await interaction.editReply({ content: response });
     }
 };

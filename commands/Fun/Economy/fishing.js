@@ -1,117 +1,147 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../../models/UserData');
-const fs = require('fs');
-const yaml = require('js-yaml');
-const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
+const { getConfig, getLang } = require('../../../utils/configLoader');
+const parseDuration = require('./Utility/parseDuration');
+const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
+
 const config = getConfig();
 const lang = getLang();
-const parseDuration = require('./Utility/parseDuration');
-
-const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('roll')
-        .setDescription('Đặt cược xem kết quả tung xúc xắc sẽ thấp hay cao.')
-        .addIntegerOption(option =>
-            option.setName('amount')
-                .setDescription('Đặt số tiền cược')
-                .setRequired(true))
-        .addStringOption(option =>
-            option.setName('bet')
-                .setDescription('Đặt Thấp hoặc Cao')
-                .setRequired(true)
-                .addChoices(
-                    { name: 'Thấp (1-50)', value: 'low' },
-                    { name: 'Cao (51-100)', value: 'high' }
-                )),
+        .setName('fishing')
+        .setDescription('Đi câu cá và kiếm phần thưởng!')
+        .addSubcommand(subcommand => {
+            subcommand
+                .setName('locations')
+                .setDescription('Xem các địa điểm câu cá có sẵn');
+            return subcommand;
+        })
+        .addSubcommand(subcommand => {
+            subcommand
+                .setName('fish')
+                .setDescription('Bắt đầu câu cá tại một địa điểm')
+                .addStringOption(option => {
+                    option.setName('location')
+                        .setDescription('Chọn một địa điểm để câu cá')
+                        .setRequired(true);
+                    const locations = Object.keys(config.Economy.Fishing.locations);
+                    locations.forEach(location => {
+                        option.addChoices({ name: location, value: location });
+                    });
+                    return option;
+                });
+            return subcommand;
+        }),
     category: 'Economy',
     async execute(interaction) {
-        const betAmount = interaction.options.getInteger('amount');
-        const betChoice = interaction.options.getString('bet').toLowerCase();
+        const subcommand = interaction.options.getSubcommand();
 
-        if (betAmount <= 0) {
-            return interaction.reply({ content: lang.Economy.Messages.betAmountError, flags: MessageFlags.Ephemeral });
-        }
+        if (subcommand === 'locations') {
+            const locationsEmbed = new EmbedBuilder()
+                .setTitle('🎣 Địa điểm câu cá')
+                .setColor('#0099ff');
 
-        let user = await User.findOne(
-            { userId: interaction.user.id, guildId: interaction.guild.id },
-            { balance: 1, 'commandData.lastRoll': 1, transactionLogs: 1, boosters: 1 }
-        );
-
-        if (!user) {
-            user = new User({ userId: interaction.user.id, guildId: interaction.guild.id, balance: 0, commandData: {}, transactionLogs: [] });
-        } else if (!Array.isArray(user.transactionLogs)) {
-            user.transactionLogs = [];
-        }
-
-        if (user.balance < betAmount) {
-            return interaction.reply({ content: lang.Economy.Messages.noMoney, flags: MessageFlags.Ephemeral });
-        }
-
-        const now = new Date();
-        const cooldown = parseDuration(config.Economy.Roll.cooldown);
-
-        if (cooldown > 0 && user.commandData.lastRoll) {
-            const nextRoll = new Date(user.commandData.lastRoll.getTime() + cooldown);
-            if (now < nextRoll) {
-                const embed = new EmbedBuilder()
-                    .setDescription(replacePlaceholders(lang.Economy.Messages.cooldown, { nextUse: Math.floor(nextRoll.getTime() / 1000) }))
-                    .setColor('#FF0000')
-                    .setFooter({ text: replacePlaceholders(lang.Economy.Messages.footer, { balance: user.balance }) });
-                return interaction.reply({ embeds: [embed] });
+            let description = '';
+            for (const location in config.Economy.Fishing.locations) {
+                const loc = config.Economy.Fishing.locations[location];
+                description += `**${location.charAt(0).toUpperCase() + location.slice(1)}**\n`;
+                description += `Chi phí: ${loc.cost} xu\n`;
+                description += `Cá có sẵn: ${loc.fish.map(f => f.name).join(', ')}\n\n`;
             }
+            locationsEmbed.setDescription(description);
+
+            return interaction.reply({ embeds: [locationsEmbed] });
         }
 
-        const rollResult = Math.floor(Math.random() * 100) + 1;
-        const isWin = (betChoice === 'low' && rollResult <= 50) || (betChoice === 'high' && rollResult > 50);
-        const baseMultiplier = 2;
-        const boosterMultiplier = checkActiveBooster(user, 'Money');
-        const totalMultiplier = baseMultiplier * boosterMultiplier;
+        if (subcommand === 'fish') {
+            const locationName = interaction.options.getString('location');
+            const locationData = config.Economy.Fishing.locations[locationName];
 
-        let placeholders = {
-            user: `<@${interaction.user.id}>`,
-            balance: betAmount,
-            rollResult: rollResult
-        };
+            if (!locationData) {
+                return interaction.reply({ content: 'Địa điểm không hợp lệ.', ephemeral: true });
+            }
 
-        let description, color, title;
+            let user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
 
-        if (isWin) {
-            const winnings = betAmount * totalMultiplier;
-            user.balance += winnings;
-            placeholders.balance = winnings;
+            if (!user) {
+                user = new User({ userId: interaction.user.id, guildId: interaction.guild.id });
+            }
 
-            description = replacePlaceholders(lang.Economy.Games.Roll.Win[Math.floor(Math.random() * lang.Economy.Games.Roll.Win.length)], placeholders);
-            color = '#00FF00';
-            title = replacePlaceholders(lang.Economy.Games.Roll.Title, { result: lang.Economy.Messages.win });
-        } else {
-            user.balance -= betAmount;
+            // --- Equipment and Boosters ---
+            let luckMultiplier = 1.0;
+            let catchMultiplier = 1.0;
+            let cooldownReduction = 0;
 
-            description = replacePlaceholders(lang.Economy.Games.Roll.Lose[Math.floor(Math.random() * lang.Economy.Games.Roll.Lose.length)], placeholders);
-            color = '#FF0000';
-            title = replacePlaceholders(lang.Economy.Games.Roll.Title, { result: lang.Economy.Messages.lose });
+            const luckBooster = checkActiveBooster(user, 'FishingLuck');
+            luckMultiplier *= luckBooster;
+
+            const equippedRodName = user.equipment.FishingRod;
+            let equippedRod = null;
+            if (equippedRodName) {
+                equippedRod = Object.values(config.Store.Equipment).find(i => i.Name === equippedRodName);
+                if (equippedRod) {
+                    luckMultiplier *= (equippedRod.LuckBonus || 1.0);
+                    catchMultiplier *= (equippedRod.CatchBonus || 1.0);
+                    cooldownReduction = equippedRod.CooldownReduction || 0;
+                }
+            }
+            // --- End Equipment and Boosters ---
+
+            if (user.balance < locationData.cost) {
+                return interaction.reply({ content: 'Bạn không có đủ tiền để câu cá ở đây.', ephemeral: true });
+            }
+
+            const now = new Date();
+            const baseCooldown = parseDuration(config.Economy.Fishing.cooldown);
+            const finalCooldown = Math.max(0, baseCooldown - cooldownReduction);
+
+            if (user.commandData.lastFishing && finalCooldown > 0) {
+                const nextFish = new Date(user.commandData.lastFishing.getTime() + finalCooldown);
+                if (now < nextFish) {
+                    return interaction.reply({ content: `Bạn đang trong thời gian hồi. Vui lòng thử lại sau <t:${Math.floor(nextFish.getTime() / 1000)}:R>.`, ephemeral: true });
+                }
+            }
+
+            user.balance -= locationData.cost;
+
+            // Fishing logic
+            const random = Math.random();
+            let caughtFish = null;
+            let cumulativeChance = 0;
+
+            for (const fish of locationData.fish) {
+                cumulativeChance += fish.chance * luckMultiplier;
+                if (random < cumulativeChance) {
+                    caughtFish = fish;
+                    break;
+                }
+            }
+
+            if (caughtFish) {
+                const baseReward = Math.floor(Math.random() * (caughtFish.maxReward - caughtFish.minReward + 1)) + caughtFish.minReward;
+                const finalReward = Math.floor(baseReward * catchMultiplier);
+                user.balance += finalReward;
+
+                const successEmbed = new EmbedBuilder()
+                    .setTitle('🎣Câu cá thành công!')
+                    .setDescription(`Bạn đã câu được một con **${caughtFish.name}** và nhận được ${finalReward} xu!`)
+                    .setColor('#00ff00')
+                    .setFooter({ text: `Số dư mới: ${user.balance} xu` });
+
+                interaction.reply({ embeds: [successEmbed] });
+            } else {
+                const failureEmbed = new EmbedBuilder()
+                    .setTitle('🎣 Không may mắn lần sau!')
+                    .setDescription('Bạn không câu được con cá nào cả.')
+                    .setColor('#ff0000')
+                    .setFooter({ text: `Số dư mới: ${user.balance} xu` });
+
+                interaction.reply({ embeds: [failureEmbed] });
+            }
+
+            user.commandData.lastFishing = now;
+            await user.save();
         }
-
-        user.commandData.lastRoll = now;
-        user.transactionLogs.push({
-            type: 'roll',
-            amount: isWin ? betAmount * totalMultiplier : -betAmount,
-            timestamp: now
-        });
-
-        await user.save();
-
-        const embed = new EmbedBuilder()
-            .setTitle(title)
-            .setDescription(description)
-            .addFields(
-                { name: lang.Economy.Messages.rollResult, value: rollResult.toString(), inline: true },
-                { name: lang.Economy.Messages.bet, value: betChoice.charAt(0).toUpperCase() + betChoice.slice(1), inline: true }
-            )
-            .setColor(color)
-            .setFooter({ text: replacePlaceholders(lang.Economy.Messages.footer, { balance: user.balance }) });
-
-        await interaction.reply({ embeds: [embed] });
-    },
+    }
 };

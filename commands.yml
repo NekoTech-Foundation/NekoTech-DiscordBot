@@ -10,7 +10,7 @@ fact: false
 fliptext: true
 lennyface: true
 meme: true
-guess: false
+guess: true
 2048: true
 8ball: true
 roll: true
@@ -24,7 +24,7 @@ rizz: true
 pickupline: true
 image: true
 wordle: true
-ascii: true
+ascii: false
 quote: true
 roast: true
 compliment: true
@@ -47,7 +47,7 @@ booster: true
 inventory: true
 economy: true
 roulette: true
-fish: true
+fishing: true
 play: true
 music: false
 
@@ -94,8 +94,8 @@ tickets: true
 tempvoice: false
 afk: true
 botavatar: true
-invites: false
-inviter: false
+invites: true
+inviter: true
 ping: true
 backup: false
 channelstats: false

@@ -1,27 +1,7 @@
-/*
-  _____            _           ____        _   
- |  __ \          | |         |  _ \      | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |__| | | | (_| |   < (_) | | |_) | (_) | |_ 
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                             
-                                        
- Thank you for choosing Drako Bot!
-
- Should you encounter any issues, require assistance, or have suggestions for improving the bot,
- we invite you to connect with us on our Discord server and create a support ticket: 
-
- http://discord.drakodevelopment.net
- 
-*/
-
 const { ContextMenuCommandBuilder, ApplicationCommandType, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
-const fs = require('fs');
-const path = require('path');
 const Suggestion = require('../../models/Suggestion');
 const suggestionActions = require('../../events/Suggestions/suggestionActions');
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
+const { getConfig, getLang } = require('../../utils/configLoader.js');
 
 const config = getConfig();
 const lang = getLang();
@@ -40,7 +20,7 @@ module.exports = {
     async execute(interaction) {
         try {
             if (!config.SuggestionSettings.Enabled) {
-                await interaction.reply({ content: lang.Suggestion.SuggestionsDisabled, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: lang.Suggestion.SuggestionsDisabled, ephemeral: true });
                 return;
             }
 
@@ -50,7 +30,7 @@ module.exports = {
 
             const suggestion = await Suggestion.findOne({ messageId: suggestionId });
             if (!suggestion) {
-                await interaction.reply({ content: `Suggestion ${suggestionId} not found.`, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: `Không tìm thấy đề xuất ${suggestionId}.`, ephemeral: true });
                 return;
             }
 
@@ -58,7 +38,7 @@ module.exports = {
             const hasAcceptDenyRole = acceptDenyRoles.some(roleId => interaction.member.roles.cache.has(roleId));
 
             if (!hasAcceptDenyRole) {
-                await interaction.reply({ content: lang.NoPermsMessage, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: lang.NoPermsMessage, ephemeral: true });
                 return;
             }
 
@@ -83,7 +63,7 @@ module.exports = {
             try {
                 const modalSubmission = await interaction.awaitModalSubmit({ filter, time: 300000 });
                 
-                await modalSubmission.deferReply({ flags: MessageFlags.Ephemeral });
+                await modalSubmission.deferReply({ ephemeral: true });
                 
                 const reason = modalSubmission.fields.getTextInputValue('reason');
 
@@ -94,7 +74,7 @@ module.exports = {
                         await suggestionActions.denySuggestion(interaction.client, modalSubmission, suggestion.uniqueId, reason);
                     }
                 } catch (actionError) {
-                    console.error("Error in suggestion action:", actionError);
+                    console.error("Lỗi trong hành động đề xuất:", actionError);
                     await modalSubmission.editReply({ 
                         content: lang.Suggestion.Error
                     });
@@ -104,25 +84,25 @@ module.exports = {
                     if (!interaction.replied) {
                         await interaction.followUp({ 
                             content: lang.Suggestion.ModalTimeout, 
-                            flags: MessageFlags.Ephemeral 
+                            ephemeral: true 
                         }).catch(console.error);
                     }
                 } else {
-                    console.error("Error in suggestion modal handling:", error);
+                    console.error("Lỗi trong việc xử lý modal đề xuất:", error);
                     if (!interaction.replied) {
                         await interaction.followUp({ 
                             content: lang.Suggestion.Error, 
-                            flags: MessageFlags.Ephemeral 
+                            ephemeral: true 
                         }).catch(console.error);
                     }
                 }
             }
         } catch (error) {
-            console.error("Error in suggestion command: ", error);
+            console.error("Lỗi trong lệnh đề xuất: ", error);
             if (!interaction.replied && !interaction.deferred) {
                 await interaction.reply({ 
                     content: lang.Suggestion.Error, 
-                    flags: MessageFlags.Ephemeral 
+                    ephemeral: true 
                 }).catch(() => {});
             }
         }

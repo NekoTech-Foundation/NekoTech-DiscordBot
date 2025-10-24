@@ -37,12 +37,19 @@ setInterval(() => {
     sentLeaveEmbeds.clear();
 }, LEAVE_EMBED_RESET_INTERVAL);
 
+const GuildSettings = require('../models/GuildSettings');
+
+// ... (rest of the requires)
+
 module.exports = async (client, member) => {
     if (!member || member.id === client.user.id) return;
 
+    const guildSettings = await GuildSettings.findOne({ guildId: member.guild.id });
 
     await saveUserRoles(member);
-    await sendLeaveMessage(member);
+    if (guildSettings && guildSettings.leave && guildSettings.leave.enabled) {
+        await sendLeaveMessage(member, guildSettings.leave);
+    }
     await updateMemberCount(member);
     await processKickEvent(member);
     await handleUserTickets(client, member);
@@ -85,12 +92,12 @@ async function updateInviteUsage(member) {
     }
 }
 
-async function sendLeaveMessage(member) {
-    if (!config.LeaveMessage.Enabled) {
+async function sendLeaveMessage(member, leaveSettings) {
+    if (!leaveSettings.enabled || !leaveSettings.channelId) {
         return;
     }
 
-    let leaveChannel = member.guild.channels.cache.get(config.LeaveMessage.ChannelID);
+    let leaveChannel = member.guild.channels.cache.get(leaveSettings.channelId);
     if (!leaveChannel) {
         return;
     }
@@ -102,60 +109,10 @@ async function sendLeaveMessage(member) {
     const userAvatarURL = member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
     const userBannerURL = await getUserBannerURL(member);
 
-    let leaveText = "";
-    if (config.LeaveMessage.Type === "MESSAGE" || config.LeaveMessage.Type === "BOTH") {
-        leaveText = replacePlaceholders(config.LeaveMessage.Text || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
-    }
-
-    let leaveEmbed = null;
-    if (config.LeaveMessage.Type === "EMBED" || config.LeaveMessage.Type === "BOTH") {
-        leaveEmbed = new EmbedBuilder().setColor(config.LeaveMessage.Embed.Color || "#FF0000");
-
-        const title = replacePlaceholders(config.LeaveMessage.Embed.Title || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
-        if (title && title.trim() !== "") leaveEmbed.setTitle(title);
-
-        const description = replacePlaceholders(config.LeaveMessage.Embed.Description.join('\n') || '', member, "", null, "", "", true, userAvatarURL, userBannerURL);
-        if (description && description.trim() !== "") leaveEmbed.setDescription(description);
-
-        const footerText = replacePlaceholders(config.LeaveMessage.Embed.Footer.Text || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
-        const footerIcon = replacePlaceholders(config.LeaveMessage.Embed.Footer.Icon || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
-        if (footerText && footerText.trim() !== "") {
-            leaveEmbed.setFooter({
-                text: footerText,
-                iconURL: footerIcon || undefined
-            });
-        }
-
-        const authorText = replacePlaceholders(config.LeaveMessage.Embed.Author.Text || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
-        const authorIcon = replacePlaceholders(config.LeaveMessage.Embed.Author.Icon || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
-        if (authorText && authorText.trim() !== "") {
-            leaveEmbed.setAuthor({
-                name: authorText,
-                iconURL: authorIcon || undefined
-            });
-        }
-
-        if (config.LeaveMessage.Embed.Thumbnail && config.LeaveMessage.Embed.Thumbnail.trim() !== "") {
-            let thumbnailURL = config.LeaveMessage.Embed.Thumbnail === "{user-avatar}" ? userAvatarURL : config.LeaveMessage.Embed.Thumbnail;
-            leaveEmbed.setThumbnail(thumbnailURL);
-        }
-
-        if (config.LeaveMessage.Embed.Image && config.LeaveMessage.Embed.Image.trim() !== "") {
-            let imageURL = config.LeaveMessage.Embed.Image === "{userBanner}" ? userBannerURL : config.LeaveMessage.Embed.Image;
-            if (imageURL && imageURL !== '') {
-                leaveEmbed.setImage(imageURL);
-            }
-        }
-    }
+    let leaveText = replacePlaceholders(leaveSettings.message || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
 
     try {
-        if (config.LeaveMessage.Type === "BOTH") {
-            await leaveChannel.send({ content: leaveText, embeds: [leaveEmbed] });
-        } else if (config.LeaveMessage.Type === "MESSAGE") {
-            await leaveChannel.send(leaveText);
-        } else if (config.LeaveMessage.Type === "EMBED") {
-            await leaveChannel.send({ embeds: [leaveEmbed] });
-        }
+        await leaveChannel.send(leaveText);
     } catch (error) {
         console.error('[ERROR] Failed to send leave message:', error);
     }

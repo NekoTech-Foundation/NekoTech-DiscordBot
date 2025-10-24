@@ -11,7 +11,7 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('botinfo')
-        .setDescription('Thong tin ve bot(CPU,RAM,USAGE...)'),
+        .setDescription('Thong tin cụ thể về bot(CPU,RAM,USAGE...)'),
     category: 'General',
     async execute(interaction) {
         try {

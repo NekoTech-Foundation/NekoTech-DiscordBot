@@ -11,7 +11,7 @@ const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers')
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('roll')
+        .setName('work')
         .setDescription('Đặt cược xem kết quả tung xúc xắc sẽ thấp hay cao.')
         .addIntegerOption(option =>
             option.setName('amount')

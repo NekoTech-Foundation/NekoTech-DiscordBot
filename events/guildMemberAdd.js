@@ -107,9 +107,20 @@ module.exports = async (client, member) => {
       //  console.error(`[ERROR] Failed to fetch invites: ${error}`);
     }
 
-    if (config.WelcomeMessage.Enabled) {
-        sendWelcomeMessage(client, member, inviterName, inviterCount);
+    const GuildSettings = require('../models/GuildSettings');
+
+// ... (rest of the requires)
+
+module.exports = async (client, member) => {
+    // ... (rest of the function until the welcome message part)
+
+    const guildSettings = await GuildSettings.findOne({ guildId: member.guild.id });
+    if (guildSettings && guildSettings.welcome.enabled) {
+        sendWelcomeMessage(client, member, inviterName, inviterCount, guildSettings.welcome);
     }
+
+    // ... (rest of the function)
+};
 
     await updateStoredMembers(client, member.guild.id);
 
@@ -197,193 +208,26 @@ function createEmbed(embedConfig, member) {
     return embed;
 }
 
-async function sendWelcomeMessage(client, member, inviterName, inviterCount) {
-    let welcomeChannel = member.guild.channels.cache.get(config.WelcomeMessage.ChannelID);
+async function sendWelcomeMessage(client, member, inviterName, inviterCount, welcomeSettings) {
+    let welcomeChannel = member.guild.channels.cache.get(welcomeSettings.channelId);
 
     if (welcomeChannel && !sentWelcomeEmbeds.has(member.id)) {
         const userAvatarURL = member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
         const userBannerURL = await getUserBannerURL(member);
 
-        let welcomeText = "";
-        if (config.WelcomeMessage.Type === "MESSAGE" || config.WelcomeMessage.Type === "BOTH") {
-            welcomeText = replacePlaceholders(config.WelcomeMessage.Text, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-        }
-
-        let welcomeEmbed = null;
-        if (config.WelcomeMessage.Type === "EMBED" || config.WelcomeMessage.Type === "BOTH") {
-            welcomeEmbed = new EmbedBuilder().setColor(config.WelcomeMessage.Embed.Color);
-
-            let title = replacePlaceholders(config.WelcomeMessage.Embed.Title, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-            if (title && title !== "") {
-                welcomeEmbed.setTitle(title);
-            }
-
-            let description = replacePlaceholders(config.WelcomeMessage.Embed.Description.join('\n'), member, inviterName, inviterCount, userAvatarURL, userBannerURL, true);
-            if (description && description !== "") {
-                welcomeEmbed.setDescription(description);
-            }
-
-            let authorText = replacePlaceholders(config.WelcomeMessage.Embed.Author.Text, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-            let authorIcon = replacePlaceholders(config.WelcomeMessage.Embed.Author.Icon, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-            if (authorText && authorText !== "") {
-                welcomeEmbed.setAuthor({
-                    name: authorText,
-                    iconURL: authorIcon || undefined,
-                });
-            }
-
-            let footerText = replacePlaceholders(config.WelcomeMessage.Embed.Footer.Text, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-            let footerIcon = replacePlaceholders(config.WelcomeMessage.Embed.Footer.Icon, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-            if (footerText && footerText !== "") {
-                welcomeEmbed.setFooter({
-                    text: footerText,
-                    iconURL: footerIcon || undefined,
-                });
-            }
-
-            if (config.WelcomeMessage.Embed.Thumbnail && config.WelcomeMessage.Embed.Thumbnail !== "") {
-                let thumbnailURL = config.WelcomeMessage.Embed.Thumbnail === "{user-avatar}" ? userAvatarURL : config.WelcomeMessage.Embed.Thumbnail;
-                if (thumbnailURL) {
-                    welcomeEmbed.setThumbnail(thumbnailURL);
-                }
-            }
-
-            if (config.WelcomeMessage.Embed.Image && config.WelcomeMessage.Embed.Image !== "") {
-                let imageURL = config.WelcomeMessage.Embed.Image === "{userBanner}" ? userBannerURL : config.WelcomeMessage.Embed.Image;
-                if (imageURL) {
-                    welcomeEmbed.setImage(imageURL);
-                }
-            }
-        }
-
-        let components = [];
-        if (config.WelcomeMessage.Embed.Buttons && Array.isArray(config.WelcomeMessage.Embed.Buttons) && config.WelcomeMessage.Embed.Buttons.length > 0) {
-            const row = new ActionRowBuilder();
-            
-            for (const buttonConfig of config.WelcomeMessage.Embed.Buttons) {
-                if (buttonConfig.Type === "LINK") {
-                    const button = new ButtonBuilder()
-                        .setLabel(buttonConfig.Name)
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(replacePlaceholders(buttonConfig.Link, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false));
-
-                    if (buttonConfig.Emoji) {
-                        button.setEmoji(buttonConfig.Emoji);
-                    }
-
-                    row.addComponents(button);
-                }
-            }
-
-            if (row.components.length > 0) {
-                components.push(row);
-            }
-        }
+        let welcomeText = replacePlaceholders(welcomeSettings.message, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
 
         try {
-            if (config.WelcomeMessage.Type === "BOTH") {
-                await welcomeChannel.send({ 
-                    content: welcomeText, 
-                    embeds: [welcomeEmbed],
-                    components: components.length > 0 ? components : undefined
-                });
-            } else if (config.WelcomeMessage.Type === "MESSAGE") {
-                await welcomeChannel.send({
-                    content: welcomeText,
-                    components: components.length > 0 ? components : undefined
-                });
-            } else if (config.WelcomeMessage.Type === "EMBED") {
-                await welcomeChannel.send({ 
-                    embeds: [welcomeEmbed],
-                    components: components.length > 0 ? components : undefined
-                });
-            }
+            await welcomeChannel.send({ content: welcomeText });
         } catch (error) {
             console.error(`[ERROR] Failed to send welcome message: ${error}`);
         }
 
         sentWelcomeEmbeds.add(member.id);
-
-        if (config.WelcomeMessage.DM.Enabled) {
-            sendWelcomeDM(member, inviterName, inviterCount, userAvatarURL, userBannerURL);
-        }
     }
 }
 
-async function sendWelcomeDM(member, inviterName, inviterCount, userAvatarURL, userBannerURL) {
-    let dmEmbed = new EmbedBuilder().setColor(config.WelcomeMessage.DM.Embed.Color);
 
-    let dmTitle = replacePlaceholders(config.WelcomeMessage.DM.Embed.Title, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-    if (dmTitle && dmTitle !== "") dmEmbed.setTitle(dmTitle);
-
-    let dmDescription = replacePlaceholders(config.WelcomeMessage.DM.Embed.Description.join('\n'), member, inviterName, inviterCount, userAvatarURL, userBannerURL, true);
-    if (dmDescription && dmDescription !== "") dmEmbed.setDescription(dmDescription);
-
-    let dmAuthorText = replacePlaceholders(config.WelcomeMessage.DM.Embed.Author.Text, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-    let dmAuthorIcon = replacePlaceholders(config.WelcomeMessage.DM.Embed.Author.Icon, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-    if (dmAuthorText && dmAuthorText !== "") {
-        dmEmbed.setAuthor({
-            name: dmAuthorText,
-            iconURL: dmAuthorIcon || undefined,
-        });
-    }
-
-    let dmFooterText = replacePlaceholders(config.WelcomeMessage.DM.Embed.Footer.Text, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-    let dmFooterIcon = replacePlaceholders(config.WelcomeMessage.DM.Embed.Footer.Icon, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
-    if (dmFooterText && dmFooterText !== "") {
-        dmEmbed.setFooter({
-            text: dmFooterText,
-            iconURL: dmFooterIcon || undefined,
-        });
-    }
-
-    if (config.WelcomeMessage.DM.Embed.Thumbnail && config.WelcomeMessage.DM.Embed.Thumbnail !== "") {
-        let dmThumbnailURL = config.WelcomeMessage.DM.Embed.Thumbnail === "{user-avatar}" ? userAvatarURL : config.WelcomeMessage.DM.Embed.Thumbnail;
-        if (dmThumbnailURL) {
-            dmEmbed.setThumbnail(dmThumbnailURL);
-        }
-    }
-
-    if (config.WelcomeMessage.DM.Embed.Image && config.WelcomeMessage.DM.Embed.Image !== "") {
-        let dmImageURL = config.WelcomeMessage.DM.Embed.Image === "{userBanner}" ? userBannerURL : config.WelcomeMessage.DM.Embed.Image;
-        if (dmImageURL) {
-            dmEmbed.setImage(dmImageURL);
-        }
-    }
-
-    let dmComponents = [];
-    if (config.WelcomeMessage.DM.Embed.Buttons && Array.isArray(config.WelcomeMessage.DM.Embed.Buttons) && config.WelcomeMessage.DM.Embed.Buttons.length > 0) {
-        const row = new ActionRowBuilder();
-        
-        for (const buttonConfig of config.WelcomeMessage.DM.Embed.Buttons) {
-            if (buttonConfig.Type === "LINK") {
-                const button = new ButtonBuilder()
-                    .setLabel(buttonConfig.Name)
-                    .setStyle(ButtonStyle.Link)
-                    .setURL(replacePlaceholders(buttonConfig.Link, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false));
-
-                if (buttonConfig.Emoji) {
-                    button.setEmoji(buttonConfig.Emoji);
-                }
-
-                row.addComponents(button);
-            }
-        }
-
-        if (row.components.length > 0) {
-            dmComponents.push(row);
-        }
-    }
-
-    try {
-        await member.send({ 
-            embeds: [dmEmbed],
-            components: dmComponents
-        });
-    } catch (error) {
-        console.error(`[ERROR] Failed to send welcome DM: ${error}`);
-    }
-}
 
 async function getUserBannerURL(member) {
     try {

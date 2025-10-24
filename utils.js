@@ -78,113 +78,8 @@ const BATCH_SIZE = 50;
     };
 
     const updateLeaderboardCache = async (client) => {
-        try {
-            const guild = client.guilds.cache.get(config.GuildID);
-            if (!guild) {
-                console.error('Guild not found');
-                return;
-            }
-
-            const guildMembers = await guild.members.fetch({ timeout: 60000 });
-            const memberIds = [...guildMembers.keys()];
-            const batches = [];
-
-            for (let i = 0; i < memberIds.length; i += BATCH_SIZE) {
-                batches.push(memberIds.slice(i, i + BATCH_SIZE));
-            }
-
-            const newCache = {
-                balance: [],
-                invites: [],
-                levels: [],
-                messages: [],
-                lastUpdated: Date.now()
-            };
-
-            for (const batch of batches) {
-                const [batchBalances, batchInvites, batchLevels, batchMessages] = await Promise.all([
-                    UserData.aggregate([
-                        { 
-                            $match: { 
-                                userId: { $in: batch },
-                                $or: [
-                                    { balance: { $gt: 0 } },
-                                    { bank: { $gt: 0 } }
-                                ]
-                            }
-                        },
-                        {
-                            $project: {
-                                _id: 0,
-                                userId: 1,
-                                totalBalance: { 
-                                    $add: [
-                                        { $ifNull: ['$balance', 0] },
-                                        { $ifNull: ['$bank', 0] }
-                                    ]
-                                }
-                            }
-                        }
-                    ]).exec(),
-
-                    Invite.aggregate([
-                        {
-                            $match: {
-                                inviterID: { $in: batch }
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: "$inviterID",
-                                invites: { $sum: "$uses" }
-                            }
-                        },
-                        {
-                            $match: {
-                                invites: { $gt: 0 }
-                            }
-                        }
-                    ]).exec(),
-
-                    UserData.find({
-                        userId: { $in: batch },
-                        $or: [
-                            { level: { $gt: 0 } },
-                            { xp: { $gt: 0 } }
-                        ]
-                    })
-                    .select('userId level xp -_id')
-                    .lean()
-                    .exec(),
-
-                    UserData.find({
-                        userId: { $in: batch },
-                        totalMessages: { $gt: 0 }
-                    })
-                    .select('userId totalMessages -_id')
-                    .lean()
-                    .exec()
-                ]);
-
-                newCache.balance.push(...batchBalances);
-                newCache.invites.push(...batchInvites.map(i => ({ userId: i._id, invites: i.invites })));
-                newCache.levels.push(...batchLevels);
-                newCache.messages.push(...batchMessages.map(m => ({ 
-                    userId: m.userId, 
-                    messages: m.totalMessages 
-                })));
-            }
-
-            newCache.balance.sort((a, b) => b.totalBalance - a.totalBalance).splice(LEADERBOARD_CACHE_SIZE);
-            newCache.invites.sort((a, b) => b.invites - a.invites).splice(LEADERBOARD_CACHE_SIZE);
-            newCache.levels.sort((a, b) => b.level - a.level || b.xp - a.xp).splice(LEADERBOARD_CACHE_SIZE);
-            newCache.messages.sort((a, b) => b.messages - a.messages).splice(LEADERBOARD_CACHE_SIZE);
-
-            global.leaderboardCache = newCache;
-
-        } catch (error) {
-            console.error('Failed to update leaderboard cache:', error);
-        }
+        // This function is disabled during the multi-guild refactoring.
+        return;
     };
 
     function forceGC() {
@@ -403,6 +298,76 @@ async function handleInteractionCreate(interaction) {
                 }
             }, 100));
         } else if (interaction.isStringSelectMenu()) {
+            if (interaction.customId.startsWith('ticket-panel-')) {
+                const panelId = interaction.customId.replace('ticket-panel-', '');
+                const categoryId = interaction.values[0];
+
+                const guildSettings = await GuildSettings.findOne({ guildId: interaction.guild.id });
+                if (!guildSettings) return;
+
+                const panel = guildSettings.tickets.panels.id(panelId);
+                const category = guildSettings.tickets.categories.id(categoryId);
+
+                if (!panel || !category) return;
+
+                const ticketChannel = await interaction.guild.channels.create({
+                    name: category.channelName.replace('{user}', interaction.user.username).replace('{id}', interaction.id),
+                    type: ChannelType.GuildText,
+                    parent: category.categoryId,
+                    permissionOverwrites: [
+                        {
+                            id: interaction.guild.id,
+                            deny: [PermissionsBitField.Flags.ViewChannel],
+                        },
+                        {
+                            id: interaction.user.id,
+                            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ReadMessageHistory],
+                        },
+                        ...category.supportRoles.map(roleId => ({
+                            id: roleId,
+                            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ReadMessageHistory],
+                        })),
+                    ],
+                });
+
+                const modal = new ModalBuilder()
+                    .setCustomId(`ticket-modal-${ticketChannel.id}`)
+                    .setTitle(category.name);
+
+                category.questions.forEach((question, index) => {
+                    const textInput = new TextInputBuilder()
+                        .setCustomId(`question_${index}`)
+                        .setLabel(question.label)
+                        .setStyle(question.style === 'Paragraph' ? TextInputStyle.Paragraph : TextInputStyle.Short)
+                        .setPlaceholder(question.placeholder || '')
+                        .setRequired(question.required)
+                        .setMinLength(question.minLength)
+                        .setMaxLength(question.maxLength);
+                    const actionRow = new ActionRowBuilder().addComponents(textInput);
+                    modal.addComponents(actionRow);
+                });
+
+                await interaction.showModal(modal);
+
+                const filter = (i) => i.customId === `ticket-modal-${ticketChannel.id}`;
+                try {
+                    const modalSubmission = await interaction.awaitModalSubmit({ filter, time: 300000 });
+
+                    const answers = category.questions.map((_, index) => modalSubmission.fields.getTextInputValue(`question_${index}`)).join('\n');
+
+                    const ticketEmbed = new EmbedBuilder()
+                        .setTitle(`Ticket: ${category.name}`)
+                        .setDescription(`**Người tạo:** ${interaction.user}\n\n**Câu trả lời:**\n${answers}`)
+                        .setColor('#0099ff')
+                        .setTimestamp();
+
+                    await ticketChannel.send({ embeds: [ticketEmbed] });
+                    await modalSubmission.reply({ content: `Đã tạo ticket của bạn trong ${ticketChannel}`, ephemeral: true });
+
+                } catch (error) {
+                    console.error('Lỗi khi xử lý modal ticket:', error);
+                }
+            }
             if (interaction.customId.startsWith('reaction_role_')) {
                 await handleReactionRoleSelect(interaction);
             }
@@ -780,18 +745,11 @@ async function handleInteractionCreate(interaction) {
             console.error(`${colors.red('[ERROR]')} Duplicate slash command names detected:`, duplicates.join(', '));
         }
 
-        const commands = await client.application.commands.fetch();
-        for (const command of commands.values()) {
-            await client.application.commands.delete(command.id);
-        }
-
         const rest = new REST({ version: '10' }).setToken(config.BotToken);
-
-        try {
-            const registeredCommands = await rest.put(
-                Routes.applicationGuildCommands(client.user.id, config.GuildID),
-                { body: global.slashCommands }
-            );
+        const registeredCommands = await rest.put(
+            Routes.applicationCommands(client.user.id),
+            { body: global.slashCommands }
+        );
 
             registeredCommands.forEach(registeredCommand => {
                 const localCommand = client.slashCommands.get(registeredCommand.name);
@@ -801,10 +759,7 @@ async function handleInteractionCreate(interaction) {
             });
 
             client.commandsReady = true;
-        } catch (error) {
-            console.error(`${colors.red('[ERROR]')} Failed to register slash commands:`, error);
-            handleSlashCommandError(error);
-        }
+
     }
 
     function logStartupInfo() {

@@ -932,14 +932,9 @@ async function handleTicketCreate(client, interaction) {
             ticketTypeKey = interaction.values[0];
         }
 
-        const ticketType = config.TicketTypes[ticketTypeKey];
+                const ticketType = config.TicketTypes[ticketTypeKey];
 
-        if (!ticketType) {
-            console.error(`Ticket type for key "${ticketTypeKey}" not found in configuration.`);
-            throw new Error('Ticket type not found.');
-        }
-
-        const blacklistedUser = await Blacklist.findOne({ userId: interaction.user.id });
+                const blacklistedUser = await Blacklist.findOne({ userId: interaction.user.id });
         if (blacklistedUser) {
             const embedConfig = lang.Tickets.Blacklisted.Embed;
             const blacklistEmbed = new EmbedBuilder();

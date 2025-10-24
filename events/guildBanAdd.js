@@ -1,13 +1,10 @@
 const { EmbedBuilder, AuditLogEvent } = require('discord.js');
-//const fs = require('fs');
-//const yaml = require('js-yaml');
-
 const moment = require('moment-timezone');
 const UserData = require('../models/UserData');
 const GuildData = require('../models/guildDataSchema');
+const GuildSettings = require('../models/GuildSettings');
 const { getConfig } = require('../utils/configLoader.js');
 const config = getConfig();
-
 
 module.exports = async (client, ban) => {
     try {
@@ -42,32 +39,27 @@ module.exports = async (client, ban) => {
 };
 
 async function logBan(ban, reason, moderator, caseNumber, currentTime) {
-    const logChannel = ban.guild.channels.cache.get(config.BanLogs.LogsChannelID);
+    const guildSettings = await GuildSettings.findOne({ guildId: ban.guild.id });
+    if (!guildSettings || !guildSettings.logChannels.has('ban')) return;
+
+    const logChannelId = guildSettings.logChannels.get('ban');
+    const logChannel = ban.guild.channels.cache.get(logChannelId);
     if (!logChannel) return;
 
+    // Using a simplified embed for now, as the original config is being removed.
     const logMessageEmbed = new EmbedBuilder()
-        .setColor(config.BanLogs.Embed.Color || "#FF0000")
-        .setTitle(replacePlaceholders(config.BanLogs.Embed.Title, ban, reason, moderator, caseNumber, currentTime))
-        .setDescription(replacePlaceholders(config.BanLogs.Embed.Description.join('\n'), ban, reason, moderator, caseNumber, currentTime))
-        .setFooter({ text: replacePlaceholders(config.BanLogs.Embed.Footer, ban, reason, moderator, caseNumber, currentTime) });
+        .setColor("#FF0000")
+        .setTitle('Thành viên bị cấm')
+        .setDescription(`${ban.user.tag} đã bị cấm bởi ${moderator.tag}.`)
+        .addFields(
+            { name: 'Lý do', value: reason || 'Không có lý do' },
+            { name: 'Case', value: `#${caseNumber}` }
+        )
+        .setTimestamp();
 
     try {
         await logChannel.send({ embeds: [logMessageEmbed] });
     } catch (error) {
         console.error(`Failed to log ban in channel: ${error}`);
     }
-}
-
-function replacePlaceholders(text, ban, reason, moderator, caseNumber, currentTime) {
-    return text
-        .replace(/{user}/g, `<@${ban.user.id}>`)
-        .replace(/{userName}/g, ban.user.username)
-        .replace(/{userTag}/g, ban.user.tag)
-        .replace(/{userId}/g, ban.user.id)
-        .replace(/{guildName}/g, ban.guild.name)
-        .replace(/{moderator}/g, `<@${moderator.id}>`)
-        .replace(/{reason}/g, reason || 'No reason provided')
-        .replace(/{caseNumber}/g, caseNumber)
-        .replace(/{shorttime}/g, currentTime.format("HH:mm"))
-        .replace(/{longtime}/g, currentTime.format('MMMM Do YYYY'));
 }

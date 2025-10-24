@@ -1,50 +1,25 @@
-/*
-  _____            _           ____        _   
- |  __ \          | |         |  _ \      | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |  | | | | (_| |   < (_) | | |_) | (_) | |_ 
- | |__| | | | (_| |_|\_\___/  |____/ \___/ \__|
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                             
-                                        
- Thank you for choosing Drako Bot!
-
- Should you encounter any issues, require assistance, or have suggestions for improving the bot,
- we invite you to connect with us on our Discord server and create a support ticket: 
-
- http://discord.drakodevelopment.net
- 
-*/
-
 const { SlashCommandBuilder } = require('discord.js');
-const fs = require('fs');
-const yaml = require("js-yaml");
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
-
-const config = getConfig();
-const lang = getLang();
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('fact')
-        .setDescription('Get a random fact.')
+        .setDescription('Nhận một sự thật ngẫu nhiên.')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('cat')
-                .setDescription('Get a random cat fact'))
+                .setDescription('Nhận một sự thật ngẫu nhiên về mèo'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('dog')
-                .setDescription('Get a random dog fact'))
+                .setDescription('Nhận một sự thật ngẫu nhiên về chó'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('general')
-                .setDescription('Get a random general fact'))
+                .setDescription('Nhận một sự thật ngẫu nhiên chung'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('useless')
-                .setDescription('Get a random useless fact')),
+                .setDescription('Nhận một sự thật ngẫu nhiên vô dụng')),
     category: 'Fun',
     async execute(interaction, client) {
         try {
@@ -71,10 +46,10 @@ module.exports = {
                 fact = data.text;
             }
 
-            interaction.editReply({ content: `**🎲 RANDOM FACT**\n${fact}` });
+            interaction.editReply({ content: `**🎲 SỰ THẬT NGẪU NHIÊN**\n${fact}` });
         } catch (error) {
-            console.error("Error fetching fact: ", error);
-            interaction.editReply({ content: 'Sorry, I couldn\'t fetch a fact at the moment.' });
+            console.error("Lỗi khi lấy sự thật: ", error);
+            interaction.editReply({ content: 'Xin lỗi, tôi không thể lấy sự thật vào lúc này.' });
         }
     }
 };

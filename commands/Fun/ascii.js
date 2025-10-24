@@ -16,12 +16,12 @@
  
 */
 
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const figlet = require('figlet');
-const fs = require('fs');
-const path = require('path');
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
+const { promisify } = require('util');
+const { getConfig, getLang } = require('../../utils/configLoader.js');
 
+const figletAsync = promisify(figlet);
 const config = getConfig();
 const lang = getLang();
 
@@ -64,48 +64,50 @@ async function checkBlacklistWords(content) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ascii')
-        .setDescription('Create ASCII text')
+        .setDescription('Tạo văn bản ASCII')
         .addStringOption(option =>
             option.setName('text')
-                .setDescription('The text you want converted')
+                .setDescription('Văn bản bạn muốn chuyển đổi')
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('size')
-                .setDescription('Font size')
+                .setDescription('Kích thước phông chữ')
                 .setRequired(false)
                 .addChoices(
-                    { name: 'Small', value: 'small' },
-                    { name: 'Medium', value: 'medium' },
-                    { name: 'Large', value: 'large' }
+                    { name: 'Nhỏ', value: 'small' },
+                    { name: 'Trung bình', value: 'medium' },
+                    { name: 'Lớn', value: 'large' }
             )),
     category: 'Fun',
     async execute(interaction) {
+        await interaction.deferReply();
         let text = interaction.options.getString('text');
         const sizeChoice = interaction.options.getString('size') || 'medium';
 
         if (await checkBlacklistWords(text)) {
             const blacklistMessage = lang.BlacklistWords && lang.BlacklistWords.Message
                 ? lang.BlacklistWords.Message.replace(/{user}/g, `${interaction.user}`)
-                : 'Your text contains blacklisted words.';
-            return interaction.reply({ content: blacklistMessage, flags: MessageFlags.Ephemeral });
+                : 'Văn bản của bạn chứa các từ bị cấm.';
+            return interaction.editReply({ content: blacklistMessage, ephemeral: true });
         }
 
         text = wordWrap(text, 25);
 
-        figlet(text, {
-            font: fontSizeMapping[sizeChoice],
-            horizontalLayout: 'default',
-            verticalLayout: 'default'
-        }, (err, data) => {
-            if (err) {
-                console.error('Something went wrong with figlet...');
-                console.dir(err);
-                return interaction.reply('Failed to convert text into ASCII art, please try again.');
-            }
+        try {
+            const data = await figletAsync(text, {
+                font: fontSizeMapping[sizeChoice],
+                horizontalLayout: 'default',
+                verticalLayout: 'default'
+            });
+
             if (data.length > 2000) {
-                return interaction.reply('The generated ASCII art is too long for Discord!');
+                return interaction.editReply('Nghệ thuật ASCII được tạo ra quá dài đối với Discord!');
             }
-            interaction.reply(`\`\`\`${data}\`\`\``);
-        });
+            interaction.editReply('```' + data + '```');
+        } catch (err) {
+            console.error('Đã có lỗi xảy ra với figlet...');
+            console.dir(err);
+            interaction.editReply('Không thể chuyển đổi văn bản thành nghệ thuật ASCII, vui lòng thử lại.');
+        }
     },
 };

@@ -1,70 +1,70 @@
-const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const Invite = require('../../../models/inviteSchema');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('invites')
-        .setDescription('Check and manage invites')
+        .setDescription('Kiểm tra và quản lý lời mời')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('user')
-                .setDescription('Check how many invites a user has')
+                .setDescription('Kiểm tra xem người dùng có bao nhiêu lời mời')
                 .addUserOption(option =>
                     option.setName('user')
-                        .setDescription('The user to check invites for')
+                        .setDescription('Người dùng để kiểm tra lời mời')
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
-                .setDescription('Add invites to a user')
+                .setDescription('Thêm lời mời cho người dùng')
                 .addUserOption(option =>
                     option.setName('user')
-                        .setDescription('The user to add invites to')
+                        .setDescription('Người dùng để thêm lời mời')
                         .setRequired(true))
                 .addIntegerOption(option =>
                     option.setName('amount')
-                        .setDescription('The amount of invites to add')
+                        .setDescription('Số lượng lời mời để thêm')
                         .setRequired(true)
                         .setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
-                .setDescription('Remove invites from a user')
+                .setDescription('Xóa lời mời của người dùng')
                 .addUserOption(option =>
                     option.setName('user')
-                        .setDescription('The user to remove invites from')
+                        .setDescription('Người dùng để xóa lời mời')
                         .setRequired(true))
                 .addIntegerOption(option =>
                     option.setName('amount')
-                        .setDescription('The amount of invites to remove')
+                        .setDescription('Số lượng lời mời để xóa')
                         .setRequired(true)
                         .setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('reset')
-                .setDescription('Reset a user\'s invites to 0')
+                .setDescription('Đặt lại lời mời của người dùng về 0')
                 .addUserOption(option =>
                     option.setName('user')
-                        .setDescription('The user to reset invites for')
+                        .setDescription('Người dùng để đặt lại lời mời')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('reset-all')
-                .setDescription('Reset all invites in the server to 0')
+                .setDescription('Đặt lại tất cả lời mời trong máy chủ về 0')
                 .addStringOption(option =>
                     option.setName('confirm')
-                        .setDescription('Type "confirm" to reset all invites')
+                        .setDescription('Nhập "confirm" để đặt lại tất cả lời mời')
                         .setRequired(true)))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     category: 'Utility',
     async execute(interaction) {
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+        await interaction.deferReply({ ephemeral: true });
 
         const guildId = interaction.guild.id;
         const subcommand = interaction.options.getSubcommand();
 
         if (subcommand !== 'user' && !interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-            return interaction.editReply({ content: 'You need Administrator permissions to use this command.', flags: MessageFlags.Ephemeral });
+            return interaction.editReply({ content: 'Bạn cần quyền Quản trị viên để sử dụng lệnh này.', ephemeral: true });
         }
 
         if (subcommand === 'user') {
@@ -76,14 +76,14 @@ module.exports = {
 
                 const embed = new EmbedBuilder()
                     .setColor('#0099ff')
-                    .setTitle(`Invite Stats for ${user.tag}`)
-                    .setDescription(`<@${user.id}> has ${inviteCount} invite(s).`)
+                    .setTitle(`Thống kê lời mời của ${user.tag}`)
+                    .setDescription(`<@${user.id}> có ${inviteCount} lời mời.`)
                     .setTimestamp();
 
-                return interaction.editReply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ embeds: [embed], ephemeral: true });
             } catch (error) {
-                console.error('Error fetching invite data:', error);
-                return interaction.editReply({ content: 'There was an error fetching the invite data.', flags: MessageFlags.Ephemeral });
+                console.error('Lỗi khi lấy dữ liệu lời mời:', error);
+                return interaction.editReply({ content: 'Đã có lỗi xảy ra khi lấy dữ liệu lời mời.', ephemeral: true });
             }
         }
 
@@ -92,8 +92,8 @@ module.exports = {
             
             if (confirmation.toLowerCase() !== 'confirm') {
                 return interaction.editReply({ 
-                    content: 'You must type "confirm" to reset all invites in the server.',
-                    flags: MessageFlags.Ephemeral 
+                    content: 'Bạn phải nhập "confirm" để đặt lại tất cả lời mời trong máy chủ.',
+                    ephemeral: true 
                 });
             }
 
@@ -105,16 +105,16 @@ module.exports = {
 
                 const embed = new EmbedBuilder()
                     .setColor('#0099ff')
-                    .setTitle('Server Invites Reset')
-                    .setDescription(`Successfully reset invites for ${result.modifiedCount} users.`)
+                    .setTitle('Đặt lại lời mời của máy chủ')
+                    .setDescription(`Đã đặt lại thành công lời mời cho ${result.modifiedCount} người dùng.`)
                     .setTimestamp();
 
-                return interaction.editReply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ embeds: [embed], ephemeral: true });
             } catch (error) {
-                console.error('Error resetting all invites:', error);
+                console.error('Lỗi khi đặt lại tất cả lời mời:', error);
                 return interaction.editReply({ 
-                    content: 'There was an error resetting all invites.',
-                    flags: MessageFlags.Ephemeral 
+                    content: 'Đã có lỗi xảy ra khi đặt lại tất cả lời mời.',
+                    ephemeral: true 
                 });
             }
         }
@@ -122,17 +122,15 @@ module.exports = {
         const targetUser = interaction.options.getUser('user');
         
         try {
-            let userInvites = await Invite.findOne({ guildID: guildId, inviterID: targetUser.id });
+            let userInvite = await Invite.findOne({ guildID: guildId, inviterID: targetUser.id });
             const amount = interaction.options.getInteger('amount');
             let message = '';
 
-            const generateInviteCode = () => {
-                return `ADMIN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            };
-
-            if (!userInvites) {
-                userInvites = new Invite({
-                    inviteCode: generateInviteCode(),
+            // This logic is flawed if a user has multiple invite links.
+            // It will only modify the first one found. A better solution would be a dedicated 'bonus' field.
+            if (!userInvite) {
+                userInvite = new Invite({
+                    inviteCode: `ADMIN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                     guildID: guildId,
                     inviterID: targetUser.id,
                     uses: 0
@@ -141,35 +139,35 @@ module.exports = {
 
             switch (subcommand) {
                 case 'add':
-                    userInvites.uses += amount;
-                    message = `Added ${amount} invite(s) to ${targetUser.tag}`;
+                    userInvite.uses += amount;
+                    message = `Đã thêm ${amount} lời mời cho ${targetUser.tag}`;
                     break;
 
                 case 'remove':
-                    const removeAmount = Math.min(amount, userInvites.uses);
-                    userInvites.uses = Math.max(0, userInvites.uses - removeAmount);
-                    message = `Removed ${removeAmount} invite(s) from ${targetUser.tag}`;
+                    const removeAmount = Math.min(amount, userInvite.uses);
+                    userInvite.uses = Math.max(0, userInvite.uses - removeAmount);
+                    message = `Đã xóa ${removeAmount} lời mời từ ${targetUser.tag}`;
                     break;
 
                 case 'reset':
-                    userInvites.uses = 0;
-                    message = `Reset invites for ${targetUser.tag}`;
+                    userInvite.uses = 0;
+                    message = `Đặt lại lời mời cho ${targetUser.tag}`;
                     break;
             }
 
-            await userInvites.save();
+            await userInvite.save();
 
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
-                .setTitle('Invite Management')
+                .setTitle('Quản lý lời mời')
                 .setDescription(message)
-                .addFields({ name: 'Current Invites', value: userInvites.uses.toString() })
+                .addFields({ name: 'Lời mời hiện tại', value: userInvite.uses.toString() })
                 .setTimestamp();
 
-            return interaction.editReply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            return interaction.editReply({ embeds: [embed], ephemeral: true });
         } catch (error) {
-            console.error('Error managing invites:', error);
-            return interaction.editReply({ content: 'There was an error managing the invites.', flags: MessageFlags.Ephemeral });
+            console.error('Lỗi khi quản lý lời mời:', error);
+            return interaction.editReply({ content: 'Đã có lỗi xảy ra khi quản lý lời mời.', ephemeral: true });
         }
     }
 };

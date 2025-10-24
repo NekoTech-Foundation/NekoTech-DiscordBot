@@ -1,42 +1,40 @@
-﻿const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+
+const ALLOWED_USER_ID = '1316287191634149377';
 
 module.exports = {
     owner: true,
     data: new SlashCommandBuilder()
         .setName('botavatar')
-        .setDescription('Set your bots profile picture')
+        .setDescription('Đặt ảnh đại diện cho bot của bạn')
         .addAttachmentOption(option => option
             .setName('avatar')
-            .setDescription('The gif file')
+            .setDescription('Tệp gif')
             .setRequired(true)),
     category: 'General',
     async execute(interaction, client) {
-        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+        await interaction.deferReply({ ephemeral: true });
 
-        if (!hasAdministratorPermissions(interaction)) {
-            await sendReply(interaction, "⛔ | You don't have permissions to use this command!");
+        if (interaction.user.id !== ALLOWED_USER_ID) {
+            await sendReply(interaction, "⛔ | Bạn không có quyền sử dụng lệnh này!");
             return;
         }
 
         const avatar = interaction.options.getAttachment('avatar');
         if (!isValidGifImage(avatar)) {
-            await sendReply(interaction, "⚠️ | Please provide a GIF image.");
+            await sendReply(interaction, "⚠️ | Vui lòng cung cấp một hình ảnh GIF.");
             return;
         }
 
         try {
             await client.user.setAvatar(avatar.url);
-            await sendReply(interaction, "✅ | Bot avatar uploaded.");
+            await sendReply(interaction, "✅ | Đã tải lên ảnh đại diện của bot.");
         } catch (error) {
             console.error(error);
-            await sendReply(interaction, `❌ | An error occurred: ${error.message}`);
+            await sendReply(interaction, `❌ | Đã xảy ra lỗi: ${error.message}`);
         }
     }
 };
-
-function hasAdministratorPermissions(interaction) {
-    return interaction.member.permissions.has('Administrator');
-}
 
 function isValidGifImage(avatar) {
     return avatar.contentType && avatar.contentType === "image/gif";

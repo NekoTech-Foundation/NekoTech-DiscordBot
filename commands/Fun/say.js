@@ -1,21 +1,3 @@
-/*
-  _____            _           ____        _   
- |  __ \          | |         |  _ \      | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |__| | | | (_| |   < (_) | | |_) | (_) | |_ 
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                             
-                                        
- Thank you for choosing Drako Bot!
-
- Should you encounter any issues, require assistance, or have suggestions for improving the bot,
- we invite you to connect with us on our Discord server and create a support ticket: 
-
- http://discord.drakodevelopment.net
- 
-*/
-
 const { SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
 
 const MAX_MESSAGE_LENGTH = 2000;
@@ -23,32 +5,32 @@ const MAX_MESSAGE_LENGTH = 2000;
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('say')
-        .setDescription('Repeats or edits messages sent by the bot')
+        .setDescription('Lặp lại hoặc chỉnh sửa tin nhắn do bot gửi')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('send')
-                .setDescription('Sends a new message')
+                .setDescription('Gửi một tin nhắn mới')
                 .addStringOption(option =>
                     option.setName('message')
-                        .setDescription('The message to send')
+                        .setDescription('Tin nhắn để gửi')
                         .setMaxLength(MAX_MESSAGE_LENGTH)
                         .setRequired(true))
                 .addAttachmentOption(option =>
                     option.setName('attachment')
-                        .setDescription('Add an attachment to the message')
+                        .setDescription('Thêm một tệp đính kèm vào tin nhắn')
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('edit')
-                .setDescription('Edit a previous bot message')
+                .setDescription('Chỉnh sửa một tin nhắn trước đó của bot')
                 .addStringOption(option =>
                     option.setName('message_id')
-                        .setDescription('The ID of the message to edit')
+                        .setDescription('ID của tin nhắn để chỉnh sửa')
                         .setRequired(true))),
     category: 'Fun',
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
-            return interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral });
+            return interaction.reply({ content: 'Bạn không có quyền sử dụng lệnh này.', ephemeral: true });
         }
 
         const subcommand = interaction.options.getSubcommand();
@@ -59,8 +41,8 @@ module.exports = {
             
             if (message.length > MAX_MESSAGE_LENGTH) {
                 return interaction.reply({ 
-                    content: `Message is too long! Maximum length is ${MAX_MESSAGE_LENGTH} characters.`, 
-                    flags: MessageFlags.Ephemeral 
+                    content: `Tin nhắn quá dài! Độ dài tối đa là ${MAX_MESSAGE_LENGTH} ký tự.`,
+                    ephemeral: true 
                 });
             }
 
@@ -69,7 +51,7 @@ module.exports = {
                 files: attachment ? [attachment] : []
             });
             
-            await interaction.reply({ content: 'Message sent!', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: 'Tin nhắn đã được gửi!', ephemeral: true });
         } 
         else if (subcommand === 'edit') {
             const messageId = interaction.options.getString('message_id');
@@ -79,18 +61,18 @@ module.exports = {
                 
                 if (targetMessage.author.id !== interaction.client.user.id) {
                     return interaction.reply({ 
-                        content: 'I can only edit messages that were sent by me.', 
-                        flags: MessageFlags.Ephemeral 
+                        content: 'Tôi chỉ có thể chỉnh sửa những tin nhắn do tôi gửi.',
+                        ephemeral: true 
                     });
                 }
 
                 const modal = new ModalBuilder()
                     .setCustomId(`edit_message_${messageId}`)
-                    .setTitle('Edit Message');
+                    .setTitle('Chỉnh sửa tin nhắn');
 
                 const messageInput = new TextInputBuilder()
                     .setCustomId('edited_content')
-                    .setLabel('New Message Content')
+                    .setLabel('Nội dung tin nhắn mới')
                     .setStyle(TextInputStyle.Paragraph)
                     .setValue(targetMessage.content)
                     .setMaxLength(MAX_MESSAGE_LENGTH)
@@ -109,20 +91,20 @@ module.exports = {
                     
                     if (newContent.length > MAX_MESSAGE_LENGTH) {
                         return submitted.reply({ 
-                            content: `Message is too long! Maximum length is ${MAX_MESSAGE_LENGTH} characters.`, 
-                            flags: MessageFlags.Ephemeral 
+                            content: `Tin nhắn quá dài! Độ dài tối đa là ${MAX_MESSAGE_LENGTH} ký tự.`,
+                            ephemeral: true 
                         });
                     }
 
                     await targetMessage.edit(newContent);
-                    await submitted.reply({ content: 'Message edited successfully!', flags: MessageFlags.Ephemeral });
+                    await submitted.reply({ content: 'Đã chỉnh sửa tin nhắn thành công!', ephemeral: true });
                 }
 
             } catch (error) {
-                console.error('Error in edit command:', error);
+                console.error('Lỗi trong lệnh chỉnh sửa:', error);
                 return interaction.reply({ 
-                    content: 'Unable to find the message. Make sure the ID is correct and the message is in this channel.', 
-                    flags: MessageFlags.Ephemeral 
+                    content: 'Không thể tìm thấy tin nhắn. Hãy chắc chắn rằng ID là chính xác và tin nhắn nằm trong kênh này.',
+                    ephemeral: true 
                 });
             }
         }
@@ -136,20 +118,20 @@ module.exports.modalSubmit = async function(interaction) {
         
         if (newContent.length > MAX_MESSAGE_LENGTH) {
             return interaction.reply({ 
-                content: `Message is too long! Maximum length is ${MAX_MESSAGE_LENGTH} characters.`, 
-                flags: MessageFlags.Ephemeral 
+                content: `Tin nhắn quá dài! Độ dài tối đa là ${MAX_MESSAGE_LENGTH} ký tự.`,
+                ephemeral: true 
             });
         }
 
         try {
             const targetMessage = await interaction.channel.messages.fetch(messageId);
             await targetMessage.edit(newContent);
-            await interaction.reply({ content: 'Message edited successfully!', flags: MessageFlags.Ephemeral });
+            await interaction.reply({ content: 'Đã chỉnh sửa tin nhắn thành công!', ephemeral: true });
         } catch (error) {
-            console.error('Error in edit message modal submission:', error);
+            console.error('Lỗi khi gửi modal chỉnh sửa tin nhắn:', error);
             await interaction.reply({ 
-                content: 'Failed to edit the message. It may have been deleted or I no longer have permission to edit it.', 
-                flags: MessageFlags.Ephemeral 
+                content: 'Không thể chỉnh sửa tin nhắn. Tin nhắn có thể đã bị xóa hoặc tôi không còn quyền chỉnh sửa nó.',
+                ephemeral: true 
             });
         }
     }
