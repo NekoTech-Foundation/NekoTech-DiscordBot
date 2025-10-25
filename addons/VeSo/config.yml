@@ -6,7 +6,7 @@ enabled: true
 settings:
   draw_time: "18:00" # Giờ sổ xố (6 giờ chiều giờ Việt Nam)
   timezone: "Asia/Ho_Chi_Minh"
-  win_multiplier: 2.5 # Hệ số nhân tiền thắng
+  win_multiplier: 12.5 # Hệ số nhân tiền thắng
   
   # Các mệnh giá vé số
   ticket_prices:

@@ -1623,31 +1623,31 @@ Store:
   "Vé Số":
     1:
       Name: "Vé Số 50"
-      Description: "-# Vé số mệnh giá 50, trúng nhận 125"
+      Description: "-# Vé số mệnh giá 50, trúng nhận 625"
       Price: 50
     2:
       Name: "Vé Số 100"
-      Description: "-# Vé số mệnh giá 100, trúng nhận 250"
+      Description: "-# Vé số mệnh giá 100, trúng nhận 1,250"
       Price: 100
     3:
       Name: "Vé Số 300"
-      Description: "-# Vé số mệnh giá 300, trúng nhận 750"
+      Description: "-# Vé số mệnh giá 300, trúng nhận 3,750"
       Price: 300
     4:
       Name: "Vé Số 500"
-      Description: "-# Vé số mệnh giá 500, trúng nhận 1,250"
+      Description: "-# Vé số mệnh giá 500, trúng nhận 6,250"
       Price: 500
     5:
       Name: "Vé Số 1000"
-      Description: "-# Vé số mệnh giá 1000, trúng nhận 2,500"
+      Description: "-# Vé số mệnh giá 1000, trúng nhận 12,500"
       Price: 1000
     6:
       Name: "Vé Số 2000"
-      Description: "-# Vé số mệnh giá 2000, trúng nhận 5,000"
+      Description: "-# Vé số mệnh giá 2000, trúng nhận 25,000"
       Price: 2000
     7:
       Name: "Vé Số 4000"
-      Description: "-# Vé số mệnh giá 4000, trúng nhận 10,000"
+      Description: "-# Vé số mệnh giá 4000, trúng nhận 50,000"
       Price: 4000
 
   Embed:
