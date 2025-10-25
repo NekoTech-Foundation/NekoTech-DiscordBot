@@ -1,0 +1,90 @@
+enabled: true
+
+# ===========================================
+#  Cấu hình Vé Số
+# ===========================================
+settings:
+  draw_time: "18:00" # Giờ sổ xố (6 giờ chiều giờ Việt Nam)
+  timezone: "Asia/Ho_Chi_Minh"
+  win_multiplier: 2.5 # Hệ số nhân tiền thắng
+  
+  # Các mệnh giá vé số
+  ticket_prices:
+    - 50
+    - 100
+    - 300
+    - 500
+    - 1000
+    - 2000
+    - 4000
+  
+  # Emoji cho vé số
+  ticket_emoji: "🎫"
+  winner_emoji: "🎉"
+  
+  # Màu sắc embed
+  colors:
+    buy: "#FFD700"
+    draw: "#FF6347"
+    winner: "#00FF00"
+    check: "#1E90FF"
+
+# ===========================================
+#  Thông báo
+# ===========================================
+messages:
+  buy_success:
+    title: "🎫 Mua Vé Số Thành Công!"
+    description: |
+      **Mệnh giá:** {price} {currency}
+      **Số vé:** {numbers}
+      **Tiền thắng nếu trúng:** {prize} {currency}
+      
+      Vé số sẽ được sổ vào **6:00 PM** hôm nay!
+    footer: "Chúc bạn may mắn!"
+    
+  draw_result:
+    title: "🎰 Kết Quả Sổ Xố Hôm Nay!"
+    description: |
+      📅 **Ngày:** {date}
+      
+      **Các số trúng thưởng:**
+      {winning_numbers}
+      
+      **Người thắng cuộc:**
+      {winners}
+    footer: "Chúc mừng các người chơi may mắn!"
+    
+  no_winners:
+    title: "😢 Không Có Người Thắng Cuộc"
+    description: "Hôm nay không có ai trúng số. Chúc các bạn may mắn lần sau!"
+    
+  check_tickets:
+    title: "🎫 Vé Số Của Bạn"
+    description: |
+      **Tổng số vé đã mua:** {total}
+      
+      {tickets_list}
+    footer: "Sổ xố vào 6:00 PM hàng ngày"
+    
+  no_tickets:
+    title: "❌ Không Có Vé Số"
+    description: "Bạn chưa mua vé số nào. Sử dụng `/store` để mua vé!"
+    
+  feature_enabled:
+    title: "✅ Vé Số Đã Được Bật"
+    description: "Chức năng vé số đã được kích hoạt cho máy chủ này."
+    
+  feature_disabled:
+    title: "❌ Vé Số Đã Được Tắt"
+    description: "Chức năng vé số đã được tắt cho máy chủ này."
+
+# ===========================================
+#  Lỗi
+# ===========================================
+errors:
+  not_admin: "Bạn không có quyền quản trị viên để sử dụng lệnh này!"
+  disabled: "Chức năng vé số đã bị tắt trên máy chủ này!"
+  insufficient_balance: "Bạn không đủ tiền để mua vé số này!"
+  invalid_price: "Mệnh giá vé số không hợp lệ!"
+  no_draw_today: "Chưa có kết quả sổ xố hôm nay!"

@@ -1619,24 +1619,36 @@ Store:
       Bonus: 1.2
 
   Equipment: # Trang bị
+
+  "Vé Số":
     1:
-      Name: "Cần câu Cơ bản"
-      Description: "-# Một chiếc cần câu đơn giản cho người mới bắt đầu"
-      Price: "1000"
-      Type: "FishingRod"
-      CatchBonus: 1.1
-      DurabilityBonus: 1.0
-      LuckBonus: 1.05
-      CooldownReduction: 60000  # 1 phút
+      Name: "Vé Số 50"
+      Description: "-# Vé số mệnh giá 50, trúng nhận 125"
+      Price: 50
     2:
-      Name: "Cần câu Bậc thầy"
-      Description: "-# Chiếc cần câu tốt nhất mà tiền có thể mua được"
-      Price: "50000"
-      Type: "FishingRod"
-      CatchBonus: 2.0
-      DurabilityBonus: 3.0
-      LuckBonus: 1.7
-      CooldownReduction: 900000  # 15 phút
+      Name: "Vé Số 100"
+      Description: "-# Vé số mệnh giá 100, trúng nhận 250"
+      Price: 100
+    3:
+      Name: "Vé Số 300"
+      Description: "-# Vé số mệnh giá 300, trúng nhận 750"
+      Price: 300
+    4:
+      Name: "Vé Số 500"
+      Description: "-# Vé số mệnh giá 500, trúng nhận 1,250"
+      Price: 500
+    5:
+      Name: "Vé Số 1000"
+      Description: "-# Vé số mệnh giá 1000, trúng nhận 2,500"
+      Price: 1000
+    6:
+      Name: "Vé Số 2000"
+      Description: "-# Vé số mệnh giá 2000, trúng nhận 5,000"
+      Price: 2000
+    7:
+      Name: "Vé Số 4000"
+      Description: "-# Vé số mệnh giá 4000, trúng nhận 10,000"
+      Price: 4000
 
   Embed:
     Title: "Cửa hàng {shopName}"

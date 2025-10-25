@@ -1,12 +1,23 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
 const fs = require('fs');
 const yaml = require('js-yaml');
+const path = require('path');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
 const lang = getLang();
 const User = require('../../../models/UserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
+
+// Import vé số addon nếu có
+let vesoAddon = null;
+let vesoConfig = null;
+try {
+    vesoAddon = require('../../../addons/VeSo/veso.js');
+    vesoConfig = yaml.load(fs.readFileSync(path.join(__dirname, '../../../addons/VeSo/config.yml'), 'utf8'));
+} catch (error) {
+    // Vé số addon không có hoặc chưa cài
+}
 
 module.exports = {
     data: (() => {
@@ -171,6 +182,86 @@ module.exports = {
                             flags: MessageFlags.Ephemeral 
                         });
                         return;
+                    }
+
+                    // Kiểm tra nếu là vé số
+                    if (category === 'Vé Số' && vesoAddon && vesoConfig) {
+                        const price = item.Price || 0;
+                        
+                        let user = await User.findOne(
+                            { userId: i.user.id, guildId: i.guild.id },
+                            { balance: 1, transactionLogs: 1 }
+                        );
+
+                        if (!user) {
+                            user = new User({ 
+                                userId: i.user.id, 
+                                guildId: i.guild.id, 
+                                balance: 0,
+                                transactionLogs: []
+                            });
+                        }
+                        
+                        // Đảm bảo transactionLogs tồn tại
+                        if (!user.transactionLogs) {
+                            user.transactionLogs = [];
+                        }
+
+                        if (user.balance < price) {
+                            await i.reply({ 
+                                content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.', 
+                                flags: MessageFlags.Ephemeral 
+                            });
+                            return;
+                        }
+
+                        try {
+                            const ticketData = await vesoAddon.buyTicket(i.user.id, i.guild.id, price);
+                            
+                            // Trừ tiền
+                            user.balance -= price;
+                            user.transactionLogs.push({
+                                type: 'veso_purchase',
+                                amount: -price,
+                                timestamp: new Date()
+                            });
+                            await user.save();
+
+                            // Gửi embed thông báo mua vé thành công
+                            const currency = config.Currency || '💰';
+                            const vesoEmbed = new EmbedBuilder()
+                                .setColor(vesoConfig.settings.colors.buy)
+                                .setTitle(vesoConfig.messages.buy_success.title)
+                                .setDescription(
+                                    vesoConfig.messages.buy_success.description
+                                        .replace(/{price}/g, price)
+                                        .replace(/{currency}/g, currency)
+                                        .replace(/{numbers}/g, ticketData.numbers)
+                                        .replace(/{prize}/g, ticketData.prize)
+                                )
+                                .setFooter({ text: vesoConfig.messages.buy_success.footer })
+                                .setTimestamp();
+
+                            await i.reply({
+                                embeds: [vesoEmbed],
+                                flags: MessageFlags.Ephemeral
+                            });
+                            return;
+                        } catch (error) {
+                            console.error('[VeSo Store] Error:', error);
+                            if (error.message === 'DISABLED') {
+                                await i.reply({ 
+                                    content: vesoConfig.errors.disabled, 
+                                    flags: MessageFlags.Ephemeral 
+                                });
+                            } else {
+                                await i.reply({ 
+                                    content: 'Có lỗi xảy ra khi mua vé số: ' + error.message, 
+                                    flags: MessageFlags.Ephemeral 
+                                });
+                            }
+                            return;
+                        }
                     }
 
                     let user = await User.findOne(
