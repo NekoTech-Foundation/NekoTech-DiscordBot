@@ -28,7 +28,7 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('antihoist')
-        .setDescription('Removes disallowed characters set in config'),
+        .setDescription('Xóa các ký tự không được phép được đặt trong cấu hình'),
     category: 'Moderation',
     async execute(interaction) {
         try {
@@ -40,7 +40,7 @@ module.exports = {
 
             if (!hasPermission) {
                 return interaction.editReply({
-                    content: lang.AntiHoist.NoPermission,
+                    content: 'Bạn không có quyền sử dụng lệnh này.',
                     flags: MessageFlags.Ephemeral,
                 });
             }
@@ -80,21 +80,21 @@ module.exports = {
                             await logChannel.send({ embeds: [logEmbed] });
                         }
                     } catch (error) {
-                        console.error(`Failed to set nickname for ${member.user.tag}: ${error.message}`);
+                        console.error(`Không thể đặt biệt danh cho ${member.user.tag}: ${error.message}`);
                     }
                 }
             }
 
             await interaction.editReply({
-                content: lang.AntiHoist.CommandCompleted,
+                content: 'Lệnh đã được hoàn thành.',
                 flags: MessageFlags.Ephemeral,
             });
         } catch (error) {
-            console.error(`An error occurred while executing the antihoist command: ${error.message}`);
+            console.error(`Đã xảy ra lỗi khi thực hiện lệnh antihoist: ${error.message}`);
             if (interaction.replied || interaction.deferred) {
-                await interaction.editReply({ content: 'There was an error trying to execute that command! Please try again later.', flags: MessageFlags.Ephemeral });
+                await interaction.editReply({ content: 'Đã xảy ra lỗi khi thực hiện lệnh đó! Vui lòng thử lại sau.', flags: MessageFlags.Ephemeral });
             } else {
-                await interaction.reply({ content: 'There was an error trying to execute that command! Please try again later.', flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: 'Đã xảy ra lỗi khi thực hiện lệnh đó! Vui lòng thử lại sau.', flags: MessageFlags.Ephemeral });
             }
         }
     }

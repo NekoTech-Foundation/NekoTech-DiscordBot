@@ -55,10 +55,10 @@ function resolveVietnameseLocation(locationInput) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('weather')
-        .setDescription('Kiểm tra thời tiết tại một địa điểm bất kỳ')
+        .setDescription('Kiểm tra thời tiết tại một địa điểm đã chỉ định.')
         .addStringOption(option =>
             option.setName('location')
-                .setDescription('Tên thành phố, mã zip (VD: Hà Nội, 70000, London)')
+                .setDescription('Tên thành phố, mã zip (VD: Hà Nội, 70000, Tokyo)')
                 .setRequired(true)),
 
     async execute(interaction) {
@@ -103,7 +103,7 @@ module.exports = {
             
             embed.addFields(fields);
             embed.setTimestamp();
-            embed.setFooter({ text: 'Powered by wttr.in' });
+            embed.setFooter({ text: 'Nguồn bởi wttr.in | Heiznerd.dev' });
             
             await interaction.editReply({ embeds: [embed] });
 

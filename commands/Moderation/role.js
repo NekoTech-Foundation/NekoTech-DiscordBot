@@ -8,26 +8,26 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('role')
-        .setDescription('Add or remove roles from users')
+        .setDescription('Thêm hoặc xóa vai trò khỏi người dùng')
         .addStringOption(option =>
             option.setName('action')
-                .setDescription('The action to perform: add or remove')
+                .setDescription('Hành động để thực hiện: thêm hoặc xóa')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'add', value: 'add' },
-                    { name: 'remove', value: 'remove' }
+                    { name: 'thêm', value: 'add' },
+                    { name: 'xóa', value: 'remove' }
                 ))
         .addRoleOption(option =>
             option.setName('role')
-                .setDescription('The role to manage')
+                .setDescription('Vai trò để quản lý')
                 .setRequired(true))
         .addUserOption(option =>
             option.setName('user')
-                .setDescription('The user to add/remove the role from')
+                .setDescription('Người dùng để thêm/xóa vai trò')
                 .setRequired(false))
         .addBooleanOption(option =>
             option.setName('all')
-                .setDescription('Apply to all users? (Ignores user parameter if set to true)')
+                .setDescription('Áp dụng cho tất cả người dùng? (Bỏ qua tham số người dùng nếu được đặt thành true)')
                 .setRequired(false)),
     category: 'Moderation',
     async execute(interaction) {
@@ -46,7 +46,7 @@ module.exports = {
             const isAdministrator = member.permissions.has(PermissionsBitField.Flags.Administrator);
 
             if (!hasModeratorRole && !isAdministrator) {
-                await interaction.reply({ content: lang.NoPermsMessage, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: 'Bạn không có quyền sử dụng lệnh này.', flags: MessageFlags.Ephemeral });
                 return;
             }
 
@@ -55,23 +55,23 @@ module.exports = {
             const rolePosition = role.position;
 
             if (rolePosition >= botHighestRole) {
-                await interaction.reply({ content: lang.AddRole.AddroleHighestRole, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: 'Tôi không thể quản lý vai trò này vì nó cao hơn hoặc bằng vai trò cao nhất của tôi.', flags: MessageFlags.Ephemeral });
                 return;
             }
 
             if (rolePosition >= userHighestRole) {
-                await interaction.reply({ content: lang.AddRole.AddroleUserRoleNotAbove, flags: MessageFlags.Ephemeral });
+                await interaction.reply({ content: 'Bạn không thể quản lý vai trò cao hơn hoặc bằng vai trò cao nhất của bạn.', flags: MessageFlags.Ephemeral });
                 return;
             }
 
             if (!applyToAll) {
                 if (!user) {
-                    await interaction.reply({ content: 'Please specify a user or set "all" to true.', flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: 'Vui lòng chỉ định một người dùng hoặc đặt "all" thành true.', flags: MessageFlags.Ephemeral });
                     return;
                 }
 
                 if (user.id === interaction.user.id) {
-                    await interaction.reply({ content: lang.AddRole.AddroleSelfRole, flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: 'Bạn không thể tự thêm hoặc xóa vai trò cho chính mình.', flags: MessageFlags.Ephemeral });
                     return;
                 }
 
@@ -79,7 +79,7 @@ module.exports = {
                 const hasRole = targetMember.roles.cache.has(role.id);
 
                 if (action === 'add' && hasRole) {
-                    await interaction.reply({ content: lang.AddRole.AddroleAlreadyHave, flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: 'Người dùng đã có vai trò này.', flags: MessageFlags.Ephemeral });
                     return;
                 }
 
@@ -87,19 +87,19 @@ module.exports = {
                     if (action === 'add') {
                         await targetMember.roles.add(role);
                         await interaction.reply({
-                            content: lang.AddRole.AddroleSuccess.replace('{role}', role.toString()).replace('{user}', user.toString()),
+                            content: `Đã thêm thành công vai trò ${role.toString()} cho ${user.toString()}`,
                             flags: MessageFlags.Ephemeral
                         });
                     } else {
                         await targetMember.roles.remove(role);
                         await interaction.reply({
-                            content: lang.AddRole.RemoveroleSuccess.replace('{role}', role.toString()).replace('{user}', user.toString()),
+                            content: `Đã xóa thành công vai trò ${role.toString()} khỏi ${user.toString()}`,
                             flags: MessageFlags.Ephemeral
                         });
                     }
                 } catch (error) {
                     console.error(error);
-                    await interaction.reply({ content: lang.AddRole.AddroleError, flags: MessageFlags.Ephemeral });
+                    await interaction.reply({ content: 'Đã xảy ra lỗi khi quản lý vai trò.', flags: MessageFlags.Ephemeral });
                 }
                 return;
             }
@@ -108,17 +108,17 @@ module.exports = {
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('confirm')
-                        .setLabel('Confirm')
+                        .setLabel('Xác nhận')
                         .setStyle(ButtonStyle.Success),
                     new ButtonBuilder()
                         .setCustomId('cancel')
-                        .setLabel('Cancel')
+                        .setLabel('Hủy')
                         .setStyle(ButtonStyle.Danger)
                 );
 
             const confirmationMessage = action === 'add'
-                ? lang.RoleAll.RoleAllConfirmationAdd.replace('{role}', role.toString())
-                : lang.RoleAll.RoleAllConfirmationRemove.replace('{role}', role.toString());
+                ? `Bạn có chắc chắn muốn thêm vai trò ${role.toString()} cho tất cả người dùng không?`
+                : `Bạn có chắc chắn muốn xóa vai trò ${role.toString()} khỏi tất cả người dùng không?`;
 
             await interaction.reply({ content: confirmationMessage, components: [row], flags: MessageFlags.Ephemeral });
 
@@ -132,11 +132,11 @@ module.exports = {
                         .addComponents(
                             new ButtonBuilder()
                                 .setCustomId('cancel')
-                                .setLabel('Cancel')
+                                .setLabel('Hủy')
                                 .setStyle(ButtonStyle.Danger)
                         );
 
-                    await i.update({ content: lang.RoleAll.RoleAllInProgress, components: [cancelRow], flags: MessageFlags.Ephemeral });
+                    await i.update({ content: 'Đang xử lý... vui lòng đợi.', components: [cancelRow], flags: MessageFlags.Ephemeral });
 
                     const members = await interaction.guild.members.fetch();
                     const totalMembers = members.size;
@@ -154,13 +154,13 @@ module.exports = {
                                         await member.roles.remove(role);
                                     }
                                 } catch (error) {
-                                    console.error(`Error processing member ${member.id}: ${error}`);
+                                    console.error(`Lỗi xử lý thành viên ${member.id}: ${error}`);
                                 }
                             }
                             processedMembers++;
                             if (processedMembers % 15 === 0) {
                                 await interaction.editReply({
-                                    content: `Progress: ${processedMembers}/${totalMembers} members processed.`,
+                                    content: `Tiến trình: ${processedMembers}/${totalMembers} thành viên đã được xử lý.`,
                                     components: [cancelRow],
                                     flags: MessageFlags.Ephemeral
                                 });
@@ -170,24 +170,24 @@ module.exports = {
                     }
 
                     const successMessage = action === 'add'
-                        ? lang.RoleAll.RoleAllSuccessAdd.replace('{role}', role.toString())
-                        : lang.RoleAll.RoleAllSuccessRemove.replace('{role}', role.toString());
+                        ? `Đã thêm thành công vai trò ${role.toString()} cho tất cả người dùng.`
+                        : `Đã xóa thành công vai trò ${role.toString()} khỏi tất cả người dùng.`;
 
                     await interaction.editReply({ content: successMessage, components: [], flags: MessageFlags.Ephemeral });
                 } else {
-                    await i.update({ content: lang.RoleAll.RoleAllCancelled, components: [], flags: MessageFlags.Ephemeral });
+                    await i.update({ content: 'Đã hủy hành động.', components: [], flags: MessageFlags.Ephemeral });
                 }
             });
 
             collector.on('end', async (collected) => {
                 if (!collected.size) {
-                    await interaction.editReply({ content: lang.RoleAll.RoleAllTimeOut, components: [], flags: MessageFlags.Ephemeral });
+                    await interaction.editReply({ content: 'Đã hết thời gian.', components: [], flags: MessageFlags.Ephemeral });
                 }
             });
 
         } catch (error) {
-            console.error(`Error in role management command: ${error}`);
-            await interaction.reply({ content: 'An error occurred while processing your request.', flags: MessageFlags.Ephemeral });
+            console.error(`Lỗi trong lệnh quản lý vai trò: ${error}`);
+            await interaction.reply({ content: 'Đã xảy ra lỗi khi xử lý yêu cầu của bạn.', flags: MessageFlags.Ephemeral });
         }
     }
 };

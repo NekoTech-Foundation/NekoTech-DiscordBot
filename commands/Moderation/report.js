@@ -1,21 +1,3 @@
-/*
-  _____                     _         ____          _   
- |  __ \                   | |       |  _ \        | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |__| | | | (_| |   < (_) | | |_) | (_) | |_ 
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                              
-                                              
-  Cảm ơn bạn đã chọn Drako Bot!
-
-  Nếu bạn gặp bất kỳ vấn đề nào, cần hỗ trợ, hoặc có đề xuất để cải thiện bot,
-  chúng tôi mời bạn kết nối với chúng tôi trên máy chủ Discord và tạo một phiếu hỗ trợ: 
-
-  http://discord.drakodevelopment.net
- 
-*/
-
 const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -25,22 +7,22 @@ const config = getConfig();
 
 module.exports = {
     data: new ContextMenuCommandBuilder()
-        .setName('Báo cáo Tin nhắn')
+        .setName('Báo cáo tin nhắn')
         .setType(ApplicationCommandType.Message),
-    category: 'Quản lý',
+    category: 'Moderation',
     async execute(interaction) {
         try {
             const message = interaction.targetMessage;
             
             const modal = new ModalBuilder()
                 .setCustomId('report_modal')
-                .setTitle('Báo cáo Tin nhắn');
+                .setTitle('Báo cáo tin nhắn');
 
             const reasonInput = new TextInputBuilder()
                 .setCustomId('report_reason')
                 .setLabel('Tại sao bạn báo cáo tin nhắn này?')
                 .setStyle(TextInputStyle.Paragraph)
-                .setPlaceholder('Nhập lý do của bạn tại đây...')
+                .setPlaceholder('Nhập lý do của bạn ở đây...')
                 .setRequired(true)
                 .setMaxLength(1000);
 
@@ -51,8 +33,8 @@ module.exports = {
 
             const filter = (i) => i.customId === 'report_modal';
             try {
-                const submission = await interaction.awaitModalSubmit({ filter, time: 300000 }); // 5 phút chờ
-
+                const submission = await interaction.awaitModalSubmit({ filter, time: 300000 }); // 5 minutes timeout
+                
                 const reason = submission.fields.getTextInputValue('report_reason');
                 const reportedUser = message.author;
                 const reportingUser = interaction.user;
@@ -107,10 +89,9 @@ module.exports = {
 
             } catch (error) {
                 if (error.code === 'InteractionCollectorError') {
-                    // Người dùng không gửi modal trong thời gian cho phép
                     return;
                 } else {
-                    console.error('Lỗi khi gửi modal báo cáo:', error);
+                    console.error('Lỗi trong gửi modal báo cáo:', error);
                 }
             }
 
