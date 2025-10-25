@@ -215,53 +215,27 @@ module.exports = {
                             return;
                         }
 
-                        try {
-                            const ticketData = await vesoAddon.buyTicket(i.user.id, i.guild.id, price);
-                            
-                            // Trừ tiền
-                            user.balance -= price;
-                            user.transactionLogs.push({
-                                type: 'veso_purchase',
-                                amount: -price,
-                                timestamp: new Date()
-                            });
-                            await user.save();
+                        // Hiển thị modal để chọn số
+                        const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
+                        
+                        const modal = new ModalBuilder()
+                            .setCustomId(`veso_choose_${price}_${i.user.id}`)
+                            .setTitle('🎫 Chọn Số Vé Của Bạn');
 
-                            // Gửi embed thông báo mua vé thành công
-                            const currency = config.Currency || '💰';
-                            const vesoEmbed = new EmbedBuilder()
-                                .setColor(vesoConfig.settings.colors.buy)
-                                .setTitle(vesoConfig.messages.buy_success.title)
-                                .setDescription(
-                                    vesoConfig.messages.buy_success.description
-                                        .replace(/{price}/g, price)
-                                        .replace(/{currency}/g, currency)
-                                        .replace(/{numbers}/g, ticketData.numbers)
-                                        .replace(/{prize}/g, ticketData.prize)
-                                )
-                                .setFooter({ text: vesoConfig.messages.buy_success.footer })
-                                .setTimestamp();
+                        const numberInput = new TextInputBuilder()
+                            .setCustomId('veso_numbers')
+                            .setLabel('Nhập số 4 chữ số (0000-9999)')
+                            .setStyle(TextInputStyle.Short)
+                            .setPlaceholder('Ví dụ: 1234')
+                            .setRequired(true)
+                            .setMinLength(4)
+                            .setMaxLength(4);
 
-                            await i.reply({
-                                embeds: [vesoEmbed],
-                                flags: MessageFlags.Ephemeral
-                            });
-                            return;
-                        } catch (error) {
-                            console.error('[VeSo Store] Error:', error);
-                            if (error.message === 'DISABLED') {
-                                await i.reply({ 
-                                    content: vesoConfig.errors.disabled, 
-                                    flags: MessageFlags.Ephemeral 
-                                });
-                            } else {
-                                await i.reply({ 
-                                    content: 'Có lỗi xảy ra khi mua vé số: ' + error.message, 
-                                    flags: MessageFlags.Ephemeral 
-                                });
-                            }
-                            return;
-                        }
+                        const actionRow = new ModalActionRow().addComponents(numberInput);
+                        modal.addComponents(actionRow);
+
+                        await i.showModal(modal);
+                        return;
                     }
 
                     let user = await User.findOne(
