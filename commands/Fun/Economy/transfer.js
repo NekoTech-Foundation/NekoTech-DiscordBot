@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -12,16 +12,16 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('transfer')
         .setDescription('Chuyển xu sang cho người khác')
-        .addUserOption(option => option.setName('target').setDescription('Chọn người dùng').setRequired(true))
-        .addIntegerOption(option => option.setName('amount').setDescription('Số xu muốn chuyển').setRequired(true)),
+        .addUserOption(option => option.setName('người-dùng').setDescription('Chọn người dùng').setRequired(true))
+        .addIntegerOption(option => option.setName('số-tiền').setDescription('Số xu muốn chuyển').setRequired(true)),
     category: 'Economy',
     async execute(interaction) {
-        const target = interaction.options.getUser('target');
-        const amount = interaction.options.getInteger('amount');
+        const target = interaction.options.getUser('người-dùng');
+        const amount = interaction.options.getInteger('số-tiền');
 
         if (target.id === interaction.user.id) {
             const embed = new EmbedBuilder()
-                .setDescription(lang.Economy.Messages.cannotTransferToSelf || "Hak moni,mà sao bạn lại chuyển cho chính mình?.")
+                .setDescription(lang.Economy.Messages.cannotTransferToSelf || "Hak moni,99999999 send to your accountlolololololol,mà sao bạn lại chuyển cho chính mình?.")
                 .setColor('#FF0000');
             return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
         }
@@ -33,13 +33,13 @@ module.exports = {
             return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
         }
 
-        const user = await User.findOne(
-            { userId: interaction.user.id, guildId: interaction.guild.id },
+        const user = await EconomyUserData.findOne(
+            { userId: interaction.user.id },
             { balance: 1, transactionLogs: 1 }
         );
 
-        const targetUser = await User.findOne(
-            { userId: target.id, guildId: interaction.guild.id },
+        const targetUser = await EconomyUserData.findOne(
+            { userId: target.id },
             { balance: 1, transactionLogs: 1 }
         );
 
@@ -58,9 +58,8 @@ module.exports = {
         });
 
         if (!targetUser) {
-            await new User({
+            await new EconomyUserData({
                 userId: target.id,
-                guildId: interaction.guild.id,
                 balance: amount,
                 transactionLogs: [{ type: 'transfer_in', amount: amount, timestamp: new Date() }]
             }).save();

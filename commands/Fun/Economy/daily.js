@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -11,12 +11,12 @@ const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('daily')
-        .setDescription('Nhận quà hàng ngày nào'),
+        .setDescription('Nhận quà hàng ngày nào!'),
     category: 'Economy',
     async execute(interaction) {
         try {
-            let user = await User.findOne(
-                { userId: interaction.user.id, guildId: interaction.guild.id },
+            let user = await EconomyUserData.findOne(
+                { userId: interaction.user.id },
                 { balance: 1, 'commandData.lastDaily': 1, 'commandData.dailyStreak': 1, transactionLogs: 1, boosters: 1 }
             );
             const now = new Date();
@@ -59,9 +59,8 @@ module.exports = {
             reward *= multiplier;
 
             if (!user) {
-                user = new User({
+                user = new EconomyUserData({
                     userId: interaction.user.id,
-                    guildId: interaction.guild.id,
                     balance: reward,
                     commandData: { lastDaily: now, dailyStreak: streak },
                     transactionLogs: []

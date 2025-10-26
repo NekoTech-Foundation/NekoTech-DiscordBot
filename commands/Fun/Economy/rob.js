@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -18,7 +18,7 @@ module.exports = {
     async execute(interaction) {
         const target = interaction.options.getUser('target');
 
-        let user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id }, { balance: 1, 'commandData.lastRob': 1, transactionLogs: 1, boosters: 1 });
+        let user = await EconomyUserData.findOne({ userId: interaction.user.id }, { balance: 1, 'commandData.lastRob': 1, transactionLogs: 1, boosters: 1 });
         const now = new Date();
 
         const cooldown = parseDuration(config.Economy.Rob.cooldown);
@@ -39,7 +39,7 @@ module.exports = {
             return interaction.reply({ embeds: [embed] });
         }
 
-        const targetUser = await User.findOne({ userId: target.id, guildId: interaction.guild.id }, { balance: 1, transactionLogs: 1 });
+        const targetUser = await EconomyUserData.findOne({ userId: target.id }, { balance: 1, transactionLogs: 1 });
 
         if (!targetUser || targetUser.balance < config.Economy.Rob.minBalanceToRob) {
             const embed = new EmbedBuilder()

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -16,8 +16,8 @@ module.exports = {
                 .setDescription('View your active boosters')),
     category: 'Economy',
     async execute(interaction) {
-        const user = await User.findOne(
-            { userId: interaction.user.id, guildId: interaction.guild.id },
+        const user = await EconomyUserData.findOne(
+            { userId: interaction.user.id },
             { boosters: 1 }
         );
 

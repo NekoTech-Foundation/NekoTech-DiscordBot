@@ -1,42 +1,15 @@
-# ===========================================================================
-# NekoTechs Bot Configuration
-# If you find any issues, need support, or have a suggestion for the bot, please join our support server and create a ticket, 
-# http://discord.NekoTechsdevelopment.net
-
-# BOT INFORMATION
-Version: "1.8.5" # Don't change this!
-BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.GL_mT_.__e4ZmYFE7mgL116uscFhpxT4qSHY79PlXlo3Q" # If you need help getting your 
+Version: "1.8.5"
+BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.GL_mT_.__e4ZmYFE7mgL116uscFhpxT4qSHY79PlXlo3Q" 
 mongoURI: "mongodb+srv://nguyenhuuquy267_db_user:GcaOubv9VThC6xBf@nekocomicsdiscorddb.xhjdqcb.mongodb.net/?retryWrites=true&w=majority&appName=NekoComicsDiscordDB"
-GuildID: "1388889326309605488" # This is your server's ID, Right click on your server icon and copy ID
+GuildID: "1388889326309605488" 
 BotName: "NekoBuckets"
 LogCommands: false
-Statistics: true  # Set to false to disable statistics in startup
-Timezone: "Asia/Ho_Chi_Minh" # Use https://gist.github.com/diogocapela/12c6617fc87607d11fd62d2a4f42b02a 
+Statistics: true 
+Timezone: "Asia/Ho_Chi_Minh" 
 
 EmbedColors: "#1769FF"
 SuccessEmbedColor: "#2ecc71"
 ErrorEmbedColor: "#E74C3C"
-
-# Only use this if your music doesn't work normally
-Cookie: "" # https://docs.NekoTechsdevelopment.net/our-bots/NekoTechs-bot/music
-
-Dashboard:
-  Enabled: true
-  ClientID: "1372420632628822057"
-  ClientSecret: "BzGgQEciW7bfQc1fW0OtlohgSqVhkLql"
-  Url: "http://free01.asakamc.vn:20042" # http://IP:PORT/api/auth/callback
-  Port: 20042
-  Auth:
-    JWTSecret: "NekoTechProductions1_G0243R712" # Make your own, long password
-    
-  Permissions:
-    Dashboard:
-      Login: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
-      Usage: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
-      Settings: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
-      Embed: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
-      Suggestions: ["1388890272766623784", "1388890276382380183"] # Add your support role IDs here
-
 
 # ===========================================================================
 # EVENT LOGS

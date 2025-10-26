@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js");
+const handleTicketAlertReset = require('./Tickets/handleTicketAlertReset.js');
 //const fs = require('fs');
 //const yaml = require("js-yaml");
 const { getConfig, getLang } = require('../utils/configLoader');
@@ -178,6 +179,8 @@ module.exports = async (client, message) => {
     if (!message.guild || !message.member || message.author.bot) {
         return;
     }
+
+    handleTicketAlertReset(message);
     
     let dmSent = false;
 

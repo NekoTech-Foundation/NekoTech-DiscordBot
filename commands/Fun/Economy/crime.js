@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -16,8 +16,8 @@ module.exports = {
     category: 'Economy',
     async execute(interaction) {
         try {
-            let user = await User.findOne(
-                { userId: interaction.user.id, guildId: interaction.guild.id },
+            let user = await EconomyUserData.findOne(
+                { userId: interaction.user.id },
                 { balance: 1, 'commandData.lastCrime': 1, transactionLogs: 1, boosters: 1 }
             );
 
@@ -41,9 +41,8 @@ module.exports = {
             const success = amount > 0;
 
             if (!user) {
-                user = new User({
+                user = new EconomyUserData({
                     userId: interaction.user.id,
-                    guildId: interaction.guild.id,
                     balance: success ? amount : 0,
                     commandData: { lastCrime: now },
                     transactionLogs: []

@@ -147,9 +147,13 @@ module.exports.run = async (client) => {
     });
 };
 
-async function drawLottery(client, config, mainConfig) {
+async function drawLottery(client, config, mainConfig, guildId = null) {
     try {
-        const guilds = await VeSo.find({ enabled: true });
+        const query = { enabled: true };
+        if (guildId) {
+            query.guildId = guildId;
+        }
+        const guilds = await VeSo.find(query);
         
         for (const guildData of guilds) {
             // Lọc vé chưa được sổ
@@ -300,6 +304,7 @@ async function drawLottery(client, config, mainConfig) {
         console.error('[VeSo] Lỗi khi sổ xố:', error);
     }
 }
+module.exports.drawLottery = drawLottery;
 
 async function checkMissedDraw(client, config, mainConfig) {
     const now = moment().tz(config.settings.timezone);

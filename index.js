@@ -148,7 +148,20 @@ process.on('unhandledRejection', (reason, promise) => {
 
 module.exports = client;
 
-require("./utils.js");
+// Initialize message commands collection
+client.messageCommands = new Map();
+
+// Load economy message command
+const economyCommand = require('./commands/Fun/Economy/economy.js');
+client.messageCommands.set(economyCommand.name, economyCommand);
+if (economyCommand.aliases) {
+    economyCommand.aliases.forEach(alias => {
+        client.messageCommands.set(alias, economyCommand);
+    });
+}
+console.log(`${colors.green('[Message Commands]')} Loaded: !economy`);
+
+require("./utils.js")(client);
 require('./events/antiNuke')(client);
 
 const filePath = './logs.txt';

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require("js-yaml");
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -17,8 +17,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('coinflip')
         .setDescription('Tung đồng xu,thử vận may hôm nay?!')
-        .addIntegerOption(option => option.setName('bet').setDescription('Bet amount').setRequired(true))
-        .addStringOption(option => option.setName('guess').setDescription('Guess the outcome: heads or tails').setRequired(true).addChoices(
+        .addIntegerOption(option => option.setName('bet').setDescription('Mức cược').setRequired(true))
+        .addStringOption(option => option.setName('guess').setDescription('Đoán kết quả: mặt sấp hay mặt ngửa').setRequired(true).addChoices(
             { name: 'Mặt Sấp', value: 'heads' },
             { name: 'Mặt Ngửa', value: 'tails' }
         )),
@@ -27,15 +27,14 @@ module.exports = {
         try {
             const cooldown = parseDuration(config.Economy.Coinflip.cooldown);
 
-            let user = await User.findOne(
-                { userId: interaction.user.id, guildId: interaction.guild.id },
+            let user = await EconomyUserData.findOne(
+                { userId: interaction.user.id },
                 { balance: 1, 'commandData.lastCoinflip': 1, transactionLogs: 1, boosters: 1 }
             );
 
             if (!user) {
-                user = new User({
+                user = new EconomyUserData({
                     userId: interaction.user.id,
-                    guildId: interaction.guild.id,
                     balance: 0,
                     commandData: {},
                     boosters: []

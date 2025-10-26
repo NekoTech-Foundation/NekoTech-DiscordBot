@@ -5,7 +5,7 @@ const path = require('path');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
 const lang = getLang();
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
 
@@ -188,15 +188,13 @@ module.exports = {
                     if (category === 'Vé Số' && vesoAddon && vesoConfig) {
                         const price = item.Price || 0;
                         
-                        let user = await User.findOne(
-                            { userId: i.user.id, guildId: i.guild.id },
-                            { balance: 1, transactionLogs: 1 }
-                        );
+                                            let user = await EconomyUserData.findOne(
+                                                { userId: i.user.id },
+                                                { balance: 1, transactionLogs: 1 }                        );
 
                         if (!user) {
-                            user = new User({ 
+user = new EconomyUserData({ 
                                 userId: i.user.id, 
-                                guildId: i.guild.id, 
                                 balance: 0,
                                 transactionLogs: []
                             });
@@ -238,15 +236,14 @@ module.exports = {
                         return;
                     }
 
-                    let user = await User.findOne(
-                        { userId: i.user.id, guildId: i.guild.id },
+                    let user = await EconomyUserData.findOne(
+                        { userId: i.user.id },
                         { balance: 1, interestRate: 1, purchasedItems: 1, inventory: 1, transactionLogs: 1 }
                     );
 
                     if (!user) {
-                        user = new User({ 
+                        user = new EconomyUserData({ 
                             userId: i.user.id, 
-                            guildId: i.guild.id, 
                             balance: 0, 
                             boosters: [], 
                             purchasedItems: [], 

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, AttachmentBuilder, MessageFlags } = require('discord.js');
 const { createCanvas, loadImage } = require('canvas');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 //const fs = require('fs');
 //const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -26,13 +26,13 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            let user = await User.findOne(
-                { userId: interaction.user.id, guildId: interaction.guild.id },
+            let user = await EconomyUserData.findOne(
+                { userId: interaction.user.id },
                 { balance: 1, 'commandData.lastBlackjack': 1, transactionLogs: 1, boosters: 1 }
             );
 
             if (!user) {
-                user = await initializeUser(interaction.user.id, interaction.guild.id);
+                user = await initializeUser(interaction.user.id);
             } else {
                 ensureUserSchema(user);
                 await user.save();
@@ -79,10 +79,9 @@ module.exports = {
     },
 };
 
-async function initializeUser(userId, guildId) {
-    const newUser = new User({
+async function initializeUser(userId) {
+    const newUser = new EconomyUserData({
         userId,
-        guildId,
         balance: 0,
         commandData: {
             lastBlackjack: null,

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const { getConfig } = require('../../../utils/configLoader');
 const config = getConfig();
 
@@ -37,7 +37,7 @@ module.exports = {
     category: 'Economy',
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
-        const user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+        const user = await EconomyUserData.findOne({ userId: interaction.user.id });
         if (!user || !user.inventory) return;
 
         const choices = user.inventory.map(item => item.itemId);
@@ -48,10 +48,10 @@ module.exports = {
     },
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
-        let user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+        let user = await EconomyUserData.findOne({ userId: interaction.user.id });
 
         if (!user) {
-            user = new User({ userId: interaction.user.id, guildId: interaction.guild.id });
+            user = new EconomyUserData({ userId: interaction.user.id });
             await user.save();
         }
 

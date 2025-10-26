@@ -32697,3 +32697,148 @@ Bot Version: 1.8.517:33 (25-10-2025) - Bot started up - Node.js v22.20.0 - App V
 [10/25/2025, 5:35:43 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v22.20.0
 Bot Version: 1.8.517:35 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 8:13:08 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.520:13 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 8:17:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.520:17 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 8:18:02 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.520:18 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 8:21:37 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.520:21 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:98:19)
+    at executeOperation (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:40:40)
+    at FindCursor._initialize (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\find_cursor.js:62:73)
+    at FindCursor.cursorInit (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:24)
+    at FindCursor.next (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:342:28)
+    at [Symbol.asyncIterator] (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:250:45)
+    at AsyncGenerator.next (<anonymous>)
+    at FindCursor.toArray (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:422:26)
+    at model.Query._find (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\node_modules\mongoose\lib\query.js:2430:27)
+
+
+[10/25/2025, 8:34:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.520:34 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 8:51:21 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.5Uncaught Exception: C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\utils.js:66
+    } catch (error) {
+      ^^^^^
+
+SyntaxError: Unexpected token 'catch'
+    at wrapSafe (node:internal/modules/cjs/loader:1638:18)
+    at Module._compile (node:internal/modules/cjs/loader:1680:20)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (C:\Users\sangt\OneDrive\Documents\GitHub\NekoTech-DiscordBot\index.js:164:1)
+
+
+[10/25/2025, 8:52:06 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.520:52 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 9:33:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.521:33 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 9:34:15 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.521:34 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 9:38:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.521:38 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 9:41:42 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.521:41 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:02:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:02 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:04:37 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:04 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:07:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:07 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:09:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:09 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:10:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:10 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:11:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:11 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:23:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:23 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:23:21 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:23 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:25:25 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:25 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:30:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:30 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:31:15 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:31 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:33:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:33 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/25/2025, 10:34:01 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.20.0
+Bot Version: 1.8.522:34 (25-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5

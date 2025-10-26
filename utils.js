@@ -16,7 +16,7 @@ const config = getConfig();
 const commandConfig = getCommands();
 const lang = getLang();
 
-const client = require('./index.js');
+
 const mongoManager = require('./models/manager.js');
 const UserData = require('./models/UserData.js');
 const ReactionRole = require('./models/ReactionRole');
@@ -35,9 +35,9 @@ const Invite = require('./models/inviteSchema');
 const Transaction = require('./models/Transction');
 const { createAutoBackup } = require('./commands/Utility/backup');
 
-client.commands = new Collection();
+
 client.slashCommands = new Collection();
-client.messageCommands = new Collection();
+
 client.snipes = new Collection();
 client.commandsReady = false;
 
@@ -61,8 +61,8 @@ const BATCH_SIZE = 50;
 //    messages: ['userId', 'messages']
 //};
 
-(async () => {
-    try {
+module.exports = async (client) => {
+        try {
         await mongoManager();
     } catch (error) {
         console.error(`Failed to connect to MongoDB: ${error.message}`);
@@ -94,7 +94,7 @@ const BATCH_SIZE = 50;
     }, LEADERBOARD_UPDATE_INTERVAL);
     setInterval(cleanupLeaderboardCache, LEADERBOARD_UPDATE_INTERVAL);
 
-    client.on('messageCreate', handleMessageCreate);
+    
     client.on('messageDelete', handleMessageDelete);
     client.on('interactionCreate', async (interaction) => handleInteractionCreate(interaction));
     client.on('messageUpdate', handleMessageUpdate);
@@ -116,32 +116,10 @@ const BATCH_SIZE = 50;
         return parseInt(hex.replace('#', ''), 16);
     }
 
-    function handleMessageCreate(message) {
-        if (message.author.bot) return;
-        handleTicketAlertReset(message);
-    }
 
-    async function handleTicketAlertReset(message) {
-        const ticket = await Ticket.findOne({ channelId: message.channel.id, status: 'open' });
 
-        if (ticket && message.author.id === ticket.userId) {
-            ticket.alertTime = null;
-            if (ticket.alertMessageId) {
-                const alertMessage = await message.channel.messages.fetch(ticket.alertMessageId).catch(() => null);
-                if (alertMessage) {
-                    try {
-                        await alertMessage.delete();
-                    } catch (error) {
-                        if (error.code !== 10008) {
-                            console.error('Failed to delete alert message:', error);
-                        }
-                    }
-                }
-                ticket.alertMessageId = null;
-            }
-            await ticket.save();
-        }
-    }
+
+
 
     function handleMessageDelete(message) {
         if (!message.guild || message.author.bot) return;
@@ -1839,4 +1817,4 @@ async function handleInteractionCreate(interaction) {
         }
     }
 
-})();
+};

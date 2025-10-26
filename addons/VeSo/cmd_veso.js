@@ -34,10 +34,7 @@ module.exports = {
                         .setName('channel')
                         .setDescription('Kênh để thông báo kết quả vé số')
                         .setRequired(true)))
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('tbketqua')
-                .setDescription('Ép buộc quay xổ số ngay lập tức (Admin)')),
+        ,
 
     async execute(interaction, client) {
         const configPath = path.join(__dirname, 'config.yml');
@@ -71,9 +68,7 @@ module.exports = {
             case 'setup':
                 await handleSetup(interaction, config);
                 break;
-            case 'tbketqua':
-                await handleForceDraw(interaction, config, client);
-                break;
+            
         }
     }
 };
@@ -246,192 +241,6 @@ async function handleSetup(interaction, config) {
     await interaction.reply({ embeds: [embed] });
 }
 
-async function handleForceDraw(interaction, config, client) {
-    const guildId = interaction.guild.id;
-    
-    await interaction.deferReply({ ephemeral: true });
-    
-    try {
-        // Import hàm drawLottery từ veso.js
-        const vesoModule = require('./veso.js');
-        const { getConfig: getMainConfig } = require('../../utils/configLoader');
-        const mainConfig = getMainConfig();
-        
-        // Gọi hàm sổ xố cho guild hiện tại
-        const vesoData = await VeSo.findOne({ guildId });
-        
-        if (!vesoData || !vesoData.enabled) {
-            return interaction.editReply({
-                content: config.errors.disabled
-            });
-        }
-        
-        const undrawnTickets = vesoData.tickets.filter(t => !t.drawn);
-        
-        if (undrawnTickets.length === 0) {
-            return interaction.editReply({
-                content: '❌ Không có vé nào để sổ!'
-            });
-        }
-        
-        // Thực hiện sổ xố
-        await performDraw(client, config, mainConfig, vesoData);
-        
-        await interaction.editReply({
-            content: '✅ Đã thực hiện sổ xố thành công! Kiểm tra kết quả bằng `/veso thongbao`'
-        });
-        
-    } catch (error) {
-        console.error('[VeSo Force Draw] Error:', error);
-        await interaction.editReply({
-            content: '❌ Có lỗi xảy ra khi thực hiện sổ xố: ' + error.message
-        });
-    }
-}
 
-async function performDraw(client, config, mainConfig, guildData) {
-    const UserData = require('../../models/UserData');
-    
-    // Lọc vé chưa được sổ
-    const undrawnTickets = guildData.tickets.filter(t => !t.drawn);
-    
-    if (undrawnTickets.length === 0) {
-        return;
-    }
-    
-    // Nhóm vé theo mệnh giá
-    const ticketsByPrice = {};
-    config.settings.ticket_prices.forEach(price => {
-        ticketsByPrice[price] = undrawnTickets.filter(t => t.price === price);
-    });
-    
-    // Tạo số trúng cho mỗi mệnh giá
-    const winningNumbers = [];
-    const winners = [];
-    
-    for (const price of config.settings.ticket_prices.sort((a, b) => a - b)) {
-        if (ticketsByPrice[price].length === 0) continue;
-        
-        // Tạo số ngẫu nhiên 4 chữ số
-        const winningNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        winningNumbers.push({ price, numbers: winningNumber });
-        
-        // Tìm người thắng
-        const winningTickets = ticketsByPrice[price].filter(t => t.numbers === winningNumber);
-        
-        for (const ticket of winningTickets) {
-            const prize = Math.floor(ticket.price * config.settings.win_multiplier);
-            
-            // Cập nhật vé
-            const ticketIndex = guildData.tickets.findIndex(t => 
-                t.userId === ticket.userId && 
-                t.numbers === ticket.numbers && 
-                t.price === ticket.price && 
-                !t.drawn
-            );
-            
-            if (ticketIndex !== -1) {
-                guildData.tickets[ticketIndex].drawn = true;
-                guildData.tickets[ticketIndex].won = true;
-                guildData.tickets[ticketIndex].prize = prize;
-            }
-            
-            // Thêm tiền cho người thắng
-            try {
-                let userData = await UserData.findOne({ 
-                    userId: ticket.userId, 
-                    guildId: guildData.guildId 
-                });
-                
-                if (userData) {
-                    userData.balance += prize;
-                    await userData.save();
-                }
-            } catch (error) {
-                console.error(`[VeSo] Lỗi khi cập nhật tiền cho user ${ticket.userId}:`, error);
-            }
-            
-            winners.push({
-                userId: ticket.userId,
-                price: ticket.price,
-                numbers: ticket.numbers,
-                prize: prize
-            });
-            
-            // Gửi thông báo cho người thắng
-            try {
-                const user = await client.users.fetch(ticket.userId);
-                const winEmbed = new EmbedBuilder()
-                    .setColor(config.settings.colors.winner)
-                    .setTitle('🎉 Chúc Mừng! Bạn Đã Trúng Số!')
-                    .setDescription(
-                        `**Mệnh giá:** ${ticket.price} ${mainConfig.Currency}\n` +
-                        `**Số trúng:** \`${ticket.numbers}\`\n` +
-                        `**Tiền thắng:** ${prize} ${mainConfig.Currency}`
-                    )
-                    .setTimestamp();
-                
-                await user.send({ embeds: [winEmbed] }).catch(() => {});
-            } catch (error) {
-                console.error(`[VeSo] Không thể gửi DM cho user ${ticket.userId}`);
-            }
-        }
-    }
-    
-    // Đánh dấu tất cả vé chưa trúng là đã sổ
-    for (let i = 0; i < guildData.tickets.length; i++) {
-        if (!guildData.tickets[i].drawn) {
-            guildData.tickets[i].drawn = true;
-            guildData.tickets[i].won = false;
-        }
-    }
-    
-    // Lưu lịch sử
-    guildData.drawHistory.push({
-        date: new Date(),
-        winningNumbers: winningNumbers,
-        winners: winners
-    });
-    
-    await guildData.save();
-    
-    // Gửi thông báo công khai
-    if (guildData.notificationChannel) {
-        try {
-            const channel = await client.channels.fetch(guildData.notificationChannel);
-            
-            let winnersText = '';
-            if (winners.length === 0) {
-                winnersText = 'Không có người thắng cuộc hôm nay.';
-            } else {
-                for (const winner of winners) {
-                    const user = await client.users.fetch(winner.userId).catch(() => null);
-                    const username = user ? user.username : 'Unknown User';
-                    winnersText += `${config.settings.winner_emoji} **${username}** - Vé: \`${winner.numbers}\` (${winner.price}) - Thắng: **${winner.prize} ${mainConfig.Currency}**\n`;
-                }
-            }
-            
-            const winningNumbersText = winningNumbers.map(wn => {
-                return `💰 **Mệnh giá ${wn.price}:** \`${wn.numbers}\``;
-            }).join('\n');
-            
-            const announceEmbed = new EmbedBuilder()
-                .setColor(config.settings.colors.winner)
-                .setTitle(config.messages.draw_result.title)
-                .setDescription(
-                    config.messages.draw_result.description
-                        .replace('{date}', new Date().toLocaleDateString('vi-VN'))
-                        .replace('{winning_numbers}', winningNumbersText)
-                        .replace('{winners}', winnersText)
-                )
-                .setFooter({ text: config.messages.draw_result.footer })
-                .setTimestamp();
-            
-            await channel.send({ embeds: [announceEmbed] });
-        } catch (error) {
-            console.error(`[VeSo] Không thể gửi thông báo đến kênh:`, error);
-        }
-    }
-    
-    console.log(`[VeSo] Đã sổ xố cho guild ${guildData.guildId} - ${winners.length} người thắng`);
-}
+
+

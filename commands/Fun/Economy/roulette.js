@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 //const fs = require('fs');
 //const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -13,7 +13,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('roulette')
         .setDescription('Chơi 1 Game')
-        .addIntegerOption(option => option.setName('bet').setDescription('Bet amount').setRequired(true))
+        .addIntegerOption(option => option.setName('bet').setDescription('Mức cược').setRequired(true))
         .addStringOption(option =>
             option.setName('color')
                 .setDescription('Chọn màu')
@@ -26,15 +26,14 @@ module.exports = {
         ),
     category: 'Economy',
     async execute(interaction) {
-        let user = await User.findOne(
-            { userId: interaction.user.id, guildId: interaction.guild.id },
+        let user = await EconomyUserData.findOne(
+            { userId: interaction.user.id },
             { balance: 1, 'commandData.lastRoulette': 1, transactionLogs: 1, boosters: 1 }
         );
 
         if (!user) {
-            user = new User({
+            user = new EconomyUserData({
                 userId: interaction.user.id,
-                guildId: interaction.guild.id,
                 balance: 0,
                 commandData: {},
                 boosters: [],

@@ -1,6 +1,6 @@
 const { AttachmentBuilder, SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlags } = require('discord.js');
 const { createCanvas, loadImage } = require('canvas');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 //const fs = require('fs');
 //const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -157,12 +157,12 @@ module.exports = {
         const type = interaction.options.getString('type');
         const targetUser = userOption || interaction.user;
 
-        const cacheKey = `${targetUser.id}-${interaction.guild.id}`;
+        const cacheKey = `${targetUser.id}`;
         const now = Date.now();
         
         const projection = { balance: 1, bank: 1 };
-        let user = await User.findOne(
-            { userId: targetUser.id, guildId: interaction.guild.id }, 
+let user = await EconomyUserData.findOne(
+            { userId: targetUser.id }, 
             projection
         ).lean();
         
@@ -179,8 +179,8 @@ module.exports = {
             if (transactionCache.has(cacheKey)) {
                 transactionLogs = transactionCache.get(cacheKey).data;
             } else {
-                const logData = await User.findOne(
-                    { userId: targetUser.id, guildId: interaction.guild.id },
+                const logData = await EconomyUserData.findOne(
+                    { userId: targetUser.id },
                     { transactionLogs: { $slice: -MAX_LOGS_DISPLAY } }
                 ).lean();
                 

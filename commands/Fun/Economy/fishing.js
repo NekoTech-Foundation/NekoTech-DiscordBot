@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const { getConfig, getLang } = require('../../../utils/configLoader');
 const parseDuration = require('./Utility/parseDuration');
 const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
@@ -62,10 +62,10 @@ module.exports = {
                 return interaction.reply({ content: 'Địa điểm không hợp lệ.', ephemeral: true });
             }
 
-            let user = await User.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+            let user = await EconomyUserData.findOne({ userId: interaction.user.id });
 
             if (!user) {
-                user = new User({ userId: interaction.user.id, guildId: interaction.guild.id });
+                user = new EconomyUserData({ userId: interaction.user.id });
             }
 
             // --- Equipment and Boosters ---

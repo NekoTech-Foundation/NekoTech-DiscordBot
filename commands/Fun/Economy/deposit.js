@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -18,8 +18,8 @@ module.exports = {
         try {
             const amount = interaction.options.getInteger('amount');
 
-            const user = await User.findOne(
-                { userId: interaction.user.id, guildId: interaction.guild.id },
+            const user = await EconomyUserData.findOne(
+                { userId: interaction.user.id },
                 { balance: 1, bank: 1, transactionLogs: 1 }
             );
 

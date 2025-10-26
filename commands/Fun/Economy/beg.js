@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const User = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -15,8 +15,8 @@ module.exports = {
         .setDescription('Đi ăn xin... đúng vậy,ăn xin kiếm xèng'),
     category: 'Economy',
     async execute(interaction) {
-        let user = await User.findOne(
-            { userId: interaction.user.id, guildId: interaction.guild.id },
+        let user = await EconomyUserData.findOne(
+            { userId: interaction.user.id },
             {
                 balance: 1,
                 commandData: 1,
@@ -42,7 +42,7 @@ module.exports = {
         coins *= multiplier;
 
         if (!user) {
-            user = new User({ userId: interaction.user.id, guildId: interaction.guild.id, balance: coins, commandData: { lastBeg: now } });
+            user = new EconomyUserData({ userId: interaction.user.id, balance: coins, commandData: { lastBeg: now } });
         } else {
             user.balance += coins;
             user.commandData.lastBeg = now;
