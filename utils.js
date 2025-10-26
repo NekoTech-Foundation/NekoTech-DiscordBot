@@ -105,6 +105,15 @@ module.exports = async (client) => {
     client.on('error', handleError);
     client.on('warn', handleWarn);
 
+    const ticketsCommand = require('./commands/Utility/tickets.js');
+    client.messageCommands.set(ticketsCommand.name, ticketsCommand);
+    if (ticketsCommand.aliases) {
+        ticketsCommand.aliases.forEach(alias => {
+            client.messageCommands.set(alias, ticketsCommand);
+        });
+    }
+    console.log(`${colors.green('[Message Commands]')} Loaded: !tickets`);
+
     const panelHandlers = {};
     const interactionDebounce = new Map();
 
@@ -1069,6 +1078,7 @@ async function handleInteractionCreate(interaction) {
         const items = fs.readdirSync(directory, { withFileTypes: true });
 
         for (const item of items) {
+            if (item.name === 'tickets.js') continue;
             const itemPath = path.join(directory, item.name);
 
             if (item.isDirectory()) {

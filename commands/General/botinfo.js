@@ -11,7 +11,7 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('botinfo')
-        .setDescription('Thong tin cụ thể về bot(CPU,RAM,USAGE...)'),
+        .setDescription('Thong tin cụ thể về bot(CPU,RAM...)'),
     category: 'General',
     async execute(interaction) {
         try {
@@ -79,7 +79,7 @@ module.exports = {
                         value: lang.BotInfo.Embed.Fields.Statistics.Value
                             .replace('{users}', bot.users.cache.size)
                             .replace('{channels}', bot.channels.cache.size)
-                            .replace('{commands}', bot.commands.size)
+                            .replace('{commands}', bot.slashCommands.size)
                             .replace('{uptime}', `<t:${uptimeTimestamp}:R>`),
                         inline: true
                     },

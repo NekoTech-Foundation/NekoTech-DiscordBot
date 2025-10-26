@@ -349,20 +349,20 @@ TicketCreation:
 
   TicketType1:
     Followup:
-      Message: "Cảm ơn {user} về yêu cầu mua hàng của bạn! Đội ngũ bán hàng của chúng tôi sẽ sớm hỗ trợ bạn."
+      Message: "Cảm ơn {user} về yêu cầu mua hàng của bạn! Đội ngũ của chúng tôi sẽ sớm hỗ trợ bạn."
     Embed:
       Title: "️ Phiếu Hỗ trợ Mua hàng Mới"
       Description:
-        - "Chào mừng đến với bộ phận Hỗ trợ Bán hàng, {user}!"
+        - "Chào mừng đến với bộ phận Hỗ trợ, {user}!"
         - ""
         - "**Loại Phiếu:** {ticketType}"
         - "**Thời gian Phản hồi Dự kiến:** Trong vòng 12 giờ"
         - "**Được xử lý bởi:** {claimer}"
         - ""
         - "{questions}"
-        - "Đội ngũ bán hàng của chúng tôi sẽ sớm hỗ trợ bạn."
+        - "Đội ngũ của chúng tôi sẽ sớm hỗ trợ bạn."
       Footer:
-        Text: "NekoTech | Hỗ trợ Bán hàng"
+        Text: "NekoTech Foundations | Hỗ trợ"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#00FF00"
       Thumbnail: "{userIcon}"
@@ -492,6 +492,40 @@ TicketTypes:
     Questions: 
       - RequiredIMG:
           Question: "Gửi File Drive truyện bạn dịch lên nha!"
+          Placeholder: ""
+          Style: "Short"
+          Required: true
+          maxLength: 1000
+  TicketType3:
+    Enabled: true
+    Panel: "Panel1"
+    Name: "Báo Lỗi Bot Discord"
+    ChannelName: "{ticket-id}-botbug-{user}-{priority}"
+    ChannelTopic: "Danh mục: {ticketType} | Người dùng: {userid} | Ưu tiên: {priority}"
+    CategoryID: "1427505637105074187"
+    AutoAlert: "12h"
+    ArchiveCategory: ""
+    SupportRole: ["1388890276382380183"]
+    UserRole: ["1388890274436223128"] 
+    TagSupport: true
+    TagCreator: false
+    RestrictDeletion: true
+    Claiming:
+      Enabled: true
+      Button:
+        Name: "Nhận Phiếu"
+        Emoji: "🎫"
+        Style: "Secondary"
+      RestrictResponse: true
+      AnnounceClaim: true
+    Button:
+      Name: "Báo Lỗi Bot Discord"
+      Emoji: "💻"
+      Style: "Primary"
+      Description: "Báo Lỗi về Bot Discord,Phát sinh lỗi, v.v..."
+    Questions: 
+      - Bug:
+          Question: "Lỗi bạn gặp là gì,hãy gửi ảnh lên nha!"
           Placeholder: ""
           Style: "Short"
           Required: true

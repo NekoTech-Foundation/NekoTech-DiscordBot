@@ -1396,9 +1396,23 @@ async function createTicket(client, interaction, ticketTypeKey, questions, selec
 
                 if (workingEmbedConfig.Title) workingEmbed.setTitle(workingEmbedConfig.Title);
                 if (workingEmbedConfig.Description) {
+                    let nextWorkingDay = currentTime.clone();
+                    let schedule;
+                    while (true) {
+                        nextWorkingDay.add(1, 'day');
+                        const dayName = nextWorkingDay.format('dddd');
+                        if (!config.WorkingHours.NonWorkingDays.includes(dayName)) {
+                            schedule = config.WorkingHours.Schedule[dayName];
+                            if (schedule) break;
+                        }
+                    }
+                    const [start, end] = schedule.split('-');
+                    const startTime = moment.tz(start, 'HH:mm', config.WorkingHours.Timezone);
+                    const endTime = moment.tz(end, 'HH:mm', config.WorkingHours.Timezone);
+
                     workingEmbed.setDescription(workingEmbedConfig.Description.join('\n')
-                        .replace('{workinghours_start}', 'N/A')
-                        .replace('{workinghours_end}', 'N/A'));
+                        .replace('{workinghours_start}', `<t:${startTime.unix()}:t>`)
+                        .replace('{workinghours_end}', `<t:${endTime.unix()}:t>`));
                 }
                 if (workingEmbedConfig.Color) workingEmbed.setColor(workingEmbedConfig.Color);
                 if (workingEmbedConfig.Footer && workingEmbedConfig.Footer.Text) {
