@@ -1627,6 +1627,73 @@ Store:
 
   Equipment: # Trang bị
 
+  "Hạt Giống":
+    1:
+      Name: "Ớt"
+      Description: "-# Hạt giống ớt"
+      Price: 500
+      Type: "Seed"
+    2:
+      Name: "Lúa"
+      Description: "-# Hạt giống lúa"
+      Price: 500
+      Type: "Seed"
+    3:
+      Name: "Dâu Tây"
+      Description: "-# Hạt giống dâu tây"
+      Price: 800
+      Type: "Seed"
+    4:
+      Name: "Ngô"
+      Description: "-# Hạt giống ngô"
+      Price: 800
+      Type: "Seed"
+    5:
+      Name: "Cà Chua"
+      Description: "-# Hạt giống cà chua"
+      Price: 1000
+      Type: "Seed"
+    6:
+      Name: "Đào"
+      Description: "-# Hạt giống đào"
+      Price: 1000
+      Type: "Seed"
+    7:
+      Name: "Khoai Mì"
+      Description: "-# Hạt giống khoai mì"
+      Price: 1500
+      Type: "Seed"
+    8:
+      Name: "Mía"
+      Description: "-# Hạt giống mía"
+      Price: 1500
+      Type: "Seed"
+    9:
+      Name: "Khoai Tây"
+      Description: "-# Hạt giống khoai tây"
+      Price: 3000
+      Type: "Seed"
+    10:
+      Name: "Dưa Gang"
+      Description: "-# Hạt giống dưa gang"
+      Price: 3000
+      Type: "Seed"
+    11:
+      Name: "Cà Rốt"
+      Description: "-# Hạt giống cà rốt"
+      Price: 5000
+      Type: "Seed"
+    12:
+      Name: "Cải Ngọt"
+      Description: "-# Hạt giống cải ngọt"
+      Price: 5000
+      Type: "Seed"
+    13:
+      Name: "Mít"
+      Description: "-# Hạt giống mít"
+      Price: 15000
+      Type: "Seed"
+
   "Vé Số":
     1:
       Name: "Vé Số 50"
@@ -1676,6 +1743,7 @@ Store:
     - "Vật phẩm tăng cường"
     - "Vật phẩm"
     - "Trang bị"
+    - "Hạt Giống"
 
 webhooks:
   - url: "https://discord.com/api/webhooks/your_webhook_id_1/your_webhook_token_1"

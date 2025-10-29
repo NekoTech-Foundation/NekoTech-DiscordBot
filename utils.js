@@ -19,6 +19,7 @@ const lang = getLang();
 
 const mongoManager = require('./models/manager.js');
 const UserData = require('./models/UserData.js');
+const EconomyUserData = require('./models/EconomyUserData.js');
 const ReactionRole = require('./models/ReactionRole');
 const packageJson = require('./package.json');
 const startGiveawayScheduler = require('./events/Giveaways/giveawayScheduler.js');
@@ -96,7 +97,6 @@ module.exports = async (client) => {
 
     
     client.on('messageDelete', handleMessageDelete);
-    client.on('interactionCreate', async (interaction) => handleInteractionCreate(interaction));
     client.on('messageUpdate', handleMessageUpdate);
     client.on('guildMemberAdd', handleGuildMemberAdd);
     client.on('messageReactionAdd', handleReactionAdd);
@@ -641,11 +641,14 @@ async function handleInteractionCreate(interaction) {
             const folderName = file.match(/\/addons\/([^/]+)/) ? file.match(/\/addons\/([^/]+)/)[1] : 'unknown';
 
             try {
+                console.log('Loading addon:', absolutePath);
                 let addon = require(absolutePath);
                 if (addon.data) { // Slash command or context menu command
                     if (addon.data.toJSON && typeof addon.data.toJSON === 'function') {
-                        global.slashCommands.push(addon.data.toJSON());
-                        client.slashCommands.set(addon.data.name, addon);
+                        if (commandConfig[addon.data.name]) {
+                            global.slashCommands.push(addon.data.toJSON());
+                            client.slashCommands.set(addon.data.name, addon);
+                        }
                     }
                 } else if (addon.name && addon.run && typeof addon.run === 'function') { // Message command
                     client.messageCommands.set(addon.name, addon);
@@ -1680,17 +1683,17 @@ async function handleInteractionCreate(interaction) {
         const nextInterestTime = getNextInterestTime();
     
         setTimeout(async () => {
-            const users = await UserData.find({});
+            const dailyInterestRate = Math.random() * (0.045 - 0.025) + 0.025;
+            const users = await EconomyUserData.find({ bank: { $gt: 0 } });
     
             for (const user of users) {
-                const interestRate = user.interestRate !== null ? user.interestRate : config.Economy.defaultInterestRate;
-                let interest = user.bank * interestRate;
+                let interest = Math.floor(user.bank * dailyInterestRate);
     
                 if (config.Economy.maxInterestEarning && config.Economy.maxInterestEarning > 0) {
                     interest = Math.min(interest, config.Economy.maxInterestEarning);
                 }
     
-                await UserData.findOneAndUpdate(
+                const updatedUser = await EconomyUserData.findOneAndUpdate(
                     { _id: user._id },
                     {
                         $inc: { bank: interest },
@@ -1701,8 +1704,26 @@ async function handleInteractionCreate(interaction) {
                                 timestamp: new Date()
                             }
                         }
-                    }
+                    },
+                    { new: true }
                 );
+
+                try {
+                    const discordUser = await client.users.fetch(user.userId);
+                    const interestEmbed = new EmbedBuilder()
+                        .setColor('#00FF00')
+                        .setTitle('Lãi Tiết Kiệm Hàng Ngày')
+                        .setDescription(`💰 Bạn đã nhận được lãi suất hàng ngày!`)
+                        .addFields(
+                            { name: 'Tiền Lãi', value: `**${interest.toLocaleString('en-US')}** 🪙` },
+                            { name: 'Tỉ Lệ Lãi Suất', value: `${(dailyInterestRate * 100).toFixed(2)}%` },
+                            { name: 'Số Dư Ngân Hàng Mới', value: `**${updatedUser.bank.toLocaleString('en-US')}** 🪙` }
+                        )
+                        .setTimestamp();
+                    await discordUser.send({ embeds: [interestEmbed] });
+                } catch (error) {
+                    console.error(`Could not send interest DM to ${user.userId}.`, error);
+                }
             }
     
             startInterestScheduler();

@@ -376,6 +376,14 @@ user = new EconomyUserData({
                             });
                         }
                     }
+                    // Handle Seed items
+                    else if (item.Type === 'Seed') {
+                        console.log('process.cwd():', process.cwd());
+                        const farmUtilsPath = path.join(process.cwd(), 'addons', 'Farming', 'farmUtils.js');
+                        console.log('farmUtilsPath:', farmUtilsPath);
+                        const { addToFarm } = require(farmUtilsPath);
+                        await addToFarm(i.user.id, item.Name, 1, 'seed');
+                    }
 
                     await user.save();
                     

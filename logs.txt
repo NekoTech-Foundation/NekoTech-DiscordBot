@@ -32892,3 +32892,275 @@ Bot Version: 1.8.518:06 (26-10-2025) - Bot started up - Node.js v22.20.0 - App V
 [10/26/2025, 6:12:24 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v22.20.0
 Bot Version: 1.8.518:12 (26-10-2025) - Bot started up - Node.js v22.20.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:45:19 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:45 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:45:41 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:45 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/operations/execute_operation.js:98:19)
+    at executeOperation (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/operations/execute_operation.js:40:40)
+    at FindCursor._initialize (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/find_cursor.js:62:73)
+    at FindCursor.cursorInit (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:24)
+    at FindCursor.next (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:28)
+    at [Symbol.asyncIterator] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:250:45)
+    at AsyncGenerator.next (<anonymous>)
+    at FindCursor.toArray (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:422:26)
+    at model.Query._find (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongoose/lib/query.js:2430:27)
+
+
+[10/29/2025, 6:47:55 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:48 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:49:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:49 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:50:29 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:50 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/operations/execute_operation.js:98:19)
+    at executeOperation (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/operations/execute_operation.js:40:40)
+    at FindCursor._initialize (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/find_cursor.js:62:73)
+    at FindCursor.cursorInit (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:666:24)
+    at FindCursor.next (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:342:28)
+    at [Symbol.asyncIterator] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:250:45)
+    at AsyncGenerator.next (<anonymous>)
+    at FindCursor.toArray (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongodb/lib/cursor/abstract_cursor.js:422:26)
+    at model.Query._find (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/node_modules/mongoose/lib/query.js:2430:27)
+
+
+[10/29/2025, 6:53:47 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:54 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:55:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:55 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:55:51 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:55 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 6:57:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.518:57 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:00:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:00 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:03:39 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:03 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:09:40 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:09 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:13:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:13 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:17:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:17 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:19:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:19 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:22:13 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:22 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:23:51 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:23 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:26:21 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:26 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:29:51 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:29 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:31:44 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:31 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:34:21 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:34 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:37:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:37 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:41:58 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:42 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:44:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:44 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:51:21 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:51 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:54:39 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:54 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:56:06 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:56 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 7:58:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.519:58 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:00:33 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:00 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:05:16 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:05 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:06:30 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:06 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:07:46 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:07 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:08:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:08 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:10:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:10 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:14:57 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:15 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:20:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:20 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:30:53 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:30 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: ReferenceError: UserData is not defined
+    at Timeout.checkAndRemoveExpiredTempBans [as _onTimeout] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/utils.js:1319:9)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+Unhandled Rejection at: [object Promise], reason: ReferenceError: UserData is not defined
+    at Timeout.checkAndRemoveExpiredTempBans [as _onTimeout] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/utils.js:1319:9)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+Unhandled Rejection at: [object Promise], reason: ReferenceError: UserData is not defined
+    at Timeout.checkAndRemoveExpiredTempBans [as _onTimeout] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/utils.js:1319:9)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+Unhandled Rejection at: [object Promise], reason: ReferenceError: UserData is not defined
+    at Timeout.checkAndRemoveExpiredTempBans [as _onTimeout] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/utils.js:1319:9)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+
+
+[10/29/2025, 8:35:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:35 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: ReferenceError: UserData is not defined
+    at Timeout.checkAndRemoveExpiredTempBans [as _onTimeout] (/home/heiznerd/Documents/GitHub/NekoTech-DiscordBot/utils.js:1319:9)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+
+
+[10/29/2025, 8:37:00 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:37 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:44:21 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:44 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:44:39 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:44 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:46:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:46 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:48:03 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:48 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:51:00 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:51 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:53:00 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:53 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[10/29/2025, 8:56:01 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v22.21.0
+Bot Version: 1.8.520:56 (29-10-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5

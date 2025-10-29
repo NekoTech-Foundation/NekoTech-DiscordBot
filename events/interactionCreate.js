@@ -615,6 +615,36 @@ async function sendArchiveEmbed(interaction, uniqueId, userId) {
 }
 
 module.exports = async (client, interaction) => {
+    if (interaction.isCommand()) {
+        const command = client.slashCommands.get(interaction.commandName);
+        if (!command) return;
+        try {
+            await command.execute(interaction, client);
+        } catch (error) {
+            console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
+            
+            // Try to send error message, but handle expired interactions gracefully
+            try {
+                if (!interaction.replied && !interaction.deferred) {
+                    await interaction.reply({ 
+                        content: 'There was an error while executing this command!', 
+                        flags: MessageFlags.Ephemeral 
+                    });
+                } else if (interaction.deferred) {
+                    await interaction.editReply({ 
+                        content: 'There was an error while executing this command!'
+                    });
+                }
+            } catch (replyError) {
+                // Only log if it's not an expired interaction error
+                if (replyError.code !== 10062) {
+                    console.error('[ERROR] Failed to send error message:', replyError);
+                }
+                // If interaction expired (10062), silently ignore
+            }
+        }
+        return;
+    }
     try {
         if (interaction.isButton()) {
             if (interaction.customId === 'check_percent' || interaction.customId === 'show_entrants') {

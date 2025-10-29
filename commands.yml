@@ -37,6 +37,7 @@ blackjack: true
 crime: true
 daily: true
 deposit: true
+tietkiem: true
 rob: true
 slot: true
 transfer: true
@@ -109,3 +110,6 @@ reload: true
 
 # Addon Commands - Commands added by addons
 test: true
+farm: true
+savings: true
+sell: true

@@ -12,11 +12,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('deposit')
         .setDescription('Gửi Xu vào ngân hàng')
-        .addIntegerOption(option => option.setName('amount').setDescription('Số lượng bạn muốn gửi').setRequired(true)),
+        .addIntegerOption(option => option.setName('sotien').setDescription('Số lượng bạn muốn gửi').setRequired(true)),
     category: 'Economy',
     async execute(interaction) {
         try {
-            const amount = interaction.options.getInteger('amount');
+            const amount = interaction.options.getInteger('sotien');
 
             const user = await EconomyUserData.findOne(
                 { userId: interaction.user.id },

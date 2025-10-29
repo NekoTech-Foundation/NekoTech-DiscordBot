@@ -12,10 +12,10 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('withdraw')
         .setDescription('Rút xu khỏi TK Ngân Hàng')
-        .addIntegerOption(option => option.setName('amount').setDescription('Số xu muốn rút').setRequired(true)),
+        .addIntegerOption(option => option.setName('sotien').setDescription('Số xu muốn rút').setRequired(true)),
     category: 'Economy',
     async execute(interaction) {
-        const amount = interaction.options.getInteger('amount');
+        const amount = interaction.options.getInteger('sotien');
 
         if (amount <= 0) {
             return interaction.reply({ content: lang.Economy.Messages.invalidAmount, flags: MessageFlags.Ephemeral });
