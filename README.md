@@ -1,7 +1,7 @@
 Start
 
 npm install
-Nodejs 20+
+(Nodejs 20+)
 
 Usage
 
