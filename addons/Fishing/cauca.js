@@ -5,6 +5,8 @@ const { loadConfig, getUserFishing } = require('./fishingUtils');
 const EconomyUserData = require('../../models/EconomyUserData');
 
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
+const fishingCooldowns = new Set();
+const COOLDOWN_SECONDS = 10;
 
 function getBaitConfigByName(baitName) {
     const config = loadConfig();
@@ -50,8 +52,7 @@ function getCatch(location, config, usedBaitKey) {
                         const foundFish = hourlyData[rarity];
                         return { ...foundFish, rarity: rarity };
                     }
-                } catch (error) { /* Fall through to general pool */ }
-            }
+                } catch (error) { /* Fall through to general pool */ }n            }
 
             fishPool = config.fish_pools[rarity]?.filter(fish => location.fish.includes(fish.name)) || [];
             
@@ -135,6 +136,13 @@ module.exports = {
         const config = loadConfig();
 
         if (subcommand === 'fish') {
+            if (fishingCooldowns.has(userId)) {
+                return interaction.reply({
+                    content: `Bạn đang trong thời gian chờ! Vui lòng đợi ${COOLDOWN_SECONDS} giây giữa mỗi lần câu.`,
+                    ephemeral: true 
+                });
+            }
+
             const locationKey = interaction.options.getString('location');
             const location = config.locations[locationKey];
             if (!location) {
@@ -152,6 +160,11 @@ module.exports = {
             if (equippedRod.durability <= 0) {
                 return interaction.reply({ content: `Cần câu **${equippedRod.name}** của bạn đã hỏng. Hãy dùng /fixcancau để sửa hoặc mua một cây mới tại /store.`, ephemeral: true });
             }
+
+            fishingCooldowns.add(userId);
+            setTimeout(() => {
+                fishingCooldowns.delete(userId);
+            }, COOLDOWN_SECONDS * 1000);
 
             await interaction.deferReply();
 
