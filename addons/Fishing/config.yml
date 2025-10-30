@@ -56,10 +56,10 @@ rarity_chances:
 # Price per KG when selling fish.
 rarity_prices_per_kg:
   common: 1
-  uncommon: 50
-  rare: 200
-  epic: 1000
-  legendary: 5000
+  uncommon: 5
+  rare: 20
+  epic: 100
+  legendary: 500
 
 # -- Locations --
 # key: The unique identifier for the location.
