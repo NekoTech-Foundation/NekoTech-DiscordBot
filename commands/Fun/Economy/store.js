@@ -540,7 +540,62 @@ user = new EconomyUserData({
                         const itemIndex = parseInt(i.values[0]);
                         const item = items[itemIndex];
 
-                        if (item.Type === 'Seed') {
+                        if (category === 'Mồi Câu') {
+                            const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
+                            const modal = new ModalBuilder()
+                                .setCustomId(`bait_buy_${item.Key}`)
+                                .setTitle(`Mua ${item.Name}`);
+                            
+                            const quantityInput = new TextInputBuilder()
+                                .setCustomId('quantity')
+                                .setLabel('Nhập số lượng muốn mua')
+                                .setStyle(TextInputStyle.Short)
+                                .setPlaceholder('1-100')
+                                .setRequired(true);
+
+                            modal.addComponents(new ModalActionRow().addComponents(quantityInput));
+                            await i.showModal(modal);
+
+                            const filter = (modalInteraction) => modalInteraction.customId === `bait_buy_${item.Key}` && modalInteraction.user.id === i.user.id;
+                            try {
+                                const modalSubmission = await i.awaitModalSubmit({ filter, time: 60000 });
+
+                                const quantity = parseInt(modalSubmission.fields.getTextInputValue('quantity'));
+                                if (isNaN(quantity) || quantity <= 0) {
+                                    return modalSubmission.reply({ content: 'Số lượng không hợp lệ.', ephemeral: true });
+                                }
+
+                                let user = await EconomyUserData.findOne({ userId: i.user.id });
+                                if (!user) user = new EconomyUserData({ userId: i.user.id, balance: 0 });
+
+                                const itemPrice = item.Price || 0;
+                                const totalPrice = itemPrice * quantity;
+
+                                if (user.balance < totalPrice) {
+                                    return modalSubmission.reply({ content: lang.Economy?.Messages?.noMoney || 'Bạn không đủ tiền.', ephemeral: true });
+                                }
+
+                                const userFishing = await getUserFishing(i.user.id);
+                                const fishingConfig = loadFishingConfig();
+                                const baitInfo = fishingConfig.baits[item.Key];
+
+                                user.balance -= totalPrice;
+                                const existingBait = userFishing.baits.find(b => b.name === baitInfo.name);
+                                if (existingBait) {
+                                    existingBait.quantity += quantity;
+                                } else {
+                                    userFishing.baits.push({ name: baitInfo.name, quantity: quantity });
+                                }
+
+                                await user.save();
+                                await userFishing.save();
+
+                                await modalSubmission.reply({ content: `Bạn đã mua thành công ${quantity} ${item.Name}.`, ephemeral: true });
+
+                            } catch (err) {
+                                console.log('Bait purchase modal timed out or failed.');
+                            }
+                        } else if (item.Type === 'Seed') {
                             const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
                             
                             const modal = new ModalBuilder()

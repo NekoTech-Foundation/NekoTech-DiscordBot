@@ -46,11 +46,11 @@ baits:
 repair_cost_multiplier: 0.5 # 50% of original price
 repair_durability_threshold: 0.3 # Can only repair below 30% durability
 rarity_chances:
-  common: 0.40 # 40%
-  uncommon: 0.30 # 30%
-  rare: 0.20 # 20%
-  epic: 0.07 # 7%
-  legendary: 0.03 # 3%
+  common: 0.41
+  uncommon: 0.305
+  rare: 0.2045
+  epic: 0.07
+  legendary: 0.0105
 
 # -- Economy --
 # Price per KG when selling fish.

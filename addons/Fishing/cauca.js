@@ -6,7 +6,7 @@ const EconomyUserData = require('../../models/EconomyUserData');
 
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
 const fishingCooldowns = new Set();
-const COOLDOWN_SECONDS = 10;
+const COOLDOWN_SECONDS = 30;
 
 function getBaitConfigByName(baitName) {
     const config = loadConfig();
