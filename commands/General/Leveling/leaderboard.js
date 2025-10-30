@@ -8,6 +8,7 @@ const config = getConfig();
 const lang = getLang();
 const UserData = require('../../../models/UserData.js');
 const Invite = require('../../../models/inviteSchema.js');
+const fishingSchema = require('../../../addons/Fishing/schemas/fishingSchema.js');
 
 function formatNumber(num) {
     if (num === undefined || num === null) num = 0;
@@ -140,7 +141,8 @@ async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageS
                 balance: { color: '#22c55e', icon: '💰' },
                 levels: { color: '#ec4899', icon: '✦' },
                 messages: { color: '#3b82f6', icon: '◆' },
-                invites: { color: '#8b5cf6', icon: '✉' }
+                invites: { color: '#8b5cf6', icon: '✉' },
+                cauca: { color: '#0ea5e9', icon: '🎣' }
             };
 
             let statText = '';
@@ -149,6 +151,7 @@ async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageS
                 case 'levels': statText = `Level ${user.level || 0}`; break;
                 case 'messages': statText = formatNumber(user.totalMessages || 0); break;
                 case 'invites': statText = formatNumber(user.invites || 0); break;
+                case 'cauca': statText = formatNumber(user.totalFish || 0); break;
             }
 
             const stat = stats[subCmd];
@@ -185,31 +188,14 @@ async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageS
 }
 
 async function getLeaderboardData(guild, type, page, pageSize) {
-    const fetchSize = pageSize * 2;
+    const fetchSize = pageSize * 2; // Fetch more to account for users who may have left
     const skip = page * pageSize;
     
     switch(type) {
         case 'balance':
             return await UserData.aggregate([
-                {
-                    $match: {
-                        guildId: guild.id,
-                        $or: [
-                            { balance: { $gt: 0 } },
-                            { bank: { $gt: 0 } }
-                        ]
-                    }
-                },
-                {
-                    $addFields: {
-                        totalBalance: {
-                            $add: [
-                                { $ifNull: ['$balance', 0] },
-                                { $ifNull: ['$bank', 0] }
-                            ]
-                        }
-                    }
-                },
+                { $match: { guildId: guild.id, $or: [{ balance: { $gt: 0 } }, { bank: { $gt: 0 } }] } },
+                { $addFields: { totalBalance: { $add: [{ $ifNull: ['$balance', 0] }, { $ifNull: ['$bank', 0] }] } } },
                 { $sort: { totalBalance: -1 } },
                 { $skip: skip },
                 { $limit: fetchSize }
@@ -217,23 +203,9 @@ async function getLeaderboardData(guild, type, page, pageSize) {
 
         case 'levels':
             return await UserData.aggregate([
-                {
-                    $match: {
-                        guildId: guild.id,
-                        $or: [{ level: { $gt: 0 } }, { xp: { $gt: 0 } }]
-                    }
-                },
-                {
-                    $sort: { level: -1, xp: -1 }
-                },
-                {
-                    $group: {
-                        _id: "$userId",
-                        userId: { $first: "$userId" },
-                        level: { $first: "$level" },
-                        xp: { $first: "$xp" }
-                    }
-                },
+                { $match: { guildId: guild.id, $or: [{ level: { $gt: 0 } }, { xp: { $gt: 0 } }] } },
+                { $sort: { level: -1, xp: -1 } },
+                { $group: { _id: "$userId", userId: { $first: "$userId" }, level: { $first: "$level" }, xp: { $first: "$xp" } } },
                 { $sort: { level: -1, xp: -1 } },
                 { $skip: skip },
                 { $limit: fetchSize }
@@ -241,22 +213,9 @@ async function getLeaderboardData(guild, type, page, pageSize) {
 
         case 'messages':
             return await UserData.aggregate([
-                {
-                    $match: {
-                        guildId: guild.id,
-                        totalMessages: { $gt: 0 }
-                    }
-                },
-                {
-                    $sort: { totalMessages: -1 }
-                },
-                {
-                    $group: {
-                        _id: "$userId",
-                        userId: { $first: "$userId" },
-                        totalMessages: { $first: "$totalMessages" }
-                    }
-                },
+                { $match: { guildId: guild.id, totalMessages: { $gt: 0 } } },
+                { $sort: { totalMessages: -1 } },
+                { $group: { _id: "$userId", userId: { $first: "$userId" }, totalMessages: { $first: "$totalMessages" } } },
                 { $sort: { totalMessages: -1 } },
                 { $skip: skip },
                 { $limit: fetchSize }
@@ -264,24 +223,20 @@ async function getLeaderboardData(guild, type, page, pageSize) {
 
         case 'invites':
             return await Invite.aggregate([
-                {
-                    $match: {
-                        guildID: guild.id
-                    }
-                },
-                {
-                    $group: {
-                        _id: "$inviterID",
-                        userId: { $first: "$inviterID" },
-                        invites: { $sum: "$uses" }
-                    }
-                },
-                {
-                    $match: {
-                        invites: { $gt: 0 }
-                    }
-                },
+                { $match: { guildID: guild.id } },
+                { $group: { _id: "$inviterID", userId: { $first: "$inviterID" }, invites: { $sum: "$uses" } } },
+                { $match: { invites: { $gt: 0 } } },
                 { $sort: { invites: -1 } },
+                { $skip: skip },
+                { $limit: fetchSize }
+            ]);
+        
+        case 'cauca':
+            return await fishingSchema.aggregate([
+                { $unwind: "$inventory" },
+                { $group: { _id: "$userId", userId: { $first: "$userId" }, totalFish: { $sum: "$inventory.quantity" } } },
+                { $match: { totalFish: { $gt: 0 } } },
+                { $sort: { totalFish: -1 } },
                 { $skip: skip },
                 { $limit: fetchSize }
             ]);
@@ -291,45 +246,25 @@ async function getLeaderboardData(guild, type, page, pageSize) {
 async function getTotalCount(guild, type) {
     switch(type) {
         case 'balance':
-            return await UserData.countDocuments({
-                guildId: guild.id,
-                $or: [
-                    { balance: { $gt: 0 } },
-                    { bank: { $gt: 0 } }
-                ]
-            });
+            return await UserData.countDocuments({ guildId: guild.id, $or: [{ balance: { $gt: 0 } }, { bank: { $gt: 0 } }] });
 
         case 'levels':
-            return await UserData.countDocuments({
-                guildId: guild.id,
-                $or: [{ level: { $gt: 0 } }, { xp: { $gt: 0 } }]
-            });
+            return await UserData.countDocuments({ guildId: guild.id, $or: [{ level: { $gt: 0 } }, { xp: { $gt: 0 } }] });
 
         case 'messages':
-            return await UserData.countDocuments({
-                guildId: guild.id,
-                totalMessages: { $gt: 0 }
-            });
+            return await UserData.countDocuments({ guildId: guild.id, totalMessages: { $gt: 0 } });
 
         case 'invites':
             const inviteCount = await Invite.aggregate([
-                {
-                    $match: { guildID: guild.id }
-                },
-                {
-                    $group: {
-                        _id: "$inviterID",
-                        invites: { $sum: "$uses" }
-                    }
-                },
-                {
-                    $match: { invites: { $gt: 0 } }
-                },
-                {
-                    $count: "total"
-                }
+                { $match: { guildID: guild.id } },
+                { $group: { _id: "$inviterID", invites: { $sum: "$uses" } } },
+                { $match: { invites: { $gt: 0 } } },
+                { $count: "total" }
             ]);
             return inviteCount[0]?.total || 0;
+        case 'cauca':
+            return await fishingSchema.countDocuments({ "inventory.0": { "$exists": true } });
+
     }
 }
 
@@ -341,46 +276,27 @@ module.exports = {
             subcommand
                 .setName('balance')
                 .setDescription('Xem những người dùng có số dư cao nhất')
-                .addIntegerOption(option =>
-                    option
-                        .setName('page')
-                        .setDescription('Số trang cần xem')
-                        .setMinValue(1)
-                )
-        )
+                .addIntegerOption(option => option.setName('page').setDescription('Số trang cần xem').setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('levels')
                 .setDescription('Xem BXH Levels')
-                .addIntegerOption(option =>
-                    option
-                        .setName('page')
-                        .setDescription('Số trang cần xem')
-                        .setMinValue(1)
-                )
-        )
+                .addIntegerOption(option => option.setName('page').setDescription('Số trang cần xem').setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('messages')
                 .setDescription('Xem Người dùng nhắn tin tại server nhiều nhất')
-                .addIntegerOption(option =>
-                    option
-                        .setName('page')
-                        .setDescription('Số trang cần xem')
-                        .setMinValue(1)
-                )
-        )
+                .addIntegerOption(option => option.setName('page').setDescription('Số trang cần xem').setMinValue(1)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('invites')
                 .setDescription('Xem những người dùng được mời nhiều nhất')
-                .addIntegerOption(option =>
-                    option
-                        .setName('page')
-                        .setDescription('Số trang cần xem')
-                        .setMinValue(1)
-                )
-        ),
+                .addIntegerOption(option => option.setName('page').setDescription('Số trang cần xem').setMinValue(1)))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('cauca')
+                .setDescription('Xem bảng xếp hạng những người câu cá hàng đầu')
+                .addIntegerOption(option => option.setName('page').setDescription('Số trang cần xem').setMinValue(1))),
     category: 'General',
     async execute(interaction) {
         try {

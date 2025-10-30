@@ -1,0 +1,155 @@
+# Configuration for the Fishing Addon
+
+# -- Rods --
+# key: The unique identifier for the rod.
+# name: The display name of the rod.
+# price: The cost to buy the rod in the shop.
+# durability: The maximum durability of the rod.
+rods:
+  tap_su:
+    name: "Cần câu tập sự"
+    price: 350
+    durability: 100
+  ban_chuyen:
+    name: "Cần câu bán chuyên"
+    price: 2500
+    durability: 600
+  chuyen_nghiep:
+    name: "Cần câu chuyên nghiệp"
+    price: 10500
+    durability: 5000
+
+# -- Baits --
+# key: The unique identifier for the bait.
+# name: The display name of the bait.
+# price: The cost to buy the bait in the shop.
+# bonus: A range [min, max] for the percentage boost to catch rates.
+# attracts: A list of rarities this bait is more likely to attract.
+baits:
+  giun:
+    name: "Mồi câu giun"
+    price: 50
+    bonus: [0.025, 0.05] # 2.5% to 5%
+    attracts: ["common", "uncommon"]
+  xa:
+    name: "Mồi câu xả"
+    price: 200
+    bonus: [0.05, 0.10] # 5% to 10%
+    attracts: ["rare", "epic"]
+  dac_biet:
+    name: "Mồi câu đặc biệt"
+    price: 800
+    bonus: [0.10, 0.15] # 10% to 15%
+    attracts: ["epic", "legendary"]
+
+# -- General Settings --
+repair_cost_multiplier: 0.5 # 50% of original price
+repair_durability_threshold: 0.3 # Can only repair below 30% durability
+rarity_chances:
+  common: 0.40 # 40%
+  uncommon: 0.30 # 30%
+  rare: 0.20 # 20%
+  epic: 0.07 # 7%
+  legendary: 0.03 # 3%
+
+# -- Economy --
+# Price per KG when selling fish.
+rarity_prices_per_kg:
+  common: 1
+  uncommon: 50
+  rare: 200
+  epic: 1000
+  legendary: 5000
+
+# -- Locations --
+# key: The unique identifier for the location.
+# name: The display name of the location.
+# fish: A list of fish names available at this location.
+locations:
+  song:
+    name: "Sông"
+    fish:
+      - "Cá Rô"
+      - "Cá Lóc"
+      - "Cá Trê"
+      - "Cá Chép"
+      - "Cá Tra"
+      - "Cá Ba Đuôi"
+      - "Cá La Hán"
+      - "Cá Tai Tượng"
+      - "Cá Sấu"
+      - "Cá Hải Tượng"
+  ho:
+    name: "Hồ"
+    fish:
+      - "Cá Rô"
+      - "Cá Lóc"
+      - "Cá Trê"
+      - "Cá Chép"
+      - "Cá Tra"
+      - "Cá Ba Đuôi"
+      - "Cá La Hán"
+      - "Cá Tai Tượng"
+      - "Cá Sấu"
+      - "Cá Hải Tượng"
+  bien:
+    name: "Biển"
+    fish:
+      - "Cá Basa"
+      - "Cá Bạc"
+      - "Cá Cam"
+      - "Cá Chim"
+      - "Cá Đuối"
+      - "Cá Bò"
+      - "Cá Ngừ"
+      - "Cá Mập"
+      - "Cá Heo"
+      - "Cá Voi"
+      - "Cá Kiếm"
+  dai_duong:
+    name: "Đại Dương"
+    fish:
+      - "Cá Basa"
+      - "Cá Bạc"
+      - "Cá Cam"
+      - "Cá Chim"
+      - "Cá Đuối"
+      - "Cá Bò"
+      - "Cá Ngừ"
+      - "Cá Mập"
+      - "Cá Heo"
+      - "Cá Voi"
+      - "Cá Kiếm"
+
+# -- Fish Pools --
+# This is the master list of all fish, categorized by rarity.
+# name: The display name of the fish.
+# emoji: The Discord emoji string for the fish.
+# min_weight, max_weight: The weight range in kg.
+fish_pools:
+  common:
+    - { name: "Cá Rô", emoji: "<:Fish_yellowperch:1433392934023200851>", min_weight: 0.1, max_weight: 0.5 }
+    - { name: "Cá Lóc", emoji: "<:Fish_bass:1433393243391000657>", min_weight: 0.5, max_weight: 2 }
+    - { name: "Cá Trê", emoji: "<:Fish_catfish:1433393269894807623>", min_weight: 0.5, max_weight: 3 }
+    - { name: "Cá Chép", emoji: "<:Fish_carp:1433392882362089563>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá Basa", emoji: "<:Fish_slendercatfish:1433392918533767190>", min_weight: 1, max_weight: 4 }
+    - { name: "Cá Bạc", emoji: "<:Fish_palebleak:1433392905057468426>", min_weight: 0.2, max_weight: 1 }
+  uncommon:
+    - { name: "Cá Tra", emoji: "<:Fish_tilapia:1433392931187724319>", min_weight: 2, max_weight: 10 }
+    - { name: "Cá Ba Đuôi", emoji: "<:Fish_goldenmandarin:1433392896333185095>", min_weight: 0.1, max_weight: 0.5 }
+    - { name: "Cá La Hán", emoji: "<:Fish_africancichlid:1433393236533055488>", min_weight: 0.5, max_weight: 1.5 }
+    - { name: "Cá Cam", emoji: "<:Fish_bluetang:1433393263309488158>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá Chim", emoji: "<:Fish_atlanticspadefish:1433393241012830230>", min_weight: 1, max_weight: 6 }
+    - { name: "Cá Đuối", emoji: "<:Fish_mantaray:1433392960631869471>", min_weight: 5, max_weight: 50 }
+  rare:
+    - { name: "Cá Tai Tượng", emoji: "<:Fish_horseheadtilefish:1433393293403623554>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá Bò", emoji: "<:Fish_filefish:1433393282783645747>", min_weight: 2, max_weight: 8 }
+    - { name: "Cá Ngừ", emoji: "<:Fish_mackerel:1433392900884140122>", min_weight: 10, max_weight: 100 }
+    - { name: "Cá Mập", emoji: "<:Fish_shark:1433392973181222974>", min_weight: 50, max_weight: 500 }
+  epic:
+    - { name: "Cá Sấu", emoji: "<:Fish_crocodile:1433392932215459861>", min_weight: 100, max_weight: 500 }
+    - { name: "Cá Heo", emoji: "<:Fish_dolphin:1433392934551552091>", min_weight: 150, max_weight: 400 }
+    - { name: "Cá Voi", emoji: "<:Fish_bluewhale:1433392930034417665>", min_weight: 1000, max_weight: 5000 }
+  legendary:
+    - { name: "Cá Hải Tượng", emoji: "<:Fish_pirarucu:1433392966575198351>", min_weight: 50, max_weight: 200 }
+    - { name: "Cá Kiếm", emoji: "<:Fish_sawshark:1433392968634466455>", min_weight: 200, max_weight: 600 }

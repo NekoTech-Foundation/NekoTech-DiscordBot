@@ -1567,23 +1567,6 @@ Economy:
     maxAmount: "5000"
 
 Store:
-  Ranks:
-    1:
-      Name: "Rank [ VIP MEMBERSHIP ]"
-      Description: "-# Rank Thành viên hạng cao,ưu tiên reply ticket"
-      Price: "10000"
-      RoleID: ["1426889490881843311"]
-      Limit: "1"
-    2:
-      Name: "Rank [ VIP MEMBERSHIP ],Gói x2 Xu trong 48h"
-      Description: "-# Rank Thành viên hạng cao,ưu tiên reply ticket."
-      Price: "20000"
-      RoleID: ["1426889490881843311"]
-      Booster: "Money"
-      Multiplier: "2.0"
-      Duration: "48h"
-      Limit: "1"
-
   Boosters:
     1:
       Name: "X2 Xu (1 Ngày)"
@@ -1624,8 +1607,6 @@ Store:
       Uses: 5
       Effect: "FishingCatchBonus"
       Bonus: 1.2
-
-  Equipment: # Trang bị
 
   "Hạt Giống":
     1:
@@ -1723,6 +1704,45 @@ Store:
       Name: "Vé Số 4000"
       Description: "-# Vé số mệnh giá 4000, trúng nhận 50,000"
       Price: 4000
+
+  "Cần Câu":
+    1:
+      Name: "Cần câu tập sự"
+      Description: "-# Cần câu cho người mới bắt đầu. Độ bền: 100"
+      Price: 350
+      Type: "FishingRod"
+      Key: "tap_su"
+    2:
+      Name: "Cần câu bán chuyên"
+      Description: "-# Cần câu cho người đã có kinh nghiệm. Độ bền: 600"
+      Price: 2500
+      Type: "FishingRod"
+      Key: "ban_chuyen"
+    3:
+      Name: "Cần câu chuyên nghiệp"
+      Description: "-# Cần câu cho chuyên gia. Độ bền: 5000"
+      Price: 10500
+      Type: "FishingRod"
+      Key: "chuyen_nghiep"
+  "Mồi Câu":
+    1:
+      Name: "Mồi câu giun"
+      Description: "-# Tăng tỉ lệ câu cá 2.5% - 5% và thu hút cá common, uncommon."
+      Price: 50
+      Type: "FishingBait"
+      Key: "giun"
+    2:
+      Name: "Mồi câu xả"
+      Description: "-# Tăng tỉ lệ câu cá 5% - 10% và thu hút cá rare, epic."
+      Price: 200
+      Type: "FishingBait"
+      Key: "xa"
+    3:
+      Name: "Mồi câu đặc biệt"
+      Description: "-# Tăng tỉ lệ câu cá 10% - 15% và thu hút cá epic, legendary."
+      Price: 800
+      Type: "FishingBait"
+      Key: "dac_biet"
 
   Embed:
     Title: "Cửa hàng {shopName}"

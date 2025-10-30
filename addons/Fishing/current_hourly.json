@@ -1,0 +1,15 @@
+{
+  "legendary": {
+    "name": "Cá Hải Tượng",
+    "emoji": "<:Fish_pirarucu:1433392966575198351>",
+    "min_weight": 50,
+    "max_weight": 200
+  },
+  "epic": {
+    "name": "Cá Voi",
+    "emoji": "<:Fish_bluewhale:1433392930034417665>",
+    "min_weight": 1000,
+    "max_weight": 5000
+  },
+  "updatedAt": "2025-10-30T11:26:41.242Z"
+}

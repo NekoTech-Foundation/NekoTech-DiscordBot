@@ -8,6 +8,8 @@ const lang = getLang();
 const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
+const { getUserFishing, loadConfig: loadFishingConfig } = require('../../../addons/Fishing/fishingUtils.js');
+
 
 // Import vé số addon nếu có
 let vesoAddon = null;
@@ -184,6 +186,138 @@ module.exports = {
                         return;
                     }
 
+                    let user = await EconomyUserData.findOne({ userId: i.user.id });
+                    if (!user) {
+                        user = new EconomyUserData({ userId: i.user.id, balance: 0 });
+                    }
+                    
+                                        const itemPrice = item.Price || 0;
+                    
+                    
+                    
+                                        if (user.balance < itemPrice) {
+                    
+                                            await i.reply({ 
+                    
+                                                content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.', 
+                    
+                                                flags: MessageFlags.Ephemeral 
+                    
+                                            });
+                    
+                                            return;
+                    
+                                        }
+                    
+                    
+                    
+                                        // Handle Fishing Rod Purchase
+                    
+                                        if (category === 'Cần Câu') {
+                    
+                                            const userFishing = await getUserFishing(i.user.id);
+                    
+                                            const fishingConfig = loadFishingConfig();
+                    
+                                            const rodInfo = fishingConfig.rods[item.Key];
+                    
+                    
+                    
+                                            if (!rodInfo) {
+                    
+                                                return i.reply({ content: 'Lỗi: Không tìm thấy thông tin cần câu.', ephemeral: true });
+                    
+                                            }
+                    
+                    
+                    
+                                            user.balance -= itemPrice;
+                    
+                    
+                    
+                                            const existingRodIndex = userFishing.rods.findIndex(r => r.key === item.Key);
+                    
+                                            const newRod = { key: item.Key, name: rodInfo.name, durability: rodInfo.durability };
+                    
+                    
+                    
+                                            if (existingRodIndex > -1) {
+                    
+                                                userFishing.rods[existingRodIndex] = newRod;
+                    
+                                            } else {
+                    
+                                                userFishing.rods.push(newRod);
+                    
+                                            }
+                    
+                    
+                    
+                                            if (!userFishing.equippedRod) {
+                    
+                                                userFishing.equippedRod = item.Key;
+                    
+                                            }
+                    
+                    
+                    
+                                            await user.save();
+                    
+                                            await userFishing.save();
+                    
+                                            
+                    
+                                            return i.reply({ content: `Bạn đã mua thành công ${item.Name}.\nSử dụng lệnh \`/cauca select\` để trang bị và sử dụng nó!`, ephemeral: true });
+                    
+                                        }
+                    
+                    
+                    
+                                        // Handle Fishing Bait Purchase
+                    
+                                        if (category === 'Mồi Câu') {
+                    
+                                            const userFishing = await getUserFishing(i.user.id);
+                    
+                                            const fishingConfig = loadFishingConfig();
+                    
+                                            const baitInfo = fishingConfig.baits[item.Key];
+                    
+                                            if (!baitInfo) {
+                    
+                                                return i.reply({ content: 'Lỗi: Không tìm thấy thông tin mồi câu.', ephemeral: true });
+                    
+                                            }
+                    
+                    
+                    
+                                            user.balance -= itemPrice;
+                    
+                                            const existingBait = userFishing.baits.find(b => b.name === baitInfo.name);
+                    
+                                            if (existingBait) {
+                    
+                                                existingBait.quantity += 1;
+                    
+                                            } else {
+                    
+                                                userFishing.baits.push({ name: baitInfo.name, quantity: 1 });
+                    
+                                            }
+                    
+                    
+                    
+                                            await user.save();
+                    
+                                            await userFishing.save();
+                    
+                                            
+                    
+                                            return i.reply({ content: `Bạn đã mua thành công 1 ${item.Name}.`, ephemeral: true });
+                    
+                                        }
+
+
                     // Kiểm tra nếu là vé số
                     if (category === 'Vé Số' && vesoAddon && vesoConfig) {
                         const price = item.Price || 0;
@@ -236,33 +370,11 @@ user = new EconomyUserData({
                         return;
                     }
 
-                    let user = await EconomyUserData.findOne(
-                        { userId: i.user.id },
-                        { balance: 1, interestRate: 1, purchasedItems: 1, inventory: 1, transactionLogs: 1 }
-                    );
+                    if (!user.purchasedItems) user.purchasedItems = [];
+                    if (!user.inventory) user.inventory = [];
+                    if (!user.transactionLogs) user.transactionLogs = [];
 
-                    if (!user) {
-                        user = new EconomyUserData({ 
-                            userId: i.user.id, 
-                            balance: 0, 
-                            boosters: [], 
-                            purchasedItems: [], 
-                            transactionLogs: [], 
-                            inventory: [] 
-                        });
-                    }
 
-                    const itemPrice = item.Price || 0;
-
-                    if (user.balance < itemPrice) {
-                        await i.reply({ 
-                            content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.', 
-                            flags: MessageFlags.Ephemeral 
-                        });
-                        return;
-                    }
-
-                    // Check purchase limit
                     const purchasedItemIndex = user.purchasedItems.findIndex(p => p.itemId === item.Name);
                     if (item.Limit && purchasedItemIndex >= 0) {
                         const currentQuantity = user.purchasedItems[purchasedItemIndex].quantity || 0;
@@ -376,14 +488,6 @@ user = new EconomyUserData({
                             });
                         }
                     }
-                    // Handle Seed items
-                    else if (item.Type === 'Seed') {
-                        console.log('process.cwd():', process.cwd());
-                        const farmUtilsPath = path.join(process.cwd(), 'addons', 'Farming', 'farmUtils.js');
-                        console.log('farmUtilsPath:', farmUtilsPath);
-                        const { addToFarm } = require(farmUtilsPath);
-                        await addToFarm(i.user.id, item.Name, 1, 'seed');
-                    }
 
                     await user.save();
                     
@@ -434,7 +538,29 @@ user = new EconomyUserData({
                         await updateMessage(i);
                     } else if (i.customId === 'buy') {
                         const itemIndex = parseInt(i.values[0]);
-                        await handlePurchase(i, itemIndex);
+                        const item = items[itemIndex];
+
+                        if (item.Type === 'Seed') {
+                            const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
+                            
+                            const modal = new ModalBuilder()
+                                .setCustomId(`seed_buy_${item.Name.replace(/ /g, '-')}_${i.user.id}`)
+                                .setTitle(`Mua ${item.Name}`);
+
+                            const quantityInput = new TextInputBuilder()
+                                .setCustomId('seed_quantity')
+                                .setLabel('Nhập số lượng muốn mua')
+                                .setStyle(TextInputStyle.Short)
+                                .setPlaceholder('Ví dụ: 10')
+                                .setRequired(true);
+
+                            const actionRow = new ModalActionRow().addComponents(quantityInput);
+                            modal.addComponents(actionRow);
+
+                            await i.showModal(modal);
+                        } else {
+                            await handlePurchase(i, itemIndex);
+                        }
                     }
                 } catch (error) {
                     console.error('Error in collector:', error);

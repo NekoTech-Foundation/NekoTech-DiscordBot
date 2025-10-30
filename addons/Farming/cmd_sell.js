@@ -10,19 +10,58 @@ module.exports = {
             const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
             return option.setName('produce').setDescription('Loại nông sản bạn muốn bán.').setRequired(true).addChoices(...choices);
         })
-        .addIntegerOption(option => 
+        .addStringOption(option => 
             option.setName('quantity')
-                .setDescription('Số lượng bạn muốn bán.')
-                .setRequired(true)),
+                .setDescription('Số lượng bạn muốn bán, hoặc gõ "all" để bán tất cả.')
+                .setRequired(true)
+                .setAutocomplete(true)),
+
+    async autocomplete(interaction) {
+        const focusedOption = interaction.options.getFocused(true);
+        if (focusedOption.name === 'quantity') {
+            const produceName = interaction.options.getString('produce');
+            if (!produceName) return;
+
+            const userId = interaction.user.id;
+            const seed = seeds[produceName];
+            const userFarm = await getUserFarm(userId);
+            const item = userFarm.items.find(i => i.name === seed.name);
+
+            const choices = [];
+            if (item && item.quantity > 0) {
+                choices.push({ name: `Tất cả (${item.quantity})`, value: 'all' });
+                choices.push({ name: `${item.quantity}`, value: `${item.quantity}` });
+            }
+
+            await interaction.respond(choices);
+        }
+    },
 
     async execute(interaction, client) {
         const produceName = interaction.options.getString('produce');
-        const quantity = interaction.options.getInteger('quantity');
+        const quantityInput = interaction.options.getString('quantity');
         const userId = interaction.user.id;
         const seed = seeds[produceName];
 
-        if (quantity <= 0) {
-            return interaction.reply({ content: 'Số lượng bán phải là số dương.', ephemeral: true });
+        const userFarm = await getUserFarm(userId);
+        const item = userFarm.items.find(i => i.name === seed.name);
+
+        if (!item || item.quantity === 0) {
+            return interaction.reply({ content: `Bạn không có ${seed.name} để bán.`, ephemeral: true });
+        }
+
+        let quantity;
+        if (quantityInput.toLowerCase() === 'all') {
+            quantity = item.quantity;
+        } else {
+            quantity = parseInt(quantityInput);
+            if (isNaN(quantity) || quantity <= 0) {
+                return interaction.reply({ content: 'Số lượng không hợp lệ. Vui lòng nhập một số dương hoặc "all".', ephemeral: true });
+            }
+        }
+
+        if (quantity > item.quantity) {
+            return interaction.reply({ content: `Bạn chỉ có ${item.quantity} ${seed.name} để bán.`, ephemeral: true });
         }
 
         const hasProduce = await removeFromFarm(userId, seed.name, quantity);
