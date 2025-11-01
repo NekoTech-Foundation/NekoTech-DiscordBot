@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
 const plantSchema = require('./schemas/plantSchema');
 const { seeds, getUserFarm, addToFarm, removeFromFarm } = require('./farmUtils');
 
@@ -37,7 +37,23 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('inventory')
-                .setDescription('Xem kho nông sản của bạn.')),
+                .setDescription('Xem kho nông sản của bạn.'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('fertilizers')
+                .setDescription('Xem kho phân bón của bạn.'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('phanbon')
+                .setDescription('Sử dụng phân bón cho cây trồng.')
+                .addStringOption(option => {
+                    const choices = Object.keys(config.Store['Phân bón']).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
+                    return option.setName('ten_phan_bon').setDescription('Loại phân bón bạn muốn sử dụng.').setRequired(true).addChoices(...choices);
+                })
+                .addStringOption(option => {
+                    const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
+                    return option.setName('ten_cay').setDescription('Loại cây bạn muốn bón phân.').setRequired(false).addChoices(...choices);
+                })),
 
     async execute(interaction, client) {
         await interaction.deferReply();
@@ -95,15 +111,26 @@ module.exports = {
             }
 
             const timeSincePlanted = Date.now() - planted.plantedAt.getTime();
-            if (timeSincePlanted < plant.growthTime) {
-                const timeRemaining = plant.growthTime - timeSincePlanted;
+            const timeRemaining = plant.growthTime - timeSincePlanted;
+            if (timeRemaining > 1000) { // Check if more than 1 second remaining
                 const hours = Math.floor(timeRemaining / 3600000);
                 const minutes = Math.floor((timeRemaining % 3600000) / 60000);
                 return interaction.editReply({ content: `${plant.name} của bạn chưa sẵn sàng để thu hoạch. Thời gian còn lại: ${hours} giờ ${minutes} phút.` });
             }
 
             await plantSchema.deleteOne({ userId, plant: plantName });
-            const harvestedQuantity = (Math.floor(Math.random() * 3) + 2) * planted.quantity;
+            let harvestedQuantity = (Math.floor(Math.random() * 3) + 2) * planted.quantity;
+            if (planted.fertilizer && planted.fertilizer.effect === 'yield_increase') {
+                if (planted.fertilizer.key === 'bumper_harvest_fertilizer') {
+                    harvestedQuantity *= 1.5; // 50% increase
+                } else if (planted.fertilizer.key === 'all_purpose_fertilizer') {
+                    harvestedQuantity *= 1.25; // 25% increase
+                }
+            }
+            if (planted.fertilizer && planted.fertilizer.qualityReduced) {
+                harvestedQuantity *= 0.5; // 50% reduction for quality reduced
+            }
+            harvestedQuantity = Math.floor(harvestedQuantity);
             await addToFarm(userId, plant.name, harvestedQuantity, 'produce');
 
             await interaction.editReply({ content: `Bạn đã thu hoạch được ${harvestedQuantity} ${plant.emoji} ${plant.name}.` });
@@ -194,6 +221,69 @@ module.exports = {
             const row = new ActionRowBuilder().addComponents(selectMenu);
 
             await interaction.editReply({ embeds: [embed], components: [row] });
+        } else if (subcommand === 'fertilizers') {
+            const userFarm = await getUserFarm(userId);
+            const fertilizerItems = userFarm.items.filter(item => item.type === 'Fertilizer');
+
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle('Kho Phân Bón Của Bạn');
+
+            if (fertilizerItems.length === 0) {
+                embed.setDescription('Bạn không có phân bón nào.');
+            } else {
+                let description = '';
+                for (const item of fertilizerItems) {
+                    description += `🌱 ${item.name}: ${item.quantity}\n`;
+                }
+                embed.setDescription(description);
+            }
+
+            await interaction.editReply({ embeds: [embed] });
+        } else if (subcommand === 'phanbon') {
+            const fertilizerKey = interaction.options.getString('ten_phan_bon');
+            const plantName = interaction.options.getString('ten_cay');
+            const fertilizer = config.Store['Phân bón'][fertilizerKey];
+
+            const userFarm = await getUserFarm(userId);
+            const fertilizerItem = userFarm.items.find(i => i.name === fertilizer.Name && i.type === 'Fertilizer');
+
+            if (!fertilizerItem || fertilizerItem.quantity < 1) {
+                return interaction.editReply({ content: `Bạn không có ${fertilizer.Name}.` });
+            }
+
+            const hasFertilizer = await removeFromFarm(userId, fertilizer.Name, 1);
+            if (!hasFertilizer) {
+                return interaction.editReply({ content: `Bạn không có ${fertilizer.Name}.` });
+            }
+
+            const plantsToFertilize = plantName ? await plantSchema.find({ userId, plant: plantName }) : await plantSchema.find({ userId });
+
+            if (plantsToFertilize.length === 0) {
+                return interaction.editReply({ content: 'Bạn không có cây trồng nào để bón phân.' });
+            }
+
+            for (const plant of plantsToFertilize) {
+                switch (fertilizer.Key) {
+                    case 'growth_fertilizer':
+                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seeds[plant.plant].growthTime * 0.25));
+                        break;
+                    case 'super_speed_fertilizer':
+                        plant.plantedAt = new Date(plant.plantedAt.getTime() - seeds[plant.plant].growthTime);
+                        plant.fertilizer = { key: fertilizer.Key, effect: 'yield_reduce', qualityReduced: true };
+                        break;
+                    case 'bumper_harvest_fertilizer':
+                        plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' };
+                        break;
+                    case 'all_purpose_fertilizer':
+                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seeds[plant.plant].growthTime * 0.5));
+                        plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' };
+                        break;
+                }
+                await plant.save();
+            }
+
+            await interaction.editReply({ content: `Bạn đã sử dụng thành công ${fertilizer.Name} cho ${plantName ? seeds[plantName].name : 'tất cả các cây trồng'}.` });
         }
     }
 };

@@ -1581,6 +1581,32 @@ Store:
       Description: "-# Vé số mệnh giá 4000, trúng nhận 50,000"
       Price: 4000
 
+  "Phân bón":
+    1:
+      Name: "Phân Bón Tăng Trưởng"
+      Description: "-# Giảm 25% thời gian sinh trưởng còn lại của cây."
+      Price: 500
+      Type: "Fertilizer"
+      Key: "growth_fertilizer"
+    2:
+      Name: "Phân Bón Siêu Tốc"
+      Description: "-# Hoàn thành ngay lập tức quá trình sinh trưởng của cây."
+      Price: 1850
+      Type: "Fertilizer"
+      Key: "super_speed_fertilizer"
+    3:
+      Name: "Phân Bón Bội Thu"
+      Description: "-# Tăng 50% sản lượng thu hoạch."
+      Price: 1000
+      Type: "Fertilizer"
+      Key: "bumper_harvest_fertilizer"
+    4:
+      Name: "Phân Bón Toàn Năng"
+      Description: "-# Giảm 50% thời gian sinh trưởng và tăng 25% sản lượng."
+      Price: 3000
+      Type: "Fertilizer"
+      Key: "all_purpose_fertilizer"
+
   "Cần Câu":
     1:
       Name: "Cần câu tập sự"
@@ -1589,17 +1615,77 @@ Store:
       Type: "FishingRod"
       Key: "tap_su"
     2:
-      Name: "Cần câu bán chuyên"
-      Description: "-# Cần câu cho người đã có kinh nghiệm. Độ bền: 600"
-      Price: 2500
+      Name: "Cần Câu Gỗ"
+      Description: "-# Cần câu đơn giản. Độ bền: 150"
+      Price: 450
       Type: "FishingRod"
-      Key: "ban_chuyen"
+      Key: "go"
     3:
+      Name: "Cần Câu Mèo"
+      Description: "-# Tăng 50% cơ hội nhận cá uncommon. Độ bền: 200"
+      Price: 750
+      Type: "FishingRod"
+      Key: "meo"
+    4:
+      Name: "Cần Câu Bỏ Túi"
+      Description: "-# Tăng 20% cơ hội thành công và 75% cơ hội nhận cá uncommon. Độ bền: 300"
+      Price: 1500
+      Type: "FishingRod"
+      Key: "bo_tui"
+    5:
+      Name: "Cần Câu Vịt"
+      Description: "-# Tăng 15% cơ hội thành công và 100% cơ hội nhận cá uncommon. Độ bền: 350"
+      Price: 2250
+      Type: "FishingRod"
+      Key: "vit"
+    6:
+      Name: "Cần Câu Nghiệp Dư"
+      Description: "-# Tăng 20% cơ hội thành công, 50% cơ hội nhận cá rare và 100% cơ hội nhận cá uncommon. Độ bền: 400"
+      Price: 3000
+      Type: "FishingRod"
+      Key: "nghiep_du"
+    7:
+      Name: "Cần Câu Phép Thuật"
+      Description: "-# Tăng 50% cơ hội thành công, 60% cơ hội nhận cá rare và 100% cơ hội nhận cá uncommon. Độ bền: 500"
+      Price: 20000
+      Type: "FishingRod"
+      Key: "phep_thuat"
+    8:
       Name: "Cần câu chuyên nghiệp"
-      Description: "-# Cần câu cho chuyên gia. Độ bền: 5000"
-      Price: 10500
+      Description: "-# Tăng 80% cơ hội thành công, 40% cơ hội nhận cá rare và 100% cơ hội nhận cá uncommon. Độ bền: 1500"
+      Price: 15000
       Type: "FishingRod"
       Key: "chuyen_nghiep"
+    9:
+      Name: "Cần Câu Quyền Trượng Phép"
+      Description: "-# Tăng 100% cơ hội thành công, 50% cơ hội nhận cá legendary và 40% cơ hội nhận cá rare (tùy vào vận may của bạn TvT). Độ bền: 1000"
+      Price: 120000
+      Type: "FishingRod"
+      Key: "quyen_truong_phep"
+    10:
+      Name: "Cần Câu Kiếm Huyền Thoại"
+      Description: "-# Tăng 40% cơ hội thành công, 50% cơ hội nhận cá rare và 100% cơ hội nhận cá uncommon. Độ bền: 600"
+      Price: 7500
+      Type: "FishingRod"
+      Key: "kiem_huyen_thoai"
+    11:
+      Name: "Cần Câu Xiếc Sư Tử"
+      Description: "-# Tăng 40% cơ hội thành công, 50% cơ hội nhận cá rare và 100% cơ hội nhận cá uncommon. Độ bền: 600"
+      Price: 7000
+      Type: "FishingRod"
+      Key: "xiec_su_tu"
+    12:
+      Name: "Cần Câu Bắp Ngô"
+      Description: "-# Tăng 40% cơ hội thành công, 50% cơ hội nhận cá rare và 100% cơ hội nhận cá uncommon. Độ bền: 600"
+      Price: 7500
+      Type: "FishingRod"
+      Key: "bap_ngo"
+    13:
+      Name: "Cần Câu Trúc"
+      Description: "-# Tăng 20% cơ hội thành công và 80% cơ hội nhận cá uncommon. Độ bền: 500"
+      Price: 1500
+      Type: "FishingRod"
+      Key: "truc"
   "Mồi Câu":
     1:
       Name: "Mồi câu giun"

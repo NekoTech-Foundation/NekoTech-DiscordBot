@@ -5,19 +5,105 @@
 # name: The display name of the rod.
 # price: The cost to buy the rod in the shop.
 # durability: The maximum durability of the rod.
+# luck: The base luck of the rod (increases catch chance).
+# effects: Special effects of the rod, such as boosting rarity chances.
 rods:
   tap_su:
     name: "Cần câu tập sự"
     price: 350
     durability: 100
-  ban_chuyen:
-    name: "Cần câu bán chuyên"
-    price: 2500
-    durability: 600
+    luck: 0.1
+  go:
+    name: "Cần Câu Gỗ"
+    price: 450
+    durability: 150
+    luck: 0
+    effects:
+      uncommon: 0.0
+  meo:
+    name: "Cần Câu Mèo"
+    price: 750
+    durability: 200
+    luck: 0
+    effects:
+      uncommon: 0.5
+  bo_tui:
+    name: "Cần Câu Bỏ Túi"
+    price: 1500
+    durability: 300
+    luck: 0.2
+    effects:
+      uncommon: 0.75
+  vit:
+    name: "Cần Câu Vịt"
+    price: 2250
+    durability: 350
+    luck: 0.15
+    effects:
+      uncommon: 1.0
+  nghiep_du:
+    name: "Cần Câu Nghiệp Dư"
+    price: 3000
+    durability: 400
+    luck: 0.2
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  phep_thuat:
+    name: "Cần Câu Phép Thuật"
+    price: 20000
+    durability: 500
+    luck: 0.5
+    effects:
+      rare: 0.6
+      uncommon: 1.0
   chuyen_nghiep:
     name: "Cần câu chuyên nghiệp"
-    price: 10500
+    price: 15000
     durability: 5000
+    luck: 0.8
+    effects:
+      rare: 0.4
+      uncommon: 1.0
+  quyen_truong_phep:
+    name: "Cần Câu Quyền Trượng Phép"
+    price: 120000
+    durability: 1000
+    luck: 2.0
+    effects:
+      legendary: 0.7
+      rare: 0.6
+  kiem_huyen_thoai:
+    name: "Cần Câu Kiếm Huyền Thoại"
+    price: 7500
+    durability: 600
+    luck: 0.4
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  xiec_su_tu:
+    name: "Cần Câu Xiếc Sư Tử"
+    price: 7000
+    durability: 600
+    luck: 0.4
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  bap_ngo:
+    name: "Cần Câu Bắp Ngô"
+    price: 7500
+    durability: 600
+    luck: 0.4
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  truc:
+    name: "Cần Câu Trúc"
+    price: 1500
+    durability: 500
+    luck: 0.2
+    effects:
+      uncommon: 0.8
 
 # -- Baits --
 # key: The unique identifier for the bait.
@@ -69,7 +155,7 @@ rarity_prices_per_kg:
   uncommon: 10
   rare: 30
   epic: 170
-  legendary: 450
+  legendary: 300
 
 xp_per_rarity:
   common: 10

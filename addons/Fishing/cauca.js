@@ -8,7 +8,7 @@ const { checkActiveBooster } = require('../../commands/Fun/Economy/Utility/helpe
 
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
 const fishingCooldowns = new Set();
-const COOLDOWN_SECONDS = 15;
+const COOLDOWN_SECONDS = 5;
 
 async function addFishingXp(user, xp, interaction) {
     user.fishingXp += xp;
@@ -30,8 +30,30 @@ function getBaitConfigByName(baitName) {
     return null;
 }
 
-function getCatch(location, config, usedBaitKey) {
+function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
+    const rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
     let chances = { ...config.rarity_chances };
+
+    if (rodEffects) {
+        for (const rarity in rodEffects) {
+            if (chances[rarity]) {
+                chances[rarity] *= (1 + rodEffects[rarity]);
+            }
+        }
+    }
+
+    if (rodLuck > 0) {
+        chances['uncommon'] *= (1 + rodLuck * 0.5);
+        chances['rare'] *= (1 + rodLuck * 1.5);
+        chances['epic'] *= (1 + rodLuck * 2);
+        chances['legendary'] *= (1 + rodLuck * 3);
+    }
+
+    // Normalize chances
+    const totalChance = Object.values(chances).reduce((a, b) => a + b, 0);
+    for (const rarity in chances) {
+        chances[rarity] /= totalChance;
+    }
 
     if (usedBaitKey && config.baits[usedBaitKey]) {
         const baitInfo = config.baits[usedBaitKey];
@@ -47,8 +69,19 @@ function getCatch(location, config, usedBaitKey) {
                 let totalNonAttractedChance = 0;
                 nonAttractedRarities.forEach(r => totalNonAttractedChance += chances[r]);
                 if (totalNonAttractedChance > 0) {
-                    nonAttractedRarities.forEach(r => { chances[r] -= (chances[r] / totalNonAttractedChance) * bonus; });
+                    nonAttractedRarities.forEach(r => { 
+                        const decrease = (chances[r] / totalNonAttractedChance) * bonus;
+                        chances[r] = Math.max(0, chances[r] - decrease);
+                    });
                 }
+            }
+        }
+
+        // Re-normalize chances after bait effects
+        const totalChanceAfterBait = Object.values(chances).reduce((a, b) => a + b, 0);
+        if (totalChanceAfterBait > 0) {
+            for (const rarity in chances) {
+                chances[rarity] /= totalChanceAfterBait;
             }
         }
 
@@ -76,7 +109,7 @@ function getCatch(location, config, usedBaitKey) {
 
     const randomNumber = Math.random();
     let cumulativeChance = 0;
-    for (const rarity in chances) {
+    for (const rarity of rarities) {
         cumulativeChance += chances[rarity];
         if (randomNumber < cumulativeChance) {
             let fishPool = [];
@@ -198,6 +231,8 @@ module.exports = {
                 return interaction.reply({ content: `Cần câu **${equippedRod.name}** của bạn đã hỏng. Hãy dùng /fixcancau để sửa hoặc mua một cây mới tại /store.`, ephemeral: true });
             }
 
+
+
             fishingCooldowns.add(userId);
             setTimeout(() => {
                 fishingCooldowns.delete(userId);
@@ -245,7 +280,10 @@ module.exports = {
             }
 
             equippedRod.durability -= 1;
-            const caughtFishInfo = getCatch(location, config, usedBaitKey);
+            const rodConfig = config.rods[equippedRodKey];
+            const rodLuck = rodConfig ? rodConfig.luck : 0;
+            const rodEffects = rodConfig ? rodConfig.effects : {};
+            const caughtFishInfo = getCatch(location, config, usedBaitKey, rodLuck, rodEffects);
 
             if (!caughtFishInfo) {
                 await userFishing.save();

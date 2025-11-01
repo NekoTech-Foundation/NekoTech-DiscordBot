@@ -9,6 +9,7 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
 const { getUserFishing, loadConfig: loadFishingConfig } = require('../../../addons/Fishing/fishingUtils.js');
+const { getUserFarm } = require('../../../addons/Farming/farmUtils.js');
 
 
 // Import vé số addon nếu có
@@ -60,6 +61,7 @@ module.exports = {
             }
 
             const items = Object.values(config.Store[category]);
+            items.sort((a, b) => a.Price - b.Price);
             
             if (!items || items.length === 0) {
                 await interaction.reply({ 
@@ -315,6 +317,21 @@ module.exports = {
                     
                                             return i.reply({ content: `Bạn đã mua thành công 1 ${item.Name}.`, ephemeral: true });
                     
+                                        }
+
+                                        // Handle Fertilizer Purchase
+                                        if (category === 'Phân bón') {
+                                            const userFarm = await getUserFarm(i.user.id);
+                                            user.balance -= itemPrice;
+                                            const existingFertilizer = userFarm.items.find(it => it.name === item.Name && it.type === 'Fertilizer');
+                                            if (existingFertilizer) {
+                                                existingFertilizer.quantity += 1;
+                                            } else {
+                                                userFarm.items.push({ name: item.Name, quantity: 1, type: 'Fertilizer' });
+                                            }
+                                            await user.save();
+                                            await userFarm.save();
+                                            return i.reply({ content: `Bạn đã mua thành công ${item.Name}.`, ephemeral: true });
                                         }
 
 
