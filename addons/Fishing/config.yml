@@ -61,6 +61,13 @@ rarity_prices_per_kg:
   epic: 100
   legendary: 500
 
+xp_per_rarity:
+  common: 10
+  uncommon: 20
+  rare: 50
+  epic: 100
+  legendary: 250
+
 # -- Locations --
 # key: The unique identifier for the location.
 # name: The display name of the location.
