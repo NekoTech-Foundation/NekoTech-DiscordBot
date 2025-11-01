@@ -16,7 +16,7 @@ module.exports = {
         const amountString = interaction.options.getString('sotien');
         const userId = interaction.user.id;
 
-        let userData = await EconomyUserData.findOne({ userId });
+        let userData = await EconomyUserData.findOne({ userId }, { balance: 1, bank: 1, purchasedItems: 1 });
 
         if (!userData || userData.balance <= 0) {
             return interaction.editReply({ content: 'Bạn không có tiền trong ví để gửi tiết kiệm.' });
@@ -38,7 +38,12 @@ module.exports = {
             return interaction.editReply({ content: 'Bạn không có đủ tiền trong ví để thực hiện giao dịch này.' });
         }
 
-        const bonusPercentage = Math.random() * (0.045 - 0.025) + 0.025;
+        let bonusPercentage = 0.035;
+        const hasInterestBooster = userData.purchasedItems.some(item => item.itemId === 'Lãi suất Ngân hàng 0.3%');
+        if (hasInterestBooster) {
+            bonusPercentage += 0.003;
+        }
+
         const bonusAmount = Math.floor(amountToDeposit * bonusPercentage);
         const totalDeposit = amountToDeposit + bonusAmount;
 

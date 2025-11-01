@@ -1375,9 +1375,36 @@ Economy:
     baseAmount: 200
     increasePerDay: 50
     maxAmount: 1000
+    Items:
+      - itemId: "moi_cau_go"
+        name: "Mồi Câu Gỗ"
+        chance: 0.6
+        quantity: 1
+      - itemId: "moi_cau_tong_hop"
+        name: "Mồi Câu Tổng Hợp"
+        chance: 0.01
+        quantity: 1
+      - itemId: "moi_cau_chay"
+        name: "Mồi Câu Chay"
+        chance: 0.1
+        quantity: 1
+      - itemId: "hat_giong_lua"
+        name: "Hạt Giống Lúa"
+        chance: 0.2
+        quantity: 5
+      - itemId: "hat_giong_ngo"
+        name: "Hạt Giống Ngô"
+        chance: 0.2
+        quantity: 5
 
   Fishing:
     cooldown: "15m"
+    xp_per_rarity:
+      common: 10
+      uncommon: 20
+      rare: 50
+      epic: 100
+      legendary: 250
     locations:
       suoi:
         cost: 20
@@ -1585,94 +1612,103 @@ Store:
       Duration: "24h"
     3:
       Name: "Tăng cường May mắn Câu cá"
-      Description: "-# Tăng 20% cơ hội bắt được cá hiếm trong 1 ngày"
+      Description: "-# Tăng 20% tỉ lệ câu được cá hiếm, 10% cho cá epic(tỉ lệ cố định)."
       Price: "5000"
       Booster: "FishingLuck"
-      Multiplier: "1.2"
       Duration: "24h"
-
-  Items: # Vật phẩm
-    1:
-      Name: "Lãi suất Ngân hàng 0.3%" # Mua cái có % cao hơn sẽ ghi đè lên cái này
+      Boosts:
+        rare: 0.2
+        epic: 0.1
+    4:
+      Name: "Lãi suất Ngân hàng 0.3%"
       Description: "-# Tăng lãi suất ngân hàng của bạn thêm 0.3%"
       Price: "10000"
       Type: "Interest"
       Interest: "0.3"
-      Limit: "1" # Người dùng có thể mua bao nhiêu vật phẩm này? 
-    2:
-      Name: "Mồi câu"
-      Description: "-# Tăng cơ hội bắt được cá của bạn"
-      Price: "100"
-      Type: "Consumable"
-      Uses: 5
-      Effect: "FishingCatchBonus"
-      Bonus: 1.2
+      Limit: "1"
+
+
 
   "Hạt Giống":
     1:
       Name: "Ớt"
       Description: "-# Hạt giống ớt"
-      Price: 500
+      Price: 250
       Type: "Seed"
     2:
       Name: "Lúa"
       Description: "-# Hạt giống lúa"
-      Price: 500
+      Price: 250
       Type: "Seed"
     3:
       Name: "Dâu Tây"
       Description: "-# Hạt giống dâu tây"
-      Price: 800
+      Price: 400
       Type: "Seed"
     4:
       Name: "Ngô"
       Description: "-# Hạt giống ngô"
-      Price: 800
+      Price: 400
       Type: "Seed"
     5:
       Name: "Cà Chua"
       Description: "-# Hạt giống cà chua"
-      Price: 1000
+      Price: 500
       Type: "Seed"
     6:
       Name: "Đào"
       Description: "-# Hạt giống đào"
-      Price: 1000
+      Price: 500
       Type: "Seed"
     7:
       Name: "Khoai Mì"
       Description: "-# Hạt giống khoai mì"
-      Price: 1500
+      Price: 750
       Type: "Seed"
     8:
       Name: "Mía"
       Description: "-# Hạt giống mía"
-      Price: 1500
+      Price: 750
       Type: "Seed"
     9:
       Name: "Khoai Tây"
       Description: "-# Hạt giống khoai tây"
-      Price: 3000
+      Price: 1500
       Type: "Seed"
     10:
       Name: "Dưa Gang"
       Description: "-# Hạt giống dưa gang"
-      Price: 3000
+      Price: 1500
       Type: "Seed"
     11:
       Name: "Cà Rốt"
       Description: "-# Hạt giống cà rốt"
-      Price: 5000
+      Price: 2500
       Type: "Seed"
     12:
       Name: "Cải Ngọt"
       Description: "-# Hạt giống cải ngọt"
-      Price: 5000
+      Price: 2500
       Type: "Seed"
     13:
       Name: "Mít"
       Description: "-# Hạt giống mít"
-      Price: 15000
+      Price: 7500
+      Type: "Seed"
+    14:
+      Name: "Bí ngô"
+      Description: "-# Hạt giống bí ngô"
+      Price: 1000
+      Type: "Seed"
+    15:
+      Name: "Dưa hấu"
+      Description: "-# Hạt giống dưa hấu"
+      Price: 4000
+      Type: "Seed"
+    16:
+      Name: "Nho"
+      Description: "-# Hạt giống nho"
+      Price: 10000
       Type: "Seed"
 
   "Vé Số":
@@ -1738,11 +1774,29 @@ Store:
       Type: "FishingBait"
       Key: "xa"
     3:
+      Name: "Mồi câu gỗ"
+      Description: "-# Tăng tỉ lệ câu cá 36% và thu hút cá rare."
+      Price: 200
+      Type: "FishingBait"
+      Key: "go"
+    4:
+      Name: "Mồi câu chay"
+      Description: "-# Tăng tỉ lệ câu cá 5% - 5% và thu hút cá epic, legendary."
+      Price: 500
+      Type: "FishingBait"
+      Key: "chay"
+    5:
       Name: "Mồi câu đặc biệt"
       Description: "-# Tăng tỉ lệ câu cá 10% - 15% và thu hút cá epic, legendary."
       Price: 800
       Type: "FishingBait"
       Key: "dac_biet"
+    6:
+      Name: "Mồi câu tổng hợp"
+      Description: "-# Tăng tỉ lệ câu cá 16% - 17% và thu hút cá epic, legendary."
+      Price: 1000
+      Type: "FishingBait"
+      Key: "tong_hop"
 
   Embed:
     Title: "Cửa hàng {shopName}"

@@ -71,6 +71,30 @@ module.exports = {
                 user.commandData.dailyStreak = streak;
             }
 
+            const awardedItems = [];
+            const dailyItems = config.Economy.Daily.Items;
+
+            if (dailyItems && dailyItems.length > 0) {
+                if (!user.inventory) {
+                    user.inventory = [];
+                }
+                for (const item of dailyItems) {
+                    if (Math.random() < item.chance) {
+                        const userItem = user.inventory.find(i => i.itemId === item.itemId);
+                        if (userItem) {
+                            userItem.quantity += item.quantity;
+                        } else {
+                            user.inventory.push({
+                                itemId: item.itemId,
+                                name: item.name,
+                                quantity: item.quantity,
+                            });
+                        }
+                        awardedItems.push({ name: item.name, quantity: item.quantity });
+                    }
+                }
+            }
+
             user.transactionLogs.push({
                 type: 'daily',
                 amount: reward,
@@ -91,6 +115,11 @@ module.exports = {
                 .setDescription(description)
                 .setFooter({ text: replacePlaceholders(lang.Economy.Messages.footer, { balance: user.balance }) })
                 .setColor('#00FF00');
+
+            if (awardedItems.length > 0) {
+                const itemsString = awardedItems.map(item => `${item.name} (x${item.quantity})`).join('\n');
+                embed.addFields({ name: 'Vật phẩm nhận được', value: itemsString });
+            }
 
             const dailyTitle = lang.Economy.Actions.Daily.Title;
             if (dailyTitle) {

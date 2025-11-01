@@ -4,9 +4,21 @@ const path = require('path');
 const { loadConfig, getUserFishing } = require('./fishingUtils');
 const EconomyUserData = require('../../models/EconomyUserData');
 
+const { checkActiveBooster } = require('../../commands/Fun/Economy/Utility/helpers');
+
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
 const fishingCooldowns = new Set();
 const COOLDOWN_SECONDS = 30;
+
+async function addFishingXp(user, xp, interaction) {
+    user.fishingXp += xp;
+    const xpForNextLevel = 100 * user.fishingLevel;
+    if (user.fishingXp >= xpForNextLevel) {
+        user.fishingLevel += 1;
+        user.fishingXp -= xpForNextLevel;
+        await interaction.followUp({ content: `Chúc mừng! Bạn đã lên cấp câu cá ${user.fishingLevel}!`, ephemeral: true });
+    }
+}
 
 function getBaitConfigByName(baitName) {
     const config = loadConfig();
@@ -23,17 +35,41 @@ function getCatch(location, config, usedBaitKey) {
 
     if (usedBaitKey && config.baits[usedBaitKey]) {
         const baitInfo = config.baits[usedBaitKey];
-        const bonus = Math.random() * (baitInfo.bonus[1] - baitInfo.bonus[0]) + baitInfo.bonus[0];
-        let totalAttractedChance = 0;
-        baitInfo.attracts.forEach(r => { if (chances[r]) totalAttractedChance += chances[r]; });
 
-        if (totalAttractedChance > 0) {
-            baitInfo.attracts.forEach(r => { if (chances[r]) chances[r] += (chances[r] / totalAttractedChance) * bonus; });
-            const nonAttractedRarities = Object.keys(chances).filter(r => !baitInfo.attracts.includes(r));
-            let totalNonAttractedChance = 0;
-            nonAttractedRarities.forEach(r => totalNonAttractedChance += chances[r]);
-            if (totalNonAttractedChance > 0) {
-                 nonAttractedRarities.forEach(r => { chances[r] -= (chances[r] / totalNonAttractedChance) * bonus; });
+        if (baitInfo.attracts) {
+            const bonus = Math.random() * (baitInfo.bonus[1] - baitInfo.bonus[0]) + baitInfo.bonus[0];
+            let totalAttractedChance = 0;
+            baitInfo.attracts.forEach(r => { if (chances[r]) totalAttractedChance += chances[r]; });
+
+            if (totalAttractedChance > 0) {
+                baitInfo.attracts.forEach(r => { if (chances[r]) chances[r] += (chances[r] / totalAttractedChance) * bonus; });
+                const nonAttractedRarities = Object.keys(chances).filter(r => !baitInfo.attracts.includes(r));
+                let totalNonAttractedChance = 0;
+                nonAttractedRarities.forEach(r => totalNonAttractedChance += chances[r]);
+                if (totalNonAttractedChance > 0) {
+                    nonAttractedRarities.forEach(r => { chances[r] -= (chances[r] / totalNonAttractedChance) * bonus; });
+                }
+            }
+        }
+
+        if (baitInfo.boosts) {
+            let totalBoost = 0;
+            for (const rarity in baitInfo.boosts) {
+                if (chances[rarity]) {
+                    const boostValue = baitInfo.boosts[rarity];
+                    chances[rarity] += boostValue;
+                    totalBoost += boostValue;
+                }
+            }
+
+            const nonBoostedRarities = Object.keys(chances).filter(r => !baitInfo.boosts[r]);
+            let totalNonBoostedChance = 0;
+            nonBoostedRarities.forEach(r => totalNonBoostedChance += chances[r]);
+
+            if (totalNonBoostedChance > 0) {
+                nonBoostedRarities.forEach(r => {
+                    chances[r] -= (chances[r] / totalNonBoostedChance) * totalBoost;
+                });
             }
         }
     }
@@ -224,11 +260,17 @@ module.exports = {
                 userFishing.inventory.push({ name: caughtFishInfo.name, rarity: caughtFishInfo.rarity, totalWeight: weight, quantity: 1 });
             }
 
+            const xpGained = config.xp_per_rarity[caughtFishInfo.rarity] || 0;
+            const xpMultiplier = checkActiveBooster(userFishing, 'FishingXP');
+            const finalXp = Math.floor(xpGained * xpMultiplier);
+            await addFishingXp(userFishing, finalXp, interaction);
+
             await userFishing.save();
 
             const embed = new EmbedBuilder()
                 .setTitle('Bạn đã câu được một con cá!')
                 .setDescription(`${caughtFishInfo.emoji} **${caughtFishInfo.name}**\nNặng: ${weight.toFixed(2)}kg\nĐộ hiếm: ${caughtFishInfo.rarity}`)
+                .addFields({ name: 'XP nhận được', value: `${finalXp} XP` })
                 .setColor('#2ECC71')
                 .setFooter({ text: `${equippedRod.name} còn ${equippedRod.durability} độ bền.` });
             
@@ -241,6 +283,8 @@ module.exports = {
         } else if (subcommand === 'inventory') {
             const userFishing = await getUserFishing(userId);
             const embed = new EmbedBuilder().setTitle(`Kho đồ của ${interaction.user.username}`).setColor('#3498DB');
+
+            embed.addFields({ name: '🎣 Cấp độ câu cá', value: `Cấp ${userFishing.fishingLevel} (${userFishing.fishingXp}/${100 * userFishing.fishingLevel} XP)` });
 
             let rodInfo = 'Bạn chưa có cần câu. Hãy mua tại `/store`.';
             if (userFishing.rods && userFishing.rods.length > 0) {
