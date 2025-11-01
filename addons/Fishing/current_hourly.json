@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Cá Hải Tượng",
-    "emoji": "<:Fish_pirarucu:1433392966575198351>",
-    "min_weight": 50,
-    "max_weight": 200
+    "name": "Cá Kiếm",
+    "emoji": "<:Fish_sawshark:1433392968634466455>",
+    "min_weight": 200,
+    "max_weight": 600
   },
   "epic": {
     "name": "Cá Sấu",
@@ -11,5 +11,5 @@
     "min_weight": 100,
     "max_weight": 500
   },
-  "updatedAt": "2025-11-01T00:08:18.842Z"
+  "updatedAt": "2025-11-01T01:00:00.015Z"
 }

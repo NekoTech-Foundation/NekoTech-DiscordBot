@@ -5,90 +5,121 @@ const languageSamples = [
         language: 'Japanese',
         flag: '🇯🇵',
         patterns: [
-            { text: 'おはようございます', meaning: 'Good morning' },
-            { text: '今日はとても良い天気ですね', meaning: 'The weather is very nice today' },
-            { text: '私の趣味は写真撮影です', meaning: 'My hobby is photography' },
+            { text: 'おはようございます', meaning: 'Chào buổi sáng' },
+            { text: '今日はとても良い天気ですね', meaning: 'Thời tiết hôm nay đẹp quá' },
+            { text: '私の趣味は写真撮影です', meaning: 'Sở thích của tôi là chụp ảnh' },
+            { text: 'この映画はとても面白いです', meaning: 'Bộ phim này rất thú vị' },
+            { text: '日本語を勉強しています', meaning: 'Tôi đang học tiếng Nhật' },
         ]
     },
     {
         language: 'Korean',
         flag: '🇰🇷',
         patterns: [
-            { text: '안녕하세요', meaning: 'Hello' },
-            { text: '오늘 날씨가 좋네요', meaning: 'The weather is nice today' },
-            { text: '저는 음악 듣는 것을 좋아해요', meaning: 'I like listening to music' },
+            { text: '안녕하세요', meaning: 'Xin chào' },
+            { text: '오늘 날씨가 좋네요', meaning: 'Thời tiết hôm nay đẹp' },
+            { text: '저는 음악 듣는 것을 좋아해요', meaning: 'Tôi thích nghe nhạc' },
+            { text: '이 음식은 맛있어요', meaning: 'Món ăn này ngon' },
+            { text: '한국 드라마를 자주 봐요', meaning: 'Tôi thường xem phim truyền hình Hàn Quốc' },
         ]
     },
     {
         language: 'Chinese',
         flag: '🇨🇳',
         patterns: [
-            { text: '你好，很高兴认识你', meaning: 'Hello, nice to meet you' },
-            { text: '我喜欢在公园散步', meaning: 'I like walking in the park' },
-            { text: '这个周末你有什么计划？', meaning: 'What are your plans for this weekend?' },
+            { text: '你好，很高兴认识你', meaning: 'Xin chào, rất vui được gặp bạn' },
+            { text: '我喜欢在公园散步', meaning: 'Tôi thích đi dạo trong công viên' },
+            { text: '这个周末你有什么计划？', meaning: 'Bạn có kế hoạch gì cho cuối tuần này không?' },
+            { text: '我想喝杯茶', meaning: 'Tôi muốn uống một tách trà' },
+            { text: '中国文化很有意思', meaning: 'Văn hóa Trung Quốc rất thú vị' },
         ]
     },
     {
         language: 'Vietnamese',
         flag: '🇻🇳',
         patterns: [
-            { text: 'Chào buổi sáng', meaning: 'Good morning' },
-            { text: 'Tôi rất thích ẩm thực Việt Nam', meaning: 'I really like Vietnamese cuisine' },
-            { text: 'Bạn đang làm gì vậy?', meaning: 'What are you doing?' },
+            { text: 'Chào buổi sáng', meaning: 'Chào buổi sáng' },
+            { text: 'Tôi rất thích ẩm thực Việt Nam', meaning: 'Tôi rất thích ẩm thực Việt Nam' },
+            { text: 'Bạn đang làm gì vậy?', meaning: 'Bạn đang làm gì vậy?' },
+            { text: 'Phở là một món ăn ngon của Việt Nam', meaning: 'Phở là một món ăn ngon của Việt Nam' },
+            { text: 'Tôi yêu Việt Nam', meaning: 'Tôi yêu Việt Nam' },
         ]
     },
     {
         language: 'Thai',
         flag: '🇹🇭',
         patterns: [
-            { text: 'สวัสดีครับ/ค่ะ', meaning: 'Hello' },
-            { text: 'วันนี้อากาศดีมาก', meaning: 'The weather is very nice today' },
-            { text: 'คุณชอบอาหารไทยไหม', meaning: 'Do you like Thai food?' },
+            { text: 'สวัสดีครับ/ค่ะ', meaning: 'Xin chào' },
+            { text: 'วันนี้อากาศดีมาก', meaning: 'Thời tiết hôm nay rất đẹp' },
+            { text: 'คุณชอบอาหารไทยไหม', meaning: 'Bạn có thích đồ ăn Thái không?' },
+            { text: 'ไปเที่ยวกันไหม', meaning: 'Đi chơi không?' },
+            { text: 'ขอบคุณครับ/ค่ะ', meaning: 'Cảm ơn' },
         ]
     },
     {
         language: 'Hindi',
         flag: '🇮🇳',
         patterns: [
-            { text: 'नमस्ते, आप कैसे हैं?', meaning: 'Hello, how are you?' },
-            { text: 'मुझे भारतीय खाना बहुत पसंद है', meaning: 'I really like Indian food' },
-            { text: 'आज मौसम बहुत अच्छा है', meaning: 'The weather is very nice today' },
+            { text: 'नमस्ते, आप कैसे हैं?', meaning: 'Xin chào, bạn khỏe không?' },
+            { text: 'मुझे भारतीय खाना बहुत पसंद है', meaning: 'Tôi rất thích đồ ăn Ấn Độ' },
+            { text: 'आज मौसम बहुत अच्छा है', meaning: 'Thời tiết hôm nay rất đẹp' },
+            { text: 'आपका नाम क्या है?', meaning: 'Tên bạn là gì?' },
+            { text: 'फिर मिलेंगे', meaning: 'Hẹn gặp lại' },
         ]
     },
     {
         language: 'Filipino',
         flag: '🇵🇭',
         patterns: [
-            { text: 'Magandang umaga po', meaning: 'Good morning (polite)' },
-            { text: 'Kumusta ka na?', meaning: 'How are you?' },
-            { text: 'Salamat po sa lahat', meaning: 'Thank you for everything' },
+            { text: 'Magandang umaga po', meaning: 'Chào buổi sáng (lịch sự)' },
+            { text: 'Kumusta ka na?', meaning: 'Bạn khỏe không?' },
+            { text: 'Salamat po sa lahat', meaning: 'Cảm ơn vì tất cả' },
+            { text: 'Mahal kita', meaning: 'Tôi yêu bạn' },
+            { text: 'Ingat ka', meaning: 'Bảo trọng nhé' },
         ]
     },
     {
         language: 'Indonesian',
         flag: '🇮🇩',
         patterns: [
-            { text: 'Selamat pagi', meaning: 'Good morning' },
-            { text: 'Apa kabar?', meaning: 'How are you?' },
-            { text: 'Saya suka makanan Indonesia', meaning: 'I like Indonesian food' },
+            { text: 'Selamat pagi', meaning: 'Chào buổi sáng' },
+            { text: 'Apa kabar?', meaning: 'Bạn khỏe không?' },
+            { text: 'Saya suka makanan Indonesia', meaning: 'Tôi thích đồ ăn Indonesia' },
+            { text: 'Terima kasih banyak', meaning: 'Cảm ơn rất nhiều' },
+            { text: 'Sampai jumpa lagi', meaning: 'Hẹn gặp lại' },
         ]
     },
     {
         language: 'Malay',
         flag: '🇲🇾',
         patterns: [
-            { text: 'Selamat pagi', meaning: 'Good morning' },
-            { text: 'Apa khabar?', meaning: 'How are you?' },
-            { text: 'Terima kasih', meaning: 'Thank you' },
+            { text: 'Selamat pagi', meaning: 'Chào buổi sáng' },
+            { text: 'Apa khabar?', meaning: 'Bạn khỏe không?' },
+            { text: 'Terima kasih', meaning: 'Cảm ơn' },
+            { text: 'Selamat tinggal', meaning: 'Tạm biệt' },
+            { text: 'Saya cinta awak', meaning: 'Tôi yêu bạn' },
         ]
     },
     {
         language: 'Bengali',
         flag: '🇧🇩',
         patterns: [
-            { text: 'নমস্কার, কেমন আছেন?', meaning: 'Hello, how are you?' },
-            { text: 'আজ আবহাওয়া খুব ভালো', meaning: 'The weather is very nice today' },
-            { text: 'আমি বাংলা শিখছি', meaning: 'I am learning Bengali' },
+            { text: 'নমস্কার, কেমন আছেন?', meaning: 'Xin chào, bạn khỏe không?' },
+            { text: 'আজ আবহাওয়া খুব ভালো', meaning: 'Thời tiết hôm nay rất đẹp' },
+            { text: 'আমি বাংলা শিখছি', meaning: 'Tôi đang học tiếng Bengal' },
+            { text: 'আপনার সাথে দেখা করে ভালো লাগলো', meaning: 'Rất vui được gặp bạn' },
+            { text: 'আবার দেখা হবে', meaning: 'Hẹn gặp lại' },
+        ]
+    },
+    {
+        language: 'Spanish',
+        flag: '🇪🇸',
+        patterns: [
+            { text: 'Hola, ¿cómo estás?', meaning: 'Xin chào, bạn khỏe không?' },
+            { text: 'Me gusta mucho la comida española', meaning: 'Tôi rất thích đồ ăn Tây Ban Nha' },
+            { text: '¿Qué planes tienes para este fin de semana?', meaning: 'Bạn có kế hoạch gì cho cuối tuần này không?' },
+            { text: '¿Donde esta el baño?', meaning: 'Nhà vệ sinh ở đâu?' },
+            { text: 'Te quiero', meaning: 'Tôi yêu bạn' },
         ]
     }
 ];
