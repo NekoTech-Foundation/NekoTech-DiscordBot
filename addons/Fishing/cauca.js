@@ -8,7 +8,7 @@ const { checkActiveBooster } = require('../../commands/Fun/Economy/Utility/helpe
 
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
 const fishingCooldowns = new Set();
-const COOLDOWN_SECONDS = 30;
+const COOLDOWN_SECONDS = 15;
 
 async function addFishingXp(user, xp, interaction) {
     user.fishingXp += xp;
@@ -88,7 +88,8 @@ function getCatch(location, config, usedBaitKey) {
                         const foundFish = hourlyData[rarity];
                         return { ...foundFish, rarity: rarity };
                     }
-                } catch (error) { /* Fall through to general pool */ }n            }
+                } catch (error) { /* Fall through to general pool */ }
+            }
 
             fishPool = config.fish_pools[rarity]?.filter(fish => location.fish.includes(fish.name)) || [];
             
