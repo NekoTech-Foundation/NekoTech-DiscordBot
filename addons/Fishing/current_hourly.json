@@ -6,10 +6,10 @@
     "max_weight": 10
   },
   "epic": {
-    "name": "Mực zombie",
-    "emoji": "<:Fish_zombiesquid:1433392936246050938>",
-    "min_weight": 1,
-    "max_weight": 5
+    "name": "Cá da trơn Goonch",
+    "emoji": "<:Fish_goonchcatfish:1433392954164252746>",
+    "min_weight": 50,
+    "max_weight": 150
   },
-  "updatedAt": "2025-11-01T06:39:08.970Z"
+  "updatedAt": "2025-11-05T12:31:15.586Z"
 }

@@ -33535,3 +33535,48 @@ Bot Version: 1.8.513:36 (01-11-2025) - Bot started up - Node.js v22.21.0 - App V
 [11/1/2025, 1:39:03 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v22.21.0
 Bot Version: 1.8.513:39 (01-11-2025) - Bot started up - Node.js v22.21.0 - App Version 1.8.5
+
+
+[11/5/2025, 6:20:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:20 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 6:23:28 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:23 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 6:36:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:36 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 6:38:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:38 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 6:42:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:42 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 6:49:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:49 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 7:11:58 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:12 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 7:27:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:27 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/5/2025, 7:31:08 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:31 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
