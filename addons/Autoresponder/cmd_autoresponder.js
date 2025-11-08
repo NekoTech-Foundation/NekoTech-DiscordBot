@@ -23,7 +23,7 @@ module.exports = {
                     { name: 'Kết thúc bằng', value: 'endswith' }
                 ))
                 .addBooleanOption(option => option.setName('ignorecase').setDescription('Bỏ qua trường hợp (chữ hoa/thường).'))
-                .addStringOption(option => option.setName('attachment_url').setDescription('URL của ảnh hoặc video để đính kèm.'))
+                .addAttachmentOption(option => option.setName('attachment').setDescription('Tệp đính kèm (ảnh/video) để gửi cùng.'))
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -37,7 +37,8 @@ module.exports = {
                 .setDescription('Chỉnh sửa một auto-responder.')
                 .addStringOption(option => option.setName('trigger').setDescription('Từ khóa của auto-responder.').setRequired(true))
                 .addStringOption(option => option.setName('response').setDescription('Chuỗi trả lời mới.'))
-                .addStringOption(option => option.setName('attachment_url').setDescription('URL mới của ảnh hoặc video.'))
+                .addAttachmentOption(option => option.setName('attachment').setDescription('Tệp đính kèm mới (ảnh/video).'))
+                .addBooleanOption(option => option.setName('remove_attachment').setDescription('Chọn true để xóa tệp đính kèm hiện tại.'))
         )
         .addSubcommand(subcommand =>
             subcommand
@@ -68,10 +69,17 @@ module.exports = {
 
         if (subcommand === 'add') {
             const trigger = interaction.options.getString('trigger');
+            
+            const existing = await AutoResponse.findOne({ guildId, trigger });
+            if (existing) {
+                return interaction.reply({ content: `Một auto-responder với trigger \`${trigger}\` đã tồn tại.`, ephemeral: true });
+            }
+
             const response = interaction.options.getString('response');
             const mode = interaction.options.getString('mode');
             const ignoreCase = interaction.options.getBoolean('ignorecase') || false;
-            const attachmentUrl = interaction.options.getString('attachment_url');
+            const attachment = interaction.options.getAttachment('attachment');
+            const attachmentUrl = attachment ? attachment.url : null;
 
             const newAutoResponse = new AutoResponse({
                 guildId,
@@ -111,14 +119,25 @@ module.exports = {
         } else if (subcommand === 'edit') {
             const trigger = interaction.options.getString('trigger');
             const newResponse = interaction.options.getString('response');
-            const newAttachmentUrl = interaction.options.getString('attachment_url');
+            const newAttachment = interaction.options.getAttachment('attachment');
+            const removeAttachment = interaction.options.getBoolean('remove_attachment');
+
+            if (newAttachment && removeAttachment) {
+                return interaction.reply({ content: 'Bạn không thể vừa thêm tệp đính kèm mới vừa xóa tệp hiện có. Vui lòng chọn một hành động.', ephemeral: true });
+            }
 
             const update = {};
-            if (newResponse) update.response = newResponse;
-            if (newAttachmentUrl) update.attachmentUrl = newAttachmentUrl;
+            if (newResponse) {
+                update.response = newResponse;
+            }
+            if (removeAttachment) {
+                update.attachmentUrl = null;
+            } else if (newAttachment) {
+                update.attachmentUrl = newAttachment.url;
+            }
 
             if (Object.keys(update).length === 0) {
-                return interaction.reply({ content: 'Bạn phải cung cấp ít nhất một response hoặc attachment URL mới.', ephemeral: true });
+                return interaction.reply({ content: 'Bạn phải cung cấp ít nhất một tùy chọn để chỉnh sửa (response, attachment, hoặc remove_attachment).', ephemeral: true });
             }
 
             const updated = await AutoResponse.findOneAndUpdate(

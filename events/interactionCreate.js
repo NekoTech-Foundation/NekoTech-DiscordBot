@@ -2384,9 +2384,7 @@ async function handleCloseReasonModal(interaction, ticketId) {
     }
 }
 
-module.exports.handleDeleteTicket = handleDeleteTicket;
-module.exports.handleTicketClose = handleTicketClose;
-module.exports.sendDMEmbedAndTranscript = sendDMEmbedAndTranscript;
+
 
 function parseDuration(duration) {
     const match = duration.match(/^(\d+)([smhd])$/);

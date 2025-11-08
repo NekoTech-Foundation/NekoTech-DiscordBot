@@ -34036,3 +34036,118 @@ Bot Version: 1.8.515:54 (08-11-2025) - Bot started up - Node.js v24.11.0 - App V
 [11/8/2025, 4:01:44 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.516:01 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 5:47:24 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:47 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:98:19)
+    at executeOperation (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:40:40)
+    at FindCursor._initialize (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\find_cursor.js:62:73)
+    at FindCursor.cursorInit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:24)
+    at FindCursor.next (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:342:28)
+    at Collection.findOne (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\collection.js:313:37)
+    at NativeCollection.<computed> [as findOne] (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:246:33)
+    at model.Query._findOne (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\query.js:2710:45)
+    at model.Query.exec (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\query.js:4627:80)
+
+
+[11/8/2025, 5:51:30 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:51 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+2025-11-08T10:53:46.384Z - ERROR: ReferenceError: EmbedBuilder is not defined
+2025-11-08T10:54:05.664Z - ERROR: ReferenceError: EmbedBuilder is not defined
+
+
+[11/8/2025, 5:55:47 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:55 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+2025-11-08T10:56:01.273Z - ERROR: ReferenceError: EmbedBuilder is not defined
+
+
+[11/8/2025, 6:04:10 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:04 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:23:55 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:24 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:24:46 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:24 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:25:42 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:25 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:44:47 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:44 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:45:34 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:45 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:46:33 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:46 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:01:50 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:01 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:06:59 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:07 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:08:23 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:08 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:10:32 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:10 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:16:29 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:16 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:98:19)
+    at executeOperation (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:40:40)
+    at FindCursor._initialize (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\find_cursor.js:62:73)
+    at FindCursor.cursorInit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:24)
+    at FindCursor.next (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:342:28)
+    at [Symbol.asyncIterator] (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:250:45)
+    at AsyncGenerator.next (<anonymous>)
+    at FindCursor.toArray (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:422:26)
+    at model.Query._find (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\query.js:2430:27)
+
+
+[11/8/2025, 8:29:09 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:29 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:30:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:30 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:33:27 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:33 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5

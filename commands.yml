@@ -134,3 +134,5 @@ network: true
 age-calculator: true
 letme: true
 server: true
+pixiv: true
+repost: true

@@ -1363,6 +1363,14 @@ Music:
     ShowVolumeControls: true
 
 # ===========================================================================
+# API KEYS
+# ===========================================================================
+API_Keys:
+  YouTube: "AIzaSyBdvaHc2CDB1_tu0pVA1bIawWmPNnoWqe0" # Dán khóa API YouTube của bạn vào đây
+  Pixiv:
+    RefreshToken: "exGZSBaGBdTFP1UdwRBsoP8NBydj8DKlguedgHvTtho" # Dán Refresh Token của bạn vào đây
+
+# ===========================================================================
 # GAMES
 # ===========================================================================
 Economy:

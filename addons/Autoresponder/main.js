@@ -41,12 +41,10 @@ module.exports = {
                     }
 
                     if (ar.attachmentUrl) {
-                        const embed = new EmbedBuilder()
-                            .setImage(ar.attachmentUrl);
-                        messagePayload.embeds = [embed];
+                        messagePayload.files = [ar.attachmentUrl];
                     }
 
-                    if (messagePayload.content || messagePayload.embeds) {
+                    if (messagePayload.content || messagePayload.files) {
                         message.channel.send(messagePayload);
                     }
                     break; // Stop after first match
