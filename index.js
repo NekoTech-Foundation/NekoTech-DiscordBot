@@ -50,7 +50,7 @@ if (version < 18) {
     process.exit();
 }
 
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
 
 const client = new Client({
     intents: [

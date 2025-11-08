@@ -1,0 +1,160 @@
+{
+  "rates": {
+    "rainbow": 0.5,
+    "gold": 2.5,
+    "silver": 17,
+    "common": 80
+  },
+  "umamusume": [
+    {
+      "id": "special_week",
+      "name": "Special Week",
+      "tier": 3,
+      "image": "https://i.imgur.com/special_week.png"
+    },
+    {
+      "id": "silence_suzuka",
+      "name": "Silence Suzuka",
+      "tier": 3,
+      "image": "https://i.imgur.com/silence_suzuka.png"
+    },
+    {
+      "id": "tokai_teio",
+      "name": "Tokai Teio",
+      "tier": 3,
+      "image": "https://i.imgur.com/tokai_teio.png"
+    },
+    {
+      "id": "maruzensky",
+      "name": "Maruzensky",
+      "tier": 3,
+      "image": "https://i.imgur.com/maruzensky.png"
+    },
+    {
+      "id": "fuji_kiseki",
+      "name": "Fuji Kiseki",
+      "tier": 3,
+      "image": "https://i.imgur.com/fuji_kiseki.png"
+    },
+    {
+      "id": "oguri_cap",
+      "name": "Oguri Cap",
+      "tier": 3,
+      "image": "https://i.imgur.com/oguri_cap.png"
+    },
+    {
+      "id": "gold_ship",
+      "name": "Gold Ship",
+      "tier": 3,
+      "image": "https://i.imgur.com/gold_ship.png"
+    },
+    {
+      "id": "vodka",
+      "name": "Vodka",
+      "tier": 3,
+      "image": "https://i.imgur.com/vodka.png"
+    },
+    {
+      "id": "daiwa_scarlet",
+      "name": "Daiwa Scarlet",
+      "tier": 3,
+      "image": "https://i.imgur.com/daiwa_scarlet.png"
+    },
+    {
+      "id": "taiki_shuttle",
+      "name": "Taiki Shuttle",
+      "tier": 3,
+      "image": "https://i.imgur.com/taiki_shuttle.png"
+    },
+    {
+      "id": "mejiro_mcqueen",
+      "name": "Mejiro McQueen",
+      "tier": 2,
+      "image": "https://i.imgur.com/mejiro_mcqueen.png"
+    },
+    {
+      "id": "haru_urara",
+      "name": "Haru Urara",
+      "tier": 2,
+      "image": "https://i.imgur.com/haru_urara.png"
+    },
+    {
+      "id": "grass_wonder",
+      "name": "Grass Wonder",
+      "tier": 2,
+      "image": "https://i.imgur.com/grass_wonder.png"
+    },
+    {
+      "id": "el_condor_pasa",
+      "name": "El Condor Pasa",
+      "tier": 2,
+      "image": "https://i.imgur.com/el_condor_pasa.png"
+    },
+    {
+      "id": "t_m_opera_o",
+      "name": "T.M. Opera O",
+      "tier": 2,
+      "image": "https://i.imgur.com/t_m_opera_o.png"
+    },
+    {
+      "id": "narita_brian",
+      "name": "Narita Brian",
+      "tier": 2,
+      "image": "https://i.imgur.com/narita_brian.png"
+    },
+    {
+      "id": "symboli_rudolf",
+      "name": "Symboli Rudolf",
+      "tier": 2,
+      "image": "https://i.imgur.com/symboli_rudolf.png"
+    },
+    {
+      "id": "air_groove",
+      "name": "Air Groove",
+      "tier": 2,
+      "image": "https://i.imgur.com/air_groove.png"
+    },
+    {
+      "id": "agnes_tachyon",
+      "name": "Agnes Tachyon",
+      "tier": 1,
+      "image": "https://i.imgur.com/agnes_tachyon.png"
+    },
+    {
+      "id": "admire_vega",
+      "name": "Admire Vega",
+      "tier": 1,
+      "image": "https://i.imgur.com/admire_vega.png"
+    },
+    {
+      "id": "inari_one",
+      "name": "Inari One",
+      "tier": 1,
+      "image": "https://i.imgur.com/inari_one.png"
+    },
+    {
+      "id": "winning_ticket",
+      "name": "Winning Ticket",
+      "tier": 1,
+      "image": "https://i.imgur.com/winning_ticket.png"
+    },
+    {
+      "id": "air_shakur",
+      "name": "Air Shakur",
+      "tier": 1,
+      "image": "https://i.imgur.com/air_shakur.png"
+    },
+    {
+      "id": "eishin_flash",
+      "name": "Eishin Flash",
+      "tier": 1,
+      "image": "https://i.imgur.com/eishin_flash.png"
+    },
+    {
+      "id": "curren_chan",
+      "name": "Curren Chan",
+      "tier": 1,
+      "image": "https://i.imgur.com/curren_chan.png"
+    }
+  ]
+}

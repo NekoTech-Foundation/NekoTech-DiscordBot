@@ -33580,3 +33580,273 @@ Bot Version: 1.8.519:27 (05-11-2025) - Bot started up - Node.js v24.11.0 - App V
 [11/5/2025, 7:31:08 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.519:31 (05-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 6:51:30 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:51 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 7:05:01 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:05 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 7:08:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:08 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 7:12:35 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:12 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: TypeError [ColorConvert]: Unable to convert "Bronze" to a number.
+    at resolveColor (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\util\Util.js:299:11)
+    at EmbedBuilder.setColor (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\structures\EmbedBuilder.js:23:36)
+    at InteractionCollector.<anonymous> (C:\Users\sangt\Documents\NekoTech-DiscordBot\addons\UmaMusume\cmd_uma_race.js:94:14)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+
+[11/7/2025, 8:02:22 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:02 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 8:12:28 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.5
+
+[11/7/2025, 8:13:58 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:14 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 8:22:42 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.5
+
+[11/7/2025, 8:24:40 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:24 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 8:26:46 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:26 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 8:31:52 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:32 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 8:37:31 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:37 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 8:44:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:44 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/7/2025, 9:27:37 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.521:27 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: DiscordAPIError[10008]: Unknown Message
+    at handleErrors (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async SequentialHandler.runRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async GuildMessageManager.edit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\managers\MessageManager.js:255:15)
+    at async Timeout._onTimeout (C:\Users\sangt\Documents\NekoTech-DiscordBot\addons\UmaMusume\cmd_uma_careers.js:1003:11)
+
+
+[11/7/2025, 9:37:37 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.521:37 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: DiscordAPIError[10008]: Unknown Message
+    at handleErrors (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async SequentialHandler.runRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async GuildMessageManager.edit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\managers\MessageManager.js:255:15)
+    at async Timeout._onTimeout (C:\Users\sangt\Documents\NekoTech-DiscordBot\addons\UmaMusume\cmd_uma_careers.js:914:11)
+
+
+[11/7/2025, 9:39:39 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.521:39 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: DiscordAPIError[10008]: Unknown Message
+    at handleErrors (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async SequentialHandler.runRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async GuildMessageManager.edit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\managers\MessageManager.js:255:15)
+    at async Timeout._onTimeout (C:\Users\sangt\Documents\NekoTech-DiscordBot\addons\UmaMusume\cmd_uma_careers.js:944:11)
+Unhandled Rejection at: [object Promise], reason: MongoNotConnectedError: Client must be connected before running operations
+    at autoConnect (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:98:19)
+    at executeOperation (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\operations\execute_operation.js:40:40)
+    at FindCursor._initialize (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\find_cursor.js:62:73)
+    at FindCursor.cursorInit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:632:38)
+    at FindCursor.fetchBatch (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:666:24)
+    at FindCursor.next (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:342:28)
+    at [Symbol.asyncIterator] (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:250:45)
+    at AsyncGenerator.next (<anonymous>)
+    at FindCursor.toArray (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cursor\abstract_cursor.js:422:26)
+    at model.Query._find (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\query.js:2430:27)
+
+
+[11/7/2025, 9:42:14 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.521:42 (07-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:50:38 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.506:50 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 6:57:16 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.506:57 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:00:18 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:00 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: DiscordAPIError[10008]: Unknown Message
+    at handleErrors (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async SequentialHandler.runRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1163:23)
+    at async SequentialHandler.queueRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:994:14)
+    at async _REST.request (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async GuildMessageManager.edit (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\managers\MessageManager.js:255:15)
+    at async Timeout._onTimeout (C:\Users\sangt\Documents\NekoTech-DiscordBot\addons\UmaMusume\cmd_uma_careers.js:1172:11)
+
+
+[11/8/2025, 7:03:50 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:03 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:07:47 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:07 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:17:42 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:17 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:36:40 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:36 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:45:04 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:45 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:48:17 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:48 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:48:46 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:48 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:50:58 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:51 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:52:03 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:52 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 7:52:59 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.507:53 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:14:29 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:14 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:16:59 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:17 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:26:21 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.5
+
+[11/8/2025, 8:31:02 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:31 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:42:37 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:42 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:48:03 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:48 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:51:00 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:51 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:52:12 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:52 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:53:47 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:53 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 8:57:28 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.508:57 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 9:01:58 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.509:02 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 9:09:59 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.509:10 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 9:11:00 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.509:11 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 9:12:35 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.509:12 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 9:18:47 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.509:18 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5

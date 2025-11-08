@@ -58,22 +58,25 @@ module.exports = {
             const multiplier = checkActiveBooster(user, 'Money');
             reward *= multiplier;
 
+            const carrotReward = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
+
             if (!user) {
                 user = new EconomyUserData({
                     userId: interaction.user.id,
                     balance: reward,
+                    carrots: carrotReward,
                     commandData: { lastDaily: now, dailyStreak: streak },
                     transactionLogs: []
                 });
             } else {
                 user.balance += reward;
+                user.carrots = (user.carrots || 0) + carrotReward;
                 user.commandData.lastDaily = now;
                 user.commandData.dailyStreak = streak;
             }
 
             const awardedItems = [];
             const dailyItems = config.Economy.Daily.Items;
-
             if (dailyItems && dailyItems.length > 0) {
                 if (!user.inventory) {
                     user.inventory = [];
@@ -114,7 +117,8 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setDescription(description)
                 .setFooter({ text: replacePlaceholders(lang.Economy.Messages.footer, { balance: user.balance }) })
-                .setColor('#00FF00');
+                .setColor('#00FF00')
+                .addFields({ name: '<:carrot:1436533295084208328> Carrots Nhận Được', value: `${carrotReward}` });
 
             if (awardedItems.length > 0) {
                 const itemsString = awardedItems.map(item => `${item.name} (x${item.quantity})`).join('\n');

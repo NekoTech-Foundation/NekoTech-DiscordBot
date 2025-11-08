@@ -1,0 +1,403 @@
+{
+  "skills": [
+    {
+      "name": "Bậc Thầy Vào Cua (Swinging Maestro)",
+      "description": "Phục hồi một lượng lớn Thể lực khi vào cua hiệu quả.",
+      "rarity": "Gold",
+      "cost": 180,
+      "effects": { "type": "stamina_recovery", "condition": "corner", "value": 5.5 }
+    },
+    {
+      "name": "Giáo Sư Đường Cong (Professor of Curvature)",
+      "description": "Tăng mạnh tốc độ khi vào cua một cách khéo léo.",
+      "rarity": "Gold",
+      "cost": 170,
+      "effects": { "type": "speed_boost", "condition": "corner", "value": 0.35 }
+    },
+    {
+      "name": "Cơn Sốt Adrenaline (Adrenaline Rush)",
+      "description": "Phục hồi một lượng lớn năng lượng để chạy sau khi kiệt sức ở các cuộc đua dài.",
+      "rarity": "Gold",
+      "cost": 180,
+      "effects": { "type": "stamina_recovery", "condition": "long_race_final_leg", "value": 5.5 }
+    },
+    {
+      "name": "Không Thể Cản Tôi! (No Stopping Me!)",
+      "description": "Tăng mạnh khả năng điều khiển và gia tốc khi đường bị chặn ở cú nước rút cuối cùng.",
+      "rarity": "Gold",
+      "cost": 170,
+      "effects": { "type": "acceleration_boost", "condition": "final_sprint_blocked", "value": 0.4 }
+    },
+    {
+      "name": "Sự Tập Trung (Concentration)",
+      "description": "Giảm đáng kể thời gian mất mát do xuất phát chậm và khó bị ảnh hưởng bởi xuất phát giả.",
+      "rarity": "Gold",
+      "cost": 160,
+      "effects": { "type": "focus_boost", "condition": "start", "value": 0.9 }
+    },
+    {
+      "name": "Siêu Số Bảy May Mắn (Super Lucky Seven)",
+      "description": "Tăng mạnh các chỉ số ngẫu nhiên khi ở ô xuất phát số 7.",
+      "rarity": "Gold",
+      "cost": 190,
+      "effects": { "type": "random_stat_boost", "condition": "gate_7", "value": 77 }
+    },
+    {
+      "name": "Hoàn Hảo Thể Chất và Tinh Thần (In Body and Mind)",
+      "description": "Tăng mạnh tốc độ trong cú nước rút cuối cùng.",
+      "rarity": "Gold",
+      "cost": 170,
+      "effects": { "type": "speed_boost", "condition": "final_sprint", "value": 0.4 }
+    },
+    {
+      "name": "Chuyên Gia Đường Cong (Corner Connoisseur)",
+      "description": "Tăng mạnh gia tốc khi vào cua điêu luyện.",
+      "rarity": "Gold",
+      "cost": 170,
+      "effects": { "type": "acceleration_boost", "condition": "corner", "value": 0.4 }
+    },
+    {
+      "name": "Bước Chân Tia Chớp (Lightning Step)",
+      "description": "Tránh bị bao vây một cách thần kỳ khi ở phía sau giữa cuộc đua (Medium).",
+      "rarity": "Gold",
+      "cost": 160,
+      "effects": { "type": "positioning_boost", "condition": "mid_race_rear_medium", "value": 0.4 }
+    },
+    {
+      "name": "Khát Khao Chưa Nguôi (Unquenched Thirst)",
+      "description": "Tăng mạnh hiệu suất với mong muốn được chạy đua.",
+      "rarity": "Gold",
+      "cost": 180,
+      "effects": { "type": "motivation_boost", "condition": "any", "value": 60 }
+    },
+    {
+      "name": "Chuẩn Bị Hoàn Hảo! (Perfect Prep!)",
+      "description": "Chuẩn bị hoàn hảo cho cú nước rút giữa cuộc đua (Sprint).",
+      "rarity": "Gold",
+      "cost": 170,
+      "effects": { "type": "sprint_prep_boost", "condition": "mid_race_sprint", "value": 0.4 }
+    },
+    {
+      "name": "Hít Thở Khí Trời (Breath of Fresh Air)",
+      "description": "Phục hồi Thể lực trên một đoạn đường thẳng.",
+      "rarity": "Rare",
+      "cost": 120,
+      "effects": { "type": "stamina_recovery", "condition": "straight", "value": 3.5 }
+    },
+    {
+      "name": "Trường Đua Phải ◎ (Right-Handed ◎)",
+      "description": "Tăng mạnh hiệu suất (Tốc độ và Sức mạnh) tại các trường đua rẽ phải.",
+      "rarity": "Rare",
+      "cost": 110,
+      "effects": { "type": "track_condition_boost", "condition": "right_turn", "value": 40 }
+    },
+    {
+      "name": "Vận Động Viên Mùa Hè ◎ (Summer Runner ◎)",
+      "description": "Tăng mạnh hiệu suất (Tốc độ và Sức bền) trong các cuộc đua mùa hè.",
+      "rarity": "Rare",
+      "cost": 100,
+      "effects": { "type": "season_bonus", "season": "summer", "value": 40 }
+    },
+    {
+      "name": "Điều kiện Mặt Đất Ướt ◎ (Wet Conditions ◎)",
+      "description": "Tăng mạnh hiệu suất (Sức mạnh) trên mặt đất tốt, mềm và nặng.",
+      "rarity": "Rare",
+      "cost": 100,
+      "effects": { "type": "ground_condition_bonus", "condition": "wet", "value": 40 }
+    },
+    {
+      "name": "Ngựa Ô ◎ (Long Shot ◎)",
+      "description": "Tăng mạnh hiệu suất khi được xếp hạng 4 yêu thích trở xuống.",
+      "rarity": "Rare",
+      "cost": 130,
+      "effects": { "type": "underdog_boost", "condition": "popularity_4_or_lower", "value": 0.25 }
+    },
+    {
+      "name": "Chuyên Gia Vượt Mặt (Passing Pro)",
+      "description": "Giảm nhẹ mệt mỏi và tăng tốc độ khi quyết tâm vượt qua đối thủ trong các cuộc đua dài.",
+      "rarity": "Rare",
+      "cost": 120,
+      "effects": { "type": "overtake_assist", "condition": "long_race", "value": 0.25 }
+    },
+    {
+      "name": "Nhãn Quan Siêu Phàm (Clairvoyance)",
+      "description": "Mở rộng đáng kể tầm nhìn và nhận biết tình huống sớm trong cuộc đua.",
+      "rarity": "Rare",
+      "cost": 110,
+      "effects": { "type": "vision_boost", "condition": "early_race", "value": 10 }
+    },
+    {
+      "name": "Ý Chí Sắt Đá (Iron Will)",
+      "description": "Phục hồi Thể lực khi đường phía trước bị kẹt sớm trong cuộc đua.",
+      "rarity": "Rare",
+      "cost": 120,
+      "effects": { "type": "stamina_recovery", "condition": "early_blocked", "value": 3.5 }
+    },
+    {
+      "name": "Tinh Thần Cạnh Tranh ◎ (Competitive Spirit ◎)",
+      "description": "Tăng mạnh hiệu suất khi có ít nhất 5 đối thủ dùng chung chiến thuật.",
+      "rarity": "Rare",
+      "cost": 110,
+      "effects": { "type": "crowd_bonus", "condition": "many_same_strategy", "value": 40 }
+    },
+    {
+      "name": "Cơn Gió Thổi Mạnh! (Rushing Gale!)",
+      "description": "Tăng mạnh gia tốc trên đoạn đường thẳng.",
+      "rarity": "Rare",
+      "cost": 130,
+      "effects": { "type": "acceleration_boost", "condition": "straight", "value": 0.3 }
+    },
+    {
+      "name": "Giác Quan Thứ Sáu (Sixth Sense)",
+      "description": "Giúp tránh bị bao vây sớm trong cuộc đua khi là Front Runner.",
+      "rarity": "Rare",
+      "cost": 100,
+      "effects": { "type": "positioning_boost", "condition": "early_front_runner", "value": 0.3 }
+    },
+    {
+      "name": "Bất Khuất (Indomitable)",
+      "description": "Phục hồi Thể lực khi bị đối thủ khác vượt qua giữa cuộc đua.",
+      "rarity": "Rare",
+      "cost": 120,
+      "effects": { "type": "stamina_recovery", "condition": "overtaken_mid_race", "value": 3.5 }
+    },
+    {
+      "name": "Người Mở Đường (Trackblazer)",
+      "description": "Giảm mệt mỏi khi dẫn đầu giữa cuộc đua (Medium).",
+      "rarity": "Rare",
+      "cost": 110,
+      "effects": { "type": "fatigue_reduction", "condition": "mid_race_lead_medium", "value": 0.15 }
+    },
+    {
+      "name": "Vào Cuộc! (It's On!)",
+      "description": "Tăng tốc độ khi vượt qua đối thủ giữa cuộc đua.",
+      "rarity": "Rare",
+      "cost": 130,
+      "effects": { "type": "speed_boost", "condition": "overtake_mid_race", "value": 0.25 }
+    },
+    {
+      "name": "Thành Thạo Lối Ngoài ◎ (Outer Post Proficiency ◎)",
+      "description": "Tăng mạnh hiệu suất ở ô xuất phát 6–8.",
+      "rarity": "Rare",
+      "cost": 90,
+      "effects": { "type": "gate_bonus", "condition": "outer_gate", "value": 40 }
+    },
+    {
+      "name": "Thành Thạo Lối Trong ◎ (Inner Post Proficiency ◎)",
+      "description": "Tăng mạnh hiệu suất ở ô xuất phát 1–3.",
+      "rarity": "Rare",
+      "cost": 90,
+      "effects": { "type": "gate_bonus", "condition": "inner_gate", "value": 40 }
+    },
+    {
+      "name": "Độc Hành ◎ (Maverick ◎)",
+      "description": "Tăng mạnh hiệu suất khi không có đối thủ nào dùng chung chiến thuật.",
+      "rarity": "Rare",
+      "cost": 120,
+      "effects": { "type": "lone_wolf_bonus", "condition": "no_same_strategy", "value": 40 }
+    },
+    {
+      "name": "Mục Tiêu Trong Tầm Ngắm ◎ (Target in Sight ◎)",
+      "description": "Tăng mạnh hiệu suất khi ứng cử viên hàng đầu dùng chung chiến thuật.",
+      "rarity": "Rare",
+      "cost": 110,
+      "effects": { "type": "rival_bonus", "condition": "favorite_same_strategy", "value": 40 }
+    },
+    {
+      "name": "Hồi Phục Khi Vào Cua ○ (Corner Recovery ○)",
+      "description": "Hồi phục nhẹ Thể lực khi vào cua hiệu quả.",
+      "rarity": "Common",
+      "cost": 80,
+      "effects": { "type": "stamina_recovery", "condition": "corner", "value": 1.5 }
+    },
+    {
+      "name": "Hồi Phục Trên Đường Thẳng (Straightaway Recovery)",
+      "description": "Hồi phục nhẹ Thể lực trên đoạn đường thẳng.",
+      "rarity": "Common",
+      "cost": 80,
+      "effects": { "type": "stamina_recovery", "condition": "straight", "value": 1.5 }
+    },
+    {
+      "name": "Trường Đua Trái ○ (Left-Handed ○)",
+      "description": "Tăng vừa phải hiệu suất tại các trường đua rẽ trái.",
+      "rarity": "Common",
+      "cost": 50,
+      "effects": { "type": "track_condition_boost", "condition": "left_turn", "value": 20 }
+    },
+    {
+      "name": "Ngày Mưa ○ (Rainy Days ○)",
+      "description": "Tăng vừa phải hiệu suất khi trời mưa.",
+      "rarity": "Common",
+      "cost": 40,
+      "effects": { "type": "weather_bonus", "condition": "rain", "value": 20 }
+    },
+    {
+      "name": "Thành Thạo Lối Ngoài ○ (Outer Post Proficiency ○)",
+      "description": "Tăng vừa phải hiệu suất ở ô xuất phát 6–8.",
+      "rarity": "Common",
+      "cost": 30,
+      "effects": { "type": "gate_bonus", "condition": "outer_gate", "value": 20 }
+    },
+    {
+      "name": "Thành Thạo Lối Trong ○ (Inner Post Proficiency ○)",
+      "description": "Tăng vừa phải hiệu suất ở ô xuất phát 1–3.",
+      "rarity": "Common",
+      "cost": 30,
+      "effects": { "type": "gate_bonus", "condition": "inner_gate", "value": 20 }
+    },
+    {
+      "name": "Tăng Tốc (Ramp Up)",
+      "description": "Tăng nhẹ tốc độ khi vượt qua đối thủ giữa cuộc đua.",
+      "rarity": "Common",
+      "cost": 60,
+      "effects": { "type": "speed_boost", "condition": "overtake_mid_race", "value": 0.15 }
+    },
+    {
+      "name": "Tập Trung (Focus)",
+      "description": "Giảm nhẹ thời gian mất mát do xuất phát chậm.",
+      "rarity": "Common",
+      "cost": 70,
+      "effects": { "type": "focus_boost", "condition": "start", "value": 0.4 }
+    },
+    {
+      "name": "Vận Động Viên Mùa Xuân ○ (Spring Runner ○)",
+      "description": "Tăng vừa phải hiệu suất trong mùa xuân.",
+      "rarity": "Common",
+      "cost": 40,
+      "effects": { "type": "season_bonus", "season": "spring", "value": 20 }
+    },
+    {
+      "name": "Cự Ly Tiêu Chuẩn ○ (Standard Distance ○)",
+      "description": "Tăng vừa phải hiệu suất ở cự ly tiêu chuẩn (bội số của 400m).",
+      "rarity": "Common",
+      "cost": 50,
+      "effects": { "type": "distance_bonus", "distance": "standard", "value": 20 }
+    },
+    {
+      "name": "Độc Hành ○ (Maverick ○)",
+      "description": "Tăng vừa phải hiệu suất khi không có đối thủ nào dùng chung chiến thuật.",
+      "rarity": "Common",
+      "cost": 60,
+      "effects": { "type": "lone_wolf_bonus", "condition": "no_same_strategy", "value": 20 }
+    },
+    {
+      "name": "Ẩn Mình (Lay Low)",
+      "description": "Hồi phục nhẹ Thể lực khi đường phía trước bị kẹt sớm trong cuộc đua.",
+      "rarity": "Common",
+      "cost": 80,
+      "effects": { "type": "stamina_recovery", "condition": "early_blocked", "value": 1.5 }
+    },
+    {
+      "name": "Dư Thừa Thể Lực (Stamina to Spare)",
+      "description": "Giảm nhẹ mệt mỏi sớm trong cuộc đua (Pace Chaser).",
+      "rarity": "Common",
+      "cost": 70,
+      "effects": { "type": "fatigue_reduction", "condition": "early_pace_chaser", "value": 0.1 }
+    },
+    {
+      "name": "Thành Thạo Đường Thẳng (Straightaway Adept)",
+      "description": "Tăng nhẹ tốc độ trên đoạn đường thẳng.",
+      "rarity": "Common",
+      "cost": 50,
+      "effects": { "type": "speed_boost", "condition": "straight", "value": 0.15 }
+    },
+    {
+      "name": "Tăng Tốc Khi Vào Cua ○ (Corner Acceleration ○)",
+      "description": "Tăng nhẹ gia tốc khi vào cua điêu luyện.",
+      "rarity": "Common",
+      "cost": 60,
+      "effects": { "type": "acceleration_boost", "condition": "corner", "value": 0.1 }
+    },
+    {
+      "name": "Mắt Tinh Anh (Keen Eye)",
+      "description": "Giảm mệt mỏi khi ở vị trí phía sau sớm trong cuộc đua (Mile).",
+      "rarity": "Common",
+      "cost": 70,
+      "effects": { "type": "fatigue_reduction", "condition": "early_rear_mile", "value": 0.1 }
+    },
+    {
+      "name": "Vận Động Viên Mùa Thu ○ (Fall Runner ○)",
+      "description": "Tăng vừa phải hiệu suất trong mùa thu.",
+      "rarity": "Common",
+      "cost": 40,
+      "effects": { "type": "season_bonus", "season": "fall", "value": 20 }
+    },
+    {
+      "name": "Vận Động Viên Mùa Đông ○ (Winter Runner ○)",
+      "description": "Tăng vừa phải hiệu suất trong mùa đông.",
+      "rarity": "Common",
+      "cost": 40,
+      "effects": { "type": "season_bonus", "season": "winter", "value": 20 }
+    },
+    {
+      "name": "Ngày Nắng ○ (Sunny Days ○)",
+      "description": "Tăng vừa phải hiệu suất khi trời nắng.",
+      "rarity": "Common",
+      "cost": 40,
+      "effects": { "type": "weather_bonus", "condition": "sunny", "value": 20 }
+    },
+    {
+      "name": "Cự Ly Phi Tiêu Chuẩn ○ (Non-Standard Distance ○)",
+      "description": "Tăng vừa phải hiệu suất ở cự ly phi tiêu chuẩn.",
+      "rarity": "Common",
+      "cost": 50,
+      "effects": { "type": "distance_bonus", "distance": "non_standard", "value": 20 }
+    },
+    {
+      "name": "Bù Nước (Hydrate)",
+      "description": "Hồi phục nhẹ Thể lực giữa cuộc đua (Pace Chaser).",
+      "rarity": "Common",
+      "cost": 80,
+      "effects": { "type": "stamina_recovery", "condition": "mid_race_pace_chaser", "value": 1.5 }
+    },
+    {
+      "name": "Lập Kế Hoạch Đua (Race Planner)",
+      "description": "Giảm mệt mỏi giữa cuộc đua (Pace Chaser).",
+      "rarity": "Common",
+      "cost": 70,
+      "effects": { "type": "fatigue_reduction", "condition": "mid_race_pace_chaser", "value": 0.1 }
+    },
+    {
+      "name": "Hạ Nhiệt (Cooldown)",
+      "description": "Giảm mệt mỏi bằng cách nghỉ ngơi khi vào đoạn thẳng (Long).",
+      "rarity": "Common",
+      "cost": 70,
+      "effects": { "type": "fatigue_reduction", "condition": "straight_long_race", "value": 0.1 }
+    },
+    {
+      "name": "Vội Vã Đoạn Cuối (Homestretch Haste)",
+      "description": "Tăng nhẹ tốc độ trong cú nước rút cuối cùng.",
+      "rarity": "Common",
+      "cost": 60,
+      "effects": { "type": "speed_boost", "condition": "final_sprint", "value": 0.15 }
+    },
+    {
+      "name": "Định Vị Thận Trọng (Prudent Positioning)",
+      "description": "Tăng vừa phải khả năng điều hướng sớm trong cuộc đua.",
+      "rarity": "Common",
+      "cost": 50,
+      "effects": { "type": "positioning_boost", "condition": "early_race", "value": 0.15 }
+    },
+    {
+      "name": "Sói Cô Độc (Lone Wolf)",
+      "description": "Tăng vừa phải hiệu suất khi không có đối thủ nào có 'trái tim sói cô độc'.",
+      "rarity": "Common",
+      "cost": 60,
+      "effects": { "type": "lone_wolf_bonus", "condition": "no_other_lone_wolf", "value": 20 }
+    },
+    {
+      "name": "Số Bảy May Mắn (Lucky Seven)",
+      "description": "Có khả năng xảy ra điều tốt đẹp vừa phải khi ở ô xuất phát số 7.",
+      "rarity": "Common",
+      "cost": 77,
+      "effects": { "type": "random_stat_boost", "condition": "gate_7", "value": 27 }
+    },
+    {
+      "name": "Thư Giãn (Relax)",
+      "description": "Phục hồi Thể lực cuối cuộc đua (Late Surger).",
+      "rarity": "Common",
+      "cost": 80,
+      "effects": { "type": "stamina_recovery", "condition": "late_surger", "value": 1.5 }
+    }
+  ]
+}

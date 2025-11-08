@@ -1,0 +1,204 @@
+Tuyệt vời, đây là bản dịch tiếng Việt của danh sách kỹ năng trong game Umamusume: Pretty Derby mà bạn đã cung cấp. Tôi sẽ nhóm chúng theo chủ đề để dễ theo dõi.
+
+🏇 Danh Sách Kỹ Năng (Skills) trong Umamusume
+I. Kỹ Năng Tương Thích Trường Đua & Môi Trường (Field & Environment Aptitude)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Right-Handed ◎	Trường Đua Phải ◎	Tăng mạnh hiệu suất tại các trường đua rẽ phải.
+Right-Handed ○	Trường Đua Phải ○	Tăng vừa phải hiệu suất tại các trường đua rẽ phải.
+Left-Handed ◎	Trường Đua Trái ◎	Tăng mạnh hiệu suất tại các trường đua rẽ trái.
+Left-Handed ○	Trường Đua Trái ○	Tăng vừa phải hiệu suất tại các trường đua rẽ trái.
+Right-Handed ×	Trường Đua Phải ×	Giảm vừa phải hiệu suất tại các trường đua rẽ phải.
+Left-Handed ×	Trường Đua Trái ×	Giảm vừa phải hiệu suất tại các trường đua rẽ trái.
+Spring Runner ◎	Vận Động Viên Mùa Xuân ◎	Tăng mạnh hiệu suất trong mùa xuân.
+Spring Runner ○	Vận Động Viên Mùa Xuân ○	Tăng vừa phải hiệu suất trong mùa xuân.
+Spring Runner ×	Vận Động Viên Mùa Xuân ×	Giảm vừa phải hiệu suất trong mùa xuân.
+Summer Runner ◎	Vận Động Viên Mùa Hè ◎	Tăng mạnh hiệu suất trong mùa hè.
+Summer Runner ○	Vận Động Viên Mùa Hè ○	Tăng vừa phải hiệu suất trong mùa hè.
+Summer Runner ×	Vận Động Viên Mùa Hè ×	Giảm vừa phải hiệu suất trong mùa hè.
+Fall Runner ◎	Vận Động Viên Mùa Thu ◎	Tăng mạnh hiệu suất trong mùa thu.
+Fall Runner ○	Vận Động Viên Mùa Thu ○	Tăng vừa phải hiệu suất trong mùa thu.
+Fall Runner ×	Vận Động Viên Mùa Thu ×	Giảm vừa phải hiệu suất trong mùa thu.
+Winter Runner ◎	Vận Động Viên Mùa Đông ◎	Tăng mạnh hiệu suất trong mùa đông.
+Winter Runner ○	Vận Động Viên Mùa Đông ○	Tăng vừa phải hiệu suất trong mùa đông.
+Winter Runner ×	Vận Động Viên Mùa Đông ×	Giảm vừa phải hiệu suất trong mùa đông.
+Firm Conditions ◎	Điều kiện Mặt Đất Tốt ◎	Tăng mạnh hiệu suất trên mặt đất cứng.
+Firm Conditions ○	Điều kiện Mặt Đất Tốt ○	Tăng vừa phải hiệu suất trên mặt đất cứng.
+Firm Conditions ×	Điều kiện Mặt Đất Tốt ×	Giảm vừa phải hiệu suất trên mặt đất cứng.
+Wet Conditions ◎	Điều kiện Mặt Đất Ướt ◎	Tăng mạnh hiệu suất trên mặt đất tốt, mềm và nặng.
+Wet Conditions ○	Điều kiện Mặt Đất Ướt ○	Tăng vừa phải hiệu suất trên mặt đất tốt, mềm và nặng.
+Wet Conditions ×	Điều kiện Mặt Đất Ướt ×	Giảm vừa phải hiệu suất trên mặt đất tốt, mềm và nặng.
+Sunny Days ◎	Ngày Nắng ◎	Tăng mạnh hiệu suất khi trời nắng.
+Sunny Days ○	Ngày Nắng ○	Tăng vừa phải hiệu suất khi trời nắng.
+Cloudy Days ◎	Ngày Mây ◎	Tăng mạnh hiệu suất khi trời mây.
+Cloudy Days ○	Ngày Mây ○	Tăng vừa phải hiệu suất khi trời mây.
+Rainy Days ◎	Ngày Mưa ◎	Tăng mạnh hiệu suất khi trời mưa.
+Rainy Days ○	Ngày Mưa ○	Tăng vừa phải hiệu suất khi trời mưa.
+Rainy Days ×	Ngày Mưa ×	Giảm vừa phải hiệu suất khi trời mưa.
+Snowy Days ◎	Ngày Tuyết ◎	Tăng mạnh hiệu suất khi trời tuyết.
+Snowy Days ○	Ngày Tuyết ○	Tăng vừa phải hiệu suất khi trời tuyết.
+Standard Distance ◎	Cự Ly Tiêu Chuẩn ◎	Tăng mạnh hiệu suất ở cự ly tiêu chuẩn (bội số của 400m).
+Standard Distance ○	Cự Ly Tiêu Chuẩn ○	Tăng vừa phải hiệu suất ở cự ly tiêu chuẩn.
+Non-Standard Distance ◎	Cự Ly Phi Tiêu Chuẩn ◎	Tăng mạnh hiệu suất ở cự ly phi tiêu chuẩn (không phải bội số của 400m).
+Non-Standard Distance ○	Cự Ly Phi Tiêu Chuẩn ○	Tăng vừa phải hiệu suất ở cự ly phi tiêu chuẩn.
+Standard Distance ×	Cự Ly Tiêu Chuẩn ×	Giảm vừa phải hiệu suất ở cự ly tiêu chuẩn.
+Non-Standard Distance ×	Cự Ly Phi Tiêu Chuẩn ×	Giảm vừa phải hiệu suất ở cự ly phi tiêu chuẩn.
+G1 Averseness	Né Tránh G1	Giảm vừa phải hiệu suất trong các cuộc đua G1 hoặc quan trọng khác.
+[Racecourse] ◎/○/×	Trường Đua [Tên] ◎/○/×	Tăng/Giảm hiệu suất tại trường đua cụ thể (Tokyo, Nakayama, Hanshin, v.v.).
+
+Xuất sang Trang tính
+
+II. Kỹ Năng Tương Thích Vị Trí & Chiến Thuật (Positioning & Strategy Aptitude)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Outer Post Proficiency ◎	Thành Thạo Lối Ngoài ◎	Tăng mạnh hiệu suất ở ô xuất phát 6–8.
+Outer Post Proficiency ○	Thành Thạo Lối Ngoài ○	Tăng vừa phải hiệu suất ở ô xuất phát 6–8.
+Outer Post Averseness	Né Tránh Lối Ngoài	Giảm vừa phải hiệu suất ở ô xuất phát 6–8.
+Inner Post Proficiency ◎	Thành Thạo Lối Trong ◎	Tăng mạnh hiệu suất ở ô xuất phát 1–3.
+Inner Post Proficiency ○	Thành Thạo Lối Trong ○	Tăng vừa phải hiệu suất ở ô xuất phát 1–3.
+Inner Post Averseness	Né Tránh Lối Trong	Giảm vừa phải hiệu suất ở ô xuất phát 1–3.
+Maverick ◎	Độc Hành ◎	Tăng mạnh hiệu suất khi không có đối thủ nào dùng chung chiến thuật.
+Maverick ○	Độc Hành ○	Tăng vừa phải hiệu suất khi không có đối thủ nào dùng chung chiến thuật.
+Competitive Spirit ◎	Tinh Thần Cạnh Tranh ◎	Tăng mạnh hiệu suất khi có ít nhất 5 đối thủ dùng chung chiến thuật.
+Competitive Spirit ○	Tinh Thần Cạnh Tranh ○	Tăng vừa phải hiệu suất khi có ít nhất 5 đối thủ dùng chung chiến thuật.
+Wallflower	Kẻ Cô Đơn	Giảm vừa phải hiệu suất khi có ít nhất 5 đối thủ dùng chung chiến thuật.
+Long Shot ◎	Ngựa Ô ◎	Tăng mạnh hiệu suất khi được xếp hạng 4 yêu thích trở xuống.
+Long Shot ○	Ngựa Ô ○	Tăng vừa phải hiệu suất khi được xếp hạng 4 yêu thích trở xuống.
+Paddock Fright	Sợ Hãi Bãi Tập	Giảm vừa phải hiệu suất khi là ứng cử viên hàng đầu (Favorite).
+Sympathy	Đồng Cảm	Tăng vừa phải hiệu suất khi nhiều đối thủ có cùng "trái tim đồng cảm".
+Lone Wolf	Sói Cô Độc	Tăng vừa phải hiệu suất khi không có đối thủ nào có "trái tim sói cô độc".
+Unchanging	Bất Biến	Tăng mạnh hiệu suất với cùng tham vọng của những ngày đã qua.
+Unquenched Thirst	Khát Khao Chưa Nguôi	Tăng vừa phải hiệu suất với mong muốn được chạy đua.
+Target in Sight ◎	Mục Tiêu Trong Tầm Ngắm ◎	Tăng mạnh hiệu suất khi ứng cử viên hàng đầu dùng chung chiến thuật.
+Target in Sight ○	Mục Tiêu Trong Tầm Ngắm ○	Tăng vừa phải hiệu suất khi ứng cử viên hàng đầu dùng chung chiến thuật.
+Lucky Seven	Số Bảy May Mắn	Có khả năng xảy ra điều tốt đẹp vừa phải khi ở ô xuất phát số 7.
+Super Lucky Seven	Siêu Số Bảy May Mắn	Có khả năng xảy ra điều tốt đẹp khi ở ô xuất phát số 7.
+
+Xuất sang Trang tính
+
+III. Kỹ Năng Phục Hồi Thể Lực (Endurance Recovery)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Swinging Maestro	Bậc Thầy Vào Cua	Phục hồi Thể lực khi vào cua hiệu quả.
+Corner Recovery ○	Hồi Phục Khi Vào Cua ○	Hồi phục nhẹ Thể lực khi vào cua hiệu quả.
+Corner Recovery ×	Hồi Phục Khi Vào Cua ×	Mất vừa phải Thể lực khi vào cua không hiệu quả.
+Breath of Fresh Air	Hít Thở Khí Trời	Phục hồi Thể lực trên đoạn đường thẳng.
+Straightaway Recovery	Hồi Phục Trên Đường Thẳng	Hồi phục nhẹ Thể lực trên đoạn đường thẳng.
+Iron Will	Ý Chí Sắt Đá	Phục hồi Thể lực khi đường phía trước bị kẹt sớm trong cuộc đua.
+Lay Low	Ẩn Mình	Hồi phục nhẹ Thể lực khi đường phía trước bị kẹt sớm trong cuộc đua.
+Indomitable	Bất Khuất	Phục hồi Thể lực khi bị đối thủ khác vượt qua giữa cuộc đua.
+Pace Strategy	Chiến Lược Tốc Độ	Hồi phục nhẹ Thể lực khi bị đối thủ khác vượt qua giữa cuộc đua.
+Unruffled	Bình Tĩnh	Phục hồi Thể lực khi bị bao vây giữa cuộc đua.
+Calm in a Crowd	Bình Tĩnh Giữa Đám Đông	Hồi phục nhẹ Thể lực khi bị bao vây giữa cuộc đua.
+Triple 7s	Ba Số 7	Tăng nhẹ năng lượng khi còn 777m.
+Shake It Out	Thư Giãn	Hồi phục nhẹ Thể lực sau khi kích hoạt nhiều kỹ năng cuối cuộc đua.
+Gourmand	Người Sành Ăn	Phục hồi Thể lực giữa cuộc đua. (Pace Chaser)
+Hydrate	Bù Nước	Hồi phục nhẹ Thể lực giữa cuộc đua. (Pace Chaser)
+Relax	Thư Thái	Phục hồi Thể lực cuối cuộc đua. (Late Surger)
+A Small Breather	Hồi Sức Nhẹ	Hồi phục nhẹ Thể lực cuối cuộc đua. (Late Surger)
+Các kỹ năng độc quyền Unique Skills của Umamusume (ví dụ: U=ma2, Pure Heart, v.v.)	Kỹ năng Độc Quyền	Hồi phục Thể lực/Hồi phục nhẹ Thể lực theo điều kiện riêng.
+
+Xuất sang Trang tính
+
+IV. Kỹ Năng Giảm Mệt Mỏi & Tăng Cường Tinh Thần (Fatigue Reduction & Vigor)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Ramp Revulsion	Chống Dốc	Tăng vừa phải sự mệt mỏi khi lên dốc.
+Packphobia	Sợ Hãi Bị Bao Vây	Mất vừa phải Thể lực khi bị bao vây.
+Running Idle	Chạy Chậm	Tăng vừa phải sự mệt mỏi khi dẫn đầu với khoảng cách quá lớn.
+Calm and Collected	Bình Tĩnh Thu Thập	Giảm mệt mỏi sớm trong cuộc đua. (Pace Chaser)
+Stamina to Spare	Dư Thừa Thể Lực	Giảm nhẹ mệt mỏi sớm trong cuộc đua. (Pace Chaser)
+Race Planner	Lập Kế Hoạch Đua	Giảm mệt mỏi giữa cuộc đua. (Pace Chaser)
+Preferred Position	Vị Trí Ưa Thích	Giảm nhẹ mệt mỏi giữa cuộc đua. (Pace Chaser)
+Sleeping Lion	Sư Tử Ngủ Yên	Giảm mệt mỏi giữa cuộc đua. (End Closer)
+Standing By	Đứng Chờ	Giảm nhẹ mệt mỏi giữa cuộc đua. (End Closer)
+Wait-and-See	Chờ Xem	Giảm nhẹ mệt mỏi khi ở vị trí phía sau giữa cuộc đua. (Sprint)
+Keen Eye	Mắt Tinh Anh	Giảm mệt mỏi khi ở vị trí phía sau sớm trong cuộc đua. (Mile)
+Watchful Eye	Mắt Cảnh Giác	Giảm nhẹ mệt mỏi khi ở vị trí phía sau sớm trong cuộc đua. (Mile)
+Trackblazer	Người Mở Đường	Giảm mệt mỏi khi dẫn đầu giữa cuộc đua. (Medium)
+Rosy Outlook	Góc Nhìn Tích Cực	Giảm nhẹ mệt mỏi khi dẫn đầu giữa cuộc đua. (Medium)
+Cooldown	Hạ Nhiệt	Giảm mệt mỏi bằng cách nghỉ ngơi khi vào đoạn thẳng. (Long)
+Deep Breaths	Thở Sâu	Giảm nhẹ mệt mỏi bằng cách nghỉ ngơi khi vào đoạn thẳng. (Long)
+Adrenaline Rush	Cơn Sốt Adrenaline	Lấy lại năng lượng để chạy sau khi kiệt sức. (Long)
+Extra Tank	Bình Phụ	Lấy lại nhẹ năng lượng để chạy sau khi kiệt sức. (Long)
+Miraculous Step	Bước Chân Thần Kì	Giảm mệt mỏi khi di chuyển ngang. (Medium)
+Soft Step	Bước Nhẹ Nhàng	Giảm nhẹ mệt mỏi khi di chuyển ngang. (Medium)
+Passing Pro	Chuyên Gia Vượt Mặt	Giảm nhẹ mệt mỏi khi quyết tâm vượt qua đối thủ. (Long)
+Restless	Bồn Chồn	Giảm mệt mỏi khi lên dốc. (Front Runner)
+Moxie	Dũng Khí	Giảm nhẹ mệt mỏi khi lên dốc. (Front Runner)
+Go-Home Specialist	Chuyên Gia Về Nhà	Giảm mệt mỏi khi xuống dốc. (End Closer)
+After-School Stroll	Đi Dạo Sau Giờ Học	Giảm nhẹ mệt mỏi khi xuống dốc. (End Closer)
+Serenity	Thanh Tĩnh	Lấy lại bình tĩnh khi đường phía trước bị kẹt. (End Closer)
+Levelheaded	Đầu Óc Tỉnh Táo	Lấy lại nhẹ bình tĩnh khi đường phía trước bị kẹt. (End Closer)
+
+Xuất sang Trang tính
+
+V. Kỹ Năng Tăng Tốc Độ (Velocity/Speed Boost)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Corner Adept ○	Thành Thạo Vào Cua ○	Tăng nhẹ tốc độ khi vào cua khéo léo.
+Straightaway Adept	Thành Thạo Đường Thẳng	Tăng nhẹ tốc độ trên đoạn đường thẳng.
+Ramp Up	Tăng Tốc	Tăng nhẹ tốc độ khi vượt qua đối thủ giữa cuộc đua.
+Homestretch Haste	Vội Vã Đoạn Cuối	Tăng nhẹ tốc độ trong cú nước rút cuối cùng.
+Professor of Curvature	Giáo Sư Đường Cong	Tăng tốc độ khi vào cua khéo léo.
+Beeline Burst	Cú Vọt Đường Thẳng	Tăng tốc độ trên đoạn đường thẳng.
+It's On!	Vào Cuộc!	Tăng tốc độ khi vượt qua đối thủ giữa cuộc đua.
+In Body and Mind	Hoàn Hảo Thể Chất và Tinh Thần	Tăng tốc độ trong cú nước rút cuối cùng.
+Corner Adept ×	Thành Thạo Vào Cua ×	Giảm vừa phải tốc độ khi vào cua vụng về.
+Defeatist	Kẻ Bỏ Cuộc	Tăng vừa phải ý muốn bỏ cuộc khi ở vị trí gần cuối ở đoạn thẳng cuối cùng.
+Reckless	Liều Lĩnh	Tăng vừa phải sự bất cẩn khi dẫn đầu với khoảng 200m còn lại.
+[Distance/Strategy] Straightaways ◎/○	Đường Thẳng [Cự Ly/Chiến Thuật] ◎/○	Tăng mạnh/vừa phải/nhẹ tốc độ trên đoạn thẳng (theo cự ly/chiến thuật).
+[Distance/Strategy] Corners ◎/○	Đường Cong [Cự Ly/Chiến Thuật] ◎/○	Tăng mạnh/vừa phải/nhẹ tốc độ khi vào cua (theo cự ly/chiến thuật).
+Và các kỹ năng tăng tốc độ theo điều kiện cụ thể (ví dụ: Fast-Paced, Prepared to Pass, Unyielding, v.v.).		Tăng nhẹ/mạnh tốc độ theo điều kiện riêng.
+Các kỹ năng độc quyền Unique Skills cấp cao (ví dụ: Sky-High Teio Step, Triumphant Pulse, v.v.)	Kỹ năng Độc Quyền	Tăng mạnh tốc độ theo điều kiện kích hoạt riêng.
+
+Xuất sang Trang tính
+
+VI. Kỹ Năng Tăng Tăng Tốc (Acceleration Boost)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Corner Acceleration ○	Tăng Tốc Khi Vào Cua ○	Tăng nhẹ gia tốc khi vào cua điêu luyện.
+Straightaway Acceleration	Tăng Tốc Đường Thẳng	Tăng nhẹ gia tốc trên đoạn đường thẳng.
+Corner Connoisseur	Chuyên Gia Đường Cong	Tăng gia tốc khi vào cua điêu luyện.
+Rushing Gale!	Cơn Gió Thổi Mạnh!	Tăng gia tốc trên đoạn đường thẳng.
+Nimble Navigator	Người Dẫn Đường Nhanh Nhẹn	Tăng nhẹ khả năng điều khiển khi đường bị chặn ở cú nước rút cuối cùng.
+No Stopping Me!	Không Thể Cản Tôi!	Tăng khả năng điều khiển khi đường bị chặn ở cú nước rút cuối cùng.
+Corner Acceleration ×	Tăng Tốc Khi Vào Cua ×	Giảm vừa phải gia tốc khi vào cua vụng về.
+Và các kỹ năng tăng gia tốc theo chiến thuật/điều kiện (ví dụ: Slick Surge, Final Push, On Your Left!, Step on the Gas!, v.v.).		Tăng nhẹ/mạnh gia tốc theo điều kiện riêng.
+Các kỹ năng độc quyền Unique Skills (ví dụ: Let's Pump Some Iron!, Red Shift/LP1211-M, v.v.)	Kỹ năng Độc Quyền	Tăng gia tốc theo điều kiện kích hoạt riêng.
+
+Xuất sang Trang tính
+
+VII. Kỹ Năng Điều Hướng & Tập Trung (Navigation & Focus)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Prudent Positioning	Định Vị Thận Trọng	Tăng vừa phải khả năng điều hướng sớm trong cuộc đua.
+Center Stage	Vị Trí Trung Tâm	Tăng khả năng điều hướng sớm trong cuộc đua.
+Go with the Flow	Thuận Theo Dòng Chảy	Tăng vừa phải khả năng điều hướng cuối cuộc đua.
+Lane Legerdemain	Khéo Léo Trong Làn Đua	Tăng khả năng điều hướng cuối cuộc đua.
+Meticulous Measures	Biện Pháp Tỉ Mỉ	Chuẩn bị vừa phải cho cú nước rút giữa cuộc đua. (Sprint)
+Perfect Prep!	Chuẩn Bị Hoàn Hảo!	Chuẩn bị cho cú nước rút giữa cuộc đua. (Sprint)
+Thunderbolt Step	Bước Chân Sấm Sét	Tránh vừa phải bị bao vây khi ở phía sau giữa cuộc đua. (Medium)
+Lightning Step	Bước Chân Tia Chớp	Tránh bị bao vây khi ở phía sau giữa cuộc đua. (Medium)
+Dodging Danger	Né Tránh Nguy Hiểm	Tránh vừa phải bị bao vây sớm trong cuộc đua. (Front Runner)
+Sixth Sense	Giác Quan Thứ Sáu	Tránh bị bao vây sớm trong cuộc đua. (Front Runner)
+Focus	Tập Trung	Giảm nhẹ thời gian mất mát do xuất phát chậm.
+Concentration	Sự Tập Trung	Giảm thời gian mất mát do xuất phát chậm.
+Gatekept	Bị Cản Lối	Tăng vừa phải thời gian mất mát do xuất phát chậm.
+Hawkeye	Mắt Đại Bàng	Mở rộng vừa phải tầm nhìn sớm trong cuộc đua. (Medium)
+Clairvoyance	Nhãn Quan Siêu Phàm	Mở rộng tầm nhìn sớm trong cuộc đua. (Medium)
+Và các kỹ năng mở rộng tầm nhìn khác (Studious, I Can See Right Through You, The Bigger Picture, v.v.).		Mở rộng tầm nhìn theo điều kiện riêng.
+
+Xuất sang Trang tính
+
+VIII. Kỹ Năng Tăng Cường Đồng Đội & Chiến Thuật Đối Kháng (Team & Debuff Skills)
+Tên Tiếng Anh	Tên Tiếng Việt	Hiệu Ứng
+Ignited Spirit SPD/STA/PWR/GUTS/WIT	Tinh Thần Rực Cháy [Chỉ số]	Tăng nhẹ (hoặc phục hồi) [Chỉ số] theo tổng chỉ số của đồng đội.
+Burning Spirit SPD/STA/PWR/GUTS/WIT	Tinh Thần Bùng Cháy [Chỉ số]	Tăng mạnh (hoặc phục hồi) [Chỉ số] theo tổng chỉ số của đồng đội.
+Hesitant [Strategy]	[Chiến Thuật] Do Dự	Giảm nhẹ tốc độ của đối thủ dùng chiến thuật cụ thể cuối cuộc đua.
+Intimidate	Đe Dọa	Đe dọa vừa phải đối thủ phía sau sớm trong cuộc đua. (Sprint)
+Adored by All	Được Tất Cả Yêu Mến	Đe dọa đối thủ phía sau sớm trong cuộc đua. (Sprint)
+Greed for Speed	Tham Lam Tốc Độ	Hút vừa phải tốc độ từ đối thủ phía sau khi dẫn đầu giữa cuộc đua. (Mile)
+Stamina Siphon	Hút Cạn Thể Lực	Hút vừa phải Thể lực từ đối thủ phía trước giữa cuộc đua. (Long)
+Dominator	Kẻ Thống Trị	Giảm tốc độ của đối thủ phía trước khi ở vị trí phía sau cuối cuộc đua. (Medium)
+Illusionist	Ảo Thuật Gia	Thu hẹp tầm nhìn của đối thủ phía trước cuối cuộc đua. (Long)
+Và nhiều kỹ năng gây Debuff/Gây nhiễu khác (Ví dụ: Trick, Subdued, Flustered, Murmur, You've Got No Shot, v.v.).		Gây ra các hiệu ứng tiêu cực lên đối thủ (tăng mệt mỏi, giảm tốc độ, gây hoảng loạn, v.v.).
+
+Xuất sang Trang tính
+
+Danh sách này bao gồm hầu hết các kỹ năng trong hệ thống của game. Các kỹ năng có biểu tượng ◎ hoặc Tên tiếng Anh đậm thường là phiên bản Hiếm (Rare) mạnh hơn của kỹ năng ○ hoặc Thường (Normal).
+
+Bạn có muốn tôi giải thích chi tiết hơn về bất kỳ kỹ năng nào trong danh sách này không?

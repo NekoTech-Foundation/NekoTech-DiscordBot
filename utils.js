@@ -638,11 +638,16 @@ async function handleInteractionCreate(interaction) {
         const files = getFilesRecursively('./addons');
         files.forEach(file => {
             const absolutePath = path.resolve(file);
-            const folderName = file.match(/\/addons\/([^/]+)/) ? file.match(/\/addons\/([^/]+)/)[1] : 'unknown';
+            const folderNameMatch = file.match(/[\\\/]addons[\\\/]([^\\\/]+)/);
+            const folderName = folderNameMatch ? folderNameMatch[1] : 'unknown';
 
             try {
-                console.log('Loading addon:', absolutePath);
                 let addon = require(absolutePath);
+
+                if (typeof addon.onLoad === 'function') {
+                    addon.onLoad(client);
+                }
+
                 if (addon.data) { // Slash command or context menu command
                     if (addon.data.toJSON && typeof addon.data.toJSON === 'function') {
                         if (commandConfig[addon.data.name]) {

@@ -1,2 +1,4 @@
 # Configuration for the Uma Musume addon
-gacha_cost: 5000
+gacha_cost_carrots: 500
+coin_to_carrot_rate: 10
+

@@ -25,7 +25,8 @@ module.exports = {
     const profileEmbed = new EmbedBuilder()
       .setTitle(`Hồ sơ của ${targetUser.username}`)
       .addFields(
-        { name: 'Xu', value: (playerEconomy?.money || 0).toString(), inline: true },
+        { name: 'Xu', value: (playerEconomy?.balance || 0).toString(), inline: true },
+        { name: '<:carrots:1436533295084208328> Cà rốt', value: (playerEconomy?.carrots || 0).toString(), inline: true },
         { name: 'Tổng số Mã nương', value: totalUmas.toString(), inline: true },
         { name: 'Mã nương yêu thích', value: umaPlayer.favoriteUma ? `${umaPlayer.favoriteUma.name} (#${umaPlayer.favoriteUma._id.toString().slice(-5)})` : 'Chưa đặt', inline: false }
       )

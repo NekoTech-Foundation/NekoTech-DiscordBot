@@ -43,6 +43,7 @@ const EconomyUserSchema = new mongoose.Schema({
     userId: { type: String, required: true, unique: true, index: true },
     balance: { type: Number, default: 0, index: true },
     bank: { type: Number, default: 0, index: true },
+    carrots: { type: Number, default: 0 },
     fishingXp: { type: Number, default: 0 },
     fishingLevel: { type: Number, default: 1 },
     inventory: [InventoryItemSchema],

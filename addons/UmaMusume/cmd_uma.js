@@ -44,7 +44,7 @@ module.exports = {
     const userId = interaction.user.id;
 
     if (subcommand === 'gacha') {
-      const gachaCost = config.gacha_cost || 5000;
+      const gachaCost = config.gacha_cost_carrots || 500;
 
       let playerEconomy = await EconomyUserData.findOne({ userId: userId });
       if (!playerEconomy) {
@@ -52,11 +52,11 @@ module.exports = {
         await playerEconomy.save();
       }
 
-      if (playerEconomy.money < gachaCost) {
-        return interaction.reply({ content: `Bạn cần ${gachaCost} xu để quay gacha, nhưng bạn chỉ có ${playerEconomy.money} xu.`, ephemeral: true });
+      if (playerEconomy.carrots < gachaCost) {
+        return interaction.reply({ content: `Bạn cần ${gachaCost} <:carrots:1436533295084208328> để quay gacha, nhưng bạn chỉ có ${playerEconomy.carrots} <:carrots:1436533295084208328>.`, ephemeral: true });
       }
 
-      playerEconomy.money -= gachaCost;
+      playerEconomy.carrots -= gachaCost;
       await playerEconomy.save();
 
       let umaPlayer = await UmaPlayer.findOne({ userId: userId });
@@ -128,7 +128,7 @@ module.exports = {
           { name: '<:power:1435601051561492530> Sức mạnh', value: newUma.stats.power.toString(), inline: true },
           { name: '<:guts:1435601048822747167> Tinh thần', value: newUma.stats.guts.toString(), inline: true },
           { name: '<:wit:1435601060004757555> Khôn ngoan', value: newUma.stats.wit.toString(), inline: true },
-          { name: 'Số xu còn lại', value: playerEconomy.money.toString(), inline: false }
+          { name: '<:carrots:1436533295084208328> Số cà rốt còn lại', value: playerEconomy.carrots.toString(), inline: false }
         )
         .setColor('Random');
 
