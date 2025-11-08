@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const dns = require('dns').promises;
 const axios = require('axios');
 const net = require('net');
@@ -24,7 +24,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('check-host')
-                .setDescription('Kiểm tra xem một máy chủ có đang hoạt động không.')
+                .setDescription('Kiểm tra xem một máy chủ có đang hoạt động không. (ex: https://music.youtube.com).')
                 .addStringOption(option => option.setName('address').setDescription('Chỉ định một địa chỉ IPv4 hoặc tên miền với giao thức.').setRequired(true))
         ),
     async execute(interaction) {
@@ -81,43 +81,109 @@ module.exports = {
             await interaction.deferReply();
 
             try {
-                const checkResponse = await axios.get(`https://check-host.net/check-http?host=${address}&max_nodes=5`, {
+                const checkResponse = await axios.get(`https://check-host.net/check-http?host=${address}`, {
                     headers: { 'Accept': 'application/json' }
                 });
                 const checkData = checkResponse.data;
 
                 if (checkData.ok !== 1) {
-                    return interaction.editReply({ content: 'Lỗi khi yêu cầu kiểm tra.', ephemeral: true });
+                    return interaction.editReply({ content: `Lỗi khi yêu cầu kiểm tra: ${checkData.error}`, ephemeral: true });
                 }
 
                 const requestId = checkData.request_id;
                 await interaction.editReply({ content: `Đang kiểm tra... Request ID: ${requestId}` });
 
-                setTimeout(async () => {
+                const pollResults = async (retries) => {
+                    if (retries === 0) {
+                        return interaction.editReply({ content: `Không thể lấy kết quả sau nhiều lần thử. Vui lòng kiểm tra thủ công: https://check-host.net/check-report/${requestId}`, ephemeral: true });
+                    }
+
                     try {
                         const resultResponse = await axios.get(`https://check-host.net/check-result/${requestId}`);
                         const resultData = resultResponse.data;
 
+                        if (!resultData) {
+                            setTimeout(() => pollResults(retries - 1), 2000);
+                            return;
+                        }
+
+                        const date = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC+0';
+                        const reportUrl = `https://check-host.net/check-report/${requestId}`;
+
+                        let stats = '';
+                        const nodes = Object.keys(resultData).slice(0, 20);
+                        const mid = Math.ceil(nodes.length / 2);
+                        const firstHalf = nodes.slice(0, mid);
+                        const secondHalf = nodes.slice(mid);
+
+                        for (let i = 0; i < mid; i++) {
+                            const node1 = firstHalf[i];
+                            const node2 = secondHalf[i];
+
+                            let line = '';
+                            if (node1) {
+                                const res1 = resultData[node1][0];
+                                const time1 = res1[1];
+                                let color1 = '\u001b[0;32m'; // Green
+                                if (time1 === null) color1 = '\u001b[0;31m'; // Red
+                                else if (time1 >= 0.5) color1 = '\u001b[0;33m'; // Yellow
+
+                                const status1 = res1[0] === null ? '---' : res1[0];
+                                const timeStr1 = time1 === null ? 'TIMEOUT' : `${(time1 * 1000).toFixed(3)}ms`;
+                                line += `${color1}[${status1}] [${timeStr1}] ${node1.padEnd(25, ' ')}\u001b[0m`;
+                            }
+                            if (node2) {
+                                const res2 = resultData[node2][0];
+                                const time2 = res2[1];
+                                let color2 = '\u001b[0;32m'; // Green
+                                if (time2 === null) color2 = '\u001b[0;31m'; // Red
+                                else if (time2 >= 0.5) color2 = '\u001b[0;33m'; // Yellow
+
+                                const status2 = res2[0] === null ? '---' : res2[0];
+                                const timeStr2 = time2 === null ? 'TIMEOUT' : `${(time2 * 1000).toFixed(3)}ms`;
+                                line += `${color2}[${status2}] [${timeStr2}] ${node2}\u001b[0m`;
+                            }
+                            stats += line + '\n';
+                        }
+
                         const embed = new EmbedBuilder()
                             .setTitle(`Kết quả kiểm tra cho: ${address}`)
-                            .setColor('Blue');
+                            .setColor('Blue')
+                            .setDescription(
+`**Information:**
+- Date       ${date}
+- Address    ${address}
+- Report URL ${reportUrl}
 
-                        for (const node in resultData) {
-                            const nodeResult = resultData[node];
-                            if (nodeResult) {
-                                const status = nodeResult[0][0] === 1 ? 'Thành công' : 'Thất bại';
-                                const time = nodeResult[0][1];
-                                embed.addFields({ name: node, value: `Trạng thái: ${status}\nThời gian: ${time}s` });
-                            }
-                        }
-                        await interaction.editReply({ embeds: [embed] });
+**Statistics:**
+\`\`\`ansi
+${stats}
+\`\`\``
+                            );
+
+                        const row = new ActionRowBuilder()
+                            .addComponents(
+                                new ButtonBuilder()
+                                    .setLabel('Trang kết quả')
+                                    .setStyle(ButtonStyle.Link)
+                                    .setURL(reportUrl),
+                                new ButtonBuilder()
+                                    .setLabel('Trang đã kiểm tra')
+                                    .setStyle(ButtonStyle.Link)
+                                    .setURL(address)
+                            );
+
+                        await interaction.editReply({ embeds: [embed], components: [row] });
+
                     } catch (error) {
-                        await interaction.editReply({ content: 'Lỗi khi lấy kết quả kiểm tra.', ephemeral: true });
+                        setTimeout(() => pollResults(retries - 1), 2000);
                     }
-                }, 5000); // Wait 5 seconds for results
+                };
+
+                setTimeout(() => pollResults(5), 2000);
 
             } catch (error) {
-                await interaction.editReply({ content: 'Lỗi khi yêu cầu kiểm tra.', ephemeral: true });
+                await interaction.editReply({ content: 'Lỗi khi yêu cầu kiểm tra. Địa chỉ không hợp lệ hoặc không thể truy cập.', ephemeral: true });
             }
         }
     }
