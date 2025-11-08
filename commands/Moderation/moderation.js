@@ -4,6 +4,8 @@ const moment = require('moment-timezone');
 const { getConfig } = require('../../utils/configLoader.js');
 const config = getConfig();
 
+const kickLogCache = new Map();
+
 function parseDuration(durationStr) {
     const durationRegex = /(\d+)\s*(mon|d|h|m|s)/g;
     let totalMilliseconds = 0;
@@ -166,7 +168,20 @@ module.exports = {
             const reason = interaction.options.getString('reason');
 
             await member.kick(reason);
+
+            kickLogCache.set(member.id, {
+                moderator: interaction.user,
+                reason,
+                timestamp: Date.now()
+            });
+    
+            setTimeout(() => {
+                kickLogCache.delete(member.id);
+            }, 10000);
+
             await interaction.reply({ content: `Đã kick ${member.user.tag}.`, ephemeral: true });
         }
     }
 };
+
+module.exports.kickLogCache = kickLogCache;

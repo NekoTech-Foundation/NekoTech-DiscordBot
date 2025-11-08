@@ -58,7 +58,7 @@ const actions = {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('lemme')
+        .setName('letme')
         .setDescription('Lemme do something!')
         .addSubcommand(subcommand =>
             subcommand

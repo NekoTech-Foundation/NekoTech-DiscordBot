@@ -9,38 +9,21 @@ const autoResponseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    responseType: {
+    response: {
         type: String,
-        enum: ['TEXT', 'EMBED'],
         required: true
     },
-    responseText: {
+    mode: {
         type: String,
-        required: function() {
-            return this.responseType === 'TEXT';
-        }
+        enum: ['exact', 'contains', 'startswith', 'endswith'],
+        required: true
     },
-    embedData: {
-        type: Object,
-        required: function() {
-            return this.responseType === 'EMBED';
-        }
+    ignoreCase: {
+        type: Boolean,
+        default: false
     },
-    whitelistRoles: {
-        type: [String],
-        default: []
-    },
-    blacklistRoles: {
-        type: [String],
-        default: []
-    },
-    whitelistChannels: {
-        type: [String],
-        default: []
-    },
-    blacklistChannels: {
-        type: [String],
-        default: []
+    attachmentUrl: {
+        type: String
     }
 });
 
@@ -48,4 +31,4 @@ autoResponseSchema.index({ guildId: 1, trigger: 1 }, { unique: true });
 
 const AutoResponse = mongoose.models.AutoResponse || mongoose.model('AutoResponse', autoResponseSchema);
 
-module.exports = AutoResponse; 
+module.exports = AutoResponse;

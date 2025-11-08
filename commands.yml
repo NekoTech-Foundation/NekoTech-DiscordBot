@@ -102,14 +102,13 @@ backup: false
 channelstats: false
 autoreact: false
 botactivity: true
-autoresponse: false
+autoresponder: true
 translate: true
 steal: true
 embed: true
 reload: true
 
 # Addon Commands - Commands added by addons
-test: true
 farm: true
 savings: true
 sell: true
@@ -132,3 +131,6 @@ customrole: true
 report: true
 minecraft: true
 network: true
+age-calculator: true
+letme: true
+server: true
