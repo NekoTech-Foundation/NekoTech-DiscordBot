@@ -6,10 +6,10 @@
     "max_weight": 1.5
   },
   "epic": {
-    "name": "Cá ngọt",
-    "emoji": "<:Fish_sweetfish:1433392925890318367>",
-    "min_weight": 0.2,
-    "max_weight": 1
+    "name": "Cá rô phi hổ",
+    "emoji": "<:Fish_tigertilapia:1433393328191180901>",
+    "min_weight": 1,
+    "max_weight": 4
   },
-  "updatedAt": "2025-11-08T07:22:27.850Z"
+  "updatedAt": "2025-11-08T07:33:38.435Z"
 }

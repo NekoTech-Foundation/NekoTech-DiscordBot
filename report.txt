@@ -1,0 +1,281 @@
+⚠ Quick Report
+Vấn đề
+Đội ngũ Quản lí Máy chủ (Server Moderators & Administrators) không phải lúc nào cũng có mặt 100% để giải quyết vấn đề xung đột giữa người dùng (Member) trong máy chủ.
+
+Bạn có thể đã tạo 1 kênh #report, cho phép member của máy chủ có thể tố cáo người dùng khác. Hoặc member cũng có thể tạo 1 ticket để tố cáo người dùng khác.
+
+Tuy nhiên, các việc đã đề cập bên trên có đôi phần rắc rối. Một kênh #report để mọi người tố cáo lẫn nhau thì không thể giữ được tính riêng tư. Tạo ticket thì chúng sẽ bị lẫn chung với các ticket ở chủ đề khác, từ đó rất khó, hoặc không thể phân biệt giữa các chủ đề ticket với nhau.
+
+Và, chúng có thể không được tổ chức một cách hợp lí. Member vẫn thích ping bạn ở #general và nói về việc “abcxyz vi phạm rồi kìa sao không xử lí đi???”.
+
+Giải pháp
+Quick Report, hay còn gọi là Tố cáo nhanh, giúp cho:
+Member tố cáo nội dung vi phạm một cách nhanh chóng
+Moderator quản lí các bản tố cáo một cách hiệu quả và tự động.
+Note
+
+Các lệnh để cài đặt tính năng sẽ bắt đầu bằng /quickreport, còn các lệnh để quản lí các phiếu tố cáo, sẽ bắt đầu bằng /report
+
+Một người dùng có thể bấm chuột phải vào một tin nhắn, sau đó chọn Ứng dụng > Tố cáo tin nhắn này. Member chỉ cần nhập thêm lí do tố cáo, vậy là một bản tố cáo đã được gửi về kênh nhận tố cáo được chỉ định trước (có thể được định trước như /quickreport enable receive_channel:#report)
+
+Note
+
+Người dùng đang bị mute, hoặc bị timeout, sẽ không thể tạo báo cáo. Xem thêm ở phía dưới để biết cách cài đặt mute role
+
+Sau khi bản tố cáo được gửi về Moderator, họ sẽ xem xét báo cáo này (được bao gồm link dẫn tới tin nhắn, nội dung tin nhắn (đề phòng việc đột ngột xóa dẫn đến mất bằng chứng), và lí do tố cáo). Moderator có thể ban, hoặc mute, hoặc timeout người dùng vi phạm, hoặc không thực hiện hành động.
+
+Nếu Moderator ban, hoặc mute, hoặc timeout người dùng vi phạm, Quick Report sẽ hoàn toàn tự động xóa bản tố cáo, và cho là đã xử lí thành công, nếu người dùng đó bị ban, hoặc mute, hoặc timeout (có thể được chỉnh qua /quickreport auto_delete, mặc định là sẽ tự động xóa)
+Nếu Moderator không thực hiện hành động (có nghĩa rằng báo cáo chưa đủ thuyết phục), Moderator có thể cập nhật bằng tay (từ chối/xác nhận) bản tố cáo này thông qua lệnh /report update
+Note
+
+Bạn cần chỉnh mute role của máy chủ (ví dụ khi mute người dùng thì bot sẽ đưa role @Muted cho người cần mute, vậy @Muted chính là mute role) thông qua lệnh /quickreport muterole để GlitchBucket có thể ghi nhận role này là role bị mute, khi đó bất cứ member nào bị mute (bị đưa role này), thì bot sẽ tự động cập nhật bản tố cáo (nếu có)
+
+Ngoài ra, Quick Report có thể đề phòng/tắt report đến từ các member có tính chất spam, hoặc report rác, bằng cách:
+
+Giới hạn hàng chờ report đang xử lí của một người bằng lệnh /quickreport concurrent. Ví dụ, nếu một Member đang có 6 trên 6 report chưa được xử lí, thì họ sẽ không thể tạo thêm report cho đến khi các report trước đó được cập nhật.
+Tạo 1 role blacklist thông qua /quickreport blacklist, gán cho người spam role blacklist đó
+Cho quyền không thể bị report bằng 1 role thông qua /quickreport bypass.
+Quick Report cũng có thể chỉ cho phép/hạn chế một số kênh nhận report, cũng như cho các bản báo cáo có thể tự động hết hạn sau một thời gian nhất định.
+
+Các lệnh quản lí report & tố cáo người dùng
+/report message
+Lệnh này để báo cáo tin nhắn trong máy chủ
+
+Note
+
+Chúng tôi khuyến khích bạn nên bấm chuột phải vào tin nhắn vi phạm, sau đó chọn Ứng dụng > Tố cáo tin nhắn này, để tố cáo tin nhắn đó.
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+channel: Chỉ định kênh chứa tin nhắn
+message_id: Chỉ định ID tin nhắn
+reason: Hãy nhập lý do cho hành động này
+Không bắt buộc:
+
+silent: Cho biết lệnh này có nên được thực hiện ở chế độ im lặng hay không
+Ví dụ sử dụng lệnh
+Lệnh này sẽ báo cáo tin nhắn với ID 1202861080175452210 trong kênh #general với lí do “Vi phạm quy tắc máy chủ”
+command
+/report message channel:#general message_id:1202861080175452210 reason:Vi phạm quy tắc máy chủ
+
+/report recent
+Lệnh này sẽ hiển thị các báo cáo gần đây
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+order: Chọn một hành động để sắp xếp kết quả
+Không bắt buộc:
+
+silent: Cho biết lệnh này có nên được thực hiện ở chế độ im lặng hay không
+status: Chỉ định trạng thái cho kết quả truy vấn
+reporter: Chỉ định người báo cáo
+reported: Chỉ định thành viên đã bị báo cáo
+Ví dụ sử dụng lệnh
+Lệnh này sẽ hiển thị các báo cáo bị từ chối gần đây
+command
+/report recent order:Mới nhất status:Đã từ chối
+
+/report check
+Lệnh này sẽ hiển thị báo cáo dựa trên ID
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+report_id: Chỉ định ID báo cáo
+Không bắt buộc:
+
+silent: Cho biết lệnh này có nên được thực hiện ở chế độ im lặng hay không
+Ví dụ sử dụng lệnh
+Lệnh này sẽ hiển thị báo cáo dựa trên ID 2215
+command
+/report check report_id:2215
+
+/report update
+Lệnh này giúp bạn Phê duyệt/Từ chối báo cáo
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+action: Hãy ghi hành động
+report_id: Chỉ định ID báo cáo
+reason: Hãy nhập lý do cho hành động này
+silent: Cho biết lệnh này có nên được thực hiện ở chế độ im lặng hay không
+Ví dụ sử dụng lệnh
+Lệnh này phê duyệt báo cáo với ID 2215 với lí do “Người dùng vi phạm quy tắc”
+command
+/report update action:Xác nhận report_id:2215 reason:Người dùng vi phạm quy tắc
+
+Các lệnh cài đặt
+/quickreport enable
+Lệnh này sẽ kích hoạt tính năng Quick Report
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+receive_channel: Chỉ định kênh để nhận báo cáo đến
+Ví dụ sử dụng lệnh
+Lệnh này sẽ kích hoạt tính năng Quick Report, gán kênh #reports thành kênh nhận các report
+command
+/quickreport enable receive_channel:#reports
+
+/quickreport muterole
+Lệnh này sẽ đặt vai trò tắt tiếng (mute role) hiện có của bot kiểm duyệt khác
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chọn vai trò
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt role @Muted thành mute role
+command
+/quickreport muterole role:@Muted
+
+/quickreport manager
+Đặt vai trò người quản lý báo cáo
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chọn vai trò
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt role @Moderator thành role có quyền quản lí báo cáo
+command
+/quickreport manager role:@Moderator
+
+/quickreport bypass
+Lệnh này sẽ đặt role bảo vệ người dùng khỏi các báo cáo. Khi người dùng có role được cài đặt ở đây, họ sẽ không thể bị báo cáo bởi member khác
+
+Note
+
+Người có quyền Quản lí Tin nhắn trở lên mặc định sẽ không thể bị báo cáo.
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chọn vai trò
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt role @VIP là role bảo vệ người dùng khỏi các báo cáo
+command
+/quickreport bypass role:@VIP
+
+/quickreport blacklist
+Lệnh này sẽ đặt vai trò khiến người dùng không thể báo cáo các tin nhắn khác. Khi người dùng có vai trò này, họ sẽ không thể tạo báo cáo mới.
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chọn vai trò
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt role @Report Blacklisted là role bảo vệ người dùng khỏi các báo cáo
+command
+/quickreport blacklist role:@Report Blacklisted
+
+/quickreport autoexpire
+Lệnh này sẽ đặt thời gian chờ cho các báo cáo khi không có người kiểm duyệt nào xử lý sau thời gian cụ thể
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+after: Chỉ định khoảng thời gian tính bằng giờ sau đó các báo cáo sẽ tự động hết hạn giờ đã chỉ định
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt thời gian tự xóa cho các báo cáo là 72 giờ
+command
+/quickreport autoexpire after:72
+
+/quickreport concurrent
+Lệnh này sẽ đặt báo cáo đồng thời tối đa cho mỗi người dùng
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+maximum: Chỉ định giá trị
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt báo cáo đồng thời tối đa cho mỗi người dùng là 6 báo cáo chưa được xử lí
+command
+/quickreport concurrent maximum:6
+
+/quickreport successful_message
+Lệnh này sẽ đặt một tin nhắn được gửi tới Người quản lí báo cáo sau khi báo cáo thành công
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+message: Chỉ định tin nhắn
+Ví dụ sử dụng lệnh
+Lệnh này sẽ đặt một tin nhắn được gửi tới Người quản lí báo cáo sau khi báo cáo thành công là “@Moderator Đã tiếp nhận một phiếu tố cáo mới”
+command
+/quickreport successful_message message:@Moderator Đã tiếp nhận một phiếu tố cáo mới
+
+/quickreport auto_delele
+Lệnh này đặt bot tự động xóa báo cáo trong một số sự kiện
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+on_user_timeout: Có xóa báo cáo khi người dùng đó đã hết giờ hay không
+on_user_muted: Có xóa báo cáo khi người dùng đó bị tắt tiếng hay không (vai trò tắt tiếng đã được trao cho họ)
+on_user_leave: Có xóa báo cáo khi người dùng đó bị cấm/rời máy chủ hay không
+Ví dụ sử dụng lệnh
+Lệnh này đặt bot tự động xóa báo cáo trong tất cả các sự kiện liệt kê bên trên
+command
+/quickreport auto_delele on_user_timeout:True on_user_muted:True on_user_leave:True
+
+/quickreport channels
+Lệnh này sẽ đưa một số kênh vào danh sách blacklist/whitelist
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+action: Hãy ghi hành động
+channel: Chọn kênh
+Ví dụ sử dụng lệnh
+Lệnh này sẽ thêm kênh spam vào danh mục không nhận report
+command
+/quickreport channels action:Add channel:#spam
+
+/quickreport categories
+Lệnh này sẽ đưa một số danh mục vào danh sách blacklist/whitelist
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+action: Hãy ghi hành động
+category: Chọn danh mục
+Ví dụ sử dụng lệnh
+Lệnh này sẽ xóa danh mục chat khỏi danh mục không nhận report
+command
+/quickreport categories action:Remove category:chat
+
+/quickreport mode
+Lệnh này sẽ chuyển đổi chế độ Quick Report (chỉ định trong một số kênh (whitelist), hoặc chặn report tại một số kênh (blacklist), hoặc toàn bộ máy chủ (entire guild))
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+action: Hãy ghi hành động
+Ví dụ sử dụng lệnh
+Lệnh này sẽ chuyển đổi chế độ Quick Report thành nhận report tại toàn bộ máy chủ
+command
+/quickreport mode action:Toàn bộ máy chủ
+
+/quickreport configuration
+Lệnh này sẽ hiển thị cấu hình Quick Report hiện tại của máy chủ này
+
+Tham số lệnh (Parameters)
+Không có tham số
+
+Ví dụ sử dụng lệnh
+command
+/quickreport configuration
+
+/quickreport disable
+Lệnh này sẽ vô hiệu hóa tính năng Quick Report
+
+Tham số lệnh (Parameters)
+Không có tham số
+
+Ví dụ sử dụng lệnh
+command
+/quickreport disable

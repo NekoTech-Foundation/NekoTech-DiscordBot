@@ -33885,3 +33885,29 @@ Bot Version: 1.8.514:20 (08-11-2025) - Bot started up - Node.js v24.11.0 - App V
 [11/8/2025, 2:22:21 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.514:22 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 2:28:54 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.514:29 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: MongoClientClosedError: Operation interrupted because client was closed
+    at ConnectionPool.closeCheckedOutConnections (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\cmap\connection_pool.js:260:26)
+    at Server.closeCheckedOutConnections (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\sdam\server.js:111:26)
+    at Topology.closeCheckedOutConnections (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\sdam\topology.js:222:27)
+    at MongoClient._close (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\mongo_client.js:348:24)
+    at MongoClient.close (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongodb\lib\mongo_client.js:331:35)
+    at NativeConnection.doClose (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:208:21)
+    at NativeConnection._close (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\connection.js:1264:18)
+    at NativeConnection.close (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\mongoose\lib\connection.js:1229:15)
+    at process.cleanup (C:\Users\sangt\Documents\NekoTech-DiscordBot\utils.js:1760:43)
+    at process.emit (node:events:520:35)
+
+
+[11/8/2025, 2:31:05 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.514:31 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/8/2025, 2:33:31 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.514:33 (08-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
