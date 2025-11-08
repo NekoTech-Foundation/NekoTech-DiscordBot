@@ -129,6 +129,31 @@ client.on('inviteDelete', async invite => {
 });
 
 client.on('interactionCreate', async interaction => {
+    // Pixiv Save Button Handler
+    if (interaction.isButton() && interaction.customId.startsWith('pixiv_save_')) {
+        const PixivApi = require('pixiv-api-client');
+        const pixiv = new PixivApi();
+        const illustId = interaction.customId.split('_')[2];
+
+        const refreshToken = async () => {
+            if (config.API_Keys.Pixiv && config.API_Keys.Pixiv.RefreshToken) {
+                await pixiv.refreshAccessToken(config.API_Keys.Pixiv.RefreshToken);
+            } else {
+                throw new Error('Pixiv Refresh Token not found in config.yml');
+            }
+        };
+
+        try {
+            await interaction.deferReply({ ephemeral: true });
+            await refreshToken();
+            await pixiv.illustBookmarkAdd(illustId);
+            return await interaction.editReply({ content: 'Đã lưu ảnh vào bộ sưu tập Pixiv của bạn!' });
+        } catch (error) {
+            console.error(error);
+            return await interaction.editReply({ content: 'Không thể lưu ảnh. Có thể bạn đã lưu ảnh này rồi hoặc token đã hết hạn.' });
+        }
+    }
+
     if (!interaction.isChatInputCommand()) return;
 
     const command = client.commands.get(interaction.commandName);

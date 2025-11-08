@@ -10,6 +10,8 @@ const configPath = path.join(__dirname, '..', '..', 'config.yml');
 const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
 const pixiv = new PixivApi();
+const recentlySent = new Set();
+const CACHE_SIZE = 100; // Remember the last 100 images
 
 async function refreshToken() {
     if (config.API_Keys.Pixiv && config.API_Keys.Pixiv.RefreshToken) {
@@ -79,47 +81,47 @@ module.exports = {
             await refreshToken();
             const subcommand = interaction.options.getSubcommand();
 
+            let illusts;
             if (subcommand === 'illustration') {
                 const tag = interaction.options.getString('tag');
                 const searchMode = interaction.options.getString('search_mode') || 'partial_match_for_tags';
                 const sortMode = interaction.options.getString('sort_mode') || 'date_desc';
                 const nsfw = interaction.options.getBoolean('nsfw') || false;
 
-                let illusts = await pixiv.searchIllust(tag, { search_target: searchMode, sort: sortMode });
+                let response = await pixiv.searchIllust(tag, { search_target: searchMode, sort: sortMode });
+                illusts = response.illusts;
                 if (!nsfw) {
-                    illusts.illusts = illusts.illusts.filter(i => i.x_restrict === 0);
+                    illusts = illusts.filter(i => i.x_restrict === 0);
                 }
-
-                if (!illusts.illusts.length) {
-                    return interaction.editReply('Không tìm thấy ảnh nào với tag này.');
-                }
-
-                const randomIllust = illusts.illusts[Math.floor(Math.random() * illusts.illusts.length)];
-                await sendIllustEmbed(interaction, randomIllust);
 
             } else if (subcommand === 'artwork') {
                 const leaderboard = interaction.options.getString('leaderboard');
-                let ranking = await pixiv.illustRanking({ mode: leaderboard });
-
-                if (!ranking.illusts.length) {
-                    return interaction.editReply('Không tìm thấy ảnh nào trong bảng xếp hạng này.');
-                }
-
-                const randomIllust = ranking.illusts[Math.floor(Math.random() * ranking.illusts.length)];
-                await sendIllustEmbed(interaction, randomIllust);
+                let response = await pixiv.illustRanking({ mode: leaderboard });
+                illusts = response.illusts;
 
             } else if (subcommand === 'bosuutap') {
-                // This requires the user's Pixiv ID. For simplicity, we'll use the logged-in user's bookmarks.
                 const selfInfo = await pixiv.userDetail(pixiv.authInfo().user.id);
-                let bookmarks = await pixiv.userBookmarksIllust(selfInfo.user.id);
-
-                if (!bookmarks.illusts.length) {
-                    return interaction.editReply('Bạn chưa yêu thích ảnh nào.');
-                }
-
-                const randomIllust = bookmarks.illusts[Math.floor(Math.random() * bookmarks.illusts.length)];
-                await sendIllustEmbed(interaction, randomIllust);
+                let response = await pixiv.userBookmarksIllust(selfInfo.user.id);
+                illusts = response.illusts;
             }
+
+            if (!illusts || !illusts.length) {
+                return interaction.editReply('Không tìm thấy ảnh nào phù hợp.');
+            }
+
+            // Filter out recently sent images
+            const availableIllusts = illusts.filter(i => !recentlySent.has(i.id));
+            
+            let randomIllust;
+            if (availableIllusts.length > 0) {
+                // Pick a random one from the available list
+                randomIllust = availableIllusts[Math.floor(Math.random() * availableIllusts.length)];
+            } else {
+                // If all images have been sent recently, just pick a random one from the full list
+                randomIllust = illusts[Math.floor(Math.random() * illusts.length)];
+            }
+
+            await sendIllustEmbed(interaction, randomIllust);
 
         } catch (error) {
             console.error(error);
@@ -171,6 +173,13 @@ async function sendIllustEmbed(interaction, illust) {
                     .setStyle(ButtonStyle.Link)
                     .setURL(`https://www.pixiv.net/en/artworks/${illust.id}`)
             );
+        
+        // Add the sent image ID to our cache
+        if (recentlySent.size >= CACHE_SIZE) {
+            const oldestEntry = recentlySent.values().next().value;
+            recentlySent.delete(oldestEntry);
+        }
+        recentlySent.add(illust.id);
 
         await interaction.editReply({ embeds: [embed], files: [attachment], components: [row] });
     } catch (error) {
