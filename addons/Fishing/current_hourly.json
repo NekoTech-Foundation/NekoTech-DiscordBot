@@ -1,15 +1,15 @@
 {
   "legendary": {
-    "name": "Mực nang",
-    "emoji": "<:Fish_cuttlefish:1433393275766706206>",
-    "min_weight": 3,
-    "max_weight": 10
+    "name": "Cá dao ma đen",
+    "emoji": "<:Fish_blackghostknifefish:1433393245467054130>",
+    "min_weight": 0.5,
+    "max_weight": 1.5
   },
   "epic": {
-    "name": "Cá mập búa",
-    "emoji": "<:Fish_hammerhead:1433392956412264480>",
-    "min_weight": 200,
-    "max_weight": 500
+    "name": "Cá ngọt",
+    "emoji": "<:Fish_sweetfish:1433392925890318367>",
+    "min_weight": 0.2,
+    "max_weight": 1
   },
-  "updatedAt": "2025-11-08T07:07:38.142Z"
+  "updatedAt": "2025-11-08T07:22:27.850Z"
 }

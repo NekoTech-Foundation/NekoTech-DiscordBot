@@ -1,0 +1,247 @@
+tạo 1 addons mới có tên là CustomRole với chức năng như bên dưới:
+Tính năng dưới đây được gọi là Custom Role, hoặc còn gọi là Role Tùy chỉnh.
+Vấn đề
+Bạn muốn tạo 1 vai trò (role) cho một người dùng trong máy chủ (server) của bạn, có thể là 1 role có thời hạn, để thay cho một lời cảm ơn, hoặc một quyền lợi gì đó.
+Tuy nhiên, bạn luôn phải…
+Cập nhật người dùng & thông tin của role mỗi khi chủ của role yêu cầu
+Nhớ thời gian để ngừng role của một người (Ví dụ: bạn tặng 1 role tùy chỉnh cho 1 người đã nâng cấp máy chủ cho bạn, tuy nhiên sau đó người này đã hủy bỏ nâng cấp và bạn phải tự xóa role đó)
+Mọi thứ đều yêu cầu bạn phải thực hiện, bởi vì một người dùng không được phép tự quản lí role bằng quyền Quản lí Vai trò (Manage Roles) của Discord, hoặc là họ sẽ cho server của bạn nổ tung ☠
+Giải pháp
+Custom Role mà một tính năng đưa ra những giải pháp để:
+Giúp bạn quản lí những role tùy chỉnh của member một cách nhanh chóng
+Giúp người sở hữu role có thể tự tùy chỉnh role một cách an toàn đối với server (thêm/xóa member, đổi tên/màu/icon của role, tất cả trong lệnh /customrole user)
+Tạo 1 role tùy chỉnh có thời gian được gia hạn bởi admin (/customrole admin create)
+Nếu như việc gia hạn đã kết thúc (/customrole admin terminate hoặc tự động hết hạn), bot sẽ tự xóa role, hoặc xóa tất cả member của role đó, tùy theo cài đặt của bạn (/customrole admin on_expire)
+Note
+Nếu bạn đang có role tùy chỉnh trong máy chủ của bạn, bạn có thể chuyển chúng sang cơ sở dữ liệu của bot bằng lệnh /customrole admin migrate để làm role đó được quản lí dễ dàng hơn!
+Lệnh chung
+/customrole search - Tìm kiếm role tùy chỉnh
+Tìm kiếm thông tin một role tùy chỉnh được gán cho một thành viên, hoặc ngược lại
+Tham số lệnh (Parameters)
+Không bắt buộc:
+role: Chọn role
+Ví dụ sử dụng lệnh
+Lệnh này sẽ tìm kiếm thông tin một role tùy chỉnh mang tên @bucket
+command
+/customrole search role:@bucket
+Các lệnh cài đặt dành cho người dùng
+/customrole user add - Thêm thành viên
+Thêm một thành viên vào role tùy chỉnh của bạn
+Tham số lệnh (Parameters)
+Bắt buộc:
+user: Chọn một thành viên
+Ví dụ sử dụng lệnh
+Lệnh này sẽ thêm người dùng @tudubucket vào role tùy chỉnh của bạn
+command
+/customrole user add user:@tudubucket
+/customrole user remove - Xóa thành viên
+Xóa một thành viên khỏi role tùy chỉnh của bạn
+Tham số lệnh (Parameters)
+Bắt buộc:
+user: Chọn một thành viên
+Ví dụ sử dụng lệnh
+Lệnh này sẽ xóa người dùng @tudubucket khỏi role tùy chỉnh của bạn
+command
+/customrole user remove user:@tudubucket
+/customrole user color - Thay đổi màu role
+Thay đổi màu của role tùy chỉnh của bạn
+Tham số lệnh (Parameters)
+Bắt buộc:
+color: Có thể là 0x<hex>, #<hex>, rgb(<number>, <number>, <number>).
+Ví dụ sử dụng lệnh
+Lệnh này sẽ thay đổi màu role tùy chỉnh của bạn thành #c0cdff
+command
+/customrole user color color:#c0cdff
+/customrole user icon - Chỉnh sửa icon
+Chỉnh sửa icon của role tùy chỉnh của bạn. Bạn có thể copy-paste trực tiếp icon vào lệnh này
+Tham số lệnh (Parameters)
+Bắt buộc:
+icon: Tải lên icon của bạn
+Ví dụ sử dụng lệnh
+Lệnh này sẽ chỉnh icon role của bạn thành file bạn đã gửi lên
+command
+/customrole user icon icon:<file>
+/customrole user removeicon - Xóa icon
+Xóa icon từ role tùy chỉnh của bạn
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng lệnh
+command
+/customrole user removeicon
+/customrole user mentionable - Làm cho role có thể nhắc đến
+Làm cho role tùy chỉnh của bạn có thể nhắc đến
+Tham số lệnh (Parameters)
+Bắt buộc:
+action: Ghi hành động
+Ví dụ sử dụng lệnh
+Lệnh này sẽ làm cho role tùy chỉnh của bạn không thể đề cập bởi người dùng khác
+command
+/customrole user mentionable action:False
+
+/customrole user info - Xem thông tin role
+Xem thông tin role tùy chỉnh của bạn
+
+Tham số lệnh (Parameters)
+Không có tham số
+
+Ví dụ sử dụng lệnh
+command
+/customrole user info
+
+/customrole user name - Thay đổi tên role
+Thay đổi tên role tùy chỉnh của bạn
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+name: Chỉ định tên role
+Ví dụ sử dụng lệnh
+Lệnh này sẽ thay đổi tên role tùy chỉnh của bạn thành @bukkit
+command
+/customrole user name name:bukkit
+
+Các lệnh cài đặt dành cho quản trị
+/customrole admin create - Tạo Role tùy chỉnh
+Lệnh này sẽ tạo và gán một Custom Role cho một thành viên
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+above_role: Role mới sẽ nằm trên role này
+author: Chỉ định chủ của role tùy chỉnh
+name: Chỉ định tên role
+max_users: Số người dùng tối đa có thể được gán vào role này
+expire_after: Hỗ trợ ngày ở dạng ngắn (ví dụ: 2mon1d2h), nhập ‘0’ để đặt là vĩnh viễn, ‘1’ để cho đến khi bỏ boost
+Không bắt buộc:
+
+color: Chỉ định màu của role
+edit_name_permission: Cho phép chủ của role thay đổi tên role của họ
+edit_icon_permission: Cho phép chủ của role thay đổi icon của họ
+edit_color_permission: Cho phép chủ của role thay đổi màu của họ
+manage_role_members_permission: Cho phép chủ của role thêm/xóa thành viên của role
+make_role_mentionable_permission: Cho phép chủ của role làm cho role của họ có thể được nhắc đến bởi các thành viên khác
+Chú ý
+
+Nếu bạn không ghi đè một quyền ở trong tham số không bắt buộc bên trên, role sẽ sử dụng quyền hạn mặc định.
+
+Quyền hạn mặc định có thể được cài đặt thông qua /customrole admin default_author_permission, giúp bạn có thể tùy chỉnh quyền của nhiều role trong 1 lúc.
+
+Ví dụ sử dụng lệnh
+Lệnh này sẽ tạo 1 role @bucket trên role @Custom Roles, với chủ của role là @tudubucket, có tối đa 3 người, hết hạn sau 1 tháng, và có màu ở dạng hex là #C0CDFF
+command
+/customrole admin create above_role:@Custom Roles author:@tudubucket name:bucket max_users:3 expire_after:1mon color:#c0cdff
+
+/customrole admin terminate - Ngừng role tùy chỉnh
+Lệnh này sẽ chấm dứt một role tùy chỉnh đang được gia hạn của một thành viên
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+user: Chọn người dùng
+Không bắt buộc:
+
+delete_role: Xóa role hay không, mặc định: không
+Ví dụ sử dụng lệnh
+Lệnh này sẽ ngừng role tùy chỉnh mà @tudubucket hiện đang có, nhưng không xóa role, chỉ xóa tất cả thành viên của role đó
+command
+/customrole admin terminate user:@tudubucket delete_role:False
+
+/customrole admin migrate - Chuyển sang role tùy chỉnh
+Lệnh này sẽ di chuyển một role hiện tại bạn đang quản lí sang role tùy chỉnh của bot
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chỉ định một role
+author: Chỉ định chủ của role tùy chỉnh
+max_users: Số người dùng tối đa có thể được gán vào role này
+expire_after: Hỗ trợ ngày ở dạng ngắn (ví dụ: 2mon1d2h), nhập ‘0’ để đặt là vĩnh viễn, ‘1’ để cho đến khi bỏ boost
+Ví dụ sử dụng lệnh
+Lệnh này sẽ di chuyển một role hiện tại bạn đang quản lí là @bucket sang role tùy chỉnh của bot, với chủ role là @tudubucket, tối đa 3 người dùng, và sẽ không bao giờ hết hạn
+command
+/customrole admin migrate role:@bucket author:@tudubucket max_users:3 expire_after:0
+
+/customrole admin edit_permission - Chỉnh sửa quyền từng role
+Lệnh này sẽ chỉnh sửa quyền của từng role
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chỉ định một role
+edit_name: Cho phép chủ của role thay đổi tên role của họ
+edit_icon: Cho phép chủ của role thay đổi icon của họ
+edit_color: Cho phép chủ của role thay đổi màu của họ
+manage_role_members: Cho phép chủ của role thêm/xóa thành viên của role
+make_role_mentionable: Cho phép chủ của role làm cho role của họ có thể được nhắc đến bởi các thành viên khác
+Ví dụ sử dụng lệnh
+Lệnh này sẽ sửa tất cả các quyền của role @bucket thành có (True)
+command
+/customrole admin default_author_permission edit_name:True edit_icon:True edit_color:True manage_role_members:True make_role_mentionable:True
+
+/customrole admin max_users - Chỉnh sửa số người tối đa
+Lệnh này sẽ chỉnh sửa số người tối đa của role
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chỉ định một role
+users: Chỉ định số lượng, từ 1 đến tối đa 100
+Ví dụ sử dụng lệnh
+Lệnh này sẽ sửa cố người tối đa của role @bucket thành 10
+command
+/customrole admin max_users role:@bucket users:10
+
+/customrole admin default_author_permission - Chỉnh sửa quyền mặc định
+Lệnh này sẽ chỉnh sửa quyền mặc định cho các role
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+edit_name: Cho phép chủ của role thay đổi tên role của họ
+edit_icon: Cho phép chủ của role thay đổi icon của họ
+edit_color: Cho phép chủ của role thay đổi màu của họ
+manage_role_members: Cho phép chủ của role thêm/xóa thành viên của role
+make_role_mentionable: Cho phép chủ của role làm cho role của họ có thể được nhắc đến bởi các thành viên khác
+Ví dụ sử dụng lệnh
+Lệnh này sẽ tạo tất cả các quyền mặc định thành có (True)
+command
+/customrole admin default_author_permission edit_name:True edit_icon:True edit_color:True manage_role_members:True make_role_mentionable:True
+
+/customrole admin extend - Gia hạn role lâu hơn
+Lệnh này sẽ gia hạn thêm ngày hết hạn cho một role tùy chỉnh
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chọn role
+time_range: Chỉ định khoảng thời gian. Nhập ‘0’ để làm vĩnh viễn, ‘1’ để xóa khi chủ role bỏ ủng hộ
+Ví dụ sử dụng lệnh
+Lệnh này sẽ gia hạn thêm 2 tháng 3 ngày cho role @bucket
+command
+/customrole admin extend role:@bucket time_range:2mon3d
+
+/customrole admin reduce - Gia hạn role ngắn đi
+Lệnh này sẽ giảm ngày hết hạn của một role tùy chỉnh
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+role: Chọn role
+time_range: Chỉ định khoảng thời gian để giảm, hỗ trợ ngày ngắn (ví dụ: 2mon4w6h)
+Ví dụ sử dụng lệnh
+Lệnh này sẽ trừ bớt 3 ngày gia hạn cho role @bucket
+command
+/customrole admin reduce role:@bucket time_range:3d
+
+/customrole admin on_expire - Chỉ định sự kiện hết hạn
+Lệnh này sẽ chỉ định sự kiện thực hiện khi role tùy chỉnh của một người dùng hết hạn
+
+Tham số lệnh (Parameters)
+Bắt buộc:
+
+action: Ghi hành động
+Ví dụ sử dụng lệnh
+Lệnh này sẽ chỉnh hành động là xóa tất cả khi một role tùy chỉnh hết hạn
+command
+/customrole admin on_expire action:Xóa tất cả
+

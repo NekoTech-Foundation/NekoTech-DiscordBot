@@ -2,6 +2,7 @@ const Greetings = require('../../models/Greetings');
 
 module.exports = {
     onLoad: (client) => {
+        console.log('Greetings addon loaded.');
         client.on('guildMemberAdd', async (member) => {
             const greetings = await Greetings.findOne({ guildId: member.guild.id });
             if (greetings && greetings.welcomeMessage && greetings.welcomeChannel) {
