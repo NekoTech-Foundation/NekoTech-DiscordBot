@@ -136,3 +136,4 @@ letme: true
 server: true
 pixiv: true
 repost: true
+trackers: true
