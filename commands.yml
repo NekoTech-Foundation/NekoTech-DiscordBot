@@ -131,3 +131,4 @@ greetings: true
 customrole: true
 report: true
 minecraft: true
+network: true
