@@ -53,7 +53,7 @@ module.exports = {
             { name: 'Thành Tựu', value: profile.achievements.toString(), inline: true },
             { name: 'La Hoàn Thâm Cảnh', value: profile.spiralAbyss, inline: true },
             { name: 'Chữ Ký', value: profile.signature, inline: false },
-            { name: 'Nhân Vật Trưng Bày', value: profile.showcasedCharacters, inline: false }
+            { name: 'Hồ Sơ', value: `[Xem profile đầy đủ tại Enka.Network](https://enka.network/u/${uid})`, inline: false }
           )
           .setColor('Blue')
           .setFooter({ text: 'Dữ liệu được cung cấp bởi Enka.Network' });
