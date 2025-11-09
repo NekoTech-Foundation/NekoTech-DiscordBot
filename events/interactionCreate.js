@@ -26,6 +26,7 @@ const Ticket = require('../models/tickets');
 const Blacklist = require('../models/blacklist');
 const Giveaway = require('../models/Giveaway');
 const client = require("../index");
+const tiktok = require('@tobyg74/tiktok-api-dl'); // Require the new library
 
 function getFormattedReason(reasonValue, customReason = null) {
     if (customReason) return customReason;
@@ -725,6 +726,54 @@ async function handleButtonInteraction(client, interaction) {
     }
 
     switch (action) {
+        case 'repost':
+            const parts = interaction.customId.split('-');
+            const subAction = parts[1];
+
+            if (subAction === 'info') {
+                await interaction.deferReply({ ephemeral: true });
+                const originalUrl = decodeURIComponent(parts.slice(2).join('-')); // Reconstruct the URL from parts
+
+                if (!originalUrl) {
+                    return interaction.editReply('Không thể tìm thấy URL gốc để lấy thông tin.');
+                }
+
+                try {
+                    // Use the tiktok-api-dl library
+                    const downloaderResponse = await tiktok.Downloader(originalUrl, { version: "v1" });
+
+                    if (downloaderResponse.status === 'error' || !downloaderResponse.result) {
+                        return interaction.editReply('Không thể lấy thông tin video.');
+                    }
+
+                    const videoData = downloaderResponse.result;
+
+                                const embed = new EmbedBuilder()
+                                    .setColor('#0099ff')
+                                    .setTitle('Thông tin video')
+                                    .setURL(originalUrl)
+                                    .setDescription(videoData.desc || 'Không có chú thích') // Use desc instead of description
+                                    .addFields(
+                                        { name: 'Người đăng', value: videoData.author.nickname || 'Không rõ', inline: true },
+                                        { name: 'Lượt thích', value: videoData.statistics.likeCount ? videoData.statistics.likeCount.toString() : 'N/A', inline: true },
+                                        { name: 'Lượt xem', value: videoData.statistics.playCount ? videoData.statistics.playCount.toString() : 'N/A', inline: true }
+                                    )
+                                    .setImage(videoData.video.cover[0]) // Use video.cover[0]
+                                    .setTimestamp();
+                    await interaction.editReply({ embeds: [embed] });
+                } catch (error) {
+                    console.error('Lỗi khi lấy thông tin TikTok cho repost (từ tiktok-api-dl):', error);
+                    await interaction.editReply('Đã có lỗi xảy ra khi lấy thông tin video.');
+                }
+            } else if (subAction === 'delete') {
+                const originalUserId = parts[2]; // Get originalUserId from customId
+                if (interaction.user.id === originalUserId || interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
+                    await interaction.message.delete();
+                } else {
+                    await interaction.reply({ content: 'Bạn không có quyền xóa tin nhắn này.', ephemeral: true });
+                }
+            }
+            break;
         case 'verifyButton':
             await handleVerificationInteraction(client, interaction);
             break;

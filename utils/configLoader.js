@@ -1,6 +1,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
+require('dotenv').config(); // Add this line back
 
 const CONFIG_PATH = path.join(__dirname, '..', 'config.yml');
 const LANG_PATH = path.join(__dirname, '..', 'lang.yml');
