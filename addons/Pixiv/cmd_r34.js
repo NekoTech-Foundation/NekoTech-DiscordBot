@@ -7,10 +7,10 @@ const config = getConfig();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('r34')
-        .setDescription('Search for images on Rule34.')
+        .setDescription('Tìm hình ảnh trên Rule34 (Yêu cầu kênh NSFW).')
         .addStringOption(option =>
             option.setName('tags')
-                .setDescription('The tags to search for, separated by spaces (e.g., "yoruichi_shihouin blonde").')
+                .setDescription('Tìm kiếm bằng tag,thay dấu cách bằng _ (v.d., "khoa_so_ma").')
                 .setRequired(true))
         .setNSFW(true),
     category: 'Fun',
@@ -104,7 +104,7 @@ module.exports = {
                             .setStyle(ButtonStyle.Primary)
                             .setDisabled(true)
                     );
-                interaction.editReply({ components: [disabledRow] });
+                interaction.editReply({ components: [disabledRow] }).catch(() => {});
             });
 
         } catch (error) {
