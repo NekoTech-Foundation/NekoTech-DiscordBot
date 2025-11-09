@@ -146,7 +146,7 @@ client.on('interactionCreate', async interaction => {
         try {
             await interaction.deferReply({ ephemeral: true });
             await refreshToken();
-            await pixiv.illustBookmarkAdd(illustId);
+            await pixiv.bookmarkIllust(illustId);
             return await interaction.editReply({ content: 'Đã lưu ảnh vào bộ sưu tập Pixiv của bạn!' });
         } catch (error) {
             console.error(error);

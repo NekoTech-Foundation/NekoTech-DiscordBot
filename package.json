@@ -44,9 +44,9 @@
         "mongoose": "^8.5.4",
         "ncp": "^2.0.0",
         "node-cron": "^4.2.1",
+        "pixiv-api-client": "^0.27.0",
         "sharp": "^0.33.5",
         "typescript": "5.7.2",
-        "ws": "^8.13.0",
-        "pixiv-api-client": "^0.27.0"
+        "ws": "^8.13.0"
     }
 }
