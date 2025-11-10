@@ -14,27 +14,39 @@ module.exports = {
                 .setRequired(false))
         .addStringOption(option =>
             option.setName('duration')
-                .setDescription('Thời gian AFK (e.g., 1h 30m)')
+                .setDescription('Thời gian AFK (ví dụ: 1h 30m, 2h, 45m)')
                 .setRequired(false)),
 
     async execute(interaction, client) {
         const configPath = path.join(__dirname, 'config.yml');
         const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
         
+        // Check permissions
         if (config.settings.allowed_roles.length > 0) {
             const hasRole = interaction.member.roles.cache.some(role => 
                 config.settings.allowed_roles.includes(role.id));
             if (!hasRole) {
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#FF4444')
+                    .setDescription(`❌ ${config.lang.errors.no_permission}`)
+                    .setTimestamp();
+                
                 return interaction.reply({ 
-                    content: config.lang.errors.no_permission, 
+                    embeds: [errorEmbed], 
                     ephemeral: true 
                 });
             }
         }
 
+        // Check if already AFK
         if (client.afkUsers.has(interaction.user.id)) {
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#FFA500')
+                .setDescription(`⚠️ ${config.lang.errors.already_afk}`)
+                .setTimestamp();
+            
             return interaction.reply({
-                content: config.lang.errors.already_afk,
+                embeds: [errorEmbed],
                 ephemeral: true
             });
         }
@@ -46,8 +58,17 @@ module.exports = {
         if (duration) {
             const time = parseDuration(duration);
             if (!time) {
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#FF4444')
+                    .setDescription(`❌ ${config.lang.errors.invalid_duration}`)
+                    .addFields({
+                        name: '📝 Ví dụ hợp lệ',
+                        value: '`1h`, `30m`, `1h 30m`, `2h 15m`'
+                    })
+                    .setTimestamp();
+                
                 return interaction.reply({ 
-                    content: config.lang.errors.invalid_duration, 
+                    embeds: [errorEmbed], 
                     ephemeral: true 
                 });
             }
@@ -58,60 +79,59 @@ module.exports = {
         client.afkUsers.set(interaction.user.id, {
             reason,
             timestamp,
-            returnTime
+            returnTime,
+            channelId: interaction.channelId,
+            guildId: interaction.guildId
         });
 
-        if (config.messages.afk_enabled.type === 'embed') {
-            const embedConfig = config.messages.afk_enabled.embed;
-            const embed = new EmbedBuilder()
-                .setColor(embedConfig.color || config.settings.default_color)
-                .setTitle(embedConfig.title.replace('{username}', interaction.user.username))
-                .setDescription(embedConfig.description
-                    .replace('{username}', interaction.user.username)
-                    .replace('{reason}', reason)
-                    .replace('{return_time}', returnTime ? `<t:${Math.floor(returnTime/1000)}:R>` : 'Indefinite')
-                    .replace('{timestamp}', `<t:${Math.floor(timestamp/1000)}:R>`));
+        // Create beautiful embed response
+        const embed = new EmbedBuilder()
+            .setColor('#FF6B6B')
+            .setAuthor({
+                name: `${interaction.user.username} đang rời máy`,
+                iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+            })
+            .setDescription(`**💤 Trạng thái AFK đã được kích hoạt**`)
+            .addFields(
+                {
+                    name: '📝 Lí do',
+                    value: `\`\`\`${reason}\`\`\``,
+                    inline: false
+                },
+                {
+                    name: '⏰ Thời gian bắt đầu',
+                    value: `<t:${Math.floor(timestamp/1000)}:F>`,
+                    inline: true
+                },
+                {
+                    name: '🔙 Quay lại sau',
+                    value: returnTime ? `<t:${Math.floor(returnTime/1000)}:R>` : '`Không xác định`',
+                    inline: true
+                }
+            )
+            .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true, size: 256 }))
+            .setFooter({
+                text: 'Bot sẽ thông báo khi bạn trở lại',
+                iconURL: client.user.displayAvatarURL()
+            })
+            .setTimestamp();
 
-            if (embedConfig.thumbnail) {
-                embed.setThumbnail(
-                    embedConfig.thumbnail === '{user_avatar}' 
-                        ? interaction.user.displayAvatarURL()
-                        : config.settings.default_thumbnail || interaction.user.displayAvatarURL()
-                );
-            }
-
-            if (embedConfig.footer) {
-                embed.setFooter({
-                    text: embedConfig.footer.text,
-                    iconURL: embedConfig.footer.icon.replace('{user_avatar}', interaction.user.displayAvatarURL())
-                });
-            }
-
-            await interaction.reply({ embeds: [embed] });
-        } else {
-            const text = config.messages.afk_enabled.text
-                .replace('{username}', interaction.user.username)
-                .replace('{reason}', reason)
-                .replace('{return_time}', returnTime ? `<t:${Math.floor(returnTime/1000)}:R>` : 'Indefinite')
-                .replace('{timestamp}', `<t:${Math.floor(timestamp/1000)}:R>`);
-            
-            await interaction.reply({ content: text });
-        }
+        await interaction.reply({ embeds: [embed] });
     }
 };
 
 function parseDuration(duration) {
-    const regex = /(\d+)([hm])/g;
+    const regex = /(\d+)\s*([hm])/gi;
     let total = 0;
     let match;
 
     while ((match = regex.exec(duration)) !== null) {
         const value = parseInt(match[1]);
-        const unit = match[2];
+        const unit = match[2].toLowerCase();
         
         if (unit === 'h') total += value * 3600000;
         if (unit === 'm') total += value * 60000;
     }
 
     return total || null;
-} 
+}

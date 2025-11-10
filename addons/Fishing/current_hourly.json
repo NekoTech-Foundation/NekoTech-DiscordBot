@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Cá mập voi",
-    "emoji": "<:Fish_whaleshark:1433392979313164352>",
-    "min_weight": 10000,
-    "max_weight": 20000
+    "name": "Bạch tuộc Dumbo",
+    "emoji": "<:Fish_dumbo:1433393278161522771>",
+    "min_weight": 5,
+    "max_weight": 10
   },
   "epic": {
     "name": "Cá Coris đuôi vàng",
@@ -11,5 +11,5 @@
     "min_weight": 0.2,
     "max_weight": 1
   },
-  "updatedAt": "2025-11-10T11:00:00.035Z"
+  "updatedAt": "2025-11-10T12:00:00.026Z"
 }
