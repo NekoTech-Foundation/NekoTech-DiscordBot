@@ -140,3 +140,4 @@ trackers: true
 r34: true
 greeting: true
 bypass: true
+profile: true

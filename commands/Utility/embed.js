@@ -1,1161 +1,925 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, PermissionsBitField, ModalBuilder, TextInputBuilder, TextInputStyle, MessageFlags } = require('discord.js');
-//const fs = require('fs');
-//const yaml = require('js-yaml');
+const { 
+    SlashCommandBuilder, 
+    EmbedBuilder, 
+    ActionRowBuilder, 
+    ButtonBuilder, 
+    ButtonStyle, 
+    StringSelectMenuBuilder, 
+    PermissionsBitField, 
+    ModalBuilder, 
+    TextInputBuilder, 
+    TextInputStyle, 
+    MessageFlags 
+} = require('discord.js');
 const mongoose = require('mongoose');
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
+const { getConfig, getLang } = require('../../utils/configLoader.js');
+
+// ===== CONFIG & CONSTANTS =====
 const config = getConfig();
 const lang = getLang();
+const MAX_LINK_BUTTONS = 5; // 1 row cho link buttons (5 buttons max)
+const MODAL_TIMEOUT = 60000;
+const COLLECTOR_TIMEOUT = 900000;
 
+// ===== MONGOOSE SCHEMA =====
 const embedSchema = new mongoose.Schema({
     name: String,
     embedData: Object,
     linkButtons: Array,
-    claimed: { type: Boolean, default: false },
-    claimedBy: { type: String, default: null }
 });
 const EmbedTemplate = mongoose.model('EmbedTemplate', embedSchema);
 
+// ===== GLOBAL STATE =====
 const activeInteractions = new Map();
 
+// ===== UTILITY FUNCTIONS =====
+const Utils = {
+    isValidUrl(str) {
+        try {
+            const url = new URL(str);
+            return url.protocol === "http:" || url.protocol === "https:";
+        } catch { return false; }
+    },
+
+    isImageUrl(url) {
+        return /\.(jpeg|jpg|gif|png|svg)$/i.test(url);
+    },
+
+    splitIntoRows(buttons, perRow = 5) {
+        const rows = [];
+        for (let i = 0; i < buttons.length; i += perRow) {
+            rows.push(new ActionRowBuilder().addComponents(buttons.slice(i, i + perRow)));
+        }
+        return rows;
+    },
+
+    combineComponents(baseRows, linkButtons) {
+        const combined = [...baseRows];
+        const linkRows = Utils.splitIntoRows(linkButtons);
+        const space = 5 - combined.length;
+        combined.push(...linkRows.slice(0, space));
+        return combined;
+    },
+
+    getUserData(client, userId) {
+        if (!client.embedData) client.embedData = {};
+        if (!client.embedData[userId]) client.embedData[userId] = {};
+        return client.embedData[userId];
+    },
+
+    clearUserData(client, userId) {
+        if (client.embedData?.[userId]) delete client.embedData[userId];
+    }
+};
+
+// ===== MODAL HANDLERS =====
+const ModalHandlers = {
+    async showModal(interaction, modalConfig, onSubmit) {
+        const modal = new ModalBuilder()
+            .setCustomId(modalConfig.id)
+            .setTitle(modalConfig.title);
+
+        modalConfig.inputs.forEach(input => {
+            modal.addComponents(new ActionRowBuilder().addComponents(input));
+        });
+
+        await interaction.showModal(modal);
+
+        try {
+            const submit = await interaction.awaitModalSubmit({
+                filter: i => i.customId === modalConfig.id,
+                time: MODAL_TIMEOUT
+            });
+            await onSubmit(submit);
+        } catch (error) {
+            if (error.code === 'InteractionCollectorError') {
+                await interaction.followUp({ 
+                    content: 'Modal đã hết thời gian. Vui lòng thử lại.', 
+                    flags: MessageFlags.Ephemeral 
+                });
+            } else {
+                console.error('Modal error:', error);
+                await interaction.followUp({ 
+                    content: 'Có lỗi xảy ra. Vui lòng thử lại.', 
+                    flags: MessageFlags.Ephemeral 
+                });
+            }
+        }
+    },
+
+    async title(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'title_modal',
+            title: 'Đặt tiêu đề Embed',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('titleText')
+                    .setLabel('Tiêu đề')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.title || '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const title = submit.fields.getTextInputValue('titleText');
+            embed.setTitle(title || null);
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async description(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'description_modal',
+            title: 'Đặt mô tả Embed',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('descriptionText')
+                    .setLabel('Mô tả')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setValue(embed.data.description || '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const description = submit.fields.getTextInputValue('descriptionText');
+            embed.setDescription(description || null);
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async author(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'author_modal',
+            title: 'Cài đặt tác giả',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('authorName')
+                    .setLabel('Tên tác giả')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.author?.name || '')
+                    .setRequired(false),
+                new TextInputBuilder()
+                    .setCustomId('authorIcon')
+                    .setLabel('URL icon tác giả')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.author?.iconURL || '')
+                    .setRequired(false),
+                new TextInputBuilder()
+                    .setCustomId('authorUrl')
+                    .setLabel('URL tác giả')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.author?.url || '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const name = submit.fields.getTextInputValue('authorName');
+            const icon = submit.fields.getTextInputValue('authorIcon');
+            const url = submit.fields.getTextInputValue('authorUrl');
+
+            if ((icon && !Utils.isValidUrl(icon)) || (url && !Utils.isValidUrl(url))) {
+                await submit.reply({ 
+                    content: 'URL không hợp lệ!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+                return;
+            }
+
+            embed.setAuthor(name || icon || url ? { 
+                name: name || null, 
+                iconURL: icon || null, 
+                url: url || null 
+            } : null);
+
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async footer(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'footer_modal',
+            title: 'Cài đặt footer',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('footerText')
+                    .setLabel('Text footer')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.footer?.text || '')
+                    .setRequired(false),
+                new TextInputBuilder()
+                    .setCustomId('footerIcon')
+                    .setLabel('URL icon footer')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.footer?.iconURL || '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const text = submit.fields.getTextInputValue('footerText');
+            const icon = submit.fields.getTextInputValue('footerIcon');
+
+            if (icon && !Utils.isValidUrl(icon)) {
+                await submit.reply({ 
+                    content: 'URL icon không hợp lệ!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+                return;
+            }
+
+            embed.setFooter(text || icon ? { 
+                text: text || null, 
+                iconURL: icon || null 
+            } : null);
+
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async color(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'color_modal',
+            title: 'Đặt màu Embed',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('colorValue')
+                    .setLabel('Màu (Hex code)')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.color ? `#${embed.data.color.toString(16)}` : '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const color = submit.fields.getTextInputValue('colorValue');
+            try {
+                embed.setColor(color || null);
+                await submit.update({ 
+                    embeds: [embed], 
+                    components: Utils.combineComponents(components, linkButtons), 
+                    flags: MessageFlags.Ephemeral 
+                });
+            } catch {
+                await submit.reply({ 
+                    content: 'Màu không hợp lệ! Sử dụng hex code (vd: #FF0000)', 
+                    flags: MessageFlags.Ephemeral 
+                });
+            }
+        });
+    },
+
+    async thumbnail(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'thumbnail_modal',
+            title: 'Đặt thumbnail',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('thumbnailUrl')
+                    .setLabel('URL thumbnail')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.thumbnail?.url || '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const url = submit.fields.getTextInputValue('thumbnailUrl');
+            
+            if (url && (!Utils.isValidUrl(url) || !Utils.isImageUrl(url))) {
+                await submit.reply({ 
+                    content: 'URL hình ảnh không hợp lệ!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+                return;
+            }
+
+            embed.setThumbnail(url || null);
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async image(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'image_modal',
+            title: 'Đặt hình ảnh lớn',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('imageUrl')
+                    .setLabel('URL hình ảnh')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue(embed.data.image?.url || '')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const url = submit.fields.getTextInputValue('imageUrl');
+            
+            if (url && (!Utils.isValidUrl(url) || !Utils.isImageUrl(url))) {
+                await submit.reply({ 
+                    content: 'URL hình ảnh không hợp lệ!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+                return;
+            }
+
+            embed.setImage(url || null);
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async addField(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'addfield_modal',
+            title: 'Thêm field',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('fieldName')
+                    .setLabel('Tên field')
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                new TextInputBuilder()
+                    .setCustomId('fieldValue')
+                    .setLabel('Giá trị field')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setRequired(true),
+                new TextInputBuilder()
+                    .setCustomId('fieldInline')
+                    .setLabel('Inline? (true/false)')
+                    .setStyle(TextInputStyle.Short)
+                    .setValue('false')
+                    .setRequired(true)
+            ]
+        }, async (submit) => {
+            const name = submit.fields.getTextInputValue('fieldName');
+            const value = submit.fields.getTextInputValue('fieldValue');
+            const inline = submit.fields.getTextInputValue('fieldInline').toLowerCase() === 'true';
+
+            embed.addFields({ name, value, inline });
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async aboveText(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'abovetext_modal',
+            title: 'Text phía trên Embed',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('aboveText')
+                    .setLabel('Text')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Nhập text (có thể mention role)')
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const text = submit.fields.getTextInputValue('aboveText');
+            const userData = Utils.getUserData(interaction.client, interaction.user.id);
+            userData.aboveText = text;
+
+            await submit.update({
+                content: text ? `Text đã được đặt: "${text}"` : 'Text đã được xóa.',
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
+            });
+        });
+    },
+
+    async aboveImage(interaction, embed, components, linkButtons) {
+        await this.showModal(interaction, {
+            id: 'aboveimage_modal',
+            title: 'Hình ảnh phía trên Embed',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('aboveImageUrl')
+                    .setLabel('URL hình ảnh')
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const url = submit.fields.getTextInputValue('aboveImageUrl');
+            const userData = Utils.getUserData(interaction.client, interaction.user.id);
+            userData.aboveImageUrl = url;
+
+            await submit.update({
+                content: url ? `URL hình ảnh đã được đặt: "${url}"` : 'Hình ảnh đã được xóa.',
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
+            });
+        });
+    },
+
+    async addLink(interaction, embed, linkButtons, components) {
+        if (linkButtons.length >= MAX_LINK_BUTTONS) {
+            await interaction.reply({ 
+                content: `Tối đa ${MAX_LINK_BUTTONS} link buttons!`, 
+                flags: MessageFlags.Ephemeral 
+            });
+            return;
+        }
+
+        await this.showModal(interaction, {
+            id: 'addlink_modal',
+            title: 'Thêm link button',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('buttonUrl')
+                    .setLabel('URL')
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                new TextInputBuilder()
+                    .setCustomId('buttonLabel')
+                    .setLabel('Label')
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true),
+                new TextInputBuilder()
+                    .setCustomId('buttonEmoji')
+                    .setLabel('Emoji (tùy chọn)')
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(false)
+            ]
+        }, async (submit) => {
+            const url = submit.fields.getTextInputValue('buttonUrl');
+            const label = submit.fields.getTextInputValue('buttonLabel');
+            const emoji = submit.fields.getTextInputValue('buttonEmoji');
+
+            if (!Utils.isValidUrl(url)) {
+                await submit.reply({ 
+                    content: 'URL không hợp lệ!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+                return;
+            }
+
+            const button = new ButtonBuilder()
+                .setURL(url)
+                .setLabel(label)
+                .setStyle(ButtonStyle.Link);
+
+            if (emoji) button.setEmoji(emoji);
+            linkButtons.push(button);
+
+            await submit.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    }
+};
+
+// ===== ACTION HANDLERS =====
+const Actions = {
+    async timestamp(interaction, embed, components, linkButtons) {
+        embed.setTimestamp(embed.data.timestamp ? null : new Date());
+        await interaction.update({ 
+            embeds: [embed], 
+            components: Utils.combineComponents(components, linkButtons), 
+            flags: MessageFlags.Ephemeral 
+        });
+    },
+
+    async togglePings(interaction, embed, components, linkButtons) {
+        const userData = Utils.getUserData(interaction.client, interaction.user.id);
+        userData.suppressPings = !userData.suppressPings;
+
+        await interaction.update({ 
+            embeds: [embed], 
+            components: Utils.combineComponents(components, linkButtons), 
+            flags: MessageFlags.Ephemeral 
+        });
+
+        await interaction.followUp({
+            content: `🔔 Pings đã ${userData.suppressPings ? 'tắt' : 'bật'}`,
+            flags: MessageFlags.Ephemeral
+        });
+    },
+
+    async removeField(interaction, embed, components, linkButtons) {
+        if (!embed.data.fields?.length) {
+            await interaction.reply({ 
+                content: 'Không có field nào để xóa!', 
+                flags: MessageFlags.Ephemeral 
+            });
+            return;
+        }
+
+        const options = embed.data.fields.map((field, index) => ({
+            label: field.name.substring(0, 100),
+            description: field.value.substring(0, 100),
+            value: index.toString()
+        }));
+
+        const menu = new StringSelectMenuBuilder()
+            .setCustomId('removefield_select')
+            .setPlaceholder('Chọn field để xóa')
+            .addOptions(options);
+
+        const response = await interaction.reply({ 
+            content: 'Chọn field để xóa:', 
+            components: [new ActionRowBuilder().addComponents(menu)], 
+            flags: MessageFlags.Ephemeral,
+            fetchReply: true
+        });
+
+        try {
+            const selected = await response.awaitMessageComponent({ 
+                filter: i => i.user.id === interaction.user.id,
+                time: MODAL_TIMEOUT 
+            });
+
+            const index = parseInt(selected.values[0]);
+            const fields = [...embed.data.fields];
+            fields.splice(index, 1);
+            embed.setFields(fields);
+
+            await interaction.editReply({ 
+                content: 'Đã xóa field!',
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        } catch {
+            await interaction.editReply({ 
+                content: 'Đã hủy thao tác.', 
+                components: [], 
+                flags: MessageFlags.Ephemeral 
+            });
+        }
+    },
+
+    async removeLink(interaction, embed, linkButtons, components) {
+        if (!linkButtons.length) {
+            await interaction.reply({ 
+                content: 'Không có link button nào để xóa!', 
+                flags: MessageFlags.Ephemeral 
+            });
+            return;
+        }
+
+        const options = linkButtons.map((btn, index) => ({
+            label: btn.data.label,
+            value: index.toString()
+        }));
+
+        const menu = new StringSelectMenuBuilder()
+            .setCustomId('removelink_select')
+            .setPlaceholder('Chọn link button để xóa')
+            .addOptions(options);
+
+        await interaction.reply({ 
+            content: 'Chọn link button để xóa:', 
+            components: [new ActionRowBuilder().addComponents(menu)], 
+            flags: MessageFlags.Ephemeral 
+        });
+
+        const filter = i => i.user.id === interaction.user.id && i.customId === 'removelink_select';
+        const collector = interaction.channel.createMessageComponentCollector({ 
+            filter, 
+            max: 1, 
+            time: MODAL_TIMEOUT 
+        });
+
+        collector.on('collect', async i => {
+            linkButtons.splice(parseInt(i.values[0]), 1);
+            await i.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async saveTemplate(interaction, embed, linkButtons) {
+        await ModalHandlers.showModal(interaction, {
+            id: 'save_template_modal',
+            title: 'Lưu template',
+            inputs: [
+                new TextInputBuilder()
+                    .setCustomId('templateName')
+                    .setLabel('Tên template')
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(true)
+            ]
+        }, async (submit) => {
+            const name = submit.fields.getTextInputValue('templateName');
+
+            const exists = await EmbedTemplate.findOne({ name });
+            if (exists) {
+                await submit.reply({ 
+                    content: 'Template đã tồn tại!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+                return;
+            }
+
+            await new EmbedTemplate({
+                name,
+                embedData: embed.toJSON(),
+                linkButtons: linkButtons.map(btn => btn.toJSON())
+            }).save();
+
+            await submit.reply({ 
+                content: 'Đã lưu template!', 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async loadTemplate(interaction, embed, components, linkButtons) {
+        const index = parseInt(interaction.values[0].split('_')[1]);
+        const templates = await EmbedTemplate.find().select('name');
+        const template = await EmbedTemplate.findOne({ name: templates[index].name });
+
+        if (template) {
+            Object.assign(embed, new EmbedBuilder(template.embedData));
+            linkButtons.splice(0, linkButtons.length, ...template.linkButtons.map(btn => ButtonBuilder.from(btn)));
+            await interaction.update({ 
+                embeds: [embed], 
+                components: Utils.combineComponents(components, linkButtons), 
+                flags: MessageFlags.Ephemeral 
+            });
+        }
+    },
+
+    async deleteTemplate(interaction) {
+        const templates = await EmbedTemplate.find().select('name');
+        if (!templates.length) {
+            await interaction.reply({ 
+                content: 'Không có template nào!', 
+                flags: MessageFlags.Ephemeral 
+            });
+            return;
+        }
+
+        const menu = new StringSelectMenuBuilder()
+            .setCustomId('delete_template_select')
+            .setPlaceholder('Chọn template để xóa')
+            .addOptions(templates.map(t => ({ label: t.name, value: t.name })));
+
+        await interaction.reply({ 
+            content: 'Chọn template để xóa:', 
+            components: [new ActionRowBuilder().addComponents(menu)], 
+            flags: MessageFlags.Ephemeral 
+        });
+
+        const filter = i => i.user.id === interaction.user.id && i.customId === 'delete_template_select';
+        const collector = interaction.channel.createMessageComponentCollector({ 
+            filter, 
+            time: 30000, 
+            max: 1 
+        });
+
+        collector.on('collect', async i => {
+            const result = await EmbedTemplate.deleteOne({ name: i.values[0] });
+            await i.update({ 
+                content: result.deletedCount > 0 ? 'Đã xóa template!' : 'Không tìm thấy template!', 
+                components: [], 
+                flags: MessageFlags.Ephemeral 
+            });
+        });
+    },
+
+    async post(interaction, embed, linkButtons, messageId) {
+        const userData = Utils.getUserData(interaction.client, interaction.user.id);
+        const { aboveText = '', aboveImageUrl = '', suppressPings = false } = userData;
+
+        try {
+            if (aboveImageUrl) {
+                await interaction.channel.send({ content: aboveImageUrl });
+            }
+
+            const messageOptions = {
+                content: aboveText,
+                embeds: [embed],
+                components: Utils.splitIntoRows(linkButtons),
+                allowedMentions: suppressPings ? { parse: [] } : undefined
+            };
+
+            if (messageId) {
+                const message = await interaction.channel.messages.fetch(messageId);
+                await message.edit(messageOptions);
+                await interaction.reply({ 
+                    content: 'Đã chỉnh sửa embed!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+            } else {
+                await interaction.channel.send(messageOptions);
+                await interaction.reply({ 
+                    content: 'Đã đăng embed!', 
+                    flags: MessageFlags.Ephemeral 
+                });
+            }
+
+            Utils.clearUserData(interaction.client, interaction.user.id);
+        } catch (error) {
+            console.error('Post embed error:', error);
+            await interaction.reply({ 
+                content: 'Có lỗi xảy ra khi đăng embed!', 
+                flags: MessageFlags.Ephemeral 
+            });
+        }
+    }
+};
+
+// ===== BUTTON ROUTER =====
+async function handleButton(i, embed, components, linkButtons, messageId) {
+    const [action] = i.customId.split('_');
+    
+    const handlers = {
+        title: () => ModalHandlers.title(i, embed, components, linkButtons),
+        description: () => ModalHandlers.description(i, embed, components, linkButtons),
+        author: () => ModalHandlers.author(i, embed, components, linkButtons),
+        footer: () => ModalHandlers.footer(i, embed, components, linkButtons),
+        color: () => ModalHandlers.color(i, embed, components, linkButtons),
+        thumbnail: () => ModalHandlers.thumbnail(i, embed, components, linkButtons),
+        image: () => ModalHandlers.image(i, embed, components, linkButtons),
+        timestamp: () => Actions.timestamp(i, embed, components, linkButtons),
+        addfield: () => ModalHandlers.addField(i, embed, components, linkButtons),
+        removefield: () => Actions.removeField(i, embed, components, linkButtons),
+        addlink: () => ModalHandlers.addLink(i, embed, linkButtons, components),
+        removelink: () => Actions.removeLink(i, embed, linkButtons, components),
+        abovetext: () => ModalHandlers.aboveText(i, embed, components, linkButtons),
+        aboveimage: () => ModalHandlers.aboveImage(i, embed, components, linkButtons),
+        toggleping: () => Actions.togglePings(i, embed, components, linkButtons),
+        save: () => Actions.saveTemplate(i, embed, linkButtons),
+        loadtemplate: () => Actions.loadTemplate(i, embed, components, linkButtons),
+        deletetemplate: () => Actions.deleteTemplate(i),
+        post: () => Actions.post(i, embed, linkButtons, messageId)
+    };
+
+    const handler = handlers[action];
+    if (handler) await handler();
+}
+
+// ===== MAIN COMMAND =====
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('embed')
-        .setDescription('Manage embeds')
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('create')
-                .setDescription('Create a new embed using buttons'))
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('edit')
-                .setDescription('Edit an existing embed')
-                .addStringOption(option =>
-                    option.setName('messageid')
-                        .setDescription('The ID of the message to edit')
-                        .setRequired(true))),
+        .setDescription('Quản lý embeds')
+        .addSubcommand(sub => sub
+            .setName('create')
+            .setDescription('Tạo embed mới'))
+        .addSubcommand(sub => sub
+            .setName('edit')
+            .setDescription('Chỉnh sửa embed')
+            .addStringOption(opt => opt
+                .setName('messageid')
+                .setDescription('ID của message cần chỉnh sửa')
+                .setRequired(true))),
+    
     category: 'Utility',
+    
     async execute(interaction) {
-        const member = interaction.member;
-        const hasEmbedRole = member.roles.cache.some(role => config.ModerationRoles.embed.includes(role.id));
-        const isAdministrator = member.permissions.has(PermissionsBitField.Flags.Administrator);
+        // Kiểm tra quyền
+        const hasRole = interaction.member.roles.cache.some(r => 
+            config.ModerationRoles.embed.includes(r.id)
+        );
+        const isAdmin = interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
 
-        if (!hasEmbedRole && !isAdministrator) {
-            return interaction.reply({ content: lang.NoPermsMessage, flags: MessageFlags.Ephemeral });
+        if (!hasRole && !isAdmin) {
+            return interaction.reply({ 
+                content: lang.NoPermsMessage, 
+                flags: MessageFlags.Ephemeral 
+            });
         }
 
+        // Dừng interaction cũ nếu có
         const userId = interaction.user.id;
-
         if (activeInteractions.has(userId)) {
-            const previousInteraction = activeInteractions.get(userId);
-            previousInteraction.stop();
+            activeInteractions.get(userId).stop();
         }
 
-        const subcommand = interaction.options.getSubcommand();
+        // Khởi tạo embed
         let embed = new EmbedBuilder()
             .setAuthor({ name: 'Embed Builder' })
             .setColor(config.EmbedColors)
-            .setDescription('Welcome to the **interactive embed builder**. Use the buttons below to build the embed, when you\'re done click **Post Embed**!');
+            .setDescription('Chào mừng đến với **Embed Builder**! Sử dụng các nút bên dưới để xây dựng embed.');
 
         let messageId = null;
-        let existingLinkButtons = [];
+        let linkButtons = [];
 
-        if (subcommand === 'edit') {
+        // Load embed hiện tại nếu đang edit
+        if (interaction.options.getSubcommand() === 'edit') {
             messageId = interaction.options.getString('messageid');
             try {
                 const message = await interaction.channel.messages.fetch(messageId);
-                if (message && message.embeds[0]) {
+                if (message?.embeds[0]) {
                     embed = EmbedBuilder.from(message.embeds[0]);
-                    existingLinkButtons = message.components.flatMap(row => row.components.filter(component => component.type === 'BUTTON' && component.style === 'LINK'));
+                    linkButtons = message.components
+                        .flatMap(row => row.components)
+                        .filter(c => c.style === ButtonStyle.Link)
+                        .map(c => ButtonBuilder.from(c));
                 } else {
-                    return interaction.reply({ content: 'Message not found or does not contain an embed.', flags: MessageFlags.Ephemeral });
+                    return interaction.reply({ 
+                        content: 'Không tìm thấy message hoặc embed!', 
+                        flags: MessageFlags.Ephemeral 
+                    });
                 }
-            } catch (error) {
-                return interaction.reply({ content: 'Failed to fetch the message. Please ensure the message ID is correct.', flags: MessageFlags.Ephemeral });
+            } catch {
+                return interaction.reply({ 
+                    content: 'Không thể fetch message. Kiểm tra lại ID!', 
+                    flags: MessageFlags.Ephemeral 
+                });
             }
         }
 
+        // Tạo ID unique cho session
         const id = Date.now().toString();
-        const linkButtons = [...existingLinkButtons];
 
-        const baseComponents = [
-            new ButtonBuilder().setCustomId(`title_${id}`).setLabel('Title').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`description_${id}`).setLabel('Description').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`author_${id}`).setLabel('Author').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`footer_${id}`).setLabel('Footer').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`timestamp_${id}`).setLabel('Timestamp').setStyle(ButtonStyle.Secondary),
+        // Tạo các buttons chính
+        const mainButtons = [
+            new ButtonBuilder().setCustomId(`title_${id}`).setLabel('Tiêu đề').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`description_${id}`).setLabel('Mô Tả').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`author_${id}`).setLabel('Tác giả').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`footer_${id}`).setLabel('Chân Trang').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`timestamp_${id}`).setLabel('Dấu thời gian').setStyle(ButtonStyle.Secondary),
 
-            new ButtonBuilder().setCustomId(`addfield_${id}`).setLabel('Add Field').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`removefield_${id}`).setLabel('Remove Field').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`thumbnail_${id}`).setLabel('Thumbnail').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`image_${id}`).setLabel('Image').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`color_${id}`).setLabel('Color').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`addfield_${id}`).setLabel('Thêm Trường').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`removefield_${id}`).setLabel('Xóa Trường').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`thumbnail_${id}`).setLabel('Hình thu nhỏ').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`image_${id}`).setLabel('Hình ảnh').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`color_${id}`).setLabel('Màu').setStyle(ButtonStyle.Secondary),
 
-            new ButtonBuilder().setCustomId(`addlink_${id}`).setLabel('Add Link').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`removelink_${id}`).setLabel('Remove Link').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`toggleping_${id}`).setLabel('Toggle Pings').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`abovetext_${id}`).setLabel('Above Text').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId(`aboveimage_${id}`).setLabel('Above Image').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`addlink_${id}`).setLabel('Thêm Liên kết').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`removelink_${id}`).setLabel('Xóa Liên kết').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`toggleping_${id}`).setLabel('Bật/Tắt Pings').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`abovetext_${id}`).setLabel('Văn bản Phía trên').setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`aboveimage_${id}`).setLabel('Hình ảnh Phía trên').setStyle(ButtonStyle.Secondary),
 
-            new ButtonBuilder().setCustomId(`save_${id}`).setLabel('Save Template').setStyle(ButtonStyle.Primary),
-            new ButtonBuilder().setCustomId(`deletetemplate_${id}`).setLabel('Delete Template').setStyle(ButtonStyle.Danger),
-            new ButtonBuilder().setCustomId(`post_${id}`).setLabel('Post Embed').setStyle(ButtonStyle.Success)
+            new ButtonBuilder().setCustomId(`save_${id}`).setLabel('Lưu Mẫu').setStyle(ButtonStyle.Primary),
+            new ButtonBuilder().setCustomId(`deletetemplate_${id}`).setLabel('Xóa Mẫu').setStyle(ButtonStyle.Danger),
+            new ButtonBuilder().setCustomId(`post_${id}`).setLabel('Đăng Embed').setStyle(ButtonStyle.Success)
         ];
 
-        const components = [];
-        for (let i = 0; i < baseComponents.length; i += 5) {
-            components.push(new ActionRowBuilder().addComponents(baseComponents.slice(i, i + 5)));
-        }
+        const components = Utils.splitIntoRows(mainButtons);
 
+        // Thêm template selector nếu có templates
         const templates = await EmbedTemplate.find().select('name');
         if (templates.length > 0) {
-            const options = templates.map((template, index) => ({
-                label: template.name,
-                value: `template_${index}`
-            }));
-        
-            const selectMenu = new StringSelectMenuBuilder()
+            const menu = new StringSelectMenuBuilder()
                 .setCustomId(`loadtemplate_${id}`)
-                .setPlaceholder('Load a template')
-                .addOptions(options);
-        
-            components.unshift(new ActionRowBuilder().addComponents(selectMenu));
+                .setPlaceholder('Load template')
+                .addOptions(templates.map((t, i) => ({ 
+                    label: t.name, 
+                    value: `template_${i}` 
+                })));
+            components.unshift(new ActionRowBuilder().addComponents(menu));
         }
 
-        await interaction.reply({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
+        // Reply với embed builder
+        await interaction.reply({ 
+            embeds: [embed], 
+            components: Utils.combineComponents(components, linkButtons), 
+            flags: MessageFlags.Ephemeral 
+        });
 
+        // Tạo collector
         const filter = i => i.user.id === interaction.user.id;
-        const collector = interaction.channel.createMessageComponentCollector({ filter, time: 900000 });
+        const collector = interaction.channel.createMessageComponentCollector({ 
+            filter, 
+            time: COLLECTOR_TIMEOUT 
+        });
 
         activeInteractions.set(userId, collector);
 
         collector.on('collect', async i => {
             try {
-                await handleButtonInteraction(i, embed, components, linkButtons, collector, messageId);
+                await handleButton(i, embed, components, linkButtons, messageId);
             } catch (error) {
-                console.error('Error handling button interaction:', error);
+                console.error('Button handler error:', error);
                 if (!i.deferred && !i.replied) {
-                    await i.reply({ content: 'An unexpected error occurred. Please try again.', flags: MessageFlags.Ephemeral }).catch(console.error);
+                    await i.reply({ 
+                        content: 'Có lỗi xảy ra! Vui lòng thử lại.', 
+                        flags: MessageFlags.Ephemeral 
+                    }).catch(console.error);
                 }
             }
         });
 
-        collector.on('end', async () => {
+        collector.on('end', () => {
             activeInteractions.delete(userId);
         });
     },
+
     EmbedTemplate
 };
-
-async function handleButtonInteraction(i, embed, components, linkButtons, collector, messageId) {
-    switch (i.customId.split('_')[0]) {
-        case 'title':
-            await showTitleModal(i, embed, components, linkButtons);
-            break;
-        case 'description':
-            await showDescriptionModal(i, embed, components, linkButtons);
-            break;
-        case 'author':
-            await showAuthorModal(i, embed, components, linkButtons);
-            break;
-        case 'footer':
-            await showFooterModal(i, embed, components, linkButtons);
-            break;
-        case 'thumbnail':
-            await showThumbnailModal(i, embed, components, linkButtons);
-            break;
-        case 'image':
-            await showImageModal(i, embed, components, linkButtons);
-            break;
-        case 'color':
-            await showColorModal(i, embed, components, linkButtons);
-            break;
-        case 'timestamp':
-            if (embed.data.timestamp) {
-                embed.setTimestamp(null);
-            } else {
-                embed.setTimestamp();
-            }
-            await i.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-            break;
-        case 'post':
-            await postEmbed(i, embed, linkButtons, messageId);
-            break;
-        case 'save':
-            await saveTemplate(i, embed, linkButtons);
-            break;
-        case 'loadtemplate':
-            await loadTemplate(i, embed, components, linkButtons);
-            break;
-        case 'deletetemplate':
-            await promptAndDeleteTemplate(i);
-            break;
-        case 'addlink':
-            await addLinkButton(i, embed, linkButtons, components);
-            break;
-        case 'removelink':
-            await removeLinkButton(i, embed, linkButtons, components);
-            break;
-        case 'abovetext':
-            await showAboveTextModal(i, embed, components, linkButtons);
-            break;
-        case 'aboveimage':
-            await showAboveImageModal(i, embed, components, linkButtons);
-            break;
-        case 'addfield':
-            await showAddFieldModal(i, embed, components, linkButtons);
-            break;
-        case 'removefield':
-            await removeField(i, embed, components, linkButtons);
-            break;
-        case 'toggleping':
-            await togglePings(i, embed, components, linkButtons);
-            break;
-    }
-}
-
-async function showAboveTextModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('abovetext_modal')
-        .setTitle('Set Text Above Embed');
-
-    const aboveTextInput = new TextInputBuilder()
-        .setCustomId('aboveText')
-        .setLabel('Text Above Embed')
-        .setStyle(TextInputStyle.Paragraph)
-        .setPlaceholder('Enter text to appear above the embed (e.g., role mentions)')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(aboveTextInput));
-
-    try {
-        await interaction.showModal(modal);
-
-        const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'abovetext_modal',
-            time: 60000
-        });
-
-        const aboveText = modalInteraction.fields.getTextInputValue('aboveText');
-
-        if (!interaction.client.embedData) {
-            interaction.client.embedData = {};
-        }
-        if (!interaction.client.embedData[interaction.user.id]) {
-            interaction.client.embedData[interaction.user.id] = {};
-        }
-        
-        interaction.client.embedData[interaction.user.id] = {
-            ...interaction.client.embedData[interaction.user.id],
-            aboveText
-        };
-
-        await modalInteraction.update({
-            content: aboveText ? `Text above embed has been set to: "${aboveText}"` : 'Text above embed has been cleared.',
-            embeds: [embed],
-            components: combineComponents(components, linkButtons),
-            flags: MessageFlags.Ephemeral
-        });
-    } catch (error) {
-        console.error('Error in above text modal:', error);
-        if (!interaction.replied && !interaction.deferred) {
-            await interaction.reply({ content: 'An error occurred while setting the text above the embed. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: 'An error occurred while setting the text above the embed. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function showTitleModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('title_modal')
-        .setTitle('Set Embed Title');
-
-    const titleInput = new TextInputBuilder()
-        .setCustomId('titleText')
-        .setLabel('Title')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.title || '')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(titleInput));
-
-    await interaction.showModal(modal);
-
-    try {
-        const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'title_modal',
-            time: 60000
-        });
-
-        const title = modalInteraction.fields.getTextInputValue('titleText');
-        embed.setTitle(title || null);
-        await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-    } catch (error) {
-        console.error('Error in title modal:', error);
-        if (error.code === 'InteractionCollectorError') {
-            await interaction.followUp({ content: 'The title modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: 'An error occurred while setting the title. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function showDescriptionModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('description_modal')
-        .setTitle('Set Embed Description');
-
-    const descriptionInput = new TextInputBuilder()
-        .setCustomId('descriptionText')
-        .setLabel('Description')
-        .setStyle(TextInputStyle.Paragraph)
-        .setValue(embed.data.description || '')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(descriptionInput));
-
-    try {
-        await interaction.showModal(modal);
-
-        const modalSubmitInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'description_modal' && i.user.id === interaction.user.id,
-            time: 120000
-        });
-
-        const description = modalSubmitInteraction.fields.getTextInputValue('descriptionText');
-        embed.setDescription(description || null);
-        
-        await modalSubmitInteraction.update({ 
-            embeds: [embed], 
-            components: combineComponents(components, linkButtons), 
-            flags: MessageFlags.Ephemeral 
-        });
-    } catch (error) {
-        if (error.code === 'InteractionCollectorError') {
-            if (!interaction.replied && !interaction.deferred) {
-                await interaction.followUp({ 
-                    content: 'The description modal timed out. Please try again.', 
-                    flags: MessageFlags.Ephemeral 
-                });
-            }
-            return;
-        }
-
-        console.error('Error in description modal:', error);
-        const errorMessage = 'An error occurred while setting the description. Please try again.';
-        
-        if (!interaction.replied && !interaction.deferred) {
-            await interaction.reply({ content: errorMessage, flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: errorMessage, flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function showAuthorModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('author_modal')
-        .setTitle('Author Settings');
-
-    const authorNameInput = new TextInputBuilder()
-        .setCustomId('authorName')
-        .setLabel('Author Name')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.author?.name || '')
-        .setRequired(false);
-
-    const authorIconInput = new TextInputBuilder()
-        .setCustomId('authorIcon')
-        .setLabel('Author Icon URL')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.author?.iconURL || '')
-        .setRequired(false);
-
-    const authorUrlInput = new TextInputBuilder()
-        .setCustomId('authorUrl')
-        .setLabel('Author URL (clickable)')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.author?.url || '')
-        .setRequired(false);
-
-    modal.addComponents(
-        new ActionRowBuilder().addComponents(authorNameInput),
-        new ActionRowBuilder().addComponents(authorIconInput),
-        new ActionRowBuilder().addComponents(authorUrlInput)
-    );
-
-    try {
-        await interaction.showModal(modal);
-    } catch (error) {
-        console.error('Error showing modal:', error);
-        return;
-    }
-
-    try {
-        const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'author_modal',
-            time: 60000
-        });
-
-        const authorName = modalInteraction.fields.getTextInputValue('authorName');
-        const authorIcon = modalInteraction.fields.getTextInputValue('authorIcon');
-        const authorUrl = modalInteraction.fields.getTextInputValue('authorUrl');
-
-        if (authorIcon && !isValidHttpUrl(authorIcon)) {
-            await modalInteraction.reply({ content: 'Invalid icon URL. Please provide a valid URL for the author icon.', flags: MessageFlags.Ephemeral });
-            return;
-        }
-
-        if (authorUrl && !isValidHttpUrl(authorUrl)) {
-            await modalInteraction.reply({ content: 'Invalid author URL. Please provide a valid URL.', flags: MessageFlags.Ephemeral });
-            return;
-        }
-
-        try {
-            if (authorName || authorIcon || authorUrl) {
-                embed.setAuthor({ 
-                    name: authorName || null, 
-                    iconURL: authorIcon || null,
-                    url: authorUrl || null
-                });
-            } else {
-                embed.setAuthor(null);
-            }
-            await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-        } catch (error) {
-            console.error('Error updating interaction:', error);
-            if (!modalInteraction.replied) {
-                await modalInteraction.reply({ content: 'An error occurred while updating the embed. Please try again.', flags: MessageFlags.Ephemeral });
-            }
-        }
-    } catch (error) {
-        console.error('Error in author modal:', error);
-        if (error.code === 'InteractionCollectorError') {
-            await interaction.followUp({ content: 'The author modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: 'An error occurred while setting the author. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function showFooterModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('footer_modal')
-        .setTitle('Footer Settings');
-
-    const footerTextInput = new TextInputBuilder()
-        .setCustomId('footerText')
-        .setLabel('Footer Text')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.footer?.text || '')
-        .setRequired(false);
-
-    const footerIconInput = new TextInputBuilder()
-        .setCustomId('footerIcon')
-        .setLabel('Footer Icon URL')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.footer?.iconURL || '')
-        .setRequired(false);
-
-    modal.addComponents(
-        new ActionRowBuilder().addComponents(footerTextInput),
-        new ActionRowBuilder().addComponents(footerIconInput)
-    );
-
-    await interaction.showModal(modal);
-
-    try {
-        const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'footer_modal',
-            time: 60000
-        });
-
-        const footerText = modalInteraction.fields.getTextInputValue('footerText');
-        const footerIcon = modalInteraction.fields.getTextInputValue('footerIcon');
-
-        if (footerIcon && !isValidHttpUrl(footerIcon)) {
-            await modalInteraction.reply({ content: 'Invalid icon URL. Please provide a valid URL for the footer icon.', flags: MessageFlags.Ephemeral });
-            return;
-        }
-
-        try {
-            if (footerText || footerIcon) {
-                embed.setFooter({ 
-                    text: footerText || null, 
-                    iconURL: footerIcon || null
-                });
-            } else {
-                embed.setFooter(null);
-            }
-            await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-        } catch (error) {
-            console.error('Error setting footer:', error);
-            let errorMessage = 'An unexpected error occurred while setting the footer. Please try again.';
-            await modalInteraction.reply({ content: errorMessage, flags: MessageFlags.Ephemeral });
-        }
-    } catch (error) {
-        console.error('Error in footer modal:', error);
-        if (error.code === 'InteractionCollectorError') {
-            await interaction.followUp({ content: 'The footer modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: 'An error occurred while setting the footer. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function showThumbnailModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('thumbnail_modal')
-        .setTitle('Set Thumbnail Image');
-
-    const thumbnailInput = new TextInputBuilder()
-        .setCustomId('thumbnailUrl')
-        .setLabel('Thumbnail URL')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.thumbnail?.url || '')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(thumbnailInput));
-
-    await interaction.showModal(modal);
-
-    const filter = (interaction) => interaction.customId === 'thumbnail_modal';
-    interaction.awaitModalSubmit({ filter, time: 60000 })
-        .then(async modalInteraction => {
-            const thumbnailUrl = modalInteraction.fields.getTextInputValue('thumbnailUrl');
-            if (thumbnailUrl && isValidHttpUrl(thumbnailUrl) && isImageUrl(thumbnailUrl)) {
-                embed.setThumbnail(thumbnailUrl);
-            } else if (!thumbnailUrl) {
-                embed.setThumbnail(null);
-            } else {
-                await modalInteraction.reply({ content: 'Invalid image URL. Please provide a valid image URL.', flags: MessageFlags.Ephemeral });
-                return;
-            }
-            await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-        })
-        .catch(error => {
-            console.error('Error in thumbnail modal:', error);
-            if (error.code === 'InteractionCollectorError') {
-                interaction.followUp({ content: 'The thumbnail modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-            } else {
-                interaction.followUp({ content: 'An error occurred while setting the thumbnail. Please try again.', flags: MessageFlags.Ephemeral });
-            }
-        });
-}
-
-async function showImageModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('image_modal')
-        .setTitle('Set Large Image');
-
-    const imageInput = new TextInputBuilder()
-        .setCustomId('imageUrl')
-        .setLabel('Image URL')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.image?.url || '')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(imageInput));
-
-    await interaction.showModal(modal);
-
-    const filter = (interaction) => interaction.customId === 'image_modal';
-    interaction.awaitModalSubmit({ filter, time: 60000 })
-        .then(async modalInteraction => {
-            const imageUrl = modalInteraction.fields.getTextInputValue('imageUrl');
-            if (imageUrl && isValidHttpUrl(imageUrl) && isImageUrl(imageUrl)) {
-                embed.setImage(imageUrl);
-            } else if (!imageUrl) {
-                embed.setImage(null);
-            } else {
-                await modalInteraction.reply({ content: 'Invalid image URL. Please provide a valid image URL.', flags: MessageFlags.Ephemeral });
-                return;
-            }
-            await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-        })
-        .catch(error => {
-            console.error('Error in image modal:', error);
-            if (error.code === 'InteractionCollectorError') {
-                interaction.followUp({ content: 'The image modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-            } else {
-                interaction.followUp({ content: 'An error occurred while setting the image. Please try again.', flags: MessageFlags.Ephemeral });
-            }
-        });
-}
-
-async function showColorModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('color_modal')
-        .setTitle('Set Embed Color');
-
-    const colorInput = new TextInputBuilder()
-        .setCustomId('colorValue')
-        .setLabel('Color (Hex code or integer)')
-        .setStyle(TextInputStyle.Short)
-        .setValue(embed.data.color ? embed.data.color.toString(16) : '')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(colorInput));
-
-    await interaction.showModal(modal);
-
-    const filter = (interaction) => interaction.customId === 'color_modal';
-    interaction.awaitModalSubmit({ filter, time: 60000 })
-        .then(async modalInteraction => {
-            const colorValue = modalInteraction.fields.getTextInputValue('colorValue');
-            if (colorValue) {
-                try {
-                    embed.setColor(colorValue);
-                } catch (error) {
-                    await modalInteraction.reply({ content: 'Invalid color value. Please provide a valid hex code or integer.', flags: MessageFlags.Ephemeral });
-                    return;
-                }
-            } else {
-                embed.setColor(null);
-            }
-            await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-        })
-        .catch(error => {
-            console.error('Error in color modal:', error);
-            if (error.code === 'InteractionCollectorError') {
-                interaction.followUp({ content: 'The color modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-            } else {
-                interaction.followUp({ content: 'An error occurred while setting the color. Please try again.', flags: MessageFlags.Ephemeral });
-            }
-        });
-}
-
-async function saveTemplate(interaction, embed, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('save_template_modal')
-        .setTitle('Save Embed Template');
-
-    const templateNameInput = new TextInputBuilder()
-        .setCustomId('templateName')
-        .setLabel('Template Name')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(true);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(templateNameInput));
-
-    await interaction.showModal(modal);
-
-    const filter = (interaction) => interaction.customId === 'save_template_modal';
-    interaction.awaitModalSubmit({ filter, time: 60000 })
-        .then(async modalInteraction => {
-            const templateName = modalInteraction.fields.getTextInputValue('templateName');
-
-            const existingTemplate = await EmbedTemplate.findOne({ name: templateName });
-            if (existingTemplate) {
-                await modalInteraction.reply({ content: 'A template with this name already exists. Please choose a different name.', flags: MessageFlags.Ephemeral });
-                return;
-            }
-
-            const newTemplate = new EmbedTemplate({
-                name: templateName,
-                embedData: embed.toJSON(),
-                linkButtons: linkButtons.map(button => button.toJSON())
-            });
-
-            await newTemplate.save();
-            await modalInteraction.reply({ content: 'Template saved successfully!', flags: MessageFlags.Ephemeral });
-        })
-        .catch(error => {
-            console.error('Error in save template modal:', error);
-            if (error.code === 'InteractionCollectorError') {
-                interaction.followUp({ content: 'The save template modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-            } else {
-                interaction.followUp({ content: 'An error occurred while saving the template. Please try again.', flags: MessageFlags.Ephemeral });
-            }
-        });
-}
-
-async function loadTemplate(interaction, embed, components, linkButtons) {
-    const templateIndex = parseInt(interaction.values[0].split('_')[1]);
-    const templates = await EmbedTemplate.find().select('name');
-    const template = await EmbedTemplate.findOne({ name: templates[templateIndex].name });
-
-    if (template) {
-        Object.assign(embed, new EmbedBuilder(template.embedData));
-        linkButtons.splice(0, linkButtons.length, ...template.linkButtons.map(button => ButtonBuilder.from(button)));
-
-        await interaction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-    } else {
-        await interaction.reply({ content: 'Template not found.', flags: MessageFlags.Ephemeral });
-    }
-}
-
-async function promptAndDeleteTemplate(interaction) {
-    const templates = await EmbedTemplate.find().select('name');
-    if (templates.length === 0) {
-        await interaction.reply({ content: 'There are no templates to delete.', flags: MessageFlags.Ephemeral });
-        return;
-    }
-
-    const options = templates.map(template => ({
-        label: template.name,
-        value: template.name
-    }));
-
-    const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId('delete_template_select')
-        .setPlaceholder('Select a template to delete')
-        .addOptions(options);
-
-    const actionRow = new ActionRowBuilder().addComponents(selectMenu);
-
-    await interaction.reply({ content: 'Select a template to delete:', components: [actionRow], flags: MessageFlags.Ephemeral });
-
-    const filter = i => i.user.id === interaction.user.id && i.customId === 'delete_template_select';
-    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000, max: 1 });
-
-    collector.on('collect', async i => {
-        const templateName = i.values[0];
-        const result = await EmbedTemplate.deleteOne({ name: templateName });
-
-        if (result.deletedCount > 0) {
-            await i.update({ content: `Template '${templateName}' deleted successfully.`, components: [], flags: MessageFlags.Ephemeral });
-        } else {
-            await i.update({ content: `Template '${templateName}' not found.`, components: [], flags: MessageFlags.Ephemeral });
-        }
-    });
-
-    collector.on('end', collected => {
-        if (collected.size === 0) {
-            interaction.editReply({ content: 'Template deletion cancelled.', components: [], flags: MessageFlags.Ephemeral });
-        }
-    });
-}
-
-async function addLinkButton(interaction, embed, linkButtons, components) {
-    const maxActionRows = 5;
-    const usedActionRows = Math.ceil(linkButtons.length / 5);
-    const availableRows = maxActionRows - 4;
-    const maxLinkButtons = availableRows * 5;
-
-    if (linkButtons.length >= maxLinkButtons) {
-        await interaction.reply({ 
-            content: `Cannot add more link buttons. Maximum of ${maxLinkButtons} link buttons reached.`, 
-            flags: MessageFlags.Ephemeral 
-        });
-        return;
-    }
-
-    const modal = new ModalBuilder()
-        .setCustomId('add_link_button_modal')
-        .setTitle('Add Link Button');
-
-    const urlInput = new TextInputBuilder()
-        .setCustomId('buttonUrl')
-        .setLabel('Button URL')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(true);
-
-    const labelInput = new TextInputBuilder()
-        .setCustomId('buttonLabel')
-        .setLabel('Button Label')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(true);
-
-    const emojiInput = new TextInputBuilder()
-        .setCustomId('buttonEmoji')
-        .setLabel('Button Emoji')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(false);
-
-    modal.addComponents(
-        new ActionRowBuilder().addComponents(urlInput),
-        new ActionRowBuilder().addComponents(labelInput),
-        new ActionRowBuilder().addComponents(emojiInput)
-    );
-
-    await interaction.showModal(modal);
-
-    const filter = (interaction) => interaction.customId === 'add_link_button_modal';
-    interaction.awaitModalSubmit({ filter, time: 60000 })
-        .then(async modalInteraction => {
-            const url = modalInteraction.fields.getTextInputValue('buttonUrl');
-            const label = modalInteraction.fields.getTextInputValue('buttonLabel');
-            const emoji = modalInteraction.fields.getTextInputValue('buttonEmoji');
-
-            if (!isValidHttpUrl(url)) {
-                await modalInteraction.reply({ content: 'Invalid URL. Please provide a valid URL.', flags: MessageFlags.Ephemeral });
-                return;
-            }
-
-            const newButton = new ButtonBuilder()
-                .setURL(url)
-                .setLabel(label)
-                .setStyle(ButtonStyle.Link);
-
-            if (emoji) {
-                newButton.setEmoji(emoji);
-            }
-
-            linkButtons.push(newButton);
-
-            await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-        })
-        .catch(error => {
-            console.error('Error in add link button modal:', error);
-            if (error.code === 'InteractionCollectorError') {
-                interaction.followUp({ content: 'The add link button modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-            } else {
-                interaction.followUp({ content: 'An error occurred while adding the link button. Please try again.', flags: MessageFlags.Ephemeral });
-            }
-        });
-}
-
-async function removeLinkButton(interaction, embed, linkButtons, components) {
-    if (linkButtons.length === 0) {
-        await interaction.reply({ content: 'There are no link buttons to remove.', flags: MessageFlags.Ephemeral });
-        return;
-    }
-
-    const options = linkButtons.map((button, index) => ({
-        label: button.data.label,
-        value: index.toString()
-    }));
-
-    const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId('removelink_select')
-        .setPlaceholder('Select a link button to remove')
-        .addOptions(options);
-
-    const removeComponents = [
-        new ActionRowBuilder().addComponents(selectMenu)
-    ];
-
-    await interaction.reply({ content: 'Select a link button to remove:', components: removeComponents, flags: MessageFlags.Ephemeral });
-
-    const filter = i => i.user.id === interaction.user.id && i.customId === 'removelink_select';
-    const removeCollector = interaction.channel.createMessageComponentCollector({ filter, max: 1, time: 60000 });
-
-    removeCollector.on('collect', async i => {
-        const selectedId = parseInt(i.values[0], 10);
-        linkButtons.splice(selectedId, 1);
-
-        await i.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-    });
-
-    removeCollector.on('end', async collected => {
-        if (collected.size === 0) {
-            await interaction.followUp({ content: 'No button selected, operation cancelled.', flags: MessageFlags.Ephemeral });
-        }
-    });
-}
-
-async function postEmbed(i, embed, linkButtons, messageId) {
-    const actionRows = linkButtonsToComponents(linkButtons);
-    const embedData = i.client.embedData && i.client.embedData[i.user.id] ? i.client.embedData[i.user.id] : {};
-    const {
-        aboveText = '',
-        aboveImageUrl = '',
-        suppressPings = false
-    } = embedData;
-
-    try {
-        if (aboveImageUrl) {
-            await i.channel.send({ content: aboveImageUrl });
-        }
-
-        const messageOptions = {
-            content: aboveText,
-            embeds: [embed],
-            components: actionRows,
-            allowedMentions: suppressPings ? { parse: [] } : undefined
-        };
-
-        if (messageId) {
-            try {
-                const message = await i.channel.messages.fetch(messageId);
-                await message.edit(messageOptions);
-                await i.reply({ content: 'Successfully edited the embed!', flags: MessageFlags.Ephemeral });
-            } catch (error) {
-                if (error.code === 50005) {
-                    await i.reply({ content: 'I do not have permission to edit this message. Please ensure I have the necessary permissions.', flags: MessageFlags.Ephemeral });
-                } else if (error.code === 10008) {
-                    await i.reply({ content: 'The message was not found. It might have been deleted.', flags: MessageFlags.Ephemeral });
-                } else {
-                    throw error;
-                }
-            }
-        } else {
-            await i.channel.send(messageOptions);
-            await i.reply({ content: 'Successfully posted the embed!', flags: MessageFlags.Ephemeral });
-        }
-
-        if (i.client.embedData && i.client.embedData[i.user.id]) {
-            delete i.client.embedData[i.user.id];
-        }
-    } catch (error) {
-        console.error('Error posting embed:', error);
-        if (!i.replied && !i.deferred) {
-            await i.reply({ content: 'An error occurred while posting the embed. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await i.followUp({ content: 'An error occurred while posting the embed. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-function combineComponents(mainComponents, linkButtons) {
-    const combined = [...mainComponents];
-    const linkButtonRows = linkButtonsToComponents(linkButtons);
-    const remainingSpace = 5 - combined.length;
-    combined.push(...linkButtonRows.slice(0, remainingSpace));
-    return combined;
-}
-
-function linkButtonsToComponents(linkButtons) {
-    const actionRows = [];
-    for (let i = 0; i < linkButtons.length; i += 5) {
-        const row = new ActionRowBuilder().addComponents(linkButtons.slice(i, Math.min(i + 5, linkButtons.length)));
-        actionRows.push(row);
-    }
-    return actionRows;
-}
-
-function isValidHttpUrl(string) {
-    try {
-        const url = new URL(string);
-        return url.protocol === "http:" || url.protocol === "https:";
-    } catch (_) {
-        return false;
-    }
-}
-
-function isImageUrl(url) {
-    return /\.(jpeg|jpg|gif|png|svg)$/i.test(url);
-}
-
-async function showAboveImageModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('aboveimage_modal')
-        .setTitle('Set Image Above Embed');
-
-    const imageInput = new TextInputBuilder()
-        .setCustomId('aboveImageUrl')
-        .setLabel('Image URL')
-        .setStyle(TextInputStyle.Short)
-        .setPlaceholder('Enter a valid image URL')
-        .setRequired(false);
-
-    modal.addComponents(new ActionRowBuilder().addComponents(imageInput));
-
-    try {
-        await interaction.showModal(modal);
-
-        const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'aboveimage_modal',
-            time: 60000
-        });
-
-        const imageUrl = modalInteraction.fields.getTextInputValue('aboveImageUrl');
-
-        if (!interaction.client.embedData) {
-            interaction.client.embedData = {};
-        }
-        if (!interaction.client.embedData[interaction.user.id]) {
-            interaction.client.embedData[interaction.user.id] = {};
-        }
-
-        interaction.client.embedData[interaction.user.id] = {
-            ...interaction.client.embedData[interaction.user.id],
-            aboveImageUrl: imageUrl
-        };
-
-        await modalInteraction.update({
-            content: imageUrl ? `Image above embed has been set to: "${imageUrl}"` : 'Image above embed has been cleared.',
-            embeds: [embed],
-            components: combineComponents(components, linkButtons),
-            flags: MessageFlags.Ephemeral
-        });
-    } catch (error) {
-        console.error('Error in above image modal:', error);
-        if (!interaction.replied && !interaction.deferred) {
-            await interaction.reply({ content: 'An error occurred while setting the image above the embed. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: 'An error occurred while setting the image above the embed. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function showAddFieldModal(interaction, embed, components, linkButtons) {
-    const modal = new ModalBuilder()
-        .setCustomId('add_field_modal')
-        .setTitle('Add Embed Field');
-
-    const nameInput = new TextInputBuilder()
-        .setCustomId('fieldName')
-        .setLabel('Field Name')
-        .setStyle(TextInputStyle.Short)
-        .setRequired(true);
-
-    const valueInput = new TextInputBuilder()
-        .setCustomId('fieldValue')
-        .setLabel('Field Value')
-        .setStyle(TextInputStyle.Paragraph)
-        .setRequired(true);
-
-    const inlineInput = new TextInputBuilder()
-        .setCustomId('fieldInline')
-        .setLabel('Inline? (true/false)')
-        .setStyle(TextInputStyle.Short)
-        .setValue('false')
-        .setRequired(true);
-
-    modal.addComponents(
-        new ActionRowBuilder().addComponents(nameInput),
-        new ActionRowBuilder().addComponents(valueInput),
-        new ActionRowBuilder().addComponents(inlineInput)
-    );
-
-    await interaction.showModal(modal);
-
-    try {
-        const modalInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === 'add_field_modal',
-            time: 60000
-        });
-
-        const name = modalInteraction.fields.getTextInputValue('fieldName');
-        const value = modalInteraction.fields.getTextInputValue('fieldValue');
-        const inline = modalInteraction.fields.getTextInputValue('fieldInline').toLowerCase() === 'true';
-
-        if (!embed.data.fields) {
-            embed.data.fields = [];
-        }
-
-        embed.addFields({ name, value, inline });
-        await modalInteraction.update({ embeds: [embed], components: combineComponents(components, linkButtons), flags: MessageFlags.Ephemeral });
-    } catch (error) {
-        console.error('Error in add field modal:', error);
-        if (error.code === 'InteractionCollectorError') {
-            await interaction.followUp({ content: 'The add field modal timed out. Please try again.', flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: 'An error occurred while adding the field. Please try again.', flags: MessageFlags.Ephemeral });
-        }
-    }
-}
-
-async function removeField(interaction, embed, components, linkButtons) {
-    if (!embed.data.fields || embed.data.fields.length === 0) {
-        await interaction.reply({ content: 'There are no fields to remove.', flags: MessageFlags.Ephemeral });
-        return;
-    }
-
-    const options = embed.data.fields.map((field, index) => ({
-        label: field.name.substring(0, 100),
-        description: field.value.substring(0, 100),
-        value: index.toString()
-    }));
-
-    const selectMenu = new StringSelectMenuBuilder()
-        .setCustomId('removefield_select')
-        .setPlaceholder('Select a field to remove')
-        .addOptions(options);
-
-    const removeComponents = [
-        new ActionRowBuilder().addComponents(selectMenu)
-    ];
-
-    const response = await interaction.reply({ 
-        content: 'Select a field to remove:', 
-        components: removeComponents, 
-        flags: MessageFlags.Ephemeral,
-        withResponse: true
-    });
-
-    try {
-        const confirmation = await response.awaitMessageComponent({ 
-            filter: i => i.user.id === interaction.user.id && i.customId === 'removefield_select',
-            time: 60000 
-        });
-
-        const selectedId = parseInt(confirmation.values[0], 10);
-        const fields = [...embed.data.fields];
-        fields.splice(selectedId, 1);
-        embed.setFields(fields);
-
-        await interaction.editReply({ 
-            content: 'Field removed successfully!',
-            embeds: [embed], 
-            components: combineComponents(components, linkButtons), 
-            flags: MessageFlags.Ephemeral 
-        });
-    } catch (error) {
-        if (error.code === 'INTERACTION_COLLECTOR_ERROR') {
-            await interaction.editReply({ 
-                content: 'No field selected, operation cancelled.', 
-                components: [], 
-                flags: MessageFlags.Ephemeral 
-            });
-        } else {
-            console.error('Error in remove field:', error);
-            await interaction.editReply({ 
-                content: 'An error occurred while removing the field.', 
-                components: [], 
-                flags: MessageFlags.Ephemeral 
-            });
-        }
-    }
-}
-
-async function togglePings(interaction, embed, components, linkButtons) {
-    if (!interaction.client.embedData) {
-        interaction.client.embedData = {};
-    }
-    if (!interaction.client.embedData[interaction.user.id]) {
-        interaction.client.embedData[interaction.user.id] = {};
-    }
-
-    const currentState = interaction.client.embedData[interaction.user.id].suppressPings || false;
-    interaction.client.embedData[interaction.user.id].suppressPings = !currentState;
-
-    await interaction.update({
-        embeds: [embed],
-        components: combineComponents(components, linkButtons),
-        flags: MessageFlags.Ephemeral
-    });
-
-    await interaction.followUp({
-        content: `🔔 Pings are now ${!currentState ? 'suppressed' : 'enabled'}`,
-        flags: MessageFlags.Ephemeral
-    });
-}
-
-async function showGenericModal(interaction, embed, components, linkButtons) {
-    try {
-        await interaction.showModal(modal);
-
-        const modalSubmitInteraction = await interaction.awaitModalSubmit({
-            filter: (i) => i.customId === modal.data.custom_id && i.user.id === interaction.user.id,
-            time: 120000
-        });
-
-        await modalSubmitInteraction.update({ 
-            embeds: [embed], 
-            components: combineComponents(components, linkButtons), 
-            flags: MessageFlags.Ephemeral 
-        });
-    } catch (error) {
-        if (error.code === 'InteractionCollectorError') {
-            if (!interaction.replied && !interaction.deferred) {
-                await interaction.followUp({ 
-                    content: 'The modal timed out. Please try again.', 
-                    flags: MessageFlags.Ephemeral 
-                });
-            }
-            return;
-        }
-
-        console.error('Error in modal:', error);
-        const errorMessage = 'An error occurred. Please try again.';
-        
-        if (!interaction.replied && !interaction.deferred) {
-            await interaction.reply({ content: errorMessage, flags: MessageFlags.Ephemeral });
-        } else {
-            await interaction.followUp({ content: errorMessage, flags: MessageFlags.Ephemeral });
-        }
-    }
-}

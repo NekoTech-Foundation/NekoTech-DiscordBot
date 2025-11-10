@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Bạch tuộc Dumbo",
-    "emoji": "<:Fish_dumbo:1433393278161522771>",
-    "min_weight": 5,
-    "max_weight": 10
+    "name": "Mực ma cà rồng",
+    "emoji": "<:Fish_vampiresquid:1433393330166693928>",
+    "min_weight": 0.5,
+    "max_weight": 1.5
   },
   "epic": {
     "name": "Cá Coris đuôi vàng",
@@ -11,5 +11,5 @@
     "min_weight": 0.2,
     "max_weight": 1
   },
-  "updatedAt": "2025-11-10T12:00:00.026Z"
+  "updatedAt": "2025-11-10T13:20:21.288Z"
 }
