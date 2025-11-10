@@ -643,6 +643,7 @@ async function handleInteractionCreate(interaction) {
 
             try {
                 let addon = require(absolutePath);
+                addon.filePath = absolutePath; // Attach filePath to the addon object
 
                 if (typeof addon.onLoad === 'function') {
                     addon.onLoad(client);

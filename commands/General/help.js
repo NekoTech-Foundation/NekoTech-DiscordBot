@@ -27,7 +27,20 @@ function getAllCommands(client) {
     client.slashCommands.forEach(command => {
         if (command.data && typeof command.data.toJSON === 'function') {
             const commandJSON = command.data.toJSON();
-            const categoryName = command.category || 'Tiện ích mở rộng';
+            
+            let categoryName;
+            // Dynamically determine category from addon folder structure
+            if (command.filePath && command.filePath.includes(path.join('addons', path.sep))) {
+                const pathParts = command.filePath.split(path.sep);
+                const addonsIndex = pathParts.indexOf('addons');
+                if (addonsIndex !== -1 && pathParts.length > addonsIndex + 1) {
+                    categoryName = pathParts[addonsIndex + 1];
+                }
+            }
+
+            if (!categoryName) {
+                categoryName = command.category || 'Chưa phân loại';
+            }
 
             if (!commands[categoryName]) {
                 commands[categoryName] = [];
@@ -43,17 +56,19 @@ function getAllCommands(client) {
                 cooldown: command.cooldown || 0
             };
 
-            let commandDisplay = `**</${commandJSON.name}:${command.id || 'undefined'}>** - ${commandJSON.description || 'Không có mô tả'}`;
+            // New display format using inline code blocks
+            let commandDisplay = `\`/${commandJSON.name}\` - ${commandJSON.description || 'Không có mô tả'}`;
 
             if (commandJSON.options) {
-                const subcommands = commandJSON.options.filter(option => option.type === 1);
+                const subcommands = commandJSON.options.filter(option => option.type === ApplicationCommandOptionType.Subcommand);
                 if (subcommands.length > 0) {
-                    commandDisplay += '\n';
-                    subcommands.forEach((subcommand, index) => {
-                        const isLast = index === subcommands.length - 1;
-                        const prefix = isLast ? '  └─' : '  ├─';
-                        commandDisplay += `${prefix} **</${commandJSON.name} ${subcommand.name}:${command.id || 'undefined'}>** - ${subcommand.description || 'Không có mô tả'}\n`;
-                        
+                    commandDisplay = `\`/${commandJSON.name}\` - ${commandJSON.description || 'Không có mô tả'}`;
+                    commands[categoryName].push(commandDisplay); // Push parent command first
+
+                    subcommands.forEach((subcommand) => {
+                        const subcommandDisplay = `  • \`/${commandJSON.name} ${subcommand.name}\` - ${subcommand.description || 'Không có mô tả'}`;
+                        commands[categoryName].push(subcommandDisplay);
+
                         commandDetails[`${commandJSON.name} ${subcommand.name}`] = {
                             name: `${commandJSON.name} ${subcommand.name}`,
                             description: subcommand.description || 'Không có mô tả',
@@ -63,7 +78,6 @@ function getAllCommands(client) {
                             parent: commandJSON.name
                         };
                     });
-                    commands[categoryName].push(commandDisplay);
                 } else {
                     commands[categoryName].push(commandDisplay);
                 }
