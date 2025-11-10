@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, ChannelType, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder } = require('discord.js');
 const Greetings = require('../../models/Greetings');
+const { buildWelcomeMessage, buildGoodbyeMessage } = require('./greetingsUtils');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -44,10 +45,78 @@ module.exports = {
             subcommand
                 .setName('goodbye-test')
                 .setDescription('Kiểm tra tin nhắn tạm biệt.')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('help')
+                .setDescription('Hiển thị trợ giúp về lệnh greetings.')
         ),
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
+
+        if (subcommand === 'help') {
+            const helpEmbed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle('📋 Trợ Giúp Lệnh Greetings')
+                .setDescription('Hệ thống tin nhắn chào mừng và tạm biệt cho máy chủ của bạn.')
+                .addFields(
+                    { 
+                        name: '🔧 Các Lệnh', 
+                        value: '`/greetings welcome` - Cấu hình tin nhắn chào mừng\n' +
+                               '`/greetings goodbye` - Cấu hình tin nhắn tạm biệt\n' +
+                               '`/greetings welcome-test` - Kiểm tra tin nhắn chào mừng\n' +
+                               '`/greetings goodbye-test` - Kiểm tra tin nhắn tạm biệt\n' +
+                               '`/greetings welcome-clear` - Xóa cấu hình chào mừng\n' +
+                               '`/greetings goodbye-clear` - Xóa cấu hình tạm biệt'
+                    },
+                    { 
+                        name: '📝 Placeholders Người Dùng', 
+                        value: '`{user_mention}` - Mention người dùng\n' +
+                               '`{user_name}` - Tên người dùng\n' +
+                               '`{user_tag}` - Tag người dùng (name#0000)\n' +
+                               '`{user_id}` - ID người dùng\n' +
+                               '`{user_created}` - Ngày tạo tài khoản\n' +
+                               '`{user_invite}` - Người mời (nếu có)'
+                    },
+                    { 
+                        name: '🏠 Placeholders Máy Chủ', 
+                        value: '`{server_name}` - Tên máy chủ\n' +
+                               '`{server_id}` - ID máy chủ\n' +
+                               '`{server_membercount}` - Tổng số thành viên\n' +
+                               '`{server_membercount_nobots}` - Số thành viên (không bao gồm bot)\n' +
+                               '`{server_created}` - Ngày tạo máy chủ\n' +
+                               '`{member_position}` - Vị trí thành viên (thứ mấy)'
+                    },
+                    { 
+                        name: '🎨 Định Dạng Embed', 
+                        value: 'Để tạo embed, sử dụng cú pháp JSON trong modal:\n' +
+                               '```json\n' +
+                               '{\n' +
+                               '  "title": "Chào mừng!",\n' +
+                               '  "description": "Chào mừng {user_mention}!",\n' +
+                               '  "color": "#00ff00",\n' +
+                               '  "thumbnail": "{user_avatar}",\n' +
+                               '  "fields": [\n' +
+                               '    {"name": "Thành viên số", "value": "{member_position}", "inline": true}\n' +
+                               '  ],\n' +
+                               '  "footer": "{server_name}"\n' +
+                               '}```'
+                    },
+                    { 
+                        name: '💡 Lưu Ý', 
+                        value: '• Để TRỐNG modal nhập `[blank]` để sử dụng embed mặc định.\n' +
+                               '• Bắt đầu tin nhắn bằng `[text]` để gửi tin nhắn văn bản thuần túy (không embed).\n' +
+                               '• Nếu nhập JSON không hợp lệ hoặc không bắt đầu bằng `[text]`, tin nhắn sẽ được gửi dưới dạng văn bản thuần túy.\n' +
+                               '• Có thể dùng `{newline}` để xuống dòng.\n' +
+                               '• Bot cần quyền gửi tin nhắn và embed trong kênh được chọn.'
+                    }
+                )
+                .setFooter({ text: 'Sử dụng /greetings <subcommand> để bắt đầu' })
+                .setTimestamp();
+
+            return interaction.reply({ embeds: [helpEmbed], ephemeral: true });
+        }
 
         if (subcommand === 'welcome') {
             const channel = interaction.options.getChannel('channel');
@@ -58,10 +127,9 @@ module.exports = {
 
             const messageInput = new TextInputBuilder()
                 .setCustomId('welcome-message')
-                .setLabel('Tin nhắn chào mừng')
+                .setLabel('Tin nhắn chào mừng (Text hoặc JSON)')
                 .setStyle(TextInputStyle.Paragraph)
-                .setPlaceholder('Xin chào {user_mention}, chào mừng đến với {server_name}!')
-                .setRequired(true);
+                .setPlaceholder('Nhập text thường hoặc JSON embed...\nVí dụ: Chào mừng {user_mention} đến với {server_name}!');
 
             const actionRow = new ActionRowBuilder().addComponents(messageInput);
             modal.addComponents(actionRow);
@@ -76,10 +144,9 @@ module.exports = {
 
             const messageInput = new TextInputBuilder()
                 .setCustomId('goodbye-message')
-                .setLabel('Tin nhắn tạm biệt')
+                .setLabel('Tin nhắn tạm biệt (Text hoặc JSON)')
                 .setStyle(TextInputStyle.Paragraph)
-                .setPlaceholder('Tạm biệt {user}, chúng tôi hy vọng bạn sẽ sớm quay lại!')
-                .setRequired(true);
+                .setPlaceholder('Nhập text thường hoặc JSON embed...\nVí dụ: Tạm biệt {user_name}!');
 
             const actionRow = new ActionRowBuilder().addComponents(messageInput);
             modal.addComponents(actionRow);
@@ -103,15 +170,10 @@ module.exports = {
             }
 
             const member = interaction.member;
-            const welcomeMessage = settings.welcomeMessage
-                .replace('{user_mention}', member.toString())
-                .replace('{user_name}', member.user.username)
-                .replace('{user_tag}', member.user.tag)
-                .replace('{server_name}', interaction.guild.name)
-                .replace('{server_membercount}', interaction.guild.memberCount);
-
+            
             try {
-                await channel.send(welcomeMessage);
+                const messageData = await buildWelcomeMessage(settings.welcomeMessage, member, interaction.guild);
+                await channel.send(messageData);
                 await interaction.reply({ content: 'Đã gửi tin nhắn chào mừng thử.', ephemeral: true });
             } catch (error) {
                 console.error(error);
@@ -129,15 +191,10 @@ module.exports = {
             }
 
             const member = interaction.member;
-            const goodbyeMessage = settings.goodbyeMessage
-                .replace('{user_mention}', member.toString())
-                .replace('{user_name}', member.user.username)
-                .replace('{user_tag}', member.user.tag)
-                .replace('{server_name}', interaction.guild.name)
-                .replace('{server_membercount}', interaction.guild.memberCount);
-
+            
             try {
-                await channel.send(goodbyeMessage);
+                const messageData = await buildGoodbyeMessage(settings.goodbyeMessage, member, interaction.guild);
+                await channel.send(messageData);
                 await interaction.reply({ content: 'Đã gửi tin nhắn tạm biệt thử.', ephemeral: true });
             } catch (error) {
                 console.error(error);
