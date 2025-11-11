@@ -49,7 +49,7 @@ inventory: true
 economy: true
 roulette: true
 fishing: true
-play: true
+play: false
 music: false
 
 # General Commands - Commonly used and fun commands
@@ -141,3 +141,4 @@ r34: true
 greeting: true
 bypass: true
 profile: true
+Music: true

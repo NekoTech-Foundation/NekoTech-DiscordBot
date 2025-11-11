@@ -61,4 +61,4 @@ MusicQueueSchema.index({ guildId: 1, updatedAt: 1 });
 
 const MusicQueue = mongoose.model('MusicQueue', MusicQueueSchema);
 
-module.exports = MusicQueue; 
+module.exports = MusicQueue;

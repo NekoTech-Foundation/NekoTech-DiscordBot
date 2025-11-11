@@ -154,7 +154,7 @@ rarity_prices_per_kg:
   common: 5
   uncommon: 10
   rare: 30
-  epic: 170
+  epic: 150
   legendary: 300
 
 xp_per_rarity:

@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Cá dao ma đen",
-    "emoji": "<:Fish_blackghostknifefish:1433393245467054130>",
-    "min_weight": 0.5,
-    "max_weight": 1.5
+    "name": "Cá nhà táng",
+    "emoji": "<:Fish_spermwhale:1433392975416791040>",
+    "min_weight": 35000,
+    "max_weight": 45000
   },
   "epic": {
     "name": "Cá rô phi hổ",
@@ -11,5 +11,5 @@
     "min_weight": 1,
     "max_weight": 4
   },
-  "updatedAt": "2025-11-11T04:20:01.499Z"
+  "updatedAt": "2025-11-11T05:02:10.494Z"
 }
