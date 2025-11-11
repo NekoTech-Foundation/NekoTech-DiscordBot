@@ -11,7 +11,7 @@ module.exports = {
 
         const botPing = Math.round(interaction.client.ws.ping);
 
-        const response = `:small_red_triangle: | ( Shard ${interaction.guild.shardId}) phản hồi trong (${botPing} ms / trung bình: ${botPing} ms).
+        const response = `:small_red_triangle: | ( Shard ${interaction.guild.shardId}) phản hồi trong (${roundTripLatency}  ms / trung bình: ${botPing} ms).
         | Để xem các lệnh có sẵn, sử dụng /help. Để xem các thông tin khác, sử dụng /botinfo`;
 
         await interaction.editReply({ content: response });
