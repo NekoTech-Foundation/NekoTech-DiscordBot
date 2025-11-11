@@ -128,6 +128,8 @@ uma_careers: true
 uma_exchange: true
 anime: true
 manga: true
+anime_chart: true
+manga_chart: true
 greetings: true
 customrole: true
 report: true
