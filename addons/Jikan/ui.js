@@ -58,9 +58,30 @@ function listEmbed({ title, items, page, totalPages }) {
   return e;
 }
 
+function mangaEmbed(manga, opts = {}) {
+  const e = new EmbedBuilder()
+    .setTitle(`${manga.title || manga.title_english || manga.title_japanese || 'Manga'}`)
+    .setURL(manga.url || `https://myanimelist.net/manga/${manga.mal_id}`)
+    .setColor(0x2ECC71)
+    .setDescription(typeof opts.description === 'string' ? opts.description : truncate(manga.synopsis))
+    .addFields(
+      { name: 'Loại', value: `${manga.type || '-'}`, inline: true },
+      { name: 'Điểm', value: manga.score != null ? `${manga.score}` : '-', inline: true },
+      { name: 'Hạng', value: manga.rank != null ? `#${manga.rank}` : '-', inline: true },
+      { name: 'Chương', value: manga.chapters != null ? `${manga.chapters}` : '-', inline: true },
+      { name: 'Tập', value: manga.volumes != null ? `${manga.volumes}` : '-', inline: true },
+      { name: 'Trạng thái', value: manga.status || '-', inline: true }
+    )
+    .setTimestamp();
+  const image = manga.images?.jpg?.image_url || manga.images?.webp?.image_url;
+  if (image) e.setThumbnail(image);
+  return e;
+}
+
 module.exports = {
   truncate,
   animeEmbed,
   characterEmbed,
+  mangaEmbed,
   listEmbed,
 };

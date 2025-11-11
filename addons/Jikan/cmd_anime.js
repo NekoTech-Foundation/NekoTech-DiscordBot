@@ -112,6 +112,14 @@ async function handleRandom(interaction) {
   await interaction.deferReply();
   const data = await jikanGet('/random/anime');
   const anime = data.data;
+  try {
+    const { translateText } = require('../Translator/translatorUtils');
+    if (anime?.synopsis) {
+      const descVi = await translateText(anime.synopsis, 'vi', 'auto');
+      const embedTranslated = UI.animeEmbed(anime, { description: descVi });
+      return interaction.editReply({ embeds: [embedTranslated] });
+    }
+  } catch {}
   const embed = UI.animeEmbed(anime);
   return interaction.editReply({ embeds: [embed] });
 }
@@ -123,6 +131,15 @@ async function handleCharacter(interaction) {
   const data = await jikanGet('/characters', { q, page });
   const items = (data.data || []).slice(0, 10);
   if (items.length === 0) return interaction.editReply('Không tìm thấy nhân vật phù hợp.');
+  try {
+    const ch = items[0];
+    if (ch?.about) {
+      const { translateText } = require('../Translator/translatorUtils');
+      const aboutVi = await translateText(ch.about, 'vi', 'auto');
+      const embedVi = UI.characterEmbed(ch, { description: aboutVi });
+      return interaction.editReply({ embeds: [embedVi] });
+    }
+  } catch {}
   const embed = UI.characterEmbed(items[0]);
   return interaction.editReply({ embeds: [embed] });
 }
