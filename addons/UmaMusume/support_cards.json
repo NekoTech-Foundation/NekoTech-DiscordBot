@@ -1,0 +1,49 @@
+{
+  "gacha": {
+    "cost_carrots": 300,
+    "rates": { "SSR": 3.0, "SR": 18.0, "R": 79.0 }
+  },
+  "cards": [
+    {
+      "id": "ssr_speed_special_week",
+      "name": "Special Week [Dream Sprint]",
+      "character": "Special Week",
+      "rarity": "SSR",
+      "type": "speed",
+      "trainingBoost": { "speed": 20, "power": 5 },
+      "skillHints": ["Concentration", "Corner Connoisseur"],
+      "image": ""
+    },
+    {
+      "id": "ssr_stamina_mejiro_mcqueen",
+      "name": "Mejiro McQueen [Enduring Grace]",
+      "character": "Mejiro McQueen",
+      "rarity": "SSR",
+      "type": "stamina",
+      "trainingBoost": { "stamina": 20, "guts": 5 },
+      "skillHints": ["Breath of Fresh Air", "Passing Pro"],
+      "image": ""
+    },
+    {
+      "id": "sr_power_gold_ship",
+      "name": "Gold Ship [Mischief Power]",
+      "character": "Gold Ship",
+      "rarity": "SR",
+      "type": "power",
+      "trainingBoost": { "power": 12, "stamina": 4 },
+      "skillHints": ["Adrenaline Rush"],
+      "image": ""
+    },
+    {
+      "id": "r_wisdom_tokinomeguri",
+      "name": "Tokai Teio [Study Hard]",
+      "character": "Tokai Teio",
+      "rarity": "R",
+      "type": "wisdom",
+      "trainingBoost": { "wisdom": 8 },
+      "skillHints": ["Right-Handed ?"],
+      "image": ""
+    }
+  ]
+}
+

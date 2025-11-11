@@ -29,6 +29,29 @@ const UmaCareerSchema = new mongoose.Schema({
     totalRacers: { type: Number },
     reward: { type: Number }
   }],
+  // Selected support cards for this career run
+  supportCards: [{
+    cardId: { type: String },
+    name: { type: String },
+    rarity: { type: String },
+    type: { type: String },
+    trainingBoost: {
+      speed: { type: Number, default: 0 },
+      stamina: { type: Number, default: 0 },
+      power: { type: Number, default: 0 },
+      guts: { type: Number, default: 0 },
+      wisdom: { type: Number, default: 0 },
+      wit: { type: Number, default: 0 }
+    }
+  }],
+  supportSummary: {
+    speed: { type: Number, default: 0 },
+    stamina: { type: Number, default: 0 },
+    power: { type: Number, default: 0 },
+    guts: { type: Number, default: 0 },
+    wisdom: { type: Number, default: 0 },
+    wit: { type: Number, default: 0 }
+  },
   totalWins: { type: Number, default: 0 },
   startedAt: { type: Date, default: Date.now },
 });

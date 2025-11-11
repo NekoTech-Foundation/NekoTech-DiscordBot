@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const UserUmaModel = require('./schemas/useruma');
 const { calculateRank, generateStats, simulateRace, generateTrackPreferences, formatTrackPreferences, generateBonuses, formatBonuses } = require('./umaUtilsNew');
+const UI = require('./ui');
 const mongoose = require('mongoose');
 
 module.exports = {
@@ -14,6 +15,10 @@ module.exports = {
             data: new SlashCommandBuilder()
                 .setName('uma')
                 .setDescription('Uma Musume: Pretty Derby')
+                .addSubcommand(subcommand =>
+                    subcommand
+                        .setName('support_gacha')
+                        .setDescription('Gacha Support Card (300 carrots)'))
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('gacha')
@@ -104,6 +109,8 @@ module.exports = {
                 switch (subcommand) {
                     case 'gacha':
                         return await this.handleGacha(interaction);
+                    case 'support_gacha':
+                        return await this.handleSupportGachaInline(interaction);
                     case 'exchange_carrots':
                         return await this.handleExchangeCarrots(interaction);
                     case 'list':
@@ -239,6 +246,28 @@ module.exports = {
                 const rank = calculateRank(stats);
                 const trackPrefs = generateTrackPreferences(stats);
                 const bonuses = generateBonuses(tier);
+                // Backfill track preferences and bonuses computed after initial save
+                try {
+                    if (userUma) {
+                        userUma.trackPreferences = trackPrefs;
+                        userUma.bonuses = bonuses;
+                        await userUma.save();
+                    }
+                } catch (_) {}
+
+                // Use improved UI embed and return early
+                {
+                    const uiEmbed = UI.gachaResultEmbed({
+                        userUma,
+                        rarity,
+                        carrotsLeft: userEconomy.carrots,
+                        rank,
+                        bonusesText: formatBonuses(bonuses),
+                        prefsText: formatTrackPreferences(trackPrefs)
+                    });
+                    if (selectedUma.image) uiEmbed.setThumbnail(selectedUma.image);
+                    return interaction.editReply({ embeds: [uiEmbed] });
+                }
                 
                 const embed = new EmbedBuilder()
                     .setTitle('🎊 GACHA THÀNH CÔNG! 🎊')
@@ -256,6 +285,68 @@ module.exports = {
                     .setTimestamp();
                 
                 return interaction.editReply({ embeds: [embed] });
+            },
+
+            async handleSupportGachaInline(interaction) {
+                const Economy = require('../../models/EconomyUserData');
+                const UserSupportCard = require('./schemas/SupportCard');
+                const config = require('./support_cards.json');
+
+                const userId = interaction.user.id;
+                const cost = config.gacha?.cost_carrots || 300;
+                await interaction.deferReply({ ephemeral: true });
+
+                const econ = await Economy.findOne({ userId });
+                if (!econ || (econ.carrots || 0) < cost) {
+                    return interaction.editReply({ content: `Bạn không đủ ${cost} <:carrot:1436533295084208328> carrots để gacha Support Card!`, ephemeral: true });
+                }
+
+                econ.carrots -= cost;
+                await econ.save();
+
+                const rates = config.gacha?.rates || { SSR: 3, SR: 18, R: 79 };
+                const roll = Math.random() * 100;
+                let rarity = 'R';
+                if (roll < rates.SSR) rarity = 'SSR';
+                else if (roll < rates.SSR + rates.SR) rarity = 'SR';
+                else rarity = 'R';
+
+                const pool = (config.cards || []).filter(c => c.rarity === rarity);
+                const card = pool[Math.floor(Math.random() * pool.length)];
+                const owned = new UserSupportCard({
+                    userId,
+                    cardId: card.id,
+                    name: card.name,
+                    character: card.character,
+                    rarity: card.rarity,
+                    type: card.type,
+                    trainingBoost: {
+                        speed: card.trainingBoost?.speed || 0,
+                        stamina: card.trainingBoost?.stamina || 0,
+                        power: card.trainingBoost?.power || 0,
+                        guts: card.trainingBoost?.guts || 0,
+                        wisdom: (card.trainingBoost?.wisdom || card.trainingBoost?.wit || 0),
+                        wit: (card.trainingBoost?.wit || 0)
+                    }
+                });
+                await owned.save();
+
+                const { EmbedBuilder } = require('discord.js');
+                const boostText = Object.entries(card.trainingBoost || {})
+                    .map(([k,v]) => `${k.toUpperCase()} +${v}%`).join(' ') || '-';
+                const embed = new EmbedBuilder()
+                    .setTitle('🎴 Support Card Gacha')
+                    .setDescription(`Bạn nhận được: **${card.name}** (${rarity})`)
+                    .addFields(
+                        { name: 'Nhân vật', value: card.character, inline: true },
+                        { name: 'Loại', value: card.type, inline: true },
+                        { name: 'Boost Train', value: boostText, inline: false },
+                        { name: 'Carrots còn lại', value: `${econ.carrots} <:carrot:1436533295084208328>`, inline: true }
+                    )
+                    .setColor(rarity === 'SSR' ? '#FFD700' : rarity === 'SR' ? '#C0C0C0' : '#CD7F32')
+                    .setTimestamp();
+
+                return interaction.editReply({ embeds: [embed], ephemeral: true });
             },
 
             async handleExchangeCarrots(interaction) {
@@ -302,7 +393,19 @@ module.exports = {
                 
                 const total = await UserUmaModel.countDocuments({ userId, isRetired: false });
                 const totalPages = Math.ceil(total / perPage);
-                
+
+                // Pretty list UI (early return)
+                {
+                    const embed = UI.listEmbed({
+                        username: interaction.user.username,
+                        umas: userUmas,
+                        page,
+                        totalPages,
+                        rankFn: (s) => calculateRank(s)
+                    });
+                    return interaction.reply({ embeds: [embed] });
+                }
+
                 if (userUmas.length === 0) {
                     return interaction.reply('❌ Bạn chưa có mã nương nào! Hãy dùng `/uma gacha` để gacha.');
                 }
@@ -336,6 +439,22 @@ module.exports = {
                 const rank = calculateRank(uma.stats);
                 const gachaConfig = require('./gacha.json');
                 const umaData = gachaConfig.umamusume.find(u => u.id === uma.umaId);
+
+                // Pretty profile/info UI (early return)
+                {
+                    const embed = UI.profileEmbed({
+                        userUma: uma,
+                        rank,
+                        ownerTag: interaction.user.tag,
+                        bonusesText: formatBonuses(uma.bonuses),
+                        prefsText: formatTrackPreferences(uma.trackPreferences)
+                    });
+                    if (umaData?.image) embed.setThumbnail(umaData.image);
+                    if (uma.skills.length > 0) {
+                        embed.addFields({ name: 'Kỹ năng', value: uma.skills.map(s => `• ${s.name} (${s.rarity})`).join('\n') });
+                    }
+                    return interaction.reply({ embeds: [embed] });
+                }
                 
                 const embed = new EmbedBuilder()
                     .setTitle(`🐴 ${uma.name} ${'★'.repeat(uma.tier)}`)

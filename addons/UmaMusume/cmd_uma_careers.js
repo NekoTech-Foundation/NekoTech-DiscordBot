@@ -3,6 +3,7 @@ const UmaMusume = require('./schemas/UmaMusume');
 const UmaCareer = require('./schemas/UmaCareer');
 const EconomyUserData = require('../../models/EconomyUserData');
 const allSkills = require('./skills.json').skills;
+const { formatTrackPreferences } = require('./umaUtilsNew');
 
 const moodEmojis = {
   Worst: '😰',
@@ -154,6 +155,23 @@ function simulateRace(umaStats, race) {
   };
 }
 
+// Compute effective SP cost with aptitude synergy: 15% discount if matching strong aptitude (A or better)
+function effectiveSkillCost(skill, umaPrefs) {
+  try {
+    const cond = (skill.effects?.condition || '').toLowerCase();
+    let match = false;
+    if (cond.includes('sprint')) match = ['A','A+','S'].includes(umaPrefs?.sprint);
+    else if (cond.includes('long')) match = ['A','A+','S'].includes(umaPrefs?.long);
+    else if (cond.includes('mile')) match = ['A','A+','S'].includes(umaPrefs?.mile);
+    else if (cond.includes('medium')) match = ['A','A+','S'].includes(umaPrefs?.medium);
+    else if (cond.includes('right_turn') || cond.includes('corner')) match = ['A','A+','S'].includes(umaPrefs?.stalker) || ['A','A+','S'].includes(umaPrefs?.front);
+    // Season synergy
+    if (!match && skill.effects?.season) match = true; // allow seasonal discount to encourage use
+    const base = skill.cost || 0;
+    return Math.max(1, Math.floor(base * (match ? 0.85 : 1)));
+  } catch { return skill.cost || 0; }
+}
+
 async function showMainMenu(interaction, career, uma) {
   const nextRace = racesList[career.currentRace];
   const currentTotalDays = nextRace.difficulty < 5 ? 12 : 7;
@@ -172,6 +190,14 @@ async function showMainMenu(interaction, career, uma) {
     `${statIcons.power} Power: ${career.careerStats.power}\n` +
     `${statIcons.guts} Guts: ${career.careerStats.guts}\n` +
     `${statIcons.wisdom} Wisdom: ${career.careerStats.wisdom}`;
+
+  if (career.supportCards && career.supportCards.length > 0) {
+    const scList = career.supportCards.map(c => `${c.name} (${c.rarity})`).join(' | ');
+    const boosts = Object.entries(career.supportSummary || {})
+      .filter(([_,v]) => v>0)
+      .map(([k,v]) => `${k.toUpperCase()} +${v}%`).join(' ');
+    description += `\n\n**Support Cards:** ${scList}\n**Support Boost:** ${boosts || '—'}`;
+  }
 
   const embed = new EmbedBuilder()
     .setColor(moodColors[career.mood])
@@ -473,6 +499,30 @@ async function handleUmaSelection(interaction, umaId, userId) {
   }
 
   // Create new career
+  // Aggregate top support boosts automatically (pick up to 2 strongest)
+  let supportCards = [];
+  try {
+    const UserSupportCard = require('./schemas/SupportCard');
+    const all = await UserSupportCard.find({ userId }).limit(50);
+    const scoreRarity = (r) => r==='SSR'?3 : r==='SR'?2 : 1;
+    supportCards = all
+      .sort((a,b)=> scoreRarity(b.rarity)-scoreRarity(a.rarity))
+      .slice(0,2)
+      .map(c => ({
+        cardId: c.cardId,
+        name: c.name,
+        rarity: c.rarity,
+        type: c.type,
+        trainingBoost: c.trainingBoost || {}
+      }));
+  } catch {}
+  const supportSummary = ['speed','stamina','power','guts','wisdom','wit'].reduce((acc,k)=>{acc[k]=0; return acc;},{});
+  supportCards.forEach(c=>{
+    for (const [k,v] of Object.entries(c.trainingBoost||{})) {
+      supportSummary[k] = Math.min(40, (supportSummary[k]||0) + (v||0));
+    }
+  });
+
   let career = new UmaCareer({
     userId,
     umaId: uma._id,
@@ -490,6 +540,8 @@ async function handleUmaSelection(interaction, umaId, userId) {
     },
     energy: 100,
     skills: [],
+    supportCards,
+    supportSummary,
     skillPoints: 50, // Starting SP
     raceResults: [],
     totalWins: 0
@@ -639,6 +691,53 @@ async function runRaceAnimation(interaction, uma, race, result) {
     }
 }
 
+// Create a new career with a chosen support card (or none)
+// Create a new career with chosen support cards (array) or none
+async function createCareerWithSupport(interaction, userId, umaIdOrDoc, supportDocs) {
+  const uma = typeof umaIdOrDoc === 'object' ? umaIdOrDoc : await UmaMusume.findById(umaIdOrDoc);
+  if (!uma || uma.ownerId !== userId) {
+    return interaction.update({ content: 'Không tìm thấy Uma hợp lệ.', components: [], embeds: [] });
+  }
+  const supportSummary = { speed:0, stamina:0, power:0, guts:0, wisdom:0, wit:0 };
+  const supportCards = [];
+  if (Array.isArray(supportDocs) && supportDocs.length) {
+    const max = Math.min(6, supportDocs.length);
+    for (let i = 0; i < max; i++) {
+      const sd = supportDocs[i];
+      supportCards.push({
+        cardId: sd.cardId,
+        name: sd.name,
+        rarity: sd.rarity,
+        type: sd.type,
+        trainingBoost: sd.trainingBoost || {}
+      });
+      for (const [k,v] of Object.entries(sd.trainingBoost || {})) {
+        supportSummary[k] = Math.min(40, (supportSummary[k]||0) + (v||0));
+      }
+    }
+  }
+  const career = new UmaCareer({
+    userId,
+    umaId: uma._id,
+    isActive: true,
+    currentDay: 0,
+    totalRaces: 10,
+    currentRace: 0,
+    mood: 'Normal',
+    careerStats: { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0 },
+    energy: 100,
+    skills: [],
+    supportCards,
+    supportSummary,
+    skillPoints: 50,
+    raceResults: [],
+    totalWins: 0
+  });
+  await career.save();
+  const menuData = await showMainMenu(interaction, career, uma);
+  return interaction.update(menuData);
+}
+
 // Handle career button interactions
 async function handleCareerInteraction(interaction) {
   const userId = interaction.user.id;
@@ -740,8 +839,15 @@ async function handleCareerInteraction(interaction) {
         };
 
         const mapping = statMapping[stat];
-        career.careerStats[mapping.main] += mainIncrease;
-        career.careerStats[mapping.bonus] += bonusIncrease;
+        // Apply support card boosts
+        const sum = career.supportSummary || {};
+        const boostMain = 1 + ((sum[mapping.main] || 0) / 100);
+        const boostBonus = 1 + ((sum[mapping.bonus] || 0) / 100);
+        const incMain = Math.floor(mainIncrease * boostMain);
+        const incBonus = Math.floor(bonusIncrease * boostBonus);
+
+        career.careerStats[mapping.main] += incMain;
+        career.careerStats[mapping.bonus] += incBonus;
 
         if (stat === 'wisdom') {
           career.energy = Math.min(100, career.energy + 5);
@@ -945,3 +1051,4 @@ async function handleCareerSkillPurchase(interaction) {
 module.exports.handleUmaSelection = handleUmaSelection;
 module.exports.handleCareerInteraction = handleCareerInteraction;
 module.exports.handleCareerSkillPurchase = handleCareerSkillPurchase;
+module.exports.createCareerWithSupport = createCareerWithSupport;

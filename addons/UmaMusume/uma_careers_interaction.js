@@ -19,20 +19,52 @@ module.exports = {
                     }
 
                     const umaId = interaction.values[0];
-                    
-                    // Import the handler function
+                    // Try to prompt support selection; fallback to direct creation
+                    try {
+                        const UserSupportCard = require('./schemas/SupportCard');
+                        const cards = await UserSupportCard.find({ userId }).limit(25);
+                        if (cards && cards.length > 0) {
+                            const { StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
+                            const menu = new StringSelectMenuBuilder()
+                                .setCustomId(`uma_careers_support_pick_${userId}_${umaId}`)
+                                .setPlaceholder('Chọn 1-6 Support Cards')
+                                .setMinValues(1)
+                                .setMaxValues(Math.min(6, cards.length))
+                                .addOptions(cards.map(c => ({
+                                    label: `${c.name} (${c.rarity})`,
+                                    description: `${c.type} | Boost: ${['speed','stamina','power','guts','wisdom','wit'].filter(k => (c.trainingBoost?.[k]||0)>0).map(k=>`${k.toUpperCase()} +${c.trainingBoost[k]}%`).join(' ') || '—'}`.slice(0, 100),
+                                    value: c._id.toString()
+                                })));
+                            const row = new ActionRowBuilder().addComponents(menu);
+                            return interaction.update({ content: 'Hãy chọn 1-6 Support Cards cho Career này.', components: [row], embeds: [] });
+                        }
+                    } catch {}
                     const careersModule = require('./cmd_uma_careers');
                     const { handleUmaSelection } = careersModule;
-                    
-                    if (handleUmaSelection) {
-                        await handleUmaSelection(interaction, umaId, userId);
-                    }
+                    if (handleUmaSelection) await handleUmaSelection(interaction, umaId, userId);
                 } else if (interaction.isStringSelectMenu() && interaction.customId.startsWith('career_skill_purchase_')) {
                     const careersModule = require('./cmd_uma_careers');
                     const { handleCareerSkillPurchase } = careersModule;
 
                     if (handleCareerSkillPurchase) {
                         await handleCareerSkillPurchase(interaction);
+                    }
+                }
+                // Support selection result
+                if (interaction.isStringSelectMenu() && interaction.customId.startsWith('uma_careers_support_pick_')) {
+                    const parts = interaction.customId.split('_');
+                    const userId = parts[parts.length - 2];
+                    const umaId = parts[parts.length - 1];
+                    if (interaction.user.id !== userId) {
+                        return interaction.reply({ content: 'Bạn không thể sử dụng menu này!', flags: 64 });
+                    }
+                    const supportDbIds = interaction.values;
+                    const UserSupportCard = require('./schemas/SupportCard');
+                    const supportDocs = await UserSupportCard.find({ _id: { $in: supportDbIds } }).limit(6);
+                    const careersModule = require('./cmd_uma_careers');
+                    const { createCareerWithSupport } = careersModule;
+                    if (createCareerWithSupport && supportDocs && supportDocs.length > 0) {
+                        await createCareerWithSupport(interaction, userId, umaId, supportDocs);
                     }
                 }
 

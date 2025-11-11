@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
 const UmaPlayer = require('./schemas/UmaPlayer');
 const UmaMusume = require('./schemas/UmaMusume');
+const { formatTrackPreferences, formatBonuses } = require('./umaUtilsNew');
+const UI = require('./ui');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,6 +17,10 @@ module.exports = {
         .addStringOption(option => option.setName('uma2_name').setDescription('The name of your second Uma Musume.').setRequired(true))
         .addStringOption(option => option.setName('uma3_name').setDescription('The name of your third Uma Musume.').setRequired(true))
     )
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('board')
+        .setDescription('Xem danh sách đối thủ trong Champions Meeting'))
     .addSubcommand(subcommand =>
       subcommand
         .setName('challenge')
@@ -55,6 +61,26 @@ module.exports = {
         .setColor('Blue');
 
       await interaction.reply({ embeds: [defenseEmbed], ephemeral: true });
+    } else if (subcommand === 'board') {
+      // List a few opponents with summaries
+      const players = await UmaPlayer.find({ userId: { $ne: userId }, defenseTeam: { $exists: true, $ne: [] } }).limit(10);
+      if (players.length === 0) {
+        return interaction.reply({ content: 'Chưa có đối thủ nào thiết lập đội phòng thủ.', ephemeral: true });
+      }
+      const lines = [];
+      for (const p of players) {
+        const umas = await UmaMusume.find({ _id: { $in: p.defenseTeam } }).limit(3);
+        if (umas.length === 0) continue;
+        const first = umas[0];
+        const prefs = first.trackPreferences || {};
+        const bonusText = formatBonuses(first.bonuses || {});
+        lines.push(`• <@${p.userId}> | ${first.name} ${'⭐'.repeat(first.tier)} | Năng lượng ${first.energy}/10\n  Aptitude: grass ${prefs.grass || '-'}, sprint ${prefs.sprint || '-'} | Bonus: ${bonusText}`);
+      }
+      const embed = new EmbedBuilder()
+        .setTitle('🏆 Champions Meeting - Đối thủ')
+        .setDescription(lines.join('\n\n'))
+        .setColor('#4D96FF');
+      return interaction.reply({ embeds: [embed], ephemeral: true });
     } else if (subcommand === 'challenge') {
       // Challenge logic will be implemented later
       await interaction.reply({ content: 'The challenge feature is not yet implemented.', ephemeral: true });
