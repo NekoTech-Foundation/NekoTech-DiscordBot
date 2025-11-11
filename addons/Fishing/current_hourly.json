@@ -1,15 +1,15 @@
 {
   "legendary": {
-    "name": "Cá hồi Đại Tây Dương",
-    "emoji": "<:Fish_atlanticsalmon:1433392861184917676>",
-    "min_weight": 2,
+    "name": "Mực nang",
+    "emoji": "<:Fish_cuttlefish:1433393275766706206>",
+    "min_weight": 3,
     "max_weight": 10
   },
   "epic": {
-    "name": "Cá da trơn Goonch",
-    "emoji": "<:Fish_goonchcatfish:1433392954164252746>",
-    "min_weight": 50,
-    "max_weight": 150
+    "name": "Cá ngọt",
+    "emoji": "<:Fish_sweetfish:1433392925890318367>",
+    "min_weight": 0.2,
+    "max_weight": 1
   },
-  "updatedAt": "2025-11-11T12:52:00.176Z"
+  "updatedAt": "2025-11-11T13:05:07.428Z"
 }
