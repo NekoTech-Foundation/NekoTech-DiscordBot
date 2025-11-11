@@ -24,7 +24,15 @@ async function translateText(text, targetLang, sourceLang = 'auto') {
     try {
         const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${validSource}&tl=${validTarget}&dt=t&q=${encodeURIComponent(text)}`);
         const data = await response.json();
-        return data[0][0][0];
+        // data[0] is an array of segments: [ translatedChunk, originalChunk, ... ]
+        if (Array.isArray(data?.[0])) {
+            const joined = data[0]
+                .map(seg => (Array.isArray(seg) ? seg[0] : ''))
+                .filter(Boolean)
+                .join('');
+            return joined || null;
+        }
+        return null;
     } catch {
         return null;
     }

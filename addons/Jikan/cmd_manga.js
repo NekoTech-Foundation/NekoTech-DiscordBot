@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const axios = require('axios');
 const UI = require('./ui');
 
@@ -91,11 +91,29 @@ async function handleRandom(interaction) {
     const { translateText } = require('../Translator/translatorUtils');
     if (manga?.synopsis) {
       const descVi = await translateText(manga.synopsis, 'vi', 'auto');
-      const embedT = UI.mangaEmbed(manga, { description: descVi });
-      return interaction.editReply({ embeds: [embedT] });
+      const description = (descVi || manga.synopsis);
+      const footerText = descVi ? 'Bản dịch được thực hiện bởi Google Translate' : undefined;
+      const embedT = UI.mangaEmbed(manga, { description, footerText });
+      let components = [];
+      if (manga?.mal_id) {
+        const row = new ActionRowBuilder().addComponents(
+          new ButtonBuilder().setCustomId(`jikan_lang_manga_vi_${manga.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
+          new ButtonBuilder().setCustomId(`jikan_lang_manga_en_${manga.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
+        );
+        components = [row];
+      }
+      return interaction.editReply({ embeds: [embedT], components });
     }
   } catch {}
   const embed = UI.mangaEmbed(manga);
-  return interaction.editReply({ embeds: [embed] });
+  let components2 = [];
+  if (manga?.mal_id) {
+    const row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId(`jikan_lang_manga_vi_${manga.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId(`jikan_lang_manga_en_${manga.mal_id}`).setLabel('English').setStyle(ButtonStyle.Primary)
+    );
+    components2 = [row];
+  }
+  return interaction.editReply({ embeds: [embed], components: components2 });
 }
 

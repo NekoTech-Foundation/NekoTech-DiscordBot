@@ -31,6 +31,9 @@ function animeEmbed(anime, opts = {}) {
       { name: 'Năm/Mùa', value: `${anime.year || '-'} ${anime.season || ''}`.trim() || '-', inline: true }
     )
     .setTimestamp();
+  if (opts.footerText) {
+    e.setFooter({ text: opts.footerText });
+  }
   const image = anime.images?.jpg?.image_url || anime.images?.webp?.image_url;
   if (image) e.setThumbnail(image);
   return e;
@@ -43,6 +46,9 @@ function characterEmbed(ch, opts = {}) {
     .setColor(0xFF69B4)
     .setDescription(typeof opts.description === 'string' ? opts.description : truncate(ch.about))
     .setTimestamp();
+  if (opts.footerText) {
+    e.setFooter({ text: opts.footerText });
+  }
   const image = ch.images?.jpg?.image_url;
   if (image) e.setThumbnail(image);
   return e;
@@ -73,6 +79,9 @@ function mangaEmbed(manga, opts = {}) {
       { name: 'Trạng thái', value: manga.status || '-', inline: true }
     )
     .setTimestamp();
+  if (opts.footerText) {
+    e.setFooter({ text: opts.footerText });
+  }
   const image = manga.images?.jpg?.image_url || manga.images?.webp?.image_url;
   if (image) e.setThumbnail(image);
   return e;
