@@ -198,6 +198,15 @@ TicketSettings:
   overFlow: ["1427505637105074187"] # Tickets will be moved to this category if the main category is full (Left to right)
 
   DelayedResponse:
+    # ... (existing ticket settings continue)
+
+# ===========================================================================
+# AI / Chatbot (Gemini)
+# ===========================================================================
+AI:
+  Gemini:
+    # Default model; can override via ENV GEMINI_MODEL
+    Model: "gemini-2.5-flash"
     Enabled: false
     TicketThreshold: 25 # Send warning when there are this many open tickets
     Embed:
@@ -1372,6 +1381,8 @@ API_Keys:
   Rule34:
     UserID: "5561147"
     ApiKey: "b97239c5af8cf13e9776ac8062f1e40ed00cb9ee79a82cedd0b8577a4f66f633b51d9bdd3eda8cf63293d532ef9ec02b913377aa2f118923796d04070a30aa9f"
+  Gemini:
+    ApiKey: "AIzaSyD3srE5exyzMdDem3fZdXP2ov2y9SHoR0E"
 
 # ===========================================================================
 # GAMES

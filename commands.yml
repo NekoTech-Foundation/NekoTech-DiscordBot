@@ -146,3 +146,6 @@ greeting: true
 bypass: true
 profile: true
 Music: true
+
+chatbot: true
+
