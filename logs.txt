@@ -34894,3 +34894,22 @@ SyntaxError: await is only valid in async functions and the top level bodies of 
 [11/13/2025, 12:02:41 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.512:02 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 12:08:11 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.5
+
+[11/13/2025, 12:11:24 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.512:11 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 12:16:51 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.512:16 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 12:20:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.512:20 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5

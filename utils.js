@@ -12,6 +12,7 @@ const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 
 const { getConfig, getLang, getCommands } = require('./utils/configLoader');
+const startGiveawayScheduler = require('./events/Giveaways/giveawayScheduler.js');
 const config = getConfig();
 const commandConfig = getCommands();
 const lang = getLang();
@@ -651,9 +652,16 @@ async function handleInteractionCreate(interaction) {
 
                 if (addon.data) { // Slash command or context menu command
                     if (addon.data.toJSON && typeof addon.data.toJSON === 'function') {
-                        if (commandConfig[addon.data.name]) {
-                            global.slashCommands.push(addon.data.toJSON());
-                            client.slashCommands.set(addon.data.name, addon);
+                        const name = addon.data.name;
+                        if (commandConfig[name]) {
+                            const exists = client.slashCommands.has(name);
+                            if (exists) {
+                                // A base command with this name already loaded; skip addon to avoid duplicates
+                                return;
+                            }
+                            const json = addon.data.toJSON();
+                            global.slashCommands.push(json);
+                            client.slashCommands.set(name, addon);
                         }
                     }
                 } else if (addon.name && addon.run && typeof addon.run === 'function') { // Message command
@@ -676,6 +684,8 @@ async function handleInteractionCreate(interaction) {
     function setupSchedulers() {
         const schedulers = [
             { condition: true, fn: startTempBanScheduler, name: 'Tempban' },
+            // Core giveaway scheduler (FullDrakoBot style)
+            { condition: commandConfig.giveaway, fn: startGiveawayScheduler, name: 'Giveaway' },
             // new giveaway addon includes its own scheduler via addons/Giveaway/giveaway.js
             { condition: config.TicketSettings.Enabled, fn: () => setInterval(() => checkAndUpdateTicketStatus(client), 300000), name: 'Ticket' },
             { condition: true, fn: startInterestScheduler, name: 'Interest' },
@@ -739,6 +749,16 @@ async function handleInteractionCreate(interaction) {
 
         if (duplicates.length > 0) {
             console.error(`${colors.red('[ERROR]')} Duplicate slash command names detected:`, duplicates.join(', '));
+            // Deduplicate by keeping the first occurrence (prefer base commands over addons)
+            const uniqueByName = new Map();
+            const ordered = [];
+            for (const cmd of global.slashCommands) {
+                if (!uniqueByName.has(cmd.name)) {
+                    uniqueByName.set(cmd.name, true);
+                    ordered.push(cmd);
+                }
+            }
+            global.slashCommands = ordered;
         }
 
         const rest = new REST({ version: '10' }).setToken(config.BotToken);

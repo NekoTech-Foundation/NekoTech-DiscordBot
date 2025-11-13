@@ -8,6 +8,16 @@ const client = require("../../index.js")
 const Giveaway = require("../../models/Giveaway.js");
 const UserData = require('../../models/UserData.js');
 
+function viLabel(label) {
+    const map = {
+        'Enter': 'Tham gia',
+        'Odds': 'Tỷ lệ',
+        'Entries': 'Lượt tham gia',
+        'Show Entrants': 'Danh sách tham gia'
+    };
+    return map[label] || label;
+}
+
 function getButtonStyle(styleString) {
     switch (styleString.toLowerCase()) {
         case "primary":
@@ -242,13 +252,13 @@ const giveawayActions = {
         }
 
         const joinButton = new ButtonBuilder()
-            .setLabel(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonText)
+            .setLabel(viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonText))
             .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonStyle))
             .setCustomId("join_giveaway")
             .setEmoji(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonEmoji);
 
         const checkPercentButton = new ButtonBuilder()
-            .setLabel(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonText)
+            .setLabel(viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonText))
             .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonStyle))
             .setCustomId("check_percent")
             .setEmoji(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonEmoji);
@@ -257,7 +267,7 @@ const giveawayActions = {
 
         if (config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList) {
             const showEntrantsButton = new ButtonBuilder()
-                .setLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList.ButtonText || "Show Entrants")
+                .setLabel(viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList.ButtonText || "Show Entrants"))
                 .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList.ButtonStyle || "SECONDARY"))
                 .setCustomId("show_entrants");
 
@@ -270,7 +280,7 @@ const giveawayActions = {
 
         if (config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries) {
             const entriesButton = new ButtonBuilder()
-                .setLabel(`${config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText}: 0`)
+                .setLabel(`${viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText)}: 0`)
                 .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonStyle))
                 .setCustomId("entries_count")
                 .setDisabled(true);
@@ -450,7 +460,7 @@ const giveawayActions = {
                     const entriesButtonIndex = components.findIndex(c => c.customId === 'entries_count');
                     if (entriesButtonIndex !== -1) {
                         const updatedButton = new ButtonBuilder()
-                            .setLabel(`${config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText}: ${giveaway.entrants.length}`)
+                            .setLabel(`${viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText)}: ${giveaway.entrants.length}`)
                             .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonStyle))
                             .setCustomId("entries_count")
                             .setDisabled(true);
@@ -510,7 +520,7 @@ const giveawayActions = {
                 const entriesButtonIndex = components.findIndex(c => c.customId === 'entries_count');
                 if (entriesButtonIndex !== -1) {
                     const updatedButton = new ButtonBuilder()
-                        .setLabel(`${config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText}: ${giveaway.entrants.length}`)
+                        .setLabel(`${viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText)}: ${giveaway.entrants.length}`)
                         .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonStyle))
                         .setCustomId("entries_count")
                         .setDisabled(true);
