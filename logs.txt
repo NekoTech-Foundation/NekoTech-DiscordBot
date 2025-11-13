@@ -34834,3 +34834,63 @@ Bot Version: 1.8.520:29 (12-11-2025) - Bot started up - Node.js v24.11.0 - App V
 [11/12/2025, 8:30:38 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.520:30 (12-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 11:17:06 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.511:17 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 11:33:59 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.511:34 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 11:35:09 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.511:35 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 11:44:07 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.511:44 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 11:44:53 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.511:45 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+2025-11-13T04:45:53.564Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+2025-11-13T04:46:02.738Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+2025-11-13T04:46:25.921Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+2025-11-13T04:47:07.169Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+
+
+[11/13/2025, 11:48:45 AM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.511:48 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+2025-11-13T04:49:29.004Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+2025-11-13T04:49:36.036Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+
+
+[11/13/2025, 12:01:12 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.5Uncaught Exception: C:\Users\sangt\Documents\NekoTech-DiscordBot\events\interactionCreate.js:959
+        await interaction.reply({ content: response, flags: MessageFlags.Ephemeral });
+        ^^^^^
+
+SyntaxError: await is only valid in async functions and the top level bodies of modules
+    at wrapSafe (node:internal/modules/cjs/loader:1691:18)
+    at Module._compile (node:internal/modules/cjs/loader:1734:20)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)
+    at Module.load (node:internal/modules/cjs/loader:1480:32)
+    at Module._load (node:internal/modules/cjs/loader:1299:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:244:24)
+    at Module.require (node:internal/modules/cjs/loader:1503:12)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (C:\Users\sangt\Documents\NekoTech-DiscordBot\events\Tickets\checkAlerts.js:4:31)
+
+
+[11/13/2025, 12:02:41 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.512:02 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5

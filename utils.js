@@ -22,7 +22,7 @@ const UserData = require('./models/UserData.js');
 const EconomyUserData = require('./models/EconomyUserData.js');
 const ReactionRole = require('./models/ReactionRole');
 const packageJson = require('./package.json');
-const startGiveawayScheduler = require('./events/Giveaways/giveawayScheduler.js');
+// old giveaway scheduler removed
 //const { handleUserJoiningTriggerChannel, handleUserLeavingChannel } = require('./events/voiceStateUpdate');
 const { startAlertScheduler } = require('./events/Tickets/checkAlerts');
 const { handleVoiceXP } = require('./events/Levels/handleXP');
@@ -676,7 +676,7 @@ async function handleInteractionCreate(interaction) {
     function setupSchedulers() {
         const schedulers = [
             { condition: true, fn: startTempBanScheduler, name: 'Tempban' },
-            { condition: commandConfig.giveaway, fn: startGiveawayScheduler, name: 'Giveaway' },
+            // new giveaway addon includes its own scheduler via addons/Giveaway/giveaway.js
             { condition: config.TicketSettings.Enabled, fn: () => setInterval(() => checkAndUpdateTicketStatus(client), 300000), name: 'Ticket' },
             { condition: true, fn: startInterestScheduler, name: 'Interest' },
             { condition: config.Alert?.Enabled, fn: () => startAlertScheduler(client), name: 'Alert' },

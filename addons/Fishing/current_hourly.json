@@ -6,10 +6,10 @@
     "max_weight": 45000
   },
   "epic": {
-    "name": "Cá Coris đuôi vàng",
-    "emoji": "<:Fish_yellowtailcoris:1433393337062391920>",
-    "min_weight": 0.2,
-    "max_weight": 1
+    "name": "Cá heo",
+    "emoji": "<:Fish_dolphin:1433392934551552091>",
+    "min_weight": 150,
+    "max_weight": 400
   },
-  "updatedAt": "2025-11-12T13:30:46.406Z"
+  "updatedAt": "2025-11-13T05:02:48.620Z"
 }

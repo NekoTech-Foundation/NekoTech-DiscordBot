@@ -7,11 +7,11 @@ const path = require('path');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('noitu')
-        .setDescription('Quản lý trò chơi nối từ(BETA)')
+        .setDescription('Quản lý trò chơi nối từ')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('adminsetup')
-                .setDescription('Setup trò chơi nối từ cho kênh (Chỉ Admin;BETA)'))
+                .setDescription('Setup trò chơi nối từ cho kênh (Chỉ Admin)'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('stop')
@@ -55,7 +55,7 @@ async function handleAdminSetup(interaction, config, client) {
         .setTitle(config.messages.setup_embed.title)
         .setDescription(
             config.messages.setup_embed.description
-                .replace('{timeout}', setupData.timeout)
+                .replace('{timeout}', '-')
                 .replace('{channel}', setupData.channelId ? `<#${setupData.channelId}>` : 'Chưa chọn')
         )
         .setFooter({ text: config.messages.setup_embed.footer.text });
@@ -72,6 +72,8 @@ async function handleAdminSetup(interaction, config, client) {
                 .setLabel('⏱️ Đặt Thời Gian')
                 .setStyle(ButtonStyle.Primary)
         );
+    // Remove timeout button if present
+    try { row1.components = row1.components.filter(btn => btn?.data?.custom_id !== 'noitu_set_timeout'); } catch (_) {}
 
     const row2 = new ActionRowBuilder()
         .addComponents(
@@ -133,7 +135,7 @@ async function handleAdminSetup(interaction, config, client) {
                         .setTitle(config.messages.setup_embed.title)
                         .setDescription(
                             config.messages.setup_embed.description
-                                .replace('{timeout}', setupData.timeout)
+                                .replace('{timeout}', '-')
                                 .replace('{channel}', `<#${setupData.channelId}>`)
                         )
                         .setFooter({ text: config.messages.setup_embed.footer.text });
@@ -148,7 +150,7 @@ async function handleAdminSetup(interaction, config, client) {
                 }
             });
 
-        } else if (i.customId === 'noitu_set_timeout') {
+        } else if (i.customId === 'noitu_set_timeout_disabled') {
             try {
                 await i.reply({
                     content: `Nhập thời gian chờ (${config.settings.min_timeout}-${config.settings.max_timeout} giây):`,
@@ -189,7 +191,7 @@ async function handleAdminSetup(interaction, config, client) {
                         .setTitle(config.messages.setup_embed.title)
                         .setDescription(
                             config.messages.setup_embed.description
-                                .replace('{timeout}', setupData.timeout)
+                                .replace('{timeout}', '-')
                                 .replace('{channel}', setupData.channelId ? `<#${setupData.channelId}>` : 'Chưa chọn')
                         )
                         .setFooter({ text: config.messages.setup_embed.footer.text });
@@ -231,7 +233,7 @@ async function handleAdminSetup(interaction, config, client) {
             client.noiTuGames.set(setupData.channelId, {
                 guildId: guildId,
                 channelId: setupData.channelId,
-                timeout: setupData.timeout,
+                // timeout disabled
                 currentWord: null,
                 lastLetter: null,
                 lastUserId: null,
@@ -245,7 +247,7 @@ async function handleAdminSetup(interaction, config, client) {
                 .setDescription(
                     config.messages.setup_complete.description
                         .replace('{channel}', `<#${setupData.channelId}>`)
-                        .replace('{timeout}', setupData.timeout)
+                        .replace('{timeout}', '-')
                 )
                 .setFooter({ text: config.messages.setup_complete.footer.text });
 

@@ -21,8 +21,6 @@ messages:
       
       📝 **Phần 1:** Chọn kênh để chơi trò chơi nối từ
       ⏱️ **Phần 2:** Chọn thời gian chờ để người chơi trả lời
-      ! **LƯU Ý** ĐÂY LÀ TÍNH NĂNG BETA, CÓ THỂ CÓ LỖI THIẾU TỪ KHI SỬ DỤNG,BẠN SẼ CÓ THỂ GẶP LỖI PHÁT SINH.
-      ! **LƯU Ý** KHI GẶP LỖI, BẠN CÓ THỂ SỬ DỤNG LỆNH /noitu stop ĐỂ DỪNG TRÒ CHƠI và Báo lỗi tại discord dsc.gg/nekocomics.
       
       **Thời gian chờ hiện tại:** {timeout} giây
       **Kênh đã chọn:** {channel}

@@ -149,3 +149,6 @@ Music: true
 
 chatbot: true
 
+# NoiTu (Word Chain) addon
+noitu: true
+

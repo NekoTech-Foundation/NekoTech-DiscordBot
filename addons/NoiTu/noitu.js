@@ -2,33 +2,38 @@ const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
+const { checkWord } = require('./vocabApi');
 
 module.exports.run = async (client) => {
     const configPath = path.join(__dirname, 'config.yml');
     const dictionaryPath = path.join(__dirname, 'dictionary.txt');
-    
+
     let config;
-    let dictionary = new Set();
-    
+    let dictionary = new Set(); // optional fallback
+
     try {
         config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-        
-        // Load dictionary
-        const dictionaryContent = fs.readFileSync(dictionaryPath, 'utf8');
-        dictionaryContent.split('\n').forEach(word => {
-            const trimmed = word.trim().toLowerCase();
-            if (trimmed) {
-                dictionary.add(trimmed);
-            }
-        });
-        
-        console.log(`[NoiTu] Loaded ${dictionary.size} words from dictionary`);
+
+        // Optional: load local dictionary as fallback if file exists
+        if (fs.existsSync(dictionaryPath)) {
+            try {
+                const dictionaryContent = fs.readFileSync(dictionaryPath, 'utf8');
+                dictionaryContent.split('\n').forEach(word => {
+                    const trimmed = word.trim().toLowerCase();
+                    if (trimmed) {
+                        dictionary.add(trimmed);
+                    }
+                });
+                console.log(`[NoiTu] Optional fallback dictionary loaded: ${dictionary.size} words`);
+            } catch (_) {}
+        }
+        console.log('[NoiTu] Using external vocabulary API for validation');
     } catch (error) {
-        console.error('Failed to load NoiTu config or dictionary:', error);
+        console.error('Failed to load NoiTu config:', error);
         return;
     }
 
-    // Khởi tạo game sessions
+    // Initialize game sessions
     if (!client.noiTuGames) {
         client.noiTuGames = new Map();
     }
@@ -36,17 +41,16 @@ module.exports.run = async (client) => {
         client.noiTuSetups = new Map();
     }
 
-    // Helper function: Chuẩn hóa chữ cái (loại bỏ dấu)
+    // Normalize Vietnamese (remove diacritics)
     function normalizeVietnamese(str) {
         return str
             .toLowerCase()
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
+            .replace(/d/g, 'd')
             .trim();
     }
 
-    // Helper function: Lấy chữ cái đầu và cuối (không dấu)
     function getFirstLetter(word) {
         const normalized = normalizeVietnamese(word);
         const words = normalized.split(' ');
@@ -60,12 +64,16 @@ module.exports.run = async (client) => {
         return lastWord.charAt(lastWord.length - 1);
     }
 
-    // Helper function: Kiểm tra từ có trong dictionary
-    function isValidWord(word) {
-        return dictionary.has(word.toLowerCase().trim());
+    // Validate word via external API; fallback to local dictionary if available
+    async function isValidWord(word) {
+        const ok = await checkWord(word);
+        if (ok) return true;
+        if (dictionary.size > 0) {
+            return dictionary.has(word.toLowerCase().trim());
+        }
+        return false;
     }
 
-    // Helper function: Tạo embed
     function createEmbed(template, data) {
         const embed = new EmbedBuilder()
             .setColor(template.color || config.settings.default_color)
@@ -83,24 +91,15 @@ module.exports.run = async (client) => {
         return embed;
     }
 
-    // Xử lý timeout
     function startTimeout(game, channelId) {
+        // Timeout disabled: do not auto end/reset game by inactivity
         if (game.timeoutHandle) {
-            clearTimeout(game.timeoutHandle);
-        }
-
-        game.timeoutHandle = setTimeout(async () => {
-            // Reset game state nhưng KHÔNG xóa game và KHÔNG gửi thông báo
-            game.currentWord = null;
-            game.lastLetter = null;
-            game.lastUserId = null;
-            game.lastUsername = null;
+            try { clearTimeout(game.timeoutHandle); } catch (_) {}
             game.timeoutHandle = null;
-            // GIỮ game.usedWords để tránh lặp lại từ đã dùng
-        }, game.timeout * 1000);
+        }
+        return;
     }
 
-    // Lắng nghe tin nhắn
     client.on('messageCreate', async (message) => {
         if (message.author.bot) return;
         if (!message.guild) return;
@@ -111,7 +110,7 @@ module.exports.run = async (client) => {
         const word = message.content.trim();
         if (!word) return;
 
-        // Kiểm tra người chơi không được chơi liên tiếp
+        // Prevent same user from playing twice in a row
         if (game.lastUserId === message.author.id && game.currentWord) {
             const embed = createEmbed(config.messages.wrong_word, {
                 username: message.author.username,
@@ -119,23 +118,23 @@ module.exports.run = async (client) => {
                 reason: config.lang.errors.same_user
             });
             await message.reply({ embeds: [embed] });
-            await message.react('❌');
+            await message.react('?');
             return;
         }
 
-        // Kiểm tra từ có trong dictionary
-        if (!isValidWord(word)) {
+        // Validate via API
+        if (!(await isValidWord(word))) {
             const embed = createEmbed(config.messages.wrong_word, {
                 username: message.author.username,
                 word: word,
                 reason: config.lang.errors.invalid_word
             });
             await message.reply({ embeds: [embed] });
-            await message.react('❌');
+            await message.react('?');
             return;
         }
 
-        // Kiểm tra từ đã được sử dụng chưa
+        // Check reused word
         if (game.usedWords.has(word.toLowerCase())) {
             const embed = createEmbed(config.messages.wrong_word, {
                 username: message.author.username,
@@ -143,11 +142,11 @@ module.exports.run = async (client) => {
                 reason: config.lang.errors.used_word
             });
             await message.reply({ embeds: [embed] });
-            await message.react('❌');
+            await message.react('?');
             return;
         }
 
-        // Nếu không phải từ đầu tiên, kiểm tra chữ cái đầu
+        // Check starting letter rule
         if (game.lastLetter) {
             const firstLetter = getFirstLetter(word);
             if (firstLetter !== game.lastLetter) {
@@ -157,12 +156,12 @@ module.exports.run = async (client) => {
                     reason: config.lang.errors.wrong_start.replace('{letter}', game.lastLetter.toUpperCase())
                 });
                 await message.reply({ embeds: [embed] });
-                await message.react('❌');
+                await message.react('?');
                 return;
             }
         }
 
-        // Từ hợp lệ!
+        // Valid word
         const lastLetter = getLastLetter(word);
         game.currentWord = word;
         game.lastLetter = lastLetter;
@@ -177,9 +176,9 @@ module.exports.run = async (client) => {
         });
 
         await message.reply({ embeds: [embed] });
-        await message.react('✅');
+        await message.react('?');
 
-        // Bắt đầu đếm ngược timeout
+        // Restart timeout for next turn
         startTimeout(game, message.channel.id);
     });
 
