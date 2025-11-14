@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Cá răng nanh",
-    "emoji": "<:Fish_fangtooth:1433393280409665577>",
-    "min_weight": 0.1,
-    "max_weight": 0.2
+    "name": "Cá hồi Đại Tây Dương",
+    "emoji": "<:Fish_atlanticsalmon:1433392861184917676>",
+    "min_weight": 2,
+    "max_weight": 10
   },
   "epic": {
     "name": "Kỳ lân biển",
@@ -11,5 +11,5 @@
     "min_weight": 800,
     "max_weight": 1600
   },
-  "updatedAt": "2025-11-14T12:53:52.124Z"
+  "updatedAt": "2025-11-14T13:00:00.034Z"
 }

@@ -35027,3 +35027,8 @@ Unhandled Rejection at: [object Promise], reason: DiscordAPIError[10062]: Unknow
 [11/14/2025, 7:53:43 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.519:53 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 7:58:33 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:58 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
