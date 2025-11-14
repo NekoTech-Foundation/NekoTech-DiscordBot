@@ -146,9 +146,7 @@ greeting: true
 bypass: true
 profile: true
 Music: true
-
 chatbot: true
-
-# NoiTu (Word Chain) addon
 noitu: true
-
+cardswap: true
+mcuser: true

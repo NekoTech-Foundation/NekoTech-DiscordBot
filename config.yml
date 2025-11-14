@@ -1818,3 +1818,14 @@ Weather:
 
   Messages:
     Error: "Unable to fetch weather data. Please check your location and try again."
+
+# ===========================================================================
+# Cardswap Partner API (addon Cardswap)
+# If you don't use .env, fill these values and restart the bot.
+# ===========================================================================
+CardSwap:
+  Domain: "sandbox.card2k.com"        # e.g. sandbox.card2k.com or your production domain
+  DomainPost: "sandbox.card2k.com"    # same as Domain unless provider specifies different host for POST endpoints
+  PartnerId: ""                       # your partner_id
+  PartnerKey: ""                      # your partner_key (used to sign requests)
+  WithdrawApiKey: ""                  # API key used for withdraw endpoints

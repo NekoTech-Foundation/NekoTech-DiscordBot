@@ -34913,3 +34913,60 @@ Bot Version: 1.8.512:16 (13-11-2025) - Bot started up - Node.js v24.11.0 - App V
 [11/13/2025, 12:20:43 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.512:20 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 7:15:22 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:15 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 7:19:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.519:19 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+2025-11-13T12:42:24.071Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+2025-11-13T12:42:31.438Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+
+
+[11/13/2025, 8:19:02 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:19 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 8:35:06 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:35 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/13/2025, 8:37:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.520:37 (13-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 5:52:16 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:52 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 5:54:08 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:54 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 5:54:29 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:54 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 5:54:49 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:54 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 5:59:45 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.517:59 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/14/2025, 6:12:30 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:12 (14-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
