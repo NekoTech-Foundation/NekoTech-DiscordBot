@@ -387,7 +387,7 @@ module.exports = {
             const targetUser = interaction.options.getUser('user') || interaction.user;
             const userData = await UserData.findOne({
                 userId: targetUser.id,
-                guildId: interaction.guild.id
+                guildId: 'global'
             })
                 .select('userId level xp prestige')
                 .lean();
@@ -415,4 +415,3 @@ module.exports = {
         }
     }
 };
-

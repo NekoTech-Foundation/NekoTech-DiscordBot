@@ -101,9 +101,17 @@ async function handleXP(message) {
     }
 
     try {
-        let userData = await UserData.findOne({ userId: message.author.id, guildId: message.guild.id });
+        // Dùng bản ghi toàn cục cho level/xp (dùng guildId = 'global')
+        let userData = await UserData.findOne({ userId: message.author.id, guildId: 'global' });
         if (!userData) {
-            userData = new UserData({ userId: message.author.id, guildId: message.guild.id, xp: 0, level: 0, totalMessages: 0, balance: 0 });
+            userData = new UserData({
+                userId: message.author.id,
+                guildId: 'global',
+                xp: 0,
+                level: 0,
+                totalMessages: 0,
+                balance: 0
+            });
         }
 
         const xpToAdd = getRandomXP(config.LevelingSystem.MessageXP);
@@ -280,9 +288,17 @@ async function handleVoiceXP(client, member) {
 
     const voiceInterval = parseTime(config.LevelingSystem.CooldownSettings.VoiceInterval || '10s');
     const timerKey = `${member.guild.id}-${member.id}`;
-    let userData = await UserData.findOne({ userId: member.id, guildId: member.guild.id });
+    // Dùng bản ghi toàn cục cho level/xp (guildId = 'global')
+    let userData = await UserData.findOne({ userId: member.id, guildId: 'global' });
     if (!userData) {
-        userData = new UserData({ userId: member.id, guildId: member.guild.id, xp: 0, level: 0, totalMessages: 0, balance: 0 });
+        userData = new UserData({
+            userId: member.id,
+            guildId: 'global',
+            xp: 0,
+            level: 0,
+            totalMessages: 0,
+            balance: 0
+        });
     }
 
     if (voiceXpTimers.has(timerKey)) {

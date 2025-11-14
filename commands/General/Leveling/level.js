@@ -247,7 +247,7 @@ module.exports = {
 
                     try {
                         const result = await UserData.updateMany(
-                            { guildId: interaction.guild.id },
+                            { guildId: 'global' },
                             { $set: updateQuery }
                         );
 
@@ -283,11 +283,12 @@ module.exports = {
         }
 
         const user = interaction.options.getUser('user') || interaction.user;
-        let userData = await UserData.findOne({ userId: user.id, guildId: guildId });
+        // Đọc/ghi level/xp theo bản ghi toàn cục (guildId = 'global')
+        let userData = await UserData.findOne({ userId: user.id, guildId: 'global' });
         if (!userData) {
             userData = new UserData({
                 userId: user.id,
-                guildId: guildId,
+                guildId: 'global',
                 xp: 0,
                 level: 1,
                 prestige: 0
@@ -444,4 +445,3 @@ module.exports = {
         }
     }
 };
-

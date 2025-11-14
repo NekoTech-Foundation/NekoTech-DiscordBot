@@ -79,7 +79,8 @@ const UserSchema = new mongoose.Schema({
     }],
     transactionLogs: [TransactionLogSchema],
     roles: [{ type: String }],
-    equipment: { type: EquipmentSchema, default: () => ({}) }
+    equipment: { type: EquipmentSchema, default: () => ({}) },
+    rankTheme: { type: String, default: null }
 });
 
 UserSchema.index({ userId: 1, guildId: 1 });
