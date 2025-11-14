@@ -6,10 +6,10 @@
     "max_weight": 10
   },
   "epic": {
-    "name": "Tôm hùm đất",
-    "emoji": "<:Fish_crayfish:1433392888347365376>",
-    "min_weight": 0.1,
-    "max_weight": 0.5
+    "name": "Cá voi xanh",
+    "emoji": "<:Fish_bluewhale:1433392930034417665>",
+    "min_weight": 1000,
+    "max_weight": 5000
   },
-  "updatedAt": "2025-11-14T11:12:41.303Z"
+  "updatedAt": "2025-11-14T11:43:03.589Z"
 }

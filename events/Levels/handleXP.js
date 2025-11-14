@@ -70,14 +70,15 @@ async function handleXP(message) {
     if (config.LevelingSystem.CooldownSettings.EnableXPCooldown) {
         const cooldownAmount = parseTime(config.LevelingSystem.CooldownSettings.XPCooldown || '20s');
         const currentTime = Date.now();
-        const userCooldown = xpCooldown.get(message.author.id);
+        const cooldownKey = `${message.guild.id}-${message.author.id}`;
+        const userCooldown = xpCooldown.get(cooldownKey);
 
         if (userCooldown && currentTime < userCooldown + cooldownAmount) {
             return;
         }
 
-        xpCooldown.set(message.author.id, currentTime);
-        setTimeout(() => xpCooldown.delete(message.author.id), cooldownAmount);
+        xpCooldown.set(cooldownKey, currentTime);
+        setTimeout(() => xpCooldown.delete(cooldownKey), cooldownAmount);
     }
 
     try {

@@ -6,6 +6,8 @@ const { getConfig, getLang, getCommands } = require('../../../utils/configLoader
 const config = getConfig();
 const lang = getLang();
 
+const LEVEL_DEV_IDS = ['1316287191634149377', '727497287777124414'];
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('level')
@@ -90,6 +92,18 @@ module.exports = {
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
+
+        // Chỉ cho phép 2 ID dev dùng các lệnh quản trị level
+        const isDev = LEVEL_DEV_IDS.includes(interaction.user.id);
+        const adminSubcommands = ['give', 'remove', 'set', 'reset'];
+
+        if (adminSubcommands.includes(subcommand) && !isDev) {
+            await interaction.reply({
+                content: lang.Levels.NoPermission,
+                flags: MessageFlags.Ephemeral
+            });
+            return;
+        }
 
         if (subcommand !== 'check') {
             const requiredRoles = config.LevelingSystem.Permission;
@@ -263,17 +277,43 @@ module.exports = {
                 break;
             case 'check':
                 if (!userData) {
-                    await interaction.reply({ 
-                        content: lang.Levels.DataNotFound.replace('{user}', user.username), 
-                        flags: MessageFlags.Ephemeral 
+                    await interaction.reply({
+                        content: lang.Levels.DataNotFound.replace('{user}', user.username),
+                        flags: MessageFlags.Ephemeral
                     });
                     return;
                 }
+
+                // Tính XP cần cho level tiếp theo (theo logic handleXP)
+                const xpNeeded = userData.level === 0 ? 70 : userData.level * config.LevelingSystem.XPNeeded;
+                const progress = Math.max(0, Math.min(1, xpNeeded > 0 ? userData.xp / xpNeeded : 0));
+                const barLength = 20;
+                const filledLength = Math.round(progress * barLength);
+                const progressBar = '▰'.repeat(filledLength) + '▱'.repeat(barLength - filledLength);
+
+                const embed = new EmbedBuilder()
+                    .setAuthor({
+                        name: `${user.username} • Level ${userData.level}`,
+                        iconURL: user.displayAvatarURL()
+                    })
+                    .setColor('#5865F2')
+                    .setDescription(
+                        lang.Levels.CurrentLevelAndXP
+                            .replace('{user}', user.username)
+                            .replace('{level}', userData.level)
+                            .replace('{xp}', userData.xp)
+                    )
+                    .addFields(
+                        {
+                            name: 'Ti?n tr�nh',
+                            value: `${progressBar}\n${userData.xp} / ${xpNeeded} XP`,
+                            inline: false
+                        }
+                    )
+                    .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() || null });
+
                 await interaction.reply({
-                    content: lang.Levels.CurrentLevelAndXP
-                        .replace('{user}', user.username)
-                        .replace('{level}', userData.level)
-                        .replace('{xp}', userData.xp),
+                    embeds: [embed],
                     flags: MessageFlags.Ephemeral
                 });
                 break;
