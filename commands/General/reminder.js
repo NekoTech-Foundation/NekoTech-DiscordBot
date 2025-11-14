@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField, MessageFlags } = require('discord.js');
 const Reminder = require('../../models/reminder');
 const { getConfig, getLang } = require('../../utils/configLoader.js');
+
 const config = getConfig();
 const lang = getLang();
 
@@ -8,11 +9,11 @@ function setEmbedProperties(embed, embedConfig) {
     if (embedConfig.Color) {
         embed.setColor(hexToDecimal(embedConfig.Color));
     }
-    
+
     if (embedConfig.Title) {
         embed.setTitle(embedConfig.Title);
     }
-    
+
     if (embedConfig.Description) {
         if (Array.isArray(embedConfig.Description)) {
             embed.setDescription(embedConfig.Description.join('\n'));
@@ -20,7 +21,7 @@ function setEmbedProperties(embed, embedConfig) {
             embed.setDescription(embedConfig.Description);
         }
     }
-    
+
     if (embedConfig.Footer?.Text) {
         if (!embedConfig.Footer.Icon || embedConfig.Footer.Icon.trim() === '') {
             embed.setFooter({ text: embedConfig.Footer.Text });
@@ -31,7 +32,7 @@ function setEmbedProperties(embed, embedConfig) {
             });
         }
     }
-    
+
     if (embedConfig.Author?.Text) {
         if (!embedConfig.Author.Icon || embedConfig.Author.Icon.trim() === '') {
             embed.setAuthor({ name: embedConfig.Author.Text });
@@ -42,15 +43,15 @@ function setEmbedProperties(embed, embedConfig) {
             });
         }
     }
-    
+
     if (embedConfig.Image && embedConfig.Image.trim() !== '') {
         embed.setImage(embedConfig.Image);
     }
-    
+
     if (embedConfig.Thumbnail && embedConfig.Thumbnail.trim() !== '') {
         embed.setThumbnail(embedConfig.Thumbnail);
     }
-    
+
     return embed;
 }
 
@@ -63,10 +64,14 @@ function parseTimeToMs(timeStr) {
     const unit = parts[2];
 
     switch (unit) {
-        case 'h': return value * 60 * 60 * 1000;
-        case 'm': return value * 60 * 1000;
-        case 'd': return value * 24 * 60 * 60 * 1000;
-        default: return null;
+        case 'h':
+            return value * 60 * 60 * 1000;
+        case 'm':
+            return value * 60 * 1000;
+        case 'd':
+            return value * 24 * 60 * 60 * 1000;
+        default:
+            return null;
     }
 }
 
@@ -77,27 +82,37 @@ function hexToDecimal(hex) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('reminder')
-        .setDescription('Quản lý lời nhắc')
+        .setDescription('Quản lý lời nhắc cá nhân')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('create')
                 .setDescription('Đặt một lời nhắc mới')
                 .addStringOption(option =>
-                    option.setName('message')
-                        .setDescription('Tin nhắn nhắc nhở')
-                        .setRequired(true))
+                    option
+                        .setName('message')
+                        .setDescription('Nội dung cần nhắc nhở')
+                        .setRequired(true)
+                )
                 .addStringOption(option =>
-                    option.setName('time')
+                    option
+                        .setName('time')
                         .setDescription('Khi nào cần nhắc bạn (ví dụ: "10m", "1h", "2d")')
-                        .setRequired(true))
+                        .setRequired(true)
+                )
                 .addUserOption(option =>
-                    option.setName('user')
-                        .setDescription('Người dùng cần nhắc nhở')
-                        .setRequired(false)))
+                    option
+                        .setName('user')
+                        .setDescription(
+                            'Người dùng cần được nhắc (bỏ trống để nhắc chính bạn)'
+                        )
+                        .setRequired(false)
+                )
+        )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription('Liệt kê các lời nhắc đang hoạt động của bạn')),
+                .setDescription('Liệt kê các lời nhắc đang hoạt động của bạn')
+        ),
     category: 'General',
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
@@ -112,24 +127,33 @@ module.exports = {
                 const embed = new EmbedBuilder();
                 setEmbedProperties(embed, {
                     Color: lang.Reminder.Embeds.List.Color,
-                    Description: lang.Reminder.Messages.no_reminders || 'Bạn không có lời nhắc nào đang hoạt động.'
+                    Title: lang.Reminder.Embeds.List.Title || '⏰ Lời nhắc',
+                    Description:
+                        lang.Reminder.Messages.no_reminders ||
+                        'Bạn không có lời nhắc nào đang hoạt động.'
                 });
 
                 await interaction.reply({ embeds: [embed], ephemeral: true });
                 return;
             }
 
-            const reminderList = reminders.map((reminder, index) => {
-                const timeLeft = reminder.reminderTime - Date.now();
-                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                return `${index + 1}. "${reminder.message}" - còn lại ${hours}h ${minutes}m`;
-            }).join('\n');
+            const reminderList = reminders
+                .map((reminder, index) => {
+                    const timeLeft = reminder.reminderTime - Date.now();
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor(
+                        (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+                    );
+                    return `• **${index + 1}.** "${reminder.message}" - còn lại **${hours}h ${minutes}m**`;
+                })
+                .join('\n');
 
             const embed = new EmbedBuilder();
             setEmbedProperties(embed, {
                 Color: lang.Reminder.Embeds.List.Color,
-                Title: lang.Reminder.Embeds.List.Title || 'Các lời nhắc đang hoạt động của bạn',
+                Title:
+                    lang.Reminder.Embeds.List.Title ||
+                    '⏰ Các lời nhắc đang hoạt động của bạn',
                 Description: reminderList,
                 Footer: lang.Reminder.Embeds.List.Footer
             });
@@ -143,12 +167,22 @@ module.exports = {
         const delay = parseTimeToMs(timeInput);
 
         if (/@everyone|@here|<@&\d+>/.test(message)) {
-            await interaction.reply({ content: lang.Reminder.Messages.invalid_mentions || 'Tin nhắn chứa các lượt đề cập không hợp lệ.', ephemeral: true });
+            await interaction.reply({
+                content:
+                    lang.Reminder.Messages.invalid_mentions ||
+                    '⚠️ Tin nhắn chứa các lượt đề cập không hợp lệ.',
+                ephemeral: true
+            });
             return;
         }
 
         if (!delay) {
-            await interaction.reply({ content: lang.Reminder.Messages.invalid_format || 'Định dạng thời gian không hợp lệ. Vui lòng sử dụng các đơn vị h, m, d.', ephemeral: true });
+            await interaction.reply({
+                content:
+                    lang.Reminder.Messages.invalid_format ||
+                    '⚠️ Định dạng thời gian không hợp lệ. Vui lòng dùng đơn vị h, m, d (ví dụ: 10m, 1h, 2d).',
+                ephemeral: true
+            });
             return;
         }
 
@@ -156,12 +190,23 @@ module.exports = {
         const user = targetUser || interaction.user;
 
         if (targetUser && targetUser.id !== interaction.user.id) {
-            const member = await interaction.guild.members.fetch(interaction.user.id);
-            const hasModeratorRole = config.ModerationRoles.reminder.some(roleId => member.roles.cache.has(roleId));
-            const isAdministrator = member.permissions.has(PermissionsBitField.Flags.Administrator);
+            const member = await interaction.guild.members.fetch(
+                interaction.user.id
+            );
+            const hasModeratorRole = config.ModerationRoles.reminder.some(roleId =>
+                member.roles.cache.has(roleId)
+            );
+            const isAdministrator = member.permissions.has(
+                PermissionsBitField.Flags.Administrator
+            );
 
             if (!hasModeratorRole && !isAdministrator) {
-                await interaction.reply({ content: lang.Reminder.Messages.permission_denied || 'Bạn không có quyền đặt lời nhắc cho người dùng khác.', ephemeral: true });
+                await interaction.reply({
+                    content:
+                        lang.Reminder.Messages.permission_denied ||
+                        '⚠️ Bạn không có quyền đặt lời nhắc cho người dùng khác.',
+                    ephemeral: true
+                });
                 return;
             }
         }
@@ -171,8 +216,8 @@ module.exports = {
         const reminder = new Reminder({
             userId: user.id,
             channelId: interaction.channelId,
-            message: message,
-            reminderTime: reminderTime,
+            message,
+            reminderTime,
             sent: false
         });
 
@@ -180,7 +225,7 @@ module.exports = {
 
         const embedConfig = lang.Reminder.Embeds.Reminder;
         if (embedConfig.Description) {
-            embedConfig.Description = embedConfig.Description.map(line => 
+            embedConfig.Description = embedConfig.Description.map(line =>
                 line.replace('{user}', user.tag).replace('{time}', timeInput)
             );
         }
@@ -191,3 +236,4 @@ module.exports = {
         await interaction.reply({ embeds: [embed], ephemeral: true });
     }
 };
+

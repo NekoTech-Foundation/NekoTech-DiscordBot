@@ -8,9 +8,7 @@ const {
     MessageFlags
 } = require('discord.js');
 const UserData = require('../../../models/UserData');
-const fs = require('fs');
-const yaml = require('js-yaml');
-const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
+const { getConfig, getLang } = require('../../../utils/configLoader.js');
 
 const config = getConfig();
 const lang = getLang();
@@ -31,12 +29,8 @@ const PRESTIGE_TIERS = [
 ];
 
 function getPrestigeTier(prestige) {
-    if (!prestige || prestige <= 0) {
-        return PRESTIGE_TIERS[0];
-    }
-    if (prestige >= PRESTIGE_TIERS.length) {
-        return PRESTIGE_TIERS[PRESTIGE_TIERS.length - 1];
-    }
+    if (!prestige || prestige <= 0) return PRESTIGE_TIERS[0];
+    if (prestige >= PRESTIGE_TIERS.length) return PRESTIGE_TIERS[PRESTIGE_TIERS.length - 1];
     return PRESTIGE_TIERS[prestige];
 }
 
@@ -128,18 +122,18 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('check')
-                .setDescription('Xem cấp độ, XP và hạng danh vọng của bạn')
+                .setDescription('Kiểm tra XP và cấp độ của người dùng')
                 .addUserOption(option =>
                     option
                         .setName('user')
-                        .setDescription('Người dùng cần kiểm tra (để trống để xem bản thân)')
+                        .setDescription('Người dùng cần kiểm tra (bỏ trống để xem chính bạn)')
                         .setRequired(false)
                 )
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('reset')
-                .setDescription('Đặt lại cấp độ và XP của toàn bộ máy chủ')
+                .setDescription('Đặt lại cấp độ và XP của toàn bộ người dùng')
                 .addStringOption(option =>
                     option
                         .setName('type')
@@ -194,7 +188,7 @@ module.exports = {
             const confirmEmbed = new EmbedBuilder()
                 .setTitle('⚠️ Xác nhận đặt lại hệ thống cấp độ')
                 .setDescription(
-                    `Bạn có chắc chắn muốn đặt lại ${type === 'both' ? 'XP và cấp độ' : type} cho toàn bộ người dùng trong máy chủ này?\n\nHành động này **không thể hoàn tác**.`
+                    `Bạn có chắc chắn muốn đặt lại ${type === 'both' ? 'XP và cấp độ' : type} cho toàn bộ người dùng trong bot?\n\nHành động này **không thể hoàn tác**.`
                 )
                 .setColor('#FFA500');
 
@@ -274,7 +268,8 @@ module.exports = {
             } catch (error) {
                 console.error('Lỗi trong quá trình xác nhận reset level:', error);
                 await interaction.editReply({
-                    content: 'Xác nhận đã hết thời gian hoặc có lỗi xảy ra. Vui lòng thử lại.',
+                    content:
+                        'Xác nhận đã hết thời gian hoặc có lỗi xảy ra. Vui lòng thử lại.',
                     embeds: [],
                     components: []
                 });
@@ -283,7 +278,6 @@ module.exports = {
         }
 
         const user = interaction.options.getUser('user') || interaction.user;
-        // Đọc/ghi level/xp theo bản ghi toàn cục (guildId = 'global')
         let userData = await UserData.findOne({ userId: user.id, guildId: 'global' });
         if (!userData) {
             userData = new UserData({
@@ -380,19 +374,6 @@ module.exports = {
 
                 const tier = getPrestigeTier(userData.prestige || 0);
 
-                const fields = [
-                    {
-                        name: 'Hạng danh vọng',
-                        value: `${tier.emoji} ${tier.name} (Prestige ${userData.prestige || 0})`,
-                        inline: true
-                    },
-                    {
-                        name: 'Tiến trình cấp độ',
-                        value: `${progressBar}\n${userData.xp} / ${xpNeeded} XP`,
-                        inline: false
-                    }
-                ];
-
                 const embed = new EmbedBuilder()
                     .setAuthor({
                         name: `${user.username} • Level ${userData.level}`,
@@ -400,12 +381,20 @@ module.exports = {
                     })
                     .setColor('#5865F2')
                     .setDescription(
-                        lang.Levels.CurrentLevelAndXP
-                            .replace('{user}', user.username)
-                            .replace('{level}', userData.level)
-                            .replace('{xp}', userData.xp)
+                        [
+                            `🏅 **Hạng danh vọng:** ${tier.emoji} ${tier.name} (Prestige ${userData.prestige || 0})`,
+                            '',
+                            lang.Levels.CurrentLevelAndXP
+                                .replace('{user}', user.username)
+                                .replace('{level}', userData.level)
+                                .replace('{xp}', userData.xp)
+                        ].join('\n')
                     )
-                    .addFields(fields)
+                    .addFields({
+                        name: '📊 Tiến trình cấp độ',
+                        value: `${progressBar}\n${userData.xp} / ${xpNeeded} XP`,
+                        inline: false
+                    })
                     .setFooter({
                         text: interaction.guild.name,
                         iconURL: interaction.guild.iconURL() || null
@@ -445,3 +434,4 @@ module.exports = {
         }
     }
 };
+

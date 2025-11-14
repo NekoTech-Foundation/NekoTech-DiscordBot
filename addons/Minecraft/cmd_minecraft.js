@@ -4,13 +4,13 @@ const axios = require('axios');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('minecraft')
-        .setDescription('Hi?n th? th�ng tin c?a m?t server Minecraft.')
+        .setDescription('Hiển thị thông tin của server Minecraft.')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('server')
-                .setDescription('Hi?n th? th�ng tin c?a m?t server Minecraft.')
-                .addStringOption(option => option.setName('address').setDescription('D?a ch? server, c� th? bao g?m c?ng (port).').setRequired(true))
-                .addStringOption(option => option.setName('name').setDescription('T�n cho server n�y.'))
+                .setDescription('Hiển thị thông tin của server Minecraft.')
+                .addStringOption(option => option.setName('address').setDescription('Địa chỉ server, có thể bao gồm cổng (port).').setRequired(true))
+                .addStringOption(option => option.setName('name').setDescription('Tên cho server này.'))
         ),
     async execute(interaction) {
         const address = interaction.options.getString('address');
@@ -27,13 +27,13 @@ module.exports = {
 
             if (data.online) {
                 const embed = new EmbedBuilder()
-                    .setTitle(`Th�ng tin server: ${name}`)
+                    .setTitle(`Thông tin server: ${name}`)
                     .setColor('Green')
                     .setThumbnail(`https://api.mcsrvstat.us/icon/${address}`)
                     .addFields(
-                        { name: 'Tr?ng th�i', value: 'Online', inline: true },
-                        { name: 'Ngu?i choi', value: `${data.players.online} / ${data.players.max}`, inline: true },
-                        { name: 'Phi�n b?n', value: data.version, inline: true },
+                        { name: 'Trạng thái', value: 'Online', inline: true },
+                        { name: 'Nguời chơi', value: `${data.players.online} / ${data.players.max}`, inline: true },
+                        { name: 'Phiên bản', value: data.version, inline: true },
                         { name: 'MOTD', value: `\`\`\`${data.motd.clean.join('\n')}\`\`\`` }
                     )
                     .setImage(`https://api.mcsrvstat.us/banner/${address}`);
@@ -41,9 +41,9 @@ module.exports = {
                 await interaction.editReply({ embeds: [embed] });
             } else {
                 const embed = new EmbedBuilder()
-                    .setTitle(`Th�ng tin server: ${name}`)
+                    .setTitle(`Thông tin server: ${name}`)
                     .setColor('Red')
-                    .setDescription('Server kh�ng ho?t d?ng ho?c kh�ng th? k?t n?i.');
+                    .setDescription('Server không hoạt động hoặc không thể kết nối.');
 
                 await interaction.editReply({ embeds: [embed] });
             }
@@ -52,7 +52,7 @@ module.exports = {
 
             try {
                 const errorPayload = {
-                    content: 'Da c� l?i x?y ra khi l?y th�ng tin server.',
+                    content: 'Có lỗi xảy ra khi thực hiện lệnh trên.',
                     flags: MessageFlags.Ephemeral
                 };
 
