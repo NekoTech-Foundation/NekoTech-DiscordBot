@@ -52,6 +52,7 @@ if (version < 18) {
 }
 
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
+const pixivAddon = require('./addons/Pixiv/pixiv.js');
 
 const client = new Client({
     intents: [
@@ -130,6 +131,26 @@ client.on('inviteDelete', async invite => {
 });
 
 client.on('interactionCreate', async interaction => {
+    // Handle all Pixiv buttons (save, collection pagination, remove, ...)
+    if (interaction.isButton() && interaction.customId.startsWith('pixiv_')) {
+        try {
+            const handled = await pixivAddon.handleButtonInteraction(interaction);
+            if (handled) return;
+        } catch (error) {
+            console.error('Error handling Pixiv button interaction:', error);
+            if (!interaction.replied && !interaction.deferred) {
+                try {
+                    await interaction.reply({
+                        content: 'Đã có lỗi khi thực thi câu lệnh, hãy thử lại nhé.',
+                        ephemeral: true
+                    });
+                } catch (replyError) {
+                    console.error('Failed to send Pixiv error reply:', replyError);
+                }
+            }
+        }
+    }
+
     // Pixiv Save Button Handler
     if (interaction.isButton() && interaction.customId.startsWith('pixiv_save_')) {
         const PixivApi = require('pixiv-api-client');
