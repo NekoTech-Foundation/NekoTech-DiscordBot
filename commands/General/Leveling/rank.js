@@ -34,7 +34,7 @@ function roundRect(ctx, x, y, width, height, radius) {
 async function fetchAvatar(url, userId) {
     const cacheKey = `${userId}-${url}`;
     const cachedAvatar = avatarCache.get(cacheKey);
-    
+
     if (cachedAvatar && Date.now() - cachedAvatar.timestamp < CACHE_DURATION) {
         return cachedAvatar.buffer;
     }
@@ -42,12 +42,12 @@ async function fetchAvatar(url, userId) {
     try {
         const response = await fetch(url);
         const buffer = await response.arrayBuffer();
-        
+
         avatarCache.set(cacheKey, {
             buffer: Buffer.from(buffer),
             timestamp: Date.now()
         });
-        
+
         return Buffer.from(buffer);
     } catch (error) {
         console.error('Error fetching avatar:', error);
@@ -58,7 +58,7 @@ async function fetchAvatar(url, userId) {
 async function getRank(userId, guildId) {
     const cacheKey = `${guildId}-${userId}`;
     const cachedRank = rankCache.get(cacheKey);
-    
+
     if (cachedRank && Date.now() - cachedRank.timestamp < CACHE_DURATION) {
         return cachedRank.rank;
     }
@@ -68,17 +68,14 @@ async function getRank(userId, guildId) {
         {
             $addFields: {
                 sortValue: {
-                    $add: [
-                        { $multiply: ["$level", 1000000] },
-                        "$xp"
-                    ]
+                    $add: [{ $multiply: ['$level', 1000000] }, '$xp']
                 }
             }
         },
         {
             $setWindowFields: {
                 partitionBy: null,
-                sortBy: { "sortValue": -1 },
+                sortBy: { sortValue: -1 },
                 output: {
                     rank: {
                         $rank: {}
@@ -100,6 +97,25 @@ async function getRank(userId, guildId) {
     return rank;
 }
 
+const PRESTIGE_TIERS = [
+    { key: 'unranked', name: 'Chưa xếp hạng' },
+    { key: 'iron', name: 'Sắt' },
+    { key: 'bronze', name: 'Đồng' },
+    { key: 'silver', name: 'Bạc' },
+    { key: 'gold', name: 'Vàng' },
+    { key: 'platinum', name: 'Bạch kim' },
+    { key: 'diamond', name: 'Kim cương' },
+    { key: 'ascendant', name: 'Thăng hoa' },
+    { key: 'immortal', name: 'Bất tử' },
+    { key: 'radiant', name: 'Rạng rỡ' }
+];
+
+function getPrestigeTier(prestige) {
+    if (!prestige || prestige <= 0) return PRESTIGE_TIERS[0];
+    if (prestige >= PRESTIGE_TIERS.length) return PRESTIGE_TIERS[PRESTIGE_TIERS.length - 1];
+    return PRESTIGE_TIERS[prestige];
+}
+
 async function generateRankCard(interaction, userData, targetUser) {
     const canvas = Canvas.createCanvas(1000, 300);
     const ctx = canvas.getContext('2d');
@@ -114,6 +130,8 @@ async function generateRankCard(interaction, userData, targetUser) {
     let levelEmoji = config.RankCard?.Emojis?.Level || '✧';
     let topRankEmoji = config.RankCard?.Emojis?.TopRank || '👑';
     let normalRankEmoji = config.RankCard?.Emojis?.NormalRank || '⭐';
+
+    const prestigeTier = getPrestigeTier(userData.prestige || 0);
 
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
@@ -141,17 +159,24 @@ async function generateRankCard(interaction, userData, targetUser) {
 
     ctx.save();
     ctx.globalAlpha = 0.1;
-    ctx.fillStyle = createGradient(ctx, canvas.width/2, 0, canvas.width/2, canvas.height, [
-        [0, '#0000'],
-        [0.5, '#7289da30'],
-        [1, '#0000']
-    ]);
+    ctx.fillStyle = createGradient(
+        ctx,
+        canvas.width / 2,
+        0,
+        canvas.width / 2,
+        canvas.height,
+        [
+            [0, '#0000'],
+            [0.5, '#7289da30'],
+            [1, '#0000']
+        ]
+    );
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.restore();
 
     const [avatarBuffer, rank] = await Promise.all([
         fetchAvatar(
-            targetUser.displayAvatarURL({ extension: 'png', size: 256 }), 
+            targetUser.displayAvatarURL({ extension: 'png', size: 256 }),
             targetUser.id
         ),
         getRank(targetUser.id, interaction.guild.id)
@@ -160,38 +185,40 @@ async function generateRankCard(interaction, userData, targetUser) {
     ctx.save();
     const margin = 20;
     const cornerLength = 40;
-    
+
     function drawCorner(x, y, rotations) {
         ctx.save();
         ctx.translate(x, y);
-        ctx.rotate((rotations * 90) * Math.PI / 180);
-        
+        ctx.rotate(rotations * 90 * Math.PI / 180);
+
         ctx.beginPath();
         ctx.lineWidth = 3;
         const gradient = ctx.createLinearGradient(0, 0, cornerLength, cornerLength);
         gradient.addColorStop(0, accentColor);
         gradient.addColorStop(1, `${accentColor}00`);
         ctx.strokeStyle = gradient;
-        
+
         ctx.moveTo(0, cornerLength);
         ctx.lineTo(0, 0);
         ctx.lineTo(cornerLength, 0);
-        
+
         ctx.shadowColor = accentColor;
         ctx.shadowBlur = 8;
         ctx.stroke();
         ctx.restore();
     }
 
-    drawCorner(margin, margin, 0);                                
-    drawCorner(canvas.width - margin, margin, 1);                  
-    drawCorner(margin, canvas.height - margin, 3);               
+    drawCorner(margin, margin, 0);
+    drawCorner(canvas.width - margin, margin, 1);
+    drawCorner(margin, canvas.height - margin, 3);
     drawCorner(canvas.width - margin, canvas.height - margin, 2);
 
     ctx.restore();
 
-    const avatarX = 120, avatarY = 150, avatarRadius = 80;
-    
+    const avatarX = 120;
+    const avatarY = 150;
+    const avatarRadius = 80;
+
     ctx.save();
     ctx.beginPath();
     ctx.arc(avatarX, avatarY, avatarRadius + 10, 0, Math.PI * 2);
@@ -200,7 +227,7 @@ async function generateRankCard(interaction, userData, targetUser) {
     ctx.strokeStyle = accentColor;
     ctx.lineWidth = 3;
     ctx.stroke();
-    
+
     ctx.beginPath();
     ctx.arc(avatarX, avatarY, avatarRadius + 5, 0, Math.PI * 2);
     ctx.strokeStyle = secondaryColor;
@@ -214,8 +241,14 @@ async function generateRankCard(interaction, userData, targetUser) {
     ctx.arc(avatarX, avatarY, avatarRadius, 0, Math.PI * 2);
     ctx.closePath();
     ctx.clip();
-    ctx.drawImage(avatar, avatarX - avatarRadius, avatarY - avatarRadius, avatarRadius * 2, avatarRadius * 2);
-    
+    ctx.drawImage(
+        avatar,
+        avatarX - avatarRadius,
+        avatarY - avatarRadius,
+        avatarRadius * 2,
+        avatarRadius * 2
+    );
+
     ctx.fillStyle = `${accentColor}15`;
     ctx.fill();
     ctx.restore();
@@ -244,13 +277,27 @@ async function generateRankCard(interaction, userData, targetUser) {
     ctx.fillStyle = levelTextColor;
     ctx.fillText(`${levelEmoji} Level `, statsX, 150);
     ctx.fillStyle = numbersColor;
-    ctx.fillText(userData.level, statsX + ctx.measureText(`${levelEmoji} Level `).width, 150);
+    ctx.fillText(
+        userData.level,
+        statsX + ctx.measureText(`${levelEmoji} Level `).width,
+        150
+    );
 
-    let rankIcon = rank <= 3 ? topRankEmoji : normalRankEmoji;
+    const rankIcon = rank <= 3 ? topRankEmoji : normalRankEmoji;
     ctx.fillStyle = rankTextColor;
     ctx.fillText(`${rankIcon} Rank #`, statsX + 220, 150);
     ctx.fillStyle = numbersColor;
-    ctx.fillText(rank, statsX + 220 + ctx.measureText(`${rankIcon} Rank #`).width, 150);
+    ctx.fillText(
+        rank,
+        statsX + 220 + ctx.measureText(`${rankIcon} Rank #`).width,
+        150
+    );
+
+    // Prestige line
+    ctx.font = '20px sans-serif';
+    ctx.fillStyle = '#e5e7eb';
+    const prestigeText = `Hạng danh vọng: ${prestigeTier.name} (P${userData.prestige || 0})`;
+    ctx.fillText(prestigeText, statsX, 185);
     ctx.restore();
 
     const barWidth = 650;
@@ -325,11 +372,13 @@ setInterval(() => {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('rank')
-        .setDescription('Xem level và kinh nghiệm của bạn')
+        .setDescription('Xem profile level đẹp của bạn')
         .addUserOption(option =>
-            option.setName('user')
-                .setDescription('Chọn người dùng')
-                .setRequired(false)),
+            option
+                .setName('user')
+                .setDescription('Chọn người dùng (để trống để xem bản thân)')
+                .setRequired(false)
+        ),
     category: 'General',
     async execute(interaction) {
         await interaction.deferReply();
@@ -339,14 +388,17 @@ module.exports = {
             const userData = await UserData.findOne({
                 userId: targetUser.id,
                 guildId: interaction.guild.id
-            }).select('userId level xp').lean();
+            })
+                .select('userId level xp prestige')
+                .lean();
 
             if (!userData) {
-                return interaction.followUp({ 
-                    content: targetUser.id === interaction.user.id 
-                        ? "Có vẻ như bạn không có dữ liệu cấp độ nào."
-                        : `Có vẻ như ${targetUser.username} không có dữ liệu cấp độ nào.`, 
-                    flags: MessageFlags.Ephemeral 
+                return interaction.followUp({
+                    content:
+                        targetUser.id === interaction.user.id
+                            ? 'Có vẻ như bạn chưa có dữ liệu cấp độ nào.'
+                            : `Có vẻ như ${targetUser.username} chưa có dữ liệu cấp độ nào.`,
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
@@ -356,10 +408,11 @@ module.exports = {
             await interaction.followUp({ files: [attachment] });
         } catch (error) {
             console.error('Error generating rank card:', error);
-            await interaction.followUp({ 
-                content: 'There was an error generating the rank card. Please try again later.',
-                flags: MessageFlags.Ephemeral 
+            await interaction.followUp({
+                content: 'Đã xảy ra lỗi khi tạo rank card. Vui lòng thử lại sau.',
+                flags: MessageFlags.Ephemeral
             });
         }
     }
 };
+

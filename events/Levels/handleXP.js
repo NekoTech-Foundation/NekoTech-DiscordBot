@@ -8,6 +8,7 @@ const lang = getLang();
 
 const xpCooldown = new Map();
 const voiceXpTimers = new Map();
+const spamTracker = new Map();
 
 function getRandomXP(range) {
     const [min, max] = range.split('-').map(Number);
@@ -64,6 +65,24 @@ async function handleXP(message) {
     if (!config.LevelingSystem.Enabled || message.author.bot || message.content.startsWith(config.CommandsPrefix) ||
         config.LevelingSystem.ChannelSettings.DisabledChannels?.includes(message.channel.id) ||
         (message.channel.parentId && config.LevelingSystem.ChannelSettings.DisabledCategories?.includes(message.channel.parentId))) {
+        return;
+    }
+
+    // Simple anti-spam: limit messages counted per user per guild in a short window
+    const spamWindowMs = (config.LevelingSystem.SpamProtection?.WindowSeconds || 10) * 1000;
+    const spamMaxMessages = config.LevelingSystem.SpamProtection?.MaxMessages || 7;
+    const spamKey = `${message.guild.id}-${message.author.id}`;
+    const now = Date.now();
+    let spamInfo = spamTracker.get(spamKey);
+
+    if (!spamInfo || now - spamInfo.windowStart > spamWindowMs) {
+        spamInfo = { count: 0, windowStart: now };
+    }
+
+    spamInfo.count += 1;
+    spamTracker.set(spamKey, spamInfo);
+
+    if (spamInfo.count > spamMaxMessages) {
         return;
     }
 
@@ -260,14 +279,15 @@ async function handleVoiceXP(client, member) {
     }
 
     const voiceInterval = parseTime(config.LevelingSystem.CooldownSettings.VoiceInterval || '10s');
+    const timerKey = `${member.guild.id}-${member.id}`;
     let userData = await UserData.findOne({ userId: member.id, guildId: member.guild.id });
     if (!userData) {
         userData = new UserData({ userId: member.id, guildId: member.guild.id, xp: 0, level: 0, totalMessages: 0, balance: 0 });
     }
 
-    if (voiceXpTimers.has(member.id)) {
-        clearInterval(voiceXpTimers.get(member.id));
-        voiceXpTimers.delete(member.id);
+    if (voiceXpTimers.has(timerKey)) {
+        clearInterval(voiceXpTimers.get(timerKey));
+        voiceXpTimers.delete(timerKey);
     }
 
     const intervalId = setInterval(async () => {
@@ -435,13 +455,16 @@ async function handleVoiceXP(client, member) {
         });
     }, voiceInterval);
 
-    voiceXpTimers.set(member.id, intervalId);
+    voiceXpTimers.set(timerKey, intervalId);
 
     const handleVoiceStateUpdate = (oldState, newState) => {
         if (oldState.member.id === member.id && 
             (!newState.channelId || oldState.channelId !== newState.channelId)) {
-            clearInterval(voiceXpTimers.get(member.id));
-            voiceXpTimers.delete(member.id);
+            const existingTimer = voiceXpTimers.get(timerKey);
+            if (existingTimer) {
+                clearInterval(existingTimer);
+                voiceXpTimers.delete(timerKey);
+            }
             client.off('voiceStateUpdate', handleVoiceStateUpdate);
         }
     };

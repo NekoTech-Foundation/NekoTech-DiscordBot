@@ -1,5 +1,12 @@
-const { SlashCommandBuilder, MessageFlags, EmbedBuilder, version: discordVersion } = require('discord.js');
-//const moment = require('moment');
+const { 
+    SlashCommandBuilder, 
+    MessageFlags, 
+    EmbedBuilder, 
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    version: discordVersion 
+} = require('discord.js');
 const os = require('os');
 const process = require('process');
 const { version } = require('../../package.json');
@@ -11,8 +18,9 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('botinfo')
-        .setDescription('Thong tin cụ thể về bot(CPU,RAM...)'),
+        .setDescription('Thông tin chi tiết về bot KentaBuckets'),
     category: 'General',
+    
     async execute(interaction) {
         try {
             await interaction.deferReply();
@@ -20,30 +28,29 @@ module.exports = {
             const bot = interaction.client;
             const uptimeTimestamp = Math.floor((Date.now() - bot.uptime) / 1000);
             const memoryUsage = process.memoryUsage();
+            
+            // Bot memory
             const totalMemory = (memoryUsage.heapTotal / 1024 / 1024).toFixed(2);
             const usedMemory = (memoryUsage.heapUsed / 1024 / 1024).toFixed(2);
+            const memoryPercent = ((usedMemory / totalMemory) * 100).toFixed(1);
 
+            // System memory
             const totalSystemMemory = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2);
             const freeSystemMemory = (os.freemem() / 1024 / 1024 / 1024).toFixed(2);
             const usedSystemMemory = (totalSystemMemory - freeSystemMemory).toFixed(2);
+            const systemMemoryPercent = ((usedSystemMemory / totalSystemMemory) * 100).toFixed(1);
 
-            const formatMemory = (total, used) => {
-                if (total > 6144) {
-                    return `${(used / 1024).toFixed(2)} GB / ${(total / 1024).toFixed(2)} GB`;
-                }
-                return `${used} MB / ${total} MB`;
-            };
-
-            let cpuModel = os.cpus()[0].model;
+            // CPU info
+            let cpuModel = os.cpus()[0].model.replace(/\s\d+-Core Processor/, '');
             const coreCount = os.cpus().length;
-          //  const nodeVersion = process.version;
-          //  const platform = `${os.type()} ${os.release()}`;
 
+            // Timestamps
             const createdAt = `<t:${Math.floor(bot.user.createdAt / 1000)}:R>`;
             const joinedAt = interaction.guild.members.cache.get(bot.user.id)?.joinedAt
                 ? `<t:${Math.floor(interaction.guild.members.cache.get(bot.user.id).joinedAt / 1000)}:R>`
-                : 'Unknown';
+                : 'Không xác định';
 
+            // Ping
             let sent;
             try {
                 sent = await interaction.fetchReply();
@@ -53,80 +60,275 @@ module.exports = {
             }
             
             const pingLatency = sent.createdTimestamp - interaction.createdTimestamp;
-         //   const wsLatency = bot.ws.ping;
+            const wsLatency = bot.ws.ping;
 
-            cpuModel = cpuModel.replace(/\s\d+-Core Processor/, '');
+            // Get bot starts
+            const botStarts = await getBotStarts(interaction.guild.id);
 
+            // Create progress bar
+            const createProgressBar = (percentage, length = 10) => {
+                const filled = Math.round((percentage / 100) * length);
+                const empty = length - filled;
+                const bar = '█'.repeat(filled) + '░'.repeat(empty);
+                
+                let color = '🟢';
+                if (percentage > 70) color = '🟡';
+                if (percentage > 90) color = '🔴';
+                
+                return `${color} \`${bar}\` ${percentage}%`;
+            };
+
+            // Main embed
             const botInfo = new EmbedBuilder()
-                .setAuthor({ name: bot.user.username, iconURL: bot.user.displayAvatarURL() })
-                .setTitle(lang.BotInfo.Embed.Title)
-                .setColor(lang.BotInfo.Embed.Color)
-                .setThumbnail(bot.user.displayAvatarURL())
+                .setColor('#5865F2')
+                .setAuthor({ 
+                    name: `${bot.user.username} - Thông tin Bot`,
+                    iconURL: bot.user.displayAvatarURL()
+                })
+                .setThumbnail(bot.user.displayAvatarURL({ size: 256 }))
+                .setDescription(`> 👋 Xin chào! Tôi là **${bot.user.username}**, bot Discord đa năng dựa trên Discord.js.\n> Dưới đây là thông tin chi tiết về hệ thống của tôi.`)
                 .addFields(
-                    { 
-                        name: lang.BotInfo.Embed.Fields.BotDetails.Name,
-                        value: lang.BotInfo.Embed.Fields.BotDetails.Value
-                            .replace('{name}', bot.user.username)
-                            .replace('{id}', bot.user.id)
-                            .replace('{version}', version)
-                            .replace('{createdAt}', createdAt)
-                            .replace('{joinedAt}', joinedAt)
-                            .replace('{starts}', await getBotStarts(interaction.guild.id)),
+                    {
+                        name: '🤖 **Thông tin cơ bản**',
+                        value: [
+                            `> **Tên Bot:** ${bot.user.username}`,
+                            `> **ID:** \`${bot.user.id}\``,
+                            `> **Phiên bản:** \`v${version}\``,
+                            `> **Được tạo:** ${createdAt}`,
+                            `> **Tham gia server:** ${joinedAt}`,
+                            `> **Số lần khởi động:** \`${botStarts}\` lần`
+                        ].join('\n'),
                         inline: false
                     },
                     {
-                        name: lang.BotInfo.Embed.Fields.Statistics.Name,
-                        value: lang.BotInfo.Embed.Fields.Statistics.Value
-                            .replace('{users}', bot.users.cache.size)
-                            .replace('{channels}', bot.channels.cache.size)
-                            .replace('{commands}', bot.slashCommands.size)
-                            .replace('{uptime}', `<t:${uptimeTimestamp}:R>`),
+                        name: '📊 **Thống kê**',
+                        value: [
+                            `\`👥\` **Người dùng:** ${bot.users.cache.size.toLocaleString()}`,
+                            `\`🏠\` **Máy chủ:** ${bot.guilds.cache.size.toLocaleString()}`,
+                            `\`📝\` **Kênh:** ${bot.channels.cache.size.toLocaleString()}`,
+                            `\`⚡\` **Lệnh:** ${bot.slashCommands.size.toLocaleString()}`
+                        ].join('\n'),
                         inline: true
                     },
                     {
-                        name: lang.BotInfo.Embed.Fields.Technical.Name,
-                        value: lang.BotInfo.Embed.Fields.Technical.Value
-                            .replace('{discordVersion}', discordVersion)
-                            .replace('{cpuModel}', cpuModel)
-                            .replace('{cpuCores}', coreCount),
+                        name: '⏱️ **Thời gian hoạt động**',
+                        value: [
+                            `\`🚀\` **Bắt đầu:** ${`<t:${uptimeTimestamp}:R>`}`,
+                            `\`📅\` **Ngày giờ:** ${`<t:${uptimeTimestamp}:F>`}`
+                        ].join('\n'),
                         inline: true
                     },
                     {
-                        name: lang.BotInfo.Embed.Fields.Performance.Name,
-                        value: lang.BotInfo.Embed.Fields.Performance.Value
-                            .replace('{botMemory}', formatMemory(totalMemory, usedMemory))
-                            .replace('{systemMemory}', `${usedSystemMemory}GB / ${totalSystemMemory}GB`)
-                            .replace('{ping}', pingLatency),
+                        name: '🔧 **Hiệu suất hệ thống**',
+                        value: [
+                            `**RAM Bot:** ${usedMemory}MB / ${totalMemory}MB`,
+                            createProgressBar(memoryPercent),
+                            ``,
+                            `**RAM Hệ thống:** ${usedSystemMemory}GB / ${totalSystemMemory}GB`,
+                            createProgressBar(systemMemoryPercent)
+                        ].join('\n'),
                         inline: false
+                    },
+                    {
+                        name: '💻 **Thông tin kỹ thuật**',
+                        value: [
+                            `\`📦\` **Discord.js:** v${discordVersion}`,
+                            `\`🟢\` **Node.js:** ${process.version}`,
+                            `\`💾\` **Platform:** ${os.type()} ${os.release()}`
+                        ].join('\n'),
+                        inline: true
+                    },
+                    {
+                        name: '🖥️ **Phần cứng**',
+                        value: [
+                            `\`⚙️\` **CPU:** ${cpuModel}`,
+                            `\`🔢\` **Cores:** ${coreCount} cores`,
+                            `\`🌐\` **Ping:** ${pingLatency}ms`,
+                            `\`📡\` **WebSocket:** ${wsLatency}ms`
+                        ].join('\n'),
+                        inline: true
                     }
                 )
                 .setFooter({ 
-                    text: lang.BotInfo.Embed.Footer.Text.replace('{user}', interaction.user.tag), 
-                    iconURL: interaction.user.displayAvatarURL() 
+                    text: `Yêu cầu bởi ${interaction.user.tag}`,
+                    iconURL: interaction.user.displayAvatarURL()
                 })
                 .setTimestamp();
 
-            try {
-                await interaction.editReply({ embeds: [botInfo] });
-            } catch (error) {
-                if (error.code === 10062) {
-                    console.error('Interaction expired before we could edit the reply');
-                } else {
-                    console.error('Error editing reply:', error);
+            // Buttons
+            const row = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('Mời Bot')
+                        .setStyle(ButtonStyle.Link)
+                        .setEmoji('🔗')
+                        .setURL(`https://discord.com/api/oauth2/authorize?client_id=${bot.user.id}&permissions=8&scope=bot%20applications.commands`),
+                    new ButtonBuilder()
+                        .setLabel('Support Server')
+                        .setStyle(ButtonStyle.Link)
+                        .setEmoji('💬')
+                        .setURL('https://discord.gg/96hgDj4b4j'),
+                    new ButtonBuilder()
+                        .setLabel('Làm mới')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('🔄')
+                        .setCustomId('refresh_botinfo')
+                );
+
+            const response = await interaction.editReply({ 
+                embeds: [botInfo],
+                components: [row]
+            });
+
+            // Collector cho nút refresh
+            const collector = response.createMessageComponentCollector({
+                filter: i => i.user.id === interaction.user.id && i.customId === 'refresh_botinfo',
+                time: 300000 // 5 phút
+            });
+
+            collector.on('collect', async i => {
+                try {
+                    await i.deferUpdate();
+                    
+                    // Refresh data
+                    const newUptimeTimestamp = Math.floor((Date.now() - bot.uptime) / 1000);
+                    const newMemoryUsage = process.memoryUsage();
+                    const newUsedMemory = (newMemoryUsage.heapUsed / 1024 / 1024).toFixed(2);
+                    const newTotalMemory = (newMemoryUsage.heapTotal / 1024 / 1024).toFixed(2);
+                    const newMemoryPercent = ((newUsedMemory / newTotalMemory) * 100).toFixed(1);
+
+                    const newFreeSystemMemory = (os.freemem() / 1024 / 1024 / 1024).toFixed(2);
+                    const newUsedSystemMemory = (totalSystemMemory - newFreeSystemMemory).toFixed(2);
+                    const newSystemMemoryPercent = ((newUsedSystemMemory / totalSystemMemory) * 100).toFixed(1);
+
+                    const newSent = await i.fetchReply();
+                    const newPingLatency = newSent.createdTimestamp - i.createdTimestamp;
+                    const newWsLatency = bot.ws.ping;
+
+                    // Update embed
+                    const updatedEmbed = new EmbedBuilder()
+                        .setColor('#5865F2')
+                        .setAuthor({ 
+                            name: `${bot.user.username} - Thông tin Bot`,
+                            iconURL: bot.user.displayAvatarURL()
+                        })
+                        .setThumbnail(bot.user.displayAvatarURL({ size: 256 }))
+                        .setDescription(`> 👋 Xin chào! Tôi là **${bot.user.username}**, bot Discord đa năng của bạn.\n> Dưới đây là thông tin chi tiết về hệ thống của tôi.`)
+                        .addFields(
+                            {
+                                name: '🤖 **Thông tin cơ bản**',
+                                value: [
+                                    `> **Tên Bot:** ${bot.user.username}`,
+                                    `> **ID:** \`${bot.user.id}\``,
+                                    `> **Phiên bản:** \`v${version}\``,
+                                    `> **Được tạo:** ${createdAt}`,
+                                    `> **Tham gia server:** ${joinedAt}`,
+                                    `> **Số lần khởi động:** \`${botStarts}\` lần`
+                                ].join('\n'),
+                                inline: false
+                            },
+                            {
+                                name: '📊 **Thống kê**',
+                                value: [
+                                    `\`👥\` **Người dùng:** ${bot.users.cache.size.toLocaleString()}`,
+                                    `\`🏠\` **Máy chủ:** ${bot.guilds.cache.size.toLocaleString()}`,
+                                    `\`📝\` **Kênh:** ${bot.channels.cache.size.toLocaleString()}`,
+                                    `\`⚡\` **Lệnh:** ${bot.slashCommands.size.toLocaleString()}`
+                                ].join('\n'),
+                                inline: true
+                            },
+                            {
+                                name: '⏱️ **Thời gian hoạt động**',
+                                value: [
+                                    `\`🚀\` **Bắt đầu:** ${`<t:${newUptimeTimestamp}:R>`}`,
+                                    `\`📅\` **Ngày giờ:** ${`<t:${newUptimeTimestamp}:F>`}`
+                                ].join('\n'),
+                                inline: true
+                            },
+                            {
+                                name: '🔧 **Hiệu suất hệ thống**',
+                                value: [
+                                    `**RAM Bot:** ${newUsedMemory}MB / ${newTotalMemory}MB`,
+                                    createProgressBar(newMemoryPercent),
+                                    ``,
+                                    `**RAM Hệ thống:** ${newUsedSystemMemory}GB / ${totalSystemMemory}GB`,
+                                    createProgressBar(newSystemMemoryPercent)
+                                ].join('\n'),
+                                inline: false
+                            },
+                            {
+                                name: '💻 **Thông tin kỹ thuật**',
+                                value: [
+                                    `\`📦\` **Discord.js:** v${discordVersion}`,
+                                    `\`🟢\` **Node.js:** ${process.version}`,
+                                    `\`💾\` **Platform:** ${os.type()} ${os.release()}`
+                                ].join('\n'),
+                                inline: true
+                            },
+                            {
+                                name: '🖥️ **Phần cứng**',
+                                value: [
+                                    `\`⚙️\` **CPU:** ${cpuModel}`,
+                                    `\`🔢\` **Cores:** ${coreCount} cores`,
+                                    `\`🌐\` **Ping:** ${newPingLatency}ms`,
+                                    `\`📡\` **WebSocket:** ${newWsLatency}ms`
+                                ].join('\n'),
+                                inline: true
+                            }
+                        )
+                        .setFooter({ 
+                            text: `Làm mới bởi ${i.user.tag} • Cập nhật lúc`,
+                            iconURL: i.user.displayAvatarURL()
+                        })
+                        .setTimestamp();
+
+                    await i.editReply({ embeds: [updatedEmbed] });
+                } catch (error) {
+                    console.error('Error refreshing botinfo:', error);
                 }
-            }
+            });
+
+            collector.on('end', async () => {
+                try {
+                    const disabledRow = new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setLabel('Mời Bot')
+                                .setStyle(ButtonStyle.Link)
+                                .setEmoji('🔗')
+                                .setURL(`https://discord.com/api/oauth2/authorize?client_id=${bot.user.id}&permissions=8&scope=bot%20applications.commands`),
+                            new ButtonBuilder()
+                                .setLabel('Support Server')
+                                .setStyle(ButtonStyle.Link)
+                                .setEmoji('💬')
+                                .setURL('https://discord.gg/96hgDj4b4j'),
+                            new ButtonBuilder()
+                                .setLabel('Làm mới')
+                                .setStyle(ButtonStyle.Secondary)
+                                .setEmoji('🔄')
+                                .setCustomId('refresh_botinfo')
+                                .setDisabled(true)
+                        );
+                    
+                    await interaction.editReply({ components: [disabledRow] });
+                } catch (error) {
+                    if (error.code !== 10008) {
+                        console.error('Error disabling buttons:', error);
+                    }
+                }
+            });
+
         } catch (error) {
-            console.error('Error in botinfo command: ', error);
+            console.error('Error in botinfo command:', error);
             try {
+                const errorMessage = '❌ Đã có lỗi xảy ra khi lấy thông tin bot!';
                 if (!interaction.replied && !interaction.deferred) {
                     await interaction.reply({ 
-                        content: lang.BotInfo.ErrorMessage, 
+                        content: errorMessage,
                         flags: MessageFlags.Ephemeral 
                     });
                 } else if (interaction.deferred) {
-                    await interaction.editReply({ 
-                        content: lang.BotInfo.ErrorMessage 
-                    });
+                    await interaction.editReply({ content: errorMessage });
                 }
             } catch (replyError) {
                 console.error('Failed to reply with error message:', replyError);
@@ -136,7 +338,12 @@ module.exports = {
 };
 
 async function getBotStarts(guildId) {
-    const GuildData = require('../../models/guildDataSchema');
-    const guildData = await GuildData.findOne({ guildID: guildId });
-    return guildData ? guildData.timesBotStarted.toString() : '0';
+    try {
+        const GuildData = require('../../models/guildDataSchema');
+        const guildData = await GuildData.findOne({ guildID: guildId });
+        return guildData ? guildData.timesBotStarted.toLocaleString() : '0';
+    } catch (error) {
+        console.error('Error getting bot starts:', error);
+        return '0';
+    }
 }

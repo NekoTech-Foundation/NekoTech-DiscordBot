@@ -44,6 +44,7 @@ const UserSchema = new mongoose.Schema({
     guildId: { type: String, required: true, index: true },
     xp: { type: Number, default: 0, index: true },
     level: { type: Number, default: 0, index: true },
+    prestige: { type: Number, default: 0 },
     warns: { type: Number, default: 0 },
     bans: { type: Number, default: 0 },
     kicks: { type: Number, default: 0 },
