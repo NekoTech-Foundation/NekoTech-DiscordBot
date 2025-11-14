@@ -92,7 +92,7 @@ moderation: true
 
 # Utility Commands - Various utility and administrative commands
 tickets: true
-tempvoice: false
+tempvoice: true
 afk: true
 botavatar: true
 invites: true

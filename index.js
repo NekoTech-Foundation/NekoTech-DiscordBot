@@ -5,13 +5,14 @@ const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
 if (process.platform !== "win32") require("child_process").exec("npm install");
 
 const colors = require('ansi-colors');
-console.log(`${colors.yellow(`[Initializing...]`)}`);
+console.log(`${colors.yellow(`[Đang tải, chờ xíu...]`)}`);
 
 const fs = require('fs');
 const packageFile = require('./package.json');
 
 const config = getConfig();
 const lang = getLang();
+
 
 global.config = config;
 global.lang = lang;
@@ -32,7 +33,7 @@ fs.appendFile("./logs.txt", logMsg, (e) => {
 
 const version = Number(process.version.split('.')[0].replace('v', ''));
 if (version < 18) {
-    console.log(`${colors.red(`[ERROR] NekoBuckets Bot requires a NodeJS version of 18 or higher!\nYou can check your NodeJS by running the "node -v" command in your terminal.`)}`);
+    console.log(`${colors.red(`[ERROR] KentaBuckets Bot requires a NodeJS version of 18 or higher!\nYou can check your NodeJS by running the "node -v" command in your terminal.`)}`);
     console.log(`${colors.blue(`\n[INFO] To update Node.js, follow the instructions below for your operating system:`)}`);
     console.log(`${colors.green(`- Windows:`)} Download and run the installer from ${colors.cyan(`https://nodejs.org/`)}`);
     console.log(`${colors.green(`- Ubuntu/Debian:`)} Run the following commands in the Terminal:`);
@@ -42,7 +43,7 @@ if (version < 18) {
     console.log(`${colors.cyan(`  - sudo yum update`)}`);
     console.log(`${colors.cyan(`  - sudo yum install -y nodejs`)}`);
 
-    let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] NekoBuckets Bot requires a NodeJS version of 18 or higher!`;
+    let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] KentaBuckets Bot requires a NodeJS version of 18 or higher!`;
     fs.appendFile("./logs.txt", logMsg, (e) => {
         if (e) console.log(e);
     });
@@ -79,7 +80,7 @@ global.client = client;
 
 
  
- const memoryChecker = new MemoryChecker('NekoBuckets Bot');
+ const memoryChecker = new MemoryChecker('KentaBuckets Bot');
  const fetch = require('node-fetch');
 //const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
  
@@ -165,9 +166,9 @@ client.on('interactionCreate', async interaction => {
     } catch (error) {
         console.error(error);
         if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.followUp({ content: 'Đã có lỗi khi thực thi câu lệnh, hãy thử lại nhé!', ephemeral: true });
         } else {
-            await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+            await interaction.reply({ content: 'Đã có lỗi khi thực thi câu lệnh, hãy thử lại nhé!', ephemeral: true });
         }
     }
 });
