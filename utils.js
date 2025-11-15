@@ -179,13 +179,15 @@ module.exports = async (client) => {
         };
     }
 
-    Object.keys(config.ReactionRoles).forEach(panelName => {
-        const panelConfig = config.ReactionRoles[panelName];
-        if (panelConfig.useButtons) {
-            const handler = createPanelHandler(panelConfig);
-            registerPanelHandler(panelName, handler);
-        }
-    });
+    if (config.ReactionRoles) {
+        Object.keys(config.ReactionRoles).forEach(panelName => {
+            const panelConfig = config.ReactionRoles[panelName];
+            if (panelConfig.useButtons) {
+                const handler = createPanelHandler(panelConfig);
+                registerPanelHandler(panelName, handler);
+            }
+        });
+    }
 
 async function handleInteractionCreate(interaction) {
     if (interaction.isCommand()) {
@@ -631,7 +633,7 @@ async function handleInteractionCreate(interaction) {
     async function initializeComponents() {
         await updateLeaderboardCache(client);
         await checkForLeftMembers();
-        if (config.ReactionRoles.Enabled) {
+        if (config.ReactionRoles && config.ReactionRoles.Enabled) {
             await setupReactionRoles();
         }
         await loadPolls(client);
