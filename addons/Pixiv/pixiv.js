@@ -427,7 +427,8 @@ module.exports.handleButtonInteraction = async (interaction) => {
         const illustId = customId.split('_')[2];
         try {
             await refreshToken();
-            await pixiv.illustBookmarkAdd(illustId);
+            // Use the correct method name for bookmarking
+            await pixiv.bookmarkIllust(illustId);
             await interaction.reply({ 
                 content: '✅ Đã lưu ảnh vào bộ sưu tập của bạn!', 
                 ephemeral: true 
@@ -497,7 +498,8 @@ module.exports.handleButtonInteraction = async (interaction) => {
         
         try {
             await refreshToken();
-            await pixiv.illustBookmarkDelete(illustId);
+            // Use the correct method name for unbookmarking
+            await pixiv.unbookmarkIllust(illustId);
             await interaction.reply({ 
                 content: '✅ Đã xóa ảnh khỏi bộ sưu tập!', 
                 ephemeral: true 

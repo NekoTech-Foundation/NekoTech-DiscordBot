@@ -1022,6 +1022,79 @@ Report:
     Thumbnail: "{guildIcon}" # {guildIcon} - Displays the guild icon
 
 # ===========================================================================
+# BACKUP CONFIGURATION
+# ===========================================================================
+Backup:
+  Enabled: false
+  Schedule: "1m" # Time between automatic backups (1d = 1 day, 1h = 1 hour, 1m = 1 minute)
+  MaxBackups: 5 # Maximum number of backups to keep (older backups will be rotated out)
+  LogsChannelID: "CHANNEL_ID" # Channel to log automatic backups (leave empty to disable)
+
+# ===========================================================================
+# USER JOIN/LEAVE MESSAGE CONFIGURATION
+# ===========================================================================
+# Placeholders
+# {userName}: YouSeeMeRunning
+# {user}: @YouSeeMeRunning
+# {userTag}: YouSeeMeRunning#1234
+# {userId}: 264032125496459265 - This is the ID
+# {userBanner}: Displays their users banner in the image field  
+# {UserCreation}: How old is their account? Discord timestamp 
+# {guildName}: Guild Name
+# {guildIcon}: Guild Icon
+# {memberCount}: Guild Member Count - 1st, 2nd, 3rd, 4th...
+# {memberCountNumeric}: Displays 5, 6, 7...
+# {longTime}: March 1st, 2023
+# {shortTime}: 17:00
+# {user-joinedAt}: For leave messages, displays when they first joined
+# {user-createdAt}: The date when the user's Discord account was created
+# {kickStatus}: Has the user been kicked or not?
+# {autoKickTime}: How long until the user is kicked
+# {invitedBy}: Who invited them?
+# {invitedByCount}: How many invites the person who invited them has
+# {joinDate} # Discord timestamp for when they joined
+# {joinTime} # Discord timestamp for when they joined
+# {leaveDate} # Discord timestamp for when they left
+# {leaveTime} # Discord timestamp for when they left
+
+
+
+
+ 
+# ===========================================================================
+# JOIN ROLE/VERIFICATION CONFIGURATION
+# ===========================================================================
+JoinRoleSettings:
+  Enabled: true
+  JoinRoles: ["1388890274436223128"] # This is the roles users get when they join your discord server, You can add multiple
+  RestoreRoles: # Should the user get back their original roles before leaving the server?
+    Enabled: true # Leave below blank to give all roles
+    Blacklist: ["ROLE_ID"] # If used, any roles not in the whitelist won't be given
+    Whitelist: ["ROLE_ID"] # If used, all roles will be given apart from the ones defined
+
+# Verification Types:
+# BUTTON - When a user clicks the button, they get the specified role
+# CALCULATOR - Solve a math question to get a specified role
+VerificationSettings:
+  Enabled: false # Enable users to verify when they join your discord server?
+  DeleteAllMessages: true # Delete all user messages in the verification channel?
+  ChannelID: "1427241810224218204" # The channel users should verify in
+  VerificationType: "BUTTON" # Options: BUTTON, CALCULATOR, CAPTCHA
+  VerifiedRoleID: ["1423609600795476088"] # The roles users get when they successfully verify, You can add multiple
+  RoleToRemove: "" # The role to remove when they successfully verify, Leave blank for none
+  EnableUnverifiedRole: false # Enable the Unverified role? (Automatically created and denied access to all channels other than verify channel)
+
+VerificationEmbed:
+  Title: "Xác minh"
+  Description: "Hãy xác minh bạn không phải bot để tham gia vào Trụ Sở NekoTech!.\nNhấn vào nút ở dưới để bắt đầu xác minh!"
+  Image: "https://i.imgur.com/R4qVpUy.png"
+
+VerificationButton:
+  Name: "Xác Minh"
+  Emoji: "✅"
+  Color: "Secondary" # Primary, Secondary, Success, Danger
+
+# ===========================================================================
 # GIVEAWAYS CONFIGURATION 
 # ===========================================================================
 Giveaways:
