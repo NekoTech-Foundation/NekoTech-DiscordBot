@@ -35155,3 +35155,32 @@ Bot Version: 1.8.5
 [11/15/2025, 1:14:11 PM] [STARTING] Attempting to start the bot..
 NodeJS Version: v24.11.0
 Bot Version: 1.8.513:14 (15-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/15/2025, 3:55:41 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.515:55 (15-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+
+
+[11/15/2025, 6:11:43 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:11 (15-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+2025-11-15T11:12:34.114Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+2025-11-15T11:12:44.627Z - ERROR: DiscordAPIError[10014]: Unknown Emoji
+
+
+[11/15/2025, 6:17:04 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:17 (15-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5
+Unhandled Rejection at: [object Promise], reason: DiscordAPIError[10062]: Unknown interaction
+    at handleErrors (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:762:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async BurstHandler.runRequest (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:866:23)
+    at async _REST.request (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\@discordjs\rest\dist\index.js:1307:22)
+    at async ChannelSelectMenuInteraction.update (C:\Users\sangt\Documents\NekoTech-DiscordBot\node_modules\discord.js\src\structures\interfaces\InteractionResponses.js:354:22)
+    at async InteractionCollector.<anonymous> (C:\Users\sangt\Documents\NekoTech-DiscordBot\addons\NoiTu\cmd_noitu.js:163:21)
+
+
+[11/15/2025, 6:23:18 PM] [STARTING] Attempting to start the bot..
+NodeJS Version: v24.11.0
+Bot Version: 1.8.518:23 (15-11-2025) - Bot started up - Node.js v24.11.0 - App Version 1.8.5

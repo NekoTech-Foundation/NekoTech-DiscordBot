@@ -97,7 +97,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('ban')
-                .setDescription('Cấm một thành viên')
+                .setDescription('Cấm một thành viên khỏi máy chủ')
                 .addUserOption(option =>
                     option
                         .setName('user')
