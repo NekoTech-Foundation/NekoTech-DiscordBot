@@ -6,10 +6,10 @@
     "max_weight": 45000
   },
   "epic": {
-    "name": "Cá lóc khổng lồ",
-    "emoji": "<:Fish_giantsnakehead:1433392943405727836>",
-    "min_weight": 20,
-    "max_weight": 50
+    "name": "Cá sấu",
+    "emoji": "<:Fish_crocodile:1433392932215459861>",
+    "min_weight": 100,
+    "max_weight": 500
   },
-  "updatedAt": "2025-11-16T04:13:11.071Z"
+  "updatedAt": "2025-11-16T04:22:50.663Z"
 }

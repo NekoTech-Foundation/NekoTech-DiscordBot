@@ -51,11 +51,14 @@ module.exports = {
                 }
 
                 // Tạo embed với widget banner từ mcstatus.io
+                // Lưu ý: data.icon là base64, phải dùng endpoint icon để lấy URL
+                const iconURL = `https://api.mcstatus.io/v2/icon/${address}`;
+                
                 const embed = new EmbedBuilder()
                     .setColor('#2ecc71')
                     .setAuthor({ 
                         name: name,
-                        iconURL: data.icon || `https://api.mcstatus.io/v2/icon/${address}`
+                        iconURL: iconURL
                     })
                     .addFields(
                         { 
