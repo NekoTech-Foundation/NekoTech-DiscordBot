@@ -21,7 +21,7 @@ async function jikanGet(path, params = {}) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('anime')
-    .setDescription('Thông tin Anime/Manga (Jikan)')
+    .setDescription('Tìm kiếm Thông tin Anime/Manga (Jikan API)')
     .addSubcommand(sc =>
       sc.setName('search')
         .setDescription('Tìm kiếm anime')
@@ -188,7 +188,7 @@ async function handleRandom(interaction) {
       }
       return interaction.editReply({ embeds: [embedTranslated], components });
     }
-  } catch {}
+  } catch { }
   const embed = UI.animeEmbed(anime);
   let components2 = [];
   if (anime?.mal_id) {
@@ -214,14 +214,14 @@ async function handleCharacter(interaction) {
   let full;
   try {
     if (target?.mal_id) full = await jikanGet(`/characters/${target.mal_id}/full`);
-  } catch {}
+  } catch { }
   let ch = full?.data || target;
   // Fallback: try non-full endpoint if needed
   if (!ch?.about && target?.mal_id) {
     try {
       const basic = await jikanGet(`/characters/${target.mal_id}`);
       if (basic?.data) ch = { ...ch, ...basic.data };
-    } catch {}
+    } catch { }
   }
 
   try {
@@ -232,7 +232,7 @@ async function handleCharacter(interaction) {
         const { translateText } = require('../Translator/translatorUtils');
         const aboutVi = await translateText(about, 'vi', 'auto');
         finalDesc = aboutVi || about; // always prefer Vietnamese when available
-      } catch {}
+      } catch { }
       // Clamp to Discord embed description limit (~4096), keep some headroom
       if (finalDesc.length > 3900) {
         finalDesc = finalDesc.slice(0, 3890) + '…';
@@ -248,7 +248,7 @@ async function handleCharacter(interaction) {
       }
       return interaction.editReply({ embeds: [embedVi], components });
     }
-  } catch {}
+  } catch { }
   const embed = UI.characterEmbed(ch);
   let components2 = [];
   if (ch?.mal_id) {
