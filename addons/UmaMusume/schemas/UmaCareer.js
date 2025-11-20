@@ -53,6 +53,40 @@ const UmaCareerSchema = new mongoose.Schema({
     wit: { type: Number, default: 0 }
   },
   totalWins: { type: Number, default: 0 },
+  skillPoints: { type: Number, default: 0 },
+  // New fields for reworked system
+  injuries: [{
+    type: { type: String, enum: ['minor', 'moderate', 'major'] },
+    affectedStat: { type: String },
+    penalty: { type: Number },
+    remainingDays: { type: Number }
+  }],
+  rivalId: { type: mongoose.Schema.Types.ObjectId, ref: 'UserUma', default: null },
+  rivalProgress: { type: Number, default: 0 },
+  eventsHistory: [{
+    eventId: { type: String },
+    day: { type: Number },
+    choice: { type: String },
+    result: { type: mongoose.Schema.Types.Mixed }
+  }],
+  condition: {
+    type: String,
+    default: 'normal',
+    enum: ['injured', 'sick', 'tired', 'normal', 'good', 'peak']
+  },
+  trainingFocus: {
+    type: String,
+    default: 'balanced',
+    enum: ['balanced', 'speed', 'stamina', 'power', 'wisdom']
+  },
+  motivation: {
+    type: String,
+    default: 'normal',
+    enum: ['low', 'normal', 'high', 'max']
+  },
+  currentFans: { type: Number, default: 0 },
+  fanRequirementMet: { type: Boolean, default: true },
+  daysUntilRace: { type: Number, default: -1 },
   startedAt: { type: Date, default: Date.now },
 });
 

@@ -1,0 +1,636 @@
+{
+    "tracks": [
+        {
+            "id": "tokyo_racecourse",
+            "name": "Trường đua Tokyo",
+            "nameEn": "Tokyo Racecourse",
+            "location": "Tokyo, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "left",
+            "trackLength": 2000,
+            "description": "Trường đua lớn nhất Nhật Bản, nổi tiếng với các giải đua G1",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 525
+            },
+            "emoji": "🏟️"
+        },
+        {
+            "id": "nakayama_racecourse",
+            "name": "Trường đua Nakayama",
+            "nameEn": "Nakayama Racecourse",
+            "location": "Chiba, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 1600,
+            "description": "Trường đua với địa hình khó khăn, nhiều dốc",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 2,
+                "downhills": 2,
+                "finalStretch": 310
+            },
+            "emoji": "⛰️"
+        },
+        {
+            "id": "hanshin_racecourse",
+            "name": "Trường đua Hanshin",
+            "nameEn": "Hanshin Racecourse",
+            "location": "Hyogo, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 2089,
+            "description": "Trường đua nổi tiếng với đường cong phức tạp",
+            "characteristics": {
+                "corners": 5,
+                "straightaways": 2,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 473
+            },
+            "emoji": "🌸"
+        },
+        {
+            "id": "kyoto_racecourse",
+            "name": "Trường đua Kyoto",
+            "nameEn": "Kyoto Racecourse",
+            "location": "Kyoto, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 1894,
+            "description": "Trường đua với đường thẳng dài, thuận lợi cho tốc độ",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 3,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 404
+            },
+            "emoji": "🏯"
+        },
+        {
+            "id": "chukyo_racecourse",
+            "name": "Trường đua Chukyo",
+            "nameEn": "Chukyo Racecourse",
+            "location": "Aichi, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "left",
+            "trackLength": 2000,
+            "description": "Trường đua hiện đại với sân cỏ chất lượng cao",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 412
+            },
+            "emoji": "🏞️"
+        },
+        {
+            "id": "niigata_racecourse",
+            "name": "Trường đua Niigata",
+            "nameEn": "Niigata Racecourse",
+            "location": "Niigata, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "left",
+            "trackLength": 2000,
+            "description": "Trường đua nổi tiếng với đường thẳng dài nhất Nhật Bản",
+            "characteristics": {
+                "corners": 3,
+                "straightaways": 4,
+                "uphills": 0,
+                "downhills": 0,
+                "finalStretch": 659
+            },
+            "emoji": "🌊"
+        },
+        {
+            "id": "sapporo_racecourse",
+            "name": "Trường đua Sapporo",
+            "nameEn": "Sapporo Racecourse",
+            "location": "Hokkaido, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 1800,
+            "description": "Trường đua miền Bắc, thời tiết mát mẻ",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 266
+            },
+            "emoji": "❄️"
+        },
+        {
+            "id": "hakodate_racecourse",
+            "name": "Trường đua Hakodate",
+            "nameEn": "Hakodate Racecourse",
+            "location": "Hokkaido, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 1626,
+            "description": "Trường đua nhỏ với đường cong chặt",
+            "characteristics": {
+                "corners": 5,
+                "straightaways": 2,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 262
+            },
+            "emoji": "🌲"
+        },
+        {
+            "id": "fukushima_racecourse",
+            "name": "Trường đua Fukushima",
+            "nameEn": "Fukushima Racecourse",
+            "location": "Fukushima, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 1600,
+            "description": "Trường đua với địa hình đồi núi",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 2,
+                "downhills": 1,
+                "finalStretch": 292
+            },
+            "emoji": "🗻"
+        },
+        {
+            "id": "kokura_racecourse",
+            "name": "Trường đua Kokura",
+            "nameEn": "Kokura Racecourse",
+            "location": "Fukuoka, Japan",
+            "surface": "Cỏ",
+            "turnDirection": "right",
+            "trackLength": 1600,
+            "description": "Trường đua miền Nam với khí hậu ấm áp",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 1,
+                "downhills": 1,
+                "finalStretch": 293
+            },
+            "emoji": "🌺"
+        },
+        {
+            "id": "ohi_racecourse",
+            "name": "Trường đua Ohi",
+            "nameEn": "Ohi Racecourse",
+            "location": "Tokyo, Japan",
+            "surface": "Đất",
+            "turnDirection": "left",
+            "trackLength": 1600,
+            "description": "Trường đua đất ban đêm, phong cách độc đáo",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 0,
+                "downhills": 0,
+                "finalStretch": 300
+            },
+            "trackCondition": "standard_dirt",
+            "emoji": "🌃"
+        },
+        {
+            "id": "kawasaki_racecourse",
+            "name": "Trường đua Kawasaki",
+            "nameEn": "Kawasaki Racecourse",
+            "location": "Kanagawa, Japan",
+            "surface": "Đất",
+            "turnDirection": "left",
+            "trackLength": 1400,
+            "description": "Trường đua đất với đường cong chặt",
+            "characteristics": {
+                "corners": 4,
+                "straightaways": 2,
+                "uphills": 0,
+                "downhills": 0,
+                "finalStretch": 280
+            },
+            "trackCondition": "standard_dirt",
+            "emoji": "🏙️"
+        }
+    ],
+    "races": [
+        {
+            "id": "arima_kinen",
+            "name": "Arima Kinen (有馬記念)",
+            "nameEn": "Arima Kinen - Grand Prix",
+            "grade": "G1",
+            "trackId": "tokyo_racecourse",
+            "surface": "Cỏ",
+            "distance": 2400,
+            "difficulty": 10,
+            "season": "fall",
+            "month": 11,
+            "weather": [
+                "Clear",
+                "Rainy"
+            ],
+            "description": "Giải đua quốc tế danh giá nhất Nhật Bản",
+            "requirements": {
+                "minRank": "A",
+                "stamina": "B+",
+                "speed": "A",
+                "fans": 10000
+            },
+            "rewards": {
+                "winner": 1000,
+                "second": 600,
+                "third": 400,
+                "skillPoints": 50,
+                "fans": 2000
+            }
+        },
+        {
+            "id": "tenno_sho_spring",
+            "name": "Tennō Shō (Xuân)",
+            "nameEn": "Tenno Sho (Spring)",
+            "grade": "G1",
+            "trackId": "kyoto_racecourse",
+            "surface": "Cỏ",
+            "distance": 3200,
+            "difficulty": 9,
+            "season": "spring",
+            "month": 4,
+            "weather": [
+                "Clear",
+                "Sunny"
+            ],
+            "description": "Giải đua cự ly dài nhất trong các giải G1",
+            "requirements": {
+                "minRank": "A",
+                "stamina": "A+",
+                "speed": "B+",
+                "fans": 8000
+            },
+            "rewards": {
+                "winner": 900,
+                "second": 540,
+                "third": 360,
+                "skillPoints": 45,
+                "fans": 1800
+            }
+        },
+        {
+            "id": "tenno_sho_autumn",
+            "name": "Tennō Shō (Thu)",
+            "nameEn": "Tenno Sho (Autumn)",
+            "grade": "G1",
+            "trackId": "tokyo_racecourse",
+            "surface": "Cỏ",
+            "distance": 2000,
+            "difficulty": 8,
+            "season": "fall",
+            "month": 10,
+            "weather": [
+                "Clear",
+                "Cloudy"
+            ],
+            "description": "Giải đua G1 mùa thu danh giá",
+            "requirements": {
+                "minRank": "A",
+                "stamina": "B",
+                "speed": "A",
+                "fans": 6000
+            },
+            "rewards": {
+                "winner": 850,
+                "second": 510,
+                "third": 340,
+                "skillPoints": 42,
+                "fans": 1600
+            }
+        },
+        {
+            "id": "tokyo_yushun",
+            "name": "Tokyo Yūshun (Japanese Derby)",
+            "nameEn": "Tokyo Yushun",
+            "grade": "G1",
+            "trackId": "tokyo_racecourse",
+            "surface": "Cỏ",
+            "distance": 2400,
+            "difficulty": 7,
+            "season": "spring",
+            "month": 5,
+            "weather": [
+                "Sunny",
+                "Clear"
+            ],
+            "description": "Derby Nhật Bản - giải đua danh giá cho ngựa 3 tuổi",
+            "requirements": {
+                "minRank": "B+",
+                "stamina": "B+",
+                "speed": "A",
+                "fans": 4500
+            },
+            "rewards": {
+                "winner": 800,
+                "second": 480,
+                "third": 320,
+                "skillPoints": 40,
+                "fans": 1400
+            }
+        },
+        {
+            "id": "kikuka_sho",
+            "name": "Kikuka Shō (St. Lite Kinen)",
+            "nameEn": "Kikuka Sho",
+            "grade": "G1",
+            "trackId": "kyoto_racecourse",
+            "surface": "Cỏ",
+            "distance": 3000,
+            "difficulty": 8,
+            "season": "fall",
+            "month": 10,
+            "weather": [
+                "Clear",
+                "Cloudy"
+            ],
+            "description": "Phần ba của Triple Crown Nhật Bản",
+            "requirements": {
+                "minRank": "B+",
+                "stamina": "A",
+                "speed": "B+",
+                "fans": 6000
+            },
+            "rewards": {
+                "winner": 800,
+                "second": 480,
+                "third": 320,
+                "skillPoints": 40,
+                "fans": 1600
+            }
+        },
+        {
+            "id": "satsuki_sho",
+            "name": "Satsuki Shō (2000 Guineas)",
+            "nameEn": "Satsuki Sho",
+            "grade": "G1",
+            "trackId": "nakayama_racecourse",
+            "surface": "Cỏ",
+            "distance": 2000,
+            "difficulty": 6,
+            "season": "spring",
+            "month": 4,
+            "weather": [
+                "Clear",
+                "Rainy"
+            ],
+            "description": "Phần đầu của Triple Crown Nhật Bản",
+            "requirements": {
+                "minRank": "B",
+                "stamina": "B",
+                "speed": "A",
+                "fans": 3000
+            },
+            "rewards": {
+                "winner": 700,
+                "second": 420,
+                "third": 280,
+                "skillPoints": 35,
+                "fans": 1200
+            }
+        },
+        {
+            "id": "takarazuka_kinen",
+            "name": "Takarazuka Kinen",
+            "grade": "G1",
+            "trackId": "hanshin_racecourse",
+            "surface": "Cỏ",
+            "distance": 2200,
+            "difficulty": 7,
+            "season": "summer",
+            "month": 6,
+            "weather": [
+                "Sunny",
+                "Rainy"
+            ],
+            "description": "Giải đua mùa hè được bầu chọn bởi người hâm mộ",
+            "requirements": {
+                "minRank": "B+",
+                "stamina": "B",
+                "speed": "A",
+                "fans": 4500
+            },
+            "rewards": {
+                "winner": 750,
+                "second": 450,
+                "third": 300,
+                "skillPoints": 38,
+                "fans": 1400
+            }
+        },
+        {
+            "id": "yasuda_kinen",
+            "name": "Yasuda Kinen",
+            "grade": "G1",
+            "trackId": "tokyo_racecourse",
+            "surface": "Cỏ",
+            "distance": 1600,
+            "difficulty": 5,
+            "season": "spring",
+            "month": 6,
+            "weather": [
+                "Clear",
+                "Sunny"
+            ],
+            "description": "Giải đua mile danh giá",
+            "requirements": {
+                "minRank": "B",
+                "stamina": "C",
+                "speed": "A",
+                "fans": 1500
+            },
+            "rewards": {
+                "winner": 650,
+                "second": 390,
+                "third": 260,
+                "skillPoints": 33,
+                "fans": 1000
+            }
+        },
+        {
+            "id": "mile_championship",
+            "name": "Mile Championship",
+            "grade": "G1",
+            "trackId": "kyoto_racecourse",
+            "surface": "Cỏ",
+            "distance": 1600,
+            "difficulty": 5,
+            "season": "fall",
+            "month": 11,
+            "weather": [
+                "Clear",
+                "Cloudy"
+            ],
+            "description": "Giải vô địch mile mùa thu",
+            "requirements": {
+                "minRank": "B",
+                "stamina": "C",
+                "speed": "A",
+                "fans": 1500
+            },
+            "rewards": {
+                "winner": 650,
+                "second": 390,
+                "third": 260,
+                "skillPoints": 33,
+                "fans": 1000
+            }
+        },
+        {
+            "id": "sprinters_stakes",
+            "name": "Sprinters Stakes",
+            "grade": "G1",
+            "trackId": "nakayama_racecourse",
+            "surface": "Cỏ",
+            "distance": 1200,
+            "difficulty": 4,
+            "season": "fall",
+            "month": 9,
+            "weather": [
+                "Clear",
+                "Sunny"
+            ],
+            "description": "Giải đua sprint ngắn nhất G1",
+            "requirements": {
+                "minRank": "B",
+                "stamina": "D",
+                "speed": "A+",
+                "fans": 500
+            },
+            "rewards": {
+                "winner": 600,
+                "second": 360,
+                "third": 240,
+                "skillPoints": 30,
+                "fans": 800
+            }
+        },
+        {
+            "id": "champions_cup",
+            "name": "Champions Cup",
+            "grade": "G1",
+            "trackId": "chukyo_racecourse",
+            "surface": "Đất",
+            "distance": 1800,
+            "difficulty": 6,
+            "season": "winter",
+            "month": 12,
+            "weather": [
+                "Clear",
+                "Cloudy"
+            ],
+            "description": "Giải đua đất danh giá nhất",
+            "requirements": {
+                "minRank": "B+",
+                "stamina": "B",
+                "speed": "A",
+                "fans": 3000
+            },
+            "rewards": {
+                "winner": 750,
+                "second": 450,
+                "third": 300,
+                "skillPoints": 38,
+                "fans": 1200
+            }
+        },
+        {
+            "id": "february_stakes",
+            "name": "February Stakes",
+            "grade": "G1",
+            "trackId": "tokyo_racecourse",
+            "surface": "Đất",
+            "distance": 1600,
+            "difficulty": 4,
+            "season": "winter",
+            "month": 2,
+            "weather": [
+                "Clear",
+                "Snowy"
+            ],
+            "description": "Giải đua đất đầu năm",
+            "requirements": {
+                "minRank": "B",
+                "stamina": "C",
+                "speed": "B+",
+                "fans": 500
+            },
+            "rewards": {
+                "winner": 600,
+                "second": 360,
+                "third": 240,
+                "skillPoints": 30,
+                "fans": 800
+            }
+        },
+        {
+            "id": "osaka_hai",
+            "name": "Osaka Hai",
+            "grade": "G1",
+            "trackId": "hanshin_racecourse",
+            "surface": "Cỏ",
+            "distance": 2000,
+            "difficulty": 7,
+            "season": "spring",
+            "month": 3,
+            "weather": [
+                "Clear",
+                "Foggy"
+            ],
+            "description": "Giải đua mở màn mùa xuân",
+            "requirements": {
+                "minRank": "B+",
+                "stamina": "B",
+                "speed": "A",
+                "fans": 4500
+            },
+            "rewards": {
+                "winner": 750,
+                "second": 450,
+                "third": 300,
+                "skillPoints": 38,
+                "fans": 1400
+            }
+        },
+        {
+            "id": "victoria_mile",
+            "name": "Victoria Mile",
+            "grade": "G1",
+            "trackId": "tokyo_racecourse",
+            "surface": "Cỏ",
+            "distance": 1600,
+            "difficulty": 5,
+            "season": "spring",
+            "month": 5,
+            "weather": [
+                "Sunny",
+                "Clear"
+            ],
+            "description": "Giải đua mile dành riêng cho nữ ngựa",
+            "requirements": {
+                "minRank": "B",
+                "stamina": "C",
+                "speed": "A",
+                "fans": 1500
+            },
+            "rewards": {
+                "winner": 650,
+                "second": 390,
+                "third": 260,
+                "skillPoints": 33,
+                "fans": 1000
+            }
+        }
+    ]
+}

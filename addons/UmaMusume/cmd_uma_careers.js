@@ -4,6 +4,8 @@ const UmaCareer = require('./schemas/UmaCareer');
 const EconomyUserData = require('../../models/EconomyUserData');
 const allSkills = require('./skills.json').skills;
 const { formatTrackPreferences } = require('./umaUtilsNew');
+const fansSystem = require('./fansSystem');
+const tracksAndRaces = require('./tracksAndRaces.json');
 
 const moodEmojis = {
   Worst: '😰',
@@ -35,15 +37,15 @@ const racesList = [
 ];
 
 const weatherEffects = {
-    'Clear': { emoji: '☀️', description: 'Thời tiết đẹp, không ảnh hưởng.' },
-    'Sunny': { emoji: '☀️', description: 'Trời nắng đẹp, một chút lợi thế cho Speed.' },
-    'Rainy': { emoji: '🌧️', description: 'Trời mưa, đường đua trơn trượt, ảnh hưởng Power.' },
-    'Foggy': { emoji: '🌫️', description: 'Sương mù dày đặc, khó đoán định.' },
-    'Snowy': { emoji: '❄️', description: 'Tuyết rơi, đường đua cực khó, ảnh hưởng lớn đến Speed.' }
+  'Clear': { emoji: '☀️', description: 'Thời tiết đẹp, không ảnh hưởng.' },
+  'Sunny': { emoji: '☀️', description: 'Trời nắng đẹp, một chút lợi thế cho Speed.' },
+  'Rainy': { emoji: '🌧️', description: 'Trời mưa, đường đua trơn trượt, ảnh hưởng Power.' },
+  'Foggy': { emoji: '🌫️', description: 'Sương mù dày đặc, khó đoán định.' },
+  'Snowy': { emoji: '❄️', description: 'Tuyết rơi, đường đua cực khó, ảnh hưởng lớn đến Speed.' }
 };
 
 function getMoodSuccessRate(mood) {
-  switch(mood) {
+  switch (mood) {
     case 'Worst': return { min: 60, max: 90 };
     case 'Bad': return { min: 40, max: 70 };
     case 'Normal': return { min: 95, max: 99 };
@@ -56,7 +58,7 @@ function getMoodSuccessRate(mood) {
 function calculateMoodChange(currentMood, action, success = true, weather = 'Clear') {
   const moods = ['Worst', 'Bad', 'Normal', 'Good', 'Great'];
   const currentIndex = moods.indexOf(currentMood);
-  
+
   if (action === 'rest') {
     const chance = Math.random();
     if (chance < 0.4 && currentIndex < moods.length - 1) {
@@ -64,7 +66,7 @@ function calculateMoodChange(currentMood, action, success = true, weather = 'Cle
     }
     return currentMood;
   }
-  
+
   if (action === 'training') {
     if (success) {
       const chance = Math.random();
@@ -78,74 +80,74 @@ function calculateMoodChange(currentMood, action, success = true, weather = 'Cle
       }
     }
   }
-  
+
   if (action.startsWith('race')) {
-      let moodChangeChance = 0;
-      if (action === 'race_win') {
-          moodChangeChance = 0.5;
-          if (weather === 'Sunny') moodChangeChance += 0.1;
-          if (Math.random() < moodChangeChance && currentIndex < moods.length - 1) return moods[currentIndex + 1];
-      } else { // race_lose
-          moodChangeChance = 0.3;
-          if (weather === 'Rainy' || weather === 'Snowy') moodChangeChance += 0.15;
-          if (Math.random() < moodChangeChance && currentIndex > 0) return moods[currentIndex - 1];
-      }
+    let moodChangeChance = 0;
+    if (action === 'race_win') {
+      moodChangeChance = 0.5;
+      if (weather === 'Sunny') moodChangeChance += 0.1;
+      if (Math.random() < moodChangeChance && currentIndex < moods.length - 1) return moods[currentIndex + 1];
+    } else { // race_lose
+      moodChangeChance = 0.3;
+      if (weather === 'Rainy' || weather === 'Snowy') moodChangeChance += 0.15;
+      if (Math.random() < moodChangeChance && currentIndex > 0) return moods[currentIndex - 1];
+    }
   }
-  
+
   return currentMood;
 }
 
 function simulateRace(umaStats, race) {
   const totalStats = Object.values(umaStats).reduce((a, b) => a + b, 0);
-  
+
   let umaScore = totalStats;
-  
+
   if (race.type === 'Sprint') umaScore += umaStats.speed * 0.3;
   else if (race.type === 'Medium') umaScore += umaStats.stamina * 0.2 + umaStats.speed * 0.1;
   else if (race.type === 'Long') umaScore += umaStats.stamina * 0.3 + umaStats.guts * 0.2;
 
   // Weather effects
   switch (race.weather) {
-      case 'Sunny':
-          umaScore *= 1.05; // 5% bonus
-          break;
-      case 'Rainy':
-          umaScore *= 0.95; // 5% penalty
-          break;
-      case 'Foggy':
-          umaScore *= (0.9 + Math.random() * 0.2); // Higher variance
-          break;
-      case 'Snowy':
-          umaScore *= 0.9; // 10% penalty
-          umaScore += umaStats.guts * 0.1; // Guts help in harsh conditions
-          break;
+    case 'Sunny':
+      umaScore *= 1.05; // 5% bonus
+      break;
+    case 'Rainy':
+      umaScore *= 0.95; // 5% penalty
+      break;
+    case 'Foggy':
+      umaScore *= (0.9 + Math.random() * 0.2); // Higher variance
+      break;
+    case 'Snowy':
+      umaScore *= 0.9; // 10% penalty
+      umaScore += umaStats.guts * 0.1; // Guts help in harsh conditions
+      break;
   }
-  
+
   umaScore = umaScore * (0.9 + Math.random() * 0.2);
-  
+
   const numBots = 5 + Math.floor(Math.random() * 4);
   const botScores = [];
-  
+
   for (let i = 0; i < numBots; i++) {
     const botBase = totalStats * (0.8 + Math.random() * 0.4);
     let botScore = botBase * (0.9 + Math.random() * 0.2) * (1 + race.difficulty * 0.05);
     if (race.weather === 'Foggy') {
-        botScore *= (0.8 + Math.random() * 0.4);
+      botScore *= (0.8 + Math.random() * 0.4);
     }
     botScores.push(botScore);
   }
-  
+
   botScores.push(umaScore);
   botScores.sort((a, b) => b - a);
-  
+
   const position = botScores.indexOf(umaScore) + 1;
   const totalRacers = botScores.length;
-  
+
   let reward = 0;
   if (position === 1) reward = 500 + race.difficulty * 100;
   else if (position === 2) reward = 300 + race.difficulty * 50;
   else if (position === 3) reward = 150 + race.difficulty * 30;
-  
+
   return {
     position,
     totalRacers,
@@ -160,11 +162,11 @@ function effectiveSkillCost(skill, umaPrefs) {
   try {
     const cond = (skill.effects?.condition || '').toLowerCase();
     let match = false;
-    if (cond.includes('sprint')) match = ['A','A+','S'].includes(umaPrefs?.sprint);
-    else if (cond.includes('long')) match = ['A','A+','S'].includes(umaPrefs?.long);
-    else if (cond.includes('mile')) match = ['A','A+','S'].includes(umaPrefs?.mile);
-    else if (cond.includes('medium')) match = ['A','A+','S'].includes(umaPrefs?.medium);
-    else if (cond.includes('right_turn') || cond.includes('corner')) match = ['A','A+','S'].includes(umaPrefs?.stalker) || ['A','A+','S'].includes(umaPrefs?.front);
+    if (cond.includes('sprint')) match = ['A', 'A+', 'S'].includes(umaPrefs?.sprint);
+    else if (cond.includes('long')) match = ['A', 'A+', 'S'].includes(umaPrefs?.long);
+    else if (cond.includes('mile')) match = ['A', 'A+', 'S'].includes(umaPrefs?.mile);
+    else if (cond.includes('medium')) match = ['A', 'A+', 'S'].includes(umaPrefs?.medium);
+    else if (cond.includes('right_turn') || cond.includes('corner')) match = ['A', 'A+', 'S'].includes(umaPrefs?.stalker) || ['A', 'A+', 'S'].includes(umaPrefs?.front);
     // Season synergy
     if (!match && skill.effects?.season) match = true; // allow seasonal discount to encourage use
     const base = skill.cost || 0;
@@ -194,8 +196,8 @@ async function showMainMenu(interaction, career, uma) {
   if (career.supportCards && career.supportCards.length > 0) {
     const scList = career.supportCards.map(c => `${c.name} (${c.rarity})`).join(' | ');
     const boosts = Object.entries(career.supportSummary || {})
-      .filter(([_,v]) => v>0)
-      .map(([k,v]) => `${k.toUpperCase()} +${v}%`).join(' ');
+      .filter(([_, v]) => v > 0)
+      .map(([k, v]) => `${k.toUpperCase()} +${v}%`).join(' ');
     description += `\n\n**Support Cards:** ${scList}\n**Support Boost:** ${boosts || '—'}`;
   }
 
@@ -206,39 +208,39 @@ async function showMainMenu(interaction, career, uma) {
     .setTimestamp();
 
   const row = new ActionRowBuilder();
-  
+
   if (career.currentDay >= currentTotalDays) {
     embed.setTitle(`🏆 Chế độ Careers - Sẵn sàng đua!`);
     row.addComponents(
-        new ButtonBuilder()
-            .setCustomId('career_race')
-            .setLabel('🏁 Tham gia cuộc đua!')
-            .setStyle(ButtonStyle.Success),
-        new ButtonBuilder()
-            .setCustomId('career_end')
-            .setLabel('🚪 Kết thúc Careers')
-            .setStyle(ButtonStyle.Danger)
+      new ButtonBuilder()
+        .setCustomId('career_race')
+        .setLabel('🏁 Tham gia cuộc đua!')
+        .setStyle(ButtonStyle.Success),
+      new ButtonBuilder()
+        .setCustomId('career_end')
+        .setLabel('🚪 Kết thúc Careers')
+        .setStyle(ButtonStyle.Danger)
     );
   } else {
     embed.setTitle(`🏆 Chế độ Careers - Đang huấn luyện`);
     row.addComponents(
-        new ButtonBuilder()
-            .setCustomId('career_rest')
-            .setLabel('💤 Nghỉ ngơi')
-            .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-            .setCustomId('career_training')
-            .setLabel('🏋️ Luyện tập')
-            .setStyle(ButtonStyle.Success)
-            .setDisabled(career.energy < 20),
-        new ButtonBuilder()
-            .setCustomId('career_skills')
-            .setLabel('✨ Skills Hỗ trợ')
-            .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-            .setCustomId('career_end')
-            .setLabel('🚪 Kết thúc Careers')
-            .setStyle(ButtonStyle.Danger)
+      new ButtonBuilder()
+        .setCustomId('career_rest')
+        .setLabel('💤 Nghỉ ngơi')
+        .setStyle(ButtonStyle.Primary),
+      new ButtonBuilder()
+        .setCustomId('career_training')
+        .setLabel('🏋️ Luyện tập')
+        .setStyle(ButtonStyle.Success)
+        .setDisabled(career.energy < 20),
+      new ButtonBuilder()
+        .setCustomId('career_skills')
+        .setLabel('✨ Skills Hỗ trợ')
+        .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId('career_end')
+        .setLabel('🚪 Kết thúc Careers')
+        .setStyle(ButtonStyle.Danger)
     );
   }
 
@@ -254,7 +256,7 @@ async function showMainMenu(interaction, career, uma) {
 
 async function showTrainingMenu(interaction, career) {
   const successRate = getMoodSuccessRate(career.mood);
-  
+
   const embed = new EmbedBuilder()
     .setColor(moodColors[career.mood])
     .setTitle('🏋️ Chế độ Luyện tập')
@@ -311,70 +313,70 @@ async function showTrainingMenu(interaction, career) {
 }
 
 async function showSkillsMenu(interaction, career) {
-    const embed = new EmbedBuilder()
-        .setColor(0x00FF00)
-        .setTitle('✨ Skills Hỗ trợ')
-        .setDescription(`**Kỹ năng của bạn:**\n${career.skills.length > 0 ? career.skills.map((s, i) => `• ${s.name} (${s.rarity})`).join('\n') : 'Chưa có kỹ năng nào.'}\n\n` +
-            `**Điểm Kỹ năng (SP):** ${career.skillPoints || 0}\n\n` +
-            `Bạn có thể mua kỹ năng mới từ shop!`);
+  const embed = new EmbedBuilder()
+    .setColor(0x00FF00)
+    .setTitle('✨ Skills Hỗ trợ')
+    .setDescription(`**Kỹ năng của bạn:**\n${career.skills.length > 0 ? career.skills.map((s, i) => `• ${s.name} (${s.rarity})`).join('\n') : 'Chưa có kỹ năng nào.'}\n\n` +
+      `**Điểm Kỹ năng (SP):** ${career.skillPoints || 0}\n\n` +
+      `Bạn có thể mua kỹ năng mới từ shop!`);
 
-    const row = new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
-                .setCustomId('skill_shop')
-                .setLabel('🛒 Mua Skill')
-                .setStyle(ButtonStyle.Success),
-            new ButtonBuilder()
-                .setCustomId('career_back')
-                .setLabel('◀️ Quay lại')
-                .setStyle(ButtonStyle.Secondary)
-        );
+  const row = new ActionRowBuilder()
+    .addComponents(
+      new ButtonBuilder()
+        .setCustomId('skill_shop')
+        .setLabel('🛒 Mua Skill')
+        .setStyle(ButtonStyle.Success),
+      new ButtonBuilder()
+        .setCustomId('career_back')
+        .setLabel('◀️ Quay lại')
+        .setStyle(ButtonStyle.Secondary)
+    );
 
-    return { embeds: [embed], components: [row] };
+  return { embeds: [embed], components: [row] };
 }
 
 async function showSkillShopMenu(interaction, career) {
-    const ownedSkillNames = new Set(career.skills.map(s => s.name));
-    const availableSkills = allSkills.filter(s => !ownedSkillNames.has(s.name));
+  const ownedSkillNames = new Set(career.skills.map(s => s.name));
+  const availableSkills = allSkills.filter(s => !ownedSkillNames.has(s.name));
 
-    const embed = new EmbedBuilder()
-        .setColor(0x0099FF)
-        .setTitle('🛒 Cửa hàng Kỹ năng')
-        .setDescription(`**Điểm Kỹ năng (SP) của bạn:** ${career.skillPoints || 0}\n\nChọn kỹ năng để mua từ danh sách bên dưới.`);
+  const embed = new EmbedBuilder()
+    .setColor(0x0099FF)
+    .setTitle('🛒 Cửa hàng Kỹ năng')
+    .setDescription(`**Điểm Kỹ năng (SP) của bạn:** ${career.skillPoints || 0}\n\nChọn kỹ năng để mua từ danh sách bên dưới.`);
 
-    const components = [];
-    const rarities = ['Common', 'Rare', 'Gold'];
+  const components = [];
+  const rarities = ['Common', 'Rare', 'Gold'];
 
-    rarities.forEach(rarity => {
-        const skillsOfRarity = availableSkills.filter(s => s.rarity === rarity);
-        if (skillsOfRarity.length > 0) {
-            const selectMenu = new StringSelectMenuBuilder()
-                .setCustomId(`career_skill_purchase_${rarity.toLowerCase()}`)
-                .setPlaceholder(`Chọn kỹ năng ${rarity} để mua...`);
+  rarities.forEach(rarity => {
+    const skillsOfRarity = availableSkills.filter(s => s.rarity === rarity);
+    if (skillsOfRarity.length > 0) {
+      const selectMenu = new StringSelectMenuBuilder()
+        .setCustomId(`career_skill_purchase_${rarity.toLowerCase()}`)
+        .setPlaceholder(`Chọn kỹ năng ${rarity} để mua...`);
 
-            skillsOfRarity.slice(0, 25).forEach(skill => {
-                selectMenu.addOptions({
-                    label: `${skill.name}`,
-                    description: `Giá: ${skill.cost} SP - ${skill.description.substring(0, 50)}...`,
-                    value: skill.name,
-                });
-            });
-            components.push(new ActionRowBuilder().addComponents(selectMenu));
-        }
-    });
-
-    if (components.length === 0) {
-        embed.setDescription('Bạn đã học tất cả các kỹ năng có sẵn hoặc không có kỹ năng nào trong cửa hàng!');
+      skillsOfRarity.slice(0, 25).forEach(skill => {
+        selectMenu.addOptions({
+          label: `${skill.name}`,
+          description: `Giá: ${skill.cost} SP - ${skill.description.substring(0, 50)}...`,
+          value: skill.name,
+        });
+      });
+      components.push(new ActionRowBuilder().addComponents(selectMenu));
     }
-    
-    components.push(new ActionRowBuilder().addComponents(
-        new ButtonBuilder()
-            .setCustomId('career_back')
-            .setLabel('◀️ Quay lại')
-            .setStyle(ButtonStyle.Secondary)
-    ));
+  });
 
-    return { embeds: [embed], components: components };
+  if (components.length === 0) {
+    embed.setDescription('Bạn đã học tất cả các kỹ năng có sẵn hoặc không có kỹ năng nào trong cửa hàng!');
+  }
+
+  components.push(new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId('career_back')
+      .setLabel('◀️ Quay lại')
+      .setStyle(ButtonStyle.Secondary)
+  ));
+
+  return { embeds: [embed], components: components };
 }
 
 module.exports = {
@@ -399,7 +401,7 @@ module.exports = {
 
       // Check if user has any Uma
       const userUmas = await UmaMusume.find({ ownerId: userId, retired: false }).limit(25);
-      
+
       if (userUmas.length === 0) {
         const noUmaEmbed = new EmbedBuilder()
           .setColor(0xFF0000)
@@ -407,9 +409,9 @@ module.exports = {
           .setDescription('Bạn chưa có mã nương nào! Hãy dùng `/uma gacha` để bắt đầu.')
           .setFooter({ text: 'Uma Musume Careers' })
           .setTimestamp();
-        return interaction.reply({ 
-          embeds: [noUmaEmbed], 
-          ephemeral: true 
+        return interaction.reply({
+          embeds: [noUmaEmbed],
+          ephemeral: true
         });
       }
 
@@ -422,9 +424,9 @@ module.exports = {
           .setDescription('Bạn đã có một Career đang hoạt động! Hãy hoàn thành hoặc kết thúc nó trước khi bắt đầu một career mới.')
           .setFooter({ text: 'Uma Musume Careers' })
           .setTimestamp();
-        return interaction.reply({ 
-          embeds: [activeCareerEmbed], 
-          ephemeral: true 
+        return interaction.reply({
+          embeds: [activeCareerEmbed],
+          ephemeral: true
         });
       }
 
@@ -491,10 +493,10 @@ module.exports = {
 async function handleUmaSelection(interaction, umaId, userId) {
   const uma = await UmaMusume.findById(umaId);
   if (!uma || uma.ownerId !== userId) {
-    return interaction.update({ 
-      content: '❌ Không tìm thấy mã nương này hoặc không thuộc sở hữu của bạn.', 
-      components: [], 
-      embeds: [] 
+    return interaction.update({
+      content: '❌ Không tìm thấy mã nương này hoặc không thuộc sở hữu của bạn.',
+      components: [],
+      embeds: []
     });
   }
 
@@ -504,10 +506,10 @@ async function handleUmaSelection(interaction, umaId, userId) {
   try {
     const UserSupportCard = require('./schemas/SupportCard');
     const all = await UserSupportCard.find({ userId }).limit(50);
-    const scoreRarity = (r) => r==='SSR'?3 : r==='SR'?2 : 1;
+    const scoreRarity = (r) => r === 'SSR' ? 3 : r === 'SR' ? 2 : 1;
     supportCards = all
-      .sort((a,b)=> scoreRarity(b.rarity)-scoreRarity(a.rarity))
-      .slice(0,2)
+      .sort((a, b) => scoreRarity(b.rarity) - scoreRarity(a.rarity))
+      .slice(0, 2)
       .map(c => ({
         cardId: c.cardId,
         name: c.name,
@@ -515,11 +517,11 @@ async function handleUmaSelection(interaction, umaId, userId) {
         type: c.type,
         trainingBoost: c.trainingBoost || {}
       }));
-  } catch {}
-  const supportSummary = ['speed','stamina','power','guts','wisdom','wit'].reduce((acc,k)=>{acc[k]=0; return acc;},{});
-  supportCards.forEach(c=>{
-    for (const [k,v] of Object.entries(c.trainingBoost||{})) {
-      supportSummary[k] = Math.min(40, (supportSummary[k]||0) + (v||0));
+  } catch { }
+  const supportSummary = ['speed', 'stamina', 'power', 'guts', 'wisdom', 'wit'].reduce((acc, k) => { acc[k] = 0; return acc; }, {});
+  supportCards.forEach(c => {
+    for (const [k, v] of Object.entries(c.trainingBoost || {})) {
+      supportSummary[k] = Math.min(40, (supportSummary[k] || 0) + (v || 0));
     }
   });
 
@@ -554,16 +556,16 @@ async function handleUmaSelection(interaction, umaId, userId) {
 
 async function endCareer(interaction, career, uma) {
   const totalStats = Object.values(career.careerStats).reduce((a, b) => a + b, 0);
-  
+
   uma.stats.speed += career.careerStats.speed;
   uma.stats.stamina += career.careerStats.stamina;
   uma.stats.power += career.careerStats.power;
   uma.stats.guts += career.careerStats.guts;
   uma.stats.wit += career.careerStats.wisdom;
-  
+
   const bonusSP = Math.floor(totalStats / 5);
   uma.skillPoints += (career.skillPoints + bonusSP);
-  
+
   await uma.save();
 
   career.isActive = false;
@@ -639,56 +641,56 @@ async function startFinalChallengeRace(interaction, career, uma) {
 }
 
 async function runRaceAnimation(interaction, uma, race, result) {
-    const trackLength = 30;
-    const numFrames = 5;
-    const playerIcon = '🏇';
-    const botIcon = '🐴';
+  const trackLength = 30;
+  const numFrames = 5;
+  const playerIcon = '🏇';
+  const botIcon = '🐴';
 
-    const racers = [{ name: uma.name, icon: playerIcon, pos: 0, finalPos: result.position }];
-    for (let i = 0; i < result.totalRacers - 1; i++) {
-        racers.push({ name: `Bot ${i+1}`, icon: botIcon, pos: 0, finalPos: -1 }); // Final pos -1 for bots for now
+  const racers = [{ name: uma.name, icon: playerIcon, pos: 0, finalPos: result.position }];
+  for (let i = 0; i < result.totalRacers - 1; i++) {
+    racers.push({ name: `Bot ${i + 1}`, icon: botIcon, pos: 0, finalPos: -1 }); // Final pos -1 for bots for now
+  }
+
+  const raceEmbed = new EmbedBuilder()
+    .setColor(0x0099ff)
+    .setTitle(`🏁 ${race.name}`)
+    .setDescription(`Thời tiết: ${weatherEffects[race.weather].emoji} ${weatherEffects[race.weather].description}\nCuộc đua bắt đầu!`)
+    .setTimestamp();
+
+  let raceTrack = racers.map(r => `[${r.icon}]` + '─'.repeat(trackLength)).join('\n');
+  raceEmbed.addFields({ name: 'Đường đua', value: raceTrack });
+
+  await interaction.editReply({ embeds: [raceEmbed], components: [] });
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  for (let frame = 1; frame <= numFrames; frame++) {
+    let descriptionText = `Cuộc đua đang diễn ra... Vòng ${frame}/${numFrames}`;
+    if (frame === numFrames) {
+      descriptionText = "Về đích!";
     }
 
-    const raceEmbed = new EmbedBuilder()
-        .setColor(0x0099ff)
-        .setTitle(`🏁 ${race.name}`)
-        .setDescription(`Thời tiết: ${weatherEffects[race.weather].emoji} ${weatherEffects[race.weather].description}\nCuộc đua bắt đầu!`)
-        .setTimestamp();
+    raceTrack = '';
+    racers.forEach(r => {
+      // Simple animation logic
+      const advance = Math.random() * (trackLength / numFrames);
+      r.pos += advance;
+      if (r.pos > trackLength) r.pos = trackLength;
 
-    let raceTrack = racers.map(r => `[${r.icon}]` + '─'.repeat(trackLength)).join('\n');
-    raceEmbed.addFields({ name: 'Đường đua', value: raceTrack });
-    
-    await interaction.editReply({ embeds: [raceEmbed], components: [] });
-    await new Promise(resolve => setTimeout(resolve, 2000));
+      const trackProgress = '─'.repeat(Math.floor(r.pos));
+      const remainingTrack = '─'.repeat(trackLength - Math.floor(r.pos));
+      raceTrack += `[${r.icon}]${trackProgress}🏁${remainingTrack}\n`;
+    });
 
-    for (let frame = 1; frame <= numFrames; frame++) {
-        let descriptionText = `Cuộc đua đang diễn ra... Vòng ${frame}/${numFrames}`;
-        if (frame === numFrames) {
-            descriptionText = "Về đích!";
-        }
+    const updatedEmbed = new EmbedBuilder()
+      .setColor(0x0099ff)
+      .setTitle(`🏁 ${race.name}`)
+      .setDescription(`Thời tiết: ${weatherEffects[race.weather].emoji} ${weatherEffects[race.weather].description}\n${descriptionText}`)
+      .addFields({ name: 'Đường đua', value: raceTrack })
+      .setTimestamp();
 
-        raceTrack = '';
-        racers.forEach(r => {
-            // Simple animation logic
-            const advance = Math.random() * (trackLength / numFrames);
-            r.pos += advance;
-            if (r.pos > trackLength) r.pos = trackLength;
-
-            const trackProgress = '─'.repeat(Math.floor(r.pos));
-            const remainingTrack = '─'.repeat(trackLength - Math.floor(r.pos));
-            raceTrack += `[${r.icon}]${trackProgress}🏁${remainingTrack}\n`;
-        });
-
-        const updatedEmbed = new EmbedBuilder()
-            .setColor(0x0099ff)
-            .setTitle(`🏁 ${race.name}`)
-            .setDescription(`Thời tiết: ${weatherEffects[race.weather].emoji} ${weatherEffects[race.weather].description}\n${descriptionText}`)
-            .addFields({ name: 'Đường đua', value: raceTrack })
-            .setTimestamp();
-        
-        await interaction.editReply({ embeds: [updatedEmbed] });
-        await new Promise(resolve => setTimeout(resolve, 1500));
-    }
+    await interaction.editReply({ embeds: [updatedEmbed] });
+    await new Promise(resolve => setTimeout(resolve, 1500));
+  }
 }
 
 // Create a new career with a chosen support card (or none)
@@ -698,7 +700,7 @@ async function createCareerWithSupport(interaction, userId, umaIdOrDoc, supportD
   if (!uma || uma.ownerId !== userId) {
     return interaction.update({ content: 'Không tìm thấy Uma hợp lệ.', components: [], embeds: [] });
   }
-  const supportSummary = { speed:0, stamina:0, power:0, guts:0, wisdom:0, wit:0 };
+  const supportSummary = { speed: 0, stamina: 0, power: 0, guts: 0, wisdom: 0, wit: 0 };
   const supportCards = [];
   if (Array.isArray(supportDocs) && supportDocs.length) {
     const max = Math.min(6, supportDocs.length);
@@ -711,8 +713,8 @@ async function createCareerWithSupport(interaction, userId, umaIdOrDoc, supportD
         type: sd.type,
         trainingBoost: sd.trainingBoost || {}
       });
-      for (const [k,v] of Object.entries(sd.trainingBoost || {})) {
-        supportSummary[k] = Math.min(40, (supportSummary[k]||0) + (v||0));
+      for (const [k, v] of Object.entries(sd.trainingBoost || {})) {
+        supportSummary[k] = Math.min(40, (supportSummary[k] || 0) + (v || 0));
       }
     }
   }
@@ -731,7 +733,8 @@ async function createCareerWithSupport(interaction, userId, umaIdOrDoc, supportD
     supportSummary,
     skillPoints: 50,
     raceResults: [],
-    totalWins: 0
+    totalWins: 0,
+    currentFans: 500
   });
   await career.save();
   const menuData = await showMainMenu(interaction, career, uma);
@@ -741,33 +744,33 @@ async function createCareerWithSupport(interaction, userId, umaIdOrDoc, supportD
 // Handle career button interactions
 async function handleCareerInteraction(interaction) {
   const userId = interaction.user.id;
-  
+
   try {
     await interaction.deferUpdate();
 
     let career = await UmaCareer.findOne({ userId, isActive: true });
     if (!career) {
-      return interaction.editReply({ 
-        content: '❌ Bạn không có career nào đang hoạt động!', 
+      return interaction.editReply({
+        content: '❌ Bạn không có career nào đang hoạt động!',
         embeds: [], components: []
       });
     }
 
     const uma = await UmaMusume.findById(career.umaId);
     if (!uma) {
-      return interaction.editReply({ 
-        content: '❌ Không tìm thấy mã nương!', 
+      return interaction.editReply({
+        content: '❌ Không tìm thấy mã nương!',
         embeds: [], components: []
       });
     }
-    
+
     if (interaction.customId === 'career_rest') {
       career.energy = Math.min(100, career.energy + 20);
       career.currentDay += 1;
-      
+
       const oldMood = career.mood;
       career.mood = calculateMoodChange(career.mood, 'rest');
-      
+
       await career.save();
 
       const nextRace = racesList[career.currentRace];
@@ -782,15 +785,15 @@ async function handleCareerInteraction(interaction) {
         .setTimestamp();
 
       await interaction.editReply({ embeds: [embed], components: [] });
-      
+
       setTimeout(async () => {
         try {
-            const latestCareer = await UmaCareer.findOne({ userId, isActive: true });
-            if (!latestCareer) return;
-            const menuData = await showMainMenu(interaction, latestCareer, uma);
-            await interaction.editReply(menuData);
-        } catch(e) {
-            if (e.code !== 10008) console.error("Error in career_rest timeout:", e);
+          const latestCareer = await UmaCareer.findOne({ userId, isActive: true });
+          if (!latestCareer) return;
+          const menuData = await showMainMenu(interaction, latestCareer, uma);
+          await interaction.editReply(menuData);
+        } catch (e) {
+          if (e.code !== 10008) console.error("Error in career_rest timeout:", e);
         }
       }, 2000);
 
@@ -802,16 +805,16 @@ async function handleCareerInteraction(interaction) {
       await interaction.editReply(menuData);
 
     } else if (interaction.customId === 'career_skills') {
-        const menuData = await showSkillsMenu(interaction, career);
-        await interaction.editReply(menuData);
+      const menuData = await showSkillsMenu(interaction, career);
+      await interaction.editReply(menuData);
 
     } else if (interaction.customId === 'skill_shop') {
-        const menuData = await showSkillShopMenu(interaction, career);
-        await interaction.editReply(menuData);
+      const menuData = await showSkillShopMenu(interaction, career);
+      await interaction.editReply(menuData);
 
     } else if (interaction.customId.startsWith('train_')) {
       const stat = interaction.customId.replace('train_', '');
-      
+
       career.energy -= 20;
       career.currentDay += 1;
 
@@ -857,13 +860,13 @@ async function handleCareerInteraction(interaction) {
           // Physical training has a chance to decrease mood, especially with low energy
           let moodDropChance = 0.05; // 5% base chance
           if (career.energy < 40) {
-              moodDropChance += 0.03 + Math.random() * 0.04; // Add 3-7%
+            moodDropChance += 0.03 + Math.random() * 0.04; // Add 3-7%
           }
           if (Math.random() < moodDropChance) {
-              const currentIndex = moods.indexOf(career.mood);
-              if (currentIndex > 0) {
-                  career.mood = moods[currentIndex - 1];
-              }
+            const currentIndex = moods.indexOf(career.mood);
+            if (currentIndex > 0) {
+              career.mood = moods[currentIndex - 1];
+            }
           }
         }
 
@@ -872,7 +875,7 @@ async function handleCareerInteraction(interaction) {
           .setTitle('✅ Luyện tập thành công!')
           .setDescription(`${uma.name} đã luyện tập xuất sắc!\n\n` +
             `📈 **${mapping.mainStat}:** +${mainIncrease} (+${progressionBonus} bonus)\n` +
-            `📈 **${mapping.bonusStat}:** +${bonusIncrease} (+${Math.floor(progressionBonus/2)} bonus)\n` +
+            `📈 **${mapping.bonusStat}:** +${bonusIncrease} (+${Math.floor(progressionBonus / 2)} bonus)\n` +
             (stat === 'wisdom' ? `⚡ **Năng lượng:** +5\n` : '') +
             `🎭 **Mood:** ${moodEmojis[oldMood]} ${oldMood} → ${moodEmojis[career.mood]} ${career.mood}\n` +
             `⚡ **Năng lượng còn lại:** ${career.energy}/100\n` +
@@ -896,54 +899,54 @@ async function handleCareerInteraction(interaction) {
 
       setTimeout(async () => {
         try {
-            const latestCareer = await UmaCareer.findOne({ userId, isActive: true });
-            if (!latestCareer) return;
-            const menuData = await showMainMenu(interaction, latestCareer, uma);
-            await interaction.editReply(menuData);
-        } catch(e) {
-            if (e.code !== 10008) console.error("Error in train_ timeout:", e);
+          const latestCareer = await UmaCareer.findOne({ userId, isActive: true });
+          if (!latestCareer) return;
+          const menuData = await showMainMenu(interaction, latestCareer, uma);
+          await interaction.editReply(menuData);
+        } catch (e) {
+          if (e.code !== 10008) console.error("Error in train_ timeout:", e);
         }
       }, 3000);
 
     } else if (interaction.customId === 'career_race') {
-        const nextRace = racesList[career.currentRace];
-        const currentTotalDays = nextRace.difficulty < 5 ? 12 : 7;
-        if (career.currentDay < currentTotalDays) {
-            return interaction.followUp({ content: `❌ Bạn cần hoàn thành ${currentTotalDays} ngày huấn luyện trước khi đua!`, ephemeral: true });
-        }
-        if (career.currentRace >= career.totalRaces) {
-            return interaction.followUp({ content: '❌ Đã hoàn thành tất cả các cuộc đua!', ephemeral: true });
-        }
+      const nextRace = racesList[career.currentRace];
+      const currentTotalDays = nextRace.difficulty < 5 ? 12 : 7;
+      if (career.currentDay < currentTotalDays) {
+        return interaction.followUp({ content: `❌ Bạn cần hoàn thành ${currentTotalDays} ngày huấn luyện trước khi đua!`, ephemeral: true });
+      }
+      if (career.currentRace >= career.totalRaces) {
+        return interaction.followUp({ content: '❌ Đã hoàn thành tất cả các cuộc đua!', ephemeral: true });
+      }
 
       const race = racesList[career.currentRace];
       const result = simulateRace(career.careerStats, race);
-      
+
       await runRaceAnimation(interaction, uma, race, result);
-      
+
       const oldMood = career.mood;
       career.mood = calculateMoodChange(career.mood, result.isWin ? 'race_win' : 'race_lose', result.isWin, race.weather);
-      
+
       career.raceResults.push({
         raceName: race.name,
         position: result.position,
         totalRacers: result.totalRacers,
         reward: result.reward
       });
-      
+
       if (result.isWin) career.totalWins++;
       if (result.reward > 0) {
-          career.skillPoints += Math.floor(result.reward / 10);
+        career.skillPoints += Math.floor(result.reward / 10);
       }
-      
+
       career.currentRace++;
       career.currentDay = 0; // Reset for next training cycle
-      
+
       await career.save();
-      
+
       if (result.reward > 0) {
         await EconomyUserData.findOneAndUpdate({ userId }, { $inc: { balance: result.reward } });
       }
-      
+
       const positionEmoji = result.position === 1 ? '🥇' : result.position === 2 ? '🥈' : result.position === 3 ? '🥉' : '📍';
       const raceEmbed = new EmbedBuilder()
         .setColor(result.isWin ? 0xFFD700 : result.position <= 3 ? 0xC0C0C0 : 0x808080)
@@ -959,20 +962,20 @@ async function handleCareerInteraction(interaction) {
 
       // We already deferred the update, so we just edit the reply
       await interaction.editReply({ embeds: [raceEmbed], components: [] });
-      
+
       setTimeout(async () => {
         try {
-            const latestCareer = await UmaCareer.findOne({ userId, isActive: true });
-            if (!latestCareer) return;
+          const latestCareer = await UmaCareer.findOne({ userId, isActive: true });
+          if (!latestCareer) return;
 
-            if (latestCareer.currentRace >= latestCareer.totalRaces) {
-              await endCareer(interaction, latestCareer, uma);
-            } else {
-              const menuData = await showMainMenu(interaction, latestCareer, uma);
-              await interaction.editReply(menuData);
-            }
-        } catch(e) {
-            if (e.code !== 10008) console.error("Error in career_race timeout:", e);
+          if (latestCareer.currentRace >= latestCareer.totalRaces) {
+            await endCareer(interaction, latestCareer, uma);
+          } else {
+            const menuData = await showMainMenu(interaction, latestCareer, uma);
+            await interaction.editReply(menuData);
+          }
+        } catch (e) {
+          if (e.code !== 10008) console.error("Error in career_race timeout:", e);
         }
       }, 5000); // Increased timeout to allow for reading the result
 
@@ -992,59 +995,59 @@ async function handleCareerInteraction(interaction) {
   } catch (error) {
     console.error('Error in handleCareerInteraction:', error);
     try {
-        await interaction.followUp({ content: '❌ Đã xảy ra lỗi!', ephemeral: true });
-    } catch(e) {
-        if (e.code !== 10008) console.error("Error sending followup after main error:", e);
+      await interaction.followUp({ content: '❌ Đã xảy ra lỗi!', ephemeral: true });
+    } catch (e) {
+      if (e.code !== 10008) console.error("Error sending followup after main error:", e);
     }
   }
 }
 
 async function handleCareerSkillPurchase(interaction) {
-    const userId = interaction.user.id;
-    const skillName = interaction.values[0];
+  const userId = interaction.user.id;
+  const skillName = interaction.values[0];
 
-    try {
-        await interaction.deferUpdate();
+  try {
+    await interaction.deferUpdate();
 
-        const career = await UmaCareer.findOne({ userId, isActive: true });
-        if (!career) {
-            return interaction.followUp({ content: '❌ Career không hoạt động.', ephemeral: true });
-        }
-
-        const skill = allSkills.find(s => s.name === skillName);
-        if (!skill) {
-            return interaction.followUp({ content: '❌ Không tìm thấy skill này.', ephemeral: true });
-        }
-
-        if ((career.skillPoints || 0) < skill.cost) {
-            return interaction.followUp({ content: `❌ Không đủ SP! Cần ${skill.cost}, bạn có ${career.skillPoints || 0}.`, ephemeral: true });
-        }
-
-        career.skillPoints -= skill.cost;
-        career.skills.push({ name: skill.name, rarity: skill.rarity, cost: skill.cost });
-        await career.save();
-
-        const embed = new EmbedBuilder()
-            .setColor(0x00FF00)
-            .setTitle('✅ Mua thành công!')
-            .setDescription(`Bạn đã học được kỹ năng: **${skill.name}**\n\nSP còn lại: ${career.skillPoints}`)
-            .setTimestamp();
-        
-        await interaction.editReply({ embeds: [embed], components: [] });
-
-        setTimeout(async () => {
-            try {
-                const menuData = await showSkillsMenu(interaction, career);
-                await interaction.editReply(menuData);
-            } catch(e) {
-                if (e.code !== 10008) console.error("Error in handleCareerSkillPurchase timeout:", e);
-            }
-        }, 2000);
-
-    } catch (error) {
-        console.error('Error purchasing skill:', error);
-        await interaction.followUp({ content: '❌ Lỗi khi mua skill.', ephemeral: true });
+    const career = await UmaCareer.findOne({ userId, isActive: true });
+    if (!career) {
+      return interaction.followUp({ content: '❌ Career không hoạt động.', ephemeral: true });
     }
+
+    const skill = allSkills.find(s => s.name === skillName);
+    if (!skill) {
+      return interaction.followUp({ content: '❌ Không tìm thấy skill này.', ephemeral: true });
+    }
+
+    if ((career.skillPoints || 0) < skill.cost) {
+      return interaction.followUp({ content: `❌ Không đủ SP! Cần ${skill.cost}, bạn có ${career.skillPoints || 0}.`, ephemeral: true });
+    }
+
+    career.skillPoints -= skill.cost;
+    career.skills.push({ name: skill.name, rarity: skill.rarity, cost: skill.cost });
+    await career.save();
+
+    const embed = new EmbedBuilder()
+      .setColor(0x00FF00)
+      .setTitle('✅ Mua thành công!')
+      .setDescription(`Bạn đã học được kỹ năng: **${skill.name}**\n\nSP còn lại: ${career.skillPoints}`)
+      .setTimestamp();
+
+    await interaction.editReply({ embeds: [embed], components: [] });
+
+    setTimeout(async () => {
+      try {
+        const menuData = await showSkillsMenu(interaction, career);
+        await interaction.editReply(menuData);
+      } catch (e) {
+        if (e.code !== 10008) console.error("Error in handleCareerSkillPurchase timeout:", e);
+      }
+    }, 2000);
+
+  } catch (error) {
+    console.error('Error purchasing skill:', error);
+    await interaction.followUp({ content: '❌ Lỗi khi mua skill.', ephemeral: true });
+  }
 }
 
 // Export handler functions for interaction handler

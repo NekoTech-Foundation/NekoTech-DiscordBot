@@ -51,6 +51,7 @@ const userUmaSchema = new mongoose.Schema({
     isFavorite: { type: Boolean, default: false },
     isDefense: { type: Boolean, default: false },
     generation: { type: Number, default: 1 },
+    fans: { type: Number, default: 0 },
     raceStats: {
         totalRaces: { type: Number, default: 0 },
         wins: { type: Number, default: 0 },

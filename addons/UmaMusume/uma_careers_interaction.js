@@ -9,7 +9,7 @@ module.exports = {
                 // Handle Uma Careers select menu
                 if (interaction.isStringSelectMenu() && interaction.customId.startsWith('uma_careers_select_')) {
                     const userId = interaction.customId.split('_').pop();
-                    
+
                     // Verify the user
                     if (interaction.user.id !== userId) {
                         return interaction.reply({
@@ -32,13 +32,13 @@ module.exports = {
                                 .setMaxValues(Math.min(6, cards.length))
                                 .addOptions(cards.map(c => ({
                                     label: `${c.name} (${c.rarity})`,
-                                    description: `${c.type} | Boost: ${['speed','stamina','power','guts','wisdom','wit'].filter(k => (c.trainingBoost?.[k]||0)>0).map(k=>`${k.toUpperCase()} +${c.trainingBoost[k]}%`).join(' ') || '—'}`.slice(0, 100),
+                                    description: `${c.type} | Boost: ${['speed', 'stamina', 'power', 'guts', 'wisdom', 'wit'].filter(k => (c.trainingBoost?.[k] || 0) > 0).map(k => `${k.toUpperCase()} +${c.trainingBoost[k]}%`).join(' ') || '—'}`.slice(0, 100),
                                     value: c._id.toString()
                                 })));
                             const row = new ActionRowBuilder().addComponents(menu);
                             return interaction.update({ content: 'Hãy chọn 1-6 Support Cards cho Career này.', components: [row], embeds: [] });
                         }
-                    } catch {}
+                    } catch { }
                     const careersModule = require('./cmd_uma_careers');
                     const { handleUmaSelection } = careersModule;
                     if (handleUmaSelection) await handleUmaSelection(interaction, umaId, userId);
@@ -48,6 +48,13 @@ module.exports = {
 
                     if (handleCareerSkillPurchase) {
                         await handleCareerSkillPurchase(interaction);
+                    }
+                } else if (interaction.isStringSelectMenu() && interaction.customId === 'career_farm_race_select') {
+                    const careersModule = require('./cmd_uma_careers');
+                    const { handleCareerInteraction } = careersModule;
+
+                    if (handleCareerInteraction) {
+                        await handleCareerInteraction(interaction);
                     }
                 }
                 // Support selection result
@@ -71,21 +78,22 @@ module.exports = {
                 // Handle Uma Careers button interactions
                 if (interaction.isButton()) {
                     const customId = interaction.customId;
-                    
+
                     // Check if it's a career-related button
                     const careerButtons = [
                         'career_rest', 'career_training', 'career_skills', 'career_race',
-                        'career_end', 'career_view_results', 'career_back', 'skill_shop'
+                        'career_end', 'career_view_results', 'career_back', 'skill_shop',
+                        'career_farm_fans'
                     ];
-                    
-                    const isCareerButton = careerButtons.includes(customId) || 
-                                         customId.startsWith('train_') ||
-                                         customId.startsWith('career_');
-                    
+
+                    const isCareerButton = careerButtons.includes(customId) ||
+                        customId.startsWith('train_') ||
+                        customId.startsWith('career_');
+
                     if (isCareerButton) {
                         const careersModule = require('./cmd_uma_careers');
                         const { handleCareerInteraction } = careersModule;
-                        
+
                         if (handleCareerInteraction) {
                             await handleCareerInteraction(interaction);
                         }
@@ -97,7 +105,7 @@ module.exports = {
                     await interaction.reply({
                         content: '❌ Đã xảy ra lỗi khi xử lý tương tác!',
                         flags: 64
-                    }).catch(() => {});
+                    }).catch(() => { });
                 }
             }
         });

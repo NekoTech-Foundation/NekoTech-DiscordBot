@@ -1,8 +1,4 @@
-# Use this file to manage the loading of slash commands in your Discord.
-# Set the value to 'true' to enable a command or 'false' to disable it.
-# Changes require a bot restart to take effect.
 
-# Fun Commands - Commonly used and fun commands
 advice: false
 coinflip: true
 darkjoke: true
@@ -51,8 +47,6 @@ roulette: true
 fishing: true
 play: false
 music: false
-
-# General Commands - Commonly used and fun commands
 help: true
 user: true
 serverinfo: true
@@ -68,8 +62,6 @@ leaderboard: true
 rank: true
 level: true
 General: true
-
-# Moderation Commands - Tools for moderators to manage the server
 role: false
 antihoist: false
 tempban: true
@@ -89,8 +81,6 @@ temprole: true
 nickname: true
 moderation: true
 "Report Message": true
-
-# Utility Commands - Various utility and administrative commands
 tickets: true
 tempvoice: true
 afk: true
@@ -107,8 +97,6 @@ translate: true
 steal: true
 embed: true
 reload: true
-
-# Addon Commands - Commands added by addons
 farm: true
 savings: true
 sell: true
@@ -144,14 +132,14 @@ marry: true
 lyhon: true
 promise: true
 together: true
-uma_profile: true
-uma_set_favorite: true
-uma_train: true
-uma_learn_skill: true
-uma_daily: true
-uma_race: true
-uma_pvp: true
-uma_champions_meeting: true
-uma_breed: true
-uma_careers: true
-uma_exchange: true
+uma_profile: false
+uma_set_favorite: false
+uma_train: false
+uma_learn_skill: false
+uma_daily: false
+uma_race: false
+uma_pvp: false
+uma_champions_meeting: false
+uma_breed: false
+uma_careers: false
+uma_exchange: false
