@@ -41,7 +41,7 @@ async function triggerAlertCommand(client, channel, ticket) {
             reply: async (options) => {
                 return await channel.send(options);
             },
-            deferReply: async () => {},
+            deferReply: async () => { },
             editReply: async (options) => {
                 return await channel.send(options);
             },
@@ -62,11 +62,11 @@ async function triggerAlertCommand(client, channel, ticket) {
 
             const autoAlertDuration = parseDuration(ticketType.AutoAlert);
             console.log(`[AutoAlert Debug] Setting alert time for ticket ${ticket.ticketId} using duration ${ticketType.AutoAlert} (${autoAlertDuration}ms)`);
-            
+
             const closeTime = new Date(Date.now() + autoAlertDuration);
             await Ticket.findOneAndUpdate(
                 { ticketId: ticket.ticketId },
-                { 
+                {
                     alertTime: closeTime
                 }
             );
@@ -80,21 +80,21 @@ async function triggerAlertCommand(client, channel, ticket) {
 
 function parseDuration(duration) {
     if (!duration) return 0;
-    
+
     duration = duration.toString().trim();
     const match = duration.match(/^(\d+)\s*([smhd])$/i);
     if (!match) return 0;
-    
+
     const value = parseInt(match[1]);
     const unit = match[2].toLowerCase();
-    
+
     const multipliers = {
         's': 1000,
         'm': 60 * 1000,
         'h': 60 * 60 * 1000,
         'd': 24 * 60 * 60 * 1000
     };
-    
+
     return value * multipliers[unit];
 }
 
@@ -102,6 +102,14 @@ async function checkAlerts(client) {
     try {
         const config = getConfig();
         const now = new Date();
+        const mongoose = require('mongoose');
+        console.log(`[checkAlerts] Mongoose readyState: ${mongoose.connection.readyState}`);
+
+        if (mongoose.connection.readyState !== 1) {
+            console.warn('[checkAlerts] MongoDB not connected. Skipping check.');
+            return;
+        }
+
         const tickets = await Ticket.find({ status: 'open' });
 
         for (const ticket of tickets) {
@@ -143,7 +151,7 @@ async function checkAlerts(client) {
                     try {
                         const member = await msg.guild.members.fetch(msg.author.id);
                         const isStaff = member.roles.cache.some(role => supportRoleIds.includes(role.id)) || msg.author.id === client.user.id;
-                        
+
                         if (!isStaff && !lastUserMessage) {
                             lastUserMessage = msg;
                         } else if (isStaff && !lastStaffMessage) {
