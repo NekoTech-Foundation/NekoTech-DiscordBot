@@ -4,16 +4,16 @@ const AutoResponse = require('../../models/autoResponse');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('autoresponder')
-        .setDescription('Cài đặt và quản lí auto-responder.')
+        .setDescription('🤖 Quản lý hệ thống trả lời tự động')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('placeholders')
-                .setDescription('Hiển thị danh sách các placeholders và functions.')
+                .setDescription('📋 Xem danh sách biến và hàm hỗ trợ')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
-                .setDescription('Thêm một auto-responder.')
+                .setDescription('➕ Thêm phản hồi tự động mới')
                 .addStringOption(option => option.setName('trigger').setDescription('Từ khóa để kích hoạt.').setRequired(true))
                 .addStringOption(option => option.setName('response').setDescription('Chuỗi để trả lời.').setRequired(true))
                 .addStringOption(option => option.setName('mode').setDescription('Chế độ khớp.').setRequired(true).addChoices(
@@ -28,13 +28,13 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('view')
-                .setDescription('Xem cài đặt của một auto-responder.')
+                .setDescription('👀 Xem chi tiết phản hồi tự động')
                 .addStringOption(option => option.setName('trigger').setDescription('Từ khóa của auto-responder.').setRequired(true))
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('edit')
-                .setDescription('Chỉnh sửa một auto-responder.')
+                .setDescription('✏️ Chỉnh sửa phản hồi tự động')
                 .addStringOption(option => option.setName('trigger').setDescription('Từ khóa của auto-responder.').setRequired(true))
                 .addStringOption(option => option.setName('response').setDescription('Chuỗi trả lời mới.'))
                 .addAttachmentOption(option => option.setName('attachment').setDescription('Tệp đính kèm mới (ảnh/video).'))
@@ -43,7 +43,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('matchmode')
-                .setDescription('Chỉnh sửa chế độ khớp của một auto-responder.')
+                .setDescription('🎯 Cài đặt chế độ so khớp từ khóa')
                 .addStringOption(option => option.setName('trigger').setDescription('Từ khóa của auto-responder.').setRequired(true))
                 .addStringOption(option => option.setName('mode').setDescription('Chế độ khớp mới.').setRequired(true).addChoices(
                     { name: 'Chính xác', value: 'exact' },
@@ -55,13 +55,13 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('delete')
-                .setDescription('Xóa một auto-responder.')
+                .setDescription('🗑️ Xóa phản hồi tự động')
                 .addStringOption(option => option.setName('trigger').setDescription('Từ khóa của auto-responder.').setRequired(true))
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('list')
-                .setDescription('Liệt kê tất cả auto-responder trên máy chủ.')
+                .setDescription('📜 Danh sách phản hồi tự động hiện có')
         ),
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
@@ -69,7 +69,7 @@ module.exports = {
 
         if (subcommand === 'add') {
             const trigger = interaction.options.getString('trigger');
-            
+
             const existing = await AutoResponse.findOne({ guildId, trigger });
             if (existing) {
                 return interaction.reply({ content: `Một auto-responder với trigger \`${trigger}\` đã tồn tại.`, ephemeral: true });
@@ -108,7 +108,7 @@ module.exports = {
                     { name: 'Mode', value: autoResponse.mode, inline: true },
                     { name: 'Ignore Case', value: autoResponse.ignoreCase.toString(), inline: true }
                 );
-            
+
             if (autoResponse.attachmentUrl) {
                 embed.addFields({ name: 'Attachment URL', value: autoResponse.attachmentUrl });
                 embed.setImage(autoResponse.attachmentUrl);

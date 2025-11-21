@@ -5,14 +5,14 @@ const { seeds, getUserFarm, removeFromFarm } = require('./farmUtils');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('sell')
-        .setDescription('Bán nông sản của bạn.')
+        .setDescription('💸 Bán nông sản kiếm lời')
         .addStringOption(option => {
             const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-            return option.setName('produce').setDescription('Loại nông sản bạn muốn bán.').setRequired(true).addChoices(...choices);
+            return option.setName('produce').setDescription('🍎 Loại nông sản muốn bán').setRequired(true).addChoices(...choices);
         })
-        .addStringOption(option => 
+        .addStringOption(option =>
             option.setName('quantity')
-                .setDescription('Số lượng bạn muốn bán, hoặc gõ "all" để bán tất cả.')
+                .setDescription('🔢 Số lượng muốn bán (hoặc "all")')
                 .setRequired(true)
                 .setAutocomplete(true)),
 

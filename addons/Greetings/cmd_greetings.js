@@ -5,51 +5,51 @@ const { buildWelcomeMessage, buildGoodbyeMessage } = require('./greetingsUtils')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('greetings')
-        .setDescription('Cấu hình tin nhắn chào mừng và tạm biệt.')
+        .setDescription('👋 Quản lý tin nhắn Chào mừng & Tạm biệt')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('welcome')
-                .setDescription('Cấu hình tin nhắn chào mừng.')
+                .setDescription('📥 Cài đặt tin nhắn Chào mừng (Welcome)')
                 .addChannelOption(option =>
                     option.setName('channel')
-                        .setDescription('Kênh để gửi tin nhắn chào mừng.')
+                        .setDescription('📢 Kênh gửi tin nhắn')
                         .addChannelTypes(ChannelType.GuildText)
                         .setRequired(true))
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('goodbye')
-                .setDescription('Cấu hình tin nhắn tạm biệt.')
+                .setDescription('📤 Cài đặt tin nhắn Tạm biệt (Goodbye)')
                 .addChannelOption(option =>
                     option.setName('channel')
-                        .setDescription('Kênh để gửi tin nhắn tạm biệt.')
+                        .setDescription('📢 Kênh gửi tin nhắn')
                         .addChannelTypes(ChannelType.GuildText)
                         .setRequired(true))
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('welcome-clear')
-                .setDescription('Xóa tin nhắn chào mừng.')
+                .setDescription('🗑️ Xóa cấu hình Chào mừng')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('goodbye-clear')
-                .setDescription('Xóa tin nhắn tạm biệt.')
+                .setDescription('🗑️ Xóa cấu hình Tạm biệt')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('welcome-test')
-                .setDescription('Kiểm tra tin nhắn chào mừng.')
+                .setDescription('🧪 Gửi thử tin nhắn Chào mừng')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('goodbye-test')
-                .setDescription('Kiểm tra tin nhắn tạm biệt.')
+                .setDescription('🧪 Gửi thử tin nhắn Tạm biệt')
         )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('help')
-                .setDescription('Hiển thị trợ giúp về lệnh greetings.')
+                .setDescription('❓ Xem hướng dẫn sử dụng')
         ),
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
@@ -61,55 +61,55 @@ module.exports = {
                 .setTitle('📋 Trợ Giúp Lệnh Greetings')
                 .setDescription('Hệ thống tin nhắn chào mừng và tạm biệt cho máy chủ của bạn.')
                 .addFields(
-                    { 
-                        name: '🔧 Các Lệnh', 
+                    {
+                        name: '🔧 Các Lệnh',
                         value: '`/greetings welcome` - Cấu hình tin nhắn chào mừng\n' +
-                               '`/greetings goodbye` - Cấu hình tin nhắn tạm biệt\n' +
-                               '`/greetings welcome-test` - Kiểm tra tin nhắn chào mừng\n' +
-                               '`/greetings goodbye-test` - Kiểm tra tin nhắn tạm biệt\n' +
-                               '`/greetings welcome-clear` - Xóa cấu hình chào mừng\n' +
-                               '`/greetings goodbye-clear` - Xóa cấu hình tạm biệt'
+                            '`/greetings goodbye` - Cấu hình tin nhắn tạm biệt\n' +
+                            '`/greetings welcome-test` - Kiểm tra tin nhắn chào mừng\n' +
+                            '`/greetings goodbye-test` - Kiểm tra tin nhắn tạm biệt\n' +
+                            '`/greetings welcome-clear` - Xóa cấu hình chào mừng\n' +
+                            '`/greetings goodbye-clear` - Xóa cấu hình tạm biệt'
                     },
-                    { 
-                        name: '📝 Placeholders Người Dùng', 
+                    {
+                        name: '📝 Placeholders Người Dùng',
                         value: '`{user_mention}` - Mention người dùng\n' +
-                               '`{user_name}` - Tên người dùng\n' +
-                               '`{user_tag}` - Tag người dùng (name#0000)\n' +
-                               '`{user_id}` - ID người dùng\n' +
-                               '`{user_created}` - Ngày tạo tài khoản\n' +
-                               '`{user_invite}` - Người mời (nếu có)'
+                            '`{user_name}` - Tên người dùng\n' +
+                            '`{user_tag}` - Tag người dùng (name#0000)\n' +
+                            '`{user_id}` - ID người dùng\n' +
+                            '`{user_created}` - Ngày tạo tài khoản\n' +
+                            '`{user_invite}` - Người mời (nếu có)'
                     },
-                    { 
-                        name: '🏠 Placeholders Máy Chủ', 
+                    {
+                        name: '🏠 Placeholders Máy Chủ',
                         value: '`{server_name}` - Tên máy chủ\n' +
-                               '`{server_id}` - ID máy chủ\n' +
-                               '`{server_membercount}` - Tổng số thành viên\n' +
-                               '`{server_membercount_nobots}` - Số thành viên (không bao gồm bot)\n' +
-                               '`{server_created}` - Ngày tạo máy chủ\n' +
-                               '`{member_position}` - Vị trí thành viên (thứ mấy)'
+                            '`{server_id}` - ID máy chủ\n' +
+                            '`{server_membercount}` - Tổng số thành viên\n' +
+                            '`{server_membercount_nobots}` - Số thành viên (không bao gồm bot)\n' +
+                            '`{server_created}` - Ngày tạo máy chủ\n' +
+                            '`{member_position}` - Vị trí thành viên (thứ mấy)'
                     },
-                    { 
-                        name: '🎨 Định Dạng Embed', 
+                    {
+                        name: '🎨 Định Dạng Embed',
                         value: 'Để tạo embed, sử dụng cú pháp JSON trong modal:\n' +
-                               '```json\n' +
-                               '{\n' +
-                               '  "title": "Chào mừng!",\n' +
-                               '  "description": "Chào mừng {user_mention}!",\n' +
-                               '  "color": "#00ff00",\n' +
-                               '  "thumbnail": "{user_avatar}",\n' +
-                               '  "fields": [\n' +
-                               '    {"name": "Thành viên số", "value": "{member_position}", "inline": true}\n' +
-                               '  ],\n' +
-                               '  "footer": "{server_name}"\n' +
-                               '}```'
+                            '```json\n' +
+                            '{\n' +
+                            '  "title": "Chào mừng!",\n' +
+                            '  "description": "Chào mừng {user_mention}!",\n' +
+                            '  "color": "#00ff00",\n' +
+                            '  "thumbnail": "{user_avatar}",\n' +
+                            '  "fields": [\n' +
+                            '    {"name": "Thành viên số", "value": "{member_position}", "inline": true}\n' +
+                            '  ],\n' +
+                            '  "footer": "{server_name}"\n' +
+                            '}```'
                     },
-                    { 
-                        name: '💡 Lưu Ý', 
+                    {
+                        name: '💡 Lưu Ý',
                         value: '• Để TRỐNG modal nhập `[blank]` để sử dụng embed mặc định.\n' +
-                               '• Bắt đầu tin nhắn bằng `[text]` để gửi tin nhắn văn bản thuần túy (không embed).\n' +
-                               '• Nếu nhập JSON không hợp lệ hoặc không bắt đầu bằng `[text]`, tin nhắn sẽ được gửi dưới dạng văn bản thuần túy.\n' +
-                               '• Có thể dùng `{newline}` để xuống dòng.\n' +
-                               '• Bot cần quyền gửi tin nhắn và embed trong kênh được chọn.'
+                            '• Bắt đầu tin nhắn bằng `[text]` để gửi tin nhắn văn bản thuần túy (không embed).\n' +
+                            '• Nếu nhập JSON không hợp lệ hoặc không bắt đầu bằng `[text]`, tin nhắn sẽ được gửi dưới dạng văn bản thuần túy.\n' +
+                            '• Có thể dùng `{newline}` để xuống dòng.\n' +
+                            '• Bot cần quyền gửi tin nhắn và embed trong kênh được chọn.'
                     }
                 )
                 .setFooter({ text: 'Sử dụng /greetings <subcommand> để bắt đầu' })
@@ -170,7 +170,7 @@ module.exports = {
             }
 
             const member = interaction.member;
-            
+
             try {
                 const messageData = await buildWelcomeMessage(settings.welcomeMessage, member, interaction.guild);
                 await channel.send(messageData);
@@ -191,7 +191,7 @@ module.exports = {
             }
 
             const member = interaction.member;
-            
+
             try {
                 const messageData = await buildGoodbyeMessage(settings.goodbyeMessage, member, interaction.guild);
                 await channel.send(messageData);

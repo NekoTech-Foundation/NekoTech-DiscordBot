@@ -6,19 +6,19 @@ const { getConfig } = require('../../utils/configLoader');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('savings')
-        .setDescription('Gửi tiền tiết kiệm vào ngân hàng.')
+        .setDescription('💰 Ngân hàng tiết kiệm')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('deposit')
-                .setDescription('Gửi tiền vào tài khoản tiết kiệm của bạn.')
+                .setDescription('📥 Gửi tiền vào tài khoản tiết kiệm')
                 .addIntegerOption(option =>
                     option.setName('amount')
-                        .setDescription('Số tiền bạn muốn gửi.')
+                        .setDescription('💵 Số tiền muốn gửi')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('balance')
-                .setDescription('Xem số dư tài khoản tiết kiệm của bạn.')),
+                .setDescription('💳 Xem số dư tiết kiệm')),
     async execute(interaction, client) {
         const config = getConfig();
         const currency = config.Currency || '💰';

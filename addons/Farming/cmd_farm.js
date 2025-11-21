@@ -5,54 +5,54 @@ const { seeds, getUserFarm, addToFarm, removeFromFarm } = require('./farmUtils')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('farm')
-        .setDescription('Các lệnh liên quan đến nông trại.')
+        .setDescription('🌾 Quản lý nông trại của bạn')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('plant')
-                .setDescription('Trồng một hạt giống.')
+                .setDescription('🌱 Trồng hạt giống')
                 .addStringOption(option => {
                     const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    return option.setName('seed').setDescription('Loại hạt giống bạn muốn trồng.').setRequired(true).addChoices(...choices);
+                    return option.setName('seed').setDescription('🌰 Loại hạt giống bạn muốn trồng').setRequired(true).addChoices(...choices);
                 })
                 .addStringOption(option =>
                     option.setName('quantity')
-                        .setDescription('Số lượng hạt giống bạn muốn trồng (mặc định là 1).')
+                        .setDescription('🔢 Số lượng hạt giống (mặc định: 1)')
                         .setRequired(false)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('harvest')
-                .setDescription('Thu hoạch một cây trồng.')
+                .setDescription('🚜 Thu hoạch cây trồng')
                 .addStringOption(option => {
                     const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    return option.setName('plant').setDescription('Loại cây bạn muốn thu hoạch.').setRequired(true).addChoices(...choices);
+                    return option.setName('plant').setDescription('🌿 Loại cây bạn muốn thu hoạch').setRequired(true).addChoices(...choices);
                 }))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('field')
-                .setDescription('Xem các cây trồng đã trồng của bạn.'))
+                .setDescription('👀 Xem cánh đồng của bạn'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('seeds')
-                .setDescription('Xem kho hạt giống của bạn.'))
+                .setDescription('🎒 Xem kho hạt giống'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('inventory')
-                .setDescription('Xem kho nông sản của bạn.'))
+                .setDescription('📦 Xem kho nông sản'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('fertilizers')
-                .setDescription('Xem kho phân bón của bạn.'))
+                .setDescription('🧪 Xem kho phân bón'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('phanbon')
-                .setDescription('Sử dụng phân bón cho cây trồng.')
+                .setDescription('✨ Sử dụng phân bón cho cây')
                 .addStringOption(option => {
                     const choices = Object.keys(config.Store['Phân bón']).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
-                    return option.setName('ten_phan_bon').setDescription('Loại phân bón bạn muốn sử dụng.').setRequired(true).addChoices(...choices);
+                    return option.setName('ten_phan_bon').setDescription('🧪 Loại phân bón muốn dùng').setRequired(true).addChoices(...choices);
                 })
                 .addStringOption(option => {
                     const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    return option.setName('ten_cay').setDescription('Loại cây bạn muốn bón phân.').setRequired(false).addChoices(...choices);
+                    return option.setName('ten_cay').setDescription('🌿 Loại cây muốn bón (để trống để bón tất cả)').setRequired(false).addChoices(...choices);
                 })),
 
     async execute(interaction, client) {

@@ -59,84 +59,84 @@ const actions = {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('letme')
-        .setDescription('Lemme do something!')
+        .setDescription('🎭 Thực hiện hành động tương tác')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('kiss')
-                .setDescription(actions.kiss.description)
+                .setDescription('💋 Gửi nụ hôn nồng thắm')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Chọn người để hôn')
+                        .setDescription('👤 Người bạn muốn hôn')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('hug')
-                .setDescription(actions.hug.description)
+                .setDescription('🤗 Gửi cái ôm ấm áp')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để ôm')
+                        .setDescription('👤 Người bạn muốn ôm')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('punch')
-                .setDescription(actions.punch.description)
+                .setDescription('👊 Đấm yêu (hoặc không yêu lắm)')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để đấm')
+                        .setDescription('👤 Người bạn muốn đấm')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('handhold')
-                .setDescription(actions.handhold.description)
+                .setDescription('🤝 Nắm tay thân thiết')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để nắm tay')
+                        .setDescription('👤 Người bạn muốn nắm tay')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('bite')
-                .setDescription(actions.bite.description)
+                .setDescription('😬 Cắn yêu một cái')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để cắn')
+                        .setDescription('👤 Người bạn muốn cắn')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('pat')
-                .setDescription(actions.pat.description)
+                .setDescription('👋 Vỗ đầu cưng nựng')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để vỗ đầu')
+                        .setDescription('👤 Người bạn muốn vỗ đầu')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('slap')
-                .setDescription(actions.slap.description)
+                .setDescription('👋 Tát một cái thật kêu')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để tát')
+                        .setDescription('👤 Người bạn muốn tát')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('fack')
-                .setDescription(actions.fack.description)
+                .setDescription('🖕 Gửi lời chào thân ái (Fack)')
                 .addUserOption(option =>
                     option.setName('target')
-                        .setDescription('Người dùng để fack')
+                        .setDescription('👤 Người bạn muốn gửi lời chào')
                         .setRequired(true))),
     category: 'Fun',
     async execute(interaction, client) {
         const subcommand = interaction.options.getSubcommand();
         const target = interaction.options.getUser('target');
         const action = actions[subcommand];
-        
+
         if (!action) {
-            return await interaction.reply({ 
-                content: '❌ Hành động không hợp lệ!', 
-                ephemeral: true 
+            return await interaction.reply({
+                content: '❌ Hành động không hợp lệ!',
+                ephemeral: true
             });
         }
-        
+
         // Special handling for fack command
         if (subcommand === 'fack') {
             // Check if the target is the bot
@@ -144,37 +144,37 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setDescription(`<@${interaction.user.id}> bro trying to fuck me? uno reverse and take a L bitch ez`)
                     .setColor(config.EmbedColors);
-                
+
                 return await interaction.reply({ embeds: [embed] });
             }
-            
+
             // Normal case - target is another user
             const embed = new EmbedBuilder()
                 .setDescription(`yo <@${target.id}> get a fuck from <@${interaction.user.id}>`)
                 .setColor(config.EmbedColors);
-            
+
             return await interaction.reply({ embeds: [embed] });
         }
-        
+
         // Reply immediately with a loading message for API-based actions
-        await interaction.reply({ 
-            content: `${action.emoji} Đang chuẩn bị...`, 
-            fetchReply: true 
+        await interaction.reply({
+            content: `${action.emoji} Đang chuẩn bị...`,
+            fetchReply: true
         });
-        
+
         try {
             // Fetch a random GIF from nekos.best API
             const response = await fetch(`https://nekos.best/api/v2/${subcommand}`);
-            
+
             if (!response.ok) {
                 throw new Error(`API responded with status: ${response.status}`);
             }
-            
+
             const data = await response.json();
-            
+
             // Extract the GIF URL from the API response
             const gifUrl = data.results[0].url;
-            
+
             const embed = new EmbedBuilder()
                 .setDescription(`<@${interaction.user.id}> ${action.message} <@${target.id}>.`)
                 .setImage(gifUrl)
@@ -183,11 +183,11 @@ module.exports = {
             await interaction.editReply({ content: null, embeds: [embed] });
         } catch (error) {
             console.error(`Error fetching ${subcommand} GIF:`, error);
-            
+
             const errorEmbed = new EmbedBuilder()
                 .setDescription('❌ Không thể tải GIF. Vui lòng thử lại!')
                 .setColor('#FF0000');
-                
+
             try {
                 await interaction.editReply({ content: null, embeds: [errorEmbed] });
             } catch (editError) {

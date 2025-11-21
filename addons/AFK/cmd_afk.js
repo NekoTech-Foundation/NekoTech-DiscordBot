@@ -1,39 +1,39 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js');
-const fs = require('fs');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const yaml = require('js-yaml');
+const fs = require('fs');
 const path = require('path');
+
+// Load config
+const configPath = path.join(__dirname, 'config.yml');
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('afk')
-        .setDescription('Đặt trạng thái của bạn (AFK)')
+        .setDescription('💤 Đặt trạng thái AFK (Away From Keyboard)')
         .addStringOption(option =>
             option.setName('reason')
-                .setDescription('Lí do')
+                .setDescription('📝 Lý do rời máy')
                 .setRequired(false))
         .addStringOption(option =>
             option.setName('duration')
-                .setDescription('Thời gian AFK (ví dụ: 1h 30m, 2h, 45m)')
+                .setDescription('⏱️ Thời gian dự kiến trở lại (vd: 1h, 30m)')
                 .setRequired(false)),
 
     async execute(interaction, client) {
-        const configPath = path.join(__dirname, 'config.yml');
-        const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-        
         // Check permissions
         if (config.settings.allowed_roles.length > 0) {
-            const hasRole = interaction.member.roles.cache.some(role => 
+            const hasRole = interaction.member.roles.cache.some(role =>
                 config.settings.allowed_roles.includes(role.id));
             if (!hasRole) {
                 const errorEmbed = new EmbedBuilder()
                     .setColor('#FF4444')
                     .setDescription(`❌ ${config.lang.errors.no_permission}`)
                     .setTimestamp();
-                
-                return interaction.reply({ 
-                    embeds: [errorEmbed], 
-                    ephemeral: true 
+
+                return interaction.reply({
+                    embeds: [errorEmbed],
+                    ephemeral: true
                 });
             }
         }
@@ -44,7 +44,7 @@ module.exports = {
                 .setColor('#FFA500')
                 .setDescription(`⚠️ ${config.lang.errors.already_afk}`)
                 .setTimestamp();
-            
+
             return interaction.reply({
                 embeds: [errorEmbed],
                 ephemeral: true
@@ -53,7 +53,7 @@ module.exports = {
 
         const reason = interaction.options.getString('reason') || 'Không có lí do';
         const duration = interaction.options.getString('duration');
-        
+
         let returnTime = null;
         if (duration) {
             const time = parseDuration(duration);
@@ -66,10 +66,10 @@ module.exports = {
                         value: '`1h`, `30m`, `1h 30m`, `2h 15m`'
                     })
                     .setTimestamp();
-                
-                return interaction.reply({ 
-                    embeds: [errorEmbed], 
-                    ephemeral: true 
+
+                return interaction.reply({
+                    embeds: [errorEmbed],
+                    ephemeral: true
                 });
             }
             returnTime = Date.now() + time;
@@ -100,12 +100,12 @@ module.exports = {
                 },
                 {
                     name: '⏰ Thời gian bắt đầu',
-                    value: `<t:${Math.floor(timestamp/1000)}:F>`,
+                    value: `<t:${Math.floor(timestamp / 1000)}:F>`,
                     inline: true
                 },
                 {
                     name: '🔙 Quay lại sau',
-                    value: returnTime ? `<t:${Math.floor(returnTime/1000)}:R>` : '`Không xác định`',
+                    value: returnTime ? `<t:${Math.floor(returnTime / 1000)}:R>` : '`Không xác định`',
                     inline: true
                 }
             )
@@ -128,7 +128,7 @@ function parseDuration(duration) {
     while ((match = regex.exec(duration)) !== null) {
         const value = parseInt(match[1]);
         const unit = match[2].toLowerCase();
-        
+
         if (unit === 'h') total += value * 3600000;
         if (unit === 'm') total += value * 60000;
     }

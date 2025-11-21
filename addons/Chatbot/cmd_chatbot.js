@@ -5,14 +5,14 @@ const chatbot = require('./chatbot');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('chatbot')
-        .setDescription('Chat với AI (Gemini)')
+        .setDescription('🤖 Trò chuyện thông minh cùng AI (Gemini)')
         .addStringOption(option =>
             option.setName('prompt')
-                .setDescription('Nội dung bạn muốn hỏi')
+                .setDescription('💬 Nội dung bạn muốn hỏi')
                 .setRequired(true))
         .addBooleanOption(option =>
             option.setName('private')
-                .setDescription('Chỉ mình bạn thấy phản hồi (ephemeral)')),
+                .setDescription('🔒 Chỉ mình bạn thấy phản hồi (ephemeral)')),
     async execute(interaction) {
         const enabledCommands = getCommands();
         if (enabledCommands && enabledCommands.chatbot === false) {

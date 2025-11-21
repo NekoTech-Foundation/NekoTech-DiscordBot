@@ -5,72 +5,72 @@ const CustomRoleSettings = require('../../models/CustomRoleSettings');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('customrole')
-        .setDescription('Quản lí role tùy chỉnh của bạn.')
+        .setDescription('🎨 Quản lý Role tùy chỉnh cá nhân')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('search')
-                .setDescription('Tìm kiếm thông tin một role tùy chỉnh.')
+                .setDescription('🔍 Tìm kiếm Role tùy chỉnh')
                 .addRoleOption(option => option.setName('role').setDescription('Chọn role để tìm kiếm.'))
         )
         .addSubcommandGroup(group =>
             group
                 .setName('user')
-                .setDescription('Các lệnh cài đặt dành cho người dùng.')
+                .setDescription('👤 Cài đặt cho người dùng')
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('add')
-                        .setDescription('Thêm một thành viên vào role tùy chỉnh của bạn.')
+                        .setDescription('➕ Thêm thành viên vào Role')
                         .addUserOption(option => option.setName('user').setDescription('Chọn một thành viên.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('remove')
-                        .setDescription('Xóa một thành viên khỏi role tùy chỉnh của bạn.')
+                        .setDescription('➖ Xóa thành viên khỏi Role')
                         .addUserOption(option => option.setName('user').setDescription('Chọn một thành viên.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('color')
-                        .setDescription('Thay đổi màu của role tùy chỉnh của bạn.')
+                        .setDescription('🎨 Đổi màu sắc Role')
                         .addStringOption(option => option.setName('color').setDescription('Mã màu hex (ví dụ: #c0cdff)').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('icon')
-                        .setDescription('Chỉnh sửa icon của role tùy chỉnh của bạn.')
+                        .setDescription('🖼️ Đổi biểu tượng (Icon) Role')
                         .addAttachmentOption(option => option.setName('icon').setDescription('Tải lên icon của bạn.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('removeicon')
-                        .setDescription('Xóa icon từ role tùy chỉnh của bạn.')
+                        .setDescription('🗑️ Xóa biểu tượng Role')
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('mentionable')
-                        .setDescription('Làm cho role tùy chỉnh của bạn có thể nhắc đến.')
+                        .setDescription('🔔 Bật/Tắt thông báo (Mention)')
                         .addBooleanOption(option => option.setName('action').setDescription('Bật hoặc tắt.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('info')
-                        .setDescription('Xem thông tin role tùy chỉnh của bạn.')
+                        .setDescription('ℹ️ Xem thông tin Role')
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('name')
-                        .setDescription('Thay đổi tên role tùy chỉnh của bạn.')
+                        .setDescription('✏️ Đổi tên Role')
                         .addStringOption(option => option.setName('name').setDescription('Tên role mới.').setRequired(true))
                 )
         )
         .addSubcommandGroup(group =>
             group
                 .setName('admin')
-                .setDescription('Các lệnh cài đặt dành cho quản trị.')
+                .setDescription('🛡️ Cài đặt cho quản trị viên')
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('create')
-                        .setDescription('Tạo và gán một Custom Role cho một thành viên.')
+                        .setDescription('✨ Tạo Role tùy chỉnh mới')
                         .addRoleOption(option => option.setName('above_role').setDescription('Role mới sẽ nằm trên role này.').setRequired(true))
                         .addUserOption(option => option.setName('author').setDescription('Chỉ định chủ của role tùy chỉnh.').setRequired(true))
                         .addStringOption(option => option.setName('name').setDescription('Chỉ định tên role.').setRequired(true))
@@ -86,14 +86,14 @@ module.exports = {
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('terminate')
-                        .setDescription('Ngừng role tùy chỉnh của một thành viên.')
+                        .setDescription('🚫 Chấm dứt Role tùy chỉnh')
                         .addUserOption(option => option.setName('user').setDescription('Chọn người dùng.').setRequired(true))
                         .addBooleanOption(option => option.setName('delete_role').setDescription('Xóa role hay không, mặc định: không.'))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('migrate')
-                        .setDescription('Chuyển một role hiện tại sang role tùy chỉnh của bot.')
+                        .setDescription('🔄 Chuyển đổi Role thường thành Custom')
                         .addRoleOption(option => option.setName('role').setDescription('Chỉ định một role.').setRequired(true))
                         .addUserOption(option => option.setName('author').setDescription('Chỉ định chủ của role tùy chỉnh.').setRequired(true))
                         .addIntegerOption(option => option.setName('max_users').setDescription('Số người dùng tối đa có thể được gán vào role này.').setRequired(true))
@@ -102,7 +102,7 @@ module.exports = {
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('edit_permission')
-                        .setDescription('Chỉnh sửa quyền của từng role.')
+                        .setDescription('⚙️ Chỉnh sửa quyền hạn Role')
                         .addRoleOption(option => option.setName('role').setDescription('Chỉ định một role.').setRequired(true))
                         .addBooleanOption(option => option.setName('edit_name').setDescription('Cho phép chủ của role thay đổi tên role của họ.'))
                         .addBooleanOption(option => option.setName('edit_icon').setDescription('Cho phép chủ của role thay đổi icon của họ.'))
@@ -113,14 +113,14 @@ module.exports = {
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('max_users')
-                        .setDescription('Chỉnh sửa số người tối đa của role.')
+                        .setDescription('👥 Giới hạn số lượng thành viên')
                         .addRoleOption(option => option.setName('role').setDescription('Chỉ định một role.').setRequired(true))
                         .addIntegerOption(option => option.setName('users').setDescription('Chỉ định số lượng, từ 1 đến tối đa 100.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('default_author_permission')
-                        .setDescription('Chỉnh sửa quyền mặc định cho các role.')
+                        .setDescription('🔒 Cài đặt quyền mặc định')
                         .addBooleanOption(option => option.setName('edit_name').setDescription('Cho phép chủ của role thay đổi tên role của họ.'))
                         .addBooleanOption(option => option.setName('edit_icon').setDescription('Cho phép chủ của role thay đổi icon của họ.'))
                         .addBooleanOption(option => option.setName('edit_color').setDescription('Cho phép chủ của role thay đổi màu của họ.'))
@@ -130,21 +130,21 @@ module.exports = {
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('extend')
-                        .setDescription('Gia hạn thêm ngày hết hạn cho một role tùy chỉnh.')
+                        .setDescription('⏳ Gia hạn thời gian sử dụng')
                         .addRoleOption(option => option.setName('role').setDescription('Chọn role.').setRequired(true))
                         .addStringOption(option => option.setName('time_range').setDescription('Chỉ định khoảng thời gian. Nhập ‘0’ để làm vĩnh viễn.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('reduce')
-                        .setDescription('Giảm ngày hết hạn của một role tùy chỉnh.')
+                        .setDescription('📉 Giảm thời gian sử dụng')
                         .addRoleOption(option => option.setName('role').setDescription('Chọn role.').setRequired(true))
                         .addStringOption(option => option.setName('time_range').setDescription('Chỉ định khoảng thời gian để giảm.').setRequired(true))
                 )
                 .addSubcommand(subcommand =>
                     subcommand
                         .setName('on_expire')
-                        .setDescription('Chỉ định sự kiện thực hiện khi role tùy chỉnh của một người dùng hết hạn.')
+                        .setDescription('⚠️ Cài đặt hành động khi hết hạn')
                         .addStringOption(option => option.setName('action').setDescription('Ghi hành động.').setRequired(true).addChoices(
                             { name: 'Xóa role', value: 'deleteRole' },
                             { name: 'Xóa tất cả thành viên', value: 'removeMembers' }

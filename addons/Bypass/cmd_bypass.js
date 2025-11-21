@@ -18,23 +18,18 @@ function loadConfig() {
 
 const config = loadConfig();
 
-// Helper function to delay execution
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// Helper function for delay
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bypass')
-        .setDescription('Bypasses a shortlink using the meobypass.click API.')
+        .setDescription('🚀 Bỏ qua link rút gọn (Bypass)')
         .addStringOption(option =>
             option.setName('url')
-                .setDescription('The shortlink URL to bypass.')
+                .setDescription('🔗 Link cần bypass')
                 .setRequired(true)),
-
     async execute(interaction) {
-        if (!config || !config.api_key) {
-            return interaction.reply({ content: 'Lỗi: Không thể tải tệp cấu hình `config.yml` của addon Bypass hoặc thiếu API key.', ephemeral: true });
-        }
-
         const urlToBypass = interaction.options.getString('url');
         const apiKey = config.api_key;
 
@@ -62,24 +57,39 @@ module.exports = {
 
             const taskId = startResponse.task_id;
             const queuePos = startResponse.queue_position || 'N/A';
-            await interaction.editReply({ 
-                content: `⏳ Yêu cầu của bạn đã được nhận!\n📋 Task ID: \`${taskId}\`\n📍 Vị trí trong hàng đợi: ${queuePos}\nVui lòng đợi...` 
+            await interaction.editReply({
+                content: `⏳ Yêu cầu của bạn đã được nhận!\n📋 Task ID: \`${taskId}\`\n📍 Vị trí trong hàng đợi: ${queuePos}\nVui lòng đợi...`
             });
 
             // 3. Poll for the result
             let resultResponse;
-            const maxAttempts = 20; // Poll for 20 * 5 = 100 seconds max
+            const maxAttempts = 30; // Poll for 30 * 5 = 150 seconds max
             for (let i = 0; i < maxAttempts; i++) {
                 await delay(5000); // Wait 5 seconds between polls
-                resultResponse = await getBypassResult(taskId);
 
-                if (resultResponse.status === 'success') {
+                try {
+                    resultResponse = await getBypassResult(taskId);
+                } catch (pollError) {
+                    console.error(`Poll attempt ${i + 1} failed:`, pollError);
+                    // Continue polling even if one request fails
+                    continue;
+                }
+
+                // Update user every 30 seconds (every 6 attempts)
+                if (i > 0 && i % 6 === 0) {
+                    await interaction.editReply({
+                        content: `⏳ Vẫn đang xử lý... (${i * 5}s / ${maxAttempts * 5}s)\n📋 Task ID: \`${taskId}\`\n🔄 Trạng thái: ${resultResponse?.status || 'pending'}`
+                    });
+                }
+
+                if (resultResponse?.status === 'success') {
                     break; // Exit loop if successful
-                } else if (resultResponse.status === 'error' || resultResponse.status === 'failed') {
+                } else if (resultResponse?.status === 'error' || resultResponse?.status === 'failed') {
                     const errorMsg = resultResponse.message || resultResponse.msg || 'Bypass thất bại';
                     throw new Error(`Bypass thất bại: ${errorMsg}`);
-                } else if (resultResponse.status !== 'pending' && resultResponse.status !== 'processing') {
-                    throw new Error(`API trả về trạng thái lỗi: ${resultResponse.status}`);
+                } else if (resultResponse?.status && resultResponse.status !== 'pending' && resultResponse.status !== 'processing') {
+                    console.warn(`Unexpected status: ${resultResponse.status}`, resultResponse);
+                    // Don't throw error immediately, continue polling
                 }
                 // If still pending or processing, the loop continues
             }
@@ -100,15 +110,17 @@ module.exports = {
 
                 await interaction.editReply({ content: '', embeds: [embed] });
             } else {
-                throw new Error('Không thể lấy kết quả bypass sau một khoảng thời gian. Vui lòng thử lại.');
+                // Provide more detailed timeout error
+                const statusInfo = resultResponse?.status ? `\nTrạng thái cuối: ${resultResponse.status}` : '';
+                throw new Error(`⏱️ Timeout: Không thể lấy kết quả sau ${maxAttempts * 5} giây.${statusInfo}\n\n💡 Link có thể quá phức tạp hoặc API đang quá tải. Vui lòng thử lại sau.`);
             }
 
         } catch (error) {
             console.error('Bypass command error:', error);
-            
+
             // More detailed error message
             let errorDescription = error.message || 'Đã xảy ra lỗi không xác định.';
-            
+
             // Add helpful suggestions based on error type
             if (errorDescription.includes('API key')) {
                 errorDescription += '\n\n💡 **Gợi ý:** Kiểm tra lại API key trong file `config.yml`';

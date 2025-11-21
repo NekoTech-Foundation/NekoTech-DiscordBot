@@ -9,7 +9,7 @@ function parseDuration(input) {
   const m = String(input).match(regex);
   if (!m) return 0;
   const [_, d, h, mnt, s] = m;
-  return (parseInt(d || 0)*86400 + parseInt(h || 0)*3600 + parseInt(mnt || 0)*60 + parseInt(s || 0));
+  return (parseInt(d || 0) * 86400 + parseInt(h || 0) * 3600 + parseInt(mnt || 0) * 60 + parseInt(s || 0));
 }
 
 function toMillis(sec) { return sec * 1000; }
@@ -39,7 +39,7 @@ function parseMultipliers(input) {
   if (!input) return [];
   return input.split('|').map(x => x.trim()).filter(Boolean).map(pair => {
     const [role, bonusStr] = pair.split(':');
-    const rid = (role.match(/<@&([0-9]+)>/) || [])[1] || ( /^[0-9]{5,}$/.test(role) ? role : role );
+    const rid = (role.match(/<@&([0-9]+)>/) || [])[1] || (/^[0-9]{5,}$/.test(role) ? role : role);
     const bonus = Math.max(0, parseInt(bonusStr || '0', 10));
     return { roleId: rid, bonus };
   }).slice(0, 10);
@@ -62,7 +62,7 @@ async function createGiveawayMessage(channel, data) {
   const embed = new EmbedBuilder()
     .setColor(data.embed?.embedColor || data.embed?.color || '#2ecc71')
     .setTitle(`🎉 Giveaway: ${data.prize}`)
-    .setDescription(data.embed?.embedDescription || `• Phần thưởng: ${data.prize}\n• Số người thắng: ${data.winnerCount}\n• Kết thúc: <t:${Math.floor(data.endAt/1000)}:R>`)
+    .setDescription(data.embed?.embedDescription || `• Phần thưởng: ${data.prize}\n• Số người thắng: ${data.winnerCount}\n• Kết thúc: <t:${Math.floor(data.endAt / 1000)}:R>`)
     .setFooter({ text: `ID: ${data.giveawayId || 'pending'}` });
   if (data.embed?.embedImage || data.embed?.image) embed.setImage(data.embed.embedImage || data.embed.image);
 
@@ -71,7 +71,7 @@ async function createGiveawayMessage(channel, data) {
     .setStyle(mapButtonStyle(data.embed?.buttons?.JoinButtonStyle || data.embed?.button?.style || 'Primary'))
     .setLabel(data.embed?.buttons?.JoinButtonText || data.embed?.button?.label || 'Tham gia');
   const emoji = data.embed?.buttons?.JoinButtonEmoji || data.embed?.button?.emoji || '🎉';
-  try { joinBtn.setEmoji(emoji); } catch (_) {}
+  try { joinBtn.setEmoji(emoji); } catch (_) { }
 
   const row = new ActionRowBuilder().addComponents(joinBtn);
   const msg = await channel.send({ embeds: [embed], components: [row] });
@@ -81,68 +81,68 @@ async function createGiveawayMessage(channel, data) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('giveaway')
-    .setDescription('Quản lý Giveaway tuỳ biến')
+    .setDescription('🎉 Quản lý hệ thống Giveaway chuyên nghiệp')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addSubcommand(sc => sc
       .setName('create')
-      .setDescription('Tạo một giveaway nhanh chóng')
-      .addStringOption(o=>o.setName('reward').setDescription('Phần thưởng').setRequired(true))
-      .addStringOption(o=>o.setName('duration').setDescription('Thời lượng, vd: 10m25s hoặc giây').setRequired(true))
-      .addIntegerOption(o=>o.setName('winners').setDescription('Số người thắng').setRequired(true))
-      .addChannelOption(o=>o.setName('channel').setDescription('Kênh bắt đầu').addChannelTypes(ChannelType.GuildText))
-      .addStringOption(o=>o.setName('template').setDescription('Tên template áp dụng'))
-      .addStringOption(o=>o.setName('requirements').setDescription('role1|role2|... (tối đa 15)'))
-      .addStringOption(o=>o.setName('blacklists').setDescription('role1|role2|... (tối đa 10)'))
-      .addStringOption(o=>o.setName('bypasses').setDescription('role1|role2|... (tối đa 15)'))
-      .addStringOption(o=>o.setName('multipliers').setDescription('role1:bonus|role2:bonus ... (tối đa 10)'))
-      .addStringOption(o=>o.setName('color').setDescription('#hex hoặc rgb(...)'))
-      .addStringOption(o=>o.setName('button_color').setDescription('Primary|Secondary|Success|Danger'))
-      .addStringOption(o=>o.setName('button_emoji').setDescription('Emoji'))
-      .addStringOption(o=>o.setName('requires_join_before').setDescription('Thời lượng phải tham gia trước (vd 3d, 7d)'))
-      .addStringOption(o=>o.setName('image').setDescription('URL ảnh'))
+      .setDescription('✨ Tạo Giveaway mới')
+      .addStringOption(o => o.setName('reward').setDescription('🎁 Phần thưởng').setRequired(true))
+      .addStringOption(o => o.setName('duration').setDescription('⏱️ Thời lượng (vd: 10m, 1h)').setRequired(true))
+      .addIntegerOption(o => o.setName('winners').setDescription('🏆 Số lượng người thắng').setRequired(true))
+      .addChannelOption(o => o.setName('channel').setDescription('📢 Kênh tổ chức').addChannelTypes(ChannelType.GuildText))
+      .addStringOption(o => o.setName('template').setDescription('📋 Sử dụng mẫu có sẵn'))
+      .addStringOption(o => o.setName('requirements').setDescription('role1|role2|... (tối đa 15)'))
+      .addStringOption(o => o.setName('blacklists').setDescription('role1|role2|... (tối đa 10)'))
+      .addStringOption(o => o.setName('bypasses').setDescription('role1|role2|... (tối đa 15)'))
+      .addStringOption(o => o.setName('multipliers').setDescription('role1:bonus|role2:bonus ... (tối đa 10)'))
+      .addStringOption(o => o.setName('color').setDescription('#hex hoặc rgb(...)'))
+      .addStringOption(o => o.setName('button_color').setDescription('Primary|Secondary|Success|Danger'))
+      .addStringOption(o => o.setName('button_emoji').setDescription('Emoji'))
+      .addStringOption(o => o.setName('requires_join_before').setDescription('Thời lượng phải tham gia trước (vd 3d, 7d)'))
+      .addStringOption(o => o.setName('image').setDescription('URL ảnh'))
     )
     .addSubcommand(sc => sc
       .setName('end')
-      .setDescription('Kết thúc một giveaway hiện có')
-      .addStringOption(o=>o.setName('giveaway').setDescription('ID hoặc messageId giveaway').setRequired(true))
+      .setDescription('🏁 Kết thúc ngay một Giveaway')
+      .addStringOption(o => o.setName('giveaway').setDescription('🆔 ID hoặc Message ID của Giveaway').setRequired(true))
     )
     .addSubcommand(sc => sc
       .setName('reroll')
-      .setDescription('Reroll một giveaway đã kết thúc')
-      .addStringOption(o=>o.setName('giveaway').setDescription('ID hoặc messageId giveaway').setRequired(true))
+      .setDescription('🎲 Chọn lại người thắng (Reroll)')
+      .addStringOption(o => o.setName('giveaway').setDescription('🆔 ID hoặc Message ID của Giveaway').setRequired(true))
     )
     .addSubcommand(sc => sc
       .setName('edit')
-      .setDescription('Chỉnh sửa một giveaway đang chạy')
-      .addStringOption(o=>o.setName('giveaway').setDescription('ID hoặc messageId').setRequired(true))
-      .addStringOption(o=>o.setName('reward').setDescription('Phần thưởng mới'))
-      .addIntegerOption(o=>o.setName('winners').setDescription('Số người thắng'))
-      .addStringOption(o=>o.setName('extend').setDescription('Tăng thêm thời lượng (vd 10m)'))
-      .addStringOption(o=>o.setName('color').setDescription('#hex hoặc rgb(...)'))
+      .setDescription('✏️ Chỉnh sửa Giveaway đang chạy')
+      .addStringOption(o => o.setName('giveaway').setDescription('ID hoặc messageId').setRequired(true))
+      .addStringOption(o => o.setName('reward').setDescription('Phần thưởng mới'))
+      .addIntegerOption(o => o.setName('winners').setDescription('Số người thắng'))
+      .addStringOption(o => o.setName('extend').setDescription('Tăng thêm thời lượng (vd 10m)'))
+      .addStringOption(o => o.setName('color').setDescription('#hex hoặc rgb(...)'))
     )
     .addSubcommandGroup(g => g
       .setName('template')
-      .setDescription('Quản lý template')
-      .addSubcommand(sc=>sc
+      .setDescription('📋 Quản lý mẫu Giveaway (Template)')
+      .addSubcommand(sc => sc
         .setName('create')
-        .setDescription('Tạo template')
-        .addStringOption(o=>o.setName('name').setDescription('Tên template').setRequired(true))
-        .addStringOption(o=>o.setName('description').setDescription('Mô tả'))
+        .setDescription('➕ Tạo mẫu mới')
+        .addStringOption(o => o.setName('name').setDescription('Tên template').setRequired(true))
+        .addStringOption(o => o.setName('description').setDescription('Mô tả'))
       )
-      .addSubcommand(sc=>sc
+      .addSubcommand(sc => sc
         .setName('edit')
-        .setDescription('Chỉnh sửa template')
-        .addStringOption(o=>o.setName('template').setDescription('Tên template').setRequired(true))
+        .setDescription('✏️ Chỉnh sửa mẫu')
+        .addStringOption(o => o.setName('template').setDescription('Tên template').setRequired(true))
       )
-      .addSubcommand(sc=>sc
+      .addSubcommand(sc => sc
         .setName('delete')
-        .setDescription('Xoá template')
-        .addStringOption(o=>o.setName('template').setDescription('Tên template').setRequired(true))
+        .setDescription('🗑️ Xóa mẫu')
+        .addStringOption(o => o.setName('template').setDescription('Tên template').setRequired(true))
       )
     )
-    .addSubcommand(sc=>sc
+    .addSubcommand(sc => sc
       .setName('setup')
-      .setDescription('Thiết lập giveaway nâng cao (menu)')
+      .setDescription('⚙️ Cài đặt nâng cao (Menu)')
     ),
 
   async execute(interaction) {
@@ -162,7 +162,7 @@ module.exports = {
       const template = await buildFromTemplate(templateName);
 
       const reqs = parseRoleList(interaction.options.getString('requirements'));
-      const bl = parseRoleList(interaction.options.getString('blacklists')).slice(0,10);
+      const bl = parseRoleList(interaction.options.getString('blacklists')).slice(0, 10);
       const by = parseRoleList(interaction.options.getString('bypasses'));
       const multipliers = parseMultipliers(interaction.options.getString('multipliers'));
       const requiresJoinBeforeSec = parseDuration(interaction.options.getString('requires_join_before')) || 0;
@@ -174,7 +174,7 @@ module.exports = {
       const doc = new Giveaway({
         messageId: 'pending',
         channelId: channel.id,
-        giveawayId: `${Date.now()}${Math.floor(Math.random()*1000)}`,
+        giveawayId: `${Date.now()}${Math.floor(Math.random() * 1000)}`,
         guildId: interaction.guild.id,
         startAt: Date.now(),
         endAt,
@@ -214,7 +214,7 @@ module.exports = {
     if (sub === 'end') {
       await interaction.deferReply({ ephemeral: true });
       const id = interaction.options.getString('giveaway', true);
-      const gw = await Giveaway.findOne({ $or: [ { giveawayId: id }, { messageId: id } ], guildId: interaction.guild.id });
+      const gw = await Giveaway.findOne({ $or: [{ giveawayId: id }, { messageId: id }], guildId: interaction.guild.id });
       if (!gw) return interaction.editReply('Không tìm thấy giveaway.');
       if (gw.ended) return interaction.editReply('Giveaway đã kết thúc.');
       gw.endAt = Date.now();
@@ -225,7 +225,7 @@ module.exports = {
     if (sub === 'reroll') {
       await interaction.deferReply({ ephemeral: true });
       const id = interaction.options.getString('giveaway', true);
-      const gw = await Giveaway.findOne({ $or: [ { giveawayId: id }, { messageId: id } ], guildId: interaction.guild.id });
+      const gw = await Giveaway.findOne({ $or: [{ giveawayId: id }, { messageId: id }], guildId: interaction.guild.id });
       if (!gw) return interaction.editReply('Không tìm thấy giveaway.');
       if (!gw.ended) return interaction.editReply('Giveaway chưa kết thúc.');
       gw.winners = [];
@@ -236,7 +236,7 @@ module.exports = {
     if (sub === 'edit') {
       await interaction.deferReply({ ephemeral: true });
       const id = interaction.options.getString('giveaway', true);
-      const gw = await Giveaway.findOne({ $or: [ { giveawayId: id }, { messageId: id } ], guildId: interaction.guild.id });
+      const gw = await Giveaway.findOne({ $or: [{ giveawayId: id }, { messageId: id }], guildId: interaction.guild.id });
       if (!gw) return interaction.editReply('Không tìm thấy giveaway.');
       if (gw.ended) return interaction.editReply('Giveaway đã kết thúc.');
       const prize = interaction.options.getString('reward');
@@ -246,7 +246,7 @@ module.exports = {
       if (prize) gw.prize = prize;
       if (winners) gw.winnerCount = winners;
       if (extend) gw.endAt += toMillis(parseDuration(extend));
-      if (color) gw.embed = { ...(gw.embed||{}), embedColor: color };
+      if (color) gw.embed = { ...(gw.embed || {}), embedColor: color };
       await gw.save();
       return interaction.editReply('Đã cập nhật giveaway.');
     }

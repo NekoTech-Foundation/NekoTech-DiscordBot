@@ -60,10 +60,10 @@ function jsonEmbed(title, obj) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('cardswap')
-    .setDescription('Tích hợp Cardswap Partner API')
+    .setDescription('💳 Hệ thống đổi thẻ cào & thanh toán')
     .addSubcommand(sc => sc
       .setName('charge')
-      .setDescription('Đổi thẻ cào (charging)')
+      .setDescription('💸 Đổi thẻ cào sang tiền mặt')
       .addStringOption(o => o.setName('telco').setDescription('Nhà mạng (VD: VIETTEL, MOBIFONE, VINAPHONE, VNMOBI, GATE)').setRequired(true))
       .addStringOption(o => o.setName('code').setDescription('Mã thẻ').setRequired(true))
       .addStringOption(o => o.setName('serial').setDescription('Serial thẻ').setRequired(true))
@@ -72,7 +72,7 @@ module.exports = {
     )
     .addSubcommand(sc => sc
       .setName('check')
-      .setDescription('Kiểm tra trạng thái thẻ (check)')
+      .setDescription('🔍 Kiểm tra trạng thái thẻ')
       .addStringOption(o => o.setName('request_id').setDescription('Mã yêu cầu khi nạp').setRequired(true))
       .addStringOption(o => o.setName('telco').setDescription('Nhà mạng'))
       .addStringOption(o => o.setName('code').setDescription('Mã thẻ'))
@@ -81,11 +81,11 @@ module.exports = {
     )
     .addSubcommand(sc => sc
       .setName('fee')
-      .setDescription('Lấy bảng phí/chiết khấu đổi thẻ')
+      .setDescription('📊 Xem bảng phí chiết khấu')
     )
     .addSubcommand(sc => sc
       .setName('buycard')
-      .setDescription('Mua thẻ cào')
+      .setDescription('🛒 Mua mã thẻ điện thoại/game')
       .addStringOption(o => o.setName('service_code').setDescription('Mã dịch vụ (VD: VIETTEL)').setRequired(true))
       .addIntegerOption(o => o.setName('value').setDescription('Mệnh giá').setRequired(true))
       .addIntegerOption(o => o.setName('qty').setDescription('Số lượng').setRequired(true))
@@ -93,27 +93,27 @@ module.exports = {
     )
     .addSubcommand(sc => sc
       .setName('balance')
-      .setDescription('Lấy số dư tài khoản mua thẻ')
+      .setDescription('💰 Xem số dư tài khoản')
     )
     .addSubcommand(sc => sc
       .setName('stock')
-      .setDescription('Kiểm tra tồn kho thẻ')
+      .setDescription('📦 Kiểm tra kho thẻ hiện có')
       .addStringOption(o => o.setName('service_code').setDescription('Mã dịch vụ').setRequired(true))
       .addIntegerOption(o => o.setName('value').setDescription('Mệnh giá').setRequired(true))
       .addIntegerOption(o => o.setName('qty').setDescription('Số lượng').setRequired(true))
     )
     .addSubcommand(sc => sc
       .setName('products')
-      .setDescription('Lấy danh sách thẻ khả dụng')
+      .setDescription('📋 Danh sách sản phẩm hỗ trợ')
     )
     .addSubcommand(sc => sc
       .setName('transfers')
-      .setDescription('Lịch sử chuyển tiền (partner)')
+      .setDescription('📜 Lịch sử giao dịch chuyển tiền')
       .addIntegerOption(o => o.setName('limit').setDescription('Số bản ghi').setMinValue(1).setMaxValue(50))
     )
     .addSubcommand(sc => sc
       .setName('withdraw_create')
-      .setDescription('Tạo lệnh rút tiền')
+      .setDescription('🏧 Tạo yêu cầu rút tiền')
       .addStringOption(o => o.setName('bank_code').setDescription('Mã ngân hàng (VD: 970415)').setRequired(true))
       .addStringOption(o => o.setName('account_number').setDescription('Số tài khoản nhận').setRequired(true))
       .addStringOption(o => o.setName('account_owner').setDescription('Chủ tài khoản nhận').setRequired(true))
@@ -121,16 +121,16 @@ module.exports = {
     )
     .addSubcommand(sc => sc
       .setName('banks')
-      .setDescription('Danh sách ngân hàng hỗ trợ rút')
+      .setDescription('🏦 Danh sách ngân hàng hỗ trợ')
     )
     .addSubcommand(sc => sc
       .setName('withdraw_status')
-      .setDescription('Kiểm tra trạng thái đơn rút')
+      .setDescription('👀 Kiểm tra trạng thái rút tiền')
       .addStringOption(o => o.setName('order_id').setDescription('Mã đơn rút').setRequired(true))
     )
     .addSubcommand(sc => sc
       .setName('checkapi')
-      .setDescription('Kiểm tra API')
+      .setDescription('🔌 Kiểm tra kết nối API')
     ),
 
   async execute(interaction) {
