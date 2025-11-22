@@ -12,9 +12,71 @@ const interactionHandler = require('./interaction_kentavoice');
 const configPath = path.join(__dirname, 'config.yml');
 const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
+// Helper function to check and delete empty channels
+async function checkAndDeleteEmptyChannel(client, channel, category) {
+    if (!channel || channel.members.size > 0) return;
+
+    try {
+        const channelId = channel.id;
+        const channelName = channel.name;
+
+        await channel.delete();
+        await VoiceMasterChannel.deleteOne({ voiceId: channelId });
+
+        // Try delete linked text channel if exists
+        const textChannelName = `chat-${channelName.toLowerCase().replace(/\s+/g, '-')}`;
+        const guild = channel.guild;
+        const textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
+        if (textChannel) {
+            await textChannel.delete().catch(() => { });
+        }
+
+        console.log(`[KentaVoice] Deleted empty channel: ${channelName}`);
+    } catch (error) {
+        console.error('Error deleting empty channel:', error);
+    }
+}
+
 module.exports = {
-    onLoad: (client) => {
+    onLoad: async (client) => {
         console.log('KentaVoice addon loaded.');
+
+        // Cleanup orphaned channels on startup
+        client.once('ready', async () => {
+            console.log('[KentaVoice] Checking for orphaned voice channels...');
+
+            try {
+                const allChannels = await VoiceMasterChannel.find({});
+
+                for (const channelData of allChannels) {
+                    // Try to find the channel in all guilds
+                    let found = false;
+                    for (const [guildId, guild] of client.guilds.cache) {
+                        const channel = guild.channels.cache.get(channelData.voiceId);
+                        if (channel) {
+                            found = true;
+                            // Check if it's empty
+                            if (channel.members.size === 0) {
+                                const voiceMaster = await VoiceMaster.findOne({ guildId: guild.id });
+                                const category = voiceMaster ? guild.channels.cache.get(voiceMaster.voiceCategoryId) : null;
+                                await checkAndDeleteEmptyChannel(client, channel, category);
+                            }
+                            break;
+                        }
+                    }
+
+                    // If channel not found in any guild, remove from DB
+                    if (!found) {
+                        await VoiceMasterChannel.deleteOne({ voiceId: channelData.voiceId });
+                        console.log(`[KentaVoice] Removed orphaned DB entry: ${channelData.voiceId}`);
+                    }
+                }
+
+                console.log('[KentaVoice] Cleanup completed.');
+            } catch (error) {
+                console.error('[KentaVoice] Error during cleanup:', error);
+            }
+        });
 
         // Handle Interactions
         client.on('interactionCreate', async (interaction) => {
@@ -143,37 +205,22 @@ module.exports = {
                             );
 
                         await newChannel.send({ content: `${member}`, embeds: [controlEmbed], components: [row1, row2] });
+                    }
+                }
 
+                // Check if someone left a voice channel
+                if (oldState.channel && oldState.channel.id !== newState.channel?.id) {
+                    const leftChannel = oldState.channel;
 
-                        // Wait for channel to be empty and delete it
-                        const checkEmpty = setInterval(async () => {
-                            const channel = guild.channels.cache.get(newChannel.id);
-                            if (!channel) {
-                                clearInterval(checkEmpty);
-                                return;
-                            }
-
-                            if (channel.members.size === 0) {
-                                clearInterval(checkEmpty);
-                                try {
-                                    await channel.delete();
-                                    await VoiceMasterChannel.deleteOne({ voiceId: newChannel.id });
-
-                                    // Try delete linked text channel if exists
-                                    const textChannelName = `chat-${channel.name.toLowerCase().replace(/\s+/g, '-')}`;
-                                    // We can't easily find it by name reliably. 
-                                    // But since we added auto-delete logic to text channel itself, it should be fine.
-                                    // Or we can iterate channels in category.
-                                    const textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
-                                    if (textChannel) {
-                                        await textChannel.delete().catch(() => { });
-                                    }
-
-                                } catch (error) {
-                                    console.error('Error deleting voice channel:', error);
-                                }
-                            }
-                        }, 3000); // Check every 3 seconds
+                    // Check if this is a KentaVoice managed channel
+                    const channelData = await VoiceMasterChannel.findOne({ voiceId: leftChannel.id });
+                    if (channelData) {
+                        // Check if channel is now empty
+                        if (leftChannel.members.size === 0) {
+                            const voiceMaster = await VoiceMaster.findOne({ guildId: guild.id });
+                            const category = voiceMaster ? guild.channels.cache.get(voiceMaster.voiceCategoryId) : null;
+                            await checkAndDeleteEmptyChannel(client, leftChannel, category);
+                        }
                     }
                 }
             } catch (error) {
