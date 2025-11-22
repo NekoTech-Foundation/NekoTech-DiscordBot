@@ -29,7 +29,7 @@ const activeGames = new Set();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('hangman')
-        .setDescription(lang.Hangman.commandDescription)
+        .setDescription('😵 Trò chơi Hangman cổ điển')
         .setDMPermission(false),
     category: 'Fun',
     async execute(interaction) {
@@ -89,7 +89,7 @@ module.exports = {
                 global.hangmanMessageIDs.add(m.id);
                 try {
                     await m.delete();
-                } catch {}
+                } catch { }
             }
         });
 

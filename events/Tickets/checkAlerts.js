@@ -103,7 +103,7 @@ async function checkAlerts(client) {
         const config = getConfig();
         const now = new Date();
         const mongoose = require('mongoose');
-        console.log(`[checkAlerts] Mongoose readyState: ${mongoose.connection.readyState}`);
+
 
         if (mongoose.connection.readyState !== 1) {
             console.warn('[checkAlerts] MongoDB not connected. Skipping check.');

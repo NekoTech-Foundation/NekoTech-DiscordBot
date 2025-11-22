@@ -72,7 +72,7 @@ history: true
 kick: true
 poll: true
 purge: true
-removerole: false
+removerole: true
 timeout: true
 warn: true
 unwarn: true
@@ -89,8 +89,8 @@ invites: true
 inviter: true
 ping: true
 backup: false
-channelstats: false
-autoreact: false
+channelstats: true
+autoreact: true
 botactivity: true
 autoresponder: true
 translate: true

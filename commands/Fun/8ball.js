@@ -38,7 +38,7 @@ async function checkBlacklistWords(content) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('8ball')
-        .setDescription('Hỏi bot một câu hỏi')
+        .setDescription('🎱 Hỏi bot một câu hỏi bất kỳ')
         .addStringOption(option => option.setName('question').setDescription('Câu hỏi để hỏi bot').setRequired(true)),
     category: 'Fun',
     async execute(interaction, client) {

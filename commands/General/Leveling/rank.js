@@ -372,7 +372,7 @@ setInterval(() => {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('rank')
-        .setDescription('Xem profile level đẹp của bạn')
+        .setDescription('🏆 Xem bảng xếp hạng')
         .addUserOption(option =>
             option
                 .setName('user')

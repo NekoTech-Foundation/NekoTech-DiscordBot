@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('fact')
-        .setDescription('Nhận một sự thật ngẫu nhiên.')
+        .setDescription('🧠 Xem một sự thật thú vị')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('cat')

@@ -50,7 +50,7 @@ function createPageEmbed(client, interaction, commands, page) {
     const commandsOnPage = commands.slice(start, end);
 
     const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
-    
+
     let description = `Chào **${interaction.user.username}**! 👋\n\n`;
     description += `> **KentaBucket** là bot Discord đa năng, đáp ứng hầu hết mọi nhu cầu của máy chủ.\n`;
     description += `> Để xem chi tiết một lệnh, sử dụng: \`/help lệnh:<tên_lệnh>\`\n\n`;
@@ -59,7 +59,7 @@ function createPageEmbed(client, interaction, commands, page) {
 
     commandsOnPage.forEach(cmd => {
         description += `**\`/${cmd.name}\`** - ${cmd.description}\n`;
-        
+
         if (cmd.subcommands.length > 0) {
             cmd.subcommands.forEach(sub => {
                 description += `  ├ \`${sub.name}\` - ${sub.description}\n`;
@@ -72,7 +72,7 @@ function createPageEmbed(client, interaction, commands, page) {
         .setTitle('📖 Danh sách lệnh')
         .setDescription(description)
         .setThumbnail(client.user.displayAvatarURL())
-        .setFooter({ 
+        .setFooter({
             text: `Trang ${page + 1}/${totalPages} • Tổng ${commands.length} lệnh`,
             iconURL: interaction.user.displayAvatarURL()
         })
@@ -82,7 +82,7 @@ function createPageEmbed(client, interaction, commands, page) {
 // Tạo embed cho lệnh cụ thể
 function createCommandEmbed(client, commandName) {
     const command = client.slashCommands.get(commandName.toLowerCase());
-    
+
     if (!command) return null;
 
     const commandJSON = command.data.toJSON();
@@ -93,11 +93,11 @@ function createCommandEmbed(client, commandName) {
         description += `**⚙️ Tùy chọn:**\n`;
         commandJSON.options.forEach(option => {
             const required = option.required ? '`[Bắt buộc]`' : '`[Tùy chọn]`';
-            
+
             if (option.type === ApplicationCommandOptionType.Subcommand) {
                 description += `\n**/${commandJSON.name} ${option.name}**\n`;
                 description += `└ ${option.description}\n`;
-                
+
                 if (option.options && option.options.length > 0) {
                     option.options.forEach(subOpt => {
                         const subRequired = subOpt.required ? '`[Bắt buộc]`' : '`[Tùy chọn]`';
@@ -106,7 +106,7 @@ function createCommandEmbed(client, commandName) {
                 }
             } else {
                 description += `• \`${option.name}\` ${required} - ${option.description}\n`;
-                
+
                 if (option.choices && option.choices.length > 0) {
                     description += `  Giá trị: ${option.choices.map(c => `\`${c.name}\``).join(', ')}\n`;
                 }
@@ -148,7 +148,7 @@ function createPaginationButtons(currentPage, totalPages, disabled = false) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Xem danh sách tất cả các lệnh của bot')
+        .setDescription('📚 Xem danh sách lệnh và hướng dẫn')
         .addStringOption(option =>
             option
                 .setName('lệnh')
@@ -174,7 +174,7 @@ module.exports = {
             // Nếu tìm kiếm lệnh cụ thể
             if (commandQuery) {
                 const commandEmbed = createCommandEmbed(client, commandQuery);
-                
+
                 if (!commandEmbed) {
                     return await interaction.editReply({
                         content: `❌ Không tìm thấy lệnh \`${commandQuery}\`\n💡 Dùng \`/help\` để xem tất cả lệnh.`
@@ -189,7 +189,7 @@ module.exports = {
                             .setStyle(ButtonStyle.Success)
                     );
 
-                const response = await interaction.editReply({ 
+                const response = await interaction.editReply({
                     embeds: [commandEmbed],
                     components: [backButton]
                 });
@@ -209,7 +209,7 @@ module.exports = {
                             embeds: [embed],
                             components: [buttons]
                         });
-                        
+
                         collector.stop();
                         startMainCollector(response, interaction, client);
                     }
@@ -237,7 +237,7 @@ module.exports = {
         } catch (error) {
             console.error(`Lỗi khi thực thi lệnh help:`, error);
             const errorMessage = '❌ Đã có lỗi xảy ra!';
-            
+
             try {
                 if (!interaction.replied && !interaction.deferred) {
                     await interaction.reply({ content: errorMessage, ephemeral: true });

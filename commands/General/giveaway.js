@@ -85,7 +85,7 @@ function parseDuration(durationString) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("giveaway")
-        .setDescription(`Quản lý giveaway`)
+        .setDescription(`🎉 Tổ chức giveaway`)
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("create")
@@ -206,7 +206,7 @@ module.exports = {
                         .setDescription("ID giveaway ở chân của embed giveaway")
                         .setRequired(true)
                 )
-    ),
+        ),
     category: 'Chung',
     async execute(interaction, client) {
         try {
@@ -299,7 +299,7 @@ module.exports = {
                     let minInvites = interaction.options.getInteger("min_invites") || 0;
                     let minMessages = interaction.options.getInteger("min_messages") || 0;
                     let extraEntriesInput = interaction.options.getString("extra_entries");
-                    
+
                     let extraEntries = [];
                     if (extraEntriesInput) {
                         const regex = /<@&(\d+)>:(\d+)/g;

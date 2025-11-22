@@ -5,7 +5,7 @@ const MAX_MESSAGE_LENGTH = 2000;
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('say')
-        .setDescription('Lặp lại hoặc chỉnh sửa tin nhắn do bot gửi')
+        .setDescription('🗣️ Yêu cầu bot nói gì đó')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('send')
@@ -38,11 +38,11 @@ module.exports = {
         if (subcommand === 'send') {
             const message = interaction.options.getString('message');
             const attachment = interaction.options.getAttachment('attachment');
-            
+
             if (message.length > MAX_MESSAGE_LENGTH) {
-                return interaction.reply({ 
+                return interaction.reply({
                     content: `Tin nhắn quá dài! Độ dài tối đa là ${MAX_MESSAGE_LENGTH} ký tự.`,
-                    ephemeral: true 
+                    ephemeral: true
                 });
             }
 
@@ -50,19 +50,19 @@ module.exports = {
                 content: message,
                 files: attachment ? [attachment] : []
             });
-            
+
             await interaction.reply({ content: 'Tin nhắn đã được gửi!', ephemeral: true });
-        } 
+        }
         else if (subcommand === 'edit') {
             const messageId = interaction.options.getString('message_id');
-            
+
             try {
                 const targetMessage = await interaction.channel.messages.fetch(messageId);
-                
+
                 if (targetMessage.author.id !== interaction.client.user.id) {
-                    return interaction.reply({ 
+                    return interaction.reply({
                         content: 'Tôi chỉ có thể chỉnh sửa những tin nhắn do tôi gửi.',
-                        ephemeral: true 
+                        ephemeral: true
                     });
                 }
 
@@ -88,11 +88,11 @@ module.exports = {
 
                 if (submitted) {
                     const newContent = submitted.fields.getTextInputValue('edited_content');
-                    
+
                     if (newContent.length > MAX_MESSAGE_LENGTH) {
-                        return submitted.reply({ 
+                        return submitted.reply({
                             content: `Tin nhắn quá dài! Độ dài tối đa là ${MAX_MESSAGE_LENGTH} ký tự.`,
-                            ephemeral: true 
+                            ephemeral: true
                         });
                     }
 
@@ -102,24 +102,24 @@ module.exports = {
 
             } catch (error) {
                 console.error('Lỗi trong lệnh chỉnh sửa:', error);
-                return interaction.reply({ 
+                return interaction.reply({
                     content: 'Không thể tìm thấy tin nhắn. Hãy chắc chắn rằng ID là chính xác và tin nhắn nằm trong kênh này.',
-                    ephemeral: true 
+                    ephemeral: true
                 });
             }
         }
     }
 };
 
-module.exports.modalSubmit = async function(interaction) {
+module.exports.modalSubmit = async function (interaction) {
     if (interaction.customId.startsWith('edit_message_')) {
         const messageId = interaction.customId.replace('edit_message_', '');
         const newContent = interaction.fields.getTextInputValue('edited_content');
-        
+
         if (newContent.length > MAX_MESSAGE_LENGTH) {
-            return interaction.reply({ 
+            return interaction.reply({
                 content: `Tin nhắn quá dài! Độ dài tối đa là ${MAX_MESSAGE_LENGTH} ký tự.`,
-                ephemeral: true 
+                ephemeral: true
             });
         }
 
@@ -129,9 +129,9 @@ module.exports.modalSubmit = async function(interaction) {
             await interaction.reply({ content: 'Đã chỉnh sửa tin nhắn thành công!', ephemeral: true });
         } catch (error) {
             console.error('Lỗi khi gửi modal chỉnh sửa tin nhắn:', error);
-            await interaction.reply({ 
+            await interaction.reply({
                 content: 'Không thể chỉnh sửa tin nhắn. Tin nhắn có thể đã bị xóa hoặc tôi không còn quyền chỉnh sửa nó.',
-                ephemeral: true 
+                ephemeral: true
             });
         }
     }

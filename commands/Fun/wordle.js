@@ -42,7 +42,7 @@ async function checkBlacklistWords(content) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('wordle')
-        .setDescription('Chơi một ván Wordle')
+        .setDescription('🔤 Trò chơi đoán từ Wordle')
         .setDMPermission(false),
     category: 'Fun',
     async execute(interaction) {
@@ -74,7 +74,7 @@ module.exports = {
             if (guess.length === 5 && /^[A-Z]{5}$/.test(guess)) {
                 try {
                     await m.delete();
-                } catch {}
+                } catch { }
 
                 if (await checkBlacklistWords(guess)) {
                     const blacklistMessage = lang.BlacklistWords && lang.BlacklistWords.Message

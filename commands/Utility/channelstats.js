@@ -5,7 +5,7 @@ const Ticket = require('../../models/tickets');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('channelstats')
-        .setDescription('Manage channel statistics')
+        .setDescription('📈 Xem thống kê kênh')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add')
@@ -84,13 +84,13 @@ module.exports = {
                 let newChannelName = channelName;
 
                 if (['TotalTickets', 'OpenTickets', 'ClosedTickets', 'DeletedTickets'].includes(type)) {
-                    const ticketCount = await Ticket.countDocuments({ 
+                    const ticketCount = await Ticket.countDocuments({
                         guildId,
                         ...(type === 'OpenTickets' && { status: 'open' }),
                         ...(type === 'ClosedTickets' && { status: 'closed' }),
                         ...(type === 'DeletedTickets' && { status: 'deleted' })
                     });
-                    
+
                     const formattedCount = new Intl.NumberFormat('en-US').format(ticketCount);
                     newChannelName = channelName.replace('{stats}', formattedCount);
                 } else if (type === 'ServerRegion') {
@@ -98,7 +98,7 @@ module.exports = {
                     newChannelName = channelName.replace('{stats}', region);
                 } else if (type === 'ServerCreationDate') {
                     const creationDate = interaction.guild.createdAt;
-                    const formattedDate = creationDate.toLocaleDateString('en-US', { 
+                    const formattedDate = creationDate.toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'short',
                         day: 'numeric'

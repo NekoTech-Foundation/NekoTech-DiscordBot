@@ -25,10 +25,10 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('compliment')
-        .setDescription('Gửi lời khen ngẫu nhiên cho ai đó!')
+        .setDescription('💖 Gửi lời khen ngợi đến ai đó')
         .addUserOption(option =>
             option.setName('user')
-                .setDescription('Gửi lời khen')
+                .setDescription('Người dùng để gửi lời khen')
                 .setRequired(true)),
     category: 'Fun',
     async execute(interaction, client) {

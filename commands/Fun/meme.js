@@ -66,7 +66,7 @@ async function checkBlacklistWords(content) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('meme')
-        .setDescription('Tạo và lấy các meme.')
+        .setDescription('🐸 Xem meme ngẫu nhiên')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('random')

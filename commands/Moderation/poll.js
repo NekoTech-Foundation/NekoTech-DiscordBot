@@ -14,7 +14,7 @@ function getNumberEmoji(number) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('poll')
-        .setDescription('Tạo một cuộc thăm dò ý kiến cho người dùng bỏ phiếu')
+        .setDescription('📊 Tạo cuộc bình chọn')
         .addStringOption(option => option
             .setName('question')
             .setDescription('Câu hỏi của cuộc thăm dò')

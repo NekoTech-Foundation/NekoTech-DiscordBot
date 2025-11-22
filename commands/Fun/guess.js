@@ -127,7 +127,7 @@ const languageSamples = [
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('guess')
-        .setDescription('Trò chơi đoán ngôn ngữ'),
+        .setDescription('🔢 Trò chơi đoán số'),
     category: 'Fun',
     async execute(interaction) {
         const correctAnswer = languageSamples[Math.floor(Math.random() * languageSamples.length)];

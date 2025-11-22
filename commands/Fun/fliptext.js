@@ -20,7 +20,7 @@ async function checkBlacklistWords(content) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('fliptext')
-        .setDescription('Lật ngược văn bản')
+        .setDescription('🙃 Lật ngược văn bản của bạn')
         .addStringOption(option => option.setName('text').setDescription('Văn bản để lật ngược').setRequired(true)),
     category: 'Fun',
     async execute(interaction, client) {

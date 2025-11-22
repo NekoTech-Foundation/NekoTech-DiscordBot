@@ -8,7 +8,7 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('role')
-        .setDescription('Thêm hoặc xóa vai trò khỏi người dùng')
+        .setDescription('🎭 Quản lý vai trò')
         .addStringOption(option =>
             option.setName('action')
                 .setDescription('Hành động để thực hiện: thêm hoặc xóa')
@@ -38,10 +38,10 @@ module.exports = {
             const applyToAll = interaction.options.getBoolean('all') ?? false;
             const member = interaction.member;
 
-            const requiredRoles = applyToAll 
-                ? config.ModerationRoles.roleall 
+            const requiredRoles = applyToAll
+                ? config.ModerationRoles.roleall
                 : config.ModerationRoles.addrole;
-            
+
             const hasModeratorRole = requiredRoles.some(roleId => member.roles.cache.has(roleId));
             const isAdministrator = member.permissions.has(PermissionsBitField.Flags.Administrator);
 

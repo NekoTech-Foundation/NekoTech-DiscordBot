@@ -1,15 +1,15 @@
-const { 
-    SlashCommandBuilder, 
-    EmbedBuilder, 
-    ActionRowBuilder, 
-    ButtonBuilder, 
-    ButtonStyle, 
-    StringSelectMenuBuilder, 
-    PermissionsBitField, 
-    ModalBuilder, 
-    TextInputBuilder, 
-    TextInputStyle, 
-    MessageFlags 
+const {
+    SlashCommandBuilder,
+    EmbedBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    StringSelectMenuBuilder,
+    PermissionsBitField,
+    ModalBuilder,
+    TextInputBuilder,
+    TextInputStyle,
+    MessageFlags
 } = require('discord.js');
 const mongoose = require('mongoose');
 const { getConfig, getLang } = require('../../utils/configLoader.js');
@@ -93,15 +93,15 @@ const ModalHandlers = {
             await onSubmit(submit);
         } catch (error) {
             if (error.code === 'InteractionCollectorError') {
-                await interaction.followUp({ 
-                    content: 'Modal đã hết thời gian. Vui lòng thử lại.', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.followUp({
+                    content: 'Modal đã hết thời gian. Vui lòng thử lại.',
+                    flags: MessageFlags.Ephemeral
                 });
             } else {
                 console.error('Modal error:', error);
-                await interaction.followUp({ 
-                    content: 'Có lỗi xảy ra. Vui lòng thử lại.', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.followUp({
+                    content: 'Có lỗi xảy ra. Vui lòng thử lại.',
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -122,10 +122,10 @@ const ModalHandlers = {
         }, async (submit) => {
             const title = submit.fields.getTextInputValue('titleText');
             embed.setTitle(title || null);
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -145,10 +145,10 @@ const ModalHandlers = {
         }, async (submit) => {
             const description = submit.fields.getTextInputValue('descriptionText');
             embed.setDescription(description || null);
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -183,23 +183,23 @@ const ModalHandlers = {
             const url = submit.fields.getTextInputValue('authorUrl');
 
             if ((icon && !Utils.isValidUrl(icon)) || (url && !Utils.isValidUrl(url))) {
-                await submit.reply({ 
-                    content: 'URL không hợp lệ!', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'URL không hợp lệ!',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
 
-            embed.setAuthor(name || icon || url ? { 
-                name: name || null, 
-                iconURL: icon || null, 
-                url: url || null 
+            embed.setAuthor(name || icon || url ? {
+                name: name || null,
+                iconURL: icon || null,
+                url: url || null
             } : null);
 
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -227,22 +227,22 @@ const ModalHandlers = {
             const icon = submit.fields.getTextInputValue('footerIcon');
 
             if (icon && !Utils.isValidUrl(icon)) {
-                await submit.reply({ 
-                    content: 'URL icon không hợp lệ!', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'URL icon không hợp lệ!',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
 
-            embed.setFooter(text || icon ? { 
-                text: text || null, 
-                iconURL: icon || null 
+            embed.setFooter(text || icon ? {
+                text: text || null,
+                iconURL: icon || null
             } : null);
 
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -263,15 +263,15 @@ const ModalHandlers = {
             const color = submit.fields.getTextInputValue('colorValue');
             try {
                 embed.setColor(color || null);
-                await submit.update({ 
-                    embeds: [embed], 
-                    components: Utils.combineComponents(components, linkButtons), 
-                    flags: MessageFlags.Ephemeral 
+                await submit.update({
+                    embeds: [embed],
+                    components: Utils.combineComponents(components, linkButtons),
+                    flags: MessageFlags.Ephemeral
                 });
             } catch {
-                await submit.reply({ 
-                    content: 'Màu không hợp lệ! Sử dụng hex code (vd: #FF0000)', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'Màu không hợp lệ! Sử dụng hex code (vd: #FF0000)',
+                    flags: MessageFlags.Ephemeral
                 });
             }
         });
@@ -291,20 +291,20 @@ const ModalHandlers = {
             ]
         }, async (submit) => {
             const url = submit.fields.getTextInputValue('thumbnailUrl');
-            
+
             if (url && (!Utils.isValidUrl(url) || !Utils.isImageUrl(url))) {
-                await submit.reply({ 
-                    content: 'URL hình ảnh không hợp lệ!', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'URL hình ảnh không hợp lệ!',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
 
             embed.setThumbnail(url || null);
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -323,20 +323,20 @@ const ModalHandlers = {
             ]
         }, async (submit) => {
             const url = submit.fields.getTextInputValue('imageUrl');
-            
+
             if (url && (!Utils.isValidUrl(url) || !Utils.isImageUrl(url))) {
-                await submit.reply({ 
-                    content: 'URL hình ảnh không hợp lệ!', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'URL hình ảnh không hợp lệ!',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
 
             embed.setImage(url || null);
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -369,10 +369,10 @@ const ModalHandlers = {
             const inline = submit.fields.getTextInputValue('fieldInline').toLowerCase() === 'true';
 
             embed.addFields({ name, value, inline });
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -430,9 +430,9 @@ const ModalHandlers = {
 
     async addLink(interaction, embed, linkButtons, components) {
         if (linkButtons.length >= MAX_LINK_BUTTONS) {
-            await interaction.reply({ 
-                content: `Tối đa ${MAX_LINK_BUTTONS} link buttons!`, 
-                flags: MessageFlags.Ephemeral 
+            await interaction.reply({
+                content: `Tối đa ${MAX_LINK_BUTTONS} link buttons!`,
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -463,9 +463,9 @@ const ModalHandlers = {
             const emoji = submit.fields.getTextInputValue('buttonEmoji');
 
             if (!Utils.isValidUrl(url)) {
-                await submit.reply({ 
-                    content: 'URL không hợp lệ!', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'URL không hợp lệ!',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
@@ -478,10 +478,10 @@ const ModalHandlers = {
             if (emoji) button.setEmoji(emoji);
             linkButtons.push(button);
 
-            await submit.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await submit.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     }
@@ -491,10 +491,10 @@ const ModalHandlers = {
 const Actions = {
     async timestamp(interaction, embed, components, linkButtons) {
         embed.setTimestamp(embed.data.timestamp ? null : new Date());
-        await interaction.update({ 
-            embeds: [embed], 
-            components: Utils.combineComponents(components, linkButtons), 
-            flags: MessageFlags.Ephemeral 
+        await interaction.update({
+            embeds: [embed],
+            components: Utils.combineComponents(components, linkButtons),
+            flags: MessageFlags.Ephemeral
         });
     },
 
@@ -502,10 +502,10 @@ const Actions = {
         const userData = Utils.getUserData(interaction.client, interaction.user.id);
         userData.suppressPings = !userData.suppressPings;
 
-        await interaction.update({ 
-            embeds: [embed], 
-            components: Utils.combineComponents(components, linkButtons), 
-            flags: MessageFlags.Ephemeral 
+        await interaction.update({
+            embeds: [embed],
+            components: Utils.combineComponents(components, linkButtons),
+            flags: MessageFlags.Ephemeral
         });
 
         await interaction.followUp({
@@ -516,9 +516,9 @@ const Actions = {
 
     async removeField(interaction, embed, components, linkButtons) {
         if (!embed.data.fields?.length) {
-            await interaction.reply({ 
-                content: 'Không có field nào để xóa!', 
-                flags: MessageFlags.Ephemeral 
+            await interaction.reply({
+                content: 'Không có field nào để xóa!',
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -534,17 +534,17 @@ const Actions = {
             .setPlaceholder('Chọn field để xóa')
             .addOptions(options);
 
-        const response = await interaction.reply({ 
-            content: 'Chọn field để xóa:', 
-            components: [new ActionRowBuilder().addComponents(menu)], 
+        const response = await interaction.reply({
+            content: 'Chọn field để xóa:',
+            components: [new ActionRowBuilder().addComponents(menu)],
             flags: MessageFlags.Ephemeral,
             fetchReply: true
         });
 
         try {
-            const selected = await response.awaitMessageComponent({ 
+            const selected = await response.awaitMessageComponent({
                 filter: i => i.user.id === interaction.user.id,
-                time: MODAL_TIMEOUT 
+                time: MODAL_TIMEOUT
             });
 
             const index = parseInt(selected.values[0]);
@@ -552,26 +552,26 @@ const Actions = {
             fields.splice(index, 1);
             embed.setFields(fields);
 
-            await interaction.editReply({ 
+            await interaction.editReply({
                 content: 'Đã xóa field!',
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         } catch {
-            await interaction.editReply({ 
-                content: 'Đã hủy thao tác.', 
-                components: [], 
-                flags: MessageFlags.Ephemeral 
+            await interaction.editReply({
+                content: 'Đã hủy thao tác.',
+                components: [],
+                flags: MessageFlags.Ephemeral
             });
         }
     },
 
     async removeLink(interaction, embed, linkButtons, components) {
         if (!linkButtons.length) {
-            await interaction.reply({ 
-                content: 'Không có link button nào để xóa!', 
-                flags: MessageFlags.Ephemeral 
+            await interaction.reply({
+                content: 'Không có link button nào để xóa!',
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -586,25 +586,25 @@ const Actions = {
             .setPlaceholder('Chọn link button để xóa')
             .addOptions(options);
 
-        await interaction.reply({ 
-            content: 'Chọn link button để xóa:', 
-            components: [new ActionRowBuilder().addComponents(menu)], 
-            flags: MessageFlags.Ephemeral 
+        await interaction.reply({
+            content: 'Chọn link button để xóa:',
+            components: [new ActionRowBuilder().addComponents(menu)],
+            flags: MessageFlags.Ephemeral
         });
 
         const filter = i => i.user.id === interaction.user.id && i.customId === 'removelink_select';
-        const collector = interaction.channel.createMessageComponentCollector({ 
-            filter, 
-            max: 1, 
-            time: MODAL_TIMEOUT 
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            max: 1,
+            time: MODAL_TIMEOUT
         });
 
         collector.on('collect', async i => {
             linkButtons.splice(parseInt(i.values[0]), 1);
-            await i.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await i.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -625,9 +625,9 @@ const Actions = {
 
             const exists = await EmbedTemplate.findOne({ name });
             if (exists) {
-                await submit.reply({ 
-                    content: 'Template đã tồn tại!', 
-                    flags: MessageFlags.Ephemeral 
+                await submit.reply({
+                    content: 'Template đã tồn tại!',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
@@ -638,9 +638,9 @@ const Actions = {
                 linkButtons: linkButtons.map(btn => btn.toJSON())
             }).save();
 
-            await submit.reply({ 
-                content: 'Đã lưu template!', 
-                flags: MessageFlags.Ephemeral 
+            await submit.reply({
+                content: 'Đã lưu template!',
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -653,10 +653,10 @@ const Actions = {
         if (template) {
             Object.assign(embed, new EmbedBuilder(template.embedData));
             linkButtons.splice(0, linkButtons.length, ...template.linkButtons.map(btn => ButtonBuilder.from(btn)));
-            await interaction.update({ 
-                embeds: [embed], 
-                components: Utils.combineComponents(components, linkButtons), 
-                flags: MessageFlags.Ephemeral 
+            await interaction.update({
+                embeds: [embed],
+                components: Utils.combineComponents(components, linkButtons),
+                flags: MessageFlags.Ephemeral
             });
         }
     },
@@ -664,9 +664,9 @@ const Actions = {
     async deleteTemplate(interaction) {
         const templates = await EmbedTemplate.find().select('name');
         if (!templates.length) {
-            await interaction.reply({ 
-                content: 'Không có template nào!', 
-                flags: MessageFlags.Ephemeral 
+            await interaction.reply({
+                content: 'Không có template nào!',
+                flags: MessageFlags.Ephemeral
             });
             return;
         }
@@ -676,25 +676,25 @@ const Actions = {
             .setPlaceholder('Chọn template để xóa')
             .addOptions(templates.map(t => ({ label: t.name, value: t.name })));
 
-        await interaction.reply({ 
-            content: 'Chọn template để xóa:', 
-            components: [new ActionRowBuilder().addComponents(menu)], 
-            flags: MessageFlags.Ephemeral 
+        await interaction.reply({
+            content: 'Chọn template để xóa:',
+            components: [new ActionRowBuilder().addComponents(menu)],
+            flags: MessageFlags.Ephemeral
         });
 
         const filter = i => i.user.id === interaction.user.id && i.customId === 'delete_template_select';
-        const collector = interaction.channel.createMessageComponentCollector({ 
-            filter, 
-            time: 30000, 
-            max: 1 
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            time: 30000,
+            max: 1
         });
 
         collector.on('collect', async i => {
             const result = await EmbedTemplate.deleteOne({ name: i.values[0] });
-            await i.update({ 
-                content: result.deletedCount > 0 ? 'Đã xóa template!' : 'Không tìm thấy template!', 
-                components: [], 
-                flags: MessageFlags.Ephemeral 
+            await i.update({
+                content: result.deletedCount > 0 ? 'Đã xóa template!' : 'Không tìm thấy template!',
+                components: [],
+                flags: MessageFlags.Ephemeral
             });
         });
     },
@@ -718,24 +718,24 @@ const Actions = {
             if (messageId) {
                 const message = await interaction.channel.messages.fetch(messageId);
                 await message.edit(messageOptions);
-                await interaction.reply({ 
-                    content: 'Đã chỉnh sửa embed!', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.reply({
+                    content: 'Đã chỉnh sửa embed!',
+                    flags: MessageFlags.Ephemeral
                 });
             } else {
                 await interaction.channel.send(messageOptions);
-                await interaction.reply({ 
-                    content: 'Đã đăng embed!', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.reply({
+                    content: 'Đã đăng embed!',
+                    flags: MessageFlags.Ephemeral
                 });
             }
 
             Utils.clearUserData(interaction.client, interaction.user.id);
         } catch (error) {
             console.error('Post embed error:', error);
-            await interaction.reply({ 
-                content: 'Có lỗi xảy ra khi đăng embed!', 
-                flags: MessageFlags.Ephemeral 
+            await interaction.reply({
+                content: 'Có lỗi xảy ra khi đăng embed!',
+                flags: MessageFlags.Ephemeral
             });
         }
     }
@@ -744,7 +744,7 @@ const Actions = {
 // ===== BUTTON ROUTER =====
 async function handleButton(i, embed, components, linkButtons, messageId) {
     const [action] = i.customId.split('_');
-    
+
     const handlers = {
         title: () => ModalHandlers.title(i, embed, components, linkButtons),
         description: () => ModalHandlers.description(i, embed, components, linkButtons),
@@ -775,7 +775,7 @@ async function handleButton(i, embed, components, linkButtons, messageId) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('embed')
-        .setDescription('Quản lý embeds')
+        .setDescription('📝 Tạo embed tùy chỉnh')
         .addSubcommand(sub => sub
             .setName('create')
             .setDescription('Tạo embed mới'))
@@ -786,20 +786,20 @@ module.exports = {
                 .setName('messageid')
                 .setDescription('ID của message cần chỉnh sửa')
                 .setRequired(true))),
-    
+
     category: 'Utility',
-    
+
     async execute(interaction) {
         // Kiểm tra quyền
-        const hasRole = interaction.member.roles.cache.some(r => 
+        const hasRole = interaction.member.roles.cache.some(r =>
             config.ModerationRoles.embed.includes(r.id)
         );
         const isAdmin = interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
 
         if (!hasRole && !isAdmin) {
-            return interaction.reply({ 
-                content: lang.NoPermsMessage, 
-                flags: MessageFlags.Ephemeral 
+            return interaction.reply({
+                content: lang.NoPermsMessage,
+                flags: MessageFlags.Ephemeral
             });
         }
 
@@ -830,15 +830,15 @@ module.exports = {
                         .filter(c => c.style === ButtonStyle.Link)
                         .map(c => ButtonBuilder.from(c));
                 } else {
-                    return interaction.reply({ 
-                        content: 'Không tìm thấy message hoặc embed!', 
-                        flags: MessageFlags.Ephemeral 
+                    return interaction.reply({
+                        content: 'Không tìm thấy message hoặc embed!',
+                        flags: MessageFlags.Ephemeral
                     });
                 }
             } catch {
-                return interaction.reply({ 
-                    content: 'Không thể fetch message. Kiểm tra lại ID!', 
-                    flags: MessageFlags.Ephemeral 
+                return interaction.reply({
+                    content: 'Không thể fetch message. Kiểm tra lại ID!',
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -879,25 +879,25 @@ module.exports = {
             const menu = new StringSelectMenuBuilder()
                 .setCustomId(`loadtemplate_${id}`)
                 .setPlaceholder('Load template')
-                .addOptions(templates.map((t, i) => ({ 
-                    label: t.name, 
-                    value: `template_${i}` 
+                .addOptions(templates.map((t, i) => ({
+                    label: t.name,
+                    value: `template_${i}`
                 })));
             components.unshift(new ActionRowBuilder().addComponents(menu));
         }
 
         // Reply với embed builder
-        await interaction.reply({ 
-            embeds: [embed], 
-            components: Utils.combineComponents(components, linkButtons), 
-            flags: MessageFlags.Ephemeral 
+        await interaction.reply({
+            embeds: [embed],
+            components: Utils.combineComponents(components, linkButtons),
+            flags: MessageFlags.Ephemeral
         });
 
         // Tạo collector
         const filter = i => i.user.id === interaction.user.id;
-        const collector = interaction.channel.createMessageComponentCollector({ 
-            filter, 
-            time: COLLECTOR_TIMEOUT 
+        const collector = interaction.channel.createMessageComponentCollector({
+            filter,
+            time: COLLECTOR_TIMEOUT
         });
 
         activeInteractions.set(userId, collector);
@@ -908,9 +908,9 @@ module.exports = {
             } catch (error) {
                 console.error('Button handler error:', error);
                 if (!i.deferred && !i.replied) {
-                    await i.reply({ 
-                        content: 'Có lỗi xảy ra! Vui lòng thử lại.', 
-                        flags: MessageFlags.Ephemeral 
+                    await i.reply({
+                        content: 'Có lỗi xảy ra! Vui lòng thử lại.',
+                        flags: MessageFlags.Ephemeral
                     }).catch(console.error);
                 }
             }

@@ -6,7 +6,7 @@ module.exports = {
     owner: true,
     data: new SlashCommandBuilder()
         .setName('botavatar')
-        .setDescription('Đặt ảnh đại diện cho bot của bạn')
+        .setDescription('🖼️ Xem avatar của bot')
         .addAttachmentOption(option => option
             .setName('avatar')
             .setDescription('Tệp gif')

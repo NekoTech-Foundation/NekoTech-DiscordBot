@@ -26,7 +26,7 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('steal')
-        .setDescription('Mượn emoji hoặc sticker từ các nguồn khác')
+        .setDescription('🦜 Đánh cắp emoji từ server khác')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('emoji')

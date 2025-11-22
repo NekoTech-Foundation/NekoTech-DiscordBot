@@ -27,7 +27,7 @@ const config = getConfig();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('tictactoe')
-        .setDescription('Chơi cờ ca-rô với bot hoặc người chơi khác!')
+        .setDescription('❌ Trò chơi Cờ Ca-rô')
         .addStringOption(option =>
             option.setName('type')
                 .setDescription('Chọn loại trò chơi')
@@ -156,7 +156,7 @@ async function createGameBoardCanvas(board, emojis, winningLine = null) {
     gradient.addColorStop(1, '#0f172a');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     ctx.save();
     ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
     const dotSpacing = 20;
@@ -181,10 +181,10 @@ async function createGameBoardCanvas(board, emojis, winningLine = null) {
     ctx.fillStyle = '#2c3e50';
     roundRect(ctx, borderWidth, borderWidth, canvas.width - borderWidth * 2, canvas.height - borderWidth * 2, 16, true);
     ctx.restore();
-    
+
     const innerGlow = ctx.createRadialGradient(
-        canvas.width/2, canvas.height/2, 50,
-        canvas.width/2, canvas.height/2, canvas.width/1.5
+        canvas.width / 2, canvas.height / 2, 50,
+        canvas.width / 2, canvas.height / 2, canvas.width / 1.5
     );
     innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.05)');
     innerGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
@@ -229,7 +229,7 @@ async function createGameBoardCanvas(board, emojis, winningLine = null) {
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
         ctx.lineWidth = 14;
         ctx.lineCap = 'round';
-        
+
         const [[startRow, startCol], , [endRow, endCol]] = winningLine;
         const startX = borderWidth + (startCol + 0.5) * cellSize;
         const startY = borderWidth + (startRow + 0.5) * cellSize;
@@ -241,29 +241,29 @@ async function createGameBoardCanvas(board, emojis, winningLine = null) {
         ctx.lineTo(endX, endY);
         ctx.stroke();
         ctx.restore();
-        
+
         ctx.save();
         const lineGradient = ctx.createLinearGradient(startX, startY, endX, endY);
         lineGradient.addColorStop(0, '#e2e8f0');
         lineGradient.addColorStop(0.5, '#f8fafc');
         lineGradient.addColorStop(1, '#e2e8f0');
-        
+
         ctx.strokeStyle = lineGradient;
         ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
         ctx.shadowBlur = 8;
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
-        
+
         ctx.beginPath();
         ctx.moveTo(startX, startY);
         ctx.lineTo(endX, endY);
         ctx.stroke();
         ctx.restore();
-        
+
         for (const [row, col] of winningLine) {
             const x = borderWidth + (col + 0.5) * cellSize;
             const y = borderWidth + (row + 0.5) * cellSize;
-            
+
             ctx.save();
             ctx.globalAlpha = 0.08;
             ctx.beginPath();
@@ -283,7 +283,7 @@ async function createGameBoardCanvas(board, emojis, winningLine = null) {
     const borderGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     borderGradient.addColorStop(0, '#64748b');
     borderGradient.addColorStop(1, '#475569');
-    
+
     ctx.strokeStyle = borderGradient;
     ctx.lineWidth = 1.5;
     ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
@@ -300,35 +300,35 @@ function drawX(ctx, x, y, size) {
     const centerY = y + size / 2;
 
     ctx.save();
-    
+
     const xGradient = ctx.createLinearGradient(
-        x + padding, y + padding, 
+        x + padding, y + padding,
         x + size - padding, y + size - padding
     );
     xGradient.addColorStop(0, '#ef4444');
     xGradient.addColorStop(1, '#dc2626');
-    
+
     ctx.strokeStyle = xGradient;
     ctx.shadowColor = 'rgba(239, 68, 68, 0.5)';
     ctx.shadowBlur = 10;
     ctx.lineWidth = 9;
     ctx.lineCap = 'round';
-    
+
     ctx.beginPath();
     ctx.moveTo(x + padding, y + padding);
     ctx.lineTo(x + size - padding, y + size - padding);
     ctx.moveTo(x + size - padding, y + padding);
     ctx.lineTo(x + padding, y + size - padding);
     ctx.stroke();
-    
+
     ctx.globalAlpha = 0.25;
     ctx.strokeStyle = '#fca5a5';
     ctx.shadowBlur = 0;
     ctx.lineWidth = 3;
-    
+
     ctx.beginPath();
     ctx.moveTo(x + padding + 4, y + padding + 4);
-    ctx.lineTo(x + padding + size/5, y + padding + size/5);
+    ctx.lineTo(x + padding + size / 5, y + padding + size / 5);
     ctx.stroke();
     ctx.restore();
 }
@@ -337,16 +337,16 @@ function drawO(ctx, x, y, size) {
     const centerX = x + size / 2;
     const centerY = y + size / 2;
     const radius = (size / 2) * 0.65;
-    
+
     ctx.save();
-    
+
     const oGradient = ctx.createLinearGradient(
         centerX - radius, centerY - radius,
         centerX + radius, centerY + radius
     );
     oGradient.addColorStop(0, '#3b82f6');
     oGradient.addColorStop(1, '#2563eb');
-    
+
     ctx.strokeStyle = oGradient;
     ctx.shadowColor = 'rgba(59, 130, 246, 0.5)';
     ctx.shadowBlur = 10;
@@ -354,7 +354,7 @@ function drawO(ctx, x, y, size) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.stroke();
-    
+
     ctx.globalAlpha = 0.25;
     ctx.strokeStyle = '#93c5fd';
     ctx.shadowBlur = 0;

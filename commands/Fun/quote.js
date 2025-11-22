@@ -21,7 +21,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('quote')
-        .setDescription(`Lấy một câu trích dẫn nổi tiếng ngẫu nhiên`),
+        .setDescription(`📜 Xem một câu danh ngôn`),
     category: 'Fun',
     async execute(interaction) {
         const quotes = [

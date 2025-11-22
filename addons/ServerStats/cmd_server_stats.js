@@ -51,6 +51,7 @@ function createStatsEmbed(stats, guild) {
         .setTitle('Thông tin Máy Chủ ( Discord Server )')
         .setColor('Blue')
         .setThumbnail(guild.iconURL())
+        .setImage(guild.bannerURL({ size: 1024 }))
         .addFields(
             { name: 'Members', value: `🙋🏻‍♂️ Người dùng: ${stats.userCount}\n🤖 Bots: ${stats.botCount}\n👪 Tổng: ${stats.totalCount}\n🟢 Online: ${stats.onlineCount}\n⚫ Offline: ${stats.offlineCount}`, inline: true },
             { name: 'Kênh', value: `📝 Văn bản: ${stats.textChannelCount}\n🔊 Voice: ${stats.voiceChannelCount}\n📂 Danh Mục: ${stats.categoryCount}\n💬 Diễn Đàn: ${stats.forumCount}`, inline: true },

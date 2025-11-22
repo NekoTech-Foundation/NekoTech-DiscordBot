@@ -37,7 +37,7 @@ function getPrestigeTier(prestige) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('level')
-        .setDescription('Quản lý cấp độ và XP của người dùng')
+        .setDescription('📊 Quản lý cấp độ và XP')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('give')

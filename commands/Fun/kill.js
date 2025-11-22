@@ -43,15 +43,15 @@ const killScenarios = [
         text: "chạy đến đè bạn để cho bạn thấy sự dễ thương.",
         image: "https://media1.tenor.com/m/n51pqoBDBp4AAAAd/kill-you-chuckie.gif"
     },
-    { 
+    {
         text: "đe dọa sẽ ám sát bạn.",
         image: "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnczdGFsemY0MTUxeWpqaHF3ZHlyeHcwZmRienhrNWFya2FqY3hxNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QHYHhShm1sjVS/giphy.gif"
     },
-    { 
+    {
         text: "ném bạn xuống vách đá.",
         image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif"
     },
-    { 
+    {
         text: "dùng tia laze để bắn bạn.",
         image: "https://media1.tenor.com/m/z5is3s2v4RcAAAAC/zap-shotgun.gif"
     },
@@ -88,7 +88,7 @@ const killScenarios = [
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('kill')
-        .setDescription('Giả vờ "tiêu diệt" một người dùng khác một cách vui vẻ và vô hại!')
+        .setDescription('🔪 Giả vờ tiêu diệt ai đó')
         .addUserOption(option =>
             option.setName('target')
                 .setDescription('Người dùng bạn muốn "tiêu diệt"')

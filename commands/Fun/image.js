@@ -25,7 +25,7 @@ const config = getConfig();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('image')
-        .setDescription('Lấy một hình ảnh ngẫu nhiên.')
+        .setDescription('🖼️ Tìm kiếm hình ảnh')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('cat')

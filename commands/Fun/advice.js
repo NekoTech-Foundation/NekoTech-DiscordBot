@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('advice')
-        .setDescription('Nhận một lời khuyên ngẫu nhiên'),
+        .setDescription('💡 Nhận một lời khuyên hữu ích'),
     category: 'Fun',
     async execute(interaction, client) {
         try {

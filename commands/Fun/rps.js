@@ -25,7 +25,7 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('rps')
-        .setDescription('Chơi Kéo Búa Bao!'),
+        .setDescription('✌️ Trò chơi Kéo Búa Bao'),
     category: 'Fun',
     async execute(interaction) {
 

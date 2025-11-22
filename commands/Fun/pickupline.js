@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('pickupline')
-        .setDescription('Nhận một câu thả thính ngẫu nhiên'),
+        .setDescription('💘 Nhận một câu thả thính'),
     category: 'Fun',
     async execute(interaction) {
         await interaction.deferReply();

@@ -64,7 +64,7 @@ async function checkBlacklistWords(content) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ascii')
-        .setDescription('Tạo văn bản ASCII')
+        .setDescription('🎨 Chuyển đổi văn bản thành dạng ASCII')
         .addStringOption(option =>
             option.setName('text')
                 .setDescription('Văn bản bạn muốn chuyển đổi')
@@ -77,7 +77,7 @@ module.exports = {
                     { name: 'Nhỏ', value: 'small' },
                     { name: 'Trung bình', value: 'medium' },
                     { name: 'Lớn', value: 'large' }
-            )),
+                )),
     category: 'Fun',
     async execute(interaction) {
         await interaction.deferReply();

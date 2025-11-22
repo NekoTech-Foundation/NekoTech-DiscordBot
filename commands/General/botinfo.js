@@ -1,11 +1,11 @@
-const { 
-    SlashCommandBuilder, 
-    MessageFlags, 
-    EmbedBuilder, 
+const {
+    SlashCommandBuilder,
+    MessageFlags,
+    EmbedBuilder,
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
-    version: discordVersion 
+    version: discordVersion
 } = require('discord.js');
 const os = require('os');
 const process = require('process');
@@ -18,17 +18,17 @@ const lang = getLang();
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('botinfo')
-        .setDescription('Thông tin chi tiết về bot KentaBuckets'),
+        .setDescription('🤖 Xem thông tin chi tiết về bot'),
     category: 'General',
-    
+
     async execute(interaction) {
         try {
             await interaction.deferReply();
-            
+
             const bot = interaction.client;
             const uptimeTimestamp = Math.floor((Date.now() - bot.uptime) / 1000);
             const memoryUsage = process.memoryUsage();
-            
+
             // Bot memory
             const totalMemory = (memoryUsage.heapTotal / 1024 / 1024).toFixed(2);
             const usedMemory = (memoryUsage.heapUsed / 1024 / 1024).toFixed(2);
@@ -58,7 +58,7 @@ module.exports = {
                 console.error('Failed to fetch reply:', error);
                 return;
             }
-            
+
             const pingLatency = sent.createdTimestamp - interaction.createdTimestamp;
             const wsLatency = bot.ws.ping;
 
@@ -70,18 +70,18 @@ module.exports = {
                 const filled = Math.round((percentage / 100) * length);
                 const empty = length - filled;
                 const bar = '█'.repeat(filled) + '░'.repeat(empty);
-                
+
                 let color = '🟢';
                 if (percentage > 70) color = '🟡';
                 if (percentage > 90) color = '🔴';
-                
+
                 return `${color} \`${bar}\` ${percentage}%`;
             };
 
             // Main embed
             const botInfo = new EmbedBuilder()
                 .setColor('#5865F2')
-                .setAuthor({ 
+                .setAuthor({
                     name: `${bot.user.username} - Thông tin Bot`,
                     iconURL: bot.user.displayAvatarURL()
                 })
@@ -149,7 +149,7 @@ module.exports = {
                         inline: true
                     }
                 )
-                .setFooter({ 
+                .setFooter({
                     text: `Yêu cầu bởi ${interaction.user.tag}`,
                     iconURL: interaction.user.displayAvatarURL()
                 })
@@ -175,7 +175,7 @@ module.exports = {
                         .setCustomId('refresh_botinfo')
                 );
 
-            const response = await interaction.editReply({ 
+            const response = await interaction.editReply({
                 embeds: [botInfo],
                 components: [row]
             });
@@ -189,7 +189,7 @@ module.exports = {
             collector.on('collect', async i => {
                 try {
                     await i.deferUpdate();
-                    
+
                     // Refresh data
                     const newUptimeTimestamp = Math.floor((Date.now() - bot.uptime) / 1000);
                     const newMemoryUsage = process.memoryUsage();
@@ -208,7 +208,7 @@ module.exports = {
                     // Update embed
                     const updatedEmbed = new EmbedBuilder()
                         .setColor('#5865F2')
-                        .setAuthor({ 
+                        .setAuthor({
                             name: `${bot.user.username} - Thông tin Bot`,
                             iconURL: bot.user.displayAvatarURL()
                         })
@@ -276,7 +276,7 @@ module.exports = {
                                 inline: true
                             }
                         )
-                        .setFooter({ 
+                        .setFooter({
                             text: `Làm mới bởi ${i.user.tag} • Cập nhật lúc`,
                             iconURL: i.user.displayAvatarURL()
                         })
@@ -309,7 +309,7 @@ module.exports = {
                                 .setCustomId('refresh_botinfo')
                                 .setDisabled(true)
                         );
-                    
+
                     await interaction.editReply({ components: [disabledRow] });
                 } catch (error) {
                     if (error.code !== 10008) {
@@ -323,9 +323,9 @@ module.exports = {
             try {
                 const errorMessage = '❌ Đã có lỗi xảy ra khi lấy thông tin bot!';
                 if (!interaction.replied && !interaction.deferred) {
-                    await interaction.reply({ 
+                    await interaction.reply({
                         content: errorMessage,
-                        flags: MessageFlags.Ephemeral 
+                        flags: MessageFlags.Ephemeral
                     });
                 } else if (interaction.deferred) {
                     await interaction.editReply({ content: errorMessage });
