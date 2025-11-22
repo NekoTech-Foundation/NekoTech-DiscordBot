@@ -9,10 +9,15 @@ const {
     StringSelectMenuBuilder,
     UserSelectMenuBuilder,
     ChannelType,
-    PermissionsBitField
+    PermissionsBitField,
+    Collection
 } = require('discord.js');
 const VoiceMasterChannel = require('../../models/VoiceMasterChannel');
 const VoiceMasterUserSettings = require('../../models/VoiceMasterUserSettings');
+
+// Ratelimit Map: userId -> timestamp
+const cooldowns = new Collection();
+const COOLDOWN_AMOUNT = 3000; // 3 seconds
 
 // Helper to get owner
 async function getOwner(channelId) {
@@ -37,14 +42,24 @@ module.exports = {
         const customId = interaction.customId;
         if (!customId.startsWith('kv_')) return;
 
+        // --- RATELIMIT CHECK ---
+        const now = Date.now();
+        const userId = interaction.user.id;
+        if (cooldowns.has(userId)) {
+            const expirationTime = cooldowns.get(userId) + COOLDOWN_AMOUNT;
+            if (now < expirationTime) {
+                const timeLeft = (expirationTime - now) / 1000;
+                return interaction.reply({ content: `⏳ Vui lòng đợi ${timeLeft.toFixed(1)} giây trước khi thao tác tiếp.`, ephemeral: true });
+            }
+        }
+        cooldowns.set(userId, now);
+        setTimeout(() => cooldowns.delete(userId), COOLDOWN_AMOUNT);
+        // -----------------------
+
         const action = customId.split('_')[1];
 
         // Determine target channel
         let targetChannel = interaction.channel;
-
-        // If interaction is in a text channel, we might need to find the voice channel
-        // But for KentaVoice, the embed is sent TO the voice channel (which has a text chat).
-        // So interaction.channel IS the voice channel.
 
         if (!targetChannel) return;
 
@@ -122,6 +137,9 @@ module.exports = {
                 case 'temptext':
                     if (!await checkOwner(interaction, targetChannel.id)) return;
                     try {
+                        // Check if already has text channel? (Hard to track without DB, but we can check children of category with similar name)
+                        // Or just create new one.
+
                         const textChannel = await interaction.guild.channels.create({
                             name: `chat-${targetChannel.name}`,
                             type: ChannelType.GuildText,
@@ -133,15 +151,64 @@ module.exports = {
                                 },
                                 {
                                     id: interaction.user.id,
-                                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+                                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ManageChannels]
                                 }
                             ]
                         });
 
-                        // Sync permissions with voice channel members?
-                        // For now, just owner.
+                        await interaction.reply({
+                            content: `✅ Đã tạo kênh text tạm thời: ${textChannel}\n⚠️ **Lưu ý:** Kênh sẽ tự động hủy sau **5 phút** nếu bạn không mời thêm người vào!`,
+                            ephemeral: true
+                        });
 
-                        await interaction.reply({ content: `✅ Đã tạo kênh text tạm thời: ${textChannel}`, ephemeral: true });
+                        // Send prompt in the new text channel
+                        const inviteRow = new ActionRowBuilder()
+                            .addComponents(
+                                new UserSelectMenuBuilder()
+                                    .setCustomId('kv_select_textinvite')
+                                    .setPlaceholder('Mời người vào kênh text này')
+                                    .setMaxValues(10)
+                            );
+
+                        await textChannel.send({
+                            content: `${interaction.user}, hãy mời bạn bè vào kênh text này ngay!`,
+                            components: [inviteRow]
+                        });
+
+                        // Set timeout to delete
+                        setTimeout(async () => {
+                            const fetchedChannel = await interaction.guild.channels.fetch(textChannel.id).catch(() => null);
+                            if (!fetchedChannel) return;
+
+                            // Check permissions. If only owner (and bot) has ViewChannel, delete.
+                            // Note: permissionOverwrites is a Collection.
+                            // We check if there are any overwrites allowing ViewChannel for users other than owner.
+
+                            const validOverwrites = fetchedChannel.permissionOverwrites.cache.filter(overwrite => {
+                                // Ignore @everyone (usually denied)
+                                if (overwrite.id === interaction.guild.roles.everyone.id) return false;
+                                // Ignore owner
+                                if (overwrite.id === interaction.user.id) return false;
+                                // Ignore bot
+                                if (overwrite.id === client.user.id) return false;
+
+                                // Check if allows ViewChannel
+                                return overwrite.allow.has(PermissionsBitField.Flags.ViewChannel);
+                            });
+
+                            if (validOverwrites.size === 0) {
+                                try {
+                                    await fetchedChannel.delete();
+                                    // Notify owner?
+                                    try {
+                                        await interaction.user.send(`⚠️ Kênh text **${fetchedChannel.name}** đã bị xóa do không có thành viên nào được mời sau 5 phút.`);
+                                    } catch (e) { }
+                                } catch (e) {
+                                    console.error('Failed to auto-delete text channel', e);
+                                }
+                            }
+                        }, 5 * 60 * 1000); // 5 minutes
+
                     } catch (err) {
                         console.error(err);
                         await interaction.reply({ content: '❌ Không thể tạo kênh text.', ephemeral: true });
@@ -191,37 +258,22 @@ module.exports = {
                         .addComponents(
                             new UserSelectMenuBuilder()
                                 .setCustomId('kv_select_invite')
-                                .setPlaceholder('Chọn người để mời')
-                                .setMaxValues(5)
+                                .setPlaceholder('Chọn người để mời (Whitelist)')
+                                .setMaxValues(10)
                         );
-                    await interaction.reply({ content: 'Chọn người muốn mời:', components: [inviteRow], ephemeral: true });
+                    await interaction.reply({ content: 'Chọn người muốn mời (Họ sẽ được cấp quyền truy cập):', components: [inviteRow], ephemeral: true });
                     break;
 
-                case 'permit':
+                case 'kick':
                     if (!await checkOwner(interaction, targetChannel.id)) return;
-                    const permitRow = new ActionRowBuilder()
+                    const kickRow = new ActionRowBuilder()
                         .addComponents(
-                            new ButtonBuilder().setCustomId('kv_sub_whitelist').setLabel('Whitelist (Cho phép)').setStyle(ButtonStyle.Success),
-                            new ButtonBuilder().setCustomId('kv_sub_blacklist').setLabel('Blacklist (Chặn)').setStyle(ButtonStyle.Danger)
+                            new UserSelectMenuBuilder()
+                                .setCustomId('kv_select_kick')
+                                .setPlaceholder('Chọn người để Kick (Blacklist)')
+                                .setMaxValues(10)
                         );
-
-                    await interaction.reply({ content: 'Bạn muốn Whitelist hay Blacklist?', components: [permitRow], ephemeral: true });
-                    break;
-
-                case 'sub':
-                    // Handle sub-buttons for permit
-                    const subAction = customId.split('_')[2];
-                    if (subAction === 'whitelist') {
-                        const row = new ActionRowBuilder().addComponents(
-                            new UserSelectMenuBuilder().setCustomId('kv_select_whitelist').setPlaceholder('Chọn người để Whitelist').setMaxValues(5)
-                        );
-                        await interaction.update({ content: 'Chọn người để Whitelist:', components: [row] });
-                    } else if (subAction === 'blacklist') {
-                        const row = new ActionRowBuilder().addComponents(
-                            new UserSelectMenuBuilder().setCustomId('kv_select_blacklist').setPlaceholder('Chọn người để Blacklist').setMaxValues(5)
-                        );
-                        await interaction.update({ content: 'Chọn người để Blacklist:', components: [row] });
-                    }
+                    await interaction.reply({ content: 'Chọn người muốn Kick (Họ sẽ bị chặn truy cập):', components: [kickRow], ephemeral: true });
                     break;
             }
         }
@@ -279,15 +331,21 @@ module.exports = {
             const users = interaction.users;
 
             if (customId === 'kv_select_invite') {
+                // Invite = Whitelist
+                for (const [id, user] of users) {
+                    await targetChannel.permissionOverwrites.edit(id, { Connect: true, ViewChannel: true });
+                    // Send DM?
+                    try {
+                        await user.send(`📨 Bạn đã được mời tham gia voice channel **${targetChannel.name}** tại server **${interaction.guild.name}**!`);
+                    } catch (e) { }
+                }
+
                 const mentions = users.map(u => u.toString()).join(' ');
                 await targetChannel.send(`📨 ${mentions}, bạn được mời tham gia voice chat bởi ${interaction.user}!`);
-                await interaction.update({ content: '✅ Đã gửi lời mời!', components: [] });
-            } else if (customId === 'kv_select_whitelist') {
-                for (const [id, user] of users) {
-                    await targetChannel.permissionOverwrites.edit(id, { Connect: true });
-                }
-                await interaction.update({ content: `✅ Đã Whitelist ${users.size} người!`, components: [] });
-            } else if (customId === 'kv_select_blacklist') {
+                await interaction.update({ content: `✅ Đã mời và cấp quyền cho ${users.size} người!`, components: [] });
+
+            } else if (customId === 'kv_select_kick') {
+                // Kick = Blacklist
                 for (const [id, user] of users) {
                     await targetChannel.permissionOverwrites.edit(id, { Connect: false });
                     // Kick if in channel
@@ -296,7 +354,15 @@ module.exports = {
                         await member.voice.disconnect();
                     }
                 }
-                await interaction.update({ content: `🚫 Đã Blacklist ${users.size} người!`, components: [] });
+                await interaction.update({ content: `🚫 Đã Kick và chặn ${users.size} người!`, components: [] });
+
+            } else if (customId === 'kv_select_textinvite') {
+                // Invite to Text Channel
+                const textChannel = interaction.channel; // Interaction happened in text channel
+                for (const [id, user] of users) {
+                    await textChannel.permissionOverwrites.edit(id, { ViewChannel: true, SendMessages: true });
+                }
+                await interaction.update({ content: `✅ Đã thêm ${users.size} người vào kênh text!`, components: [] });
             }
         }
     }

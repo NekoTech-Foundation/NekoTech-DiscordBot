@@ -138,7 +138,7 @@ module.exports = {
                                 new ButtonBuilder().setCustomId('kv_lock').setEmoji('🔒').setLabel('Khóa/Mở').setStyle(ButtonStyle.Danger),
                                 new ButtonBuilder().setCustomId('kv_hide').setEmoji('👁️').setLabel('Ẩn/Hiện').setStyle(ButtonStyle.Danger),
                                 new ButtonBuilder().setCustomId('kv_invite').setEmoji('📩').setLabel('Mời').setStyle(ButtonStyle.Success),
-                                new ButtonBuilder().setCustomId('kv_permit').setEmoji('🛡️').setLabel('Quyền').setStyle(ButtonStyle.Success),
+                                new ButtonBuilder().setCustomId('kv_kick').setEmoji('🚫').setLabel('Kick').setStyle(ButtonStyle.Danger),
                                 new ButtonBuilder().setCustomId('kv_claim').setEmoji('👑').setLabel('Claim').setStyle(ButtonStyle.Primary)
                             );
 
@@ -159,13 +159,16 @@ module.exports = {
                                     await channel.delete();
                                     await VoiceMasterChannel.deleteOne({ voiceId: newChannel.id });
 
-                                    // Also try to delete temp text channel if exists (by name convention?)
-                                    // Ideally we stored the text channel ID in DB, but for now we try to find it
+                                    // Try delete linked text channel if exists
                                     const textChannelName = `chat-${channel.name.toLowerCase().replace(/\s+/g, '-')}`;
-                                    // This is risky without ID. 
-                                    // Improvement: Store textChannelId in VoiceMasterChannel model.
-                                    // But for now, we skip auto-delete of text channel to avoid accidents, 
-                                    // OR we iterate channels in category.
+                                    // We can't easily find it by name reliably. 
+                                    // But since we added auto-delete logic to text channel itself, it should be fine.
+                                    // Or we can iterate channels in category.
+                                    const textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
+                                    if (textChannel) {
+                                        await textChannel.delete().catch(() => { });
+                                    }
+
                                 } catch (error) {
                                     console.error('Error deleting voice channel:', error);
                                 }
