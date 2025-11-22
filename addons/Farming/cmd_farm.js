@@ -1,6 +1,20 @@
 const { EmbedBuilder, SlashCommandBuilder, StringSelectMenuBuilder, ActionRowBuilder } = require('discord.js');
 const plantSchema = require('./schemas/plantSchema');
 const { seeds, getUserFarm, addToFarm, removeFromFarm } = require('./farmUtils');
+const { events, getRandomMutation } = require('./farmEvents');
+const { getGlobalWeather } = require('./farmWeather');
+const EconomyUserData = require('../../models/EconomyUserData');
+
+// Helper function to format effects
+function formatEffect(effect) {
+    if (!effect) return 'Không có';
+    let parts = [];
+    if (effect.growthSpeed) parts.push(`Tốc độ lớn: x${effect.growthSpeed}`);
+    if (effect.yield) parts.push(`Sản lượng: x${effect.yield}`);
+    if (effect.mutationChance) parts.push(`Tỉ lệ đột biến: x${effect.mutationChance}`);
+    if (effect.price) parts.push(`Giá bán: x${effect.price}`);
+    return parts.join(', ');
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -30,6 +44,10 @@ module.exports = {
             subcommand
                 .setName('field')
                 .setDescription('👀 Xem cánh đồng của bạn'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('event')
+                .setDescription('🌤️ Xem sự kiện thời tiết hiện tại'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('seeds')
@@ -91,16 +109,37 @@ module.exports = {
             }
 
             const existingPlant = await plantSchema.findOne({ userId, plant: seedName });
+
+            // Get Global Weather
+            const globalWeather = await getGlobalWeather();
+            const currentWeather = globalWeather.currentWeather;
+
+            // Chance to inherit mutation from weather
+            const mutation = getRandomMutation(currentWeather);
+
             if (existingPlant) {
                 existingPlant.quantity += quantity;
                 existingPlant.plantedAt = Date.now();
+                if (!existingPlant.mutation && mutation) {
+                    existingPlant.mutation = mutation;
+                }
                 await existingPlant.save();
             } else {
-                const newPlant = new plantSchema({ userId, plant: seedName, quantity });
+                const newPlant = new plantSchema({
+                    userId,
+                    plant: seedName,
+                    quantity,
+                    mutation: mutation
+                });
                 await newPlant.save();
             }
 
-            await interaction.editReply({ content: `Bạn đã trồng thành công ${quantity} ${seed.emoji} ${seed.name}.` });
+            let reply = `Bạn đã trồng thành công ${quantity} ${seed.emoji} ${seed.name}.`;
+            if (mutation) {
+                reply += `\n✨ **May mắn!** Cây của bạn đã bị đột biến: ${mutation.emoji} **${mutation.name}** do ảnh hưởng của thời tiết ${currentWeather.emoji} ${currentWeather.name}!`;
+            }
+            await interaction.editReply({ content: reply });
+
         } else if (subcommand === 'harvest') {
             const plantName = interaction.options.getString('plant');
             const plant = seeds[plantName];
@@ -112,7 +151,7 @@ module.exports = {
 
             const timeSincePlanted = Date.now() - planted.plantedAt.getTime();
             const timeRemaining = plant.growthTime - timeSincePlanted;
-            if (timeRemaining > 1000) { // Check if more than 1 second remaining
+            if (timeRemaining > 1000) {
                 const hours = Math.floor(timeRemaining / 3600000);
                 const minutes = Math.floor((timeRemaining % 3600000) / 60000);
                 return interaction.editReply({ content: `${plant.name} của bạn chưa sẵn sàng để thu hoạch. Thời gian còn lại: ${hours} giờ ${minutes} phút.` });
@@ -120,20 +159,55 @@ module.exports = {
 
             await plantSchema.deleteOne({ userId, plant: plantName });
             let harvestedQuantity = (Math.floor(Math.random() * 3) + 2) * planted.quantity;
+
+            // Apply Fertilizer Effects
             if (planted.fertilizer && planted.fertilizer.effect === 'yield_increase') {
                 if (planted.fertilizer.key === 'bumper_harvest_fertilizer') {
-                    harvestedQuantity *= 1.5; // 50% increase
+                    harvestedQuantity *= 1.5;
                 } else if (planted.fertilizer.key === 'all_purpose_fertilizer') {
-                    harvestedQuantity *= 1.25; // 25% increase
+                    harvestedQuantity *= 1.25;
                 }
             }
             if (planted.fertilizer && planted.fertilizer.qualityReduced) {
-                harvestedQuantity *= 0.5; // 50% reduction for quality reduced
+                harvestedQuantity *= 0.5;
             }
+
+            // Apply Global Weather Yield Effects
+            const globalWeather = await getGlobalWeather();
+            const currentWeather = globalWeather.currentWeather;
+            if (currentWeather && currentWeather.effect && currentWeather.effect.yield) {
+                harvestedQuantity *= currentWeather.effect.yield;
+            }
+
+            // Apply Mutation Effects
+            let bonusMoney = 0;
+            if (planted.mutation) {
+                if (planted.mutation.effect.yield) {
+                    harvestedQuantity *= planted.mutation.effect.yield;
+                }
+                if (planted.mutation.effect.price) {
+                    const basePrice = plant.price || 100;
+                    bonusMoney = Math.floor(basePrice * planted.quantity * (planted.mutation.effect.price - 1));
+                }
+            }
+
             harvestedQuantity = Math.floor(harvestedQuantity);
+            if (harvestedQuantity < 1) harvestedQuantity = 1;
+
             await addToFarm(userId, plant.name, harvestedQuantity, 'produce');
 
-            await interaction.editReply({ content: `Bạn đã thu hoạch được ${harvestedQuantity} ${plant.emoji} ${plant.name}.` });
+            let replyContent = `Bạn đã thu hoạch được ${harvestedQuantity} ${plant.emoji} ${plant.name}.`;
+
+            if (bonusMoney > 0) {
+                let economyData = await EconomyUserData.findOne({ userId });
+                if (!economyData) economyData = new EconomyUserData({ userId });
+                economyData.balance += bonusMoney;
+                await economyData.save();
+                replyContent += `\n✨ Cây đột biến **${planted.mutation.name}** đã mang lại cho bạn thêm **${bonusMoney.toLocaleString()}** xu!`;
+            }
+
+            await interaction.editReply({ content: replyContent });
+
         } else if (subcommand === 'field') {
             const userPlants = await plantSchema.find({ userId });
             const embed = new EmbedBuilder()
@@ -155,17 +229,45 @@ module.exports = {
                         const hours = Math.floor(timeRemaining / 3600000);
                         const minutes = Math.floor((timeRemaining % 3600000) / 60000);
                         const progress = Math.min(100, (timeSincePlanted / plant.growthTime) * 100);
+
                         description += `${plant.emoji} ${plant.name} (x${p.quantity}): ${progress.toFixed(2)}% - Còn lại: ${hours}h ${minutes}m\n`;
+
+                        if (p.mutation) {
+                            description += `   ╰ ✨ **Đột biến**: ${p.mutation.emoji} ${p.mutation.name}\n`;
+                        }
                     }
                 }
+
+                const globalWeather = await getGlobalWeather();
+                const currentWeather = globalWeather.currentWeather;
+                const endTime = Math.floor(globalWeather.weatherEndTime / 1000);
+
                 if (description === '') {
-                    embed.setDescription('Bạn không có cây trồng nào.');
-                } else {
-                    embed.setDescription(description);
+                    description = 'Bạn không có cây trồng nào.';
                 }
+
+                embed.setDescription(`🌤️ **Thời tiết hiện tại**: ${currentWeather.emoji} **${currentWeather.name}** (Kết thúc: <t:${endTime}:R>)\n${currentWeather.description}\n\n` + description);
             }
 
             await interaction.editReply({ embeds: [embed] });
+
+        } else if (subcommand === 'event') {
+            const globalWeather = await getGlobalWeather();
+            const currentWeather = globalWeather.currentWeather;
+            const endTime = Math.floor(globalWeather.weatherEndTime / 1000);
+
+            const embed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle('🌤️ Sự Kiện Thời Tiết Nông Trại')
+                .setDescription(`**Hiện tại:** ${currentWeather.emoji} **${currentWeather.name}**\n\n${currentWeather.description}`)
+                .addFields(
+                    { name: '⏳ Kết thúc', value: `<t:${endTime}:R>`, inline: true },
+                    { name: '✨ Hiệu ứng', value: formatEffect(currentWeather.effect), inline: true }
+                )
+                .setFooter({ text: 'Thời tiết ảnh hưởng đến tốc độ lớn và tỉ lệ đột biến khi trồng cây.' });
+
+            await interaction.editReply({ embeds: [embed] });
+
         } else if (subcommand === 'seeds') {
             const userFarm = await getUserFarm(userId);
             const seedItems = userFarm.items.filter(item => Object.values(seeds).some(s => s.name === item.name && item.type === 'seed'));
@@ -188,6 +290,7 @@ module.exports = {
             }
 
             await interaction.editReply({ embeds: [embed] });
+
         } else if (subcommand === 'inventory') {
             const userFarm = await getUserFarm(userId);
             const produceItems = userFarm.items.filter(item => item.type === 'produce');
@@ -221,6 +324,7 @@ module.exports = {
             const row = new ActionRowBuilder().addComponents(selectMenu);
 
             await interaction.editReply({ embeds: [embed], components: [row] });
+
         } else if (subcommand === 'fertilizers') {
             const userFarm = await getUserFarm(userId);
             const fertilizerItems = userFarm.items.filter(item => item.type === 'Fertilizer');
@@ -240,6 +344,7 @@ module.exports = {
             }
 
             await interaction.editReply({ embeds: [embed] });
+
         } else if (subcommand === 'phanbon') {
             const fertilizerKey = interaction.options.getString('ten_phan_bon');
             const plantName = interaction.options.getString('ten_cay');
