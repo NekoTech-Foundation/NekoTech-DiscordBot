@@ -302,13 +302,24 @@ module.exports = {
             } else if (customId === 'kv_modal_status') {
                 const status = interaction.fields.getTextInputValue('status');
                 try {
-                    if (targetChannel.setStatus) {
-                        await targetChannel.setStatus(status);
-                        await interaction.reply({ content: `✅ Đã cập nhật trạng thái.`, ephemeral: true });
+                    // Fetch full channel to ensure we have all methods
+                    const fullChannel = await interaction.guild.channels.fetch(targetChannel.id);
+
+                    if (fullChannel.setStatus) {
+                        await fullChannel.setStatus(status);
+                        await interaction.reply({ content: `✅ Đã cập nhật trạng thái: **${status}**`, ephemeral: true });
                     } else {
-                        await interaction.reply({ content: `ℹ️ Tính năng chưa được hỗ trợ.`, ephemeral: true });
+                        // Try editing directly (fallback for some versions)
+                        try {
+                            await fullChannel.edit({ status: status });
+                            await interaction.reply({ content: `✅ Đã cập nhật trạng thái: **${status}**`, ephemeral: true });
+                        } catch (err) {
+                            console.error(err);
+                            await interaction.reply({ content: `ℹ️ Bot chưa hỗ trợ tính năng này hoặc phiên bản Discord.js cũ.`, ephemeral: true });
+                        }
                     }
                 } catch (e) {
+                    console.error(e);
                     await interaction.reply({ content: '❌ Lỗi cập nhật trạng thái.', ephemeral: true });
                 }
             }
