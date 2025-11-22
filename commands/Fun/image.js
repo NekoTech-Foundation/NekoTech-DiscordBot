@@ -82,7 +82,7 @@ module.exports = {
                         .addChoices(
                             { name: '✅ Safe - An toàn', value: 'safe' },
                             { name: '⚠️ Suggestive - Gợi cảm', value: 'suggestive' },
-                            { name: '🔞 Explicit - Người lớn', value: 'explicit' }
+                            { name: '🔞 Explicit - NSFW', value: 'explicit' }
                         )))
         .addSubcommand(subcommand =>
             subcommand
@@ -96,7 +96,7 @@ module.exports = {
                         .addChoices(
                             { name: '✅ Safe - An toàn', value: 'safe' },
                             { name: '⚠️ Suggestive - Gợi cảm', value: 'suggestive' },
-                            { name: '🔞 Explicit - Người lớn', value: 'explicit' }
+                            { name: '🔞 Explicit - NSFW', value: 'explicit' }
                         )))
         .addSubcommand(subcommand =>
             subcommand
@@ -110,7 +110,7 @@ module.exports = {
                         .addChoices(
                             { name: '✅ Safe - An toàn', value: 'safe' },
                             { name: '⚠️ Suggestive - Gợi cảm', value: 'suggestive' },
-                            { name: '🔞 Explicit - Người lớn', value: 'explicit' }
+                            { name: '🔞 Explicit - NSFW', value: 'explicit' }
                         ))),
     category: 'Giải trí',
     async execute(interaction) {
@@ -142,6 +142,15 @@ module.exports = {
             } else if (subcommand === 'neko' || subcommand === 'anime' || subcommand === 'waifu') {
                 // Get rating from option, default to 'safe'
                 const rating = interaction.options.getString('rating') || 'safe';
+
+                // Check if NSFW rating is used in non-NSFW channel
+                if ((rating === 'suggestive' || rating === 'explicit') && !interaction.channel.nsfw) {
+                    await interaction.editReply({
+                        content: `⚠️ Rating **${rating}** chỉ có thể sử dụng trong kênh NSFW!\nVui lòng sử dụng lệnh này trong kênh có giới hạn độ tuổi hoặc chọn \`rating:safe\`.`
+                    });
+                    return;
+                }
+
                 const imageData = await fetchNekosImage(rating);
 
                 const embed = new EmbedBuilder()
