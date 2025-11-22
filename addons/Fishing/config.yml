@@ -105,42 +105,6 @@ rods:
     effects:
       uncommon: 0.8
 
-# -- Baits --
-# key: The unique identifier for the bait.
-# name: The display name of the bait.
-# price: The cost to buy the bait in the shop.
-# bonus: A range [min, max] for the percentage boost to catch rates.
-# attracts: A list of rarities this bait is more likely to attract.
-baits:
-  giun:
-    name: "Mồi câu giun"
-    price: 50
-    bonus: [0.025, 0.05] # 2.5% to 5%
-    attracts: ["common", "uncommon"]
-  xa:
-    name: "Mồi câu xả"
-    price: 200
-    bonus: [0.05, 0.10] # 5% to 10%
-    attracts: ["rare", "epic"]
-  go:
-    name: "Mồi câu gỗ"
-    price: 200
-    bonus: [0.36]
-    attracts: ["rare"]
-  chay:
-    name: "Mồi câu chay"
-    price: 500
-    bonus: [0.05, 0.05]
-    attracts: ["epic", "legendary"]
-  dac_biet:
-    name: "Mồi câu đặc biệt"
-    price: 800
-    bonus: [0.10, 0.15] # 10% to 15%
-    attracts: ["epic", "legendary"]
-
-# -- General Settings --
-repair_cost_multiplier: 0.5 # 50% of original price
-repair_durability_threshold: 0.3 # Can only repair below 30% durability
 rarity_chances:
   common: 0.41
   uncommon: 0.305

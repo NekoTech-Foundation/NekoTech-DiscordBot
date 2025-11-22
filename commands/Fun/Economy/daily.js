@@ -3,6 +3,8 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
+const { seeds, addToFarm } = require('../../../addons/Farming/farmUtils');
+const { getUserFishing, loadConfig: loadFishingConfig } = require('../../../addons/Fishing/fishingUtils');
 
 const config = getConfig();
 const lang = getLang();
@@ -58,22 +60,46 @@ module.exports = {
             const multiplier = checkActiveBooster(user, 'Money');
             reward *= multiplier;
 
-            const carrotReward = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
+            // --- REWARD GENERATION ---
+            // 1. Seed Reward
+            const seedKeys = Object.keys(seeds);
+            const randomSeedKey = seedKeys[Math.floor(Math.random() * seedKeys.length)];
+            const seedReward = seeds[randomSeedKey];
+            const seedQuantity = Math.floor(Math.random() * 3) + 1; // 1 to 3 seeds
+
+            // 2. Bait Reward
+            const fishingConfig = loadFishingConfig();
+            const baitKeys = Object.keys(fishingConfig.baits);
+            const randomBaitKey = baitKeys[Math.floor(Math.random() * baitKeys.length)];
+            const baitReward = fishingConfig.baits[randomBaitKey];
+            const baitQuantity = Math.floor(Math.random() * 3) + 1; // 1 to 3 baits
 
             if (!user) {
                 user = new EconomyUserData({
                     userId: interaction.user.id,
                     balance: reward,
-                    carrots: carrotReward,
                     commandData: { lastDaily: now, dailyStreak: streak },
                     transactionLogs: []
                 });
             } else {
                 user.balance += reward;
-                user.carrots = (user.carrots || 0) + carrotReward;
                 user.commandData.lastDaily = now;
                 user.commandData.dailyStreak = streak;
             }
+
+            // Add Seed
+            await addToFarm(interaction.user.id, seedReward.name, seedQuantity, 'seed');
+
+            // Add Bait
+            const userFishing = await getUserFishing(interaction.user.id);
+            const baitItem = userFishing.baits.find(b => b.name === baitReward.name);
+            if (baitItem) {
+                baitItem.quantity += baitQuantity;
+            } else {
+                userFishing.baits.push({ name: baitReward.name, quantity: baitQuantity });
+            }
+            await userFishing.save();
+
 
             const awardedItems = [];
             const dailyItems = config.Economy.Daily.Items;
@@ -118,11 +144,14 @@ module.exports = {
                 .setDescription(description)
                 .setFooter({ text: replacePlaceholders(lang.Economy.Messages.footer, { balance: user.balance }) })
                 .setColor('#00FF00')
-                .addFields({ name: '<:carrot:1436533295084208328> Carrots Nhận Được', value: `${carrotReward}` });
+                .addFields(
+                    { name: '🌱 Hạt Giống', value: `${seedReward.emoji} ${seedReward.name} (x${seedQuantity})`, inline: true },
+                    { name: '🪱 Mồi Câu', value: `${baitReward.name} (x${baitQuantity})`, inline: true }
+                );
 
             if (awardedItems.length > 0) {
                 const itemsString = awardedItems.map(item => `${item.name} (x${item.quantity})`).join('\n');
-                embed.addFields({ name: 'Vật phẩm nhận được', value: itemsString });
+                embed.addFields({ name: 'Vật phẩm khác', value: itemsString, inline: false });
             }
 
             const dailyTitle = lang.Economy.Actions.Daily.Title;
