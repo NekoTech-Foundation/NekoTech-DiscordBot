@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Cá hồi Đại Tây Dương",
-    "emoji": "<:Fish_atlanticsalmon:1433392861184917676>",
-    "min_weight": 2,
-    "max_weight": 10
+    "name": "Cá dao ma đen",
+    "emoji": "<:Fish_blackghostknifefish:1433393245467054130>",
+    "min_weight": 0.5,
+    "max_weight": 1.5
   },
   "epic": {
     "name": "San hô",
@@ -11,5 +11,5 @@
     "min_weight": 0.1,
     "max_weight": 1
   },
-  "updatedAt": "2025-11-22T03:21:29.822Z"
+  "updatedAt": "2025-11-22T07:54:44.827Z"
 }

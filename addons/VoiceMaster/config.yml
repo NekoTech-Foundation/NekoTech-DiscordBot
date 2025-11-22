@@ -1,0 +1,7 @@
+# VoiceMaster Addon Configuration
+
+# Cooldown time in seconds between creating channels (prevents spam)
+cooldown_seconds: 15
+
+# Default user limit for voice channels (0 = unlimited)
+default_channel_limit: 0

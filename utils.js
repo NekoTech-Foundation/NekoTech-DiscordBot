@@ -64,7 +64,7 @@ const BATCH_SIZE = 50;
 //};
 
 module.exports = async (client) => {
-        try {
+    try {
         await mongoManager();
     } catch (error) {
         console.error(`Failed to connect to MongoDB: ${error.message}`);
@@ -96,7 +96,7 @@ module.exports = async (client) => {
     }, LEADERBOARD_UPDATE_INTERVAL);
     setInterval(cleanupLeaderboardCache, LEADERBOARD_UPDATE_INTERVAL);
 
-    
+
     client.on('messageDelete', handleMessageDelete);
     client.on('messageUpdate', handleMessageUpdate);
     client.on('guildMemberAdd', handleGuildMemberAdd);
@@ -189,68 +189,68 @@ module.exports = async (client) => {
         });
     }
 
-async function handleInteractionCreate(interaction) {
-    if (interaction.isCommand()) {
-        const command = client.slashCommands.get(interaction.commandName);
-        if (!command) return;
-        try {
-            await command.execute(interaction, client);
-        } catch (error) {
-            console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
-            
-            // Try to send error message, but handle expired interactions gracefully
+    async function handleInteractionCreate(interaction) {
+        if (interaction.isCommand()) {
+            const command = client.slashCommands.get(interaction.commandName);
+            if (!command) return;
             try {
-                if (!interaction.replied && !interaction.deferred) {
-                    await interaction.reply({ 
-                        content: 'There was an error while executing this command!', 
-                        flags: MessageFlags.Ephemeral 
-                    });
-                } else if (interaction.deferred) {
-                    await interaction.editReply({ 
-                        content: 'There was an error while executing this command!'
-                    });
+                await command.execute(interaction, client);
+            } catch (error) {
+                console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
+
+                // Try to send error message, but handle expired interactions gracefully
+                try {
+                    if (!interaction.replied && !interaction.deferred) {
+                        await interaction.reply({
+                            content: 'There was an error while executing this command!',
+                            flags: MessageFlags.Ephemeral
+                        });
+                    } else if (interaction.deferred) {
+                        await interaction.editReply({
+                            content: 'There was an error while executing this command!'
+                        });
+                    }
+                } catch (replyError) {
+                    // Only log if it's not an expired interaction error
+                    if (replyError.code !== 10062) {
+                        console.error('[ERROR] Failed to send error message:', replyError);
+                    }
+                    // If interaction expired (10062), silently ignore
                 }
-            } catch (replyError) {
-                // Only log if it's not an expired interaction error
-                if (replyError.code !== 10062) {
-                    console.error('[ERROR] Failed to send error message:', replyError);
-                }
-                // If interaction expired (10062), silently ignore
             }
-        }
         } else if (interaction.isAutocomplete()) {
             try {
                 const command = client.slashCommands.get(interaction.commandName);
                 if (!command || !command.autocomplete) {
-                    await interaction.respond([]).catch(() => {});
+                    await interaction.respond([]).catch(() => { });
                     return;
                 }
-                
+
                 try {
                     await command.autocomplete(interaction);
                 } catch (error) {
                     console.error(`[ERROR] Failed to execute autocomplete for command ${command.id || command.name}:`, error);
                     try {
-                        await interaction.respond([]).catch(() => {});
+                        await interaction.respond([]).catch(() => { });
                     } catch (respondError) {
                     }
                 }
             } catch (error) {
                 console.error('Error in main autocomplete handler:', error);
                 try {
-                    await interaction.respond([]).catch(() => {});
+                    await interaction.respond([]).catch(() => { });
                 } catch (respondError) {
                 }
             }
         } else if (interaction.isButton()) {
             const interactionKey = `${interaction.user.id}-${interaction.customId}`;
-            
+
             if (interactionDebounce.size > MAX_DEBOUNCE_ENTRIES) {
                 const oldestKey = Array.from(interactionDebounce.keys())[0];
                 clearTimeout(interactionDebounce.get(oldestKey));
                 interactionDebounce.delete(oldestKey);
             }
-            
+
             if (interactionDebounce.has(interactionKey)) {
                 clearTimeout(interactionDebounce.get(interactionKey));
             }
@@ -279,10 +279,10 @@ async function handleInteractionCreate(interaction) {
                             }
                         }
                     } else {
-                  //      console.warn(`Interaction ${interaction.id} has already been replied or deferred.`);
+                        //      console.warn(`Interaction ${interaction.id} has already been replied or deferred.`);
                     }
                 } catch (error) {
-                
+
                 } finally {
                     interactionDebounce.delete(interactionKey);
                 }
@@ -395,20 +395,20 @@ async function handleInteractionCreate(interaction) {
     async function handleReactionRoleSelect(interaction) {
         const panelName = interaction.customId.split('_')[2];
         const panel = config.ReactionRoles[panelName];
-    
+
         if (!panel) return;
-    
+
         const member = interaction.member;
         const selectedValues = interaction.values;
         const availableRoles = panel.Reactions.map((r, index) => ({ roleId: r.RoleID, value: `${panelName}_${index}` }));
-    
+
         try {
             for (const { roleId, value } of availableRoles) {
                 const role = interaction.guild.roles.cache.get(roleId);
                 if (!role) {
                     continue;
                 }
-    
+
                 if (selectedValues.includes(value)) {
                     if (!member.roles.cache.has(roleId)) {
                         await member.roles.add(roleId);
@@ -419,7 +419,7 @@ async function handleInteractionCreate(interaction) {
                     }
                 }
             }
-    
+
             await interaction.reply({ content: lang.Reactions.RolesUpdated, flags: MessageFlags.Ephemeral });
         } catch (error) {
             console.error('Error updating roles:', error);
@@ -437,7 +437,7 @@ async function handleInteractionCreate(interaction) {
         const cooldownKey = `${user.id}`;
         const lastReactionTime = userReactionCooldowns.get(cooldownKey);
         const now = Date.now();
-        
+
         if (lastReactionTime && now - lastReactionTime < REACTION_COOLDOWN) {
             await reaction.users.remove(user).catch(console.error);
             return;
@@ -475,7 +475,7 @@ async function handleInteractionCreate(interaction) {
         }
 
         const member = reaction.message.guild.members.cache.get(user.id);
-        
+
         try {
             if (member.roles.cache.has(role.id)) {
                 await member.roles.remove(role);
@@ -534,7 +534,7 @@ async function handleInteractionCreate(interaction) {
         }
 
         const member = reaction.message.guild.members.cache.get(user.id);
-        
+
         try {
             if (member && member.roles.cache.has(role.id)) {
                 await member.roles.remove(role);
@@ -637,7 +637,7 @@ async function handleInteractionCreate(interaction) {
             await setupReactionRoles();
         }
         await loadPolls(client);
-        
+
         const files = getFilesRecursively('./addons');
         files.forEach(file => {
             const absolutePath = path.resolve(file);
@@ -692,16 +692,16 @@ async function handleInteractionCreate(interaction) {
             { condition: config.TicketSettings.Enabled, fn: () => setInterval(() => checkAndUpdateTicketStatus(client), 300000), name: 'Ticket' },
             { condition: true, fn: startInterestScheduler, name: 'Interest' },
             { condition: config.Alert?.Enabled, fn: () => startAlertScheduler(client), name: 'Alert' },
-            { 
-                condition: true, 
+            {
+                condition: true,
                 fn: () => {
                     updateChannelStats(client);
                     const interval = setInterval(() => {
                         updateChannelStats(client);
                     }, 30000);
                     global.channelStatsInterval = interval;
-                }, 
-                name: 'ChannelStats' 
+                },
+                name: 'ChannelStats'
             },
             {
                 condition: config.Backup?.Enabled,
@@ -769,14 +769,14 @@ async function handleInteractionCreate(interaction) {
             { body: global.slashCommands }
         );
 
-            registeredCommands.forEach(registeredCommand => {
-                const localCommand = client.slashCommands.get(registeredCommand.name);
-                if (localCommand) {
-                    localCommand.id = registeredCommand.id;
-                }
-            });
+        registeredCommands.forEach(registeredCommand => {
+            const localCommand = client.slashCommands.get(registeredCommand.name);
+            if (localCommand) {
+                localCommand.id = registeredCommand.id;
+            }
+        });
 
-            client.commandsReady = true;
+        client.commandsReady = true;
 
     }
 
@@ -893,30 +893,30 @@ async function handleInteractionCreate(interaction) {
         return duration;
     }
 
-  //  function parseCustomDuration(durationStr) {
-  //      const timeUnits = {
-  //          s: 1000,
-  //          m: 60 * 1000,
-  //          h: 60 * 60 * 1000,
-  //          d: 24 * 60 * 60 * 1000
-  //      };
-  //      return durationStr.split(' ').reduce((totalMilliseconds, part) => {
-  //          const unit = part.slice(-1);
-  //          const value = parseInt(part.slice(0, -1), 10);
-  //          return totalMilliseconds + (value * (timeUnits[unit] || 0));
-  //      }, 0);
-  //  }
+    //  function parseCustomDuration(durationStr) {
+    //      const timeUnits = {
+    //          s: 1000,
+    //          m: 60 * 1000,
+    //          h: 60 * 60 * 1000,
+    //          d: 24 * 60 * 60 * 1000
+    //      };
+    //      return durationStr.split(' ').reduce((totalMilliseconds, part) => {
+    //          const unit = part.slice(-1);
+    //          const value = parseInt(part.slice(0, -1), 10);
+    //          return totalMilliseconds + (value * (timeUnits[unit] || 0));
+    //      }, 0);
+    //  }
 
-  //  function createLogEmbed(author, color, title, description, fields, footerText) {
-  //      return new EmbedBuilder()
-  //          .setAuthor({ name: author })
-  //          .setColor(color)
-  //          .setTitle(title)
-  //          .setDescription(description)
-  //          .addFields(fields)
-  //          .setTimestamp()
-  //          .setFooter({ text: footerText });
-  //  }
+    //  function createLogEmbed(author, color, title, description, fields, footerText) {
+    //      return new EmbedBuilder()
+    //          .setAuthor({ name: author })
+    //          .setColor(color)
+    //          .setTitle(title)
+    //          .setDescription(description)
+    //          .addFields(fields)
+    //          .setTimestamp()
+    //          .setFooter({ text: footerText });
+    //  }
 
     //  function humanReadableDuration(milliseconds) {
     //      if (milliseconds < 1000) return "Less than a second";
@@ -948,31 +948,31 @@ async function handleInteractionCreate(interaction) {
     //      return duration.replace(/,\s*$/, "");
     //  }
 
-   // function sendLogMessage(guild, channelId, embed) {
-   //     const logChannel = guild.channels.cache.get(channelId);
-   //     if (logChannel) {
-   //         logChannel.send({ embeds: [embed] });
-   //     }
-   // }
+    // function sendLogMessage(guild, channelId, embed) {
+    //     const logChannel = guild.channels.cache.get(channelId);
+    //     if (logChannel) {
+    //         logChannel.send({ embeds: [embed] });
+    //     }
+    // }
 
-   // async function sendDirectMessage(user, template, data) {
-   //     let messageContent = template
-   //         .replace(/{user}/g, user.username)
-   //         .replace(/{guildname}/g, data.guildName)
-   //         .replace(/{message}/g, data.messageContent)
-   //         .replace(/{time}/g, data.timeoutDuration);
-   //     try {
-   //         await user.send(messageContent);
-   //     } catch (error) {
-   //         console.log(`Could not send DM to ${user.username}: ${error}`);
-   //     }
-   // }
+    // async function sendDirectMessage(user, template, data) {
+    //     let messageContent = template
+    //         .replace(/{user}/g, user.username)
+    //         .replace(/{guildname}/g, data.guildName)
+    //         .replace(/{message}/g, data.messageContent)
+    //         .replace(/{time}/g, data.timeoutDuration);
+    //     try {
+    //         await user.send(messageContent);
+    //     } catch (error) {
+    //         console.log(`Could not send DM to ${user.username}: ${error}`);
+    //     }
+    // }
 
     async function updateChannelStats(client) {
         try {
             const stats = await ChannelStat.find({});
             const updatePromises = [];
-            
+
             for (const stat of stats) {
                 const guild = client.guilds.cache.get(stat.guildId);
                 if (!guild) continue;
@@ -1062,11 +1062,11 @@ async function handleInteractionCreate(interaction) {
                         const parts = stat.channelName.split('{stats}');
                         const beforeStats = parts[0] || '';
                         const afterStats = parts[1] || '';
-                        
+
                         const newChannelName = `${beforeStats}${formattedValue}${afterStats}`
                             .replace(/\s+/g, ' ')
                             .trim();
-                        
+
                         if (channel.name !== newChannelName) {
                             updatePromises.push({
                                 channel,
@@ -1120,7 +1120,7 @@ async function handleInteractionCreate(interaction) {
 
                     if (command.data instanceof SlashCommandBuilder || command.data instanceof ContextMenuCommandBuilder || Array.isArray(command.data)) {
                         const commandData = Array.isArray(command.data) ? command.data : [command.data];
-                        
+
                         commandData.forEach(data => {
                             const commandName = data.name;
                             if (commandNames.has(commandName)) {
@@ -1177,19 +1177,19 @@ async function handleInteractionCreate(interaction) {
         if (!config.ReactionRoles.Enabled) {
             return;
         }
-    
+
         for (const panelName in config.ReactionRoles) {
             if (panelName === 'Enabled') continue;
-            
+
             const panel = config.ReactionRoles[panelName];
             if (!panel) {
                 continue;
             }
-    
+
             if (!panel.ChannelID) {
                 continue;
             }
-    
+
             let channel;
             try {
                 channel = await client.channels.fetch(panel.ChannelID);
@@ -1197,11 +1197,11 @@ async function handleInteractionCreate(interaction) {
                 console.error(`Error fetching channel for panel ${panelName}:`, error);
                 continue;
             }
-    
+
             if (!channel) {
                 continue;
             }
-    
+
             const existingPanel = await ReactionRole.findOne({ panelName });
             if (existingPanel) {
                 try {
@@ -1216,12 +1216,12 @@ async function handleInteractionCreate(interaction) {
                     }
                 }
             }
-    
+
             const panelDescription = panel.Embed.Description.map(line => line.trim()).join('\n');
-    
+
             const embed = new EmbedBuilder()
                 .setDescription(panelDescription);
-    
+
             if (panel.Embed.Title) embed.setTitle(panel.Embed.Title);
             if (panel.Embed.Footer && panel.Embed.Footer.Text) {
                 const footerOptions = { text: panel.Embed.Footer.Text };
@@ -1240,22 +1240,22 @@ async function handleInteractionCreate(interaction) {
             if (panel.Embed.Color) embed.setColor(panel.Embed.Color);
             if (panel.Embed.Image) embed.setImage(panel.Embed.Image);
             if (panel.Embed.Thumbnail) embed.setThumbnail(panel.Embed.Thumbnail);
-    
+
             let sentMessage;
-    
+
             if (panel.type === "BUTTON") {
                 const actionRows = [];
                 let currentRow = new ActionRowBuilder();
                 let totalButtons = 0;
-    
+
                 panel.Reactions.forEach((reaction, index) => {
                     if (totalButtons >= 25) {
                         console.error(`Exceeded the button limit for panel: ${panelName}. Maximum 25 buttons are allowed.`);
                         return;
                     }
-    
+
                     const buttonStyle = validButtonStyles[reaction.Style.toUpperCase()] || ButtonStyle.Secondary;
-    
+
                     const button = new ButtonBuilder()
                         .setCustomId(`reaction_role_${panelName}_${index}`)
                         .setLabel(reaction.Description)
@@ -1263,17 +1263,17 @@ async function handleInteractionCreate(interaction) {
                         .setEmoji(reaction.Emoji);
                     currentRow.addComponents(button);
                     totalButtons++;
-    
+
                     if (currentRow.components.length === 5) {
                         actionRows.push(currentRow);
                         currentRow = new ActionRowBuilder();
                     }
                 });
-    
+
                 if (currentRow.components.length > 0) {
                     actionRows.push(currentRow);
                 }
-    
+
                 sentMessage = await channel.send({ embeds: [embed], components: actionRows });
             } else if (panel.type === "REACT") {
                 sentMessage = await channel.send({ embeds: [embed] });
@@ -1286,7 +1286,7 @@ async function handleInteractionCreate(interaction) {
                     .setPlaceholder('Select your roles')
                     .setMinValues(0)
                     .setMaxValues(panel.Reactions.length);
-            
+
                 panel.Reactions.forEach((reaction, index) => {
                     const option = {
                         label: reaction.Name,
@@ -1300,15 +1300,15 @@ async function handleInteractionCreate(interaction) {
 
                     selectMenu.addOptions(option);
                 });
-            
+
                 const actionRow = new ActionRowBuilder().addComponents(selectMenu);
                 sentMessage = await channel.send({ embeds: [embed], components: [actionRow] });
             }
-    
+
             if (sentMessage) {
                 await ReactionRole.findOneAndUpdate(
                     { panelName },
-                    { 
+                    {
                         panelName,
                         channelID: panel.ChannelID,
                         messageID: sentMessage.id
@@ -1402,7 +1402,7 @@ async function handleInteractionCreate(interaction) {
     setInterval(async () => {
         const now = new Date();
         const reminders = await Reminder.find({ reminderTime: { $lte: now }, sent: false });
-    
+
         reminders.forEach(async (reminder) => {
             try {
                 let channel;
@@ -1415,20 +1415,20 @@ async function handleInteractionCreate(interaction) {
                     }
                     throw channelError;
                 }
-    
+
                 const user = await client.users.fetch(reminder.userId);
-    
+
                 const embed = new EmbedBuilder()
                     .setColor(hexToDecimal(lang.Reminder.Embeds.DM.Color));
-    
+
                 if (lang.Reminder.Embeds.DM.Title) {
                     embed.setTitle(lang.Reminder.Embeds.DM.Title);
                 }
-    
+
                 if (lang.Reminder.Embeds.DM.Description) {
                     embed.setDescription(lang.Reminder.Embeds.DM.Description.replace('{message}', reminder.message));
                 }
-    
+
                 if (lang.Reminder.Embeds.DM.Footer && lang.Reminder.Embeds.DM.Footer.Text) {
                     const footerOptions = { text: lang.Reminder.Embeds.DM.Footer.Text };
                     if (lang.Reminder.Embeds.DM.Footer.Icon && lang.Reminder.Embeds.DM.Footer.Icon.trim() !== '') {
@@ -1436,7 +1436,7 @@ async function handleInteractionCreate(interaction) {
                     }
                     embed.setFooter(footerOptions);
                 }
-    
+
                 if (lang.Reminder.Embeds.DM.Author && lang.Reminder.Embeds.DM.Author.Text) {
                     const authorOptions = { name: lang.Reminder.Embeds.DM.Author.Text };
                     if (lang.Reminder.Embeds.DM.Author.Icon && lang.Reminder.Embeds.DM.Author.Icon.trim() !== '') {
@@ -1444,17 +1444,17 @@ async function handleInteractionCreate(interaction) {
                     }
                     embed.setAuthor(authorOptions);
                 }
-    
+
                 if (lang.Reminder.Embeds.DM.Image) {
                     embed.setImage(lang.Reminder.Embeds.DM.Image);
                 }
-    
+
                 if (lang.Reminder.Embeds.DM.Thumbnail) {
                     embed.setThumbnail(lang.Reminder.Embeds.DM.Thumbnail);
                 }
-    
+
                 embed.setTimestamp();
-    
+
                 await user.send({ embeds: [embed] }).catch(async error => {
                     if (error.code === 50007) {
                         await channel.send({ content: `<@${reminder.userId}>`, embeds: [embed] });
@@ -1462,7 +1462,7 @@ async function handleInteractionCreate(interaction) {
                         console.error('Failed to send reminder:', error);
                     }
                 });
-    
+
                 reminder.sent = true;
                 await reminder.save();
             } catch (error) {
@@ -1493,10 +1493,10 @@ async function handleInteractionCreate(interaction) {
 
     client.polls = new Map();
 
-   // function getNumberEmoji(number) {
-   //     const numberEmojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
-   //     return numberEmojis[number - 1];
-   // }
+    // function getNumberEmoji(number) {
+    //     const numberEmojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
+    //     return numberEmojis[number - 1];
+    // }
 
     client.on('messageReactionAdd', async (reaction, user) => {
         if (user.bot) return;
@@ -1709,18 +1709,18 @@ async function handleInteractionCreate(interaction) {
     function startInterestScheduler() {
         const interval = process.env.TEST_MODE ? 60 * 1000 : 24 * 60 * 60 * 1000;
         const nextInterestTime = getNextInterestTime();
-    
+
         setTimeout(async () => {
             const dailyInterestRate = Math.random() * (0.045 - 0.025) + 0.025;
             const users = await EconomyUserData.find({ bank: { $gt: 0 } });
-    
+
             for (const user of users) {
                 let interest = Math.floor(user.bank * dailyInterestRate);
-    
+
                 if (config.Economy.maxInterestEarning && config.Economy.maxInterestEarning > 0) {
                     interest = Math.min(interest, config.Economy.maxInterestEarning);
                 }
-    
+
                 const updatedUser = await EconomyUserData.findOneAndUpdate(
                     { _id: user._id },
                     {
@@ -1753,12 +1753,12 @@ async function handleInteractionCreate(interaction) {
                     console.error(`Could not send interest DM to ${user.userId}.`, error);
                 }
             }
-    
+
             startInterestScheduler();
         }, nextInterestTime.diff(moment().tz(config.Timezone)));
     }
 
-    async function cleanup() {    
+    async function cleanup() {
         client.removeAllListeners('messageCreate');
         client.removeAllListeners('messageDelete');
         client.removeAllListeners('interactionCreate');
@@ -1798,7 +1798,7 @@ async function handleInteractionCreate(interaction) {
 
     function cleanupLeaderboardCache() {
         const now = Date.now();
-        if (global.leaderboardCache.lastUpdated && 
+        if (global.leaderboardCache.lastUpdated &&
             now - global.leaderboardCache.lastUpdated > LEADERBOARD_STALE_TIME) {
             global.leaderboardCache = {
                 balance: [],
@@ -1816,7 +1816,7 @@ async function handleInteractionCreate(interaction) {
         const oldPolls = await Poll.find({
             createdAt: { $lt: new Date(Date.now() - POLL_CLEANUP_INTERVAL) }
         });
-        
+
         for (const poll of oldPolls) {
             client.polls.delete(poll.messageId);
             await Poll.deleteOne({ _id: poll._id });
