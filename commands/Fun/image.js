@@ -22,13 +22,18 @@ const config = getConfig();
 
 /**
  * Fetch random image from Nekos API
- * @param {string} rating - Rating filter (safe, suggestive, explicit)
+ * @param {string} rating - Rating filter (safe, suggestive, explicit, all)
  * @returns {Promise<Object>} Image data with url, tags, artist, source
  */
 async function fetchNekosImage(rating = 'safe') {
     try {
         const response = await fetch('https://api.nekosapi.com/v4/images/random');
         const data = await response.json();
+
+        // If rating is 'all', return any random image
+        if (rating === 'all') {
+            return data[Math.floor(Math.random() * data.length)];
+        }
 
         // Filter by rating and pick a random image
         const filteredImages = data.filter(img => img.rating === rating);
@@ -68,15 +73,45 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('neko')
-                .setDescription('🐱 Lấy hình ảnh neko girl ngẫu nhiên'))
+                .setDescription('🐱 Lấy hình ảnh neko girl ngẫu nhiên')
+                .addStringOption(option =>
+                    option
+                        .setName('rating')
+                        .setDescription('Chọn mức độ rating (mặc định: safe)')
+                        .setRequired(false)
+                        .addChoices(
+                            { name: '✅ Safe - An toàn', value: 'safe' },
+                            { name: '⚠️ Suggestive - Gợi cảm', value: 'suggestive' },
+                            { name: '🔞 Explicit - Người lớn', value: 'explicit' }
+                        )))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('anime')
-                .setDescription('🌸 Lấy hình ảnh anime ngẫu nhiên'))
+                .setDescription('🌸 Lấy hình ảnh anime ngẫu nhiên')
+                .addStringOption(option =>
+                    option
+                        .setName('rating')
+                        .setDescription('Chọn mức độ rating (mặc định: safe)')
+                        .setRequired(false)
+                        .addChoices(
+                            { name: '✅ Safe - An toàn', value: 'safe' },
+                            { name: '⚠️ Suggestive - Gợi cảm', value: 'suggestive' },
+                            { name: '🔞 Explicit - Người lớn', value: 'explicit' }
+                        )))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('waifu')
-                .setDescription('💖 Lấy hình ảnh waifu ngẫu nhiên')),
+                .setDescription('💖 Lấy hình ảnh waifu ngẫu nhiên')
+                .addStringOption(option =>
+                    option
+                        .setName('rating')
+                        .setDescription('Chọn mức độ rating (mặc định: safe)')
+                        .setRequired(false)
+                        .addChoices(
+                            { name: '✅ Safe - An toàn', value: 'safe' },
+                            { name: '⚠️ Suggestive - Gợi cảm', value: 'suggestive' },
+                            { name: '🔞 Explicit - Người lớn', value: 'explicit' }
+                        ))),
     category: 'Giải trí',
     async execute(interaction) {
         try {
@@ -105,7 +140,9 @@ module.exports = {
                 imageUrl = data.url;
                 title = 'Đây là một chú vịt ngẫu nhiên cho bạn!';
             } else if (subcommand === 'neko' || subcommand === 'anime' || subcommand === 'waifu') {
-                const imageData = await fetchNekosImage('safe');
+                // Get rating from option, default to 'safe'
+                const rating = interaction.options.getString('rating') || 'safe';
+                const imageData = await fetchNekosImage(rating);
 
                 const embed = new EmbedBuilder()
                     .setTitle(subcommand === 'neko' ? '🐱 Đây là neko girl ngẫu nhiên cho bạn!' :
@@ -113,6 +150,15 @@ module.exports = {
                             '💖 Đây là waifu ngẫu nhiên cho bạn!')
                     .setImage(imageData.url)
                     .setColor(config.EmbedColors);
+
+                // Add rating badge
+                const ratingEmoji = imageData.rating === 'safe' ? '✅' :
+                    imageData.rating === 'suggestive' ? '⚠️' : '🔞';
+                embed.addFields({
+                    name: '📊 Rating',
+                    value: `${ratingEmoji} ${imageData.rating.toUpperCase()}`,
+                    inline: true
+                });
 
                 // Add tags if available
                 if (imageData.tags && imageData.tags.length > 0) {
