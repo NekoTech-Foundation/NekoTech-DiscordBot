@@ -719,6 +719,14 @@ module.exports = async (client) => {
                     setInterval(runBackup, scheduleTime);
                 },
                 name: 'AutoBackup'
+            },
+            {
+                condition: commandConfig.cardrecharge,
+                fn: () => {
+                    const { startTask } = require('./addons/CardRecharge/tasks/cardStatusTask');
+                    startTask(client);
+                },
+                name: 'CardRecharge'
             }
         ];
 

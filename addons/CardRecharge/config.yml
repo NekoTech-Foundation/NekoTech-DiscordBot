@@ -1,0 +1,162 @@
+# ======================================================================================
+# CardRecharge Addon - Nạp thẻ cào tự động
+# ======================================================================================
+
+# Nhà cung cấp API
+provider: "https://card2k.com"
+
+# ======================================================================================
+# CẤU HÌNH CHỨC NĂNG
+# enabled: true - bật chức năng, false - tắt chức năng
+# only_admin: true - chỉ admin sử dụng được, false - tất cả người dùng
+# ======================================================================================
+commands:
+  topup:
+    enabled: true
+    description: "💳 Nạp thẻ cào để tăng số dư tài khoản"
+    only_admin: false
+  checkfee:
+    enabled: true
+    description: "💰 Kiểm tra phí đổi thẻ cào theo nhà mạng"
+    only_admin: false
+  history:
+    enabled: true
+    description: "📜 Xem lịch sử nạp thẻ cào của bạn"
+    only_admin: false
+  setup:
+    enabled: true
+    description: "⚙️ Cấu hình kênh thông báo nạp thẻ"
+    only_admin: true
+
+# ======================================================================================
+# CẤU HÌNH THÔNG BÁO
+# channel_id: ID của kênh thông báo (không bắt buộc)
+# role_id: ID của vai trò được ping khi có thông báo (không bắt buộc)
+# ======================================================================================
+notifications:
+  topup:
+    channel_id: ""   # Kênh thông báo kết quả nạp thẻ
+    role_id: ""      # Vai trò được ping
+
+# ======================================================================================
+# CẤU HÌNH KIỂM TRA TRẠNG THÁI THẺ
+# type:
+#   - "api": Kiểm tra trạng thái thẻ qua API (khuyến nghị)
+#   - "callback": Sử dụng callback URL (cần cấu hình VPS)
+# delay_time: Thời gian delay giữa các lần kiểm tra (giây, tối thiểu: 30)
+# ======================================================================================
+card_status_check:
+  type: "api"
+  callback_url: ""
+  delay_time: 30
+
+# ======================================================================================
+# BANNER VÀ URL
+# ======================================================================================
+banner:
+  default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmdMaWzjGnnRXb6cvKjMasSO5AiRNHBh1Ybg&s"
+  checkfee: "https://i.ibb.co/DHNx3NjC/image.png"
+  topup: ""
+
+url:
+  app: "https://card2k.com"
+
+# ======================================================================================
+# DANH SÁCH NHÀ MẠNG HỖ TRỢ
+# true: bật, false: tắt
+# Lưu ý: Cần khởi động lại bot sau khi thay đổi
+# ======================================================================================
+card_types:
+  viettel: true
+  mobifone: true
+  vinaphone: true
+  vietnamobile: true
+  garena: true
+  zing: true
+  vcoin: true
+  gate: false
+
+# ======================================================================================
+# CẤU HÌNH MỆNH GIÁ THẺ
+# true: bật, false: tắt
+# Lưu ý: Cần khởi động lại bot sau khi thay đổi
+# ======================================================================================
+card_amounts:
+  viettel:
+    10000: true
+    20000: true
+    30000: true
+    50000: true
+    100000: true
+    200000: true
+    300000: true
+    500000: true
+    1000000: true
+  mobifone:
+    10000: true
+    20000: true
+    30000: true
+    50000: true
+    100000: true
+    200000: true
+    300000: true
+    500000: true
+    1000000: false
+  vinaphone:
+    10000: true
+    20000: true
+    30000: true
+    50000: true
+    100000: true
+    200000: true
+    300000: true
+    500000: true
+    1000000: false
+  vietnamobile:
+    10000: true
+    20000: true
+    30000: true
+    50000: true
+    100000: true
+    200000: true
+    300000: true
+    500000: true
+    1000000: false
+  garena:
+    5000: true
+    10000: true
+    20000: true
+    30000: false
+    50000: true
+    100000: true
+    200000: true
+    300000: false
+    500000: true
+    1000000: false
+  zing:
+    10000: true
+    20000: true
+    30000: false
+    50000: true
+    100000: true
+    200000: true
+    300000: false
+    500000: true
+    1000000: true
+  vcoin:
+    10000: true
+    20000: true
+    30000: false
+    50000: true
+    100000: true
+    200000: true
+    300000: true
+    500000: true
+    1000000: true
+  gate:
+    10000: true
+    20000: true
+    50000: true
+    100000: true
+    200000: true
+    500000: true

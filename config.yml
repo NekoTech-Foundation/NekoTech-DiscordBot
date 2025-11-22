@@ -1802,3 +1802,13 @@ CardSwap:
   PartnerId: ""                       # your partner_id
   PartnerKey: ""                      # your partner_key (used to sign requests)
   WithdrawApiKey: ""                  # API key used for withdraw endpoints
+
+# ===========================================================================
+# Card2k API Keys (addon CardRecharge - Nạp thẻ cào)
+# Fill these values to enable card recharge functionality
+# ===========================================================================
+API_Keys:
+  Card2k:
+    PartnerId: ""        # Partner ID từ card2k.com
+    PartnerKey: ""       # Partner Key từ card2k.com
+    Provider: "https://card2k.com"  # URL của provider
