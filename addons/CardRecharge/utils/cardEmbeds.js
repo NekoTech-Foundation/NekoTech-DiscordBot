@@ -160,10 +160,12 @@ function createFeeEmbed(feeData, telco = null) {
 
         let description = '**Danh sách phí theo mệnh giá:**\n\n';
 
-        if (feeData && feeData.fees) {
+        if (feeData && feeData.fees && Object.keys(feeData.fees).length > 0) {
             for (const [amount, fee] of Object.entries(feeData.fees)) {
                 description += `> ▫️ \`${parseInt(amount).toLocaleString('vi-VN')} VNĐ\` → **${fee}%**\n`;
             }
+        } else {
+            description += '> ⚠️ Không có dữ liệu phí cho nhà mạng này.\n';
         }
 
         embed.setDescription(description);
@@ -177,10 +179,12 @@ function createFeeEmbed(feeData, telco = null) {
 
         let description = '**Danh sách phí theo nhà mạng:**\n\n';
 
-        if (feeData) {
+        if (feeData && Object.keys(feeData).length > 0) {
             for (const [telcoName, fee] of Object.entries(feeData)) {
                 description += `> ▫️ **${telcoName.charAt(0).toUpperCase() + telcoName.slice(1)}**: ${fee}%\n`;
             }
+        } else {
+            description += '> ⚠️ Không có dữ liệu phí.\n';
         }
 
         embed.setDescription(description);

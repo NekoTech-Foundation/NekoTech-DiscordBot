@@ -339,6 +339,7 @@ async function handleCheckFee(interaction) {
         const card2kService = new Card2kService();
 
         const rawFeeData = await card2kService.getFees();
+        console.log('[CardRecharge] Raw fee data:', JSON.stringify(rawFeeData, null, 2));
 
         if (!rawFeeData) {
             return interaction.editReply({
@@ -349,11 +350,20 @@ async function handleCheckFee(interaction) {
         if (telco === 'all') {
             // Hiển thị tất cả nhà mạng
             const feeData = card2kService.parseFeeData(rawFeeData);
+            console.log('[CardRecharge] Parsed fee data (all):', feeData);
+
+            if (!feeData || Object.keys(feeData).length === 0) {
+                return interaction.editReply({
+                    content: '❌ Không có dữ liệu phí để hiển thị.'
+                });
+            }
+
             const embed = createFeeEmbed(feeData);
             await interaction.editReply({ embeds: [embed] });
         } else {
             // Hiển thị theo nhà mạng
             const telcoFeeData = card2kService.parseTelcoFeeData(rawFeeData, telco);
+            console.log('[CardRecharge] Parsed fee data (telco):', telcoFeeData);
 
             if (!telcoFeeData) {
                 return interaction.editReply({
