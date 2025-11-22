@@ -1694,6 +1694,30 @@ Store:
       Price: 1000
       Type: "FishingBait"
       Key: "tong_hop"
+    7:
+      Name: "Mồi cơm"
+      Description: "-# Tăng tỉ lệ câu cá 7% và thu hút cá common, uncommon."
+      Price: 150
+      Type: "FishingBait"
+      Key: "com"
+    8:
+      Name: "Mồi trứng kiến"
+      Description: "-# Tăng tỉ lệ câu cá 12% và thu hút cá uncommon, rare."
+      Price: 300
+      Type: "FishingBait"
+      Key: "trung_kien"
+    9:
+      Name: "Mồi tôm"
+      Description: "-# Tăng tỉ lệ câu cá 20% và thu hút cá rare, epic."
+      Price: 600
+      Type: "FishingBait"
+      Key: "tom"
+    10:
+      Name: "Mồi thuốc bắc"
+      Description: "-# Tăng tỉ lệ câu cá 25% và thu hút cá epic, legendary."
+      Price: 1200
+      Type: "FishingBait"
+      Key: "thuoc_bac"
 
   Embed:
     Title: "Cửa hàng {shopName}"

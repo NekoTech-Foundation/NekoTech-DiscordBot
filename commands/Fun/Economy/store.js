@@ -32,10 +32,10 @@ module.exports = {
                     .setDescription('Chọn Danh Mục Muốn Mua')
                     .setRequired(true);
 
-                const categories = Object.keys(config.Store).filter(category => 
+                const categories = Object.keys(config.Store).filter(category =>
                     category !== 'Embed' && category !== 'Categories'
                 );
-                
+
                 categories.forEach(category => {
                     option.addChoices({ name: category, value: category });
                 });
@@ -46,27 +46,27 @@ module.exports = {
         return builder;
     })(),
     category: 'Economy',
-    
+
     async execute(interaction) {
         try {
             const category = interaction.options.getString('category');
-            
+
             // Validate category exists and has items
             if (!config.Store[category]) {
-                await interaction.reply({ 
-                    content: 'Invalid category selected.', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.reply({
+                    content: 'Invalid category selected.',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
 
             const items = Object.values(config.Store[category]);
             items.sort((a, b) => a.Price - b.Price);
-            
+
             if (!items || items.length === 0) {
-                await interaction.reply({ 
-                    content: 'This category has no items available.', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.reply({
+                    content: 'This category has no items available.',
+                    flags: MessageFlags.Ephemeral
                 });
                 return;
             }
@@ -181,9 +181,9 @@ module.exports = {
                     const item = items[itemIndex];
 
                     if (!item) {
-                        await i.reply({ 
-                            content: 'Invalid item selection.', 
-                            flags: MessageFlags.Ephemeral 
+                        await i.reply({
+                            content: 'Invalid item selection.',
+                            flags: MessageFlags.Ephemeral
                         });
                         return;
                     }
@@ -192,181 +192,181 @@ module.exports = {
                     if (!user) {
                         user = new EconomyUserData({ userId: i.user.id, balance: 0 });
                     }
-                    
-                                        const itemPrice = item.Price || 0;
-                    
-                    
-                    
-                                        if (user.balance < itemPrice) {
-                    
-                                            await i.reply({ 
-                    
-                                                content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.', 
-                    
-                                                flags: MessageFlags.Ephemeral 
-                    
-                                            });
-                    
-                                            return;
-                    
-                                        }
-                    
-                    
-                    
-                                        // Handle Fishing Rod Purchase
-                    
-                                        if (category === 'Cần Câu') {
-                    
-                                            const userFishing = await getUserFishing(i.user.id);
-                    
-                                            const fishingConfig = loadFishingConfig();
-                    
-                                            const rodInfo = fishingConfig.rods[item.Key];
-                    
-                    
-                    
-                                            if (!rodInfo) {
-                    
-                                                return i.reply({ content: 'Lỗi: Không tìm thấy thông tin cần câu.', ephemeral: true });
-                    
-                                            }
-                    
-                    
-                    
-                                            user.balance -= itemPrice;
-                    
-                    
-                    
-                                            const existingRodIndex = userFishing.rods.findIndex(r => r.key === item.Key);
-                    
-                                            const newRod = { key: item.Key, name: rodInfo.name, durability: rodInfo.durability };
-                    
-                    
-                    
-                                            if (existingRodIndex > -1) {
-                    
-                                                userFishing.rods[existingRodIndex] = newRod;
-                    
-                                            } else {
-                    
-                                                userFishing.rods.push(newRod);
-                    
-                                            }
-                    
-                    
-                    
-                                            if (!userFishing.equippedRod) {
-                    
-                                                userFishing.equippedRod = item.Key;
-                    
-                                            }
-                    
-                    
-                    
-                                            await user.save();
-                    
-                                            await userFishing.save();
-                    
-                                            
-                    
-                                            return i.reply({ content: `Bạn đã mua thành công ${item.Name}.\nSử dụng lệnh \`/cauca select\` để trang bị và sử dụng nó!`, ephemeral: true });
-                    
-                                        }
-                    
-                    
-                    
-                                        // Handle Fishing Bait Purchase
-                    
-                                        if (category === 'Mồi Câu') {
-                    
-                                            const userFishing = await getUserFishing(i.user.id);
-                    
-                                            const fishingConfig = loadFishingConfig();
-                    
-                                            const baitInfo = fishingConfig.baits[item.Key];
-                    
-                                            if (!baitInfo) {
-                    
-                                                return i.reply({ content: 'Lỗi: Không tìm thấy thông tin mồi câu.', ephemeral: true });
-                    
-                                            }
-                    
-                    
-                    
-                                            user.balance -= itemPrice;
-                    
-                                            const existingBait = userFishing.baits.find(b => b.name === baitInfo.name);
-                    
-                                            if (existingBait) {
-                    
-                                                existingBait.quantity += 1;
-                    
-                                            } else {
-                    
-                                                userFishing.baits.push({ name: baitInfo.name, quantity: 1 });
-                    
-                                            }
-                    
-                    
-                    
-                                            await user.save();
-                    
-                                            await userFishing.save();
-                    
-                                            
-                    
-                                            return i.reply({ content: `Bạn đã mua thành công 1 ${item.Name}.`, ephemeral: true });
-                    
-                                        }
 
-                                        // Handle Fertilizer Purchase
-                                        if (category === 'Phân bón') {
-                                            const userFarm = await getUserFarm(i.user.id);
-                                            user.balance -= itemPrice;
-                                            const existingFertilizer = userFarm.items.find(it => it.name === item.Name && it.type === 'Fertilizer');
-                                            if (existingFertilizer) {
-                                                existingFertilizer.quantity += 1;
-                                            } else {
-                                                userFarm.items.push({ name: item.Name, quantity: 1, type: 'Fertilizer' });
-                                            }
-                                            await user.save();
-                                            await userFarm.save();
-                                            return i.reply({ content: `Bạn đã mua thành công ${item.Name}.`, ephemeral: true });
-                                        }
+                    const itemPrice = item.Price || 0;
+
+
+
+                    if (user.balance < itemPrice) {
+
+                        await i.reply({
+
+                            content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.',
+
+                            flags: MessageFlags.Ephemeral
+
+                        });
+
+                        return;
+
+                    }
+
+
+
+                    // Handle Fishing Rod Purchase
+
+                    if (category === 'Cần Câu') {
+
+                        const userFishing = await getUserFishing(i.user.id);
+
+                        const fishingConfig = loadFishingConfig();
+
+                        const rodInfo = fishingConfig.rods[item.Key];
+
+
+
+                        if (!rodInfo) {
+
+                            return i.reply({ content: 'Lỗi: Không tìm thấy thông tin cần câu.', ephemeral: true });
+
+                        }
+
+
+
+                        user.balance -= itemPrice;
+
+
+
+                        const existingRodIndex = userFishing.rods.findIndex(r => r.key === item.Key);
+
+                        const newRod = { key: item.Key, name: rodInfo.name, durability: rodInfo.durability };
+
+
+
+                        if (existingRodIndex > -1) {
+
+                            userFishing.rods[existingRodIndex] = newRod;
+
+                        } else {
+
+                            userFishing.rods.push(newRod);
+
+                        }
+
+
+
+                        if (!userFishing.equippedRod) {
+
+                            userFishing.equippedRod = item.Key;
+
+                        }
+
+
+
+                        await user.save();
+
+                        await userFishing.save();
+
+
+
+                        return i.reply({ content: `Bạn đã mua thành công ${item.Name}.\nSử dụng lệnh \`/cauca select\` để trang bị và sử dụng nó!`, ephemeral: true });
+
+                    }
+
+
+
+                    // Handle Fishing Bait Purchase
+
+                    if (category === 'Mồi Câu') {
+
+                        const userFishing = await getUserFishing(i.user.id);
+
+                        const fishingConfig = loadFishingConfig();
+
+                        const baitInfo = fishingConfig.baits[item.Key];
+
+                        if (!baitInfo) {
+
+                            return i.reply({ content: 'Lỗi: Không tìm thấy thông tin mồi câu.', ephemeral: true });
+
+                        }
+
+
+
+                        user.balance -= itemPrice;
+
+                        const existingBait = userFishing.baits.find(b => b.name === baitInfo.name);
+
+                        if (existingBait) {
+
+                            existingBait.quantity += 1;
+
+                        } else {
+
+                            userFishing.baits.push({ name: baitInfo.name, quantity: 1 });
+
+                        }
+
+
+
+                        await user.save();
+
+                        await userFishing.save();
+
+
+
+                        return i.reply({ content: `Bạn đã mua thành công 1 ${item.Name}.`, ephemeral: true });
+
+                    }
+
+                    // Handle Fertilizer Purchase
+                    if (category === 'Phân bón') {
+                        const userFarm = await getUserFarm(i.user.id);
+                        user.balance -= itemPrice;
+                        const existingFertilizer = userFarm.items.find(it => it.name === item.Name && it.type === 'Fertilizer');
+                        if (existingFertilizer) {
+                            existingFertilizer.quantity += 1;
+                        } else {
+                            userFarm.items.push({ name: item.Name, quantity: 1, type: 'Fertilizer' });
+                        }
+                        await user.save();
+                        await userFarm.save();
+                        return i.reply({ content: `Bạn đã mua thành công ${item.Name}.`, ephemeral: true });
+                    }
 
 
                     // Kiểm tra nếu là vé số
                     if (category === 'Vé Số' && vesoAddon && vesoConfig) {
                         const price = item.Price || 0;
-                        
-                                            let user = await EconomyUserData.findOne(
-                                                { userId: i.user.id },
-                                                { balance: 1, transactionLogs: 1 }                        );
+
+                        let user = await EconomyUserData.findOne(
+                            { userId: i.user.id },
+                            { balance: 1, transactionLogs: 1 });
 
                         if (!user) {
-user = new EconomyUserData({ 
-                                userId: i.user.id, 
+                            user = new EconomyUserData({
+                                userId: i.user.id,
                                 balance: 0,
                                 transactionLogs: []
                             });
                         }
-                        
+
                         // Đảm bảo transactionLogs tồn tại
                         if (!user.transactionLogs) {
                             user.transactionLogs = [];
                         }
 
                         if (user.balance < price) {
-                            await i.reply({ 
-                                content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.', 
-                                flags: MessageFlags.Ephemeral 
+                            await i.reply({
+                                content: lang.Economy?.Messages?.noMoney || 'You do not have enough money.',
+                                flags: MessageFlags.Ephemeral
                             });
                             return;
                         }
 
                         // Hiển thị modal để chọn số
                         const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
-                        
+
                         const modal = new ModalBuilder()
                             .setCustomId(`veso_choose_${price}_${i.user.id}`)
                             .setTitle('🎫 Chọn Số Vé Của Bạn');
@@ -397,12 +397,12 @@ user = new EconomyUserData({
                         const currentQuantity = user.purchasedItems[purchasedItemIndex].quantity || 0;
                         const limit = parseInt(item.Limit, 10);
                         if (currentQuantity >= limit) {
-                            await i.reply({ 
+                            await i.reply({
                                 content: replacePlaceholders(
                                     lang.Economy?.Other?.Store?.purchaseLimit || 'You have reached the purchase limit for {item}.',
                                     { limit: item.Limit, item: item.Name }
-                                ), 
-                                flags: MessageFlags.Ephemeral 
+                                ),
+                                flags: MessageFlags.Ephemeral
                             });
                             return;
                         }
@@ -414,9 +414,9 @@ user = new EconomyUserData({
                     if (item.Type === 'Interest') {
                         const itemInterest = item.Interest || 0;
                         if (currentInterestRate >= itemInterest) {
-                            await i.reply({ 
-                                content: lang.Economy?.Other?.Store?.higherInterestRate || 'You already have a higher or equal interest rate.', 
-                                flags: MessageFlags.Ephemeral 
+                            await i.reply({
+                                content: lang.Economy?.Other?.Store?.higherInterestRate || 'You already have a higher or equal interest rate.',
+                                flags: MessageFlags.Ephemeral
                             });
                             return;
                         }
@@ -454,7 +454,7 @@ user = new EconomyUserData({
                                 roleIds: item.RoleID || []
                             });
                         }
-                    } 
+                    }
                     // Handle Rank items
                     else if (item.Type === 'Rank' || item.RoleID) {
                         const inventoryItemIndex = user.inventory.findIndex(p => p.itemId === item.Name);
@@ -488,7 +488,7 @@ user = new EconomyUserData({
                                 }
                             }
                         }
-                    } 
+                    }
                     // Handle Equipment items
                     else if (category === 'Equipment') {
                         const inventoryItemIndex = user.inventory.findIndex(p => p.itemId === item.Name);
@@ -507,7 +507,7 @@ user = new EconomyUserData({
                     }
 
                     await user.save();
-                    
+
                     await i.reply({
                         content: replacePlaceholders(
                             lang.Economy?.Other?.Store?.purchaseSuccess || 'Successfully purchased {item}! Balance: {balance}',
@@ -521,9 +521,9 @@ user = new EconomyUserData({
                 } catch (error) {
                     console.error('Error handling purchase:', error);
                     if (!i.replied && !i.deferred) {
-                        await i.reply({ 
-                            content: 'There was an error processing your purchase.', 
-                            flags: MessageFlags.Ephemeral 
+                        await i.reply({
+                            content: 'There was an error processing your purchase.',
+                            flags: MessageFlags.Ephemeral
                         });
                     }
                 }
@@ -540,9 +540,9 @@ user = new EconomyUserData({
 
             // Create collector
             const filter = i => i.user.id === interaction.user.id;
-            const collector = message.createMessageComponentCollector({ 
-                filter, 
-                time: 60000 
+            const collector = message.createMessageComponentCollector({
+                filter,
+                time: 60000
             });
 
             collector.on('collect', async i => {
@@ -562,7 +562,7 @@ user = new EconomyUserData({
                             const modal = new ModalBuilder()
                                 .setCustomId(`bait_buy_${item.Key}`)
                                 .setTitle(`Mua ${item.Name}`);
-                            
+
                             const quantityInput = new TextInputBuilder()
                                 .setCustomId('quantity')
                                 .setLabel('Nhập số lượng muốn mua')
@@ -610,11 +610,11 @@ user = new EconomyUserData({
                                 await modalSubmission.reply({ content: `Bạn đã mua thành công ${quantity} ${item.Name}.`, ephemeral: true });
 
                             } catch (err) {
-                                console.log('Bait purchase modal timed out or failed.');
+                                console.error('Bait purchase failed:', err);
                             }
                         } else if (item.Type === 'Seed') {
                             const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
-                            
+
                             const modal = new ModalBuilder()
                                 .setCustomId(`seed_buy_${item.Name.replace(/ /g, '-')}_${i.user.id}`)
                                 .setTitle(`Mua ${item.Name}`);
@@ -637,14 +637,14 @@ user = new EconomyUserData({
                 } catch (error) {
                     console.error('Error in collector:', error);
                     if (!i.replied && !i.deferred) {
-                        await i.reply({ 
-                            content: 'There was an error while executing this action.', 
-                            flags: MessageFlags.Ephemeral 
+                        await i.reply({
+                            content: 'There was an error while executing this action.',
+                            flags: MessageFlags.Ephemeral
                         });
                     } else {
-                        await i.followUp({ 
-                            content: 'There was an error while executing this action.', 
-                            flags: MessageFlags.Ephemeral 
+                        await i.followUp({
+                            content: 'There was an error while executing this action.',
+                            flags: MessageFlags.Ephemeral
                         });
                     }
                 }
@@ -660,11 +660,11 @@ user = new EconomyUserData({
 
         } catch (error) {
             console.error('Error executing store command:', error);
-            const errorMessage = { 
-                content: 'There was an error while executing this command.', 
-                flags: MessageFlags.Ephemeral 
+            const errorMessage = {
+                content: 'There was an error while executing this command.',
+                flags: MessageFlags.Ephemeral
             };
-            
+
             if (!interaction.replied && !interaction.deferred) {
                 await interaction.reply(errorMessage);
             } else {

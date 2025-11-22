@@ -7,6 +7,75 @@
 # durability: The maximum durability of the rod.
 # luck: The base luck of the rod (increases catch chance).
 # effects: Special effects of the rod, such as boosting rarity chances.
+# -- Baits --
+# key: The unique identifier for the bait.
+# name: The display name of the bait.
+# price: The cost to buy the bait.
+# luck: The added luck percentage.
+# bonus: The range of bonus catch rate.
+# attracts: The rarity of fish this bait attracts.
+baits:
+  giun:
+    name: "Mồi câu giun"
+    price: 50
+    luck: 0.05
+    bonus: [0.025, 0.05]
+    attracts: ["common", "uncommon"]
+  xa:
+    name: "Mồi câu xả"
+    price: 200
+    luck: 0.10
+    bonus: [0.05, 0.10]
+    attracts: ["rare", "epic"]
+  go:
+    name: "Mồi câu gỗ"
+    price: 200
+    luck: 0.36
+    bonus: [0.36, 0.36]
+    attracts: ["rare"]
+  chay:
+    name: "Mồi câu chay"
+    price: 500
+    luck: 0.05
+    bonus: [0.05, 0.05]
+    attracts: ["epic", "legendary"]
+  dac_biet:
+    name: "Mồi câu đặc biệt"
+    price: 800
+    luck: 0.15
+    bonus: [0.10, 0.15]
+    attracts: ["epic", "legendary"]
+  tong_hop:
+    name: "Mồi câu tổng hợp"
+    price: 1000
+    luck: 0.17
+    bonus: [0.16, 0.17]
+    attracts: ["epic", "legendary"]
+  com:
+    name: "Mồi cơm"
+    price: 150
+    luck: 0.07
+    bonus: [0.05, 0.10]
+    attracts: ["common", "uncommon"]
+  trung_kien:
+    name: "Mồi trứng kiến"
+    price: 300
+    luck: 0.12
+    bonus: [0.10, 0.15]
+    attracts: ["uncommon", "rare"]
+  tom:
+    name: "Mồi tôm"
+    price: 600
+    luck: 0.20
+    bonus: [0.15, 0.25]
+    attracts: ["rare", "epic"]
+  thuoc_bac:
+    name: "Mồi thuốc bắc"
+    price: 1200
+    luck: 0.25
+    bonus: [0.20, 0.30]
+    attracts: ["epic", "legendary"]
+
 rods:
   tap_su:
     name: "Cần câu tập sự"
