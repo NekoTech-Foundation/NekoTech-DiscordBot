@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 
-const ALLOWED_USER_ID = '1316287191634149377';
+const ALLOWED_USER_IDS = ['727497287777124414', '1316287191634149377'];
 
 module.exports = {
     owner: true,
@@ -15,7 +15,7 @@ module.exports = {
     async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: true });
 
-        if (interaction.user.id !== ALLOWED_USER_ID) {
+        if (!ALLOWED_USER_IDS.includes(interaction.user.id)) {
             await sendReply(interaction, "⛔ | Bạn không có quyền sử dụng lệnh này!");
             return;
         }
