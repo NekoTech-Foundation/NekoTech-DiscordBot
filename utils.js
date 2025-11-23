@@ -720,14 +720,14 @@ module.exports = async (client) => {
                 },
                 name: 'AutoBackup'
             },
-            {
-                condition: commandConfig.cardrecharge,
-                fn: () => {
-                    const { startTask } = require('./addons/CardRecharge/tasks/cardStatusTask');
-                    startTask(client);
-                },
-                name: 'CardRecharge'
-            }
+            // {
+            //     condition: commandConfig.cardrecharge,
+            //     fn: () => {
+            //         const { startTask } = require('./addons/CardRecharge/tasks/cardStatusTask');
+            //         startTask(client);
+            //     },
+            //     name: 'CardRecharge'
+            // }
         ];
 
         schedulers.forEach(({ condition, fn, name }) => {
