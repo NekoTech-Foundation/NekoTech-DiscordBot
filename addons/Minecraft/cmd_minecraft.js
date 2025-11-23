@@ -1,5 +1,6 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags, AttachmentBuilder } = require('discord.js');
 const axios = require('axios');
+const { parseMotdToAnsi, createBanner } = require('./mcUtils');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,189 +10,122 @@ module.exports = {
             subcommand
                 .setName('server')
                 .setDescription('Hiển thị thông tin của server Minecraft.')
-                .addStringOption(option => 
+                .addStringOption(option =>
                     option
                         .setName('address')
                         .setDescription('Địa chỉ server, có thể bao gồm cổng (port).')
                         .setRequired(true)
                 )
-                .addStringOption(option => 
+                .addStringOption(option =>
                     option
                         .setName('name')
-                        .setDescription('Tên cho server này.')
+                        .setDescription('Tên cho server này (tùy chọn).')
                 )
         ),
     async execute(interaction) {
         const address = interaction.options.getString('address');
-        const name = interaction.options.getString('name') || address;
+        const nameOption = interaction.options.getString('name');
 
         try {
-            // Acknowledge early to avoid interaction expiry
             if (!interaction.deferred && !interaction.replied) {
                 await interaction.deferReply();
             }
 
-            // Gọi mcstatus.io API (v2) - có widget đẹp hơn
-            const response = await axios.get(`https://api.mcstatus.io/v2/status/java/${address}`, {
-                headers: {
-                    'User-Agent': 'Discord Bot - Minecraft Server Status'
-                }
+            // 1. Get Minecraft Server Status
+            const statusResponse = await axios.get(`https://api.mcstatus.io/v2/status/java/${address}`, {
+                headers: { 'User-Agent': 'Discord Bot - Minecraft Server Status' }
             });
-            const data = response.data;
+            const data = statusResponse.data;
 
-            if (data.online) {
-                // Format player list nếu có
-                let playerList = '';
-                if (data.players.list && data.players.list.length > 0) {
-                    const displayPlayers = data.players.list.slice(0, 10);
-                    playerList = displayPlayers.map(p => p.name_clean).join(', ');
-                    if (data.players.list.length > 10) {
-                        playerList += ` và ${data.players.list.length - 10} người khác`;
-                    }
-                }
-
-                // Tạo embed với widget banner từ mcstatus.io
-                // Lưu ý: data.icon là base64, phải dùng endpoint icon để lấy URL
-                const iconURL = `https://api.mcstatus.io/v2/icon/${address}`;
-                
+            if (!data.online) {
                 const embed = new EmbedBuilder()
-                    .setColor('#2ecc71')
-                    .setAuthor({ 
-                        name: name,
-                        iconURL: iconURL
-                    })
-                    .addFields(
-                        { 
-                            name: '📊 Trạng thái', 
-                            value: '```css\n🟢 Online\n```', 
-                            inline: true 
-                        },
-                        { 
-                            name: '👥 Người chơi', 
-                            value: `\`\`\`yml\n${data.players.online} / ${data.players.max}\n\`\`\``, 
-                            inline: true 
-                        },
-                        { 
-                            name: '🎮 Phiên bản', 
-                            value: `\`\`\`${data.version.name_clean}\`\`\``, 
-                            inline: true 
-                        }
-                    );
-
-                // Thêm MOTD
-                if (data.motd && data.motd.clean) {
-                    embed.addFields({
-                        name: '📝 MOTD',
-                        value: `\`\`\`${data.motd.clean}\`\`\``,
-                        inline: false
-                    });
-                }
-
-                // Thêm software nếu có
-                if (data.software) {
-                    embed.addFields({
-                        name: '⚙️ Software',
-                        value: `\`${data.software}\``,
-                        inline: true
-                    });
-                }
-
-                // Thêm player list nếu có
-                if (playerList) {
-                    embed.addFields({
-                        name: '🎯 Người chơi đang online',
-                        value: `\`${playerList}\``,
-                        inline: false
-                    });
-                }
-
-                // Thêm plugins nếu có
-                if (data.plugins && data.plugins.length > 0) {
-                    const pluginList = data.plugins
-                        .slice(0, 5)
-                        .map(p => `${p.name}${p.version ? ` (${p.version})` : ''}`)
-                        .join(', ');
-                    embed.addFields({
-                        name: '🔌 Plugins',
-                        value: `\`${pluginList}\`${data.plugins.length > 5 ? ` và ${data.plugins.length - 5} plugins khác` : ''}`,
-                        inline: false
-                    });
-                }
-
-                // Thêm mods nếu có
-                if (data.mods && data.mods.length > 0) {
-                    const modList = data.mods
-                        .slice(0, 5)
-                        .map(m => `${m.name} (${m.version})`)
-                        .join(', ');
-                    embed.addFields({
-                        name: '🎨 Mods',
-                        value: `\`${modList}\`${data.mods.length > 5 ? ` và ${data.mods.length - 5} mods khác` : ''}`,
-                        inline: false
-                    });
-                }
-
-                // QUAN TRỌNG: Sử dụng widget endpoint từ mcstatus.io để có banner đẹp
-                // Widget này sẽ hiển thị MOTD với đầy đủ format và màu sắc Minecraft
-                const widgetUrl = `https://api.mcstatus.io/v2/widget/java/${address}?dark=true&rounded=true`;
-                
-                embed.setImage(widgetUrl)
-                    .setFooter({ 
-                        text: `IP: ${data.host}:${data.port}`,
-                        iconURL: 'https://i.imgur.com/9bxjMo5.png'
+                    .setColor('#e74c3c')
+                    .setAuthor({ name: 'Minecraft Server Status', iconURL: 'https://i.imgur.com/bCXJoIs.png' })
+                    .setDescription(`\`\`\`diff\n- Server ${nameOption || address} hiện đang ngoại tuyến hoặc không thể kết nối.\n\`\`\``)
+                    .setFooter({
+                        text: `${interaction.user.username} • ${address}`,
+                        iconURL: interaction.user.displayAvatarURL()
                     })
                     .setTimestamp();
 
-                await interaction.editReply({ embeds: [embed] });
-            } else {
-                const embed = new EmbedBuilder()
-                    .setColor('#e74c3c')
-                    .setAuthor({ 
-                        name: name,
-                        iconURL: 'https://i.imgur.com/bCXJoIs.png'
-                    })
-                    .setDescription('```diff\n- Server không hoạt động hoặc không thể kết nối\n```')
-                    .addFields({
-                        name: '📊 Trạng thái',
-                        value: '```css\n🔴 Offline\n```',
-                        inline: true
-                    });
-
-                if (data.host) {
-                    embed.addFields({
-                        name: '🌐 IP',
-                        value: `\`${data.host}${data.port ? ':' + data.port : ''}\``,
-                        inline: true
-                    });
-                }
-
-                embed.setFooter({ 
-                    text: `IP: ${address}`,
-                    iconURL: 'https://i.imgur.com/9bxjMo5.png'
-                })
-                .setTimestamp();
-
-                await interaction.editReply({ embeds: [embed] });
+                return interaction.editReply({ embeds: [embed] });
             }
-        } catch (error) {
-            console.error(error);
+
+            // 2. Get IP/ISP Information
+            const ipToQuery = data.ip_address || address;
+            let ispString = 'N/A';
 
             try {
-                const errorPayload = {
-                    content: '❌ Có lỗi xảy ra khi thực hiện lệnh. Vui lòng kiểm tra lại địa chỉ server.',
-                    flags: MessageFlags.Ephemeral
-                };
+                const ipResponse = await axios.get(`http://ip-api.com/json/${ipToQuery}`);
+                if (ipResponse.data && ipResponse.data.status === 'success') {
+                    const { as, org, isp } = ipResponse.data;
+                    // Format: AS135918 VIET DIGITAL... -> [AS-135918] VIET DIGITAL...
+                    // ip-api returns "AS12345 Name" in the 'as' field usually.
+                    const asMatch = (as || '').match(/^AS(\d+)\s+(.*)$/);
+                    if (asMatch) {
+                        ispString = `[AS-${asMatch[1]}] ${asMatch[2]}`;
+                    } else {
+                        ispString = `[${as || 'Unknown'}] ${org || isp || 'Unknown'}`;
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to fetch IP info:', err.message);
+            }
 
-                if (!interaction.replied && !interaction.deferred) {
-                    await interaction.reply(errorPayload);
-                } else {
-                    await interaction.followUp(errorPayload);
-                }
-            } catch (replyError) {
-                // Ignore interaction expiry errors to avoid noisy logs
-                if (replyError.code !== 10062) {
-                    console.error('Failed to send error response for /minecraft:', replyError);
-                }
+            // 3. Generate Banner & Parse MOTD
+            const serverName = nameOption || address;
+            const bannerBuffer = await createBanner(data, address, serverName);
+            const attachment = new AttachmentBuilder(bannerBuffer, { name: 'banner.png' });
+
+            const motdAnsi = parseMotdToAnsi(data.motd.raw);
+            const software = data.software || 'Unknown';
+            const version = data.version.name_clean || 'Unknown';
+            const iconURL = `https://api.mcstatus.io/v2/icon/${address}`;
+
+            const embed = new EmbedBuilder()
+                .setColor('#151b2e')
+                .setAuthor({
+                    name: 'A Minecraft Server',
+                    iconURL: iconURL
+                })
+                .setTitle(serverName)
+                .setDescription(`\`\`\`ansi\n${motdAnsi}\n\`\`\``)
+                .addFields(
+                    {
+                        name: 'Địa chỉ IP',
+                        value: `${data.ip_address}:${data.port}\n\`${ispString}\``,
+                        inline: true
+                    },
+                    {
+                        name: 'Số lượng người chơi',
+                        value: `**${data.players.online}/${data.players.max}**`,
+                        inline: true
+                    },
+                    {
+                        name: 'Phiên bản',
+                        value: `Phần mềm: **${software}**\nPhiên bản: **${version}**`,
+                        inline: false
+                    }
+                )
+                .setImage('attachment://banner.png')
+                .setFooter({
+                    text: `${interaction.user.username} • ${address} • Hôm nay lúc ${new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: true })}`,
+                    iconURL: interaction.user.displayAvatarURL()
+                });
+
+            await interaction.editReply({ embeds: [embed], files: [attachment] });
+
+        } catch (error) {
+            console.error(error);
+            const errorPayload = {
+                content: '❌ Có lỗi xảy ra khi lấy thông tin server.',
+                flags: MessageFlags.Ephemeral
+            };
+
+            if (!interaction.replied && !interaction.deferred) {
+                await interaction.reply(errorPayload);
+            } else {
+                await interaction.editReply(errorPayload);
             }
         }
     }
