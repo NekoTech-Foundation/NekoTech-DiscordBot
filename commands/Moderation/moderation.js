@@ -229,6 +229,20 @@ module.exports = {
                 });
             }
 
+            if (!member.manageable) {
+                return interaction.reply({
+                    content: 'User có quyền hạn cao hơn tui, Hãy kiểm tra lại role hoặc tạo role có quyền hạn cao hơn',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+
+            if (member.roles.highest.position >= interaction.member.roles.highest.position) {
+                return interaction.reply({
+                    content: 'Bạn không thể thực hiện hành động này với người có quyền hạn cao hơn hoặc bằng bạn.',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+
             await member.timeout(timeInMs, reason);
 
             const embed = new EmbedBuilder()
@@ -270,6 +284,25 @@ module.exports = {
             const deleteMessageDays = interaction.options.getInteger('delete_message') || 0;
             const dmUser = interaction.options.getBoolean('dm_user');
             const shouldDM = dmUser === null ? true : dmUser;
+
+            try {
+                const member = await interaction.guild.members.fetch(user.id);
+                if (!member.manageable) {
+                    return interaction.reply({
+                        content: 'User có quyền hạn cao hơn tui, Hãy kiểm tra lại role hoặc tạo role có quyền hạn cao hơn',
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+
+                if (member.roles.highest.position >= interaction.member.roles.highest.position) {
+                    return interaction.reply({
+                        content: 'Bạn không thể thực hiện hành động này với người có quyền hạn cao hơn hoặc bằng bạn.',
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+            } catch (error) {
+                // Member not found in guild, proceed with ban
+            }
 
             await interaction.deferReply();
 
@@ -401,6 +434,20 @@ module.exports = {
             const reason = interaction.options.getString('reason');
             const dmUser = interaction.options.getBoolean('dm_user');
             const shouldDM = dmUser === null ? true : dmUser;
+
+            if (!member.manageable) {
+                return interaction.reply({
+                    content: 'User có quyền hạn cao hơn tui, Hãy kiểm tra lại role hoặc tạo role có quyền hạn cao hơn',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+
+            if (member.roles.highest.position >= interaction.member.roles.highest.position) {
+                return interaction.reply({
+                    content: 'Bạn không thể thực hiện hành động này với người có quyền hạn cao hơn hoặc bằng bạn.',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
 
             await interaction.deferReply();
 
