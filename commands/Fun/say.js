@@ -29,7 +29,8 @@ module.exports = {
                         .setRequired(true))),
     category: 'Fun',
     async execute(interaction) {
-        if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
+        const allowedUserIds = ['929204123956564019', '727497287777124414', '1316287191634149377', '808974657994752050', '710025322497572926'];
+        if (!allowedUserIds.includes(interaction.user.id)) {
             return interaction.reply({ content: 'Bạn không có quyền sử dụng lệnh này.', ephemeral: true });
         }
 
