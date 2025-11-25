@@ -4,6 +4,7 @@ const { seeds, getUserFarm, addToFarm, removeFromFarm } = require('./farmUtils')
 const { events, getRandomMutation } = require('./farmEvents');
 const { getGlobalWeather } = require('./farmWeather');
 const EconomyUserData = require('../../models/EconomyUserData');
+const { getConfig } = require('../../utils/configLoader'); // Added missing import for config
 
 // Helper function to format effects
 function formatEffect(effect) {
@@ -62,6 +63,7 @@ module.exports = {
                 .setName('phanbon')
                 .setDescription('✨ Sử dụng phân bón cho cây')
                 .addStringOption(option => {
+                    const config = getConfig(); // Ensure config is available
                     const choices = Object.keys(config.Store['Phân bón']).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
                     return option.setName('ten_phan_bon').setDescription('🧪 Loại phân bón muốn dùng').setRequired(true).addChoices(...choices);
                 })
@@ -74,6 +76,7 @@ module.exports = {
         await interaction.deferReply();
         const subcommand = interaction.options.getSubcommand();
         const userId = interaction.user.id;
+        const config = getConfig(); // Ensure config is available
 
         if (subcommand === 'plant') {
             const seedName = interaction.options.getString('seed');
@@ -100,7 +103,7 @@ module.exports = {
                 return interaction.editReply({ content: `Bạn không có đủ hạt giống ${seed.name} để trồng.` });
             }
 
-            const hasSeed = await removeFromFarm(userId, seed.name, quantity);
+            const hasSeed = await removeFromFarm(userId, seed.name, quantity, 'seed');
             if (!hasSeed) {
                 return interaction.editReply({ content: `Bạn không có đủ hạt giống ${seed.name} để trồng.` });
             }
@@ -396,7 +399,7 @@ module.exports = {
                 return interaction.editReply({ content: `Bạn không có ${fertilizer.Name}.` });
             }
 
-            const hasFertilizer = await removeFromFarm(userId, fertilizer.Name, 1);
+            const hasFertilizer = await removeFromFarm(userId, fertilizer.Name, 1, 'Fertilizer');
             if (!hasFertilizer) {
                 return interaction.editReply({ content: `Bạn không có ${fertilizer.Name}.` });
             }
@@ -408,19 +411,26 @@ module.exports = {
             }
 
             for (const plant of plantsToFertilize) {
+                let seedData = seeds[plant.plant];
+                if (!seedData) {
+                    seedData = Object.values(seeds).find(s => s.name === plant.plant);
+                }
+
+                if (!seedData) continue; // Skip if seed data not found
+
                 switch (fertilizer.Key) {
                     case 'growth_fertilizer':
-                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seeds[plant.plant].growthTime * 0.25));
+                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seedData.growthTime * 0.25));
                         break;
                     case 'super_speed_fertilizer':
-                        plant.plantedAt = new Date(plant.plantedAt.getTime() - seeds[plant.plant].growthTime);
+                        plant.plantedAt = new Date(plant.plantedAt.getTime() - seedData.growthTime);
                         plant.fertilizer = { key: fertilizer.Key, effect: 'yield_reduce', qualityReduced: true };
                         break;
                     case 'bumper_harvest_fertilizer':
                         plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' };
                         break;
                     case 'all_purpose_fertilizer':
-                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seeds[plant.plant].growthTime * 0.5));
+                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seedData.growthTime * 0.5));
                         plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' };
                         break;
                 }

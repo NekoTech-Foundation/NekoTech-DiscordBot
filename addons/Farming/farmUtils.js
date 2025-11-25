@@ -30,7 +30,7 @@ async function getUserFarm(userId) {
 
 async function addToFarm(userId, itemName, quantity, itemType) {
     const userFarm = await getUserFarm(userId);
-    const item = userFarm.items.find(i => i.name === itemName);
+    const item = userFarm.items.find(i => i.name === itemName && i.type === itemType);
 
     if (item) {
         item.quantity += quantity;
@@ -41,9 +41,20 @@ async function addToFarm(userId, itemName, quantity, itemType) {
     await userFarm.save();
 }
 
-async function removeFromFarm(userId, itemName, quantity) {
+async function removeFromFarm(userId, itemName, quantity, itemType) {
     const userFarm = await getUserFarm(userId);
-    const item = userFarm.items.find(i => i.name === itemName);
+    // If itemType is provided, find by name AND type.
+    // If not provided (backward compatibility or loose check), find by name only (though this is what we want to avoid).
+    // For this fix, we will assume itemType is passed or we default to finding the first match if strictly needed,
+    // but the goal is to be strict.
+
+    let item;
+    if (itemType) {
+        item = userFarm.items.find(i => i.name === itemName && i.type === itemType);
+    } else {
+        // Fallback for calls that haven't been updated yet, though we plan to update all.
+        item = userFarm.items.find(i => i.name === itemName);
+    }
 
     if (!item || item.quantity < quantity) {
         return false; // Not enough items
@@ -52,7 +63,12 @@ async function removeFromFarm(userId, itemName, quantity) {
     item.quantity -= quantity;
 
     if (item.quantity <= 0) {
-        userFarm.items = userFarm.items.filter(i => i.name !== itemName);
+        // Only remove the specific item entry
+        if (itemType) {
+            userFarm.items = userFarm.items.filter(i => !(i.name === itemName && i.type === itemType));
+        } else {
+            userFarm.items = userFarm.items.filter(i => i.name !== itemName);
+        }
     }
 
     await userFarm.save();

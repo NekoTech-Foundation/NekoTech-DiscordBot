@@ -25,7 +25,7 @@ module.exports = {
             const userId = interaction.user.id;
             const seed = seeds[produceName];
             const userFarm = await getUserFarm(userId);
-            const item = userFarm.items.find(i => i.name === seed.name);
+            const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
 
             const choices = [];
             if (item && item.quantity > 0) {
@@ -44,7 +44,7 @@ module.exports = {
         const seed = seeds[produceName];
 
         const userFarm = await getUserFarm(userId);
-        const item = userFarm.items.find(i => i.name === seed.name);
+        const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
 
         if (!item || item.quantity === 0) {
             return interaction.reply({ content: `Bạn không có ${seed.name} để bán.`, ephemeral: true });
@@ -64,7 +64,7 @@ module.exports = {
             return interaction.reply({ content: `Bạn chỉ có ${item.quantity} ${seed.name} để bán.`, ephemeral: true });
         }
 
-        const hasProduce = await removeFromFarm(userId, seed.name, quantity);
+        const hasProduce = await removeFromFarm(userId, seed.name, quantity, 'produce');
         if (!hasProduce) {
             return interaction.reply({ content: `Bạn không có đủ ${seed.name} để bán.`, ephemeral: true });
         }

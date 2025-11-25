@@ -62,7 +62,7 @@ module.exports.run = async (client) => {
             const sellPrice = Math.floor(seed.price * 0.8);
             const totalGain = sellPrice * quantity;
 
-            await removeFromFarm(userId, produceName, quantity);
+            await removeFromFarm(userId, produceName, quantity, 'produce');
 
             let economyData = await EconomyUserData.findOne({ userId });
             if (!economyData) {
