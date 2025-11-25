@@ -161,6 +161,12 @@ module.exports = {
                             ephemeral: true
                         });
 
+                        // Save text channel ID to DB
+                        await VoiceMasterChannel.findOneAndUpdate(
+                            { voiceId: targetChannel.id },
+                            { textChannelId: textChannel.id }
+                        );
+
                         // Send prompt in the new text channel
                         const inviteRow = new ActionRowBuilder()
                             .addComponents(

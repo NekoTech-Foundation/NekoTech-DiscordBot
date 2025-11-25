@@ -13,7 +13,7 @@ const configPath = path.join(__dirname, 'config.yml');
 const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
 // Helper function to check and delete empty channels
-async function checkAndDeleteEmptyChannel(client, channel, category) {
+async function checkAndDeleteEmptyChannel(client, channel, category, channelData) {
     if (!channel || channel.members.size > 0) return;
 
     try {
@@ -23,10 +23,21 @@ async function checkAndDeleteEmptyChannel(client, channel, category) {
         await channel.delete();
         await VoiceMasterChannel.deleteOne({ voiceId: channelId });
 
-        // Try delete linked text channel if exists
-        const textChannelName = `chat-${channelName.toLowerCase().replace(/\s+/g, '-')}`;
+        // Try delete linked text channel
         const guild = channel.guild;
-        const textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
+        let textChannel = null;
+
+        // Priority 1: Use ID from DB
+        if (channelData && channelData.textChannelId) {
+            textChannel = guild.channels.cache.get(channelData.textChannelId);
+        }
+
+        // Priority 2: Fallback to name guessing (for old channels)
+        if (!textChannel && category) {
+            const textChannelName = `chat-${channelName.toLowerCase().replace(/\s+/g, '-')}`;
+            textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
+        }
+
         if (textChannel) {
             await textChannel.delete().catch(() => { });
         }
@@ -59,7 +70,7 @@ module.exports = {
                             if (channel.members.size === 0) {
                                 const voiceMaster = await VoiceMaster.findOne({ guildId: guild.id });
                                 const category = voiceMaster ? guild.channels.cache.get(voiceMaster.voiceCategoryId) : null;
-                                await checkAndDeleteEmptyChannel(client, channel, category);
+                                await checkAndDeleteEmptyChannel(client, channel, category, channelData);
                             }
                             break;
                         }
@@ -219,7 +230,7 @@ module.exports = {
                         if (leftChannel.members.size === 0) {
                             const voiceMaster = await VoiceMaster.findOne({ guildId: guild.id });
                             const category = voiceMaster ? guild.channels.cache.get(voiceMaster.voiceCategoryId) : null;
-                            await checkAndDeleteEmptyChannel(client, leftChannel, category);
+                            await checkAndDeleteEmptyChannel(client, leftChannel, category, channelData);
                         }
                     }
                 }

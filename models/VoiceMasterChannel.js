@@ -13,6 +13,10 @@ const voiceMasterChannelSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    textChannelId: {
+        type: String,
+        required: false
     }
 });
 
