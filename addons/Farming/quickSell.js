@@ -79,5 +79,51 @@ module.exports.run = async (client) => {
 
             await interaction.reply({ embeds: [embed], ephemeral: true });
         }
+
+
+        if (interaction.isButton() && interaction.customId === 'sell_all_harvested') {
+            const userId = interaction.user.id;
+            const userFarm = await getUserFarm(userId);
+            const produceItems = userFarm.items.filter(item => item.type === 'produce');
+
+            if (produceItems.length === 0) {
+                return interaction.reply({ content: 'Bạn không có nông sản nào để bán.', ephemeral: true });
+            }
+
+            let totalGain = 0;
+            let soldItems = [];
+
+            for (const item of produceItems) {
+                const seed = Object.values(seeds).find(s => s.name === item.name);
+                if (seed) {
+                    const sellPrice = Math.floor(seed.price * 0.8);
+                    const gain = sellPrice * item.quantity;
+                    totalGain += gain;
+                    soldItems.push(`${item.quantity} ${seed.emoji} ${item.name}`);
+
+                    // Remove item directly from array since we are iterating
+                    // But better to use removeFromFarm or just clear the array after loop if we sell everything
+                }
+            }
+
+            // Remove all produce items
+            userFarm.items = userFarm.items.filter(item => item.type !== 'produce');
+            await userFarm.save();
+
+            let economyData = await EconomyUserData.findOne({ userId });
+            if (!economyData) {
+                economyData = new EconomyUserData({ userId });
+            }
+            economyData.balance += totalGain;
+            await economyData.save();
+
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle('Bán Tất Cả Thành Công')
+                .setDescription(`Bạn đã bán tất cả nông sản:\n${soldItems.join('\n')}\n\n💰 Tổng thu nhập: **${totalGain.toLocaleString()}** xu`)
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [embed], ephemeral: true });
+        }
     });
 };
