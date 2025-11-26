@@ -36,6 +36,7 @@ const GuildSettingsSchema = new mongoose.Schema({
         of: String,
         default: new Map()
     },
+    prefix: { type: String, default: 'k' },
     welcome: {
         enabled: { type: Boolean, default: false },
         channelId: { type: String, default: null },

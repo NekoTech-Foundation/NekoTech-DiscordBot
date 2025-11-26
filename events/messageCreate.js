@@ -13,6 +13,7 @@ const handleMessageCount = require('./Levels/handleMessageCount');
 const UserData = require('../models/UserData');
 const utils = require('../utils');
 const GuildData = require('../models/guildDataSchema');
+const GuildSettings = require('../models/GuildSettings');
 const AutoReact = require('../models/autoReact');
 const AutoResponse = require('../models/autoResponse');
 const suggestionActions = require('./Suggestions/suggestionActions');
@@ -32,18 +33,18 @@ const convertPatternToRegex = (pattern) => {
     if (pattern.includes('*')) {
         return new RegExp(regexPattern, 'i');
     }
-    
+
     return new RegExp(`^${regexPattern}$`, 'i');
 };
 
 const checkBlacklistWords = async (message, dmSent) => {
     if (!config.BlacklistWords.Enabled) return dmSent;
-    
+
     if (message.member.permissions.has(config.BlacklistWords.BypassPerms)) {
         return dmSent;
     }
 
-    const hasBypassRole = message.member.roles.cache.some(role => 
+    const hasBypassRole = message.member.roles.cache.some(role =>
         config.BlacklistWords.BypassRoles.includes(role.id)
     );
     if (hasBypassRole) {
@@ -56,7 +57,7 @@ const checkBlacklistWords = async (message, dmSent) => {
     }
 
     const content = message.content;
-    
+
     const whitelistMatched = config.BlacklistWords.WhitelistWords.some(word => {
         const regex = convertPatternToRegex(word);
         return regex.test(content);
@@ -78,7 +79,7 @@ const checkBlacklistWords = async (message, dmSent) => {
     if (triggeredPattern) {
         try {
             await message.delete();
-            
+
             const filterWordsMsg = config.BlacklistWords.Message
                 .replace(/{user}/g, `<@${message.author.id}>`);
             const notificationMsg = await message.channel.send(filterWordsMsg);
@@ -105,15 +106,15 @@ const checkBlacklistWords = async (message, dmSent) => {
                         const embed = new EmbedBuilder()
                             .setColor(embedConfig.Color)
                             .setTitle(embedConfig.Title)
-                            .setDescription(embedConfig.Description.map(line => 
-                                Object.entries(replacements).reduce((str, [key, value]) => 
+                            .setDescription(embedConfig.Description.map(line =>
+                                Object.entries(replacements).reduce((str, [key, value]) =>
                                     str.replace(new RegExp(`{${key}}`, 'g'), value)
-                                , line)
+                                    , line)
                             ).join('\n'));
 
                         if (embedConfig.Footer) {
-                            embed.setFooter({ 
-                                text: embedConfig.Footer.replace(/{shorttime}/g, replacements.shorttime) 
+                            embed.setFooter({
+                                text: embedConfig.Footer.replace(/{shorttime}/g, replacements.shorttime)
                             });
                         }
 
@@ -137,7 +138,7 @@ const checkBlacklistWords = async (message, dmSent) => {
                     const embed = new EmbedBuilder()
                         .setColor(embedConfig.Color)
                         .setTitle(embedConfig.Title)
-                        .setDescription(embedConfig.Description.map(line => 
+                        .setDescription(embedConfig.Description.map(line =>
                             line.replace(/{user}/g, `<@${message.author.id}>`)
                                 .replace(/{blacklistedword}/g, triggeredPattern)
                                 .replace(/{shorttime}/g, currentTime.format("HH:mm"))
@@ -146,7 +147,7 @@ const checkBlacklistWords = async (message, dmSent) => {
                         ).join('\n'));
 
                     if (embedConfig.Footer.Text) {
-                        embed.setFooter({ 
+                        embed.setFooter({
                             text: embedConfig.Footer.Text.replace(/{guildName}/g, message.guild.name),
                             iconURL: message.guild.iconURL()
                         });
@@ -165,7 +166,7 @@ const checkBlacklistWords = async (message, dmSent) => {
             console.error('Error handling blacklisted word:', error);
         }
     }
-    
+
     return dmSent;
 };
 
@@ -181,7 +182,7 @@ module.exports = async (client, message) => {
     }
 
     handleTicketAlertReset(message);
-    
+
     let dmSent = false;
 
     if (!client.buttonHandlersRegistered) {
@@ -193,10 +194,19 @@ module.exports = async (client, message) => {
         client.buttonHandlersRegistered = true;
     }
 
-    if (message.content.startsWith(config.CommandsPrefix)) {
-        const args = message.content.slice(config.CommandsPrefix.length).trim().split(/ +/);
+    let guildSettings = await GuildSettings.findOne({ guildId: message.guild.id });
+    const prefix = guildSettings?.prefix || config.CommandsPrefix || 'k';
+
+    console.log(`[DEBUG] Message content: ${message.content}`);
+    console.log(`[DEBUG] Resolved prefix: ${prefix}`);
+
+    if (message.content.startsWith(prefix)) {
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
+        console.log(`[DEBUG] Command name: ${commandName}`);
+
         const command = client.messageCommands.get(commandName);
+        console.log(`[DEBUG] Command found in messageCommands: ${command ? command.name : 'No'}`);
 
         if (command) {
             try {
@@ -207,7 +217,76 @@ module.exports = async (client, message) => {
             }
             return; // Command found and executed, so we stop here.
         }
-        
+
+        // Check slash commands
+        const slashCommand = client.slashCommands.get(commandName);
+        console.log(`[DEBUG] Command found in slashCommands: ${slashCommand ? slashCommand.data.name : 'No'}`);
+
+        if (slashCommand) {
+            try {
+                // Create a fake interaction object
+                const fakeInteraction = {
+                    user: message.author,
+                    guild: message.guild,
+                    client: client,
+                    createdTimestamp: message.createdTimestamp,
+                    channel: message.channel,
+                    member: message.member,
+                    id: message.id,
+
+                    deferred: false,
+                    replied: false,
+                    deferredMessage: null,
+
+                    reply: async function (options) {
+                        this.replied = true;
+                        return message.reply(options);
+                    },
+                    deferReply: async function (options) {
+                        this.deferred = true;
+                        this.deferredMessage = await message.reply({ content: 'Processing...', fetchReply: true });
+                        return this.deferredMessage;
+                    },
+                    editReply: async function (options) {
+                        if (this.deferredMessage) {
+                            return this.deferredMessage.edit(options);
+                        }
+                        return message.reply(options);
+                    },
+                    followUp: async function (options) {
+                        return message.reply(options);
+                    },
+                    options: {
+                        _args: args,
+                        getSubcommand: function () {
+                            return this._args[0] || null;
+                        },
+                        getString: function (name) {
+                            // Basic mapping for prefix command
+                            if (this._args[0] === 'set' && name === 'new_prefix') return this._args[1];
+                            return null;
+                        },
+                        // Add dummy methods for other types to prevent crashes
+                        getInteger: function () { return null; },
+                        getBoolean: function () { return null; },
+                        getUser: function () { return null; },
+                        getMember: function () { return null; },
+                        getChannel: function () { return null; },
+                        getRole: function () { return null; },
+                        getMentionable: function () { return null; },
+                        getNumber: function () { return null; },
+                        getAttachment: function () { return null; },
+                    }
+                };
+
+                await slashCommand.execute(fakeInteraction);
+            } catch (error) {
+                console.error(`Error executing slash command ${slashCommand.data.name} via prefix:`, error);
+                message.reply('There was an error trying to execute that command!');
+            }
+            return;
+        }
+
         // If not found in messageCommands, it might be a custom command from config.
         try {
             await processCustomCommands(client, message);
@@ -217,7 +296,7 @@ module.exports = async (client, message) => {
     }
 
     dmSent = await checkBlacklistWords(message, dmSent);
-    
+
     if (message.deletable) {
         await handleMessageCount(message);
         await handleXP(message);
@@ -247,16 +326,16 @@ module.exports = async (client, message) => {
 
             const messageContent = message.content;
 
-            const hasAllowedRole = config.SuggestionSettings.AllowedRoles.length === 0 || 
+            const hasAllowedRole = config.SuggestionSettings.AllowedRoles.length === 0 ||
                 config.SuggestionSettings.AllowedRoles.some(roleId => message.member.roles.cache.has(roleId));
 
             if (!hasAllowedRole) {
-                const errorMsg = await message.channel.send({ 
+                const errorMsg = await message.channel.send({
                     content: lang.NoPermsMessage
                 });
-                
+
                 if (config.SuggestionSettings.DeleteFailureMessages) {
-                    setTimeout(() => errorMsg.delete().catch(console.error), 
+                    setTimeout(() => errorMsg.delete().catch(console.error),
                         config.SuggestionSettings.FailureMessageTimeout);
                 }
 
@@ -267,14 +346,14 @@ module.exports = async (client, message) => {
             }
 
             const isBlacklisted = await SuggestionBlacklist.findOne({ userId: message.author.id });
-            
+
             if (isBlacklisted) {
                 const errorMsg = await message.channel.send({
                     content: lang.Suggestion.BlacklistMessage
                 });
-                
+
                 if (config.SuggestionSettings.DeleteFailureMessages) {
-                    setTimeout(() => errorMsg.delete().catch(console.error), 
+                    setTimeout(() => errorMsg.delete().catch(console.error),
                         config.SuggestionSettings.FailureMessageTimeout);
                 }
 
@@ -291,9 +370,9 @@ module.exports = async (client, message) => {
                     const errorMsg = await message.channel.send({
                         content: lang.BlacklistWords.Message.replace(/{user}/g, message.author.toString())
                     });
-                    
+
                     if (config.SuggestionSettings.DeleteFailureMessages) {
-                        setTimeout(() => errorMsg.delete().catch(console.error), 
+                        setTimeout(() => errorMsg.delete().catch(console.error),
                             config.SuggestionSettings.FailureMessageTimeout);
                     }
 
@@ -306,11 +385,11 @@ module.exports = async (client, message) => {
 
             try {
                 await suggestionActions.createSuggestion(client, message, messageContent);
-                
+
                 if (config.SuggestionSettings.DeleteOriginalMessage) {
                     try {
                         await message.delete().catch(error => {
-                            if (error.code !== 10008) { 
+                            if (error.code !== 10008) {
                                 console.error('Error deleting message:', error);
                             }
                         });
@@ -322,10 +401,10 @@ module.exports = async (client, message) => {
                 }
             } catch (error) {
                 console.error('Error creating suggestion:', error);
-                const errorMsg = await message.channel.send({ 
+                const errorMsg = await message.channel.send({
                     content: `${message.author}, ${lang.Suggestion.Error}`
                 });
-                
+
                 setTimeout(() => errorMsg.delete().catch(error => {
                     if (error.code !== 10008) {
                         console.error('Error deleting error message:', error);
@@ -338,7 +417,7 @@ module.exports = async (client, message) => {
 
 async function handleButtonInteraction(interaction) {
     if (!interaction.isButton()) return;
-    
+
 
     const [action, ...contextParts] = interaction.customId.split('_');
 
@@ -354,7 +433,7 @@ async function handleButtonInteraction(interaction) {
             }
 
             let currentConfig = config.CustomCommands[commandPath[0]];
-            
+
             if (!currentConfig) {
                 console.error('Command not found:', commandPath[0]);
                 await interaction.reply({ content: 'Command configuration not found', flags: MessageFlags.Ephemeral });
@@ -374,7 +453,7 @@ async function handleButtonInteraction(interaction) {
             }
 
             const buttonConfig = currentConfig.Buttons?.[buttonIndex];
-            
+
             if (!buttonConfig || buttonConfig.Type !== "REPLY" || !buttonConfig.Reply) {
                 console.error('Invalid button configuration:', { buttonIndex, config: buttonConfig });
                 await interaction.reply({ content: 'Button configuration not found', flags: MessageFlags.Ephemeral });
@@ -399,7 +478,7 @@ async function handleButtonInteraction(interaction) {
                 }
 
                 if (replyConfig.Embed.Description) {
-                    const description = Array.isArray(replyConfig.Embed.Description) 
+                    const description = Array.isArray(replyConfig.Embed.Description)
                         ? replyConfig.Embed.Description.join('\n')
                         : replyConfig.Embed.Description;
                     embed.setDescription(description);
@@ -472,9 +551,9 @@ async function handleButtonInteraction(interaction) {
         } catch (error) {
             console.error('Error handling button interaction:', error);
             if (!interaction.replied) {
-                await interaction.reply({ 
-                    content: 'An error occurred while processing your request.', 
-                    flags: MessageFlags.Ephemeral 
+                await interaction.reply({
+                    content: 'An error occurred while processing your request.',
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -497,7 +576,7 @@ function createButtons(buttonsConfig, commandContext) {
             button.setStyle(ButtonStyle[buttonConfig.Style] || ButtonStyle.Primary);
         } else if (buttonConfig.Type === "LINK") {
             button.setStyle(ButtonStyle.Link)
-                  .setURL(buttonConfig.Link);
+                .setURL(buttonConfig.Link);
         } else {
             console.error(`Unknown button type: ${buttonConfig.Type}`);
         }
@@ -599,15 +678,15 @@ async function checkAntiMassMention(message) {
 
 function parseDuration(duration) {
     if (!duration) return 0;
-    
+
     const regex = /(\d+)([smhd])/;
     const match = duration.match(regex);
-    
+
     if (!match) return 0;
-    
+
     const value = parseInt(match[1]);
     const unit = match[2];
-    
+
     switch (unit) {
         case 's': return value * 1000;
         case 'm': return value * 60 * 1000;
@@ -619,15 +698,15 @@ function parseDuration(duration) {
 
 function hasPermissionOrRole(member, permissions = [], roles = []) {
     if (!member) return false;
-    
+
     if (permissions.length > 0) {
         if (member.permissions.has(permissions)) return true;
     }
-    
+
     if (roles.length > 0) {
         return member.roles.cache.some(role => roles.includes(role.id));
     }
-    
+
     return false;
 }
 
@@ -716,7 +795,7 @@ async function checkAntiSpam(message) {
                     setTimeout(() => warningMsg.delete().catch(console.error), 3000);
 
                     await message.member.timeout(timeInMs, "Spamming (Auto Moderation)");
-                    
+
                     await UserData.updateOne(
                         { userId: message.author.id, guildId: message.guild.id },
                         { $inc: { timeouts: 1 } }
@@ -818,28 +897,28 @@ function replaceCustomCommandPlaceholders(template, message, placeholders = {}) 
 }
 
 async function processCustomCommands(client, message) {
-    try {        
+    try {
         if (!config) {
             return;
         }
-        
+
         if (!config.CommandsEnabled || message.author.bot || !message.content.startsWith(config.CommandsPrefix)) {
             return;
         }
 
         const args = message.content.slice(config.CommandsPrefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
-        
+
         const command = config.CustomCommands[commandName];
         if (!command) return;
-        
+
         if (!command.Roles || !Array.isArray(command.Roles.Whitelist)) {
             return;
         }
 
         const memberRoles = message.member.roles.cache.map(role => role.id);
 
-        const isWhitelisted = command.Roles.Whitelist.length === 0 || 
+        const isWhitelisted = command.Roles.Whitelist.length === 0 ||
             command.Roles.Whitelist.some(roleId => memberRoles.includes(roleId));
 
         if (!isWhitelisted) {
@@ -856,7 +935,7 @@ async function processCustomCommands(client, message) {
             }
 
             if (command.Embed.Description && command.Embed.Description.length > 0) {
-                const description = command.Embed.Description.map(line => 
+                const description = command.Embed.Description.map(line =>
                     replaceCustomCommandPlaceholders(line, message, { commandName })
                 ).join("\n");
                 embed.setDescription(description);
@@ -864,16 +943,16 @@ async function processCustomCommands(client, message) {
 
             if (command.Embed.Footer && command.Embed.Footer.Text) {
                 const footerText = replaceCustomCommandPlaceholders(command.Embed.Footer.Text, message, { commandName });
-                const footerIcon = command.Embed.Footer.Icon ? 
-                    replaceCustomCommandPlaceholders(command.Embed.Footer.Icon, message, { commandName }) : 
+                const footerIcon = command.Embed.Footer.Icon ?
+                    replaceCustomCommandPlaceholders(command.Embed.Footer.Icon, message, { commandName }) :
                     undefined;
                 embed.setFooter({ text: footerText, iconURL: footerIcon });
             }
 
             if (command.Embed.Author && command.Embed.Author.Text) {
                 const authorName = replaceCustomCommandPlaceholders(command.Embed.Author.Text, message, { commandName });
-                const authorIcon = command.Embed.Author.Icon ? 
-                    replaceCustomCommandPlaceholders(command.Embed.Author.Icon, message, { commandName }) : 
+                const authorIcon = command.Embed.Author.Icon ?
+                    replaceCustomCommandPlaceholders(command.Embed.Author.Icon, message, { commandName }) :
                     undefined;
                 embed.setAuthor({ name: authorName, iconURL: authorIcon });
             }
@@ -937,9 +1016,9 @@ async function processCustomCommands(client, message) {
 async function processAutoResponses(message) {
     try {
         const guildId = message.guild.id;
-        
+
         const autoResponses = await AutoResponse.find({ guildId }).lean();
-        
+
         if (!autoResponses || autoResponses.length === 0) {
             return;
         }
@@ -949,12 +1028,12 @@ async function processAutoResponses(message) {
 
         for (const response of autoResponses) {
             const trigger = response.trigger.toLowerCase().trim();
-            
-            const isExactMatch = messageContent === trigger || 
-                               messageWords.some(word => word === trigger);
-            
+
+            const isExactMatch = messageContent === trigger ||
+                messageWords.some(word => word === trigger);
+
             if (isExactMatch) {
-                
+
                 if (response.whitelistRoles?.length > 0 && !response.whitelistRoles.some(roleId => message.member.roles.cache.has(roleId))) {
                     continue;
                 }
@@ -1118,7 +1197,7 @@ async function processAutoResponses(message) {
 function handleVerificationSettings(message) {
     try {
         if (config.VerificationSettings.Enabled && message && message.channel) {
-            if (config.VerificationSettings.DeleteAllMessages && 
+            if (config.VerificationSettings.DeleteAllMessages &&
                 message.channel.id === config.VerificationSettings.ChannelID) {
                 message.delete().catch((error) => {
                     if (error.code !== 10008) {
