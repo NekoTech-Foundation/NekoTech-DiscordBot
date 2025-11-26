@@ -197,16 +197,11 @@ module.exports = async (client, message) => {
     let guildSettings = await GuildSettings.findOne({ guildId: message.guild.id });
     const prefix = guildSettings?.prefix || config.CommandsPrefix || 'k';
 
-    console.log(`[DEBUG] Message content: ${message.content}`);
-    console.log(`[DEBUG] Resolved prefix: ${prefix}`);
-
     if (message.content.startsWith(prefix)) {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
-        console.log(`[DEBUG] Command name: ${commandName}`);
 
         const command = client.messageCommands.get(commandName);
-        console.log(`[DEBUG] Command found in messageCommands: ${command ? command.name : 'No'}`);
 
         if (command) {
             try {
@@ -220,7 +215,6 @@ module.exports = async (client, message) => {
 
         // Check slash commands
         const slashCommand = client.slashCommands.get(commandName);
-        console.log(`[DEBUG] Command found in slashCommands: ${slashCommand ? slashCommand.data.name : 'No'}`);
 
         if (slashCommand) {
             try {
@@ -799,7 +793,7 @@ async function checkAntiSpam(message) {
                     await UserData.updateOne(
                         { userId: message.author.id, guildId: message.guild.id },
                         { $inc: { timeouts: 1 } }
-                    ).catch(console.error);
+                    );
 
                     const logEmbed = createLogEmbed(
                         'Auto Moderation',
@@ -807,9 +801,9 @@ async function checkAntiSpam(message) {
                         'Spam Detected',
                         `**User:** <@${message.author.id}> \n**Action:** Timeout`,
                         [
-                            { name: 'Reason', value: 'Spamming Messages', inline: true },
+                            { name: 'Reason', value: 'Spamming', inline: true },
                             { name: 'Duration', value: humanReadableDuration(timeInMs), inline: true },
-                            { name: 'Messages', value: `${userData.msgCount} messages in ${humanReadableDuration(timeLimit)}`, inline: true }
+                            { name: 'Messages', value: `${userData.msgCount} messages`, inline: true }
                         ],
                         `User ID: ${message.author.id}`
                     );
@@ -819,25 +813,18 @@ async function checkAntiSpam(message) {
                     if (config.AntiSpam.SendDM) {
                         const dmData = {
                             user: message.author.username,
-                            guildName: message.guild.name,
-                            messageContent: message.content,
                             time: config.AntiSpam.TimeoutTime
                         };
                         await sendDirectMessage(message.author, config.AntiSpam.DirectMessage, dmData);
                     }
 
-                    try {
-                        const messagesToDelete = userData.messages.map(m => m.id);
-                        await message.channel.bulkDelete(messagesToDelete).catch(console.error);
-                    } catch (error) {
-                        console.error('Failed to delete messages:', error);
-                    }
+                    // Delete spam messages
+                    userData.messages.forEach(msg => msg.delete().catch(console.error));
+                    spamData.delete(message.author.id);
 
                 } catch (error) {
-                    console.error(`Error handling spam timeout: ${error}`);
+                    console.error('Error applying timeout:', error);
                 }
-
-                spamData.delete(message.author.id);
             }
         } else {
             spamData.set(message.author.id, {
@@ -849,74 +836,17 @@ async function checkAntiSpam(message) {
     }
 }
 
-// function isValidHttpUrl(string) {
-//     let url;
-
-//     try {
-//         url = new URL(string);
-//     } catch (_) {
-//         return false;
-//     }
-
-//     return url.protocol === "http:" || url.protocol === "https:";
-// }
-
-function removeTags(text) {
-    text = text.replace(/@everyone/gi, "everyone").replace(/@here/gi, "here");
-    text = text.replace(/<@&\d+>/g, "(role mention removed)");
-    text = text.replace(/@(?!everyone|here)(\w+)/gi, "$1");
-    return text;
-}
-
-function replaceCustomCommandPlaceholders(template, message, placeholders = {}) {
-    if (!template) {
-        return '\u200b';
-    }
-
-    const defaultPlaceholders = {
-        guildName: message.guild.name,
-        guildId: message.guild.id,
-        userName: message.author.username,
-        userId: message.author.id,
-        userMention: message.author.toString(),
-        channelName: message.channel.name,
-        channelId: message.channel.id,
-        channelMention: message.channel.toString(),
-        commandName: placeholders.commandName || '',
-        longTime: moment().tz(config.Timezone).format('MMMM Do YYYY'),
-        shortTime: moment().tz(config.Timezone).format("HH:mm"),
-        memberCount: message.guild.memberCount
-    };
-
-    const allPlaceholders = { ...defaultPlaceholders, ...placeholders };
-
-    return Object.keys(allPlaceholders).reduce((acc, key) => {
-        const regex = new RegExp(`{${key}}`, 'gi');
-        return acc.replace(regex, allPlaceholders[key] || '');
-    }, template);
-}
-
 async function processCustomCommands(client, message) {
     try {
-        if (!config) {
-            return;
-        }
-
-        if (!config.CommandsEnabled || message.author.bot || !message.content.startsWith(config.CommandsPrefix)) {
-            return;
-        }
-
-        const args = message.content.slice(config.CommandsPrefix.length).trim().split(/ +/);
-        const commandName = args.shift().toLowerCase();
-
+        const content = message.content.trim();
+        const commandName = content.split(' ')[0].toLowerCase();
         const command = config.CustomCommands[commandName];
-        if (!command) return;
 
-        if (!command.Roles || !Array.isArray(command.Roles.Whitelist)) {
+        if (!command) {
             return;
         }
 
-        const memberRoles = message.member.roles.cache.map(role => role.id);
+        const memberRoles = message.member.roles.cache.map(r => r.id);
 
         const isWhitelisted = command.Roles.Whitelist.length === 0 ||
             command.Roles.Whitelist.some(roleId => memberRoles.includes(roleId));
@@ -1170,9 +1100,9 @@ async function processAutoResponses(message) {
 
 // function replacePlaceholders(text, message, additionalPlaceholders = {}) {
 //     if (!text || typeof text !== 'string') return '';
-
+// 
 //     const currentTime = moment().tz(config.Timezone);
-
+// 
 //     const placeholders = {
 //         user: message.author ? `<@${message.author.id}>` : 'Unknown User',
 //         userName: message.author ? message.author.username : 'Unknown Username',
@@ -1187,7 +1117,7 @@ async function processAutoResponses(message) {
 //         longtime: currentTime.format('MMMM Do YYYY'),
 //         ...additionalPlaceholders
 //     };
-
+// 
 //     return Object.keys(placeholders).reduce((acc, key) => {
 //         const regex = new RegExp(`{${key}}`, 'gi');
 //         return acc.replace(regex, placeholders[key] || '');
@@ -1222,4 +1152,28 @@ function handleVerificationSettings(message) {
     } catch (error) {
         console.error("An unexpected error occurred in handleVerificationSettings:", error);
     }
+}
+
+function replaceCustomCommandPlaceholders(text, message, additionalPlaceholders = {}) {
+    if (!text || typeof text !== 'string') return '';
+
+    const currentTime = moment().tz(config.Timezone);
+
+    const placeholders = {
+        user: message.author ? `<@${message.author.id}>` : 'Unknown User',
+        userName: message.author ? message.author.username : 'Unknown Username',
+        userTag: message.author ? message.author.tag : 'Unknown UserTag',
+        userId: message.author ? message.author.id : 'Unknown UserID',
+        guildName: message.guild ? message.guild.name : 'Unknown Guild',
+        channelName: message.channel ? message.channel.name : 'Unknown Channel',
+        channelId: message.channel ? message.channel.id : 'Unknown ChannelID',
+        shorttime: currentTime.format("HH:mm"),
+        longtime: currentTime.format('MMMM Do YYYY'),
+        ...additionalPlaceholders
+    };
+
+    return Object.keys(placeholders).reduce((acc, key) => {
+        const regex = new RegExp(`{${key}}`, 'gi');
+        return acc.replace(regex, placeholders[key] || '');
+    }, text);
 }
