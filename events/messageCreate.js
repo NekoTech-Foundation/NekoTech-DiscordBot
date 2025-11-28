@@ -167,16 +167,9 @@ const checkBlacklistWords = async (message, dmSent) => {
         }
     }
 
-    return dmSent;
-};
+}
 
 module.exports = async (client, message) => {
-    // if (message.mentions.has(client.user.id) && !message.mentions.everyone) {
-    //     const botPing = Math.round(client.ws.ping);
-    //     const response = `:small_red_triangle: | ( Shard ${message.guild.shardId}) phản hồi trong (${botPing} ms / trung bình: ${botPing} ms).\n        | Để xem các lệnh có sẵn, sử dụng /help. Để xem các thông tin khác, sử dụng /botinfo`;
-    //     message.channel.send(response);
-    //     return;
-    // }
     if (!message.guild || !message.member || message.author.bot) {
         return;
     }
@@ -201,7 +194,10 @@ module.exports = async (client, message) => {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
 
+        console.log(`[DEBUG] Prefix: '${prefix}', Command: '${commandName}'`);
+
         const command = client.messageCommands.get(commandName);
+        console.log(`[DEBUG] Message Command found: ${!!command}`);
 
         if (command) {
             try {
@@ -210,7 +206,7 @@ module.exports = async (client, message) => {
                 console.error(`Error executing message command ${command.name}:`, error);
                 message.reply('There was an error trying to execute that command!');
             }
-            return; // Command found and executed, so we stop here.
+            return;
         }
 
         // Check slash commands
@@ -218,58 +214,166 @@ module.exports = async (client, message) => {
 
         if (slashCommand) {
             try {
-                // Create a fake interaction object
+                // Argument Parsing Logic
+                let parsedOptions = {};
+                let currentArgs = [...args];
+
+                const commandDataOptions = slashCommand.data.options || [];
+
+                // Check for subcommands first
+                const subcommands = commandDataOptions.filter(opt => opt.type === 1); // 1 is SUB_COMMAND
+                let subcommandName = null;
+
+                if (subcommands.length > 0 && currentArgs.length > 0) {
+                    const possibleSubcommand = currentArgs[0];
+                    if (subcommands.some(sc => sc.name === possibleSubcommand)) {
+                        subcommandName = possibleSubcommand;
+                        currentArgs.shift(); // Consume subcommand name
+                    }
+                }
+
+                // If we have a subcommand, we should look at its options
+                let relevantOptions = commandDataOptions;
+                if (subcommandName) {
+                    const sc = subcommands.find(s => s.name === subcommandName);
+                    relevantOptions = sc.options || [];
+                }
+
+                // Map positional args to options based on order for now
+                for (let i = 0; i < relevantOptions.length; i++) {
+                    const opt = relevantOptions[i];
+                    if (currentArgs.length > i) {
+                        let value = currentArgs[i];
+
+                        // Type conversion based on opt.type
+                        if (opt.type === 3) { // STRING
+                            parsedOptions[opt.name] = value;
+                        } else if (opt.type === 4) { // INTEGER
+                            parsedOptions[opt.name] = parseInt(value);
+                        } else if (opt.type === 10) { // NUMBER
+                            parsedOptions[opt.name] = parseFloat(value);
+                        } else if (opt.type === 5) { // BOOLEAN
+                            parsedOptions[opt.name] = value === 'true' || value === '1' || value === 'yes';
+                        } else if (opt.type === 6) { // USER
+                            const userId = value.replace(/[<@!>]/g, '');
+                            const user = await client.users.fetch(userId).catch(() => null);
+                            const member = await message.guild.members.fetch(userId).catch(() => null);
+                            parsedOptions[opt.name] = { user, member };
+                        } else if (opt.type === 7) { // CHANNEL
+                            const channelId = value.replace(/[<#>]/g, '');
+                            const channel = message.guild.channels.cache.get(channelId);
+                            parsedOptions[opt.name] = channel;
+                        } else if (opt.type === 8) { // ROLE
+                            const roleId = value.replace(/[<@&>]/g, '');
+                            const role = message.guild.roles.cache.get(roleId);
+                            parsedOptions[opt.name] = role;
+                        } else if (opt.type === 9) { // MENTIONABLE
+                            const id = value.replace(/[<@!&>]/g, '');
+                            const user = await client.users.fetch(id).catch(() => null);
+                            const member = await message.guild.members.fetch(id).catch(() => null);
+                            const role = message.guild.roles.cache.get(id);
+                            parsedOptions[opt.name] = { user, member, role };
+                        }
+                    }
+                }
+
+                // Validation: Check for missing required options
+                const missingOptions = relevantOptions.filter(opt => opt.required && !parsedOptions[opt.name]);
+
+                if (missingOptions.length > 0) {
+                    const missingNames = missingOptions.map(o => o.name).join(', ');
+                    let usageMsg = `❌ Thiếu tham số bắt buộc: **${missingNames}**`;
+
+                    // Custom guides for specific commands
+                    if (commandName === 'farm') {
+                        if (subcommandName === 'plant') {
+                            usageMsg += `\n\n💡 **Cách dùng đúng:**\n\`${prefix}farm plant <hạt_giống>\`\nVí dụ: \`${prefix}farm plant rice\``;
+                        } else if (subcommandName === 'harvest') {
+                            usageMsg += `\n\n💡 **Cách dùng đúng:**\n\`${prefix}farm harvest <all/loại_cây>\`\nVí dụ: \`${prefix}farm harvest all\``;
+                        } else if (subcommandName === 'phanbon') {
+                            usageMsg += `\n\n💡 **Cách dùng đúng:**\n\`${prefix}farm phanbon <loại_phân_bón>\`\nVí dụ: \`${prefix}farm phanbon fertilizer\``;
+                        }
+                    } else if (commandName === 'fish') {
+                        usageMsg += `\n\n💡 **Cách dùng đúng:**\n\`${prefix}fish <địa_điểm>\`\nVí dụ: \`${prefix}fish lake\``;
+                    }
+
+                    return message.reply(usageMsg);
+                }
+
                 const fakeInteraction = {
                     user: message.author,
+                    member: message.member,
                     guild: message.guild,
+                    channel: message.channel,
                     client: client,
                     createdTimestamp: message.createdTimestamp,
-                    channel: message.channel,
-                    member: message.member,
                     id: message.id,
-
-                    deferred: false,
-                    replied: false,
-                    deferredMessage: null,
-
-                    reply: async function (options) {
-                        this.replied = true;
-                        return message.reply(options);
-                    },
-                    deferReply: async function (options) {
-                        this.deferred = true;
-                        this.deferredMessage = await message.reply({ content: 'Processing...', fetchReply: true });
-                        return this.deferredMessage;
-                    },
-                    editReply: async function (options) {
-                        if (this.deferredMessage) {
-                            return this.deferredMessage.edit(options);
+                    isChatInputCommand: () => true,
+                    isButton: () => false,
+                    isSelectMenu: () => false,
+                    isModalSubmit: () => false,
+                    reply: async (content) => {
+                        if (typeof content === 'string') {
+                            return message.reply(content);
                         }
-                        return message.reply(options);
+                        return message.reply(content);
                     },
-                    followUp: async function (options) {
-                        return message.reply(options);
+                    editReply: async (content) => {
+                        if (typeof content === 'string') {
+                            return message.channel.send(content);
+                        }
+                        return message.channel.send(content);
+                    },
+                    deferReply: async () => {
+                        await message.channel.sendTyping();
+                    },
+                    followUp: async (content) => {
+                        if (typeof content === 'string') {
+                            return message.channel.send(content);
+                        }
+                        return message.channel.send(content);
                     },
                     options: {
-                        _args: args,
+                        _parsed: parsedOptions,
                         getSubcommand: function () {
-                            return this._args[0] || null;
+                            return subcommandName;
                         },
                         getString: function (name) {
-                            // Basic mapping for prefix command
-                            if (this._args[0] === 'set' && name === 'new_prefix') return this._args[1];
-                            return null;
+                            return this._parsed[name] || null;
                         },
-                        // Add dummy methods for other types to prevent crashes
-                        getInteger: function () { return null; },
-                        getBoolean: function () { return null; },
-                        getUser: function () { return null; },
-                        getMember: function () { return null; },
-                        getChannel: function () { return null; },
-                        getRole: function () { return null; },
-                        getMentionable: function () { return null; },
-                        getNumber: function () { return null; },
-                        getAttachment: function () { return null; },
+                        getInteger: function (name) {
+                            const val = this._parsed[name];
+                            return val !== undefined ? parseInt(val) : null;
+                        },
+                        getNumber: function (name) {
+                            const val = this._parsed[name];
+                            return val !== undefined ? parseFloat(val) : null;
+                        },
+                        getBoolean: function (name) {
+                            return this._parsed[name] || false;
+                        },
+                        getUser: function (name) {
+                            const val = this._parsed[name];
+                            return val ? val.user : null;
+                        },
+                        getMember: function (name) {
+                            const val = this._parsed[name];
+                            return val ? val.member : null;
+                        },
+                        getChannel: function (name) {
+                            return this._parsed[name] || null;
+                        },
+                        getRole: function (name) {
+                            return this._parsed[name] || null;
+                        },
+                        getMentionable: function (name) {
+                            const val = this._parsed[name];
+                            if (!val) return null;
+                            return val.role || val.member || val.user;
+                        },
+                        getAttachment: function (name) {
+                            return null;
+                        }
                     }
                 };
 
@@ -280,52 +384,88 @@ module.exports = async (client, message) => {
             }
             return;
         }
-
-        // If not found in messageCommands, it might be a custom command from config.
-        try {
-            await processCustomCommands(client, message);
-        } catch (error) {
-            console.error('Error in custom command processing:', error);
-        }
+// If not found in messageCommands, it might be a custom command from config.
+try {
+    await processCustomCommands(client, message);
+} catch (error) {
+    console.error('Error in custom command processing:', error);
+}
     }
 
-    dmSent = await checkBlacklistWords(message, dmSent);
+dmSent = await checkBlacklistWords(message, dmSent);
 
-    if (message.deletable) {
-        await handleMessageCount(message);
-        await handleXP(message);
-        await checkAutoReact(message);
+if (message.deletable) {
+    await handleMessageCount(message);
+    await handleXP(message);
+    await checkAutoReact(message);
 
-        dmSent = await checkAntiMassMention(message);
-        await checkAntiSpam(message);
+    dmSent = await checkAntiMassMention(message);
+    await checkAntiSpam(message);
 
-        try {
-            await GuildData.findOneAndUpdate(
-                { guildID: message.guild.id },
-                { $inc: { totalMessages: 1 } },
-                { new: true, upsert: true, setDefaultsOnInsert: true }
-            );
-        } catch (error) {
-            console.error('Error updating GuildData:', error);
+    try {
+        await GuildData.findOneAndUpdate(
+            { guildID: message.guild.id },
+            { $inc: { totalMessages: 1 } },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+        );
+    } catch (error) {
+        console.error('Error updating GuildData:', error);
+    }
+
+    processAutoResponses(message);
+    handleVerificationSettings(message);
+
+    const suggestionInputChannel = config.SuggestionSettings.ChannelSuggestionID || config.SuggestionSettings.ChannelID;
+    if (message.channel.id === suggestionInputChannel) {
+        if (!config.SuggestionSettings.AllowChannelSuggestions) {
+            return;
         }
 
-        processAutoResponses(message);
-        handleVerificationSettings(message);
+        const messageContent = message.content;
 
-        const suggestionInputChannel = config.SuggestionSettings.ChannelSuggestionID || config.SuggestionSettings.ChannelID;
-        if (message.channel.id === suggestionInputChannel) {
-            if (!config.SuggestionSettings.AllowChannelSuggestions) {
-                return;
+        const hasAllowedRole = config.SuggestionSettings.AllowedRoles.length === 0 ||
+            config.SuggestionSettings.AllowedRoles.some(roleId => message.member.roles.cache.has(roleId));
+
+        if (!hasAllowedRole) {
+            const errorMsg = await message.channel.send({
+                content: lang.NoPermsMessage
+            });
+
+            if (config.SuggestionSettings.DeleteFailureMessages) {
+                setTimeout(() => errorMsg.delete().catch(console.error),
+                    config.SuggestionSettings.FailureMessageTimeout);
             }
 
-            const messageContent = message.content;
+            if (config.SuggestionSettings.DeleteOriginalMessage) {
+                await message.delete().catch(console.error);
+            }
+            return;
+        }
 
-            const hasAllowedRole = config.SuggestionSettings.AllowedRoles.length === 0 ||
-                config.SuggestionSettings.AllowedRoles.some(roleId => message.member.roles.cache.has(roleId));
+        const isBlacklisted = await SuggestionBlacklist.findOne({ userId: message.author.id });
 
-            if (!hasAllowedRole) {
+        if (isBlacklisted) {
+            const errorMsg = await message.channel.send({
+                content: lang.Suggestion.BlacklistMessage
+            });
+
+            if (config.SuggestionSettings.DeleteFailureMessages) {
+                setTimeout(() => errorMsg.delete().catch(console.error),
+                    config.SuggestionSettings.FailureMessageTimeout);
+            }
+
+            if (config.SuggestionSettings.DeleteOriginalMessage) {
+                await message.delete().catch(console.error);
+            }
+            return;
+        }
+
+        if (config.SuggestionSettings.blockBlacklistWords) {
+            const messageObj = { content: messageContent, member: message.member, channel: message.channel, author: message.author, deletable: true };
+            const hasBlacklistedWords = await checkBlacklistWords(messageObj, false);
+            if (hasBlacklistedWords) {
                 const errorMsg = await message.channel.send({
-                    content: lang.NoPermsMessage
+                    content: lang.BlacklistWords.Message.replace(/{user}/g, message.author.toString())
                 });
 
                 if (config.SuggestionSettings.DeleteFailureMessages) {
@@ -338,75 +478,38 @@ module.exports = async (client, message) => {
                 }
                 return;
             }
+        }
 
-            const isBlacklisted = await SuggestionBlacklist.findOne({ userId: message.author.id });
+        try {
+            await suggestionActions.createSuggestion(client, message, messageContent);
 
-            if (isBlacklisted) {
-                const errorMsg = await message.channel.send({
-                    content: lang.Suggestion.BlacklistMessage
-                });
-
-                if (config.SuggestionSettings.DeleteFailureMessages) {
-                    setTimeout(() => errorMsg.delete().catch(console.error),
-                        config.SuggestionSettings.FailureMessageTimeout);
-                }
-
-                if (config.SuggestionSettings.DeleteOriginalMessage) {
-                    await message.delete().catch(console.error);
-                }
-                return;
-            }
-
-            if (config.SuggestionSettings.blockBlacklistWords) {
-                const messageObj = { content: messageContent, member: message.member, channel: message.channel, author: message.author, deletable: true };
-                const hasBlacklistedWords = await checkBlacklistWords(messageObj, false);
-                if (hasBlacklistedWords) {
-                    const errorMsg = await message.channel.send({
-                        content: lang.BlacklistWords.Message.replace(/{user}/g, message.author.toString())
-                    });
-
-                    if (config.SuggestionSettings.DeleteFailureMessages) {
-                        setTimeout(() => errorMsg.delete().catch(console.error),
-                            config.SuggestionSettings.FailureMessageTimeout);
-                    }
-
-                    if (config.SuggestionSettings.DeleteOriginalMessage) {
-                        await message.delete().catch(console.error);
-                    }
-                    return;
-                }
-            }
-
-            try {
-                await suggestionActions.createSuggestion(client, message, messageContent);
-
-                if (config.SuggestionSettings.DeleteOriginalMessage) {
-                    try {
-                        await message.delete().catch(error => {
-                            if (error.code !== 10008) {
-                                console.error('Error deleting message:', error);
-                            }
-                        });
-                    } catch (error) {
+            if (config.SuggestionSettings.DeleteOriginalMessage) {
+                try {
+                    await message.delete().catch(error => {
                         if (error.code !== 10008) {
                             console.error('Error deleting message:', error);
                         }
+                    });
+                } catch (error) {
+                    if (error.code !== 10008) {
+                        console.error('Error deleting message:', error);
                     }
                 }
-            } catch (error) {
-                console.error('Error creating suggestion:', error);
-                const errorMsg = await message.channel.send({
-                    content: `${message.author}, ${lang.Suggestion.Error}`
-                });
-
-                setTimeout(() => errorMsg.delete().catch(error => {
-                    if (error.code !== 10008) {
-                        console.error('Error deleting error message:', error);
-                    }
-                }), 5000);
             }
+        } catch (error) {
+            console.error('Error creating suggestion:', error);
+            const errorMsg = await message.channel.send({
+                content: `${message.author}, ${lang.Suggestion.Error}`
+            });
+
+            setTimeout(() => errorMsg.delete().catch(error => {
+                if (error.code !== 10008) {
+                    console.error('Error deleting error message:', error);
+                }
+            }), 5000);
         }
     }
+}
 };
 
 async function handleButtonInteraction(interaction) {
