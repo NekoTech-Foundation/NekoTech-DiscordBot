@@ -213,14 +213,7 @@ client.messageCommands = new Map();
 client.commands = new Map();
 
 // Load economy message command
-const economyCommand = require('./commands/Fun/Economy/economy.js');
-client.messageCommands.set(economyCommand.name, economyCommand);
-if (economyCommand.aliases) {
-    economyCommand.aliases.forEach(alias => {
-        client.messageCommands.set(alias, economyCommand);
-    });
-}
-console.log(`${colors.green('[Message Commands]')} Loaded: !economy`);
+// Economy command removed as part of consolidation
 
 require("./utils.js")(client);
 require('./events/antiNuke')(client);

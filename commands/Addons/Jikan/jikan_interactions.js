@@ -26,11 +26,11 @@ module.exports = {
           const period = parts[4];
           const page = parseInt(parts[5] || '1', 10) || 1;
           if (kind === 'anime') {
-            const { _buildAnimePeriodEmbed } = require('./cmd_anime_chart');
+            const { _buildAnimePeriodEmbed } = require('./cmd_jikan');
             const { embed, row } = await _buildAnimePeriodEmbed(metric, period, page);
             return interaction.update({ embeds: [embed], components: [row] });
           } else if (kind === 'manga') {
-            const { _buildMangaPeriodEmbed } = require('./cmd_manga_chart');
+            const { _buildMangaPeriodEmbed } = require('./cmd_jikan');
             const { embed, row } = await _buildMangaPeriodEmbed(metric, period, page);
             return interaction.update({ embeds: [embed], components: [row] });
           }

@@ -41,6 +41,11 @@ module.exports = {
         sc.setName('chart')
           .setDescription('Biểu đồ Top Anime')
           .addStringOption(o => o.setName('metric').setDescription('Chỉ số').addChoices({ name: 'Thành viên', value: 'members' }, { name: 'Điểm', value: 'score' }))
+    )
+    .addSubcommand(sc => 
+        sc.setName('manga_chart')
+          .setDescription('Biểu đồ Top Manga')
+          .addStringOption(o => o.setName('metric').setDescription('Chỉ số').addChoices({ name: 'Thành viên', value: 'members' }, { name: 'Điểm', value: 'score' }))
     ),
 
   async execute(interaction) {
@@ -61,6 +66,8 @@ module.exports = {
             if (sub === 'random') return await handleMangaRandom(interaction);
         } else if (sub === 'chart') {
             return await handleAnimeChart(interaction);
+        } else if (sub === 'manga_chart') {
+            return await handleMangaChart(interaction);
         }
     } catch (e) {
       console.error('[Jikan] command error:', e?.response?.data || e);
@@ -268,7 +275,7 @@ async function handleMangaRandom(interaction) {
 }
 
 
-// --- Chart Handler (Refactored from cmd_anime_chart) ---
+// --- Chart Handler (Refactored from cmd_anime_chart & cmd_manga_chart) ---
 async function buildAnimePeriodEmbed(metric, period, page) {
   const now = new Date();
   const start = new Date(now);
@@ -294,6 +301,31 @@ async function buildAnimePeriodEmbed(metric, period, page) {
   return { embed, row };
 }
 
+async function buildMangaPeriodEmbed(metric, period, page) {
+  const now = new Date();
+  const start = new Date(now);
+  if (period === 'week') start.setDate(start.getDate() - 7);
+  else if (period === 'month') start.setDate(start.getDate() - 30);
+  else start.setDate(start.getDate() - 365);
+  const params = {
+    start_date: start.toISOString().slice(0,10),
+    end_date: now.toISOString().slice(0,10),
+    order_by: metric, sort: 'desc', page
+  };
+  const data = await jikanGet('/manga', params);
+  const items = (data.data || []).slice(0, 10);
+  const metricLabel = metric === 'members' ? '👥' : '⭐';
+  const lines = items.map((m, idx) => `• ${((page-1)*10)+idx+1}. [${m.title}](${m.url}) — ${m.type || '-'} | ${metricLabel} ${metric==='members'?(m.members ?? '-'):(m.score ?? '-')}`);
+  const title = `📈 Top Manga theo ${period} (theo ${metric})`;
+  const embed = UI.listEmbed({ title, items: lines, page, totalPages: data.pagination?.last_visible_page || page });
+  const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder().setCustomId(`jikan_top_manga_${metric}_week_${page}`).setLabel('Tuần').setStyle(period==='week'?ButtonStyle.Primary:ButtonStyle.Secondary),
+    new ButtonBuilder().setCustomId(`jikan_top_manga_${metric}_month_${page}`).setLabel('Tháng').setStyle(period==='month'?ButtonStyle.Primary:ButtonStyle.Secondary),
+    new ButtonBuilder().setCustomId(`jikan_top_manga_${metric}_year_${page}`).setLabel('Năm').setStyle(period==='year'?ButtonStyle.Primary:ButtonStyle.Secondary)
+  );
+  return { embed, row };
+}
+
 async function handleAnimeChart(interaction) {
     const metric = interaction.options.getString('metric') || 'members';
     await interaction.deferReply();
@@ -302,5 +334,14 @@ async function handleAnimeChart(interaction) {
     return interaction.editReply({ embeds: [embed], components: [row] });
 }
 
-// Export buildAnimePeriodEmbed for jikan_interactions to use if needed (buttons)
+async function handleMangaChart(interaction) {
+    const metric = interaction.options.getString('metric') || 'members';
+    await interaction.deferReply();
+    const page = 1, period = 'week';
+    const { embed, row } = await buildMangaPeriodEmbed(metric, period, page);
+    return interaction.editReply({ embeds: [embed], components: [row] });
+}
+
+// Export builders for jikan_interactions to use if needed (buttons)
 module.exports._buildAnimePeriodEmbed = buildAnimePeriodEmbed;
+module.exports._buildMangaPeriodEmbed = buildMangaPeriodEmbed;
