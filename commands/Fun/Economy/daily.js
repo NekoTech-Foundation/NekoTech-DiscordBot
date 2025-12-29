@@ -4,7 +4,7 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const { seeds, addToFarm } = require('../../Addons/Farming/farmUtils');
-const { getUserFishing, loadConfig: loadFishingConfig } = require('../../../addons/Fishing/fishingUtils');
+const { getUserFishing, loadConfig: loadFishingConfig } = require('../../Addons/Fishing/fishingUtils');
 
 const config = getConfig();
 const lang = getLang();

@@ -8,16 +8,16 @@ const lang = getLang();
 const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
-const { getUserFishing, loadConfig: loadFishingConfig } = require('../../../addons/Fishing/fishingUtils.js');
-const { getUserFarm } = require('../../../addons/Farming/farmUtils.js');
+const { getUserFishing, loadConfig: loadFishingConfig } = require('../../Addons/Fishing/fishingUtils.js');
+const { getUserFarm } = require('../../Addons/Farming/farmUtils.js');
 
 
 // Import vé số addon nếu có
 let vesoAddon = null;
 let vesoConfig = null;
 try {
-    vesoAddon = require('../../../addons/VeSo/veso.js');
-    vesoConfig = yaml.load(fs.readFileSync(path.join(__dirname, '../../../addons/VeSo/config.yml'), 'utf8'));
+    vesoAddon = require('../../Addons/VeSo/veso.js');
+    vesoConfig = yaml.load(fs.readFileSync(path.join(__dirname, '../../Addons/VeSo/config.yml'), 'utf8'));
 } catch (error) {
     // Vé số addon không có hoặc chưa cài
 }

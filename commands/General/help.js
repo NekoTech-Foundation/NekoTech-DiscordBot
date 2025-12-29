@@ -27,6 +27,7 @@ const CATEGORY_EMOJIS = {
     'NoiTu': '🔤',
     'Hentai': '🔞',
     'Weather': '☁️',
+    'Marry': '💍',
     'Default': '📁'
 };
 
@@ -41,6 +42,13 @@ const CATEGORY_DESCRIPTIONS = {
     'Pixiv': 'Tìm kiếm ảnh Pixiv',
     'VoiceMaster': 'Tạo phòng voice riêng',
     'Utility': 'Các tiện ích hữu dụng',
+    'Bypass': 'Bỏ qua link rút gọn',
+    'Giveaway': 'Tổ chức giveaway',
+    'VeSo': 'Xổ số kiến thiết',
+    'Translator': 'Dịch thuật đa ngôn ngữ',
+    'NoiTu': 'Trò chơi nối từ',
+    'Weather': 'Thông tin thời tiết',
+    'Marry': 'Hệ thống kết hôn',
     'Default': 'Các lệnh khác'
 };
 
@@ -72,33 +80,84 @@ function getAllCategories(client) {
 }
 
 function createCategorySelectMenu(categories, currentCategory) {
-    const options = categories.map(cat => ({
-        label: cat,
-        value: cat,
-        description: getCategoryDescription(cat),
-        emoji: getCategoryEmoji(cat),
-        default: cat === currentCategory
-    }));
+    const options = [
+        {
+            label: 'Trang chủ',
+            value: 'overview',
+            description: 'Quay lại xem tổng quan và thống kê',
+            emoji: '🏠',
+            default: currentCategory === 'overview'
+        },
+        ...categories.map(cat => ({
+            label: cat,
+            value: cat,
+            description: getCategoryDescription(cat),
+            emoji: getCategoryEmoji(cat),
+            default: cat === currentCategory
+        }))
+    ];
 
     return new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
             .setCustomId('help_category_select')
-            .setPlaceholder('Chọn danh mục lệnh...')
+            .setPlaceholder('Chọn module lệnh...')
             .addOptions(options)
     );
+}
+
+function createOverviewEmbed(client, categories, interaction) {
+    const totalCommands = client.slashCommands.size;
+    
+    // Split categories into two columns for better display if needed, 
+    // but the screenshot shows a grid-like view. 
+    // Discord fields with inline: true wrap automatically 3 per row (desktop) / 2 (mobile).
+    
+    const fields = categories.map(cat => {
+        const count = getCommandsByCategory(client, cat).length;
+        return {
+            name: `${getCategoryEmoji(cat)} ${cat}`,
+            value: `${count} lệnh`,
+            inline: true
+        };
+    });
+
+    const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
+
+    return new EmbedBuilder()
+        .setColor('#2b2d31') // Dark theme color similar to screenshot
+        .setTitle(`📚 Menu Trợ Giúp`)
+        .setDescription(
+            `**NekoTech** là một bot Discord đa năng, đáp ứng mọi nhu cầu cần thiết.\n\n` +
+            `• [Server Giải đáp & Hỗ trợ](https://discord.gg/96hgDj4b4j)\n` +
+            `• [Hướng dẫn Sử dụng](https://docs.nekotech.xyz) - [Điều khoản Dịch vụ](https://nekotech.xyz/tos) - [Chính sách Bảo mật](https://nekotech.xyz/privacy) - [Invite bot!](${inviteLink})\n\n` +
+            `Để xem hướng dẫn về các lệnh có sẵn, sử dụng dropdown phía dưới.`
+        )
+        .addFields(fields)
+        .setThumbnail(client.user.displayAvatarURL())
+        .setFooter({ 
+            text: `NekoTech • Tổng: ${totalCommands} lệnh`, 
+            iconURL: interaction.user.displayAvatarURL()
+        })
+        .setTimestamp();
 }
 
 function createCommandListEmbed(client, category, interaction) {
     const commands = getCommandsByCategory(client, category);
     
-    // Sort commands alphabetically
-    commands.sort((a, b) => a.data.name.localeCompare(b.data.name));
+    // Sort commands alphabetically safely
+    commands.sort((a, b) => {
+        const nameA = a.data?.name || 'unknown';
+        const nameB = b.data?.name || 'unknown';
+        return nameA.localeCompare(nameB);
+    });
 
     const description = commands.map(cmd => {
-        let desc = `**/${cmd.data.name}** - ${cmd.data.description}`;
+        const cmdName = cmd.data?.name || 'unknown';
+        const cmdDesc = cmd.data?.description || 'Không có mô tả';
+        let desc = `**/${cmdName}** - ${cmdDesc}`;
         // List subcommands if any
         if (cmd.data.options) {
-            const subcommands = cmd.data.options.filter(opt => opt.type === ApplicationCommandOptionType.Subcommand);
+            const subcommands = cmd.data?.options?.filter(opt => opt.type === ApplicationCommandOptionType.Subcommand) || [];
             if (subcommands.length > 0) {
                 const subNames = subcommands.map(s => `\`${s.name}\``).join(', ');
                 desc += `\n> Subcommands: ${subNames}`;
@@ -120,18 +179,21 @@ function createCommandListEmbed(client, category, interaction) {
 }
 
 function createCommandDetailEmbed(command) {
-    const data = command.data;
+    const data = command.data || {};
+    const name = data.name || 'Undefined';
+    const description = data.description || 'No description';
+
     const embed = new EmbedBuilder()
         .setColor('#0099ff')
-        .setTitle(`📖 Hướng dẫn: /${data.name}`)
-        .setDescription(data.description)
+        .setTitle(`📖 Hướng dẫn: /${name}`)
+        .setDescription(description)
         .addFields({ name: '📂 Danh mục', value: command.category || 'General', inline: true });
 
     if (data.options && data.options.length > 0) {
         let optionsText = '';
         data.options.forEach(opt => {
             if (opt.type === ApplicationCommandOptionType.Subcommand) {
-                optionsText += `**/ ${data.name} ${opt.name}**: ${opt.description}\n`;
+                optionsText += `**/ ${name} ${opt.name}**: ${opt.description}\n`;
                 if (opt.options) {
                     opt.options.forEach(subOpt => {
                          const required = subOpt.required ? '(Bắt buộc)' : '(Tùy chọn)';
@@ -175,10 +237,6 @@ module.exports = {
     },
 
     async execute(interaction, client) {
-        // Fix for "TypeError: Cannot read properties of undefined (reading 'commandsReady')"
-        // If client is passed correctly, this should work.
-        // Also handling if commandsReady is not yet set (though it should be by the time user can interact)
-        
         await interaction.deferReply();
 
         const commandName = interaction.options.getString('command');
@@ -192,16 +250,13 @@ module.exports = {
             return interaction.editReply({ embeds: [embed] });
         }
 
-        // Main Help Menu
+        // Main Help Menu (Overview)
         const categories = getAllCategories(client);
-        // Default to 'General' or the first category
-        const initialCategory = categories.includes('General') ? 'General' : categories[0];
         
-        const embed = createCommandListEmbed(client, initialCategory, interaction);
-        const row = createCategorySelectMenu(categories, initialCategory);
+        const embed = createOverviewEmbed(client, categories, interaction);
+        const row = createCategorySelectMenu(categories, 'overview');
 
         const response = await interaction.editReply({
-            content: '👋 Chào mừng đến với **NekoTech Bot**! Chọn danh mục bên dưới để xem lệnh.',
             embeds: [embed],
             components: [row]
         });
@@ -213,9 +268,16 @@ module.exports = {
         });
 
         collector.on('collect', async i => {
-            const selectedCategory = i.values[0];
-            const newEmbed = createCommandListEmbed(client, selectedCategory, interaction);
-            const newRow = createCategorySelectMenu(categories, selectedCategory);
+            const selectedValue = i.values[0];
+            
+            let newEmbed;
+            if (selectedValue === 'overview') {
+                newEmbed = createOverviewEmbed(client, categories, interaction);
+            } else {
+                newEmbed = createCommandListEmbed(client, selectedValue, interaction);
+            }
+            
+            const newRow = createCategorySelectMenu(categories, selectedValue);
             
             await i.update({
                 embeds: [newEmbed],
@@ -225,8 +287,6 @@ module.exports = {
 
         collector.on('end', () => {
              // Disable components on timeout
-             // We can't edit ephemeral messages effectively if deferred? msg is regular reply.
-             // Just attempting to remove components.
              interaction.editReply({ components: [] }).catch(() => {});
         });
     }
