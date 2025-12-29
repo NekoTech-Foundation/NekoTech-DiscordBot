@@ -1,21 +1,14 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const plantSchema = new mongoose.Schema({
-    userId: { type: String, required: true },
-    plant: { type: String, required: true },
-    plantedAt: { type: Date, required: true, default: Date.now },
-    quantity: { type: Number, required: true, default: 1 },
-    fertilizer: {
-        type: Object, default: null,
-        properties: {
-            key: { type: String },
-            effect: { type: String },
-            qualityReduced: { type: Boolean, default: false }
-        }
-    },
-    event: { type: Object, default: null },
-    mutation: { type: Object, default: null },
-    lastEventCheck: { type: Date, default: Date.now }
+const defaultData = (query) => ({
+    userId: query.userId,
+    plant: query.plant,
+    plantedAt: Date.now(),
+    quantity: 1,
+    fertilizer: null,
+    event: null,
+    mutation: null,
+    lastEventCheck: Date.now()
 });
 
-module.exports = mongoose.model('plantSchema', plantSchema);
+module.exports = new SQLiteModel('farming_plants', ['userId', 'plant'], defaultData);

@@ -102,13 +102,7 @@ async function checkAlerts(client) {
     try {
         const config = getConfig();
         const now = new Date();
-        const mongoose = require('mongoose');
 
-
-        if (mongoose.connection.readyState !== 1) {
-            console.warn('[checkAlerts] MongoDB not connected. Skipping check.');
-            return;
-        }
 
         const tickets = await Ticket.find({ status: 'open' });
 
@@ -175,7 +169,7 @@ async function checkAlerts(client) {
                     }
                 }
             } catch (error) {
-                console.error(`Error processing ticket ${ticket._id}:`, error);
+                console.error(`Error processing ticket ${ticket.ticketId}:`, error);
             }
         }
     } catch (error) {

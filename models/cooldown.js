@@ -1,11 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const cooldownSchema = new mongoose.Schema({
-    userId: { type: String, required: true, index: true },
-    type: { type: String, required: true },
-    endsAt: { type: Number, required: true }
+const defaultData = (query) => ({
+    userId: query.userId,
+    type: query.type,
+    endsAt: 0
 });
 
-cooldownSchema.index({ userId: 1, type: 1 }, { unique: true });
-
-module.exports = mongoose.model('Cooldown', cooldownSchema);
+module.exports = new SQLiteModel('cooldowns', ['userId', 'type'], defaultData);

@@ -33,7 +33,7 @@ module.exports = {
             );
 
             if (!user) {
-                user = new EconomyUserData({
+                user = await EconomyUserData.create({
                     userId: interaction.user.id,
                     balance: 0,
                     commandData: {},

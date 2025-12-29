@@ -51,8 +51,7 @@ module.exports = {
         let user = await EconomyUserData.findOne({ userId: interaction.user.id });
 
         if (!user) {
-            user = new EconomyUserData({ userId: interaction.user.id });
-            await user.save();
+            user = await EconomyUserData.create({ userId: interaction.user.id });
         }
 
         if (subcommand === 'view') {

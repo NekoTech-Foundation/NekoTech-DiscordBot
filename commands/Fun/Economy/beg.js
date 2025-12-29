@@ -42,7 +42,7 @@ module.exports = {
         coins *= multiplier;
 
         if (!user) {
-            user = new EconomyUserData({ userId: interaction.user.id, balance: coins, commandData: { lastBeg: now } });
+            user = await EconomyUserData.create({ userId: interaction.user.id, balance: coins, commandData: { lastBeg: now } });
         } else {
             user.balance += coins;
             user.commandData.lastBeg = now;

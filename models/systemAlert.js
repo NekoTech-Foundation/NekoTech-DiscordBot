@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const systemAlertSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    address: { type: String, required: true },
-    type: { type: String, enum: ['Website', 'Minecraft', 'Bots', 'Pterodactyl'], required: true },
-    pterodactylId: { type: String },
-    apiKey: { type: String },
-    status: { type: String, enum: ['Online', 'Offline', 'Pending'], default: 'Pending' },
-    lastChecked: { type: Date, default: Date.now },
-    lastStatusChange: { type: Date, default: Date.now },
-    notificationChannel: { type: String }
+const defaultData = (query) => ({
+    name: query.name,
+    address: query.address,
+    type: 'Website',
+    pterodactylId: null,
+    apiKey: null,
+    status: 'Pending',
+    lastChecked: Date.now(),
+    lastStatusChange: Date.now(),
+    notificationChannel: null
 });
 
-module.exports = mongoose.model('SystemAlert', systemAlertSchema);
+module.exports = new SQLiteModel('system_alerts', 'name', defaultData);

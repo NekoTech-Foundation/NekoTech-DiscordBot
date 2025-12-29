@@ -1,14 +1,15 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const guildDataSchema = new mongoose.Schema({
-    guildID: { type: String, required: true },
-    cases: { type: Number, default: 0 },
-    totalMessages: { type: Number, default: 0 },
-    stars: { type: Object, default: {} },
-    totalSuggestions: { type: Number, default: 0 },
-    timesBotStarted: { type: Number, default: 0 },
-    members: { type: [String], default: [] },
-    timeoutRoleId: { type: String, default: null }
+const defaultData = (query) => ({
+    guildID: query.guildID,
+    cases: 0,
+    totalMessages: 0,
+    stars: {},
+    totalSuggestions: 0,
+    timesBotStarted: 0,
+    members: [],
+    timeoutRoleId: null,
+    language: 'vn'
 });
 
-module.exports = mongoose.model('GuildData', guildDataSchema);
+module.exports = new SQLiteModel('guilds', 'guildID', defaultData);

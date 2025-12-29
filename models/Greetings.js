@@ -1,27 +1,11 @@
-const { Schema, model } = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const greetingsSchema = new Schema({
-    guildId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    welcomeChannel: {
-        type: String,
-        default: null,
-    },
-    welcomeMessage: {
-        type: String,
-        default: null,
-    },
-    goodbyeChannel: {
-        type: String,
-        default: null,
-    },
-    goodbyeMessage: {
-        type: String,
-        default: null,
-    },
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    welcomeChannel: null,
+    welcomeMessage: null,
+    goodbyeChannel: null,
+    goodbyeMessage: null
 });
 
-module.exports = model('Greetings', greetingsSchema);
+module.exports = new SQLiteModel('greetings', 'guildId', defaultData);

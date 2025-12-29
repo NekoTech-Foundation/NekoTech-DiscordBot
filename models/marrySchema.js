@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const MarrySchema = new mongoose.Schema({
-  authorid: { type: String, required: true },
-  wifeid: { type: String, required: true },
-  husbandid: { type: String, required: true },
-  nhan: { type: String, default: null },
-  loihua: { type: String, default: 'Yêu nhau suốt kiếp' },
-  together: { type: Number, default: 0 },
+const defaultData = (query) => ({
+    authorid: query.authorid,
+    wifeid: query.wifeid,
+    husbandid: query.husbandid,
+    nhan: null,
+    loihua: 'Yêu nhau suốt kiếp',
+    together: 0
 });
 
-module.exports = mongoose.model('Marry', MarrySchema);
+module.exports = new SQLiteModel('marriages', 'authorid', defaultData);

@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const bankSchema = new mongoose.Schema({
-    userId: { type: String, required: true, unique: true },
-    balance: { type: Number, default: 0 },
+const defaultData = (query) => ({
+    userId: query.userId,
+    balance: 0
 });
 
-module.exports = mongoose.model('bankSchema', bankSchema);
+module.exports = new SQLiteModel('farming_bank', 'userId', defaultData);

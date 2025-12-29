@@ -1,11 +1,11 @@
 Version: "1.8.5"
-BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.GL_mT_.__e4ZmYFE7mgL116uscFhpxT4qSHY79PlXlo3Q" 
+BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.GL_mT_.__e4ZmYFE7mgL116uscFhpxT4qSHY79PlXlo3Q"
 mongoURI: "mongodb+srv://nguyenhuuquy267_db_user:GcaOubv9VThC6xBf@nekocomicsdiscorddb.xhjdqcb.mongodb.net/?retryWrites=true&w=majority&appName=NekoComicsDiscordDB"
-GuildID: "1388889326309605488" 
+GuildID: "1388889326309605488"
 BotName: "NekoBuckets"
 LogCommands: false
-Statistics: true 
-Timezone: "Asia/Ho_Chi_Minh" 
+Statistics: true
+Timezone: "Asia/Ho_Chi_Minh"
 
 EmbedColors: "#1769FF"
 SuccessEmbedColor: "#2ecc71"
@@ -84,7 +84,6 @@ WarnLogs:
   Enabled: false
   LogsChannelID: "CHANNEL_ID"
 
-
 UnbanLogs:
   Enabled: false
   LogsChannelID: "CHANNEL_ID"
@@ -134,7 +133,7 @@ InviteCreateLogs:
 InviteDeleteLogs:
   Enabled: false
   LogsChannelID: "CHANNEL_ID"
-  
+
 InviteJoinLogs:
   Enabled: false
   LogsChannelID: "CHANNEL_ID"
@@ -185,16 +184,15 @@ GiveawayLogs:
       ThumbnailUrl: "https://i.imgur.com/ewT6bOT.png"
       Thumbnail: true
 
-
 # ===========================================================================
-# REACTION ROLES CONFIGURATION 
+# REACTION ROLES CONFIGURATION
 # ===========================================================================
 ReactionRoles:
   Enabled: false
 
   Example:
     type: "REACT" # BUTTON, REACT, SELECT
-    resetReacts: true  # Should it remove the users reaction
+    resetReacts: true # Should it remove the users reaction
     ChannelID: "CHANNEL_ID"
     Embed:
       Title: "**  Choose Your Roles!**"
@@ -206,7 +204,7 @@ ReactionRoles:
         - " "
         - "*(( React with the corresponding emoji to get your roles! ))*"
       Footer:
-        Text: "Drako Bot | Reaction Role System"
+        Text: "NekoBuckets | Reaction Role System"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Author:
         Text: "Reaction Panel"
@@ -251,7 +249,7 @@ CustomCommands:
         - ""
         - "Need further assistance? Don't hesitate to open a support ticket."
       Footer:
-        Text: "Drako Development | MongoDB Setup"
+        Text: "NekoTech | MongoDB Setup"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#1769FF"
       Thumbnail: ""
@@ -264,9 +262,9 @@ CustomCommands:
       - Type: "LINK"
         Name: "MongoDB Setup"
         Emoji: "📑"
-        Link: "https://docs.drakodevelopment.net/misc/mongodb-setup"
+        Link: "https://docs.nekofoundation.tech/misc/mongodb-setup"
 
- # See https://docs.drakodevelopment.net/our-bots/drako-bot/custom-commands for more examples
+  # See https://docs.nekofoundation.tech/ for more examples
 
 # ===========================================================================
 # TICKET SYSTEM
@@ -304,8 +302,8 @@ AI:
         - "> 🔄 **Status:** Processing tickets in order received"
         - ""
         - "## Need Immediate Help?"
-        - "• Review our [Documentation](https://docs.drakodevelopment.net)"
-        - "• Join our [Community](https://discord.gg/drakobot)"
+        - "• Review our [Documentation](https://docs.nekofoundation.tech/)"
+        - "• Join our [Community](https://discord.gg/nekotech)"
       Footer:
         Text: "Your ticket will still be created • Thank you for your patience"
         Icon: "https://i.imgur.com/w5XxKpc.png"
@@ -332,7 +330,7 @@ AI:
     AllowCustomReason: true
 
 Priority:
-  Enabled: true 
+  Enabled: true
   DefaultPriority: "Low"
 
   Levels:
@@ -355,7 +353,7 @@ WorkingHours:
   Enabled: true
   Timezone: "Asia/Ho_Chi_Minh" # https://gist.github.com/diogocapela/12c6617fc87607d11fd62d2a4f42b02a
   NonWorkingDays: ["Saturday", "Sunday"] # Days that are completely off - no working hours
-  Schedule: 
+  Schedule:
     Monday: "7:00-22:00"
     Tuesday: "7:00-22:00"
     Wednesday: "7:00-22:00"
@@ -363,7 +361,7 @@ WorkingHours:
     Friday: "7:00-22:00"
     Saturday: "7:00-22:00"
     Sunday: "7:00-22:00"
-  allowOpenTickets: true # Should people be able to open tickets during the off hours? 
+  allowOpenTickets: true # Should people be able to open tickets during the off hours?
 
 WorkingEmbed: # This will be posted in the ticket if it's raised out of hours
   Embed:
@@ -387,7 +385,7 @@ TicketPanelSettings:
   Panel1:
     Embed:
       Title: "📩 Support Tickets"
-      Description: 
+      Description:
         - "Vui lòng chọn một danh mục bên dưới để được hỗ trợ."
         - " "
         - "🕒 **Giờ hoạt động**: {workinghours_start_monday} - {workinghours_end_monday}"
@@ -406,11 +404,11 @@ TicketTranscript:
   Type: "TXT" # TXT, WEB
   Save: true
   MinMessages: "1"
-  SavePath: "./transcripts/"  # Sẽ lưu trong thư mục transcripts ở thư mục gốc của bot
+  SavePath: "./transcripts/" # Sẽ lưu trong thư mục transcripts ở thư mục gốc của bot
 
 # {ticketType} hiển thị loại phiếu
 # {user} là @John James
-# {guild} hiển thị máy chủ 
+# {guild} hiển thị máy chủ
 # {question} mảng câu hỏi
 # {answer} mảng câu trả lời
 # {userIcon} hiển thị icon của người dùng
@@ -433,7 +431,7 @@ TicketCreation:
         Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
         Icon: "https://i.imgur.com/w5XxKpc.png"
       Color: "#1769FF"
-      Thumbnail: "{userIcon}" 
+      Thumbnail: "{userIcon}"
     QuestionFormat:
       - "**{question}**"
       - "```{answer}```"
@@ -525,8 +523,8 @@ TicketTypes:
     ChannelName: "{ticket-id}-Chung-{user}-{priority}"
     ChannelTopic: "Danh mục: {ticketType} | Người dùng: {userid} | Ưu tiên: {priority}"
     CategoryID: "1427505637105074187"
-    AutoAlert: "12h" 
-    ArchiveCategory: "" 
+    AutoAlert: "12h"
+    ArchiveCategory: ""
     SupportRole: ["1388890276382380183"]
     UserRole: ["1388890274436223128"]
     TagSupport: true
@@ -545,7 +543,7 @@ TicketTypes:
       Emoji: "🔍"
       Style: "Danger"
       Description: "Mở để nhận hỗ trợ chung"
-    Questions: 
+    Questions:
       - PurchaseID:
           Question: "Hãy Miêu tả vấn đề của bạn?"
           Placeholder: "Miêu tả vấn đề nhé"
@@ -563,7 +561,7 @@ TicketTypes:
     AutoAlert: "12h"
     ArchiveCategory: ""
     SupportRole: ["1388890276382380183"]
-    UserRole: ["1388890274436223128"] 
+    UserRole: ["1388890274436223128"]
     TagSupport: true
     TagCreator: false
     RestrictDeletion: true
@@ -580,7 +578,7 @@ TicketTypes:
       Emoji: "💻"
       Style: "Primary"
       Description: "Dành cho Các nhóm dịch có thể yêu cầu Quyền Lợi"
-    Questions: 
+    Questions:
       - RequiredIMG:
           Question: "Gửi File Drive truyện bạn dịch lên nha!"
           Placeholder: ""
@@ -597,7 +595,7 @@ TicketTypes:
     AutoAlert: "12h"
     ArchiveCategory: ""
     SupportRole: ["1388890276382380183"]
-    UserRole: ["1388890274436223128"] 
+    UserRole: ["1388890274436223128"]
     TagSupport: true
     TagCreator: false
     RestrictDeletion: true
@@ -614,7 +612,7 @@ TicketTypes:
       Emoji: "💻"
       Style: "Primary"
       Description: "Báo Lỗi về Bot Discord,Phát sinh lỗi, v.v..."
-    Questions: 
+    Questions:
       - Bug:
           Question: "Lỗi bạn gặp là gì,hãy gửi ảnh lên nha!"
           Placeholder: ""
@@ -697,7 +695,7 @@ TicketClosureDM:
       Text: "NekoTech | Hệ thống Phiếu Hỗ trợ"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Author:
-      Text: "Hỗ trợ Drako"
+      Text: "Hỗ trợ NekoTech"
       Icon: "https://i.imgur.com/w5XxKpc.png"
     Color: "#1769FF"
     Image: "https://images-ext-1.discordapp.net/external/OllWGq5ta58LX6KoA8yEVTMrI9L4BJ0iE_T0pE4TZvw/https/i.imgur.com/LbjDuZ8.png?format=webp&quality=lossless&width=1618&height=403"
@@ -711,7 +709,7 @@ Reviews:
   askWhy: true
 
 Logs:
-  Close: 
+  Close:
     Embed:
       Title: "**Đóng Phiếu**"
       Description:
@@ -727,7 +725,7 @@ Logs:
         - " "
         - "**Kênh Phiếu**"
         - "> {channelName}"
-        - " " 
+        - " "
         - "**Đánh giá**"
         - "> **Xếp hạng:** {rating}"
       Footer:
@@ -748,7 +746,7 @@ Logs:
 # {userName}: YouSeeMeRunning
 # {user}: @YouSeeMeRunning
 # {userId}: 264032125496459265 - This is the ID
-# {userBanner}: Displays their users banner in the image field  
+# {userBanner}: Displays their users banner in the image field
 # {guildName}: Guild Name
 # {guildIcon}: Guild Icon
 # {oldLevel}: What was your previous level?
@@ -792,7 +790,7 @@ LevelingSystem:
       Color: "#1769FF"
       Image: ""
       Thumbnail: "{userIcon}"
-        
+
   RoleSettings:
     StackRoles: false
     LevelRoles:
@@ -808,20 +806,20 @@ LevelingSystem:
           coins: 35
 
 RankCard:
-  AccentColor: '#1769FF'
-  SecondaryColor: '#4785FF'
+  AccentColor: "#1769FF"
+  SecondaryColor: "#4785FF"
   ProgressBar:
-    StartColor: '#1769FF'
-    EndColor: '#4785FF'
+    StartColor: "#1769FF"
+    EndColor: "#4785FF"
   TextColors:
-    LevelText: '#FFFFFF'
-    RankText: '#FFFFFF'
-    Numbers: '#FFFFFF'
+    LevelText: "#FFFFFF"
+    RankText: "#FFFFFF"
+    Numbers: "#FFFFFF"
   Emojis:
-    Level: '✧'
-    TopRank: '♚'
-    NormalRank: '★'
-    
+    Level: "✧"
+    TopRank: "♚"
+    NormalRank: "★"
+
 # ===========================================================================
 # MODERATION
 # ===========================================================================
@@ -856,31 +854,31 @@ PurgeLogChannel: "CHANNEL_ID"
 Warnings:
   Expiry: "30d" # 1d 15m = 1 day 15 minutes
 
-  Punishments: 
-    1: 
+  Punishments:
+    1:
       Timeout: "" # Leave blank for no punishment
-    2: 
+    2:
       Timeout: "10m"
-    3: 
+    3:
       Timeout: "15m" # Supports up to 30 days
 
-AutoKick: 
- Enabled: false
- Time: "10s" # 1h 15s = 1 hour 15 seconds, 10m 15s = 10 minute 15 seconds
- Role: [] # The user needs to have one of these roles to not get kicked
- DM:
-   Enabled: true
-   Embed:
-     Title: "⚠️ Verification Failure ⚠️"
-     Description: 
-       - "🚫 **Notice:** You failed to verify within the given amount of time."
-       - "Please rejoin and verify to remain in our server. discord.gg/NekoTechsbot"
-     Color: "#1769FF"
-     Footer: "Automatic Kick | NekoBuckets"
+AutoKick:
+  Enabled: false
+  Time: "10s" # 1h 15s = 1 hour 15 seconds, 10m 15s = 10 minute 15 seconds
+  Role: [] # The user needs to have one of these roles to not get kicked
+  DM:
+    Enabled: true
+    Embed:
+      Title: "⚠️ Verification Failure ⚠️"
+      Description:
+        - "🚫 **Notice:** You failed to verify within the given amount of time."
+        - "Please rejoin and verify to remain in our server. discord.gg/NekoTechsbot"
+      Color: "#1769FF"
+      Footer: "Automatic Kick | NekoBuckets"
 
 # Alt Prevention System
 AltPrevention:
-  Enabled:  false
+  Enabled: false
   TimeLimit: "30d"
   KickAlts: false
 
@@ -927,17 +925,17 @@ AltPrevention:
 BlacklistWords:
   Enabled: false
   Patterns:
-    - "example.net"        # Exact match
-    - "discord.gg/*"       # Matches any path after discord.gg/
-    - "*badword*"          # Matches badword anywhere in the string
-    - "regex:\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"  # Email regex
+    - "example.net" # Exact match
+    - "discord.gg/*" # Matches any path after discord.gg/
+    - "*badword*" # Matches badword anywhere in the string
+    - "regex:\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b" # Email regex
     - "regex:\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b" # IP Address regex
   WhitelistWords:
     - "discord.gg/NekoTechsbot"
-  WhitelistChannels: 
-    - "CHANNEL_ID"  # IDs of channels that should be exempted
+  WhitelistChannels:
+    - "CHANNEL_ID" # IDs of channels that should be exempted
   WhitelistCategories:
-    - "CATEGORY_ID"  # IDs of categories to exempt
+    - "CATEGORY_ID" # IDs of categories to exempt
   BypassPerms: ["ManageMessages"]
   BypassRoles: ["ROLE_ID"]
   Message: "{user}, you used a blacklisted word!"
@@ -1039,11 +1037,11 @@ AntiHoist:
   EnableOnUserUpdate: false # Enable Anti Hosting when a user edits their server profile
   DefaultDisplayName: "zName" # If the users display name is only disallowed characters it will make it this
   AllowRoles: ["ROLE_ID"] # What roles can use the command
-  DisallowedCharacters: ['-', '_', '!', '?', '.', '"'] # Characters to be removed from the beginning of the users display name
+  DisallowedCharacters: ["-", "_", "!", "?", ".", '"'] # Characters to be removed from the beginning of the users display name
   LogsChannelID: "CHANNEL_ID" # The channel to send logs to
   LogEmbed:
     Title: "☢️ Changed Users Nickname"
-    Description: 
+    Description:
       - "**👤 User:** {user}"
       - "🟥 **Old Display Name:** `{oldDisplayName}`"
       - "🟩 **New Display Name:** `{newDisplayName}`"
@@ -1060,7 +1058,7 @@ AntiMassMention:
   Message: "{user}, mass mentions are not permitted here!"
   TimeoutUser: true # Timeout user if they mass mention?
   TimeoutTime: "5m" # Timeout time if TimeoutUser is set to true
-  LogsChannelID: "CHANNEL_ID" 
+  LogsChannelID: "CHANNEL_ID"
   SendDM: true
   DirectMessage: "{user} you have been muted for {time} for mass mentioning users."
 
@@ -1074,10 +1072,10 @@ AntiSpam:
   Message: "{user}, spamming is not permitted here!"
   TimeoutUser: true # Timeout user if they spam?
   TimeoutTime: "5m" # Timeout time if TimeoutUser is set to true
-  LogsChannelID: "CHANNEL_ID" 
+  LogsChannelID: "CHANNEL_ID"
   SendDM: true
   DirectMessage: "{user} you have been muted for {time} for spamming."
-  
+
 Report:
   LogsChannelID: "CHANNEL_ID"
   Embed:
@@ -1120,8 +1118,8 @@ Backup:
 # {user}: @YouSeeMeRunning
 # {userTag}: YouSeeMeRunning#1234
 # {userId}: 264032125496459265 - This is the ID
-# {userBanner}: Displays their users banner in the image field  
-# {UserCreation}: How old is their account? Discord timestamp 
+# {userBanner}: Displays their users banner in the image field
+# {UserCreation}: How old is their account? Discord timestamp
 # {guildName}: Guild Name
 # {guildIcon}: Guild Icon
 # {memberCount}: Guild Member Count - 1st, 2nd, 3rd, 4th...
@@ -1139,10 +1137,6 @@ Backup:
 # {leaveDate} # Discord timestamp for when they left
 # {leaveTime} # Discord timestamp for when they left
 
-
-
-
- 
 # ===========================================================================
 # JOIN ROLE/VERIFICATION CONFIGURATION
 # ===========================================================================
@@ -1177,7 +1171,7 @@ VerificationButton:
   Color: "Secondary" # Primary, Secondary, Success, Danger
 
 # ===========================================================================
-# GIVEAWAYS CONFIGURATION 
+# GIVEAWAYS CONFIGURATION
 # ===========================================================================
 Giveaways:
   AllowRoles: []
@@ -1284,38 +1278,38 @@ SuggestionEmbed:
   EmbedColor: "#1769FF"
   EmbedTitle: "{user}'s Suggestion"
   EmbedDescription:
-  - "**Suggestion**"
-  - "```{suggestion}```" 
-  - "* **Information**"
-  - "> **Product:** {modal_product}" # product is the input from AdditionalModalInputs config
+    - "**Suggestion**"
+    - "```{suggestion}```"
+    - "* **Information**"
+    - "> **Product:** {modal_product}" # product is the input from AdditionalModalInputs config
   EmbedFooter: "Suggestion ID: {SuggestionID} | {LongTime}" # {SuggestionID}, {ShortTime}, {LongTime}
   Thumbnail: True
   AuthorIcon: True
 
 # Placeholders: {user}, {reason, {suggestion}, {SuggestionID}, {ShortTime} ShortTime is HH:MM:SS. {LongTime} LongTime is May 5th 2024
-SuggestionAcceptEmbed: 
+SuggestionAcceptEmbed:
   AcceptChannelID: "" # Define where the embed is posted once accepted. Leave blank for none
   EmbedColor: "#4BB543"
-  EmbedTitle: "Accepted {user}'s Suggestion" 
-  EmbedBody: 
-  - "**Suggestion**"
-  - "```{suggestion}```"
-  - "**Reason**"
-  - "```{reason}```"
+  EmbedTitle: "Accepted {user}'s Suggestion"
+  EmbedBody:
+    - "**Suggestion**"
+    - "```{suggestion}```"
+    - "**Reason**"
+    - "```{reason}```"
   EmbedFooter: "Suggestion ID: {SuggestionID} | {LongTime}" # {SuggestionID}, {ShortTime}, {LongTime}
   Thumbnail: True
   AuthorIcon: True
-  
+
 # Placeholders: {user}, {reason}, {suggestion}, {SuggestionID}, {ShortTime} ShortTime is HH:MM:SS. {LongTime} LongTime is May 5th 2024
-SuggestionDenyEmbed: 
+SuggestionDenyEmbed:
   DenyChannelID: "" # Define where the embed is posted once denied. Leave blank for none
   EmbedColor: "#a82e2e"
-  EmbedTitle: "Denied {user}'s Suggestion" 
-  EmbedBody: 
-  - "**Suggestion**"
-  - "```{suggestion}```"
-  - "**Reason**"
-  - "```{reason}```"
+  EmbedTitle: "Denied {user}'s Suggestion"
+  EmbedBody:
+    - "**Suggestion**"
+    - "```{suggestion}```"
+    - "**Reason**"
+    - "```{reason}```"
   EmbedFooter: "Suggestion ID: {SuggestionID} | {LongTime}" # {SuggestionID}, {ShortTime}, {LongTime}
   Thumbnail: True
   AuthorIcon: True
@@ -1333,9 +1327,9 @@ API_Keys:
   Gemini:
     ApiKey: "AIzaSyD3srE5exyzMdDem3fZdXP2ov2y9SHoR0E"
   Card2k:
-    PartnerId: "-1665828871"        # Partner ID từ card2k.com
-    PartnerKey: "JIn39rq1WOvjchXmuA9YaJsAwqNI5vAR"       # Partner Key từ card2k.com
-    Provider: "https://card2k.com"  # URL của provider
+    PartnerId: "-1665828871" # Partner ID từ card2k.com
+    PartnerKey: "JIn39rq1WOvjchXmuA9YaJsAwqNI5vAR" # Partner Key từ card2k.com
+    Provider: "https://card2k.com" # URL của provider
 
 # ===========================================================================
 # GAMES
@@ -1344,7 +1338,7 @@ Economy:
   defaultInterestRate: 0.00
   interestInterval: ["10:00"]
   administrator: ["1388890272766623784", "1388890276382380183"]
-  maxInterestEarning: 100000  # Optional: Set to 0 for no limit
+  maxInterestEarning: 100000 # Optional: Set to 0 for no limit
 
   Daily:
     baseAmount: 200
@@ -1371,8 +1365,6 @@ Economy:
         name: "Hạt Giống Ngô"
         chance: 0.2
         quantity: 5
-
-
 
   Beg:
     cooldown: "10m"
@@ -1403,7 +1395,7 @@ Economy:
   Roll:
     cooldown: "0"
   Rob:
-    cooldown: "2h" 
+    cooldown: "2h"
     minBalanceToRob: 200
     percent: "5%"
     maxAmount: "5000"
@@ -1441,8 +1433,6 @@ Store:
       Type: "Interest"
       Interest: "0.3"
       Limit: "1"
-
-
 
   "Hạt Giống":
     1:
@@ -1753,7 +1743,7 @@ webhooks:
           - "https://cdn-icons-png.flaticon.com/512/2815/2815428.png"
           - "https://cdn-icons-png.flaticon.com/512/3349/3349798.png"
         footer: "Footer for Embed 1"
-        interval: "5s"  # Rotates every 5 seconds
+        interval: "5s" # Rotates every 5 seconds
 
   - url: "https://discord.com/api/webhooks/your_webhook_id_2/your_webhook_token_2"
     embeds:
@@ -1763,7 +1753,7 @@ webhooks:
           - "http://example.com/image1.jpg"
           - "http://example.com/image2.jpg"
         footer: "Footer for Embed 2"
-        interval: "1m 15s"  # Rotates every 1 minute 15 seconds
+        interval: "1m 15s" # Rotates every 1 minute 15 seconds
 Weather:
   Embed:
     Color: "#0099ff"
@@ -1782,7 +1772,7 @@ Weather:
       Name: "🌞 Feels Like"
     Weather:
       Enabled: true
-      Name: "{weatherEmoji} Weather"  # {weatherEmoji} will be replaced with the emoji for the current weather
+      Name: "{weatherEmoji} Weather" # {weatherEmoji} will be replaced with the emoji for the current weather
     Humidity:
       Enabled: true
       Name: "💦 Humidity"

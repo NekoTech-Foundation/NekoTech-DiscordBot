@@ -80,7 +80,7 @@ module.exports = {
 };
 
 async function initializeUser(userId) {
-    const newUser = new EconomyUserData({
+    const newUser = await EconomyUserData.create({
         userId,
         balance: 0,
         commandData: {
@@ -97,7 +97,6 @@ async function initializeUser(userId) {
         inventory: []
     });
 
-    await newUser.save();
     return newUser;
 }
 

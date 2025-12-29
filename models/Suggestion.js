@@ -1,59 +1,18 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const suggestionSchema = new mongoose.Schema({
-    uniqueId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    text: {
-        type: String,
-        required: true,
-    },
-    authorId: {
-        type: String,
-        required: true,
-    },
-    channelId: {
-        type: String,
-        required: true,
-    },
-    messageId: {
-        type: String,
-        required: true,
-    },
-    threadId: {
-        type: String,
-        required: false,
-    },
-    upvotes: {
-        type: Number,
-        default: 0,
-    },
-    downvotes: {
-        type: Number,
-        default: 0,
-    },
-    voters: [{
-        userId: String,
-        voteType: String,
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    status: {
-        type: String,
-        enum: ['Pending', 'Accepted', 'Denied'],
-        default: 'Pending',
-    },
-    modalData: {
-        type: Map,
-        of: String,
-        default: {}
-    }
+const defaultData = (query) => ({
+    uniqueId: query.uniqueId,
+    text: null,
+    authorId: null,
+    channelId: null,
+    messageId: null,
+    threadId: null,
+    upvotes: 0,
+    downvotes: 0,
+    voters: [],
+    createdAt: Date.now(),
+    status: 'Pending',
+    modalData: {}
 });
 
-const Suggestion = mongoose.model('Suggestion', suggestionSchema);
-
-module.exports = Suggestion;
+module.exports = new SQLiteModel('suggestions', 'uniqueId', defaultData);

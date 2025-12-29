@@ -1,12 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const SessionSchema = new mongoose.Schema({
-  sessionId: String,
-  session: Object,
-  expires: Date
-}, { timestamps: true });
+const defaultData = (query) => ({
+    sessionId: query.sessionId,
+    session: {},
+    expires: null
+});
 
-SessionSchema.index({ sessionId: 1 });
-SessionSchema.index({ expires: 1 }, { expireAfterSeconds: 0 });
-
-module.exports = mongoose.model('Session', SessionSchema); 
+module.exports = new SQLiteModel('sessions', 'sessionId', defaultData);

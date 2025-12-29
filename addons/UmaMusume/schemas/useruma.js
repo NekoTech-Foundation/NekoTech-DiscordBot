@@ -1,68 +1,43 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const userUmaSchema = new mongoose.Schema({
-    userId: { type: String, required: true, index: true },
-    umaId: { type: String, required: true },
-    name: { type: String, required: true },
-    tier: { type: Number, required: true, min: 1, max: 3 },
-    rarity: { type: String, required: true },
+const defaultData = (query) => ({
+    id: query.id || Date.now().toString(36) + Math.random().toString(36).substr(2),
+    userId: query.userId,
+    umaId: query.umaId, // ID from UmaMusume data
+    name: query.name || 'Unknown',
+    nickname: '',
+    level: 1,
+    limitBreak: 0,
+    exp: 0,
+    rarity: query.rarity || 1,
     stats: {
-        speed: { type: Number, default: 0 },
-        stamina: { type: Number, default: 0 },
-        power: { type: Number, default: 0 },
-        guts: { type: Number, default: 0 },
-        wit: { type: Number, default: 0 }
+        speed: 50,
+        stamina: 50,
+        power: 50,
+        guts: 50,
+        wisdom: 50
     },
-    trackPreferences: {
-        grass: { type: String, default: 'C' },
-        dirt: { type: String, default: 'C' },
-        sprint: { type: String, default: 'C' },
-        mile: { type: String, default: 'C' },
-        medium: { type: String, default: 'C' },
-        long: { type: String, default: 'C' },
-        front: { type: String, default: 'C' },
-        stalker: { type: String, default: 'C' },
-        closer: { type: String, default: 'C' },
-        chaser: { type: String, default: 'C' }
+    aptitudes: {
+        turf: 'G', dirt: 'G',
+        short: 'G', mile: 'G', medium: 'G', long: 'G',
+        runner: 'G', leader: 'G', betweener: 'G', chaser: 'G'
     },
-    bonuses: {
-        powerBonus: { type: Number, default: 0 },
-        witBonus: { type: Number, default: 0 },
-        speedBonus: { type: Number, default: 0 },
-        staminaBonus: { type: Number, default: 0 },
-        gutsBonus: { type: Number, default: 0 }
+    skills: [], // Array of skill objects/IDs
+    fans: 0,
+    rank: 'G',
+    obtainedAt: Date.now(),
+    isFavorite: false,
+    trainingStatus: {
+        inTraining: false,
+        careerId: null
     },
-    trainCount: { type: Number, default: 0, max: 30 },
-    energy: { type: Number, default: 10, min: 0, max: 10 },
-    skillPoints: { type: Number, default: 0 },
-    skills: [{
-        name: String,
-        description: String,
-        rarity: String,
-        cost: Number,
-        effects: mongoose.Schema.Types.Mixed
-    }],
-    factors: [{
-        type: String,
-        value: Number,
-        stars: Number
-    }],
-    isRetired: { type: Boolean, default: false },
-    isFavorite: { type: Boolean, default: false },
-    isDefense: { type: Boolean, default: false },
-    generation: { type: Number, default: 1 },
-    fans: { type: Number, default: 0 },
     raceStats: {
-        totalRaces: { type: Number, default: 0 },
-        wins: { type: Number, default: 0 },
-        places: { type: Number, default: 0 },
-        shows: { type: Number, default: 0 }
+        runs: 0,
+        wins: 0,
+        places: 0
     },
-    createdAt: { type: Date, default: Date.now }
+    customOutfit: null,
+    awakeningLevel: 1
 });
 
-userUmaSchema.index({ userId: 1, isRetired: 1 });
-userUmaSchema.index({ userId: 1, isFavorite: 1 });
-userUmaSchema.index({ userId: 1, isDefense: 1 });
-
-module.exports = mongoose.model('UserUma', userUmaSchema);
+module.exports = new SQLiteModel('user_umas', 'id', defaultData);

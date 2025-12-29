@@ -78,7 +78,7 @@ async function handleGive(message, targetUser, args) {
     });
 
     if (!userData) {
-        userData = new EconomyUserData({
+        userData = await EconomyUserData.create({
             userId: targetUser.id,
             balance: 0,
             bank: 0
@@ -168,7 +168,7 @@ async function handleSet(message, targetUser, args) {
     });
 
     if (!userData) {
-        userData = new EconomyUserData({
+        userData = await EconomyUserData.create({
             userId: targetUser.id,
             balance: 0,
             bank: 0

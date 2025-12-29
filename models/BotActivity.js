@@ -1,39 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const botActivitySchema = new mongoose.Schema({
-    botId: {
-        type: String,
-        default: 'global_settings',
-        unique: true
-    },
-    activities: [{
-        status: {
-            type: String,
-            required: true
-        },
-        activityType: {
-            type: String,
-            enum: ['PLAYING', 'LISTENING', 'WATCHING', 'STREAMING', 'COMPETING'],
-            required: true
-        },
-        statusType: {
-            type: String,
-            enum: ['online', 'idle', 'dnd'],
-            required: true
-        },
-        streamingURL: {
-            type: String,
-            required: function() {
-                return this.activityType === 'STREAMING';
-            }
-        }
-    }],
-    lastActivityIndex: {
-        type: Number,
-        default: 0
-    }
-}, {
-    timestamps: true
+const defaultData = (query) => ({
+    botId: query.botId || 'global_settings',
+    activities: [],
+    lastActivityIndex: 0
 });
 
-module.exports = mongoose.model('BotActivity', botActivitySchema);
+module.exports = new SQLiteModel('bot_activity', 'botId', defaultData);

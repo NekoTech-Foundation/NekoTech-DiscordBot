@@ -1,29 +1,29 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const giveawayTemplateSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  description: { type: String, default: '' },
-  embed: {
-    color: { type: String, default: '#2ecc71' },
-    image: { type: String, default: '' },
-    button: {
-      style: { type: String, default: 'Primary' },
-      emoji: { type: String, default: '🎉' },
-      label: { type: String, default: 'Tham gia' }
-    }
-  },
-  defaults: {
-    winners: { type: Number, default: 1 },
-    durationSec: { type: Number, default: 600 },
-    requirements: {
-      whitelistRoles: [String],
-      blacklistRoles: [String],
-      bypassRoles: [String],
-      requiresJoinBeforeSec: { type: Number, default: 0 }
+const defaultData = (query) => ({
+    name: query.name,
+    description: '',
+    embed: {
+        color: '#2ecc71',
+        image: '',
+        button: {
+            style: 'Primary',
+            emoji: '🎉',
+            label: 'Tham gia'
+        }
     },
-    multipliers: [{ roleId: String, bonus: Number }]
-  }
+    defaults: {
+        winners: 1,
+        durationSec: 600,
+        requirements: {
+            whitelistRoles: [],
+            blacklistRoles: [],
+            bypassRoles: [],
+            requiresJoinBeforeSec: 0
+        },
+        multipliers: []
+    }
 });
 
-module.exports = mongoose.model('giveaway_templates', giveawayTemplateSchema);
+module.exports = new SQLiteModel('giveaway_templates', 'name', defaultData);
 

@@ -26,7 +26,7 @@ async function prepareDashboardDist() {
                 "cors": "^2.8.5",
                 "dotenv": "^16.3.1",
                 "jsonwebtoken": "^9.0.2",
-                "mongoose": "^8.0.3",
+                "better-sqlite3": "^9.0.0",
                 "discord.js": "^14.14.1",
                 "cookie-parser": "^1.4.6",
                 "node-fetch": "^2.6.7"

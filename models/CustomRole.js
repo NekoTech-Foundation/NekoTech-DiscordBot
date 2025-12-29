@@ -1,49 +1,18 @@
-const { Schema, model } = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const customRoleSchema = new Schema({
-    roleId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    guildId: {
-        type: String,
-        required: true,
-    },
-    authorId: {
-        type: String,
-        required: true,
-    },
-    maxUsers: {
-        type: Number,
-        default: 1,
-    },
-    expiresAt: {
-        type: Date,
-        default: null,
-    },
+const defaultData = (query) => ({
+    roleId: query.roleId,
+    guildId: query.guildId,
+    authorId: query.authorId,
+    maxUsers: 1,
+    expiresAt: null,
     permissions: {
-        editName: {
-            type: Boolean,
-            default: false,
-        },
-        editIcon: {
-            type: Boolean,
-            default: false,
-        },
-        editColor: {
-            type: Boolean,
-            default: false,
-        },
-        manageMembers: {
-            type: Boolean,
-            default: false,
-        },
-        mentionable: {
-            type: Boolean,
-            default: false,
-        },
-    },
+        editName: false,
+        editIcon: false,
+        editColor: false,
+        manageMembers: false,
+        mentionable: false
+    }
 });
 
-module.exports = model('CustomRole', customRoleSchema);
+module.exports = new SQLiteModel('custom_roles', 'roleId', defaultData);

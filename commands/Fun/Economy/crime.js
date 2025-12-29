@@ -41,7 +41,7 @@ module.exports = {
             const success = amount > 0;
 
             if (!user) {
-                user = new EconomyUserData({
+                user = await EconomyUserData.create({
                     userId: interaction.user.id,
                     balance: success ? amount : 0,
                     commandData: { lastCrime: now },

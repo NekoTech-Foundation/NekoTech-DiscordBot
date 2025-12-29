@@ -1,56 +1,22 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const userSettingsSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-        unique: true
-    },
+const defaultData = (query) => ({
+    userId: query.userId,
     ticketPreferences: {
-        statusOrder: {
-            type: [{
-                status: String,
-                order: Number
-            }],
-            default: [
-                { status: 'open', order: 1 },
-                { status: 'closed', order: 2 },
-                { status: 'deleted', order: 3 }
-            ]
-        }
+        statusOrder: [
+            { status: 'open', order: 1 },
+            { status: 'closed', order: 2 },
+            { status: 'deleted', order: 3 }
+        ]
     },
-    theme: {
-        type: String,
-        enum: ['dark', 'light', 'system'],
-        default: 'dark'
-    },
+    theme: 'dark',
     notifications: {
-        ticketUpdates: {
-            type: Boolean,
-            default: true
-        },
-        mentions: {
-            type: Boolean,
-            default: true
-        },
-        email: {
-            type: Boolean,
-            default: false
-        }
+        ticketUpdates: true,
+        mentions: true,
+        email: false
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
+    createdAt: Date.now(),
+    updatedAt: Date.now()
 });
 
-userSettingsSchema.pre('save', function(next) {
-    this.updatedAt = new Date();
-    next();
-});
-
-module.exports = mongoose.model('UserSettings', userSettingsSchema); 
+module.exports = new SQLiteModel('user_settings', 'userId', defaultData);

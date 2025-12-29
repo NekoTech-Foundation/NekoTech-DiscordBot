@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const BackupSchema = new mongoose.Schema({
-    backupId: String,
-    guildId: String,
-    data: mongoose.Schema.Types.Mixed,
-    createdAt: Date
+const defaultData = (query) => ({
+    backupId: query.backupId,
+    guildId: null,
+    data: {},
+    createdAt: null
 });
 
-module.exports = mongoose.model('Backup', BackupSchema);
+module.exports = new SQLiteModel('backups', 'backupId', defaultData);

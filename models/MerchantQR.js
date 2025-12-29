@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const merchantQRSchema = new mongoose.Schema({
-  guildId: { type: String, required: true, index: true, unique: true },
-  method: { type: String, default: 'vietqr' }, // vietqr | zalopay_qr | other
-  label: { type: String, default: 'Merchant QR' },
-  imageUrl: { type: String, required: true },
-  updatedBy: { type: String }
-}, { timestamps: true });
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    method: 'vietqr',
+    label: 'Merchant QR',
+    imageUrl: '',
+    updatedBy: null
+});
 
-module.exports = mongoose.model('MerchantQR', merchantQRSchema);
+module.exports = new SQLiteModel('merchant_qr', 'guildId', defaultData);
 

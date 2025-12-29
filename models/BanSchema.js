@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const BanSchema = new mongoose.Schema({
-  memberid: { type: String, required: true },
+const defaultData = (query) => ({
+    memberid: query.memberid
 });
 
-module.exports = mongoose.model('Ban', BanSchema);
+module.exports = new SQLiteModel('bans', 'memberid', defaultData);

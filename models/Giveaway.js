@@ -1,60 +1,51 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const giveawaySchema = new mongoose.Schema({
-    messageId: String,
-    channelId: String,
-    giveawayId: String,
-    guildId: String,
-    startAt: Number,
-    endAt: Number,
-    ended: Boolean,
-    winnerCount: Number,
-    prize: String,
-    entries: Number,
-    messageWinner: Boolean,
-    notifyEntrantOnEnter: Boolean,
+const defaultData = (query) => ({
+    messageId: query.messageId,
+    channelId: null,
+    giveawayId: null,
+    guildId: null,
+    startAt: null,
+    endAt: null,
+    ended: false,
+    winnerCount: 1,
+    prize: '',
+    entries: 0,
+    messageWinner: false,
+    notifyEntrantOnEnter: false,
     requirements: {
-        whitelistRoles: [String],
-        blacklistRoles: [String],
-        minServerJoinDate: Date,
-        minAccountAge: Date,
-        minInvites: { type: Number, default: 0 },
-        minMessages: { type: Number, default: 0 },
+        whitelistRoles: [],
+        blacklistRoles: [],
+        minServerJoinDate: null,
+        minAccountAge: null,
+        minInvites: 0,
+        minMessages: 0
     },
-    winners: [{
-        winnerId: String,
-    }],
+    winners: [],
     embed: {
-        embedColor: String,
-        embedImage: String,
-        EmbedThumbnail: String,
-        embedDescription: String,
+        embedColor: null,
+        embedImage: null,
+        EmbedThumbnail: null,
+        embedDescription: null,
         buttons: {
             joinButton: {
-                JoinButtonStyle: String,
-                JoinButtonEmoji: String,
-                JoinButtonText: String,
+                JoinButtonStyle: null,
+                JoinButtonEmoji: null,
+                JoinButtonText: null,
             },
         },
     },
     messages: {
-        winMessage: String,
-        endMessage: String,
-        noParticipantsMessage: String,
-        noRoleRequirementMessage: String,
-        noMinimumServerJoinDateMessage: String,
-        noMinimumAccountAgeMessage: String,
+        winMessage: null,
+        endMessage: null,
+        noParticipantsMessage: null,
+        noRoleRequirementMessage: null,
+        noMinimumServerJoinDateMessage: null,
+        noMinimumAccountAgeMessage: null,
     },
-    entrants: [{
-        entrantId: String,
-        entrantUsername: String,
-        extraEntries: { type: Number, default: 0 }
-    }],
-    extraEntries: [{
-        roleId: String,
-        entries: Number
-    }],
-    hostedBy: String,
-}, { id: false });
+    entrants: [],
+    extraEntries: [],
+    hostedBy: null
+});
 
-module.exports = mongoose.model('giveaways', giveawaySchema);
+module.exports = new SQLiteModel('giveaways', 'messageId', defaultData);

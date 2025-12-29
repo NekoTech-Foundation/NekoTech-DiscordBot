@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const TriggerChannelSchema = new mongoose.Schema({
-    triggerChannelId: String,
-    namePattern: String,
-    categoryId: String,
+const defaultData = (query) => ({
+    triggerChannelId: query.triggerChannelId,
+    namePattern: null,
+    categoryId: null
 });
 
-module.exports = mongoose.model('TriggerChannel', TriggerChannelSchema);
+module.exports = new SQLiteModel('trigger_channels', 'triggerChannelId', defaultData);

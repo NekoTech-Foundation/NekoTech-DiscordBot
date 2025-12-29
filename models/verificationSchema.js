@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const verificationSchema = new mongoose.Schema({
-    guildID: String,
-    msgID: String,
-    unverifiedRoleID: String
+const defaultData = (query) => ({
+    guildID: query.guildID,
+    msgID: null,
+    unverifiedRoleID: null
 });
 
-module.exports = mongoose.model('Verification', verificationSchema);
+module.exports = new SQLiteModel('verifications', 'guildID', defaultData);

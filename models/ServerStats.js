@@ -1,21 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const serverStatsSchema = new mongoose.Schema({
-    guildId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    channelId: {
-        type: String,
-        required: true
-    },
-    messageId: {
-        type: String,
-        required: true
-    }
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    channelId: null,
+    messageId: null
 });
 
-const ServerStats = mongoose.models.ServerStats || mongoose.model('ServerStats', serverStatsSchema);
-
-module.exports = ServerStats;
+module.exports = new SQLiteModel('server_stats', 'guildId', defaultData);

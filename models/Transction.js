@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const transactionSchema = new mongoose.Schema({
-    interactionId: { type: String, required: true, unique: true },
-    userId: { type: String, required: true },
-    address: { type: String, required: true },
-    qrCodeURL: { type: String, required: true }
+const defaultData = (query) => ({
+    interactionId: query.interactionId,
+    userId: null,
+    address: null,
+    qrCodeURL: null
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+module.exports = new SQLiteModel('transactions', 'interactionId', defaultData);

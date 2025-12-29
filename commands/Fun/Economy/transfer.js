@@ -58,11 +58,11 @@ module.exports = {
         });
 
         if (!targetUser) {
-            await new EconomyUserData({
+            await EconomyUserData.create({
                 userId: target.id,
                 balance: amount,
                 transactionLogs: [{ type: 'transfer_in', amount: amount, timestamp: new Date() }]
-            }).save();
+            });
         } else {
             targetUser.balance += amount;
             targetUser.transactionLogs.push({

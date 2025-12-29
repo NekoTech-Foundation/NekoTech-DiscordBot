@@ -1,24 +1,10 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const blacklistSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    addedBy: {
-        type: String,
-        required: true
-    },
-    addedAt: {
-        type: Date,
-        default: Date.now
-    },
-    reason: {
-        type: String,
-        default: 'No reason provided'
-    }
+const defaultData = (query) => ({
+    userId: query.userId,
+    addedBy: null,
+    addedAt: Date.now(),
+    reason: 'No reason provided'
 });
 
-const Blacklist = mongoose.model('Blacklist', blacklistSchema);
-module.exports = Blacklist;
+module.exports = new SQLiteModel('blacklist', 'userId', defaultData);

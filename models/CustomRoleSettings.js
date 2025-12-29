@@ -1,38 +1,15 @@
-const { Schema, model } = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const customRoleSettingsSchema = new Schema({
-    guildId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    onExpireAction: {
-        type: String,
-        enum: ['deleteRole', 'removeMembers'],
-        default: 'removeMembers',
-    },
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    onExpireAction: 'removeMembers',
     defaultPermissions: {
-        editName: {
-            type: Boolean,
-            default: false,
-        },
-        editIcon: {
-            type: Boolean,
-            default: false,
-        },
-        editColor: {
-            type: Boolean,
-            default: false,
-        },
-        manageMembers: {
-            type: Boolean,
-            default: false,
-        },
-        mentionable: {
-            type: Boolean,
-            default: false,
-        },
-    },
+        editName: false,
+        editIcon: false,
+        editColor: false,
+        manageMembers: false,
+        mentionable: false
+    }
 });
 
-module.exports = model('CustomRoleSettings', customRoleSettingsSchema);
+module.exports = new SQLiteModel('custom_role_settings', 'guildId', defaultData);

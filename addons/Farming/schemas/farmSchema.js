@@ -1,14 +1,8 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const itemSchema = new mongoose.Schema({
-    name: String,
-    quantity: Number,
-    type: String
+const defaultData = (query) => ({
+    userId: query.userId,
+    items: []
 });
 
-const farmSchema = new mongoose.Schema({
-    userId: { type: String, required: true },
-    items: [itemSchema]
-});
-
-module.exports = mongoose.model('farmSchema', farmSchema);
+module.exports = new SQLiteModel('farming_farm', 'userId', defaultData);

@@ -1,16 +1,23 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const UmaPlayerSchema = new mongoose.Schema({
-  userId: { type: String, required: true, unique: true },
-  coins: { type: Number, default: 0 },
-  carrots: { type: Number, default: 0 },
-  energy: { type: Number, default: 100 }, // Max energy
-  trainingTickets: { type: Number, default: 5 },
-  lastTrain: { type: Date, default: 0 },
-  favoriteUma: { type: mongoose.Schema.Types.ObjectId, ref: 'UmaMusume' },
-  daily: { type: Date, default: 0 },
-  umas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UmaMusume' }],
-  defenseTeam: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UmaMusume' }],
+const defaultData = (query) => ({
+    userId: query.userId,
+    coins: 0,
+    carrots: 0,
+    friendPoints: 0,
+    energy: 100,
+    maxEnergy: 100,
+    trainingTickets: 3,
+    raceTickets: 3,
+    lastEnergyUpdate: Date.now(),
+    lastTicketReset: Date.now(),
+    umas: [], // Array of UserUma IDs
+    supportCards: [], // Array of UserSupportCard IDs
+    items: [],
+    settings: {
+        voice: true,
+        notifications: true
+    }
 });
 
-module.exports = mongoose.model('UmaPlayer', UmaPlayerSchema);
+module.exports = new SQLiteModel('uma_players', 'userId', defaultData);

@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const tempRoleSchema = new mongoose.Schema({
-    userId: String,
-    guildId: String,
-    roleId: String,
-    expiration: Date,
+const defaultData = (query) => ({
+    userId: query.userId,
+    guildId: query.guildId,
+    roleId: query.roleId,
+    expiration: null
 });
 
-module.exports = mongoose.model('TempRole', tempRoleSchema);
+module.exports = new SQLiteModel('temp_roles', ['userId', 'guildId', 'roleId'], defaultData);

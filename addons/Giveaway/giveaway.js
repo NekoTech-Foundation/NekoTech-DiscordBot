@@ -95,7 +95,7 @@ module.exports.run = (client) => {
   setInterval(async () => {
     try {
       const now = Date.now();
-      const list = await Giveaway.find({ ended: false, endAt: { $lte: now } }).limit(20);
+      const list = (await Giveaway.find({ ended: false, endAt: { $lte: now } })).slice(0, 20);
       for (const gw of list) {
         await endGiveaway(client, gw);
       }

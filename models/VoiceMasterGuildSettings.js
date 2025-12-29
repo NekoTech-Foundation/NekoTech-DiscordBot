@@ -1,17 +1,8 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const voiceMasterGuildSettingsSchema = new mongoose.Schema({
-    guildId: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    channelLimit: {
-        type: Number,
-        default: 0
-    }
-}, {
-    timestamps: true
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    channelLimit: 0
 });
 
-module.exports = mongoose.model('VoiceMasterGuildSettings', voiceMasterGuildSettingsSchema);
+module.exports = new SQLiteModel('voice_master_guild_settings', 'guildId', defaultData);

@@ -40,7 +40,7 @@ module.exports = {
         );
 
         if (!user) {
-            user = new EconomyUserData({ userId: interaction.user.id, balance: 0, commandData: {}, transactionLogs: [] });
+            user = await EconomyUserData.create({ userId: interaction.user.id, balance: 0, commandData: {}, transactionLogs: [] });
         } else if (!Array.isArray(user.transactionLogs)) {
             user.transactionLogs = [];
         }

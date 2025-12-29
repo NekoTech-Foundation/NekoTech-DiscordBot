@@ -75,7 +75,7 @@ module.exports = {
             const baitQuantity = Math.floor(Math.random() * 3) + 1; // 1 to 3 baits
 
             if (!user) {
-                user = new EconomyUserData({
+                user = await EconomyUserData.create({
                     userId: interaction.user.id,
                     balance: reward,
                     commandData: { lastDaily: now, dailyStreak: streak },

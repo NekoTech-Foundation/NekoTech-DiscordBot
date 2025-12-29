@@ -9,7 +9,7 @@ const colors = require('ansi-colors');
 const axios = require('axios');
 const { Routes } = require('discord-api-types/v10');
 const moment = require('moment-timezone');
-const mongoose = require('mongoose');
+
 
 const { getConfig, getLang, getCommands } = require('./utils/configLoader');
 const startGiveawayScheduler = require('./events/Giveaways/giveawayScheduler.js');
@@ -18,7 +18,7 @@ const commandConfig = getCommands();
 const lang = getLang();
 
 
-const mongoManager = require('./models/manager.js');
+
 const UserData = require('./models/UserData.js');
 const EconomyUserData = require('./models/EconomyUserData.js');
 const ReactionRole = require('./models/ReactionRole');
@@ -64,12 +64,8 @@ const BATCH_SIZE = 50;
 //};
 
 module.exports = async (client) => {
-    try {
-        await mongoManager();
-    } catch (error) {
-        console.error(`Failed to connect to MongoDB: ${error.message}`);
-        process.exit(1);
-    }
+    // SQLite Database is initialized by utils/database.js when required by models
+    require('./utils/database');
 
     global.leaderboardCache = {
         balance: [],
@@ -655,7 +651,7 @@ module.exports = async (client) => {
                 if (addon.data) { // Slash command or context menu command
                     if (addon.data.toJSON && typeof addon.data.toJSON === 'function') {
                         const name = addon.data.name;
-                        if (commandConfig[name]) {
+                        if (commandConfig && commandConfig[name]) {
                             const exists = client.slashCommands.has(name);
                             if (exists) {
                                 // A base command with this name already loaded; skip addon to avoid duplicates
@@ -686,8 +682,8 @@ module.exports = async (client) => {
     function setupSchedulers() {
         const schedulers = [
             { condition: true, fn: startTempBanScheduler, name: 'Tempban' },
-            // Core giveaway scheduler (FullDrakoBot style)
-            { condition: commandConfig.giveaway, fn: startGiveawayScheduler, name: 'Giveaway' },
+            // Core giveaway scheduler
+            { condition: commandConfig && commandConfig.giveaway, fn: startGiveawayScheduler, name: 'Giveaway' },
             // new giveaway addon includes its own scheduler via addons/Giveaway/giveaway.js
             { condition: config.TicketSettings.Enabled, fn: () => setInterval(() => checkAndUpdateTicketStatus(client), 300000), name: 'Ticket' },
             { condition: true, fn: startInterestScheduler, name: 'Interest' },
@@ -721,7 +717,7 @@ module.exports = async (client) => {
                 name: 'AutoBackup'
             },
             // {
-            //     condition: commandConfig.cardrecharge,
+            //     condition: commandConfig && commandConfig.cardrecharge,
             //     fn: () => {
             //         const { startTask } = require('./addons/CardRecharge/tasks/cardStatusTask');
             //         startTask(client);
@@ -823,7 +819,7 @@ module.exports = async (client) => {
                 let guildData = await GuildData.findOne({ guildID: guildId });
 
                 if (!guildData) {
-                    guildData = new GuildData({ guildID: guildId, members: [] });
+                    guildData = await GuildData.create({ guildID: guildId, members: [] });
                 }
 
                 const storedMemberIds = new Set(guildData.members);
@@ -1135,7 +1131,7 @@ module.exports = async (client) => {
                                 duplicateCommands.push(commandName);
                             } else {
                                 commandNames.add(commandName);
-                                if (commandConfig[commandName]) {
+                                if (commandConfig && commandConfig[commandName]) {
                                     global.slashCommands.push(data.toJSON());
                                     client.slashCommands.set(commandName, command);
                                 }

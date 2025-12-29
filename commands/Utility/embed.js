@@ -11,7 +11,7 @@ const {
     TextInputStyle,
     MessageFlags
 } = require('discord.js');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const { getConfig, getLang } = require('../../utils/configLoader.js');
 
 // ===== CONFIG & CONSTANTS =====
@@ -21,13 +21,7 @@ const MAX_LINK_BUTTONS = 5; // 1 row cho link buttons (5 buttons max)
 const MODAL_TIMEOUT = 60000;
 const COLLECTOR_TIMEOUT = 900000;
 
-// ===== MONGOOSE SCHEMA =====
-const embedSchema = new mongoose.Schema({
-    name: String,
-    embedData: Object,
-    linkButtons: Array,
-});
-const EmbedTemplate = mongoose.model('EmbedTemplate', embedSchema);
+const EmbedTemplate = require('../../models/EmbedTemplate');
 
 // ===== GLOBAL STATE =====
 const activeInteractions = new Map();
@@ -632,11 +626,11 @@ const Actions = {
                 return;
             }
 
-            await new EmbedTemplate({
+            await EmbedTemplate.create({
                 name,
                 embedData: embed.toJSON(),
                 linkButtons: linkButtons.map(btn => btn.toJSON())
-            }).save();
+            });
 
             await submit.reply({
                 content: 'Đã lưu template!',
@@ -647,7 +641,7 @@ const Actions = {
 
     async loadTemplate(interaction, embed, components, linkButtons) {
         const index = parseInt(interaction.values[0].split('_')[1]);
-        const templates = await EmbedTemplate.find().select('name');
+        const templates = await EmbedTemplate.find();
         const template = await EmbedTemplate.findOne({ name: templates[index].name });
 
         if (template) {
@@ -662,7 +656,7 @@ const Actions = {
     },
 
     async deleteTemplate(interaction) {
-        const templates = await EmbedTemplate.find().select('name');
+        const templates = await EmbedTemplate.find();
         if (!templates.length) {
             await interaction.reply({
                 content: 'Không có template nào!',

@@ -1,30 +1,12 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const fishingSchema = new mongoose.Schema({
-    userId: { type: String, required: true, unique: true },
-    equippedRod: { type: String }, // Key of the equipped rod, e.g., 'tap_su'
-    equippedBait: { type: String }, // Key of the equipped bait, e.g., 'giun'
-    rods: [
-        {
-            key: { type: String }, // e.g., 'tap_su', 'ban_chuyen'
-            name: { type: String },
-            durability: { type: Number },
-        },
-    ],
-    inventory: [
-        {
-            name: { type: String },
-            rarity: { type: String },
-            totalWeight: { type: Number },
-            quantity: { type: Number },
-        },
-    ],
-    baits: [
-        {
-            name: { type: String },
-            quantity: { type: Number },
-        },
-    ],
+const defaultData = (query) => ({
+    userId: query.userId,
+    equippedRod: null,
+    equippedBait: null,
+    rods: [],
+    inventory: [],
+    baits: []
 });
 
-module.exports = mongoose.model('fishingSchema', fishingSchema);
+module.exports = new SQLiteModel('fishing_user', 'userId', defaultData);

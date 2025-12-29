@@ -1,14 +1,8 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const autoReactSchema = new mongoose.Schema({
-    guildId: { type: String, required: true },
-    reactions: [{
-        id: { type: Number, required: true },
-        keyword: { type: String, required: true },
-        emoji: { type: String, required: true },
-        whitelistRoles: [String],
-        whitelistChannels: [String],
-    }]
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    reactions: []
 });
 
-module.exports = mongoose.model('AutoReact', autoReactSchema);
+module.exports = new SQLiteModel('auto_react', 'guildId', defaultData);

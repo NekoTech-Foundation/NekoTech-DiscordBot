@@ -1,10 +1,8 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const SequenceSchema = new mongoose.Schema({
-    name: { type: String, required: true, unique: true },
-    value: { type: Number, required: true }
+const defaultData = (query) => ({
+    name: query.name,
+    value: 0
 });
 
-const Sequence = mongoose.model('Sequence', SequenceSchema);
-
-module.exports = Sequence;
+module.exports = new SQLiteModel('sequences', 'name', defaultData);

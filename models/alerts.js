@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const alertSchema = new mongoose.Schema({
-    alertType: { type: String, required: true },
-    serverName: { type: String, required: true },
-    version: { type: String },
-    status: { type: String, required: true },
-    lastChecked: { type: Date, default: Date.now },
-    webhookUrl: { type: String, required: true }
+const defaultData = (query) => ({
+    alertType: query.alertType,
+    serverName: query.serverName,
+    version: null,
+    status: null,
+    lastChecked: Date.now(),
+    webhookUrl: null
 });
 
-module.exports = mongoose.model('Alert', alertSchema);
+module.exports = new SQLiteModel('alerts', ['serverName', 'alertType'], defaultData);

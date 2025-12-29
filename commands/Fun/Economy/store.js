@@ -190,7 +190,7 @@ module.exports = {
 
                     let user = await EconomyUserData.findOne({ userId: i.user.id });
                     if (!user) {
-                        user = new EconomyUserData({ userId: i.user.id, balance: 0 });
+                        user = await EconomyUserData.create({ userId: i.user.id, balance: 0 });
                     }
 
                     const itemPrice = item.Price || 0;
@@ -344,7 +344,7 @@ module.exports = {
                             { balance: 1, transactionLogs: 1 });
 
                         if (!user) {
-                            user = new EconomyUserData({
+                            user = await EconomyUserData.create({
                                 userId: i.user.id,
                                 balance: 0,
                                 transactionLogs: []
@@ -583,7 +583,7 @@ module.exports = {
                                 }
 
                                 let user = await EconomyUserData.findOne({ userId: i.user.id });
-                                if (!user) user = new EconomyUserData({ userId: i.user.id, balance: 0 });
+                                if (!user) user = await EconomyUserData.create({ userId: i.user.id, balance: 0 });
 
                                 const itemPrice = item.Price || 0;
                                 const totalPrice = itemPrice * quantity;

@@ -75,12 +75,11 @@ module.exports = async client => {
         try {
             let verificationData = await Verification.findOne({ guildID: guild.id });
             if (!verificationData) {
-                verificationData = new Verification({
+                verificationData = await Verification.create({
                     guildID: guild.id,
                     msgID: null,
                     unverifiedRoleID: null
                 });
-                await verificationData.save();
             }
 
             await createUnverifiedRoleIfNeeded(guild, verificationData);
@@ -91,7 +90,7 @@ module.exports = async client => {
 
         let guildData = await GuildData.findOne({ guildID: guild.id });
         if (!guildData) {
-            guildData = new GuildData({
+            guildData = await GuildData.create({
                 guildID: guild.id,
                 cases: 0,
                 totalMessages: 0,
@@ -99,7 +98,6 @@ module.exports = async client => {
                 totalSuggestions: 0,
                 timesBotStarted: 1
             });
-            await guildData.save();
         } else {
             guildData.timesBotStarted++;
             await guildData.save();

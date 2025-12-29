@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const AnhCuoiSchema = new mongoose.Schema({
-  authorid: { type: String, required: true },
-  wifeid: { type: String, required: true },
-  anhcuoi: { type: String, required: true },
+const defaultData = (query) => ({
+    authorid: query.authorid,
+    wifeid: null,
+    anhcuoi: null
 });
 
-module.exports = mongoose.model('AnhCuoi', AnhCuoiSchema);
+module.exports = new SQLiteModel('anhcuoi', 'authorid', defaultData);

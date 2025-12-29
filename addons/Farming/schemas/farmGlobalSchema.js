@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../utils/sqliteModel');
 
-const farmGlobalSchema = new mongoose.Schema({
-    identifier: { type: String, required: true, default: 'global' }, // Singleton
-    currentWeather: { type: Object, default: null },
-    weatherStartTime: { type: Date, default: Date.now },
-    weatherEndTime: { type: Date, default: () => Date.now() + 3600000 } // Default 1 hour
+const defaultData = (query) => ({
+    identifier: query.identifier || 'global',
+    currentWeather: null,
+    weatherStartTime: Date.now(),
+    weatherEndTime: Date.now() + 3600000
 });
 
-module.exports = mongoose.model('farmGlobalSchema', farmGlobalSchema);
+module.exports = new SQLiteModel('farming_global', 'identifier', defaultData);

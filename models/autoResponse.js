@@ -1,34 +1,12 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const autoResponseSchema = new mongoose.Schema({
-    guildId: {
-        type: String,
-        required: true
-    },
-    trigger: {
-        type: String,
-        required: true
-    },
-    response: {
-        type: String,
-        required: true
-    },
-    mode: {
-        type: String,
-        enum: ['exact', 'contains', 'startswith', 'endswith'],
-        required: true
-    },
-    ignoreCase: {
-        type: Boolean,
-        default: false
-    },
-    attachmentUrl: {
-        type: String
-    }
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    trigger: query.trigger,
+    response: null,
+    mode: 'exact',
+    ignoreCase: false,
+    attachmentUrl: null
 });
 
-autoResponseSchema.index({ guildId: 1, trigger: 1 }, { unique: true });
-
-const AutoResponse = mongoose.models.AutoResponse || mongoose.model('AutoResponse', autoResponseSchema);
-
-module.exports = AutoResponse;
+module.exports = new SQLiteModel('auto_response', ['guildId', 'trigger'], defaultData);

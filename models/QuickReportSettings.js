@@ -1,80 +1,24 @@
-const { Schema, model } = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const quickReportSettingsSchema = new Schema({
-    guildId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    enabled: {
-        type: Boolean,
-        default: false,
-    },
-    receiveChannelId: {
-        type: String,
-        default: null,
-    },
-    muteRoleId: {
-        type: String,
-        default: null,
-    },
-    managerRoleId: {
-        type: String,
-        default: null,
-    },
-    bypassRoleId: {
-        type: String,
-        default: null,
-    },
-    blacklistRoleId: {
-        type: String,
-        default: null,
-    },
-    autoExpireHours: {
-        type: Number,
-        default: 0,
-    },
-    concurrentReports: {
-        type: Number,
-        default: 6,
-    },
-    successfulMessage: {
-        type: String,
-        default: '@{moderator}, đã tiếp nhận một phiếu tố cáo mới.',
-    },
-    autoDeleteOnTimeout: {
-        type: Boolean,
-        default: true,
-    },
-    autoDeleteOnMute: {
-        type: Boolean,
-        default: true,
-    },
-    autoDeleteOnLeave: {
-        type: Boolean,
-        default: true,
-    },
-    whitelistedChannels: {
-        type: [String],
-        default: [],
-    },
-    blacklistedChannels: {
-        type: [String],
-        default: [],
-    },
-    whitelistedCategories: {
-        type: [String],
-        default: [],
-    },
-    blacklistedCategories: {
-        type: [String],
-        default: [],
-    },
-    mode: {
-        type: String,
-        enum: ['whitelist', 'blacklist', 'guild'],
-        default: 'guild',
-    },
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    enabled: false,
+    receiveChannelId: null,
+    muteRoleId: null,
+    managerRoleId: null,
+    bypassRoleId: null,
+    blacklistRoleId: null,
+    autoExpireHours: 0,
+    concurrentReports: 6,
+    successfulMessage: '@{moderator}, đã tiếp nhận một phiếu tố cáo mới.',
+    autoDeleteOnTimeout: true,
+    autoDeleteOnMute: true,
+    autoDeleteOnLeave: true,
+    whitelistedChannels: [],
+    blacklistedChannels: [],
+    whitelistedCategories: [],
+    blacklistedCategories: [],
+    mode: 'guild'
 });
 
-module.exports = model('QuickReportSettings', quickReportSettingsSchema);
+module.exports = new SQLiteModel('quick_report_settings', 'guildId', defaultData);

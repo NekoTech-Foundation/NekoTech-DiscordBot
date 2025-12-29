@@ -1,13 +1,12 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const reminderSchema = new mongoose.Schema({
-    userId: String,
-    channelId: String,
-    message: String,
-    reminderTime: Date,
-    sent: Boolean
+const defaultData = (query) => ({
+    reminderId: query.reminderId || Date.now().toString(36) + Math.random().toString(36).substr(2),
+    userId: query.userId,
+    channelId: null,
+    message: null,
+    reminderTime: null,
+    sent: false
 });
 
-const Reminder = mongoose.models.Reminder || mongoose.model('Reminder', reminderSchema);
-
-module.exports = Reminder;
+module.exports = new SQLiteModel('reminders', 'reminderId', defaultData);

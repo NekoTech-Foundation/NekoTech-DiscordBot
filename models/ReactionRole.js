@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../utils/sqliteModel');
 
-const ReactionRoleSchema = new mongoose.Schema({
-    panelName: { type: String, required: true, unique: true },
-    channelID: { type: String, required: true },
-    messageID: { type: String, required: true }
+const defaultData = (query) => ({
+    panelName: query.panelName,
+    channelID: null,
+    messageID: null
 });
 
-module.exports = mongoose.model('ReactionRole', ReactionRoleSchema);
+module.exports = new SQLiteModel('reaction_roles', 'panelName', defaultData);
