@@ -244,7 +244,7 @@ async function createSuggestion(client, interaction, suggestionText, modalData =
             guildData.totalSuggestions = (guildData.totalSuggestions || 0) + 1;
             await guildData.save();
         } else {
-            const newGuildData = new GuildData({
+            const newGuildData = await GuildData.create({
                 guildID: guildId,
                 cases: 0,
                 totalMessages: 0,
@@ -252,7 +252,6 @@ async function createSuggestion(client, interaction, suggestionText, modalData =
                 totalSuggestions: 1,
                 timesBotStarted: 0
             });
-            await newGuildData.save();
         }
 
         if (interaction.commandId) {

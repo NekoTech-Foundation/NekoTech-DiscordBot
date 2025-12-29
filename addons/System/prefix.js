@@ -34,7 +34,7 @@ module.exports = {
 
         let guildSettings = await GuildSettings.findOne({ guildId });
         if (!guildSettings) {
-            guildSettings = new GuildSettings({ guildId });
+            guildSettings = await GuildSettings.create({ guildId });
         }
 
         if (subcommand === 'set') {

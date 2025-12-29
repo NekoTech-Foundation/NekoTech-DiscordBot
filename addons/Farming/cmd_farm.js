@@ -235,7 +235,7 @@ module.exports = {
 
             if (totalBonusMoney > 0) {
                 let economyData = await EconomyUserData.findOne({ userId });
-                if (!economyData) economyData = new EconomyUserData({ userId });
+                if (!economyData) economyData = await EconomyUserData.create({ userId });
                 economyData.balance += totalBonusMoney;
                 await economyData.save();
                 replyContent += `\n✨ Cây đột biến: **${mutationDetails.join(', ')}** đã mang lại cho bạn thêm **${totalBonusMoney.toLocaleString()}** xu!`;

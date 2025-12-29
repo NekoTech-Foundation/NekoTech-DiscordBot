@@ -78,11 +78,11 @@ async function handleEnable(interaction, config) {
     
     let vesoData = await VeSo.findOne({ guildId });
     if (!vesoData) {
-        vesoData = new VeSo({ guildId, enabled: true });
+        vesoData = await VeSo.create({ guildId, enabled: true });
     } else {
         vesoData.enabled = true;
+        await vesoData.save();
     }
-    await vesoData.save();
     
     const embed = new EmbedBuilder()
         .setColor(config.settings.colors.check)
@@ -98,11 +98,11 @@ async function handleDisable(interaction, config) {
     
     let vesoData = await VeSo.findOne({ guildId });
     if (!vesoData) {
-        vesoData = new VeSo({ guildId, enabled: false });
+        vesoData = await VeSo.create({ guildId, enabled: false });
     } else {
         vesoData.enabled = false;
+        await vesoData.save();
     }
-    await vesoData.save();
     
     const embed = new EmbedBuilder()
         .setColor(config.settings.colors.check)
@@ -226,7 +226,7 @@ async function handleSetup(interaction, config) {
     
     let vesoData = await VeSo.findOne({ guildId });
     if (!vesoData) {
-        vesoData = new VeSo({ guildId });
+        vesoData = await VeSo.create({ guildId });
     }
     
     vesoData.notificationChannel = channel.id;

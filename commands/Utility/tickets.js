@@ -47,12 +47,11 @@ module.exports = {
             const user = message.mentions.users.first() || client.users.cache.get(args[1]);
             if (!user) return message.reply('Please provide a user to blacklist.');
             const reason = args.slice(2).join(' ') || 'No reason provided';
-            const blacklist = new Blacklist({
+            const blacklist = await Blacklist.create({
                 userId: user.id,
                 reason: reason,
                 staffId: message.author.id,
             });
-            await blacklist.save();
             await message.reply({ content: `${user} has been blacklisted from creating tickets.` });
         } else if (subcommand === 'alert') {
             await message.reply({ content: 'This is an alert for the ticket!' });

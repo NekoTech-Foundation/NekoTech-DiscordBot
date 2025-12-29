@@ -200,7 +200,7 @@ module.exports = {
             let actionColor = '#00ff88';
 
             if (!userInvite) {
-                userInvite = new Invite({
+                userInvite = await Invite.create({
                     inviteCode: `ADMIN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                     guildID: guildId,
                     inviterID: targetUser.id,

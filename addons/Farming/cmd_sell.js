@@ -74,7 +74,7 @@ module.exports = {
 
         let economyData = await EconomyUserData.findOne({ userId });
         if (!economyData) {
-            economyData = new EconomyUserData({ userId });
+            economyData = await EconomyUserData.create({ userId });
         }
         economyData.balance += totalGain;
         await economyData.save();

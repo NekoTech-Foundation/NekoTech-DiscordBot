@@ -64,7 +64,7 @@ module.exports.run = async (client) => {
             );
 
             if (!user) {
-                user = new UserData({ 
+                user = await UserData.create({ 
                     userId: interaction.user.id, 
                     guildId: interaction.guild.id, 
                     balance: 0,
@@ -347,7 +347,7 @@ module.exports.buyTicket = async function(userId, guildId, price, customNumbers 
     
     let vesoData = await VeSo.findOne({ guildId });
     if (!vesoData) {
-        vesoData = new VeSo({ guildId });
+        vesoData = await VeSo.create({ guildId });
     }
     
     if (!vesoData.enabled) {

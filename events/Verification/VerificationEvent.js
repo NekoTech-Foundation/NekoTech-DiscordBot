@@ -127,7 +127,7 @@ async function handleVerification(client, guild) {
     try {
         let verificationData = await Verification.findOne({ guildID: guild.id });
         if (!verificationData) {
-            verificationData = await new Verification({ guildID: guild.id }).save();
+            verificationData = await Verification.create({ guildID: guild.id });
         }
 
         const channel = guild.channels.cache.get(config.VerificationSettings.ChannelID);

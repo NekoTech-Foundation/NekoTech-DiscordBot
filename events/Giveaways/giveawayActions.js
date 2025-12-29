@@ -310,7 +310,7 @@ const giveawayActions = {
             })
             .setColor(config.SuccessEmbedColor);
 
-        const newGiveaway = new Giveaway({
+        const newGiveaway = await Giveaway.create({
             giveawayId: giveawayId,
             messageId: giveawayMessage.id,
             channelId: channel.id,
@@ -336,8 +336,6 @@ const giveawayActions = {
             entrants: [],
             extraEntries: giveawayDetails.extraEntries || [],
         });
-
-        await newGiveaway.save();
 
         if (config.GiveawayLogs.Enabled) {
             let embedData = config.GiveawayLogs.GiveawayStarted.Embed;

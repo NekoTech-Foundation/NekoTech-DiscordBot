@@ -310,7 +310,7 @@ async function updateStoredMembers(client, guildId) {
         try {
             const guildData = await GuildData.findOne({ guildID: guildId });
             if (!guildData) {
-                const newGuildData = new GuildData({ guildID: guildId });
+                const newGuildData = await GuildData.create({ guildID: guildId });
                 const members = await client.guilds.cache.get(guildId).members.fetch();
                 newGuildData.members = members.map(member => member.id);
                 await newGuildData.save();

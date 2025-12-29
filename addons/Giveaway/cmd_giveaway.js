@@ -171,7 +171,7 @@ module.exports = {
       const buttonEmoji = interaction.options.getString('button_emoji') || template?.embed?.button?.emoji;
       const image = interaction.options.getString('image') || template?.embed?.image;
 
-      const doc = new Giveaway({
+      const doc = await Giveaway.create({
         messageId: 'pending',
         channelId: channel.id,
         giveawayId: `${Date.now()}${Math.floor(Math.random() * 1000)}`,
@@ -204,7 +204,7 @@ module.exports = {
         hostedBy: interaction.user.id,
       });
 
-      const msg = await createGiveawayMessage(channel, doc.toObject());
+      const msg = await createGiveawayMessage(channel, doc);
       doc.messageId = msg.id;
       await doc.save();
 
@@ -256,8 +256,7 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
         const name = interaction.options.getString('name', true);
         const description = interaction.options.getString('description') || '';
-        const t = new GiveawayTemplate({ name, description });
-        await t.save();
+        const t = await GiveawayTemplate.create({ name, description });
         return interaction.editReply(`Đã tạo template: ${name}`);
       }
       if (sub === 'edit') {

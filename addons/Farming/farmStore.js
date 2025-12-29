@@ -42,7 +42,7 @@ module.exports.run = async (client) => {
 
         let user = await EconomyUserData.findOne({ userId: interaction.user.id });
         if (!user) {
-            user = new EconomyUserData({ userId: interaction.user.id, balance: 0 });
+            user = await EconomyUserData.create({ userId: interaction.user.id, balance: 0 });
         }
 
         const totalCost = item.Price * quantity;

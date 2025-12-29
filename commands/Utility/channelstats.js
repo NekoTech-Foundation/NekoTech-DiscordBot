@@ -108,14 +108,13 @@ module.exports = {
 
                 await channel.setName(newChannelName).catch(console.error);
 
-                const newStat = new ChannelStat({
+                const newStat = await ChannelStat.create({
                     guildId: guildId,
                     type: type,
                     channelId: channel.id,
                     channelName: channelName,
                     roleId: role ? role.id : null
                 });
-                await newStat.save();
                 await interaction.reply({ content: `Added stat for channel **${channel.name}** with type **${type}**${role ? ` and role **${role.name}**` : ''}.`, flags: MessageFlags.Ephemeral });
             } catch (error) {
                 console.error(error);

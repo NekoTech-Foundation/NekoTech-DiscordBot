@@ -160,23 +160,20 @@ async function handleNewMarriage(interaction, husband, wife) {
   collector.on('collect', async i => {
     if (i.customId === 'yes') {
       const defaultPromise = 'Yêu nhau suốt kiếp';
-      const newWife = new marrySchema({ 
+      const newWife = await marrySchema.create({ 
         authorid: husband.id, 
         wifeid: wife.id, 
         husbandid: wife.id, 
         together: 1, 
         loihua: defaultPromise 
       });
-      const newHusband = new marrySchema({ 
+      const newHusband = await marrySchema.create({ 
         authorid: wife.id, 
         wifeid: husband.id, 
         husbandid: husband.id, 
         loihua: 'Đầu bạc răng long', 
         together: 1 
       });
-      
-      await newWife.save();
-      await newHusband.save();
 
       const successEmbed = new EmbedBuilder()
         .setColor('#00FF00')

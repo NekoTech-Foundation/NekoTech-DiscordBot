@@ -290,7 +290,7 @@ module.exports = {
                 }
                 const newRole = await interaction.guild.roles.create(roleOptions);
 
-                const customRole = new CustomRole({
+                const customRole = await CustomRole.create({
                     roleId: newRole.id,
                     guildId: interaction.guild.id,
                     authorId: author.id,
@@ -304,8 +304,6 @@ module.exports = {
                         mentionable: makeRoleMentionablePermission,
                     },
                 });
-
-                await customRole.save();
 
                 await interaction.reply({ content: `Đã tạo role tùy chỉnh ${newRole.name} cho ${author.toString()}.`, ephemeral: true });
             } else if (subcommand === 'terminate') {
@@ -342,15 +340,13 @@ module.exports = {
                     }
                 }
 
-                const customRole = new CustomRole({
+                const customRole = await CustomRole.create({
                     roleId: role.id,
                     guildId: interaction.guild.id,
                     authorId: author.id,
                     maxUsers,
                     expiresAt,
                 });
-
-                await customRole.save();
 
                 await interaction.reply({ content: `Đã chuyển role ${role.name} thành role tùy chỉnh cho ${author.toString()}.`, ephemeral: true });
             } else if (subcommand === 'on_expire') {

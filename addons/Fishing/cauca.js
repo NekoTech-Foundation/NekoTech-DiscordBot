@@ -73,7 +73,7 @@ async function handleLevelUp(interaction, user, xpGained) {
 
         let userData = await UserData.findOne({ userId: user.id, guildId: interaction.guild.id });
         if (!userData) {
-            userData = new UserData({ userId: user.id, guildId: interaction.guild.id });
+            userData = await UserData.create({ userId: user.id, guildId: interaction.guild.id });
         }
 
         userData.xp += xpGained;
@@ -505,7 +505,7 @@ async function handleSell(interaction, config) {
     const userFishing = await getUserFishing(interaction.user.id);
 
     let economyData = await EconomyUserData.findOne({ userId: interaction.user.id });
-    if (!economyData) economyData = new EconomyUserData({ userId: interaction.user.id, balance: 0 });
+    if (!economyData) economyData = await EconomyUserData.create({ userId: interaction.user.id, balance: 0 });
 
     if (fishName.toLowerCase() === 'all') {
         if (!userFishing.inventory || userFishing.inventory.length === 0) {
