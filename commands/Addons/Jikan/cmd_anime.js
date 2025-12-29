@@ -110,7 +110,8 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    const sub = interaction.options.getSubcommand();
+    const sub = interaction.options.getSubcommand(false);
+    if (!sub) return interaction.reply({ content: 'Vui lòng chọn một lệnh con (subcommand)!', ephemeral: true });
     try {
       if (sub === 'search') return await handleSearch(interaction);
       if (sub === 'top') return await handleTop(interaction);

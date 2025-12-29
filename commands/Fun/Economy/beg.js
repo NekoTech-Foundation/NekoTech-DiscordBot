@@ -29,7 +29,7 @@ module.exports = {
 
         const cooldown = parseDuration(config.Economy.Beg.cooldown);
         if (user && user.commandData.lastBeg) {
-            const nextBeg = new Date(user.commandData.lastBeg.getTime() + cooldown);
+            const nextBeg = new Date(new Date(user.commandData.lastBeg).getTime() + cooldown);
             if (now < nextBeg) {
                 const embed = new EmbedBuilder()
                     .setDescription(replacePlaceholders(lang.Economy.Messages.cooldown, { nextUse: Math.floor(nextBeg.getTime() / 1000) }))

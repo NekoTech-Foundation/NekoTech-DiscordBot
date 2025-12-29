@@ -33,7 +33,8 @@ module.exports = {
     .addSubcommand(sc => sc.setName('random').setDescription('Manga ngẫu nhiên')),
 
   async execute(interaction) {
-    const sub = interaction.options.getSubcommand();
+    const sub = interaction.options.getSubcommand(false);
+    if (!sub) return interaction.reply({ content: 'Vui lòng chọn một lệnh con (subcommand)!', ephemeral: true });
     try {
       if (sub === 'search') return await handleSearch(interaction);
       if (sub === 'top') return await handleTop(interaction);
@@ -52,18 +53,7 @@ async function handleSearch(interaction) {
   await interaction.deferReply();
   const data = await jikanGet('/manga', { q, page });
   const items = (data.data || []).slice(0, 10);
-  {
-    const lines2 = items.map((m) => `#${m.rank ?? '?'} • [${m.title}](${m.url}) — ${m.type || '-'} | ⭐ ${m.score ?? '-'} | Chương ${m.chapters ?? '-'}`);
-    const embed2 = UI.listEmbed({ title: `🏆 Top Manga (${type})`, items: lines2, page, totalPages: data.pagination?.last_visible_page || page });
-    const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId(`jikan_top_manga_members_week_${page}`).setLabel('Tuần').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId(`jikan_top_manga_members_month_${page}`).setLabel('Tháng').setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId(`jikan_top_manga_members_year_${page}`).setLabel('Năm').setStyle(ButtonStyle.Secondary)
-    );
-    await interaction.editReply({ embeds: [embed2], components: [row] });
-    return;
-  }
+
   if (items.length === 0) return interaction.editReply('Không tìm thấy manga phù hợp.');
   const lines = items.map((m, idx) => `• ${((page-1)*10)+idx+1}. [${m.title}](${m.url}) — ${m.type || '-'} | ⭐ ${m.score ?? '-'} | Chương ${m.chapters ?? '-'} | Tập ${m.volumes ?? '-'}`);
   const embed = UI.listEmbed({ title: `🔎 Kết quả tìm kiếm manga: "${q}"`, items: lines, page, totalPages: data.pagination?.last_visible_page || page });

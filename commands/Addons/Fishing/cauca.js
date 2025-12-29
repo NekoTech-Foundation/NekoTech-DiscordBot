@@ -263,6 +263,7 @@ async function handleFish(interaction, config) {
     }
     const location = config.locations[locationKey];
 
+    const userFishing = await getUserFishing(userId);
     const equippedRodKey = userFishing.equippedRod;
 
     // Check rod

@@ -639,7 +639,7 @@ module.exports = async (client) => {
         const commandFiles = getFilesRecursively('./commands');
         commandFiles.forEach(file => {
              const absolutePath = path.resolve(file);
-             const folderNameMatch = file.match(/[\\\/]commands[\\\/]([^\\\/]+)/);
+             const folderNameMatch = file.match(/[\\\/]commands[\\\/]([^\\\/]+)/i);
              const folderName = folderNameMatch ? folderNameMatch[1] : 'unknown';
 
              try {
@@ -649,7 +649,7 @@ module.exports = async (client) => {
                  // Determine category
                  let category = folderName;
                  if (folderName === 'Addons') {
-                     const addonMatch = file.match(/[\\\/]commands[\\\/]Addons[\\\/]([^\\\/]+)/);
+                     const addonMatch = file.match(/[\\\/]commands[\\\/]Addons[\\\/]([^\\\/]+)/i);
                      if (addonMatch) {
                          category = addonMatch[1];
                      }
