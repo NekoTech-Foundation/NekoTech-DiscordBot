@@ -207,7 +207,7 @@ module.exports = {
                         .setRequired(true)
                 )
         ),
-    category: 'Chung',
+    category: 'General',
     async execute(interaction, client) {
         try {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });

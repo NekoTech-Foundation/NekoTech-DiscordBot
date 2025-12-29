@@ -3,7 +3,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
 const { startBypass, getBypassResult } = require('./bypassUtils');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 
 // Function to load config
 function loadConfig() {
@@ -33,7 +33,7 @@ module.exports = {
     async execute(interaction) {
         const urlToBypass = interaction.options.getString('url');
         const apiKey = config.api_key;
-        const lang = loadLang(interaction.guild.id);
+        const lang = await getLang(interaction.guild.id);
         const bypassLang = lang.Addons.Bypass;
 
         try {

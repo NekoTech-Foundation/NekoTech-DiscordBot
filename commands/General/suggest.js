@@ -161,7 +161,7 @@ function convertSimplePatternToRegex(simplePattern) {
 
 module.exports = {
     data: command,
-    category: 'Chung',
+    category: 'General',
     async execute(interaction, client) {
         try {
             if (!config.SuggestionSettings.Enabled) {

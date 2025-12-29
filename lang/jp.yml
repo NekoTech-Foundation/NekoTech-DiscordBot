@@ -48,6 +48,58 @@ HelpCommand:
       Name: "拡張機能"
       Description: "拡張機能のコマンド"
       Emoji: "❓"
+    System:
+      Name: "システム"
+      Description: "Botシステム管理"
+      Emoji: "⚙️"
+    Fishing:
+      Name: "釣り"
+      Description: "釣りコマンド"
+      Emoji: "🎣"
+    Farming:
+      Name: "農業"
+      Description: "農業コマンド"
+      Emoji: "🌾"
+    AFK:
+      Name: "AFK"
+      Description: "AFKシステム"
+      Emoji: "💤"
+    Pixiv:
+      Name: "Pixiv"
+      Description: "Pixiv検索"
+      Emoji: "🎨"
+    VoiceMaster:
+      Name: "ボイスマスター"
+      Description: "ボイスチャンネル管理"
+      Emoji: "🔊"
+    Bypass:
+      Name: "バイパス"
+      Description: "リンク短縮バイパス"
+      Emoji: "🔗"
+    Giveaway:
+      Name: "ギブアウェイ"
+      Description: "ギブアウェイイベント"
+      Emoji: "🎉"
+    VeSo:
+      Name: "宝くじ"
+      Description: "宝くじシステム"
+      Emoji: "🎫"
+    Translator:
+      Name: "翻訳"
+      Description: "翻訳機能"
+      Emoji: "🌐"
+    NoiTu:
+      Name: "しりとり"
+      Description: "しりとりゲーム"
+      Emoji: "🔤"
+    Weather:
+      Name: "天気"
+      Description: "天気情報"
+      Emoji: "☁️"
+    Marry:
+      Name: "結婚"
+      Description: "結婚システム"
+      Emoji: "💍"
 
   CategoryEmbed:
     Title: "{category} のコマンド"

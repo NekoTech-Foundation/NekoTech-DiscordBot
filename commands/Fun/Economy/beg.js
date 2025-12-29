@@ -15,6 +15,7 @@ module.exports = {
         .setDescription('Đi ăn xin... đúng vậy,ăn xin kiếm xèng'),
     category: 'Economy',
     async execute(interaction) {
+        await interaction.deferReply();
         let user = await EconomyUserData.findOne(
             { userId: interaction.user.id },
             {
@@ -33,7 +34,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setDescription(replacePlaceholders(lang.Economy.Messages.cooldown, { nextUse: Math.floor(nextBeg.getTime() / 1000) }))
                     .setColor('#FF0000');
-                return interaction.reply({ embeds: [embed] });
+                return interaction.editReply({ embeds: [embed] });
             }
         }
 

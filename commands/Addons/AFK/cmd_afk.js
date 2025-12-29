@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
@@ -22,7 +22,7 @@ module.exports = {
                 .setRequired(false)),
 
     async execute(interaction, client) {
-        const lang = loadLang(interaction.guild.id);
+        const lang = await getLang(interaction.guild.id);
         const afkLang = lang.Addons.AFK;
         // Check permissions
         if (config.settings.allowed_roles.length > 0) {

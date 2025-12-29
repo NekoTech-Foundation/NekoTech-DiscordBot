@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const AutoResponse = require('../../../models/autoResponse');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -67,7 +67,7 @@ module.exports = {
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
-        const lang = loadLang(guildId);
+        const lang = await getLang(guildId);
         const autoLang = lang.Addons.Autoresponder;
 
         if (subcommand === 'add') {

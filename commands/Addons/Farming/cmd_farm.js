@@ -5,7 +5,7 @@ const { events, getRandomMutation } = require('./farmEvents');
 const { getGlobalWeather } = require('./farmWeather');
 const EconomyUserData = require('../../../models/EconomyUserData');
 const { getConfig } = require('../../../utils/configLoader');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 
 // Helper function to format effects
 function formatEffect(effect) {
@@ -78,7 +78,7 @@ module.exports = {
         const subcommand = interaction.options.getSubcommand();
         const userId = interaction.user.id;
         const config = getConfig();
-        const lang = loadLang(interaction.guild.id);
+        const lang = await getLang(interaction.guild.id);
         const farmingLang = lang.Addons.Farming;
 
         if (subcommand === 'plant') {

@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 const GuildSettings = require('../../../models/GuildSettings');
 const { getConfig } = require('../../../utils/configLoader');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 
 const config = getConfig();
 
@@ -31,7 +31,7 @@ module.exports = {
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
-        const lang = loadLang(guildId);
+        const lang = await getLang(guildId);
         const prefixLang = lang.Addons.System.Prefix;
 
         let guildSettings = await GuildSettings.findOne({ guildId });

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getCommands } = require('../../../utils/configLoader');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 const chatbot = require('./chatbot');
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
             option.setName('private')
                 .setDescription('🔒 Chỉ mình bạn thấy phản hồi (ephemeral)')),
     async execute(interaction) {
-        const lang = loadLang(interaction.guild.id);
+        const lang = await getLang(interaction.guild.id);
         const chatbotLang = lang.Addons.Chatbot;
         const enabledCommands = getCommands();
         if (enabledCommands && enabledCommands.chatbot === false) {

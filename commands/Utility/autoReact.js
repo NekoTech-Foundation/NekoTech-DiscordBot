@@ -34,8 +34,9 @@ module.exports = {
     ),
     category: 'Utility',
     async execute(interaction) {
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
-            return interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral });
+            return interaction.editReply({ content: 'You do not have permission to use this command.' });
         }
 
         const guildId = interaction.guild.id;
@@ -53,7 +54,7 @@ module.exports = {
 
             const validEmoji = validateEmoji(interaction, emoji);
             if (!validEmoji) {
-                return interaction.reply({ content: `❌ The emoji "${emoji}" is not valid or not accessible by the bot. Please try another emoji.`, flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ content: `❌ The emoji "${emoji}" is not valid or not accessible by the bot. Please try another emoji.` });
             }
 
             const reactionCount = autoReactData.reactions.length;
@@ -101,14 +102,14 @@ module.exports = {
                     .setDescription(`The AutoReact with identifier "${identifier}" has been successfully removed.`)
                     .setColor('#ED4245');
 
-                return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ embeds: [embed] });
             } else {
-                return interaction.reply({ content: `❌ No AutoReact found with the identifier "${identifier}". Please check and try again.`, flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ content: `❌ No AutoReact found with the identifier "${identifier}". Please check and try again.` });
             }
 
         } else if (subCommand === 'list') {
             if (autoReactData.reactions.length === 0) {
-                return interaction.reply({ content: 'No AutoReacts are set.', flags: MessageFlags.Ephemeral });
+                return interaction.editReply({ content: 'No AutoReacts are set.' });
             }
 
             const listFields = await Promise.all(

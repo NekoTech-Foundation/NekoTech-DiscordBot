@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 
 module.exports.run = async (client) => {
     client.afkUsers = new Map();
@@ -58,7 +58,7 @@ module.exports.run = async (client) => {
             if (data.returnTime && now >= data.returnTime) {
                 const user = client.users.cache.get(userId);
                 if (user) {
-                    const lang = loadLang(data.guildId);
+                    const lang = await getLang(data.guildId);
                     const afkLang = lang.Addons.AFK;
                     const guild = client.guilds.cache.get(data.guildId);
                     if (guild) {
@@ -116,7 +116,7 @@ module.exports.run = async (client) => {
         
         // Check if the message author is returning from AFK
         if (client.afkUsers.has(message.author.id)) {
-            const lang = loadLang(message.guild.id);
+            const lang = await getLang(message.guild.id);
             const afkLang = lang.Addons.AFK;
             const data = client.afkUsers.get(message.author.id);
             const afkDuration = formatDuration(Date.now() - data.timestamp);
@@ -175,7 +175,7 @@ module.exports.run = async (client) => {
         if (message.mentions.users.size > 0) {
             message.mentions.users.forEach(async mentionedUser => {
                 if (client.afkUsers.has(mentionedUser.id)) {
-                    const lang = loadLang(message.guild.id);
+                    const lang = await getLang(message.guild.id);
                     const afkLang = lang.Addons.AFK;
                     const afkData = client.afkUsers.get(mentionedUser.id);
                     const afkTime = formatDuration(Date.now() - afkData.timestamp);

@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { EmbedBuilder } = require('discord.js');
 const { getConfig } = require('../../../utils/configLoader');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 
 function getApiKey() {
     const cfg = getConfig() || {};
@@ -105,7 +105,7 @@ function createErrorEmbed(errorType, message, chatbotLang) {
 
 async function handleChatbot(interaction, prompt, options = {}) {
     const ephemeral = !!options.ephemeral;
-    const lang = loadLang(interaction.guild.id);
+    const lang = await getLang(interaction.guild.id);
     const chatbotLang = lang.Addons.Chatbot;
 
     // Show loading embed
