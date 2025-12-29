@@ -1,5 +1,6 @@
 const { EmbedBuilder, SlashCommandBuilder, StringSelectMenuBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const plantSchema = require('./schemas/plantSchema');
+const bankSchema = require('./schemas/bankSchema');
 const { seeds, getUserFarm, addToFarm, removeFromFarm } = require('./farmUtils');
 const { events, getRandomMutation } = require('./farmEvents');
 const { getGlobalWeather } = require('./farmWeather');
@@ -71,7 +72,51 @@ module.exports = {
                 .addStringOption(option => {
                     const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
                     return option.setName('ten_cay').setDescription('🌿 Loại cây muốn bón (để trống để bón tất cả)').setRequired(false).addChoices(...choices);
-                })),
+                }))
+        .addSubcommandGroup(group =>
+            group.setName('savings')
+                .setDescription('💰 Ngân hàng tiết kiệm')
+                .addSubcommand(sub =>
+                    sub.setName('deposit')
+                        .setDescription('📥 Gửi tiền vào tài khoản tiết kiệm')
+                        .addIntegerOption(opt => opt.setName('amount').setDescription('💵 Số tiền muốn gửi').setRequired(true)))
+                .addSubcommand(sub =>
+                    sub.setName('balance')
+                        .setDescription('💳 Xem số dư tiết kiệm')))
+        .addSubcommand(subcommand =>
+            subcommand.setName('sell')
+                .setDescription('💸 Bán nông sản kiếm lời')
+                .addStringOption(option => {
+                    const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
+                    return option.setName('produce').setDescription('🍎 Loại nông sản muốn bán').setRequired(true).addChoices(...choices);
+                })
+                .addStringOption(option =>
+                    option.setName('quantity')
+                        .setDescription('🔢 Số lượng muốn bán (hoặc "all")')
+                        .setRequired(true)
+                        .setAutocomplete(true))),
+
+    async autocomplete(interaction) {
+        const focusedOption = interaction.options.getFocused(true);
+        if (focusedOption.name === 'quantity') {
+            const produceName = interaction.options.getString('produce');
+            if (!produceName) return;
+
+            const userId = interaction.user.id;
+            const seed = seeds[produceName];
+            if (!seed) return;
+            
+            const userFarm = await getUserFarm(userId);
+            const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
+
+            const choices = [];
+            if (item && item.quantity > 0) {
+                choices.push({ name: `Tất cả (${item.quantity})`, value: 'all' });
+                choices.push({ name: `${item.quantity}`, value: `${item.quantity}` });
+            }
+            await interaction.respond(choices);
+        }
+    },
 
     async execute(interaction, client) {
         await interaction.deferReply();
@@ -449,6 +494,70 @@ module.exports = {
             }
 
             await interaction.editReply({ content: farmingLang.UI.FertilizeSuccess.replace('{fertilizer}', fertilizer.Name).replace('{plant}', plantName ? seeds[plantName].name : 'all plants') });
+        
+        } else if (subcommand === 'deposit' || subcommand === 'balance') { // Handle Savings Group
+             const currency = config.Currency || '💰';
+             if (subcommand === 'deposit') {
+                 const amount = interaction.options.getInteger('amount');
+                 if (amount <= 0) return interaction.editReply({ content: 'Số tiền gửi phải là số dương.' });
+
+                 let economyData = await EconomyUserData.findOne({ userId });
+                 if (!economyData || economyData.balance < amount) return interaction.editReply({ content: 'Bạn không đủ tiền để gửi.' });
+
+                 economyData.balance -= amount;
+                 await economyData.save();
+
+                 let savingsData = await bankSchema.findOne({ userId });
+                 if (!savingsData) savingsData = await bankSchema.create({ userId, balance: 0 });
+                 savingsData.balance += amount;
+                 await savingsData.save();
+
+                 const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Gửi Tiết Kiệm Thành Công')
+                    .setDescription(`Bạn đã gửi thành công **${amount.toLocaleString()} ${currency}** vào tài khoản tiết kiệm của mình.`)
+                    .addFields({ name: 'Số dư tiết kiệm mới', value: `${savingsData.balance.toLocaleString()} ${currency}` });
+                 await interaction.editReply({ embeds: [embed] });
+
+             } else if (subcommand === 'balance') {
+                 let savingsData = await bankSchema.findOne({ userId });
+                 const balance = savingsData ? savingsData.balance : 0;
+                 const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Số Dư Tài Khoản Tiết Kiệm')
+                    .setDescription(`Số dư tiết kiệm của bạn là: **${balance.toLocaleString()} ${currency}**`);
+                 await interaction.editReply({ embeds: [embed] });
+             }
+
+        } else if (subcommand === 'sell') {
+            const produceName = interaction.options.getString('produce');
+            const quantityInput = interaction.options.getString('quantity');
+            const seed = seeds[produceName];
+            
+            const userFarm = await getUserFarm(userId);
+            const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
+
+            if (!item || item.quantity === 0) return interaction.editReply({ content: `Bạn không có ${seed.name} để bán.` });
+            
+            let quantity;
+            if (quantityInput.toLowerCase() === 'all') quantity = item.quantity;
+            else {
+                quantity = parseInt(quantityInput);
+                if (isNaN(quantity) || quantity <= 0) return interaction.editReply({ content: 'Số lượng không hợp lệ.' });
+            }
+
+            if (quantity > item.quantity) return interaction.editReply({ content: `Bạn chỉ có ${item.quantity} ${seed.name} để bán.` });
+
+            const hasProduce = await removeFromFarm(userId, seed.name, quantity, 'produce');
+            if (!hasProduce) return interaction.editReply({ content: `Bạn không có đủ ${seed.name} để bán.` });
+
+            const sellPrice = Math.floor(seed.price * 0.8);
+            const totalGain = sellPrice * quantity;
+
+            let economyData = await EconomyUserData.findOne({ userId });
+            if (!economyData) economyData = await EconomyUserData.create({ userId });
+            economyData.balance += totalGain;
+            await economyData.save();
+
+            const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Bán Nông Sản Thành Công')
+                .setDescription(`Bạn đã bán thành công ${quantity} ${seed.emoji} ${seed.name} với giá ${totalGain.toLocaleString()} 💰.`);
+            await interaction.editReply({ embeds: [embed] });
         }
     }
 };

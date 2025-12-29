@@ -1,20 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { getConfig, getLang } = require('../../utils/configLoader.js');
-
-const config = getConfig();
-const lang = getLang();
-
-// Helper functions
-function convertSimplePatternToRegex(simplePattern) {
-    let regexPattern = simplePattern.replace(/\./g, '\\.').replace(/\*/g, '.*');
-    return new RegExp(`^${regexPattern}$`, 'i');
-}
-
-async function checkBlacklistWords(content) {
-    if (!config.BlacklistWords || !config.BlacklistWords.Patterns) return false;
-    const blacklistRegex = config.BlacklistWords.Patterns.map(pattern => convertSimplePatternToRegex(pattern));
-    return blacklistRegex.some(regex => regex.test(content));
-}
 
 const memeTemplates = [
     { name: 'Anh chàng Người Ngoài Hành Tinh Cổ Đại', value: 'aag' },
@@ -47,222 +32,296 @@ const memeTemplates = [
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('fun')
-        .setDescription('🎉 Bộ sưu tập các lệnh giải trí (Fun)')
-        .addSubcommand(sub => sub.setName('8ball').setDescription('🎱 Hỏi bot một câu hỏi bất kỳ').addStringOption(o => o.setName('question').setDescription('Câu hỏi').setRequired(true)))
-        .addSubcommand(sub => sub.setName('advice').setDescription('💡 Nhận một lời khuyên hữu ích'))
-        .addSubcommand(sub => sub.setName('compliment').setDescription('💖 Gửi lời khen ngợi đến ai đó').addUserOption(o => o.setName('user').setDescription('Người dùng').setRequired(true)))
-        .addSubcommand(sub => sub.setName('darkjoke').setDescription('🌑 Câu đùa hài hước... chắc vậy'))
-        .addSubcommandGroup(group => 
-            group.setName('fact').setDescription('🧠 Xem sự thật thú vị')
-                .addSubcommand(s => s.setName('cat').setDescription('Sự thật về mèo'))
-                .addSubcommand(s => s.setName('dog').setDescription('Sự thật về chó'))
-                .addSubcommand(s => s.setName('general').setDescription('Sự thật chung'))
-                .addSubcommand(s => s.setName('useless').setDescription('Sự thật vô dụng'))
+        .setDescription('🎉 Các lệnh vui vẻ tổng hợp')
+        .addSubcommand(sub => 
+            sub.setName('8ball')
+                .setDescription('🎱 Hỏi bot một câu hỏi bất kỳ')
+                .addStringOption(option => option.setName('question').setDescription('Câu hỏi').setRequired(true))
         )
-        .addSubcommand(sub => sub.setName('fliptext').setDescription('🙃 Lật ngược văn bản').addStringOption(o => o.setName('text').setDescription('Văn bản').setRequired(true)))
+        .addSubcommand(sub => sub.setName('advice').setDescription('💡 Nhận một lời khuyên hữu ích'))
+        .addSubcommand(sub => 
+            sub.setName('compliment')
+                .setDescription('💖 Gửi lời khen ngợi đến ai đó')
+                .addUserOption(option => option.setName('user').setDescription('Người dùng').setRequired(true))
+        )
+        .addSubcommand(sub => sub.setName('darkjoke').setDescription('🌑 Câu đùa hài hước... chắc vậy'))
+        .addSubcommandGroup(group => // FACT Subcommand Group
+            group.setName('fact')
+                .setDescription('🧠 Xem sự thật thú vị')
+                .addSubcommand(sub => sub.setName('cat').setDescription('Sự thật về mèo'))
+                .addSubcommand(sub => sub.setName('dog').setDescription('Sự thật về chó'))
+                .addSubcommand(sub => sub.setName('general').setDescription('Sự thật chung'))
+                .addSubcommand(sub => sub.setName('useless').setDescription('Sự thật vô dụng'))
+        )
+        .addSubcommand(sub => 
+            sub.setName('fliptext')
+                .setDescription('🙃 Lật ngược văn bản')
+                .addStringOption(option => option.setName('text').setDescription('Văn bản').setRequired(true))
+        )
         .addSubcommand(sub => sub.setName('lennyface').setDescription('Lenny Face ( ͡° ͜ʖ ͡°)'))
-        .addSubcommandGroup(group =>
-            group.setName('meme').setDescription('🐸 Meme time')
-                .addSubcommand(s => s.setName('random').setDescription('Meme ngẫu nhiên'))
-                .addSubcommand(s => s.setName('text').setDescription('Tạo meme chữ').addStringOption(o => o.setName('template').setDescription('Mẫu').setRequired(true).addChoices(...memeTemplates)).addStringOption(o => o.setName('top_text').setDescription('Văn bản trên').setRequired(true)).addStringOption(o => o.setName('bottom_text').setDescription('Văn bản dưới')))
-                .addSubcommand(s => s.setName('sadcat').setDescription('Mèo buồn').addStringOption(o => o.setName('text').setDescription('Văn bản').setRequired(true)))
+        .addSubcommandGroup(group => // MEME Subcommand Group
+            group.setName('meme')
+                .setDescription('🐸 Meme time')
+                .addSubcommand(sub => sub.setName('random').setDescription('Meme ngẫu nhiên'))
+                .addSubcommand(sub => 
+                    sub.setName('text')
+                        .setDescription('Tạo meme chữ')
+                        .addStringOption(o => o.setName('template').setDescription('Mẫu').setRequired(true).addChoices(...memeTemplates))
+                        .addStringOption(o => o.setName('top_text').setDescription('Văn bản trên').setRequired(true))
+                        .addStringOption(o => o.setName('bottom_text').setDescription('Văn bản dưới')))
+                .addSubcommand(sub => 
+                    sub.setName('sadcat')
+                        .setDescription('Mèo buồn')
+                        .addStringOption(o => o.setName('text').setDescription('Văn bản').setRequired(true))
+                )
         )
         .addSubcommand(sub => sub.setName('pickupline').setDescription('💘 Nhận câu thả thính'))
         .addSubcommand(sub => sub.setName('quote').setDescription('📜 Xem danh ngôn'))
-        .addSubcommand(sub => sub.setName('rizz').setDescription('😉 Gửi câu thả thính kèm GIF').addUserOption(o => o.setName('user').setDescription('Người nhận').setRequired(true)))
-        .addSubcommand(sub => sub.setName('roast').setDescription('🔥 Chọc ghẹo ai đó').addUserOption(o => o.setName('target').setDescription('Nạn nhân').setRequired(true)))
-        .addSubcommand(sub => sub.setName('kill').setDescription('🔪 Giả vờ tiêu diệt ai đó').addUserOption(o => o.setName('target').setDescription('Nạn nhân').setRequired(true))),
-    
+        .addSubcommand(sub => 
+            sub.setName('rizz')
+                .setDescription('😉 Gửi câu thả thính kèm GIF')
+                .addUserOption(element => element.setName('user').setDescription('Người nhận').setRequired(true))
+        )
+        .addSubcommand(sub => 
+            sub.setName('roast')
+                .setDescription('🔥 Chọc ghẹo ai đó')
+                .addUserOption(option => option.setName('target').setDescription('Nạn nhân').setRequired(true))
+        )
+        .addSubcommand(sub => 
+            sub.setName('kill')
+                .setDescription('🔪 Giả vờ tiêu diệt ai đó')
+                .addUserOption(option => option.setName('target').setDescription('Nạn nhân').setRequired(true))
+        ),
     category: 'Fun',
     async execute(interaction) {
-        const subcommandGroup = interaction.options.getSubcommandGroup();
         const subcommand = interaction.options.getSubcommand();
-        const commandName = subcommandGroup ? `${subcommandGroup}_${subcommand}` : subcommand;
+        const group = interaction.options.getSubcommandGroup(false);
 
-        try {
-            switch (commandName) {
-                case '8ball': await execute8Ball(interaction); break;
-                case 'advice': await executeAdvice(interaction); break;
-                case 'compliment': await executeCompliment(interaction); break;
-                case 'darkjoke': await executeDarkJoke(interaction); break;
-                case 'fact_cat': await executeFact(interaction, 'cat'); break;
-                case 'fact_dog': await executeFact(interaction, 'dog'); break;
-                case 'fact_general': await executeFact(interaction, 'general'); break;
-                case 'fact_useless': await executeFact(interaction, 'useless'); break;
-                case 'fliptext': await executeFlipText(interaction); break;
-                case 'lennyface': await executeLennyFace(interaction); break;
-                case 'meme_random': await executeMemeRandom(interaction); break;
-                case 'meme_text': await executeMemeText(interaction); break;
-                case 'meme_sadcat': await executeMemeSadCat(interaction); break;
-                case 'pickupline': await executePickupLine(interaction); break;
-                case 'quote': await executeQuote(interaction); break;
-                case 'rizz': await executeRizz(interaction); break;
-                case 'roast': await executeRoast(interaction); break;
-                case 'kill': await executeKill(interaction); break;
-                default: await interaction.reply({ content: 'Lệnh không hợp lệ', ephemeral: true });
-            }
-        } catch (error) {
-            console.error(`Error in fun command (${commandName}):`, error);
-            if (!interaction.replied && !interaction.deferred) {
-                await interaction.reply({ content: 'Đã xảy ra lỗi!', ephemeral: true });
-            } else {
-                await interaction.editReply({ content: 'Đã xảy ra lỗi!', components: [] });
+        if (group === 'fact') {
+            await this.handleFact(interaction, subcommand);
+        } else if (group === 'meme') {
+            await this.handleMeme(interaction, subcommand);
+        } else {
+            // Check individual subcommands
+            if (subcommand === '8ball') await this.handle8Ball(interaction);
+            else if (subcommand === 'advice') await this.handleAdvice(interaction);
+            else if (subcommand === 'compliment') await this.handleCompliment(interaction);
+            else if (subcommand === 'darkjoke') await this.handleDarkJoke(interaction);
+            else if (subcommand === 'fliptext') await this.handleFlipText(interaction);
+            else if (subcommand === 'lennyface') await this.handleLennyFace(interaction);
+            else if (subcommand === 'pickupline') await this.handlePickupLine(interaction);
+            else if (subcommand === 'quote') await this.handleQuote(interaction);
+            else if (subcommand === 'rizz') await this.handleRizz(interaction);
+            else if (subcommand === 'roast') await this.handleRoast(interaction);
+            else if (subcommand === 'kill') await this.handleKill(interaction);
+        }
+    },
+
+    // --- Handlers ---
+
+    async handle8Ball(interaction) {
+        const config = getConfig();
+        const lang = await getLang(interaction.guild?.id);
+        const question = interaction.options.getString("question");
+        
+        if (config.BlacklistWords && config.BlacklistWords.Patterns) {
+            const patterns = config.BlacklistWords.Patterns;
+            const blacklistRegex = patterns.map(p => new RegExp(`^${p.replace(/\./g, '\\.').replace(/\*/g, '.*')}$`, 'i'));
+            if (blacklistRegex.some(regex => regex.test(question))) {
+                return interaction.reply({ content: 'Câu hỏi chứa từ cấm.', ephemeral: true });
             }
         }
+        
+        const replies = lang.EightBallReplies || ["Có", "Không", "Có thể"];
+        const result = replies[Math.floor(Math.random() * replies.length)];
+        
+        const embed = new EmbedBuilder()
+            .setColor(config.EmbedColors || '#0099ff')
+            .setTitle(lang.EightBallTitle || "8 Ball")
+            .addFields({ name: "Câu hỏi", value: question }, { name: "Trả lời", value: result })
+            .setFooter({ text: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() });
+        await interaction.reply({ embeds: [embed] });
+    },
+
+    async handleAdvice(interaction) {
+        await interaction.deferReply();
+        try {
+            const res = await fetch('http://api.adviceslip.com/advice');
+            const data = await res.json();
+            await interaction.editReply(data.slip.advice);
+        } catch (error) {
+            console.error(error);
+            await interaction.editReply('Không thể lấy lời khuyên lúc này.');
+        }
+    },
+
+    async handleCompliment(interaction) {
+        const lang = await getLang(interaction.guild?.id);
+        const user = interaction.options.getUser('user');
+        const compliments = lang.compliments?.messages || ["Bạn thật tuyệt vời!"];
+        const compliment = compliments[Math.floor(Math.random() * compliments.length)];
+        await interaction.reply(`<@${user.id}>, ${compliment}`);
+    },
+
+    async handleDarkJoke(interaction) {
+        const lang = await getLang(interaction.guild?.id);
+        const darkjokes = lang.darkjokes?.messages || ["Why did the chicken cross the road? To get to the other side."];
+        const joke = darkjokes[Math.floor(Math.random() * darkjokes.length)];
+        await interaction.reply(`**🤣 CÂU ĐÙA HÀI HƯỚC**\n${joke}`);
+    },
+
+    async handleFact(interaction, type) {
+        await interaction.deferReply();
+        let fact;
+        try {
+            if (type === 'cat') {
+                const res = await fetch('https://catfact.ninja/fact?max_length=140');
+                const data = await res.json();
+                fact = data.fact;
+            } else if (type === 'dog') {
+                const res = await fetch('https://dog-api.kinduff.com/api/facts?number=1');
+                const data = await res.json();
+                fact = data.facts[0];
+            } else if (type === 'general') {
+                const res = await fetch('https://api.popcat.xyz/fact');
+                const data = await res.json();
+                fact = data.fact;
+            } else { // useless
+                const res = await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random');
+                const data = await res.json();
+                fact = data.text;
+            }
+            await interaction.editReply(`**🎲 SỰ THẬT NGẪU NHIÊN**\n${fact}`);
+        } catch (error) {
+            console.error(error);
+            await interaction.editReply('Không thể lấy sự thật lúc này.');
+        }
+    },
+
+    async handleFlipText(interaction) {
+        const config = getConfig();
+        const text = interaction.options.getString("text");
+        
+        if (config.BlacklistWords && config.BlacklistWords.Patterns) {
+            const patterns = config.BlacklistWords.Patterns;
+            const blacklistRegex = patterns.map(p => new RegExp(`^${p.replace(/\./g, '\\.').replace(/\*/g, '.*')}$`, 'i'));
+            if (blacklistRegex.some(regex => regex.test(text))) {
+                return interaction.reply({ content: 'Văn bản chứa từ cấm.', ephemeral: true });
+            }
+        }
+        
+        const mapping = '¡"#$%⅋,)(*+\' - ˙/0ƖᄅƐㄣϛ9ㄥ86:;<=>?@∀qƆpƎℲפHIſʞ˥WNOԀQɹS┴∩ΛMX⅄Z[/]^_`ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz{|}~';
+        const OFFSET = '!'.charCodeAt(0);
+        const flipped = text.split('').map(c => c.charCodeAt(0) - OFFSET).map(c => mapping[c] || ' ').reverse().join('');
+        await interaction.reply(flipped);
+    },
+
+    async handleLennyFace(interaction) {
+        const faces = ["( ͡° ͜ʖ ͡°)", "ʘ‿ʘ", "(◑‿◐)", "( ͡~ ͜ʖ ͡°)", "( ° ͜ʖ °)", "( ͠° ͟ʖ ͡°)", "¯\\_(ツ)_/¯"];
+        await interaction.reply(faces[Math.floor(Math.random() * faces.length)]);
+    },
+
+    async handleMeme(interaction, type) {
+        await interaction.deferReply();
+        const config = getConfig();
+
+        try {
+            if (type === 'random') {
+                const res = await fetch('https://meme-api.com/gimme');
+                const json = await res.json();
+                const embed = new EmbedBuilder()
+                    .setTitle(json.title)
+                    .setURL(json.postLink)
+                    .setImage(json.url)
+                    .setColor(config.EmbedColors || '#000000')
+                    .setFooter({ text: `👍 ${json.ups} | Author: ${json.author}` });
+                await interaction.editReply({ embeds: [embed] });
+            } else if (type === 'text') {
+                const template = interaction.options.getString('template');
+                const top = interaction.options.getString('top_text');
+                const bottom = interaction.options.getString('bottom_text') || '';
+                
+                const url = `https://api.memegen.link/images/${template}/${encodeURIComponent(top)}/${encodeURIComponent(bottom)}.png`;
+                const embed = new EmbedBuilder()
+                    .setTitle('😂 Meme')
+                    .setImage(url)
+                    .setColor(config.EmbedColors || '#000000');
+                await interaction.editReply({ embeds: [embed] });
+            } else if (type === 'sadcat') {
+                const text = interaction.options.getString('text');
+                const res = await fetch(`https://api.popcat.xyz/sadcat?text=${encodeURIComponent(text)}`);
+                const buffer = await res.arrayBuffer();
+                const embed = new EmbedBuilder().setTitle('😿 Mèo Buồn').setImage('attachment://sadcat.png').setColor('#000000');
+                await interaction.editReply({ embeds: [embed], files: [{ attachment: Buffer.from(buffer), name: 'sadcat.png' }] });
+            }
+        } catch (error) {
+            console.error(error);
+            await interaction.editReply('Có lỗi xảy ra khi tạo meme.');
+        }
+    },
+
+    async handlePickupLine(interaction) {
+        await interaction.deferReply();
+        try {
+            const res = await fetch('https://api.popcat.xyz/pickuplines');
+            const json = await res.json();
+            const embed = new EmbedBuilder().setTitle('💘 Thả thính').setDescription(json.pickupline).setColor('#ff69b4');
+            await interaction.editReply({ embeds: [embed] });
+        } catch (error) {
+            console.error(error);
+            await interaction.editReply('Không thể lấy câu thả thính.');
+        }
+    },
+
+    async handleQuote(interaction) {
+        const quotes = [
+            "Không có gì là vĩnh cửu ngoại trừ sự thay đổi. - {Heraclitus}", 
+            "Học, học nữa, học mãi. - {Vladimir Lenin}",
+            "Người biết thì không nói, người nói thì không biết. - {Lão Tử}",
+            "Hạnh phúc không phải là điểm đến, mà là hành trình. - {Zig Ziglar}"
+        ]; 
+        const quote = quotes[Math.floor(Math.random() * quotes.length)];
+        const parts = quote.split(' - ');
+        await interaction.reply(`\`\`\`ansi\n"${parts[0]}" - \x1b[2;34m[${parts[1].replace(/[{}]/g, '')}]\x1b[0m\n\`\`\``);
+    },
+
+    async handleRizz(interaction) {
+        const config = getConfig();
+        const user = interaction.options.getUser('user');
+        const lines = ["Cậu có bản đồ không? Vì tớ lạc vào mắt cậu rồi.", "Nhà cậu có bán rượu không, mà sao nói chuyện với cậu tớ say quá.", "Tớ cho phép cậu bắt cóc tớ đấy."];
+        const gifs = ["https://media1.tenor.com/m/8EBYtwaGjmwAAAAC/rizz-hey-girl.gif", "https://media.tenor.com/Fj7YEYy1c4AAAAAC/rizz.gif"];
+        
+        const embed = new EmbedBuilder()
+            .setTitle(`Gửi tới ${user.username}`)
+            .setDescription(lines[Math.floor(Math.random() * lines.length)])
+            .setImage(gifs[Math.floor(Math.random() * gifs.length)])
+            .setColor(config.EmbedColors || '#000000');
+        await interaction.reply({ embeds: [embed] });
+    },
+
+    async handleRoast(interaction) {
+        const target = interaction.options.getUser('target');
+        const roasts = [
+            "Bạn giống như đám mây. Khi bạn biến mất, ngày trở nên đẹp trời.",
+            "Tôi không nói bạn ngu, tôi chỉ nói bạn gặp may khi suy nghĩ thôi.",
+            "Nếu sự dốt nát là một cái cây, bạn hẳn là rừng Amazon."
+        ];
+        const roast = roasts[Math.floor(Math.random() * roasts.length)];
+        await interaction.reply(`<@${target.id}>, ${roast}`);
+    },
+
+    async handleKill(interaction) {
+        const config = getConfig();
+        const target = interaction.options.getUser('target');
+        const scenarios = [
+            { text: "ném bạn xuống vách đá.", image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif" },
+            { text: "đã ra tay tàn độc.", image: "https://media1.tenor.com/m/J7JjVjF8_GgAAAAC/wasted-gta.gif" }
+        ];
+        const sc = scenarios[Math.floor(Math.random() * scenarios.length)];
+        const embed = new EmbedBuilder()
+            .setDescription(`<@${interaction.user.id}> ${sc.text} <@${target.id}>.`)
+            .setImage(sc.image)
+            .setColor(config.EmbedColors || '#FF0000');
+        await interaction.reply({ embeds: [embed] });
     }
 };
-
-// Implementations
-
-async function execute8Ball(interaction) {
-    let question = interaction.options.getString("question");
-    if (await checkBlacklistWords(question)) return interaction.reply({ content: 'Câu hỏi chứa từ cấm.', ephemeral: true });
-    
-    const replies = lang.EightBallReplies || ["Có", "Không", "Có thể"];
-    const result = replies[Math.floor(Math.random() * replies.length)];
-    
-    const embed = new EmbedBuilder()
-        .setColor(config.EmbedColors)
-        .setTitle(lang.EightBallTitle || "8 Ball")
-        .addFields({ name: "Câu hỏi", value: question }, { name: "Trả lời", value: result })
-        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() });
-    await interaction.reply({ embeds: [embed] });
-}
-
-async function executeAdvice(interaction) {
-    await interaction.deferReply();
-    const res = await fetch('http://api.adviceslip.com/advice');
-    const data = await res.json();
-    await interaction.editReply(data.slip.advice);
-}
-
-async function executeCompliment(interaction) {
-    const user = interaction.options.getUser('user');
-    const compliments = lang.compliments.messages;
-    const compliment = compliments[Math.floor(Math.random() * compliments.length)];
-    await interaction.reply(`<@${user.id}>, ${compliment}`);
-}
-
-async function executeDarkJoke(interaction) {
-    const darkjokes = lang.darkjokes.messages;
-    const joke = darkjokes[Math.floor(Math.random() * darkjokes.length)];
-    await interaction.reply(`**🤣 CÂU ĐÙA HÀI HƯỚC**\n${joke}`);
-}
-
-async function executeFact(interaction, type) {
-    await interaction.deferReply();
-    let fact;
-    if (type === 'cat') {
-        const res = await fetch('https://catfact.ninja/fact?max_length=140');
-        const data = await res.json();
-        fact = data.fact;
-    } else if (type === 'dog') {
-        const res = await fetch('https://dog-api.kinduff.com/api/facts?number=1');
-        const data = await res.json();
-        fact = data.facts[0];
-    } else if (type === 'general') {
-        const res = await fetch('https://api.popcat.xyz/fact');
-        const data = await res.json();
-        fact = data.fact;
-    } else {
-        const res = await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random');
-        const data = await res.json();
-        fact = data.text;
-    }
-    await interaction.editReply(`**🎲 SỰ THẬT NGẪU NHIÊN**\n${fact}`);
-}
-
-async function executeFlipText(interaction) {
-    const text = interaction.options.getString("text");
-    if (await checkBlacklistWords(text)) return interaction.reply({ content: 'Văn bản chứa từ cấm.', ephemeral: true });
-    
-    const mapping = '¡"#$%⅋,)(*+\' - ˙/0ƖᄅƐㄣϛ9ㄥ86:;<=>?@∀qƆpƎℲפHIſʞ˥WNOԀQɹS┴∩ΛMX⅄Z[/]^_`ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz{|}~';
-    const OFFSET = '!'.charCodeAt(0);
-    const flipped = text.split('').map(c => c.charCodeAt(0) - OFFSET).map(c => mapping[c] || ' ').reverse().join('');
-    await interaction.reply(flipped);
-}
-
-async function executeLennyFace(interaction) {
-    const faces = ["( ͡° ͜ʖ ͡°)", "ʘ‿ʘ", "(◑‿◐)", "( ͡~ ͜ʖ ͡°)", "( ° ͜ʖ °)", "( ͠° ͟ʖ ͡°)", "¯\\_(ツ)_/¯"];
-    await interaction.reply(faces[Math.floor(Math.random() * faces.length)]);
-}
-
-async function executeMemeRandom(interaction) {
-    await interaction.deferReply();
-    const res = await fetch('https://meme-api.com/gimme');
-    const json = await res.json();
-    const embed = new EmbedBuilder()
-        .setTitle(json.title)
-        .setURL(json.postLink)
-        .setImage(json.url)
-        .setColor(config.EmbedColors)
-        .setFooter({ text: `👍 ${json.ups} | Author: ${json.author}` });
-    await interaction.editReply({ embeds: [embed] });
-}
-
-async function executeMemeText(interaction) {
-    await interaction.deferReply();
-    const template = interaction.options.getString('template');
-    const top = interaction.options.getString('top_text');
-    const bottom = interaction.options.getString('bottom_text') || '';
-    if (await checkBlacklistWords(top) || await checkBlacklistWords(bottom)) return interaction.editReply({ content: 'Từ cấm!', ephemeral: true });
-    
-    const url = `https://api.memegen.link/images/${template}/${encodeURIComponent(top)}/${encodeURIComponent(bottom)}.png`;
-    const embed = new EmbedBuilder()
-        .setTitle('😂 Meme')
-        .setImage(url)
-        .setColor(config.EmbedColors);
-    await interaction.editReply({ embeds: [embed] });
-}
-
-async function executeMemeSadCat(interaction) {
-    await interaction.deferReply();
-    const text = interaction.options.getString('text');
-    const res = await fetch(`https://api.popcat.xyz/sadcat?text=${encodeURIComponent(text)}`);
-    const buffer = await res.arrayBuffer();
-    const embed = new EmbedBuilder().setTitle('😿 Mèo Buồn').setImage('attachment://sadcat.png').setColor('#000000');
-    await interaction.editReply({ embeds: [embed], files: [{ attachment: Buffer.from(buffer), name: 'sadcat.png' }] });
-}
-
-async function executePickupLine(interaction) {
-    await interaction.deferReply();
-    const res = await fetch('https://api.popcat.xyz/pickuplines');
-    const json = await res.json();
-    const embed = new EmbedBuilder().setTitle('💘 Thả thính').setDescription(json.pickupline).setColor('#ff69b4');
-    await interaction.editReply({ embeds: [embed] });
-}
-
-async function executeQuote(interaction) {
-    // Shortened list for brevity, ideally would load from a file or config if possible to keep code short
-    const quotes = ["Không có gì là vĩnh cửu ngoại trừ sự thay đổi. - {Heraclitus}", "Học, học nữa, học mãi. - {Vladimir Lenin}"]; 
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
-    const parts = quote.split(' - ');
-    await interaction.reply(`\`\`\`ansi\n"${parts[0]}" - \x1b[2;34m[${parts[1].replace(/[{}]/g, '')}]\x1b[0m\n\`\`\``);
-}
-
-async function executeRizz(interaction) {
-    const user = interaction.options.getUser('user');
-    const lines = ["Cậu có bản đồ không? Vì tớ lạc vào mắt cậu rồi."];
-    const gifs = ["https://media1.tenor.com/m/8EBYtwaGjmwAAAAC/rizz-hey-girl.gif"];
-    const embed = new EmbedBuilder()
-        .setTitle(`Gửi tới ${user.username}`)
-        .setDescription(lines[Math.floor(Math.random() * lines.length)])
-        .setImage(gifs[Math.floor(Math.random() * gifs.length)])
-        .setColor(config.EmbedColors);
-    await interaction.reply({ embeds: [embed] });
-}
-
-async function executeRoast(interaction) {
-    const target = interaction.options.getUser('target');
-    const roasts = ["Bạn giống như đám mây. Khi bạn biến mất, ngày trở nên đẹp trời."];
-    const roast = roasts[Math.floor(Math.random() * roasts.length)];
-    await interaction.reply(`<@${target.id}>, ${roast}`);
-}
-
-async function executeKill(interaction) {
-    const target = interaction.options.getUser('target');
-    const scenarios = [{ text: "ném bạn xuống vách đá.", image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif" }];
-    const sc = scenarios[Math.floor(Math.random() * scenarios.length)];
-    const embed = new EmbedBuilder().setDescription(`<@${interaction.user.id}> ${sc.text} <@${target.id}>.`).setImage(sc.image).setColor(config.EmbedColors);
-    await interaction.reply({ embeds: [embed] });
-}

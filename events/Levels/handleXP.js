@@ -104,13 +104,9 @@ async function handleXP(message) {
         // Dùng bản ghi toàn cục cho level/xp (dùng guildId = 'global')
         let userData = await UserData.findOne({ userId: message.author.id, guildId: 'global' });
         if (!userData) {
-            userData = new UserData({
+            userData = await UserData.create({
                 userId: message.author.id,
-                guildId: 'global',
-                xp: 0,
-                level: 0,
-                totalMessages: 0,
-                balance: 0
+                guildId: 'global'
             });
         }
 
@@ -291,13 +287,9 @@ async function handleVoiceXP(client, member) {
     // Dùng bản ghi toàn cục cho level/xp (guildId = 'global')
     let userData = await UserData.findOne({ userId: member.id, guildId: 'global' });
     if (!userData) {
-        userData = new UserData({
+        userData = await UserData.create({
             userId: member.id,
-            guildId: 'global',
-            xp: 0,
-            level: 0,
-            totalMessages: 0,
-            balance: 0
+            guildId: 'global'
         });
     }
 
