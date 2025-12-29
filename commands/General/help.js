@@ -9,6 +9,7 @@ const {
     ApplicationCommandOptionType,
     PermissionsBitField
 } = require('discord.js');
+const { getLang } = require('../../utils/langLoader'); // Use direct loader for async support
 
 const CATEGORY_EMOJIS = {
     'Fun': '🎲',
@@ -32,33 +33,13 @@ const CATEGORY_EMOJIS = {
     'Default': '📁'
 };
 
-const CATEGORY_DESCRIPTIONS = {
-    'Fun': 'Các trò chơi và giải trí',
-    'General': 'Các lệnh thông thường',
-    'System': 'Hệ thống và quản lý bot',
-    'Economy': 'Hệ thống kinh tế và tiền tệ',
-    'Fishing': 'Câu cá thư giãn',
-    'Farming': 'Nông trại vui vẻ',
-    'AFK': 'Hệ thống treo máy',
-    'Pixiv': 'Tìm kiếm ảnh Pixiv',
-    'VoiceMaster': 'Tạo phòng voice riêng',
-    'Utility': 'Các tiện ích hữu dụng',
-    'Bypass': 'Bỏ qua link rút gọn',
-    'Giveaway': 'Tổ chức giveaway',
-    'VeSo': 'Xổ số kiến thiết',
-    'Translator': 'Dịch thuật đa ngôn ngữ',
-    'NoiTu': 'Trò chơi nối từ',
-    'Weather': 'Thông tin thời tiết',
-    'Marry': 'Hệ thống kết hôn',
-    'Default': 'Các lệnh khác'
-};
-
-function getCategoryEmoji(category) {
-    return CATEGORY_EMOJIS[category] || CATEGORY_EMOJIS['Default'];
+function getCategoryEmoji(category, lang) {
+    // Try to get emoji from lang file first, fallback to constant
+    return lang.HelpCommand?.Categories?.[category]?.Emoji || CATEGORY_EMOJIS[category] || CATEGORY_EMOJIS['Default'];
 }
 
-function getCategoryDescription(category) {
-    return CATEGORY_DESCRIPTIONS[category] || 'Danh sách lệnh cho ' + category;
+function getCategoryDescription(category, lang) {
+    return lang.HelpCommand?.Categories?.[category]?.Description || `${category} commands`;
 }
 
 function getCommandsByCategory(client, category) {
@@ -68,7 +49,6 @@ function getCommandsByCategory(client, category) {
             commands.push(cmd);
         }
     });
-    // Sort commands alphabetically safely
     commands.sort((a, b) => {
         const nameA = a.data?.name || 'unknown';
         const nameB = b.data?.name || 'unknown';
@@ -86,20 +66,20 @@ function getAllCategories(client) {
 }
 
 // 1. Dropdown: Select Module (Category)
-function createCategorySelectMenu(categories, currentCategory) {
+function createCategorySelectMenu(categories, currentCategory, lang) {
     const options = [
         {
-            label: 'Trang chủ',
+            label: lang.HelpCommand?.HomeLabel || 'Trang chủ',
             value: 'overview',
-            description: 'Quay lại xem tổng quan và thống kê',
+            description: lang.HelpCommand?.HomeDescription || 'Quay lại tổng quan',
             emoji: '🏠',
             default: currentCategory === 'overview'
         },
         ...categories.map(cat => ({
-            label: cat,
-            value: cat,
-            description: getCategoryDescription(cat),
-            emoji: getCategoryEmoji(cat),
+            label: lang.HelpCommand?.Categories?.[cat]?.Name || cat, // Use localized name
+            value: cat, // Keep internal value as key
+            description: getCategoryDescription(cat, lang),
+            emoji: getCategoryEmoji(cat, lang),
             default: cat === currentCategory
         }))
     ];
@@ -107,16 +87,13 @@ function createCategorySelectMenu(categories, currentCategory) {
     return new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
             .setCustomId('help_category_select')
-            .setPlaceholder('Chọn module lệnh...')
+            .setPlaceholder(lang.HelpCommand?.CategorySelectPlaceholder || 'Select a category...')
             .addOptions(options)
     );
 }
 
 // 2. Dropdown: Select Command (Detailed View)
-function createCommandSelectMenu(commands) {
-    // Discord limits Select Menu to 25 items
-    // If > 25, we might need a way to search or handle it. 
-    // For now, take first 25. Ideally pagination handles list display, but dropdown is hard to paginate.
+function createCommandSelectMenu(commands, lang) {
     const slicedCommands = commands.slice(0, 25);
     
     if (slicedCommands.length === 0) return null;
@@ -135,17 +112,17 @@ function createCommandSelectMenu(commands) {
     return new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
             .setCustomId('help_command_select')
-            .setPlaceholder('Chọn lệnh để xem chi tiết...')
+            .setPlaceholder(lang.HelpCommand?.CommandSelectPlaceholder || 'Select command to view details...')
             .addOptions(options)
     );
 }
 
 // 3. Pagination Buttons
-function createPaginationButtons(currentPage, totalPages) {
+function createPaginationButtons(currentPage, totalPages, lang) {
     return new ActionRowBuilder().addComponents(
         new ButtonBuilder()
             .setCustomId('help_prev')
-            .setLabel('Trước')
+            .setLabel(lang.HelpCommand?.PrevButtonLabel || 'Previous')
             .setEmoji('⬅️')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(currentPage === 0),
@@ -156,7 +133,7 @@ function createPaginationButtons(currentPage, totalPages) {
             .setDisabled(true),
         new ButtonBuilder()
             .setCustomId('help_next')
-            .setLabel('Tiếp')
+            .setLabel(lang.HelpCommand?.NextButtonLabel || 'Next')
             .setEmoji('➡️')
             .setStyle(ButtonStyle.Primary)
             .setDisabled(currentPage >= totalPages - 1)
@@ -165,39 +142,56 @@ function createPaginationButtons(currentPage, totalPages) {
 
 // --- EMBEDS ---
 
-function createOverviewEmbed(client, categories, interaction) {
+function replacePlaceholders(string, placeholders) {
+    if (!string) return '';
+    let result = string;
+    for (const [key, value] of Object.entries(placeholders)) {
+        result = result.replace(new RegExp(`{${key}}`, 'g'), value);
+    }
+    return result;
+}
+
+function createOverviewEmbed(client, categories, interaction, lang) {
     const totalCommands = client.slashCommands.size;
     
     const fields = categories.map(cat => {
         const count = getCommandsByCategory(client, cat).length;
+        const catName = lang.HelpCommand?.Categories?.[cat]?.Name || cat;
         return {
-            name: `${getCategoryEmoji(cat)} ${cat}`,
-            value: `${count} lệnh`,
+            name: `${getCategoryEmoji(cat, lang)} ${catName}`,
+            value: `${count} ${lang.HelpCommand?.CommandLabel || 'commands'}`,
             inline: true
         };
     });
 
     const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
+    
+    const embedConfig = lang.HelpCommand?.MainEmbed || {};
+    const title = replacePlaceholders(embedConfig.Title, { botName: client.user.username });
+    
+    // Handle description array or string
+    let descContent = '';
+    if (Array.isArray(embedConfig.Description)) {
+        descContent = embedConfig.Description.join('\n');
+    } else {
+        descContent = embedConfig.Description || 'Help Menu';
+    }
+    descContent = replacePlaceholders(descContent, { inviteLink });
 
     return new EmbedBuilder()
-        .setColor('#2b2d31')
-        .setTitle(`📚 Menu Trợ Giúp`)
-        .setDescription(
-            `**NekoTech** là một bot Discord đa năng, đáp ứng mọi nhu cầu cần thiết.\n\n` +
-            `• [Server Giải đáp & Hỗ trợ](https://discord.gg/96hgDj4b4j)\n` +
-            `• [Hướng dẫn Sử dụng](https://docs.nekotech.xyz) - [Điều khoản Dịch vụ](https://nekotech.xyz/tos) - [Chính sách Bảo mật](https://nekotech.xyz/privacy) - [Invite bot!](${inviteLink})\n\n` +
-            `Để xem hướng dẫn về các lệnh có sẵn, sử dụng dropdown phía dưới.`
-        )
+        .setColor(embedConfig.Color || '#2b2d31')
+        .setTitle(title)
+        .setDescription(descContent)
         .addFields(fields)
         .setThumbnail(client.user.displayAvatarURL())
         .setFooter({ 
-            text: `NekoTech • Tổng: ${totalCommands} lệnh`, 
+            text: replacePlaceholders(embedConfig.Footer?.Text || 'NekoTech', { totalCommands }), 
             iconURL: interaction.user.displayAvatarURL()
         })
         .setTimestamp();
 }
 
-function createCommandListEmbed(client, category, interaction, page, itemsPerPage) {
+function createCommandListEmbed(client, category, interaction, page, itemsPerPage, lang) {
     const allCommands = getCommandsByCategory(client, category);
     const totalPages = Math.ceil(allCommands.length / itemsPerPage);
     const start = page * itemsPerPage;
@@ -206,54 +200,56 @@ function createCommandListEmbed(client, category, interaction, page, itemsPerPag
 
     const description = commandsOnPage.map((cmd, index) => {
         const cmdName = cmd.data?.name || 'unknown';
-        const cmdDesc = cmd.data?.description || 'Không có mô tả';
+        const cmdDesc = cmd.data?.description || 'No description';
         return `**/${cmdName}**: ${cmdDesc}`;
     }).join('\n');
 
+    const catName = lang.HelpCommand?.Categories?.[category]?.Name || category;
+    const embedConfig = lang.HelpCommand?.CategoryEmbed || {};
+
     return new EmbedBuilder()
-        .setColor('#2b2d31')
-        .setTitle(`${getCategoryEmoji(category)} Các lệnh ${category}`)
+        .setColor(embedConfig.Color || '#2b2d31')
+        .setTitle(replacePlaceholders(embedConfig.Title || 'Commands in {category}', { category: catName })) // Use localized category name
         .setDescription(
-            `Chọn một lệnh từ menu thả xuống bên dưới để xem thông tin chi tiết.\n\n` +
-            `**Các lệnh khả dụng (${start + 1}-${Math.min(end, allCommands.length)} trong tổng số ${allCommands.length})**\n` +
+            (lang.HelpCommand?.CategoryDescriptionPrefix || 'Select a command below to view details.\n\n') +
+            `**${lang.HelpCommand?.AvailableCommandsLabel || 'Available Commands'} (${start + 1}-${Math.min(end, allCommands.length)} / ${allCommands.length})**\n` +
             `${description}`
         )
         .setThumbnail(client.user.displayAvatarURL())
         .setFooter({ 
-            text: `NekoTech • Tổng: ${allCommands.length} lệnh • Trang ${page + 1}/${totalPages}`, 
+            text: `${embedConfig.Footer?.Text || 'Page'} • ${page + 1}/${totalPages}`, 
             iconURL: interaction.user.displayAvatarURL()
         })
         .setTimestamp();
 }
 
-function createCommandDetailEmbed(command, interaction) {
+function createCommandDetailEmbed(command, interaction, lang) {
     const data = command.data || {};
     const name = data.name || 'Undefined';
     const description = data.description || 'No description';
     
-    // Determine Permissions
-    let perms = 'Mọi người';
+    let perms = lang.HelpCommand?.Permissions?.Everyone || 'Everyone';
     if (data.default_member_permissions) {
-        // This is a bitmask, difficult to decode easily into text without a helper, 
-        // but we can check if it exists.
-        perms = 'Hạn chế (Xem Discord)';
+        perms = lang.HelpCommand?.Permissions?.Restricted || 'Restricted';
     }
 
-    const isNSFW = data.nsfw ? 'Có' : 'Không';
-    const isGuildOnly = !data.dm_permission ? 'Có' : 'Không (Cả DM)';
+    const isNSFW = data.nsfw ? (lang.Common?.Yes || 'Yes') : (lang.Common?.No || 'No');
+    const isGuildOnly = !data.dm_permission ? (lang.Common?.Yes || 'Yes') : (lang.Common?.NoDM || 'No (DM Allowed)');
+
+    const embedConfig = lang.HelpCommand?.CommandDetailsEmbed || {};
 
     const embed = new EmbedBuilder()
-        .setColor('#2b2d31')
+        .setColor(embedConfig.Color || '#2b2d31')
         .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
         .setTitle(`/${name}`)
         .setDescription(description)
         .addFields(
-            { name: 'Phiên bản Slash', value: `/${name}`, inline: true },
-            { name: 'Phiên bản Prefix', value: 'Không khả dụng', inline: true }, // Assuming migrated to slash
-            { name: '\u200B', value: '\u200B', inline: false }, // Spacer
-            { name: 'Chỉ Server', value: isGuildOnly, inline: true },
+            { name: lang.HelpCommand?.Labels?.SlashVersion || 'Slash Version', value: `/${name}`, inline: true },
+            { name: lang.HelpCommand?.Labels?.PrefixVersion || 'Prefix Version', value: lang.HelpCommand?.Labels?.NotAvailable || 'N/A', inline: true },
+            { name: '\u200B', value: '\u200B', inline: false },
+            { name: lang.HelpCommand?.Labels?.ServerOnly || 'Server Only', value: isGuildOnly, inline: true },
             { name: 'NSFW', value: isNSFW, inline: true },
-            { name: 'Danh mục', value: command.category || 'General', inline: true }
+            { name: lang.HelpCommand?.Labels?.Category || 'Category', value: command.category || 'General', inline: true }
         );
 
     // Subcommands
@@ -269,21 +265,21 @@ function createCommandDetailEmbed(command, interaction) {
         });
 
         if (subcommands.length > 0) {
-            embed.addFields({ name: 'Các lệnh con', value: subcommands.join('\n') });
+            embed.addFields({ name: lang.HelpCommand?.Labels?.Subcommands || 'Subcommands', value: subcommands.join('\n') });
         }
     }
 
-    embed.setFooter({ text: 'Lưu ý: Đây là một khối lệnh.' });
+    embed.setFooter({ text: embedConfig.Footer?.Text || 'Command Details' });
     return embed;
 }
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Xem danh sách lệnh hoặc hướng dẫn chi tiết')
+        .setDescription('Xem danh sách lệnh hoặc hướng dẫn chi tiết / View commands or details')
         .addStringOption(option => 
             option.setName('command')
-                .setDescription('Tên lệnh cần xem chi tiết')
+                .setDescription('Tên lệnh cần xem chi tiết / Command name')
                 .setRequired(false)
                 .setAutocomplete(true)
         ),
@@ -301,36 +297,33 @@ module.exports = {
     async execute(interaction, client) {
         await interaction.deferReply();
 
+        const lang = await getLang(interaction.guild?.id);
         const commandName = interaction.options.getString('command');
 
         if (commandName) {
             const command = client.slashCommands.get(commandName.toLowerCase());
             if (!command) {
-                return interaction.editReply(`❌ Không tìm thấy lệnh \`${commandName}\`.`);
+                return interaction.editReply(`❌ ${lang.HelpCommand?.Messages?.NotFound || 'Command not found'} \`${commandName}\`.`);
             }
-            const embed = createCommandDetailEmbed(command, interaction);
+            const embed = createCommandDetailEmbed(command, interaction, lang);
             return interaction.editReply({ embeds: [embed] });
         }
 
         // --- STATE MANAGEMENT ---
-        // We need to track: Current Category, Current Page
-        // Initial State:
         const categories = getAllCategories(client);
         let currentCategory = 'overview';
         let currentPage = 0;
-        const itemsPerPage = 8; // As per screenshot '1-8'
+        const itemsPerPage = 8;
 
-        // Render Initial View (Overview)
         const renderView = () => {
              if (currentCategory === 'overview') {
-                 const embed = createOverviewEmbed(client, categories, interaction);
-                 const row1 = createCategorySelectMenu(categories, currentCategory);
+                 const embed = createOverviewEmbed(client, categories, interaction, lang);
+                 const row1 = createCategorySelectMenu(categories, currentCategory, lang);
                  return { embeds: [embed], components: [row1] };
              } else {
-                 const embed = createCommandListEmbed(client, currentCategory, interaction, currentPage, itemsPerPage);
-                 const row1 = createCategorySelectMenu(categories, currentCategory);
-                 
-                 const row2 = createCommandSelectMenu(getCommandsByCategory(client, currentCategory));
+                 const embed = createCommandListEmbed(client, currentCategory, interaction, currentPage, itemsPerPage, lang);
+                 const row1 = createCategorySelectMenu(categories, currentCategory, lang);
+                 const row2 = createCommandSelectMenu(getCommandsByCategory(client, currentCategory), lang);
                  
                  const totalItems = getCommandsByCategory(client, currentCategory).length;
                  const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -338,7 +331,7 @@ module.exports = {
                  const components = [row1];
                  if (row2) components.push(row2);
                  if (totalPages > 1) {
-                     const row3 = createPaginationButtons(currentPage, totalPages);
+                     const row3 = createPaginationButtons(currentPage, totalPages, lang);
                      components.push(row3);
                  }
                  
@@ -351,7 +344,7 @@ module.exports = {
 
         const collector = response.createMessageComponentCollector({
             filter: i => i.user.id === interaction.user.id,
-            time: 600000 // 10 minutes
+            time: 600000 
         });
 
         collector.on('collect', async i => {
@@ -360,7 +353,7 @@ module.exports = {
             if (id === 'help_category_select') {
                 const selected = i.values[0];
                 currentCategory = selected;
-                currentPage = 0; // Reset page on category switch
+                currentPage = 0; 
             } 
             else if (id === 'help_prev') {
                 if (currentPage > 0) currentPage--;
@@ -374,29 +367,20 @@ module.exports = {
                  const cmdName = i.values[0];
                  const command = client.slashCommands.get(cmdName.toLowerCase());
                  if (command) {
-                     const embed = createCommandDetailEmbed(command, interaction);
-                     // Keep Category Dropdown, remove Command Dropdown/Pagination temporarily? 
-                     // Or just reply ephemerally? 
-                     // GlitchBucket likely replaces the embed.
-                     // IMPORTANT: To go back, user needs to re-select category or use back button?
-                     // Screenshot doesn't show "Back" from detail. 
-                     // Let's replace the Main Embed with Detail Embed, 
-                     // and keep Category Dropdown so they can switch away or back to list.
-                     // The requirement "Dropdowns remain available" is key.
-                     
-                     // If we show detail, what happens to pagination buttons?
-                     // They should probably be hidden or specific to detail.
-                     // Let's just show Detail Embed + Category Select.
-                     
-                     const row1 = createCategorySelectMenu(categories, currentCategory);
+                     const embed = createCommandDetailEmbed(command, interaction, lang);
+                     const row1 = createCategorySelectMenu(categories, currentCategory, lang);
                      await i.update({ embeds: [embed], components: [row1] });
                      return; 
                  }
             }
 
-            // Re-render
             const payload = renderView();
-            await i.update(payload);
+            try {
+                await i.update(payload);
+            } catch (e) {
+                // If update fails (e.g. already acknowledged), try edit
+                await interaction.editReply(payload).catch(() => {});
+            }
         });
 
         collector.on('end', () => {

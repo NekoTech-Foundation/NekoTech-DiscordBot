@@ -42,7 +42,7 @@ module.exports = {
         let autoReactData = await AutoReact.findOne({ guildId });
 
         if (!autoReactData) {
-            autoReactData = new AutoReact({ guildId, reactions: [] });
+            autoReactData = await AutoReact.create({ guildId, reactions: [] });
         }
 
         const subCommand = interaction.options.getSubcommand();
