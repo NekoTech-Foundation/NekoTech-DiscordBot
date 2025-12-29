@@ -63,8 +63,8 @@ async function handleXP(message) {
     }
 
     if (!config.LevelingSystem.Enabled || message.author.bot || message.content.startsWith(config.CommandsPrefix) ||
-        config.LevelingSystem.ChannelSettings.DisabledChannels?.includes(message.channel.id) ||
-        (message.channel.parentId && config.LevelingSystem.ChannelSettings.DisabledCategories?.includes(message.channel.parentId))) {
+        config.LevelingSystem.ChannelSettings?.DisabledChannels?.includes(message.channel.id) ||
+        (message.channel.parentId && config.LevelingSystem.ChannelSettings?.DisabledCategories?.includes(message.channel.parentId))) {
         return;
     }
 
@@ -282,7 +282,7 @@ async function handleVoiceXP(client, member) {
     }
 
     if (member.voice.channel && member.voice.channel.parentId &&
-        config.LevelingSystem.ChannelSettings.DisabledCategories?.includes(member.voice.channel.parentId)) {
+        config.LevelingSystem.ChannelSettings?.DisabledCategories?.includes(member.voice.channel.parentId)) {
         return;
     }
 
