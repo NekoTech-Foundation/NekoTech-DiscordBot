@@ -1,15 +1,15 @@
 {
   "legendary": {
-    "name": "Cá hố",
-    "emoji": "<:Fish_cutlassfish:1433393273916883144>",
-    "min_weight": 1,
-    "max_weight": 5
+    "name": "Cá mập cưa",
+    "emoji": "<:Fish_sawshark:1433392968634466455>",
+    "min_weight": 200,
+    "max_weight": 600
   },
   "epic": {
-    "name": "Cá rô phi hổ",
-    "emoji": "<:Fish_tigertilapia:1433393328191180901>",
-    "min_weight": 1,
-    "max_weight": 4
+    "name": "Khủng long sáu sừng",
+    "emoji": "<:Fish_axolotl:1433392927614173304>",
+    "min_weight": 0.1,
+    "max_weight": 0.3
   },
-  "updatedAt": "2025-12-29T12:59:01.434Z"
+  "updatedAt": "2025-12-29T13:09:28.472Z"
 }

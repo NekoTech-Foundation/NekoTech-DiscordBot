@@ -747,7 +747,8 @@ async function handleSelect(interaction, config) {
 }
 
 async function handleHelp(interaction) {
-    const lang = loadLang(interaction.guild.id);
+    const { getLang } = require('../../../utils/langLoader');
+    const lang = await getLang(interaction.guild?.id);
     const fishingLang = lang.Addons.Fishing;
 
     const embed = new EmbedBuilder()
