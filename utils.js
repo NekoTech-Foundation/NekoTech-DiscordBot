@@ -280,6 +280,83 @@ module.exports = async (client) => {
 
             if (interaction.customId.startsWith('reaction_role_')) {
                 await handleReactionRoleSelect(interaction);
+            } else if (interaction.customId.startsWith('cmd_menu_')) {
+                await handleCommandMenuSelect(interaction);
+            }
+        }
+    }
+
+    async function handleCommandMenuSelect(interaction) {
+        const commandName = interaction.customId.replace('cmd_menu_', '');
+        const selectedSubcommand = interaction.values[0];
+        const command = client.slashCommands.get(commandName);
+
+        if (!command) {
+            return interaction.reply({ content: 'Lệnh không tồn tại hoặc đã bị xóa.', flags: MessageFlags.Ephemeral });
+        }
+
+        // Create a fake interaction wrapper to mimic a Slash Command Interaction
+        const fakeInteraction = {
+            ...interaction,
+            user: interaction.user,
+            member: interaction.member,
+            guild: interaction.guild,
+            channel: interaction.channel,
+            client: client,
+            createdTimestamp: interaction.createdTimestamp,
+            id: interaction.id,
+            // Override options to return the selected subcommand
+            options: {
+                getSubcommand: () => selectedSubcommand,
+                getString: (name) => {
+                    // Start defaults for optional args if needed, or null
+                    return null; 
+                },
+                getInteger: () => null,
+                getNumber: () => null,
+                getBoolean: () => false,
+                getUser: () => null,
+                getMember: () => null,
+                getChannel: () => null,
+                getRole: () => null,
+                getMentionable: () => null,
+                getAttachment: () => null,
+                // Helper to pass through other things if needed
+                _parsed: {} 
+            },
+            reply: async (options) => {
+                if (interaction.replied || interaction.deferred) {
+                    return interaction.editReply(options);
+                }
+                return interaction.reply(options);
+            },
+            editReply: async (options) => {
+                return interaction.editReply(options);
+            },
+            deferReply: async (options) => {
+                if (!interaction.deferred && !interaction.replied) {
+                    return interaction.deferReply(options);
+                }
+            },
+            followUp: async (options) => {
+                return interaction.followUp(options);
+            }
+        };
+
+        // Bind functions to preserve context if they used `this`
+        fakeInteraction.reply = fakeInteraction.reply.bind(fakeInteraction);
+        fakeInteraction.editReply = fakeInteraction.editReply.bind(fakeInteraction);
+        fakeInteraction.deferReply = fakeInteraction.deferReply.bind(fakeInteraction);
+        fakeInteraction.followUp = fakeInteraction.followUp.bind(fakeInteraction);
+
+        try {
+            await command.execute(fakeInteraction, client);
+        } catch (error) {
+            console.error(`Error executing command ${commandName} via menu:`, error);
+            if (!interaction.replied && !interaction.deferred) {
+                await interaction.reply({ content: 'Có lỗi xảy ra khi thực hiện lệnh!', flags: MessageFlags.Ephemeral });
+            } else {
+                await interaction.editReply({ content: 'Có lỗi xảy ra khi thực hiện lệnh!' });
             }
         }
     }

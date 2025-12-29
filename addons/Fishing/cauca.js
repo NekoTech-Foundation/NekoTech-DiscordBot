@@ -257,6 +257,10 @@ async function handleFish(interaction, config) {
         });
     }
 
+    let locationKey = interaction.options.getString('location');
+    if (!locationKey) {
+        locationKey = Object.keys(config.locations)[0];
+    }
     const location = config.locations[locationKey];
 
     const equippedRodKey = userFishing.equippedRod;
@@ -815,7 +819,7 @@ module.exports = {
                     return option
                         .setName('location')
                         .setDescription('Địa điểm câu cá.')
-                        .setRequired(true)
+                        .setRequired(false)
                         .addChoices(...choices);
                 }))
         .addSubcommand(subcommand =>

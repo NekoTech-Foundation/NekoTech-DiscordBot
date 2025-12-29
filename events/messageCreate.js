@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, StringSelectMenuBuilder } = require("discord.js");
 
 //const fs = require('fs');
 //const yaml = require("js-yaml");
@@ -18,6 +18,41 @@ const AutoReact = require('../models/autoReact');
 const AutoResponse = require('../models/autoResponse');
 const suggestionActions = require('./Suggestions/suggestionActions');
 const SuggestionBlacklist = require('../models/SuggestionBlacklist');
+
+// Levenshtein distance for fuzzy matching
+function levenshteinDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) { matrix[i] = [i]; }
+    for (let j = 0; j <= a.length; j++) { matrix[0][j] = j; }
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+function findBestMatch(term, targets) {
+    let bestMatch = null;
+    let minDist = Infinity;
+    for (const target of targets) {
+        const dist = levenshteinDistance(term, target);
+        if (dist < minDist) {
+            minDist = dist;
+            bestMatch = target;
+        }
+    }
+    return { bestMatch, rating: 1 - (minDist / Math.max(term.length, bestMatch.length)) };
+}
 
 let spamData = new Map();
 
@@ -224,11 +259,50 @@ module.exports = async (client, message) => {
                 const subcommands = commandDataOptions.filter(opt => opt.type === 1); // 1 is SUB_COMMAND
                 let subcommandName = null;
 
-                if (subcommands.length > 0 && currentArgs.length > 0) {
-                    const possibleSubcommand = currentArgs[0];
-                    if (subcommands.some(sc => sc.name === possibleSubcommand)) {
-                        subcommandName = possibleSubcommand;
-                        currentArgs.shift(); // Consume subcommand name
+                if (subcommands.length > 0) {
+                    if (currentArgs.length > 0) {
+                        const possibleSubcommand = currentArgs[0];
+                        if (subcommands.some(sc => sc.name === possibleSubcommand)) {
+                            subcommandName = possibleSubcommand;
+                            currentArgs.shift(); // Consume subcommand name
+                        } else {
+                            // Fuzzy search for subcommand logic
+                            const scNames = subcommands.map(sc => sc.name);
+                            const { bestMatch, rating } = findBestMatch(possibleSubcommand, scNames);
+
+                            if (rating > 0.4) {
+                                const embed = new EmbedBuilder()
+                                    .setColor('#FFCC00')
+                                    .setTitle('❓ Did you mean?')
+                                    .setDescription(`Có phải ý bạn là: \`${prefix}${commandName} ${bestMatch}\`?`)
+                                    .setFooter({ text: 'Tự động gợi ý lệnh' });
+                                return message.reply({ embeds: [embed] });
+                            }
+                        }
+                    }
+
+                    // If no subcommand found (and no typo caught above), show Interactive Menu
+                    if (!subcommandName) {
+                        const embed = new EmbedBuilder()
+                            .setColor('#0099ff')
+                            .setTitle(`📂 Lệnh: ${prefix}${commandName}`)
+                            .setDescription('Vui lòng chọn một tùy chọn bên dưới để tiếp tục:')
+                            .setFooter({ text: 'Sử dụng menu bên dưới để chọn chức năng' });
+
+                        const selectMenu = new StringSelectMenuBuilder()
+                            .setCustomId(`cmd_menu_${commandName}`)
+                            .setPlaceholder('Chọn chức năng...')
+                            .addOptions(
+                                subcommands.map(sc => ({
+                                    label: sc.name,
+                                    description: sc.description ? sc.description.substring(0, 100) : 'Không có mô tả',
+                                    value: sc.name,
+                                    emoji: '🔧'
+                                })).slice(0, 25)
+                            );
+
+                        const row = new ActionRowBuilder().addComponents(selectMenu);
+                        return message.reply({ embeds: [embed], components: [row] });
                     }
                 }
 
@@ -377,13 +451,26 @@ module.exports = async (client, message) => {
                     }
                 };
 
-                await slashCommand.execute(fakeInteraction);
+                await slashCommand.execute(fakeInteraction, client);
             } catch (error) {
                 console.error(`Error executing slash command ${slashCommand.data.name} via prefix:`, error);
                 message.reply('There was an error trying to execute that command!');
             }
             return;
         }
+        // Fuzzy Search for Command
+        const allCommands = [...client.messageCommands.keys(), ...client.slashCommands.keys()];
+        const { bestMatch, rating } = findBestMatch(commandName, allCommands);
+
+        if (rating > 0.5) {
+             const embed = new EmbedBuilder()
+                .setColor('#E74C3C')
+                .setTitle('❌ Không tìm thấy lệnh')
+                .setDescription(`Lệnh \`${commandName}\` không tồn tại.\nCó phải ý bạn là: **${prefix}${bestMatch}**?`)
+                .setFooter({ text: 'Hệ thống gợi ý thông minh' });
+             return message.reply({ embeds: [embed] });
+        }
+
 // If not found in messageCommands, it might be a custom command from config.
 try {
     await processCustomCommands(client, message);
