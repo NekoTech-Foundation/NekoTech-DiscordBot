@@ -6,7 +6,8 @@ const {
     ButtonBuilder,
     ButtonStyle,
     ComponentType,
-    ApplicationCommandOptionType
+    ApplicationCommandOptionType,
+    PermissionsBitField
 } = require('discord.js');
 
 const CATEGORY_EMOJIS = {
@@ -63,10 +64,15 @@ function getCategoryDescription(category) {
 function getCommandsByCategory(client, category) {
     const commands = [];
     client.slashCommands.forEach(cmd => {
-        // use command.category assigned by utils.js
         if ((cmd.category || 'General') === category) {
             commands.push(cmd);
         }
+    });
+    // Sort commands alphabetically safely
+    commands.sort((a, b) => {
+        const nameA = a.data?.name || 'unknown';
+        const nameB = b.data?.name || 'unknown';
+        return nameA.localeCompare(nameB);
     });
     return commands;
 }
@@ -79,6 +85,7 @@ function getAllCategories(client) {
     return Array.from(categories).sort();
 }
 
+// 1. Dropdown: Select Module (Category)
 function createCategorySelectMenu(categories, currentCategory) {
     const options = [
         {
@@ -105,12 +112,61 @@ function createCategorySelectMenu(categories, currentCategory) {
     );
 }
 
+// 2. Dropdown: Select Command (Detailed View)
+function createCommandSelectMenu(commands) {
+    // Discord limits Select Menu to 25 items
+    // If > 25, we might need a way to search or handle it. 
+    // For now, take first 25. Ideally pagination handles list display, but dropdown is hard to paginate.
+    const slicedCommands = commands.slice(0, 25);
+    
+    if (slicedCommands.length === 0) return null;
+
+    const options = slicedCommands.map(cmd => {
+        const name = cmd.data?.name || 'unknown';
+        const desc = cmd.data?.description || 'No description';
+        return {
+            label: `/${name}`,
+            value: name,
+            description: desc.substring(0, 100),
+            emoji: '🔹'
+        };
+    });
+
+    return new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder()
+            .setCustomId('help_command_select')
+            .setPlaceholder('Chọn lệnh để xem chi tiết...')
+            .addOptions(options)
+    );
+}
+
+// 3. Pagination Buttons
+function createPaginationButtons(currentPage, totalPages) {
+    return new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+            .setCustomId('help_prev')
+            .setLabel('Trước')
+            .setEmoji('⬅️')
+            .setStyle(ButtonStyle.Primary)
+            .setDisabled(currentPage === 0),
+        new ButtonBuilder()
+            .setCustomId('help_page_num')
+            .setLabel(`${currentPage + 1}/${totalPages}`)
+            .setStyle(ButtonStyle.Secondary)
+            .setDisabled(true),
+        new ButtonBuilder()
+            .setCustomId('help_next')
+            .setLabel('Tiếp')
+            .setEmoji('➡️')
+            .setStyle(ButtonStyle.Primary)
+            .setDisabled(currentPage >= totalPages - 1)
+    );
+}
+
+// --- EMBEDS ---
+
 function createOverviewEmbed(client, categories, interaction) {
     const totalCommands = client.slashCommands.size;
-    
-    // Split categories into two columns for better display if needed, 
-    // but the screenshot shows a grid-like view. 
-    // Discord fields with inline: true wrap automatically 3 per row (desktop) / 2 (mobile).
     
     const fields = categories.map(cat => {
         const count = getCommandsByCategory(client, cat).length;
@@ -124,7 +180,7 @@ function createOverviewEmbed(client, categories, interaction) {
     const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
 
     return new EmbedBuilder()
-        .setColor('#2b2d31') // Dark theme color similar to screenshot
+        .setColor('#2b2d31')
         .setTitle(`📚 Menu Trợ Giúp`)
         .setDescription(
             `**NekoTech** là một bot Discord đa năng, đáp ứng mọi nhu cầu cần thiết.\n\n` +
@@ -141,77 +197,83 @@ function createOverviewEmbed(client, categories, interaction) {
         .setTimestamp();
 }
 
-function createCommandListEmbed(client, category, interaction) {
-    const commands = getCommandsByCategory(client, category);
-    
-    // Sort commands alphabetically safely
-    commands.sort((a, b) => {
-        const nameA = a.data?.name || 'unknown';
-        const nameB = b.data?.name || 'unknown';
-        return nameA.localeCompare(nameB);
-    });
+function createCommandListEmbed(client, category, interaction, page, itemsPerPage) {
+    const allCommands = getCommandsByCategory(client, category);
+    const totalPages = Math.ceil(allCommands.length / itemsPerPage);
+    const start = page * itemsPerPage;
+    const end = start + itemsPerPage;
+    const commandsOnPage = allCommands.slice(start, end);
 
-    const description = commands.map(cmd => {
+    const description = commandsOnPage.map((cmd, index) => {
         const cmdName = cmd.data?.name || 'unknown';
         const cmdDesc = cmd.data?.description || 'Không có mô tả';
-        let desc = `**/${cmdName}** - ${cmdDesc}`;
-        // List subcommands if any
-        if (cmd.data.options) {
-            const subcommands = cmd.data?.options?.filter(opt => opt.type === ApplicationCommandOptionType.Subcommand) || [];
-            if (subcommands.length > 0) {
-                const subNames = subcommands.map(s => `\`${s.name}\``).join(', ');
-                desc += `\n> Subcommands: ${subNames}`;
-            }
-        }
-        return desc;
-    }).join('\n\n');
+        return `**/${cmdName}**: ${cmdDesc}`;
+    }).join('\n');
 
     return new EmbedBuilder()
-        .setColor('#0099ff')
-        .setTitle(`${getCategoryEmoji(category)} Danh mục: ${category}`)
-        .setDescription(description || 'Chưa có lệnh nào trong danh mục này.')
+        .setColor('#2b2d31')
+        .setTitle(`${getCategoryEmoji(category)} Các lệnh ${category}`)
+        .setDescription(
+            `Chọn một lệnh từ menu thả xuống bên dưới để xem thông tin chi tiết.\n\n` +
+            `**Các lệnh khả dụng (${start + 1}-${Math.min(end, allCommands.length)} trong tổng số ${allCommands.length})**\n` +
+            `${description}`
+        )
         .setThumbnail(client.user.displayAvatarURL())
         .setFooter({ 
-            text: `Yêu cầu bởi ${interaction.user.username}`, 
+            text: `NekoTech • Tổng: ${allCommands.length} lệnh • Trang ${page + 1}/${totalPages}`, 
             iconURL: interaction.user.displayAvatarURL()
         })
         .setTimestamp();
 }
 
-function createCommandDetailEmbed(command) {
+function createCommandDetailEmbed(command, interaction) {
     const data = command.data || {};
     const name = data.name || 'Undefined';
     const description = data.description || 'No description';
+    
+    // Determine Permissions
+    let perms = 'Mọi người';
+    if (data.default_member_permissions) {
+        // This is a bitmask, difficult to decode easily into text without a helper, 
+        // but we can check if it exists.
+        perms = 'Hạn chế (Xem Discord)';
+    }
+
+    const isNSFW = data.nsfw ? 'Có' : 'Không';
+    const isGuildOnly = !data.dm_permission ? 'Có' : 'Không (Cả DM)';
 
     const embed = new EmbedBuilder()
-        .setColor('#0099ff')
-        .setTitle(`📖 Hướng dẫn: /${name}`)
+        .setColor('#2b2d31')
+        .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
+        .setTitle(`/${name}`)
         .setDescription(description)
-        .addFields({ name: '📂 Danh mục', value: command.category || 'General', inline: true });
+        .addFields(
+            { name: 'Phiên bản Slash', value: `/${name}`, inline: true },
+            { name: 'Phiên bản Prefix', value: 'Không khả dụng', inline: true }, // Assuming migrated to slash
+            { name: '\u200B', value: '\u200B', inline: false }, // Spacer
+            { name: 'Chỉ Server', value: isGuildOnly, inline: true },
+            { name: 'NSFW', value: isNSFW, inline: true },
+            { name: 'Danh mục', value: command.category || 'General', inline: true }
+        );
 
+    // Subcommands
     if (data.options && data.options.length > 0) {
-        let optionsText = '';
+        const subcommands = [];
         data.options.forEach(opt => {
             if (opt.type === ApplicationCommandOptionType.Subcommand) {
-                optionsText += `**/ ${name} ${opt.name}**: ${opt.description}\n`;
-                if (opt.options) {
-                    opt.options.forEach(subOpt => {
-                         const required = subOpt.required ? '(Bắt buộc)' : '(Tùy chọn)';
-                         optionsText += `  └ \`${subOpt.name}\` ${required}: ${subOpt.description}\n`;
-                    });
-                }
+                const required = opt.options?.some(o => o.required) ? '*' : ''; 
+                subcommands.push(`🥗 **/${name} ${opt.name}**: ${opt.description}`);
             } else if (opt.type === ApplicationCommandOptionType.SubcommandGroup) {
-                 optionsText += `**[Group] ${opt.name}**: ${opt.description}\n`;
-            } else {
-                const required = opt.required ? '(Bắt buộc)' : '(Tùy chọn)';
-                optionsText += `• \`${opt.name}\` ${required}: ${opt.description}\n`;
+                 subcommands.push(`📁 **[Group] ${opt.name}**: ${opt.description}`);
             }
         });
-        if (optionsText) {
-            embed.addFields({ name: '⚙️ Tùy chọn / Subcommands', value: optionsText });
+
+        if (subcommands.length > 0) {
+            embed.addFields({ name: 'Các lệnh con', value: subcommands.join('\n') });
         }
     }
 
+    embed.setFooter({ text: 'Lưu ý: Đây là một khối lệnh.' });
     return embed;
 }
 
@@ -246,47 +308,98 @@ module.exports = {
             if (!command) {
                 return interaction.editReply(`❌ Không tìm thấy lệnh \`${commandName}\`.`);
             }
-            const embed = createCommandDetailEmbed(command);
+            const embed = createCommandDetailEmbed(command, interaction);
             return interaction.editReply({ embeds: [embed] });
         }
 
-        // Main Help Menu (Overview)
+        // --- STATE MANAGEMENT ---
+        // We need to track: Current Category, Current Page
+        // Initial State:
         const categories = getAllCategories(client);
-        
-        const embed = createOverviewEmbed(client, categories, interaction);
-        const row = createCategorySelectMenu(categories, 'overview');
+        let currentCategory = 'overview';
+        let currentPage = 0;
+        const itemsPerPage = 8; // As per screenshot '1-8'
 
-        const response = await interaction.editReply({
-            embeds: [embed],
-            components: [row]
-        });
+        // Render Initial View (Overview)
+        const renderView = () => {
+             if (currentCategory === 'overview') {
+                 const embed = createOverviewEmbed(client, categories, interaction);
+                 const row1 = createCategorySelectMenu(categories, currentCategory);
+                 return { embeds: [embed], components: [row1] };
+             } else {
+                 const embed = createCommandListEmbed(client, currentCategory, interaction, currentPage, itemsPerPage);
+                 const row1 = createCategorySelectMenu(categories, currentCategory);
+                 
+                 const row2 = createCommandSelectMenu(getCommandsByCategory(client, currentCategory));
+                 
+                 const totalItems = getCommandsByCategory(client, currentCategory).length;
+                 const totalPages = Math.ceil(totalItems / itemsPerPage);
+                 
+                 const components = [row1];
+                 if (row2) components.push(row2);
+                 if (totalPages > 1) {
+                     const row3 = createPaginationButtons(currentPage, totalPages);
+                     components.push(row3);
+                 }
+                 
+                 return { embeds: [embed], components: components };
+             }
+        };
+
+        const initialPayload = renderView();
+        const response = await interaction.editReply(initialPayload);
 
         const collector = response.createMessageComponentCollector({
-            componentType: ComponentType.StringSelect,
-            filter: i => i.user.id === interaction.user.id && i.customId === 'help_category_select',
+            filter: i => i.user.id === interaction.user.id,
             time: 600000 // 10 minutes
         });
 
         collector.on('collect', async i => {
-            const selectedValue = i.values[0];
-            
-            let newEmbed;
-            if (selectedValue === 'overview') {
-                newEmbed = createOverviewEmbed(client, categories, interaction);
-            } else {
-                newEmbed = createCommandListEmbed(client, selectedValue, interaction);
+            const id = i.customId;
+
+            if (id === 'help_category_select') {
+                const selected = i.values[0];
+                currentCategory = selected;
+                currentPage = 0; // Reset page on category switch
+            } 
+            else if (id === 'help_prev') {
+                if (currentPage > 0) currentPage--;
             }
-            
-            const newRow = createCategorySelectMenu(categories, selectedValue);
-            
-            await i.update({
-                embeds: [newEmbed],
-                components: [newRow]
-            });
+            else if (id === 'help_next') {
+                const totalItems = getCommandsByCategory(client, currentCategory).length;
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                if (currentPage < totalPages - 1) currentPage++;
+            }
+            else if (id === 'help_command_select') {
+                 const cmdName = i.values[0];
+                 const command = client.slashCommands.get(cmdName.toLowerCase());
+                 if (command) {
+                     const embed = createCommandDetailEmbed(command, interaction);
+                     // Keep Category Dropdown, remove Command Dropdown/Pagination temporarily? 
+                     // Or just reply ephemerally? 
+                     // GlitchBucket likely replaces the embed.
+                     // IMPORTANT: To go back, user needs to re-select category or use back button?
+                     // Screenshot doesn't show "Back" from detail. 
+                     // Let's replace the Main Embed with Detail Embed, 
+                     // and keep Category Dropdown so they can switch away or back to list.
+                     // The requirement "Dropdowns remain available" is key.
+                     
+                     // If we show detail, what happens to pagination buttons?
+                     // They should probably be hidden or specific to detail.
+                     // Let's just show Detail Embed + Category Select.
+                     
+                     const row1 = createCategorySelectMenu(categories, currentCategory);
+                     await i.update({ embeds: [embed], components: [row1] });
+                     return; 
+                 }
+            }
+
+            // Re-render
+            const payload = renderView();
+            await i.update(payload);
         });
 
         collector.on('end', () => {
-             // Disable components on timeout
              interaction.editReply({ components: [] }).catch(() => {});
         });
     }
