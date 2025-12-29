@@ -3,7 +3,7 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
-const { seeds, addToFarm } = require('../../../addons/Farming/farmUtils');
+const { seeds, addToFarm } = require('../../Addons/Farming/farmUtils');
 const { getUserFishing, loadConfig: loadFishingConfig } = require('../../../addons/Fishing/fishingUtils');
 
 const config = getConfig();

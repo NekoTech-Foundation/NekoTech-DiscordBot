@@ -1,0 +1,94 @@
+enabled: true
+
+# ===========================================
+#  General Settings
+# ===========================================
+settings:
+  default_timeout: 60 # Thời gian chờ mặc định (giây)
+  min_timeout: 10
+  max_timeout: 300
+  default_color: "#3498db"
+  
+# ===========================================
+#  Message Templates
+# ===========================================
+messages:
+  setup_embed:
+    color: "#3498db"
+    title: "🎮 Setup Trò Chơi Nối Từ"
+    description: |
+      **Đây là bảng setup trò chơi nối từ**
+      
+      📝 **Phần 1:** Chọn kênh để chơi trò chơi nối từ
+      ⏱️ **Phần 2:** Chọn thời gian chờ để người chơi trả lời
+      
+      **Thời gian chờ hiện tại:** {timeout} giây
+      **Kênh đã chọn:** {channel}
+    footer:
+      text: "Sử dụng các nút bên dưới để setup"
+      
+  setup_complete:
+    color: "#2ecc71"
+    title: "✅ Setup Hoàn Tất!"
+    description: |
+      **Kênh:** {channel}
+      **Thời gian chờ:** {timeout} giây
+      
+      Giờ người chơi có thể bắt đầu chơi bằng cách gửi một từ vào kênh này!
+    footer:
+      text: "Chúc bạn chơi game vui vẻ!"
+      
+  setup_cancelled:
+    color: "#e74c3c"
+    title: "❌ Setup Đã Bị Hủy"
+    description: "Setup trò chơi nối từ đã bị hủy bỏ."
+    
+  correct_word:
+    color: "#2ecc71"
+    title: "✅ Đúng Rồi!"
+    description: |
+      **Người chơi:** {username}
+      **Từ:** {word}
+      **Từ tiếp theo phải bắt đầu bằng:** {next_letter}
+    
+  wrong_word:
+    color: "#e74c3c"
+    title: "❌ Sai Rồi!"
+    description: |
+      **Người chơi:** {username}
+      **Từ:** {word}
+      **Lý do:** {reason}
+      
+  timeout:
+    color: "#f39c12"
+    title: "⏰ Hết Giờ!"
+    description: |
+      **Người chơi cuối:** {username}
+      **Từ cuối:** {word}
+      
+      ⚠️ Không có người trả lời trong {timeout} giây!
+      
+      📝 Trò chơi vẫn tiếp tục - hãy gửi một từ mới để chơi tiếp!
+
+# ===========================================
+#  Language Settings
+# ===========================================
+lang:
+  errors:
+    no_permission: "Bạn không có quyền sử dụng lệnh này! Cần quyền Administrator."
+    invalid_timeout: "Thời gian không hợp lệ! Phải từ {min} đến {max} giây."
+    no_setup: "Kênh này chưa được setup để chơi nối từ!"
+    invalid_word: "Từ không hợp lệ trong từ điển Tiếng Việt!"
+    wrong_start: "Từ phải bắt đầu bằng chữ '{letter}'!"
+    used_word: "Từ này đã được sử dụng rồi!"
+    same_user: "Bạn không thể chơi liên tiếp! Hãy đợi người khác."
+    
+  success:
+    channel_selected: "Đã chọn kênh: {channel}"
+    timeout_updated: "Đã cập nhật thời gian chờ: {timeout} giây"
+
+# ===========================================
+#  Từ điển Tiếng Việt (mẫu - có thể mở rộng)
+# ===========================================
+# Danh sách từ hợp lệ sẽ được load từ file dictionary.txt
+dictionary_file: "dictionary.txt"

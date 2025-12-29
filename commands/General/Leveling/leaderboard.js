@@ -15,7 +15,7 @@ const config = getConfig();
 const lang = getLang();
 const UserData = require('../../../models/UserData.js');
 const Invite = require('../../../models/inviteSchema.js');
-const fishingSchema = require('../../../addons/Fishing/schemas/fishingSchema.js');
+const fishingSchema = require('../../Addons/Fishing/schemas/fishingSchema.js');
 
 function formatNumber(num) {
     if (num === undefined || num === null) num = 0;

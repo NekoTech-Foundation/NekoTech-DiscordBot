@@ -1,0 +1,424 @@
+# Configuration for the Fishing Addon
+
+# -- Rods --
+# key: The unique identifier for the rod.
+# name: The display name of the rod.
+# price: The cost to buy the rod in the shop.
+# durability: The maximum durability of the rod.
+# luck: The base luck of the rod (increases catch chance).
+# effects: Special effects of the rod, such as boosting rarity chances.
+# -- Baits --
+# key: The unique identifier for the bait.
+# name: The display name of the bait.
+# price: The cost to buy the bait.
+# luck: The added luck percentage.
+# bonus: The range of bonus catch rate.
+# attracts: The rarity of fish this bait attracts.
+baits:
+  giun:
+    name: "Mồi câu giun"
+    price: 50
+    luck: 0.05
+    bonus: [0.025, 0.05]
+    attracts: ["common", "uncommon"]
+  xa:
+    name: "Mồi câu xả"
+    price: 200
+    luck: 0.10
+    bonus: [0.05, 0.10]
+    attracts: ["rare", "epic"]
+  go:
+    name: "Mồi câu gỗ"
+    price: 200
+    luck: 0.36
+    bonus: [0.36, 0.36]
+    attracts: ["rare"]
+  chay:
+    name: "Mồi câu chay"
+    price: 500
+    luck: 0.05
+    bonus: [0.05, 0.05]
+    attracts: ["epic", "legendary"]
+  dac_biet:
+    name: "Mồi câu đặc biệt"
+    price: 800
+    luck: 0.15
+    bonus: [0.10, 0.15]
+    attracts: ["epic", "legendary"]
+  tong_hop:
+    name: "Mồi câu tổng hợp"
+    price: 1000
+    luck: 0.17
+    bonus: [0.16, 0.17]
+    attracts: ["epic", "legendary"]
+  com:
+    name: "Mồi cơm"
+    price: 150
+    luck: 0.07
+    bonus: [0.05, 0.10]
+    attracts: ["common", "uncommon"]
+  trung_kien:
+    name: "Mồi trứng kiến"
+    price: 300
+    luck: 0.12
+    bonus: [0.10, 0.15]
+    attracts: ["uncommon", "rare"]
+  tom:
+    name: "Mồi tôm"
+    price: 600
+    luck: 0.20
+    bonus: [0.15, 0.25]
+    attracts: ["rare", "epic"]
+  thuoc_bac:
+    name: "Mồi thuốc bắc"
+    price: 1200
+    luck: 0.25
+    bonus: [0.20, 0.30]
+    attracts: ["epic", "legendary"]
+
+rods:
+  tap_su:
+    name: "Cần câu tập sự"
+    price: 350
+    durability: 100
+    luck: 0.1
+  go:
+    name: "Cần Câu Gỗ"
+    price: 450
+    durability: 150
+    luck: 0
+    effects:
+      uncommon: 0.0
+  meo:
+    name: "Cần Câu Mèo"
+    price: 750
+    durability: 200
+    luck: 0
+    effects:
+      uncommon: 0.5
+  bo_tui:
+    name: "Cần Câu Bỏ Túi"
+    price: 1500
+    durability: 300
+    luck: 0.2
+    effects:
+      uncommon: 0.75
+  vit:
+    name: "Cần Câu Vịt"
+    price: 2250
+    durability: 350
+    luck: 0.15
+    effects:
+      uncommon: 1.0
+  nghiep_du:
+    name: "Cần Câu Nghiệp Dư"
+    price: 3000
+    durability: 400
+    luck: 0.2
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  phep_thuat:
+    name: "Cần Câu Phép Thuật"
+    price: 20000
+    durability: 500
+    luck: 0.5
+    effects:
+      rare: 0.6
+      uncommon: 1.0
+  chuyen_nghiep:
+    name: "Cần câu chuyên nghiệp"
+    price: 15000
+    durability: 5000
+    luck: 0.8
+    effects:
+      rare: 0.4
+      uncommon: 1.0
+  quyen_truong_phep:
+    name: "Cần Câu Quyền Trượng Phép"
+    price: 120000
+    durability: 1000
+    luck: 2.0
+    effects:
+      legendary: 0.7
+      rare: 0.6
+  kiem_huyen_thoai:
+    name: "Cần Câu Kiếm Huyền Thoại"
+    price: 7500
+    durability: 600
+    luck: 0.4
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  xiec_su_tu:
+    name: "Cần Câu Xiếc Sư Tử"
+    price: 7000
+    durability: 600
+    luck: 0.4
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  bap_ngo:
+    name: "Cần Câu Bắp Ngô"
+    price: 7500
+    durability: 600
+    luck: 0.4
+    effects:
+      rare: 0.5
+      uncommon: 1.0
+  truc:
+    name: "Cần Câu Trúc"
+    price: 1500
+    durability: 500
+    luck: 0.2
+    effects:
+      uncommon: 0.8
+
+rarity_chances:
+  common: 0.41
+  uncommon: 0.305
+  rare: 0.2045
+  epic: 0.07
+  legendary: 0.0105
+
+# -- Economy --
+# Price per KG when selling fish.
+rarity_prices_per_kg:
+  common: 5
+  uncommon: 10
+  rare: 30
+  epic: 95
+  legendary: 200
+
+xp_per_rarity:
+  common: 10
+  uncommon: 20
+  rare: 50
+  epic: 100
+  legendary: 250
+
+# -- Locations --
+# key: The unique identifier for the location.
+# name: The display name of the location.
+# fish: A list of fish names available at this location.
+locations:
+  song:
+    name: "Sông"
+    fish:
+      - "Cá rô vàng"
+      - "Cá vược"
+      - "Cá da trơn"
+      - "Cá chép"
+      - "Cá trê mảnh"
+      - "Cá xanh nhạt"
+      - "Cá rô phi"
+      - "Cá mang xanh"
+      - "Cá trích"
+      - "Cá Oryzias"
+      - "Cá đắng"
+      - "Cá Wakasagi"
+      - "Cá quýt vàng"
+      - "Cá hoàng đế châu Phi"
+      - "Cá hồi anh đào"
+      - "Cá diếc trắng"
+      - "Cá sấu hỏa tiễn"
+      - "Lươn"
+      - "Lươn vây dài"
+  ho:
+    name: "Hồ"
+    fish:
+      - "Cá rô vàng"
+      - "Cá vược"
+      - "Cá da trơn"
+      - "Cá chép"
+      - "Cá trê mảnh"
+      - "Cá xanh nhạt"
+      - "Cá rô phi"
+      - "Cá mang xanh"
+      - "Cá trích"
+      - "Cá Oryzias"
+      - "Cá đắng"
+      - "Cá Wakasagi"
+      - "Cá quýt vàng"
+      - "Cá hoàng đế châu Phi"
+      - "Cá hồi anh đào"
+      - "Cá diếc trắng"
+      - "Cá sấu hỏa tiễn"
+      - "Lươn"
+      - "Lươn vây dài"
+  bien:
+    name: "Biển"
+    fish:
+      - "Cá chim Đại Tây Dương"
+      - "Cá bò"
+      - "Cá bống lửa"
+      - "Cá hề"
+      - "Cá bướm"
+      - "Cá neon"
+      - "Cá đuôi gai nâu"
+      - "Cá Hồng y Banggai"
+      - "Cá nóc ngựa"
+      - "Cá thu"
+      - "Cá mập"
+      - "Cá đuối"
+      - "Cá bò cạp"
+      - "Cá đá"
+      - "Cá thiên thần nữ hoàng"
+      - "Cá nhím"
+      - "Cá chuồn"
+      - "Cá sọc"
+      - "Cá mỏ sọc"
+      - "Lươn biển"
+      - "Cá Samson"
+      - "Cua tuyết đỏ"
+      - "Cá cầu vồng"
+      - "Cá vẹt nữ hoàng"
+      - "Nhím biển tím"
+      - "Cá Dottyback tím"
+      - "Cá vẹt"
+      - "Cá thu đao Thái Bình Dương"
+      - "Bạch tuộc"
+      - "Cá mặt trăng"
+      - "Cua hoàng đế"
+      - "Cá sấu"
+      - "Cá heo"
+      - "Rùa biển"
+      - "Cá heo hồng"
+      - "Mực"
+      - "Tôm hùm đất"
+      - "San hô"
+      - "Cá Coris đuôi vàng"
+      - "Cá rô phi hổ"
+  dai_duong:
+    name: "Đại Dương"
+    fish:
+      - "Cá voi xanh"
+      - "Cá mặt trăng"
+      - "Cá hải tượng"
+      - "Cá mái chèo"
+      - "Kỳ lân biển"
+      - "Cá voi sát thủ"
+      - "Cá mập búa"
+      - "Cá da trơn Goonch"
+      - "Cá hổ Goliath"
+      - "Cá lóc khổng lồ"
+      - "Cá mập diềm"
+      - "Cá heo không vây"
+      - "Cá chép đỏ"
+      - "Mực zombie"
+      - "Nòng nọc"
+      - "Khủng long sáu sừng"
+      - "Cá ngọt"
+      - "Sao biển"
+      - "Cá mập cưa"
+      - "Cá mập voi"
+      - "Cá nhà táng"
+      - "Cá hồi Đại Tây Dương"
+      - "Mực ma cà rồng"
+      - "Cá răng nanh"
+      - "Bạch tuộc Dumbo"
+      - "Mực nang"
+      - "Cá hố"
+      - "Cá dao ma đen"
+      - "Cá cần câu"
+
+# -- Fish Pools --
+# This is the master list of all fish, categorized by rarity.
+# name: The display name of the fish.
+# emoji: The Discord emoji string for the fish.
+# min_weight, max_weight: The weight range in kg.
+fish_pools:
+  common:
+    - { name: "Cá rô vàng", emoji: "<:Fish_yellowperch:1433392934023200851>", min_weight: 0.1, max_weight: 0.5 }
+    - { name: "Cá vược", emoji: "<:Fish_bass:1433393243391000657>", min_weight: 0.5, max_weight: 2 }
+    - { name: "Cá da trơn", emoji: "<:Fish_catfish:1433393269894807623>", min_weight: 0.5, max_weight: 3 }
+    - { name: "Cá chép", emoji: "<:Fish_carp:1433392882362089563>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá trê mảnh", emoji: "<:Fish_slendercatfish:1433392918533767190>", min_weight: 1, max_weight: 4 }
+    - { name: "Cá xanh nhạt", emoji: "<:Fish_palebleak:1433392905057468426>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Cá rô phi", emoji: "<:Fish_tilapia:1433392931187724319>", min_weight: 2, max_weight: 10 }
+    - { name: "Cá mang xanh", emoji: "<:Fish_bluegill:1433393261183238255>", min_weight: 0.2, max_weight: 1.5 }
+    - { name: "Cá trích", emoji: "<:Fish_herring:1433393291033841704>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Cá Oryzias", emoji: "<:Fish_ricefish:1433392911692857374>", min_weight: 0.01, max_weight: 0.05 }
+    - { name: "Cá đắng", emoji: "<:Fish_bitterling:1433392865387479160>", min_weight: 0.05, max_weight: 0.2 }
+    - { name: "Cá Wakasagi", emoji: "<:Fish_wakasagi:1433393332150861835>", min_weight: 0.05, max_weight: 0.15 }
+  uncommon:
+    - { name: "Cá quýt vàng", emoji: "<:Fish_goldenmandarin:1433392896333185095>", min_weight: 0.1, max_weight: 0.5 }
+    - { name: "Cá hoàng đế châu Phi", emoji: "<:Fish_africancichlid:1433393236533055488>", min_weight: 0.5, max_weight: 1.5 }
+    - { name: "Cá đuôi gai xanh", emoji: "<:Fish_bluetang:1433393263309488158>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá chim Đại Tây Dương", emoji: "<:Fish_atlanticspadefish:1433393241012830230>", min_weight: 1, max_weight: 6 }
+    - { name: "Cá bò", emoji: "<:Fish_filefish:1433393282783645747>", min_weight: 2, max_weight: 8 }
+    - { name: "Cá bống lửa", emoji: "<:Fish_firegoby:1433393285522784368>", min_weight: 0.05, max_weight: 0.15 }
+    - { name: "Cá hề", emoji: "<:Fish_clownfish:1433393271823925259>", min_weight: 0.1, max_weight: 0.3 }
+    - { name: "Cá bướm", emoji: "<:Fish_butterflyfish:1433393267352797255>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Cá neon", emoji: "<:Fish_neontetra:1433392903027429416>", min_weight: 0.01, max_weight: 0.03 }
+    - { name: "Cá hồi anh đào", emoji: "<:Fish_cherrysalmon:1433392884307984535>", min_weight: 0.5, max_weight: 2 }
+    - { name: "Cá đuôi gai nâu", emoji: "<:Fish_browntang:1433392880222736404>", min_weight: 0.5, max_weight: 2.5 }
+    - { name: "Cá Hồng y Banggai", emoji: "<:Fish_banggaicardinalfish:1433392863525343375>", min_weight: 0.05, max_weight: 0.1 }
+    - { name: "Cá diếc trắng", emoji: "<:Fish_whitecruciancarp:1433393334981758997>", min_weight: 0.5, max_weight: 2 }
+  rare:
+    - { name: "Cá nóc ngựa", emoji: "<:Fish_horseheadtilefish:1433393293403623554>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá thu", emoji: "<:Fish_mackerel:1433392900884140122>", min_weight: 10, max_weight: 100 }
+    - { name: "Cá mập", emoji: "<:Fish_shark:1433392973181222974>", min_weight: 50, max_weight: 500 }
+    - { name: "Cá đuối", emoji: "<:Fish_mantaray:1433392960631869471>", min_weight: 5, max_weight: 50 }
+    - { name: "Cá sấu hỏa tiễn", emoji: "<:Fish_Alligatorgar:1433392924980150282>", min_weight: 10, max_weight: 50 }
+    - { name: "Cá bò cạp", emoji: "<:Fish_scorpionfish:1433392916189151375>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá đá", emoji: "<:Fish_rockfish:1433392913982816317>", min_weight: 1, max_weight: 7 }
+    - { name: "Cá thiên thần nữ hoàng", emoji: "<:Fish_queenangelfish:1433392909541179464>", min_weight: 0.5, max_weight: 2 }
+    - { name: "Cá nhím", emoji: "<:Fish_porcupinefish:1433392907066413147>", min_weight: 1, max_weight: 4 }
+    - { name: "Cá chuồn", emoji: "<:Fish_flyingfish:1433392893749625012>", min_weight: 0.5, max_weight: 2 }
+    - { name: "Lươn", emoji: "<:Fish_eel:1433392891031719986>", min_weight: 0.5, max_weight: 3 }
+    - { name: "Cá sọc", emoji: "<:Fish_stripey:1433393325972394077>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Cá mỏ sọc", emoji: "<:Fish_stripedbeakfish:1433393323783098438>", min_weight: 1, max_weight: 4 }
+    - { name: "Lươn biển", emoji: "<:Fish_sea_eel:1433393321765634058>", min_weight: 2, max_weight: 10 }
+    - { name: "Cá Samson", emoji: "<:Fish_samsonfish:1433393319328612375>", min_weight: 10, max_weight: 40 }
+    - { name: "Cua tuyết đỏ", emoji: "<:Fish_redsnowcrab:1433393317214818367>", min_weight: 1, max_weight: 3 }
+    - { name: "Cá cầu vồng", emoji: "<:Fish_rainbowfish:1433393315184906322>", min_weight: 0.1, max_weight: 0.5 }
+    - { name: "Cá vẹt nữ hoàng", emoji: "<:Fish_queenparrotfish:1433393313079361647>", min_weight: 1, max_weight: 5 }
+    - { name: "Nhím biển tím", emoji: "<:Fish_purpleseaurchin:1433393311099523184>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Cá Dottyback tím", emoji: "<:Fish_purpledottyback:1433393309115486290>", min_weight: 0.05, max_weight: 0.15 }
+    - { name: "Cá vẹt", emoji: "<:Fish_parrotfish:1433393307169325076>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá thu đao Thái Bình Dương", emoji: "<:Fish_pacificsaury:1433393305198002237>", min_weight: 0.2, max_weight: 0.8 }
+    - { name: "Bạch tuộc", emoji: "<:Fish_octopus:1433393302849192039>", min_weight: 1, max_weight: 10 }
+    - { name: "Cá mặt trăng", emoji: "<:Fish_moonwrasse:1433393300123025450>", min_weight: 0.5, max_weight: 2 }
+    - { name: "Lươn vây dài", emoji: "<:Fish_longfinnedeel:1433393297891528778>", min_weight: 1, max_weight: 5 }
+    - { name: "Cua hoàng đế", emoji: "<:Fish_kingcrab:1433393295706558504>", min_weight: 2, max_weight: 10 }
+  epic:
+    - { name: "Cá sấu", emoji: "<:Fish_crocodile:1433392932215459861>", min_weight: 100, max_weight: 500 }
+    - { name: "Cá heo", emoji: "<:Fish_dolphin:1433392934551552091>", min_weight: 150, max_weight: 400 }
+    - { name: "Cá voi xanh", emoji: "<:Fish_bluewhale:1433392930034417665>", min_weight: 1000, max_weight: 5000 }
+    - { name: "Cá mặt trăng", emoji: "<:Fish_sunfish:1433392977354424351>", min_weight: 200, max_weight: 1000 }
+    - { name: "Rùa biển", emoji: "<:Fish_seaturtle:1433392971310567474>", min_weight: 100, max_weight: 300 }
+    - { name: "Cá hải tượng", emoji: "<:Fish_pirarucu:1433392966575198351>", min_weight: 50, max_weight: 200 }
+    - { name: "Cá mái chèo", emoji: "<:Fish_oarfish:1433392964670853223>", min_weight: 100, max_weight: 300 }
+    - { name: "Kỳ lân biển", emoji: "<:Fish_narwhal:1433392962640937021>", min_weight: 800, max_weight: 1600 }
+    - { name: "Cá voi sát thủ", emoji: "<:Fish_killerwhale:1433392958434181232>", min_weight: 2000, max_weight: 5000 }
+    - { name: "Cá mập búa", emoji: "<:Fish_hammerhead:1433392956412264480>", min_weight: 200, max_weight: 500 }
+    - { name: "Cá da trơn Goonch", emoji: "<:Fish_goonchcatfish:1433392954164252746>", min_weight: 50, max_weight: 150 }
+    - { name: "Cá hổ Goliath", emoji: "<:Fish_goliathtigerfish:1433392951811375124>", min_weight: 30, max_weight: 70 }
+    - { name: "Cá lóc khổng lồ", emoji: "<:Fish_giantsnakehead:1433392943405727836>", min_weight: 20, max_weight: 50 }
+    - { name: "Cá mập diềm", emoji: "<:Fish_frilledshark:1433392941451317392>", min_weight: 10, max_weight: 30 }
+    - { name: "Cá heo không vây", emoji: "<:Fish_finlessporpoise:1433392939186389102>", min_weight: 30, max_weight: 50 }
+    - { name: "Cá chép đỏ", emoji: "<:Redcarp2:1433392938385281054>", min_weight: 2, max_weight: 10 }
+    - { name: "Cá heo hồng", emoji: "<:Fish_dolphin_pink:1433392936921468998>", min_weight: 150, max_weight: 300 }
+    - { name: "Mực zombie", emoji: "<:Fish_zombiesquid:1433392936246050938>", min_weight: 1, max_weight: 5 }
+    - { name: "Nòng nọc", emoji: "<:Fish_tadpole:1433392929430442135>", min_weight: 0.01, max_weight: 0.05 }
+    - { name: "Khủng long sáu sừng", emoji: "<:Fish_axolotl:1433392927614173304>", min_weight: 0.1, max_weight: 0.3 }
+    - { name: "Cá ngọt", emoji: "<:Fish_sweetfish:1433392925890318367>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Sao biển", emoji: "<:Fish_starfish:1433392922572619866>", min_weight: 0.1, max_weight: 2 }
+    - { name: "Mực", emoji: "<:Fish_squid:1433392920450437150>", min_weight: 1, max_weight: 10 }
+    - { name: "Tôm hùm đất", emoji: "<:Fish_crayfish:1433392888347365376>", min_weight: 0.1, max_weight: 0.5 }
+    - { name: "San hô", emoji: "<:Fish_coral:1433392886421913600>", min_weight: 0.1, max_weight: 1 }
+    - { name: "Cá Coris đuôi vàng", emoji: "<:Fish_yellowtailcoris:1433393337062391920>", min_weight: 0.2, max_weight: 1 }
+    - { name: "Cá rô phi hổ", emoji: "<:Fish_tigertilapia:1433393328191180901>", min_weight: 1, max_weight: 4 }
+  legendary:
+    - { name: "Cá mập cưa", emoji: "<:Fish_sawshark:1433392968634466455>", min_weight: 200, max_weight: 600 }
+    - { name: "Cá mập voi", emoji: "<:Fish_whaleshark:1433392979313164352>", min_weight: 10000, max_weight: 20000 }
+    - { name: "Cá nhà táng", emoji: "<:Fish_spermwhale:1433392975416791040>", min_weight: 35000, max_weight: 45000 }
+    - { name: "Cá hồi Đại Tây Dương", emoji: "<:Fish_atlanticsalmon:1433392861184917676>", min_weight: 2, max_weight: 10 }
+    - { name: "Mực ma cà rồng", emoji: "<:Fish_vampiresquid:1433393330166693928>", min_weight: 0.5, max_weight: 1.5 }
+    - { name: "Cá răng nanh", emoji: "<:Fish_fangtooth:1433393280409665577>", min_weight: 0.1, max_weight: 0.2 }
+    - { name: "Bạch tuộc Dumbo", emoji: "<:Fish_dumbo:1433393278161522771>", min_weight: 5, max_weight: 10 }
+    - { name: "Mực nang", emoji: "<:Fish_cuttlefish:1433393275766706206>", min_weight: 3, max_weight: 10 }
+    - { name: "Cá hố", emoji: "<:Fish_cutlassfish:1433393273916883144>", min_weight: 1, max_weight: 5 }
+    - { name: "Cá dao ma đen", emoji: "<:Fish_blackghostknifefish:1433393245467054130>", min_weight: 0.5, max_weight: 1.5 }
+    - { name: "Cá cần câu", emoji: "<:Fish_angler:1433393238953296033>", min_weight: 20, max_weight: 50 }

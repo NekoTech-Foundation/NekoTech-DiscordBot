@@ -1,0 +1,15 @@
+{
+  "legendary": {
+    "name": "Cá mập voi",
+    "emoji": "<:Fish_whaleshark:1433392979313164352>",
+    "min_weight": 10000,
+    "max_weight": 20000
+  },
+  "epic": {
+    "name": "San hô",
+    "emoji": "<:Fish_coral:1433392886421913600>",
+    "min_weight": 0.1,
+    "max_weight": 1
+  },
+  "updatedAt": "2025-12-29T12:13:56.341Z"
+}

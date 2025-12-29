@@ -1,0 +1,81 @@
+enabled: true
+
+# Command settings
+prefix: "/"
+delete_command: true  # Toggle whether to delete the command message ONLY PREFIX COMMANDS
+
+# Context menu settings
+context_menu:
+  enabled: true
+  default_language: "vi"  # Default language if server language not detected
+
+# Supported languages display format
+language_format: "CODE"  # CODE = en, NAME = English
+
+# Enable auto language detection 
+allow_detection: true
+
+# Message embeds
+embed:
+  enabled: true  # Master switch for embeds
+  color: ""  # Leave empty for default color
+  footer:
+    enabled: true  # Toggle footer on/off
+    text: "Google Dịch"  # Footer text (optional)
+    icon: ""  # Footer icon URL (optional)
+  author:
+    enabled: true  # Toggle author on/off 
+    text: ""  # Author name (optional)
+    icon: ""  # Author icon URL (optional)
+  timestamp: true  # Toggle timestamp on/off
+
+# Supported languages
+languages:
+  ar: "Tiếng Ả Rập"
+  de: "Tiếng Đức"
+  en: "Tiếng Anh"
+  es: "Tiếng Tây Ban Nha"
+  fr: "Tiếng Pháp"
+  af: "Tiếng Nam Phi"
+  bg: "Tiếng Bulgaria"
+  bn: "Tiếng Bengal"
+  ca: "Tiếng Catalunya"
+  cs: "Tiếng Séc"
+  da: "Tiếng Đan Mạch"
+  el: "Tiếng Hy Lạp"
+  et: "Tiếng Estonia"
+  fa: "Tiếng Ba Tư"
+  fi: "Tiếng Phần Lan"
+  gu: "Tiếng Gujarat"
+  he: "Tiếng Do Thái"
+  hi: "Tiếng Hindi"
+  hr: "Tiếng Croatia"
+  hu: "Tiếng Hungary"
+  id: "Tiếng Indonesia"
+  it: "Tiếng Ý"
+  jp: "Tiếng Nhật"
+  kn: "Tiếng Kannada"
+  ko: "Tiếng Hàn"
+  lt: "Tiếng Lithuania"
+  lv: "Tiếng Latvia"
+  ml: "Tiếng Malayalam"
+  mr: "Tiếng Marathi"
+  ms: "Tiếng Malaysia"
+  nl: "Tiếng Hà Lan"
+  no: "Tiếng Na Uy"
+  pl: "Tiếng Ba Lan"
+  pt: "Tiếng Bồ Đào Nha"
+  ro: "Tiếng Romania"
+  ru: "Tiếng Nga"
+  sk: "Tiếng Slovak"
+  sl: "Tiếng Slovenia"
+  sr: "Tiếng Serbia"
+  sv: "Tiếng Thụy Điển"
+  ta: "Tiếng Tamil"
+  te: "Tiếng Telugu"
+  th: "Tiếng Thái"
+  tr: "Tiếng Thổ Nhĩ Kỳ"
+  uk: "Tiếng Ukraina"
+  ur: "Tiếng Urdu"
+  vi: "Tiếng Việt"
+  zh: "Tiếng Trung"

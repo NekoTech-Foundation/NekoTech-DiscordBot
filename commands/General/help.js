@@ -2,297 +2,232 @@ const {
     SlashCommandBuilder,
     EmbedBuilder,
     ActionRowBuilder,
+    StringSelectMenuBuilder,
     ButtonBuilder,
     ButtonStyle,
+    ComponentType,
     ApplicationCommandOptionType
 } = require('discord.js');
-const { getLang } = require('../../utils/configLoader');
 
-// Lấy tất cả commands dưới dạng list
-function getAllCommands(client) {
-    const commandList = [];
+const CATEGORY_EMOJIS = {
+    'Fun': '🎲',
+    'General': '📘',
+    'System': '⚙️',
+    'Economy': '💰',
+    'Fishing': '🎣',
+    'Farming': '🌾',
+    'AFK': '💤',
+    'Pixiv': '🎨',
+    'VoiceMaster': '🔊',
+    'Utility': '🛠️',
+    'Bypass': '🔗',
+    'Giveaway': '🎉',
+    'VeSo': '🎫',
+    'Translator': '🌐',
+    'NoiTu': '🔤',
+    'Hentai': '🔞',
+    'Weather': '☁️',
+    'Default': '📁'
+};
 
-    client.slashCommands.forEach(command => {
-        if (!command.data || typeof command.data.toJSON !== 'function') return;
+const CATEGORY_DESCRIPTIONS = {
+    'Fun': 'Các trò chơi và giải trí',
+    'General': 'Các lệnh thông thường',
+    'System': 'Hệ thống và quản lý bot',
+    'Economy': 'Hệ thống kinh tế và tiền tệ',
+    'Fishing': 'Câu cá thư giãn',
+    'Farming': 'Nông trại vui vẻ',
+    'AFK': 'Hệ thống treo máy',
+    'Pixiv': 'Tìm kiếm ảnh Pixiv',
+    'VoiceMaster': 'Tạo phòng voice riêng',
+    'Utility': 'Các tiện ích hữu dụng',
+    'Default': 'Các lệnh khác'
+};
 
-        const commandJSON = command.data.toJSON();
-        const commandInfo = {
-            name: commandJSON.name,
-            description: commandJSON.description || 'Không có mô tả',
-            subcommands: []
-        };
-
-        // Lấy subcommands nếu có
-        if (commandJSON.options) {
-            const subcommands = commandJSON.options.filter(
-                option => option.type === ApplicationCommandOptionType.Subcommand
-            );
-            commandInfo.subcommands = subcommands.map(sub => ({
-                name: sub.name,
-                description: sub.description || 'Không có mô tả'
-            }));
-        }
-
-        commandList.push(commandInfo);
-    });
-
-    // Sắp xếp theo alphabet
-    commandList.sort((a, b) => a.name.localeCompare(b.name));
-    return commandList;
+function getCategoryEmoji(category) {
+    return CATEGORY_EMOJIS[category] || CATEGORY_EMOJIS['Default'];
 }
 
-// Tạo embed cho từng trang
-function createPageEmbed(client, interaction, commands, page) {
-    const itemsPerPage = 7;
-    const totalPages = Math.ceil(commands.length / itemsPerPage);
-    const start = page * itemsPerPage;
-    const end = start + itemsPerPage;
-    const commandsOnPage = commands.slice(start, end);
+function getCategoryDescription(category) {
+    return CATEGORY_DESCRIPTIONS[category] || 'Danh sách lệnh cho ' + category;
+}
 
-    const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
-
-    let description = `Chào **${interaction.user.username}**! 👋\n\n`;
-    description += `> **KentaBucket** là bot Discord đa năng, đáp ứng hầu hết mọi nhu cầu của máy chủ.\n`;
-    description += `> Để xem chi tiết một lệnh, sử dụng: \`/help lệnh:<tên_lệnh>\`\n\n`;
-    description += `🔗 [Support](https://discord.gg/96hgDj4b4j) • [Hướng dẫn](https://your-docs-link.com) • [Điều khoản](https://your-tos-link.com) • [Mời Bot](${inviteLink})\n\n`;
-    description += `**━━━━━━━━━━━━━━━━━━━━**\n\n`;
-
-    commandsOnPage.forEach(cmd => {
-        description += `**\`/${cmd.name}\`** - ${cmd.description}\n`;
-
-        if (cmd.subcommands.length > 0) {
-            cmd.subcommands.forEach(sub => {
-                description += `  ├ \`${sub.name}\` - ${sub.description}\n`;
-            });
+function getCommandsByCategory(client, category) {
+    const commands = [];
+    client.slashCommands.forEach(cmd => {
+        // use command.category assigned by utils.js
+        if ((cmd.category || 'General') === category) {
+            commands.push(cmd);
         }
     });
+    return commands;
+}
+
+function getAllCategories(client) {
+    const categories = new Set();
+    client.slashCommands.forEach(cmd => {
+        categories.add(cmd.category || 'General');
+    });
+    return Array.from(categories).sort();
+}
+
+function createCategorySelectMenu(categories, currentCategory) {
+    const options = categories.map(cat => ({
+        label: cat,
+        value: cat,
+        description: getCategoryDescription(cat),
+        emoji: getCategoryEmoji(cat),
+        default: cat === currentCategory
+    }));
+
+    return new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder()
+            .setCustomId('help_category_select')
+            .setPlaceholder('Chọn danh mục lệnh...')
+            .addOptions(options)
+    );
+}
+
+function createCommandListEmbed(client, category, interaction) {
+    const commands = getCommandsByCategory(client, category);
+    
+    // Sort commands alphabetically
+    commands.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+    const description = commands.map(cmd => {
+        let desc = `**/${cmd.data.name}** - ${cmd.data.description}`;
+        // List subcommands if any
+        if (cmd.data.options) {
+            const subcommands = cmd.data.options.filter(opt => opt.type === ApplicationCommandOptionType.Subcommand);
+            if (subcommands.length > 0) {
+                const subNames = subcommands.map(s => `\`${s.name}\``).join(', ');
+                desc += `\n> Subcommands: ${subNames}`;
+            }
+        }
+        return desc;
+    }).join('\n\n');
 
     return new EmbedBuilder()
-        .setColor('#1769FF')
-        .setTitle('📖 Danh sách lệnh')
-        .setDescription(description)
+        .setColor('#0099ff')
+        .setTitle(`${getCategoryEmoji(category)} Danh mục: ${category}`)
+        .setDescription(description || 'Chưa có lệnh nào trong danh mục này.')
         .setThumbnail(client.user.displayAvatarURL())
-        .setFooter({
-            text: `Trang ${page + 1}/${totalPages} • Tổng ${commands.length} lệnh`,
+        .setFooter({ 
+            text: `Yêu cầu bởi ${interaction.user.username}`, 
             iconURL: interaction.user.displayAvatarURL()
         })
         .setTimestamp();
 }
 
-// Tạo embed cho lệnh cụ thể
-function createCommandEmbed(client, commandName) {
-    const command = client.slashCommands.get(commandName.toLowerCase());
+function createCommandDetailEmbed(command) {
+    const data = command.data;
+    const embed = new EmbedBuilder()
+        .setColor('#0099ff')
+        .setTitle(`📖 Hướng dẫn: /${data.name}`)
+        .setDescription(data.description)
+        .addFields({ name: '📂 Danh mục', value: command.category || 'General', inline: true });
 
-    if (!command) return null;
-
-    const commandJSON = command.data.toJSON();
-    let description = `**📝 Mô tả:**\n${commandJSON.description || 'Không có mô tả'}\n\n`;
-    description += `**💡 Cách dùng:** \`/${commandJSON.name}\`\n\n`;
-
-    if (commandJSON.options && commandJSON.options.length > 0) {
-        description += `**⚙️ Tùy chọn:**\n`;
-        commandJSON.options.forEach(option => {
-            const required = option.required ? '`[Bắt buộc]`' : '`[Tùy chọn]`';
-
-            if (option.type === ApplicationCommandOptionType.Subcommand) {
-                description += `\n**/${commandJSON.name} ${option.name}**\n`;
-                description += `└ ${option.description}\n`;
-
-                if (option.options && option.options.length > 0) {
-                    option.options.forEach(subOpt => {
-                        const subRequired = subOpt.required ? '`[Bắt buộc]`' : '`[Tùy chọn]`';
-                        description += `  • \`${subOpt.name}\` ${subRequired} - ${subOpt.description}\n`;
+    if (data.options && data.options.length > 0) {
+        let optionsText = '';
+        data.options.forEach(opt => {
+            if (opt.type === ApplicationCommandOptionType.Subcommand) {
+                optionsText += `**/ ${data.name} ${opt.name}**: ${opt.description}\n`;
+                if (opt.options) {
+                    opt.options.forEach(subOpt => {
+                         const required = subOpt.required ? '(Bắt buộc)' : '(Tùy chọn)';
+                         optionsText += `  └ \`${subOpt.name}\` ${required}: ${subOpt.description}\n`;
                     });
                 }
+            } else if (opt.type === ApplicationCommandOptionType.SubcommandGroup) {
+                 optionsText += `**[Group] ${opt.name}**: ${opt.description}\n`;
             } else {
-                description += `• \`${option.name}\` ${required} - ${option.description}\n`;
-
-                if (option.choices && option.choices.length > 0) {
-                    description += `  Giá trị: ${option.choices.map(c => `\`${c.name}\``).join(', ')}\n`;
-                }
+                const required = opt.required ? '(Bắt buộc)' : '(Tùy chọn)';
+                optionsText += `• \`${opt.name}\` ${required}: ${opt.description}\n`;
             }
         });
+        if (optionsText) {
+            embed.addFields({ name: '⚙️ Tùy chọn / Subcommands', value: optionsText });
+        }
     }
 
-    return new EmbedBuilder()
-        .setColor('#1769FF')
-        .setTitle(`📘 Chi tiết: /${commandJSON.name}`)
-        .setDescription(description)
-        .setThumbnail(client.user.displayAvatarURL())
-        .setFooter({ text: 'Nhấn nút bên dưới để quay lại danh sách' })
-        .setTimestamp();
-}
-
-// Tạo buttons phân trang
-function createPaginationButtons(currentPage, totalPages, disabled = false) {
-    return new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
-                .setCustomId('previous_page')
-                .setLabel('◀ Trước')
-                .setStyle(ButtonStyle.Primary)
-                .setDisabled(disabled || currentPage === 0),
-            new ButtonBuilder()
-                .setCustomId('page_number')
-                .setLabel(`${currentPage + 1} / ${totalPages}`)
-                .setStyle(ButtonStyle.Secondary)
-                .setDisabled(true),
-            new ButtonBuilder()
-                .setCustomId('next_page')
-                .setLabel('Sau ▶')
-                .setStyle(ButtonStyle.Primary)
-                .setDisabled(disabled || currentPage >= totalPages - 1)
-        );
+    return embed;
 }
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('help')
-        .setDescription('📚 Xem danh sách lệnh và hướng dẫn')
-        .addStringOption(option =>
-            option
-                .setName('lệnh')
+        .setDescription('Xem danh sách lệnh hoặc hướng dẫn chi tiết')
+        .addStringOption(option => 
+            option.setName('command')
                 .setDescription('Tên lệnh cần xem chi tiết')
                 .setRequired(false)
+                .setAutocomplete(true)
         ),
-    category: 'Chung',
+    category: 'General',
+
+    async autocomplete(interaction, client) {
+        const focusedValue = interaction.options.getFocused();
+        const choices = Array.from(client.slashCommands.keys());
+        const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+        await interaction.respond(
+            filtered.slice(0, 25).map(choice => ({ name: choice, value: choice }))
+        );
+    },
 
     async execute(interaction, client) {
-        try {
-            // Kiểm tra commands đã ready
-            if (!client.commandsReady) {
-                return await interaction.reply({
-                    content: '⏳ Các lệnh vẫn đang được đăng ký. Vui lòng thử lại sau.',
-                    ephemeral: true
-                });
+        // Fix for "TypeError: Cannot read properties of undefined (reading 'commandsReady')"
+        // If client is passed correctly, this should work.
+        // Also handling if commandsReady is not yet set (though it should be by the time user can interact)
+        
+        await interaction.deferReply();
+
+        const commandName = interaction.options.getString('command');
+
+        if (commandName) {
+            const command = client.slashCommands.get(commandName.toLowerCase());
+            if (!command) {
+                return interaction.editReply(`❌ Không tìm thấy lệnh \`${commandName}\`.`);
             }
-
-            await interaction.deferReply();
-
-            const commandQuery = interaction.options.getString('lệnh');
-
-            // Nếu tìm kiếm lệnh cụ thể
-            if (commandQuery) {
-                const commandEmbed = createCommandEmbed(client, commandQuery);
-
-                if (!commandEmbed) {
-                    return await interaction.editReply({
-                        content: `❌ Không tìm thấy lệnh \`${commandQuery}\`\n💡 Dùng \`/help\` để xem tất cả lệnh.`
-                    });
-                }
-
-                const backButton = new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                            .setCustomId('back_to_list')
-                            .setLabel('↩ Quay lại danh sách')
-                            .setStyle(ButtonStyle.Success)
-                    );
-
-                const response = await interaction.editReply({
-                    embeds: [commandEmbed],
-                    components: [backButton]
-                });
-
-                const collector = response.createMessageComponentCollector({
-                    filter: i => i.user.id === interaction.user.id,
-                    time: 300000
-                });
-
-                collector.on('collect', async i => {
-                    if (i.customId === 'back_to_list') {
-                        const commands = getAllCommands(client);
-                        const embed = createPageEmbed(client, interaction, commands, 0);
-                        const buttons = createPaginationButtons(0, Math.ceil(commands.length / 7));
-
-                        await i.update({
-                            embeds: [embed],
-                            components: [buttons]
-                        });
-
-                        collector.stop();
-                        startMainCollector(response, interaction, client);
-                    }
-                });
-
-                return;
-            }
-
-            // Hiển thị danh sách lệnh
-            const commands = getAllCommands(client);
-            const itemsPerPage = 7;
-            const totalPages = Math.ceil(commands.length / itemsPerPage);
-            let currentPage = 0;
-
-            const initialEmbed = createPageEmbed(client, interaction, commands, currentPage);
-            const initialButtons = createPaginationButtons(currentPage, totalPages);
-
-            const response = await interaction.editReply({
-                embeds: [initialEmbed],
-                components: [initialButtons]
-            });
-
-            startMainCollector(response, interaction, client);
-
-        } catch (error) {
-            console.error(`Lỗi khi thực thi lệnh help:`, error);
-            const errorMessage = '❌ Đã có lỗi xảy ra!';
-
-            try {
-                if (!interaction.replied && !interaction.deferred) {
-                    await interaction.reply({ content: errorMessage, ephemeral: true });
-                } else {
-                    await interaction.editReply({ content: errorMessage });
-                }
-            } catch (replyError) {
-                console.error('Không thể gửi tin nhắn lỗi:', replyError);
-            }
+            const embed = createCommandDetailEmbed(command);
+            return interaction.editReply({ embeds: [embed] });
         }
-    }
-};
 
-// Collector chính cho pagination
-function startMainCollector(response, interaction, client) {
-    const commands = getAllCommands(client);
-    const itemsPerPage = 7;
-    const totalPages = Math.ceil(commands.length / itemsPerPage);
-    let currentPage = 0;
+        // Main Help Menu
+        const categories = getAllCategories(client);
+        // Default to 'General' or the first category
+        const initialCategory = categories.includes('General') ? 'General' : categories[0];
+        
+        const embed = createCommandListEmbed(client, initialCategory, interaction);
+        const row = createCategorySelectMenu(categories, initialCategory);
 
-    const collector = response.createMessageComponentCollector({
-        filter: i => i.user.id === interaction.user.id,
-        idle: 300000 // 5 phút
-    });
+        const response = await interaction.editReply({
+            content: '👋 Chào mừng đến với **NekoTech Bot**! Chọn danh mục bên dưới để xem lệnh.',
+            embeds: [embed],
+            components: [row]
+        });
 
-    collector.on('collect', async i => {
-        try {
-            if (i.customId === 'previous_page') {
-                currentPage--;
-            } else if (i.customId === 'next_page') {
-                currentPage++;
-            }
+        const collector = response.createMessageComponentCollector({
+            componentType: ComponentType.StringSelect,
+            filter: i => i.user.id === interaction.user.id && i.customId === 'help_category_select',
+            time: 600000 // 10 minutes
+        });
 
-            const newEmbed = createPageEmbed(client, interaction, commands, currentPage);
-            const newButtons = createPaginationButtons(currentPage, totalPages);
-
+        collector.on('collect', async i => {
+            const selectedCategory = i.values[0];
+            const newEmbed = createCommandListEmbed(client, selectedCategory, interaction);
+            const newRow = createCategorySelectMenu(categories, selectedCategory);
+            
             await i.update({
                 embeds: [newEmbed],
-                components: [newButtons]
+                components: [newRow]
             });
-        } catch (error) {
-            console.error('Lỗi khi xử lý pagination:', error);
-        }
-    });
+        });
 
-    collector.on('end', async () => {
-        try {
-            const disabledButtons = createPaginationButtons(currentPage, totalPages, true);
-            await interaction.editReply({
-                components: [disabledButtons]
-            });
-        } catch (error) {
-            if (error.code !== 10008) {
-                console.error('Lỗi khi vô hiệu hóa buttons:', error);
-            }
-        }
-    });
-}
+        collector.on('end', () => {
+             // Disable components on timeout
+             // We can't edit ephemeral messages effectively if deferred? msg is regular reply.
+             // Just attempting to remove components.
+             interaction.editReply({ components: [] }).catch(() => {});
+        });
+    }
+};

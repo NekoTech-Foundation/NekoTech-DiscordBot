@@ -44,7 +44,7 @@ if (version < 18) {
 }
 
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
-const pixivAddon = require('./addons/Pixiv/pixiv.js');
+const pixivAddon = require('./commands/Addons/Pixiv/pixiv.js');
 
 const client = new Client({
     intents: [

@@ -635,68 +635,63 @@ module.exports = async (client) => {
         }
         await loadPolls(client);
 
-        const files = getFilesRecursively('./addons');
-        files.forEach(file => {
-            const absolutePath = path.resolve(file);
-            const folderNameMatch = file.match(/[\\\/]addons[\\\/]([^\\\/]+)/);
-            const folderName = folderNameMatch ? folderNameMatch[1] : 'unknown';
-
-            try {
-                let addon = require(absolutePath);
-                addon.filePath = absolutePath; // Attach filePath to the addon object
-
-                if (typeof addon.onLoad === 'function') {
-                    addon.onLoad(client);
-                }
-
-                if (addon.data) { // Slash command or context menu command
-                    if (addon.data.toJSON && typeof addon.data.toJSON === 'function') {
-                        const name = addon.data.name;
-                        if (commandConfig && commandConfig[name]) {
-                            const exists = client.slashCommands.has(name);
-                            if (exists) {
-                                // A base command with this name already loaded; skip addon to avoid duplicates
-                                return;
-                            }
-                            const json = addon.data.toJSON();
-                            global.slashCommands.push(json);
-                            client.slashCommands.set(name, addon);
-                        }
-                    }
-                } else if (addon.name && addon.run && typeof addon.run === 'function') { // Message command
-                    client.messageCommands.set(addon.name, addon);
-                    if (addon.aliases && Array.isArray(addon.aliases)) {
-                        addon.aliases.forEach(alias => {
-                            client.messageCommands.set(alias, addon);
-                        });
-                    }
-                } else if (addon.run && typeof addon.run === 'function') { // Event
-                    addon.run(client);
-                }
-            } catch (addonError) {
-                console.error(`[ERROR] ${folderName}: ${addonError.message}`);
-                console.error(addonError.stack);
-            }
-        });
-
-        // Scan 'commands' directory for slash commands
+        // Scan 'commands' directory for all types of modules (Slash, Message, Events, etc.)
         const commandFiles = getFilesRecursively('./commands');
         commandFiles.forEach(file => {
              const absolutePath = path.resolve(file);
+             const folderNameMatch = file.match(/[\\\/]commands[\\\/]([^\\\/]+)/);
+             const folderName = folderNameMatch ? folderNameMatch[1] : 'unknown';
+
              try {
                  const command = require(absolutePath);
+                 command.filePath = absolutePath;
+
+                 // Determine category
+                 let category = folderName;
+                 if (folderName === 'Addons') {
+                     const addonMatch = file.match(/[\\\/]commands[\\\/]Addons[\\\/]([^\\\/]+)/);
+                     if (addonMatch) {
+                         category = addonMatch[1];
+                     }
+                 }
+                 if (!command.category) {
+                    command.category = category;
+                 }
+
+                 // Execute onLoad if present
+                 if (typeof command.onLoad === 'function') {
+                     command.onLoad(client);
+                 }
+
+                 // Handle Slash Commands
                  if (command.data && typeof command.data.toJSON === 'function') {
                      const name = command.data.name;
-                     // Prevent duplicates if already loaded from addons (unlikely but safe)
+                     // Prevent duplicates if already loaded
                      if (!client.slashCommands.has(name)) {
                         const json = command.data.toJSON();
                         global.slashCommands.push(json);
                         client.slashCommands.set(name, command);
                      }
                  }
-                 // Message commands are handled in index.js via client.messageCommands loader
+                 
+                 // Handle Message Commands
+                 if (command.name && command.run && typeof command.run === 'function') {
+                    // Avoid overwriting if possible, or allow overwrite if intentional. 
+                    // Using set() usually overwrites which is standard behavior.
+                    client.messageCommands.set(command.name, command);
+                    if (command.aliases && Array.isArray(command.aliases)) {
+                        command.aliases.forEach(alias => {
+                            client.messageCommands.set(alias, command);
+                        });
+                    }
+                 } 
+                 // Handle Plain Events
+                 else if (command.run && typeof command.run === 'function' && !command.data) {
+                     command.run(client);
+                 }
+
              } catch (err) {
-                 console.error(`[ERROR] Failed to load command ${file}:`, err);
+                 console.error(`[ERROR] Failed to load module ${file}:`, err);
              }
         });
     }

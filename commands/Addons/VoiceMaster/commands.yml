@@ -1,0 +1,74 @@
+# VoiceMaster Commands Configuration
+
+tempvoice:
+  description: "🎙️ Quản lý voice channel tạm thời của bạn"
+  enabled: true
+  subcommands:
+    setup:
+      description: "⚙️ Thiết lập hệ thống voice channel tạm thời (chỉ owner server)"
+      enabled: true
+      options: []
+    
+    lock:
+      description: "🔒 Khóa voice channel của bạn"
+      enabled: true
+      options: []
+    
+    unlock:
+      description: "🔓 Mở khóa voice channel của bạn"
+      enabled: true
+      options: []
+    
+    name:
+      description: "✏️ Đổi tên voice channel của bạn"
+      enabled: true
+      options:
+        - name: "name"
+          description: "Tên mới cho voice channel"
+          type: 3
+          required: true
+    
+    limit:
+      description: "👥 Đặt giới hạn số người trong voice channel"
+      enabled: true
+      options:
+        - name: "number"
+          description: "Số người tối đa (0 = không giới hạn)"
+          type: 4
+          required: true
+          min_value: 0
+          max_value: 99
+    
+    permit:
+      description: "✅ Cho phép người dùng vào voice channel của bạn"
+      enabled: true
+      options:
+        - name: "user"
+          description: "Người dùng được phép vào"
+          type: 6
+          required: true
+    
+    reject:
+      description: "❌ Từ chối và kick người dùng khỏi voice channel"
+      enabled: true
+      options:
+        - name: "user"
+          description: "Người dùng bị từ chối"
+          type: 6
+          required: true
+    
+    claim:
+      description: "👑 Nhận quyền sở hữu channel khi owner rời đi"
+      enabled: true
+      options: []
+    
+    setlimit:
+      description: "⚙️ Đặt giới hạn mặc định cho server (chỉ owner)"
+      enabled: true
+      options:
+        - name: "number"
+          description: "Số người tối đa mặc định (0 = không giới hạn)"
+          type: 4
+          required: true
+          min_value: 0
+          max_value: 99
