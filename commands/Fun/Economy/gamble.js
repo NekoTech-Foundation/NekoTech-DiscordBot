@@ -208,8 +208,13 @@ module.exports = {
                 const attachment = await createBlackjackCanvas(playerHand, dealerHand);
                  const embed = new EmbedBuilder()
                     .setTitle(`Xì Dách - ${title} (Blackjack!)`)
-                    .setDescription(`Bạn có Blackjack!`)
-                    .addFields({ name: 'Số dư mới', value: `${user.balance}`, inline: true })
+                    .setDescription(`**${user.userId === interaction.user.id ? 'Bạn' : `<@${user.userId}>`}** có Blackjack!`)
+                    .addFields(
+                        { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                        { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                        { name: '💵 Kết quả', value: `+${winnings.toLocaleString()}`, inline: true },
+                        { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                    )
                     .setColor(color);
                 return interaction.editReply({ embeds: [embed], files: [attachment] });
             }
@@ -237,7 +242,19 @@ module.exports = {
                         await user.save();
                         
                         const att = await createBlackjackCanvas(playerHand, dealerHand);
-                        interaction.editReply({ embeds: [new EmbedBuilder().setTitle('Xì Dách - Thua (Quắc)').setColor('#FF0000')], files: [att], components: [] });
+                        
+                        const embed = new EmbedBuilder()
+                            .setTitle('Xì Dách - Thua (Quắc)')
+                            .setColor('#FF0000')
+                            .setDescription(`Bạn đã quắc (Bust)!`)
+                            .addFields(
+                                { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                                { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                                { name: '💵 Mất', value: `-${bet.toLocaleString()}`, inline: true },
+                                { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                            );
+
+                        interaction.editReply({ embeds: [embed], files: [att], components: [] });
                         return;
                     }
                     const att = await createBlackjackCanvas(playerHand, dealerHand, true);
@@ -288,8 +305,21 @@ module.exports = {
                     const color = win ? '#00FF00' : draw ? '#FFFF00' : '#FF0000';
                     const title = win ? 'Thắng' : draw ? 'Hòa' : 'Thua';
                     
+                    const resultMoney = win ? `+${(finalBet + (finalBet * (multiplier - 1) * booster) - finalBet).toLocaleString()}` : draw ? '0' : `-${finalBet.toLocaleString()}`;
+
+                    const embed = new EmbedBuilder()
+                        .setTitle(`Xì Dách - ${title}`)
+                        .setColor(color)
+                        .setDescription(`Bạn: **${pVal}** - Nhà cái: **${dVal}**`)
+                        .addFields(
+                            { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                            { name: '💰 Cược', value: `${finalBet.toLocaleString()}`, inline: true },
+                            { name: '💵 Kết quả', value: resultMoney, inline: true },
+                            { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                        );
+
                     interaction.editReply({ 
-                        embeds: [new EmbedBuilder().setTitle(`Xì Dách - ${title}`).setColor(color).setDescription(`Bạn: ${pVal} - Nhà cái: ${dVal}`)],
+                        embeds: [embed],
                         files: [att],
                         components: []
                     });
@@ -313,7 +343,13 @@ module.exports = {
              
              const embed = new EmbedBuilder()
                  .setTitle(win ? 'Thắng Coinflip!' : 'Thua Coinflip!')
-                 .setDescription(`Kết quả: ${result === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}\nBạn chọn: ${guess === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}`)
+                 .setDescription(`Kết quả: **${result === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}**\nBạn chọn: **${guess === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}**`)
+                 .addFields(
+                    { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                    { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                    { name: '💵 Kết quả', value: win ? `+${amount.toLocaleString()}` : `${amount.toLocaleString()}`, inline: true },
+                    { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                 )
                  .setColor(win ? '#00FF00' : '#FF0000');
              interaction.reply({ embeds: [embed] });
 
@@ -338,7 +374,13 @@ module.exports = {
 
              interaction.reply({ embeds: [new EmbedBuilder()
                  .setTitle(win ? 'Thắng Roll!' : 'Thua Roll!')
-                 .setDescription(`Xúc xắc: ${roll}. Bạn chọn: ${guess}\n${win ? `Ăn ${bet * multiplier}` : `Mất ${bet}`}`)
+                 .setDescription(`Xúc xắc: **${roll}**. Bạn chọn: **${guess}**\n${win ? `Ăn ${bet * multiplier}` : `Mất ${bet}`}`)
+                 .addFields(
+                    { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                    { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                    { name: '💵 Kết quả', value: win ? `+${(bet * multiplier).toLocaleString()}` : `-${bet.toLocaleString()}`, inline: true },
+                    { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                 )
                  .setColor(win ? '#00FF00' : '#FF0000')] });
 
         } else if (subcommand === 'roulette') {
@@ -356,10 +398,28 @@ module.exports = {
                  const winnings = bet * winMulti * checkActiveBooster(user, 'Money');
                  user.balance += winnings;
                  user.transactionLogs.push({ type: 'roulette', amount: winnings - bet, timestamp: now });
-                 interaction.reply({ embeds: [new EmbedBuilder().setTitle('Thắng Roulette!').setDescription(`Về ${result}! Bạn ăn ${winnings}`).setColor('#00FF00')] });
+                 interaction.reply({ embeds: [new EmbedBuilder()
+                    .setTitle('Thắng Roulette!')
+                    .setDescription(`Về **${result}**! Bạn ăn **${winnings.toLocaleString()}**`)
+                    .addFields(
+                        { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                        { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                        { name: '💵 Thắng', value: `+${winnings.toLocaleString()}`, inline: true },
+                        { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                    )
+                    .setColor('#00FF00')] });
              } else {
                  user.transactionLogs.push({ type: 'roulette', amount: -bet, timestamp: now });
-                 interaction.reply({ embeds: [new EmbedBuilder().setTitle('Thua Roulette!').setDescription(`Về ${result}! Bạn mất ${bet}`).setColor('#FF0000')] });
+                 interaction.reply({ embeds: [new EmbedBuilder()
+                    .setTitle('Thua Roulette!')
+                    .setDescription(`Về **${result}**! Bạn mất **${bet.toLocaleString()}**`)
+                    .addFields(
+                        { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                        { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                        { name: '💵 Mất', value: `-${bet.toLocaleString()}`, inline: true },
+                        { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                    )
+                    .setColor('#FF0000')] });
              }
              await user.save();
 
@@ -381,7 +441,13 @@ module.exports = {
              
              interaction.reply({ embeds: [new EmbedBuilder()
                  .setTitle('Slots')
-                 .setDescription(`🎰 ${r.join(' ')} 🎰\n\n${win ? `JACKPOT! Thắng ${amount}` : `Thua ${bet}`}`)
+                 .setDescription(`🎰 ${r.join(' ')} 🎰\n\n${win ? `JACKPOT! Thắng **${amount.toLocaleString()}**` : `Thua **${bet.toLocaleString()}**`}`)
+                 .addFields(
+                    { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
+                    { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
+                    { name: '💵 Kết quả', value: win ? `+${amount.toLocaleString()}` : `${amount.toLocaleString()}`, inline: true },
+                    { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                 )
                  .setColor(win ? '#00FF00' : '#FF0000')] });
         }
     }

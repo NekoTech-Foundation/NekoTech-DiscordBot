@@ -133,6 +133,23 @@ Economy:
     min: 10
     max: 50
 
+  Blackjack:
+    cooldown: "15s"
+    winMultiplier: 2.0
+
+  Coinflip:
+    cooldown: "5s"
+
+  Roll:
+    cooldown: "10s"
+
+  Roulette:
+    cooldown: "15s"
+
+  Slot:
+    cooldown: "10s"
+    multiplier: 5.0
+
 Store:
   Categories: []
   Phân bón:
