@@ -17,8 +17,7 @@ async function getUserFishing(userId) {
     let userFishing = await fishingSchema.findOne({ userId });
     if (!userFishing) {
         // If user is brand new, create a new document with the correct structure
-        userFishing = new fishingSchema({ userId, inventory: [], baits: [], rods: [] });
-        await userFishing.save();
+        userFishing = await fishingSchema.create({ userId, inventory: [], baits: [], rods: [] });
     } else {
         // If user exists, check if they have the old data structure
         if (typeof userFishing.rods === 'undefined') {

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { loadLang } = require('../../utils/langLoader');
 const yaml = require('js-yaml');
 const fs = require('fs');
 const path = require('path');
@@ -21,6 +22,8 @@ module.exports = {
                 .setRequired(false)),
 
     async execute(interaction, client) {
+        const lang = loadLang(interaction.guild.id);
+        const afkLang = lang.Addons.AFK;
         // Check permissions
         if (config.settings.allowed_roles.length > 0) {
             const hasRole = interaction.member.roles.cache.some(role =>
@@ -28,7 +31,7 @@ module.exports = {
             if (!hasRole) {
                 const errorEmbed = new EmbedBuilder()
                     .setColor('#FF4444')
-                    .setDescription(`❌ ${config.lang.errors.no_permission}`)
+                    .setDescription(`❌ ${afkLang.Errors.NoPermission}`)
                     .setTimestamp();
 
                 return interaction.reply({
@@ -42,7 +45,7 @@ module.exports = {
         if (client.afkUsers.has(interaction.user.id)) {
             const errorEmbed = new EmbedBuilder()
                 .setColor('#FFA500')
-                .setDescription(`⚠️ ${config.lang.errors.already_afk}`)
+                .setDescription(`⚠️ ${afkLang.Errors.AlreadyAFK}`)
                 .setTimestamp();
 
             return interaction.reply({
@@ -51,7 +54,7 @@ module.exports = {
             });
         }
 
-        const reason = interaction.options.getString('reason') || 'Không có lí do';
+        const reason = interaction.options.getString('reason') || afkLang.UI.ReasonField;
         const duration = interaction.options.getString('duration');
 
         let returnTime = null;
@@ -60,9 +63,9 @@ module.exports = {
             if (!time) {
                 const errorEmbed = new EmbedBuilder()
                     .setColor('#FF4444')
-                    .setDescription(`❌ ${config.lang.errors.invalid_duration}`)
+                    .setDescription(`${afkLang.Errors.InvalidDuration}`)
                     .addFields({
-                        name: '📝 Ví dụ hợp lệ',
+                        name: 'Example',
                         value: '`1h`, `30m`, `1h 30m`, `2h 15m`'
                     })
                     .setTimestamp();
@@ -88,30 +91,30 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor('#FF6B6B')
             .setAuthor({
-                name: `${interaction.user.username} đang rời máy`,
+                name: afkLang.UI.SetAFKSuccessTitle,
                 iconURL: interaction.user.displayAvatarURL({ dynamic: true })
             })
-            .setDescription(`**💤 Trạng thái AFK đã được kích hoạt**`)
+            .setDescription(afkLang.UI.SetAFKSuccessDesc)
             .addFields(
                 {
-                    name: '📝 Lí do',
+                    name: afkLang.UI.Reason,
                     value: `\`\`\`${reason}\`\`\``,
                     inline: false
                 },
                 {
-                    name: '⏰ Thời gian bắt đầu',
+                    name: afkLang.UI.StartTime,
                     value: `<t:${Math.floor(timestamp / 1000)}:F>`,
                     inline: true
                 },
                 {
-                    name: '🔙 Quay lại sau',
-                    value: returnTime ? `<t:${Math.floor(returnTime / 1000)}:R>` : '`Không xác định`',
+                    name: afkLang.UI.ReturnTime,
+                    value: returnTime ? `<t:${Math.floor(returnTime / 1000)}:R>` : '`N/A`',
                     inline: true
                 }
             )
             .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true, size: 256 }))
             .setFooter({
-                text: 'Bot sẽ thông báo khi bạn trở lại',
+                text: afkLang.UI.Footer,
                 iconURL: client.user.displayAvatarURL()
             })
             .setTimestamp();

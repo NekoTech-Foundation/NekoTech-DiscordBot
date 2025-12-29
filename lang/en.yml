@@ -1,0 +1,875 @@
+NoPermsMessage: "You do not have permission to use this command."
+SuccessEmbedTitle: "Success"
+ErrorEmbedTitle: "An error occurred"
+
+# ===========================================================================
+# HELP COMMAND MESSAGES
+# ===========================================================================
+HelpCommand:
+  MainEmbed:
+    Title: "Welcome to {botName} Help Menu"
+    Description:
+      - "Select a category from the dropdown menu to view available commands."
+    Footer:
+      Text: "KentaBuckets Bot"
+      Icon: ""
+    Author:
+      Text: "{user}"
+      Icon: "{user-avatar}"
+    Color: "#1769FF"
+    Image: ""
+    Thumbnail: "{guild-avatar}"
+
+  CategorySelectPlaceholder: "Select a category..."
+  BackButtonLabel: "Back to categories"
+
+  Categories:
+    General:
+      Name: "General"
+      Description: "Basic commands for general use"
+      Emoji: "📋"
+    Moderation:
+      Name: "Moderation"
+      Description: "Commands to manage the server"
+      Emoji: "🛡️"
+    Fun:
+      Name: "Fun"
+      Description: "Fun and entertainment commands"
+      Emoji: "🎉"
+    Economy:
+      Name: "Economy"
+      Description: "Commands to manage your virtual economy"
+      Emoji: "💰"
+    Utility:
+      Name: "Utility"
+      Description: "Useful tools and utilities"
+      Emoji: "🔧"
+    Uncategorized:
+      Name: "Extensions"
+      Description: "Commands from extensions"
+      Emoji: "❓"
+
+  CategoryEmbed:
+    Title: "Commands in {category}"
+    Description: []
+    Color: "#5865F2"
+    Footer:
+      Text: "Use the back button to return to category selection"
+      Icon: ""
+    Author:
+      Text: "{botName} Commands"
+      Icon: ""
+
+  CommandDetailsEmbed:
+    Footer:
+      Text: "Use /help to view all commands"
+      Icon: ""
+    Author:
+      Text: "Command Details"
+      Icon: ""
+    Color: "#5865F2"
+
+Verify:
+  AlreadyVerified: "You are already verified!"
+  Success: "Verification successful! Welcome."
+  Error: "An error occurred during verification."
+  CaptchaTitle: "CAPTCHA Verification"
+  CaptchaDescription: "Please select cells containing: **{shape}**"
+  SubmitCaptcha: "Submit"
+  IncorrectCaptcha: "Incorrect CAPTCHA, please try again."
+  Timeout: "Verification timeout."
+  Required: "Solve the math problem"
+  QuestionFormat: "What is {num1} {operator} {num2}?"
+  Incorrect: "Incorrect answer."
+
+# ===========================================================================
+# BACKUP COMMAND
+# ===========================================================================
+BackupCreating: "✅ | Creating backup, please wait..."
+BackupCreatedEmbed: "Successfully **created backup** for this server!"
+BackupCreatedMsg: "✅ | Successfully created backup for this server, backup info has been sent to your DM!"
+BackupWrongUsage: "Please specify a valid backup ID!"
+BackupDeleted: "Successfully deleted backup!"
+BackupNotFound: "No backup found with that ID!"
+BackupLoadWarning: "⚠️ All channels, roles, and settings of the server will be deleted. Are you sure you want to load the backup?"
+BackupLoading: "⚠️ Loading backup..."
+BackupLoaded: "Backup loaded successfully!"
+BackupCancelled: "Cancelled!"
+BackupEmbedUsage: "Usage"
+BackupCreatedBy: "Created by:"
+BackupButtonConfirm: "Confirm"
+BackupButtonCancel: "Cancel"
+
+# ===========================================================================
+# AVATAR + BANNER COMMANDS
+# ===========================================================================
+AvatarSearchedBy: "Searched by:"
+AvatarClickHere: "Click here to view image"
+
+BannerClickHere: "Click here to view full banner"
+BannerSearchedBy: "Banner searched by"
+NoBannerSet: "This user has not set a banner."
+
+# ===========================================================================
+# MEME COMMAND
+# ===========================================================================
+MemeViewThread: "View Thread"
+
+# ===========================================================================
+# COMPLIMENT COMMAND
+# ===========================================================================
+compliments:
+  messages:
+    - "You are more helpful than you realize."
+    - "Your kindness is unmatched."
+    - "You have a great sense of humor."
+    - "You bring out the best in other people."
+    - "You light up the room."
+    - "You are a smart cookie."
+    - "You are the reason someone smiles today."
+    - "You have the best ideas."
+    - "You are a candle in the darkness."
+    - "You are a great example to others."
+
+# ===========================================================================
+# DARK JOKES COMMAND
+# ===========================================================================
+darkjokes:
+  messages:
+    - "I have a fish that can breakdance! Only for 20 seconds though, and only once."
+    - "My grandfather has the heart of a lion and a lifetime ban from the zoo."
+    - "I'll never forget my Granddad's last words to me just before he died. 'Are you still holding the ladder?'"
+    - "Why don't cannibals eat clowns? Because they taste funny."
+    - "What's the difference between a Ferrari and a pile of dead bodies? I don't have a Ferrari in my garage."
+
+# ===========================================================================
+# GAME COMMANDS
+# ===========================================================================
+Roll: "🎲 You rolled a ${rollResult}!"
+
+wordSnake:
+  start: "Word Snake started! The first word is: `${word}`. The next word must start with `${letter}`."
+  invalidWord: "Invalid word! Remember, it must start with `${letter}`."
+  timeUp: "Time's up! The last word was `${lastWord}`. Game over, final score: `${score}`."
+  gameOver: "Game Over! Final Score: `${score}`."
+
+Hangman:
+  commandDescription: "Play Hangman!"
+  activeGameWarning: "You already have a game in progress. Please finish it first."
+  gameStartMessage: "Starting Hangman... Enter your guess!"
+  winMessage: "Congratulations, {username}! You won!"
+  gameOverMessage: "Game Over! The word was: {word}"
+  continueMessage: "Keep guessing!"
+  words:
+    - Ocean
+    - Pirate
+    - Castle
+    - Rainbow
+    - Forest
+    - Dragon
+    - Music
+    - Cookie
+    - Pumpkin
+    - Lantern
+    - Shadow
+    - Comet
+    - Candle
+    - Guitar
+    - Puzzle
+    - Dolphin
+    - Rocket
+    - Witch
+    - Knight
+    - Circus
+    - Discord
+    - Adventure
+    - Balloon
+    - Bicycle
+    - Butterfly
+    - Campfire
+    - Chocolate
+    - Dinosaur
+    - Elephant
+    - Fireworks
+    - Galaxy
+    - Gemstone
+    - Helicopter
+    - Igloo
+    - Jellyfish
+    - Culture
+    - Lighthouse
+    - Meteor
+    - Necklace
+    - Octopus
+    - Painting
+    - Swamp
+    - Robot
+    - Spaceship
+    - Treasure
+    - Unicorn
+    - Volcano
+    - Waterfall
+    - Harp
+    - Snowman
+    - Zebra
+    - Blossom
+    - Canyon
+    - Desert
+    - Mystery
+    - Fairy
+    - Garden
+    - Horizon
+    - Island
+    - Juggler
+    - Kite
+    - Maze
+    - Motor
+    - Nebula
+    - Oasis
+    - Palace
+    - Quasar
+    - Reef
+    - Starship
+    - Temple
+    - Universe
+    - Vortex
+    - Whistle
+    - Xenon
+    - Yard
+    - Zeppelin
+    - Apple
+    - Banana
+    - Cherry
+    - Date
+    - Fig
+    - Grape
+    - Melon
+    - Jackfruit
+    - Kiwi
+    - Lemon
+    - Mango
+    - Peach
+    - Orange
+    - Papaya
+  embeds:
+    gameTitle: "🔤 Hangman: {username}"
+    hangman: "Hangman"
+    wordToGuess: "Word to guess"
+    guessesLeft: "Guesses left"
+    progress: "Progress"
+    useChatToGuess: "Use chat to guess a letter.\nOnly one letter per message."
+    guessFooter: "Type your guess in chat. Wrong guesses reduce attempts left!"
+    gameOverTitle: "Game Over"
+    finalWord: "The word was:"
+    gameEndMessage: "The game has ended."
+    thanksForPlaying: "Thanks for playing!"
+
+Wordle:
+  Messages:
+    Title: "Wordle"
+    BottomFirst: "Guess the 5-letter word"
+    BottomLast: "Use chat to guess!"
+    KeepGuess: "Keep guessing!"
+    GameActive: "You already have an active game!"
+    LetsPlay: "Let's play Wordle! Try to guess the 5-letter word."
+  Embed:
+    Title: "**Game Over**"
+    Description: "Game Over! The word was {word}"
+    Footer: "Thanks for playing!"
+  words:
+    - Apple
+    - Bread
+    - Crate
+    - Drink
+    - Eagle
+    - Frost
+    - Grape
+    - House
+    - Ideal
+    - Juice
+    - Knife
+    - Lemon
+    - Mango
+    - Night
+    - Olive
+    - Peach
+    - Quiet
+    - River
+    - Stone
+    - Table
+    - Unity
+    - Vivid
+    - Whale
+    - Zebra
+
+Connectfour:
+  Title: "{user}'s Turn!"
+  Colors:
+    Win: "#7ff946"
+    Lose: "#df3e3e"
+    Tie: "#ffffff"
+  Embed:
+    Title: "**Game Over**"
+    Description: "{user} won!"
+    Footer: "Thanks for playing!"
+  Board:
+    Emojis:
+      Player: "🔴"
+      Bot: "🟡"
+      Blank: "⬛"
+      1: "1️⃣"
+      2: "2️⃣"
+      3: "3️⃣"
+      4: "4️⃣"
+      5: "5️⃣"
+      6: "6️⃣"
+      7: "7️⃣"
+  Buttons:
+    Style: "Secondary"
+    Numbers:
+      1:
+        Text: ""
+        Emoji: "1️⃣"
+      2:
+        Text: ""
+        Emoji: "2️⃣"
+      3:
+        Text: ""
+        Emoji: "3️⃣"
+      4:
+        Text: ""
+        Emoji: "4️⃣"
+      5:
+        Text: ""
+        Emoji: "5️⃣"
+      6:
+        Text: ""
+        Emoji: "6️⃣"
+      7:
+        Text: ""
+        Emoji: "7️⃣"
+
+TicTacToe:
+  Board:
+    Emojis:
+      X: "❌"
+      O: "⭕"
+      Blank: "⬛"
+  Colors:
+    Win: "#00FF00"
+    Lose: "#FF0000"
+    Tie: "#FFFF00"
+  Messages:
+    OwnGame: "Start your own game!"
+    ColumnFull: "This column is full, try another one"
+    Win: "## **Good job {user}! You won!**"
+    Tie: "## **It's a tie {user}!**"
+    Lost: "## **Sorry {user}, you lost!**"
+    Columns: "Column number. Use buttons below to make a move."
+    GameOver: "Game Over"
+    ThanksForPlaying: "Thanks for playing!"
+
+RockPaperScissors:
+  Messages:
+    RockPaperScissors: "**Rock Paper Scissors**"
+    YourChoice: "## You chose **{userChoice}**, and bot chose **{botChoice}**."
+    Win: "## **Good job {user}! You won!**"
+    Tie: "## **It's a tie {user}!**"
+    Lost: "## **Sorry {user}, you lost!**"
+    GameEnded: "Game Ended!"
+    ThanksForPlaying: "Thanks for playing!"
+    CantPlaySomeoneElsesGame: "You can't play someone else's game!"
+  Embed:
+    Color: "#000000"
+    Title: "👊 Rock Paper Scissors"
+    Description: "**Let's play! Choose your weapon below:**"
+    Fields:
+      Rock:
+        Name: "Rock"
+        Value: "🪨"
+      Paper:
+        Name: "Paper"
+        Value: "📰"
+      Scissors:
+        Name: "Scissors"
+        Value: "✂️"
+    Footer:
+      Text: "Make your choice!"
+    Buttons:
+      Rock:
+        Style: "Secondary"
+        Text: "Rock"
+        Emoji: "🪨"
+      Paper:
+        Style: "Secondary"
+        Text: "Paper"
+        Emoji: "📰"
+      Scissors:
+        Style: "Secondary"
+        Text: "Scissors"
+        Emoji: "✂️"
+
+# ===========================================================================
+# SNIPE COMMAND
+# ===========================================================================
+SnipeNoMsg: "No messages to snipe in this channel."
+ErrorGeneric: "Sorry, there was an error with this command."
+
+# ===========================================================================
+# GIVEAWAY COMMAND
+# ===========================================================================
+Giveaways:
+  EntrySuccessMessage: "🎉 You successfully entered the giveaway for **{prize}** hosted by {hostedBy}!"
+  LeaveSuccessMessage: "👋 You successfully left the giveaway."
+  EntryErrorMessage: "An error occurred while trying to enter the giveaway. Please contact support."
+  CheckChance: "{user}, you have a {percent}% chance of winning this giveaway. ({entries} entries)"
+  NotJoinedGiveaway: "You have not joined this giveaway!"
+  CalculationError: "An error occurred whilst calculating your chance."
+  GiveawayNotFound: "Giveaway not found or may have been deleted...."
+  GiveawayAlreadyEnded: "Giveaway has already ended."
+  GiveawayHasntEnded: "Giveaway hasn't ended yet."
+  WinMessage: "Congratulations to the winners of **{prize}**! {winners}"
+  WinRerollMessage: "Giveaway rerolled! Congratulations to the new winners of **{prize}**! {winners}"
+  WinnerDirectMessage: "Congratulations, you won the giveaway for **{prize}**! Please open a ticket in **{serverName}** to claim. {channel}"
+  NoParticipationMessage: "No winner, nobody participated in the giveaway for {prize}."
+  IncorrectRoleMessage: "You do not have the required role to enter the giveaway for {prize}!"
+  IncorrectMinimumAccountAgeMessage: "Your account is not old enough to enter the giveaway for {prize}!"
+  IncorrectMinimumServerJoinDateMessage: "You haven't been in the server {serverName} long enough to enter the giveaway for {prize}!"
+  AlreadyEnteredMessage: "You have already entered the giveaway for {prize}!"
+  IncorrectInviteCountMessage: "You need at least {minInvites} invites to enter this giveaway."
+  IncorrectMessageCountMessage: "You need {required} messages to enter this giveaway. You currently have {current}."
+  chanceMessage: "{user}, you have a **{winChance}%** chance of winning. ({userEntries} entries: 1 base + {extraEntries} bonus)"
+  ExtraEntriesMessage: "You have **{extraEntries}** extra entries from your roles! Use the `Chance` button to check your win rate."
+
+  Embeds:
+    ActiveGiveaway:
+      Prize: "## Giveaway {prize} x{winnerCount}!"
+      HostedByField: "Hosted by:"
+      EndsInField: "Ends in:"
+      EntriesField: "Entries:"
+      WhitelistRoleField: "Who can enter"
+      BlacklistRoleField: "Who cannot enter"
+      MinimumSeverJoinDateField: "Min Server Join Date"
+      MinimumAccountAgeField: "Min Account Age"
+
+    EndedGiveaway:
+      Title: "## Giveaway {prize} Ended!"
+      WinnersField: "Winners:"
+      EntriesField: "Entries:"
+
+# ===========================================================================
+# AFK COMMAND
+# ===========================================================================
+AFK:
+  Success: "AFK status set"
+  ErrorMessges:
+    NoPermission: "You do not have permission to use AFK command."
+    NickNameMissingPermissions: "Could not change nickname due to missing permissions."
+    NickNameOwner: "Your AFK status was set, but I cannot change your nickname because you are the server owner."
+    AlreadyMarkedAFK: "You are already marked as AFK!"
+    TimeFormat: "Invalid time format. Please use formats like: 1s, 1m, 1h, 1d."
+    TimeParseError: "Could not parse time input."
+    RoleCreate: "Error creating AFK role. Please check my permissions."
+
+# ===========================================================================
+# LEADERBOARD & LEVELS
+# ===========================================================================
+Leaderboard:
+  Balance:
+    Top: "🏆 Leaderboard - Balance"
+    Footer: "Page {pageMin}/{pageMax} • Updated at {time}"
+    Messages: "{count} 🪙"
+  Levels:
+    Top: "🏆 Leaderboard - Levels"
+    Footer: "Page {pageMin}/{pageMax} • Updated at {time}"
+    Messages: "Level {count_level}, XP {count_xp}"
+  Messages:
+    Top: "🏆 Leaderboard - Messages"
+    Footer: "Page {pageMin}/{pageMax} • Updated at {time}"
+    Messages: "{count} messages"
+  Invites:
+    Top: "🏆 Leaderboard - Invites"
+    Footer: "Page {pageMin}/{pageMax} • Updated at {time}"
+    Messages: "{count} invites"
+  Error: "An error occurred while fetching leaderboard for {guild}."
+  Button:
+    Previous: "Previous"
+    Next: "Next"
+  Embed:
+    Colour: "#000000"
+
+Levels:
+  NoPermission: "Access Denied. You lack the necessary permissions to modify XP or levels."
+  DataNotFound: "No profile found for {user}. Please ensure the user exists in the system."
+  CurrentLevelAndXP: "{user} is currently level {level}, with a total of {xp} XP."
+  UpdatedXP: "{user}'s XP has been successfully updated to {xp}."
+  UpdatedLevel: "{user}'s level has been successfully updated to {level}."
+  UpdatedXPAndLevel: "{user}'s XP and level have been updated to {xp} and {level}."
+
+  LevelMessages:
+    - "{user}, congratulations on reaching level {newLevel}! Your dedication to procrastination is inspiring. 😅"
+    - "Ting! {user} leveled up to {newLevel}! Looks like all that XP grinding was worth it. 🤔"
+    - "Level {newLevel} unlocked for {user}! Keep it up! 🚀"
+    - "🎉 Congrats {user}! You powered up to level {newLevel}! ⚡️"
+    - "🏆 {user}, you reached level {newLevel}! {guildName} is proud of you!"
+
+# ===========================================================================
+# ROLE COMMANDS
+# ===========================================================================
+AddRole:
+  AddroleSelfRole: "You cannot add a role to yourself."
+  AddroleHighestRole: "The selected role is higher than my highest role."
+  AddroleUserRoleNotAbove: "You cannot add a role higher or equal to your highest role."
+  AddroleAlreadyHave: "User already has this role."
+  AddroleSuccess: "Successfully added {role} to {user}"
+  AddroleError: "Error adding role."
+  RoleAllUserHighestRole: "You cannot assign a role higher or equal to your highest role."
+
+RoleAll:
+  RoleAllConfirmationAdd: "Are you sure you want to add role {role} to ALL users?"
+  RoleAllConfirmationRemove: "Are you sure you want to remove role {role} from ALL users?"
+  RoleAllHighestRole: "Selected role is higher or equal to bot's highest role. Not allowed."
+  RoleAllUserHighestRole: "Selected role is higher or equal to your highest role. Not allowed."
+  RoleAllSuccessAdd: "Successfully added role {role} to all users."
+  RoleAllSuccessRemove: "Successfully removed role {role} from all users."
+  RoleAllError: "Error processing request."
+  RoleAllCancelled: "Action cancelled."
+  RoleAllTimeOut: "Command timed out."
+
+Temprole:
+  SameOrHigherRoleError: "You cannot assign a role equal or higher than your current highest role."
+  InvalidDurationFormat: "Invalid time format. Please use formats like 1h, 15m, 1d."
+  RoleAssigned: "Temporarily assigned role {role} to {user} for {duration}."
+  ErrorAssigningRole: "Error assigning temporary role."
+  MissingPermissionsError: "Bot does not have enough permissions."
+  UnknownRoleError: "Invalid or unknown role specified."
+
+# ===========================================================================
+# HISTORY COMMAND
+# ===========================================================================
+History:
+  HistoryEmbedTitle: "User History for {user-tag}"
+  HistoryEmbedUserInfo: "👤 User Info"
+  HistoryEmbedName: "Name"
+  HistoryEmbedJoinedServer: "📆 Joined Server"
+  HistoryTotalMessages: "💌 Total Messages"
+  HistoryEmbedNote: "📝 Note"
+  HistoryEmbedWarnings: "⚠️ Warnings"
+  HistoryEmbedTimeouts: "⏲️ Timeouts"
+  HistoryEmbedKicks: "👢 Kicks"
+  HistoryEmbedBans: "🔨 Bans"
+
+ClearhistorySuccess: "Successfully cleared history for {user}!"
+
+# ===========================================================================
+# POLL COMMAND
+# ===========================================================================
+PollEmbedTitle: "A Poll has started!"
+PollEmbedFooter: "Poll started by:"
+
+# ===========================================================================
+# PURGE COMMAND
+# ===========================================================================
+Purge:
+  NoPermsMessage: "You do not have permission to delete messages."
+  PurgeCleared: "Successfully cleared {amount} messages."
+  PurgeOld: "Error: Cannot delete messages older than 14 days."
+  ModerationEmbedTitle: "Moderation Action"
+  ModerationEmbedAction: "Action: Purge"
+  ModerationEmbedDetails: "Moderator: <@{user-id}>\nAmount: {amount}\nChannel: {channel}"
+
+# ===========================================================================
+# SLOWMODE COMMAND
+# ===========================================================================
+SlowmodeReset: "Slowmode has been reset for this channel."
+SlowmodeFailed: "Failed to set slowmode. Check your input."
+SlowmodeSuccess: "Slowmode set to **{time}** seconds."
+
+# ===========================================================================
+# ANTIHOIST COMMAND
+# ===========================================================================
+AntiHoist:
+  NoPermission: "You do not have permission to use antihoist."
+  CommandCompleted: "Antihoist command completed."
+  NotifyUserMessage: "Hello {user}! Your nickname was changed from `{oldDisplayName}` to `{newDisplayName}` in **{guildName}** due to anti-hoisting rules."
+
+# ===========================================================================
+# WARN COMMAND
+# ===========================================================================
+Unwarn:
+  NoPermission: "You do not have permission to use this command."
+  NoWarnings: "No warnings found for this user."
+  InvalidWarningID: "Invalid Warning ID."
+  WarningRemoved: "Removed warning from {userTag}: `{reason}`."
+  Error: "An error occurred."
+
+Warn:
+  BotOrSelf: "You cannot warn a bot or yourself."
+  Success: "User {userTag} has been warned for: {reason}"
+  Error: "Error warning user."
+
+# ===========================================================================
+# REMINDER COMMAND
+# ===========================================================================
+Reminder:
+  Messages:
+    invalid_mentions: "You cannot include mentions in your reminder."
+    invalid_format: "Invalid format. Use '10m', '1h', etc."
+    permission_denied: "You don't have permission."
+    no_reminders: "You have no active reminders."
+  Embeds:
+    Reminder:
+      Color: "#1769FF"
+      Title: "Reminder Set"
+      Description:
+        - "I will remind {user} in {time}"
+      Footer:
+        Text: "KentaBuckets Bot Reminder"
+        Icon: ""
+    List:
+      Color: "#1769FF"
+      Title: "Your Active Reminders"
+      Footer:
+        Text: "Use /reminder create to set a new one"
+        Icon: ""
+    DM:
+      Color: "#1769FF"
+      Title: "🔔 Reminder!"
+      Description: "{message}"
+      Footer:
+        Text: "Your reminder is here!"
+        Icon: ""
+
+# ===========================================================================
+# ADDON MESSAGES
+# ===========================================================================
+Addons:
+  Fishing:
+    Errors:
+      Cooldown: "⏰ **Cooldown!** Please wait `{time}s`."
+      NoRod: "❌ You don't have a fishing rod! Use `/store` to buy one."
+      RodBrokenTitle: "🔧 Fishing Rod Broken"
+      RodBrokenDesc: "Your **{rod}** has run out of durability!\n\nUse `/fixcancau` to repair it or buy a new one at `/store`."
+      NoBait: "❌ You don't have any bait."
+      NoFishToSell: "❌ You have no fish to sell."
+      NoFishInInventory: "❌ You don't have this fish in your inventory."
+      InvalidQuantity: "❌ Invalid quantity. You have {quantity}."
+      NoRodsOwned: "❌ You don't own any fishing rods."
+      NotYourMenu: "❌ This is not your menu."
+      InvalidCommand: "❌ Invalid command."
+      GenericError: "❌ An error occurred while executing the command. Please try again later."
+    UI:
+      NoBaitButton: "No Bait"
+      SelectBaitTitle: "🎣 Select Bait"
+      SelectBaitDesc: "Do you want to use bait?\n*Bait increases the chance of catching rare fish.*"
+      SelectBaitFooter: "Selection time: 30 seconds"
+      CastingLine: "🎣 Casting line..."
+      Timeout: "⏰ Time's up! Using bait: {bait}"
+      NoCatchTitle: "😞 Catch Nothing"
+      NoCatchDesc: "You didn't catch any fish this time. Better luck next time!"
+      NoCatchFooter: "{rod} has {durability} durability left"
+      SuccessTitle: "🎉 Fishing Successful!"
+      Weight: "⚖️ Weight"
+      Rarity: "✨ Rarity"
+      XPGained: "🌟 XP Gained"
+      BaitUsed: "🪱 Bait Used"
+      InventoryTitle: "🎒 Fishing Inventory - {user}"
+      NoRodStatus: "❌ No rod"
+      RodHeader: "🎣 Fishing Rods"
+      NoBaitStatus: "❌ No bait"
+      BaitHeader: "🪱 Bait"
+      EmptyFishInventory: "❌ Empty Fish Inventory"
+      MoreFish: "\n\n*...and {count} others*"
+      FishHeader: "🐠 Fish Inventory"
+      SellSuccessTitle: "💰 Fish Sold Successfully"
+      SellAllDesc: "Sold **all fish** in inventory!"
+      TotalIncome: "💵 Total Income"
+      SpeciesCount: "🐟 Species Count"
+      NewBalance: "💳 New Balance"
+      Quantity: "🐟 Quantity"
+      TotalWeight: "⚖️ Total Weight"
+      SelectRodTitle: "🎣 Select Fishing Rod"
+      SelectRodDesc: "Select the fishing rod you want to use:"
+      SelectRodPlaceholder: "Select rod to equip"
+      EquippedRodConfig: "✅ Equipped: **{rod}**"
+      SelectBaitConfigTitle: "🪱 Select Bait"
+      SelectBaitConfigDesc: "Select the bait you want to prioritize:"
+      SelectBaitPlaceholder: "Select default bait"
+      EquippedBaitConfig: "✅ Selected: **{bait}** as default bait"
+    Help:
+      Title: "🎣 Fishing Guide"
+      Desc: "Welcome to the fishing system! Here are the commands you can use:"
+      Fields:
+        Fish:
+          Name: "🎣 Fishing"
+          Value: "`/cauca fish <location>` - Start fishing at the selected location\n*Each cast consumes 1 rod durability*"
+        Inventory:
+          Name: "🎒 Inventory Management"
+          Value: "`/cauca inventory` - View your fishing inventory\n`/cauca select <rod/bait>` - Select rod or bait to equip\n`/fixcancau` - Repair fishing rod (only when durability < 30%)"
+        Economy:
+          Name: "💰 Economy"
+          Value: "`/cauca sell <fish/all> [quantity]` - Sell fish for coins\n`/store` - Open store to buy rods and bait"
+        Stats:
+          Name: "📊 Statistics"
+          Value: "`/leaderboard cauca` - View fishing leaderboard\n`/cauca help` - Show this message"
+        Rarity:
+          Name: "✨ Fish Rarity"
+          Value: "{common} Common • {uncommon} Uncommon • {rare} Rare\n{epic} Epic • {legendary} Legendary"
+        Tips:
+          Name: "💡 Tips"
+          Value: "• Use bait to increase the chance of catching rare fish\n• Better rods = higher durability + special effects\n• Epic and Legendary fish change every hour!"
+      Footer: "Hope you catch many rare fish! 🐟"
+
+  Farming:
+    Errors:
+      NoSeed: "You don't have {seed} seeds to plant."
+      InvalidQuantity: "Invalid quantity."
+      NotEnoughSeed: "You don't have enough {seed} seeds to plant."
+      NoPlantsReady: "You have no crops ready to harvest."
+      NotPlanted: "You haven't planted {plant}."
+      NotReady: "Your {plant} is not ready to harvest yet. Time remaining: {time}."
+      NoPlants: "You haven't planted any crops."
+      NoSeeds: "You don't have any seeds."
+      NoProduce: "You don't have any produce or fertilizer."
+      NoFertilizer: "You don't have {fertilizer}."
+      NoPlantsToFertilize: "You have no crops to fertilize."
+    UI:
+      PlantSuccess: "You successfully planted {quantity} {emoji} {name}."
+      PlantMutation: "\n✨ **Lucky!** Your plant mutated into: {emoji} **{name}** due to {weatherEmoji} {weatherName} weather!"
+      HarvestSuccess: "You harvested:\n"
+      HarvestBonus: "\n✨ Mutated crops: **{mutations}** gave you an extra **{amount}** coins!"
+      HarvestMutationOnly: "\n✨ Mutated crops: **{mutations}**"
+      SellAllButton: "Sell All"
+      FieldTitle: "Your Farm"
+      FieldEmpty: "You have no crops planted."
+      WeatherCurrent: "🌤️ **Current Weather**: {emoji} **{name}** (Ends: {time})\n{desc}"
+      WeatherEventTitle: "🌤️ Farm Weather Event"
+      WeatherEventCurrent: "**Current:** {emoji} **{name}**\n\n{desc}"
+      WeatherEnds: "⏳ Ends"
+      WeatherEffect: "✨ Effects"
+      WeatherFooter: "Weather affects growth speed and mutation rates."
+      SeedInventoryTitle: "Your Seed Inventory"
+      InventoryTitle: "Produce & Fertilizer Inventory"
+      InventoryProduce: "**Produce:**\n"
+      InventoryFertilizer: "\n**Fertilizer:**\n"
+      None: "None."
+      QuickSellPlaceholder: "Select produce to quick sell"
+      FertilizeSuccess: "You successfully used {fertilizer} on {plant}."
+
+  Bypass:
+    Errors:
+      Unknown: "Unknown API error"
+      UnexpectedStatus: "API returned unexpected status: {status}"
+      NoTaskId: "API did not return task_id."
+      Failed: "Bypass failed: {error}"
+      Timeout: "⏱️ Timeout: Could not get result after {time} seconds.{status}\n\n💡 Link might be too complex or API is overloaded. Please try again later."
+      Generic: "An unknown error occurred."
+      ApiKeyHint: "\n\n💡 **Hint:** Check API key in `config.yml`"
+      UrlHint: "\n\n💡 **Hint:** Ensure URL is a valid supported shortlink"
+    UI:
+      Processing: "⏳ Processing bypass request..."
+      Received: "⏳ Your request has been received!\n📋 Task ID: `{taskId}`\n📍 Queue Position: {queue}\nPlease wait..."
+      StillProcessing: "⏳ Still processing... ({current}s / {max}s)\n📋 Task ID: `{taskId}`\n🔄 Status: {status}"
+      SuccessTitle: "✅ Bypass Successful!"
+      SuccessDesc: "Your link has been successfully bypassed."
+      OriginalLink: "Original Link"
+      BypassedLink: "Bypassed Link"
+      ProcessTime: "Processing Time"
+      Footer: "Powered by meobypass.click"
+      FailTitle: "❌ Bypass Failed"
+      TriedUrl: "Tried URL"
+
+  System:
+    Prefix:
+      Errors:
+        Spaces: "Prefix cannot contain spaces."
+      UI:
+        Updated: "Prefix Updated"
+        UpdatedDesc: "The prefix for this server has been set to `{prefix}`"
+        Reset: "Prefix Reset"
+        ResetDesc: "The prefix for this server has been reset to default: `k`"
+        Current: "Current Prefix"
+        CurrentDesc: "The current prefix for this server is: `{prefix}`"
+        RequestedBy: "Requested by {user}"
+
+  Help:
+    Errors:
+      NotReady: "⏳ Commands are still registering. Please try again later."
+      NotFound: "❌ Command `{command}` not found\n💡 Use `/help` to view all commands."
+      Generic: "❌ An error occurred!"
+    UI:
+      NoDesc: "No description"
+      Greeting: "Hello **{user}**! 👋\n\n"
+      Desc: "> **KentaBucket** is a multipurpose Discord bot.\n> To view command details, use: `/help command:<name>`\n\n"
+      Links: "🔗 [Support](https://discord.gg/96hgDj4b4j) • [Invite Bot]({invite})\n\n**━━━━━━━━━━━━━━━━━━━━**\n\n"
+      Title: "📖 Command List"
+      PageFooter: "Page {current}/{total} • Total {count} commands"
+      CommandDesc: "**📝 Description:**\n{desc}\n\n"
+      Usage: "**💡 Usage:** `{usage}`\n\n"
+      Options: "**⚙️ Options:**\n"
+      Required: "`[Required]`"
+      Optional: "`[Optional]`"
+      Values: "  Values: {values}\n"
+      DetailTitle: "📘 Detail: /{command}"
+      BackFooter: "Click button below to return to list"
+      ButtonPrev: "◀ Prev"
+      ButtonNext: "Next ▶"
+      ButtonBack: "↩ Back to List"
+
+  AFK:
+    Errors:
+      NoPermission: "You do not have permission to use this command."
+      InvalidDuration: "⚠️ Invalid duration! Example: 1h, 30m, 1h 30m"
+      AlreadyAFK: "You are already AFK!"
+      NotAFK: "You are currently not AFK!"
+    UI:
+      SetAFKSuccessTitle: "⌛ AFK Status (On)"
+      SetAFKSuccessDesc: "**💤 AFK status has been activated**"
+      Reason: "📝 Reason"
+      StartTime: "⏰ Start Time"
+      ReturnTime: "🔙 Return Time"
+      Footer: "Bot will notify when you return"
+      WelcomeBackTitle: "👋 Welcome Back!"
+      WelcomeBackDesc: "**👋 Welcome back!**\n\n*You were away for {duration}*"
+      WelcomeBackFallback: "👋 Welcome back **{username}**! You were AFK for {duration}"
+      AFKDuration: "⏱️ AFK Duration"
+      ReasonField: "📝 Previous Reason"
+      WelcomeBackFooter: "AFK status has been automatically removed"
+      UserAFKTitle: "{username} is AFK"
+      UserAFKDesc: "**💤 This user is currently away**"
+      UserAFKFooter: "They will receive your message when they return"
+
+  Chatbot:
+    Errors:
+      Config: "⚠️ Missing **GEMINI_API_KEY**.\n\nPlease configure API key."
+      API: "🔧 **Invalid model or API changed**"
+      Auth: "🔑 **Invalid API key or unauthorized**"
+      Unknown: "⚠️ **Unknown error occurred**"
+      Timeout: "⏱️ **Request timed out**"
+    UI:
+      ThinkingTitle: "🤖 AI is thinking..."
+      ThinkingDesc: "**Your question:**\n> {prompt}"
+      ThinkingFooter: "⏳ Processing request..."
+      ResponseTitle: "💬 Response"
+      ResponseFooter: "Model: {model} • Time: {time}s • Length: {chars} chars"
+      Disabled: "This command is currently disabled."
+
+  Autoresponder:
+    Errors:
+      AlreadyExists: "An auto-responder with trigger `{trigger}` already exists."
+      NotFound: "Auto-responder not found with this trigger."
+      InvalidEdit: "You must provide at least one option to edit."
+      ConflictError: "You cannot add a new attachment and remove the existing one at the same time."
+    UI:
+      AddSuccess: "Created auto-responder for trigger: `{trigger}`"
+      EditSuccess: "Updated auto-responder for trigger: `{trigger}`"
+      DeleteSuccess: "Deleted auto-responder for trigger: `{trigger}`"
+      ListTitle: "Auto-responder List"
+      ListEmpty: "No auto-responders on this server."
+      ViewTitle: "Auto-responder: {trigger}"
+      ViewMode: "Mode"
+      ViewIgnoreCase: "Ignore Case"
+      ViewAttachment: "Attachment URL"
+      ModeUpdateSuccess: "Updated mode for trigger `{trigger}` to `{mode}`."
+      PlaceholdersTitle: "Placeholders & Functions"
+      PlaceholdersDesc: "Here is a list of placeholders and functions you can use."

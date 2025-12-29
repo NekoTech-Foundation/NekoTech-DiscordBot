@@ -4,6 +4,7 @@ const defaultData = (query) => ({
     guildId: query.guildId,
     logChannels: {},
     prefix: 'k',
+    language: 'vn',
     welcome: {
         enabled: false,
         channelId: null,

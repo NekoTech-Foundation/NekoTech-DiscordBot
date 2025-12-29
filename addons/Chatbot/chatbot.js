@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { EmbedBuilder } = require('discord.js');
 const { getConfig } = require('../../utils/configLoader');
+const { loadLang } = require('../../utils/langLoader');
 
 function getApiKey() {
     const cfg = getConfig() || {};
@@ -50,17 +51,17 @@ async function callGemini(apiKey, model, prompt) {
     return text || '(Không có phản hồi)';
 }
 
-function createLoadingEmbed(prompt) {
+function createLoadingEmbed(prompt, chatbotLang) {
     const embed = new EmbedBuilder()
         .setColor('#5865F2') // Discord blurple
-        .setTitle('🤖 AI đang suy nghĩ...')
-        .setDescription(`**Câu hỏi của bạn:**\n> ${prompt.length > 200 ? prompt.substring(0, 200) + '...' : prompt}`)
-        .setFooter({ text: '⏳ Đang xử lý yêu cầu...' })
+        .setTitle(chatbotLang.UI.ThinkingTitle)
+        .setDescription(chatbotLang.UI.ThinkingDesc.replace('{prompt}', prompt.length > 200 ? prompt.substring(0, 200) + '...' : prompt))
+        .setFooter({ text: chatbotLang.UI.ThinkingFooter })
         .setTimestamp();
     return embed;
 }
 
-function createSuccessEmbed(prompt, reply, model, responseTime) {
+function createSuccessEmbed(prompt, reply, model, responseTime, chatbotLang) {
     const charCount = reply.length;
     const embed = new EmbedBuilder()
         .setColor('#5865F2') // Discord blurple cho AI
@@ -68,32 +69,35 @@ function createSuccessEmbed(prompt, reply, model, responseTime) {
             name: 'Gemini AI Assistant',
             iconURL: 'https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'
         })
-        .setTitle('💬 Câu trả lời')
+        .setTitle(chatbotLang.UI.ResponseTitle)
         .setDescription(reply.length > 4000 ? reply.substring(0, 4000) + '...' : reply)
         .setFooter({
-            text: `Model: ${model} • Thời gian: ${responseTime}s • Độ dài: ${charCount} ký tự`
+            text: chatbotLang.UI.ResponseFooter
+                .replace('{model}', model)
+                .replace('{time}', responseTime)
+                .replace('{chars}', charCount)
         })
         .setTimestamp();
 
     return embed;
 }
 
-function createErrorEmbed(errorType, message) {
+function createErrorEmbed(errorType, message, chatbotLang) {
     const embed = new EmbedBuilder()
         .setColor('#ED4245') // Discord red
-        .setTitle('❌ Đã xảy ra lỗi')
+        .setTitle(chatbotLang.Errors.Unknown)
         .setDescription(message)
         .setTimestamp();
 
     // Add specific emoji based on error type
     if (errorType === 'config') {
-        embed.setAuthor({ name: 'Lỗi Cấu Hình' });
+        embed.setAuthor({ name: 'Config Error' });
     } else if (errorType === 'api') {
-        embed.setAuthor({ name: 'Lỗi API' });
+        embed.setAuthor({ name: 'API Error' });
     } else if (errorType === 'auth') {
-        embed.setAuthor({ name: 'Lỗi Xác Thực' });
+        embed.setAuthor({ name: 'Auth Error' });
     } else {
-        embed.setAuthor({ name: 'Lỗi Không Xác Định' });
+        embed.setAuthor({ name: 'Error' });
     }
 
     return embed;
@@ -101,19 +105,19 @@ function createErrorEmbed(errorType, message) {
 
 async function handleChatbot(interaction, prompt, options = {}) {
     const ephemeral = !!options.ephemeral;
+    const lang = loadLang(interaction.guild.id);
+    const chatbotLang = lang.Addons.Chatbot;
 
     // Show loading embed
-    const loadingEmbed = createLoadingEmbed(prompt);
+    const loadingEmbed = createLoadingEmbed(prompt, chatbotLang);
     await interaction.deferReply({ ephemeral });
     await interaction.editReply({ embeds: [loadingEmbed] });
 
     const apiKey = getApiKey();
     if (!apiKey) {
         const errorEmbed = createErrorEmbed('config',
-            '⚠️ Thiếu **GEMINI_API_KEY**.\n\n' +
-            'Vui lòng cấu hình API key trong:\n' +
-            '• File `.env` (biến môi trường)\n' +
-            '• Hoặc trong `config.yml` tại `API_Keys.Gemini.ApiKey`'
+            chatbotLang.Errors.Config,
+            chatbotLang
         );
         return interaction.editReply({ embeds: [errorEmbed] });
     }
@@ -130,18 +134,18 @@ async function handleChatbot(interaction, prompt, options = {}) {
 
         if (chunks.length === 1) {
             // Single response - use beautiful embed
-            const successEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime);
+            const successEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime, chatbotLang);
             await interaction.editReply({ embeds: [successEmbed] });
         } else {
             // Multiple chunks - first one in embed, rest as text
-            const successEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime);
+            const successEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime, chatbotLang);
             await interaction.editReply({ embeds: [successEmbed] });
 
             for (let i = 1; i < chunks.length; i++) {
                 const continueEmbed = new EmbedBuilder()
                     .setColor('#5865F2')
                     .setDescription(chunks[i])
-                    .setFooter({ text: `Phần ${i + 1}/${chunks.length}` });
+                    .setFooter({ text: `Part ${i + 1}/${chunks.length}` });
                 await interaction.followUp({ embeds: [continueEmbed], ephemeral });
             }
         }
@@ -152,31 +156,23 @@ async function handleChatbot(interaction, prompt, options = {}) {
 
         if (status === 404 || status === 400) {
             errorEmbed = createErrorEmbed('api',
-                `🔧 **Model không hợp lệ hoặc API đã thay đổi**\n\n` +
-                `Model hiện tại: \`${model}\`\n\n` +
-                `Vui lòng kiểm tra:\n` +
-                `• Tên model trong cấu hình có đúng không\n` +
-                `• API endpoint có còn hoạt động không`
+                chatbotLang.Errors.API,
+                chatbotLang
             );
         } else if (status === 401 || status === 403) {
             errorEmbed = createErrorEmbed('auth',
-                `🔑 **API key không hợp lệ hoặc không có quyền**\n\n` +
-                `Vui lòng kiểm tra:\n` +
-                `• API key có chính xác không\n` +
-                `• API key có còn hoạt động không\n` +
-                `• Project có bật Gemini API không`
+                chatbotLang.Errors.Auth,
+                chatbotLang
             );
         } else if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
             errorEmbed = createErrorEmbed('api',
-                `⏱️ **Yêu cầu đã hết thời gian chờ**\n\n` +
-                `Gemini AI mất quá nhiều thời gian để phản hồi.\n` +
-                `Vui lòng thử lại với câu hỏi ngắn gọn hơn.`
+                chatbotLang.Errors.Timeout,
+                chatbotLang
             );
         } else {
             errorEmbed = createErrorEmbed('unknown',
-                `⚠️ **Đã xảy ra lỗi không xác định**\n\n` +
-                `Vui lòng thử lại sau.\n` +
-                `Nếu lỗi vẫn tiếp diễn, hãy liên hệ quản trị viên.`
+                chatbotLang.Errors.Unknown,
+                chatbotLang
             );
         }
 

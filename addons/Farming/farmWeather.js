@@ -5,12 +5,11 @@ async function getGlobalWeather() {
     let globalState = await farmGlobalSchema.findOne({ identifier: 'global' });
 
     if (!globalState) {
-        globalState = new farmGlobalSchema({
+        globalState = await farmGlobalSchema.create({
             currentWeather: getRandomEvent(),
             weatherStartTime: Date.now(),
             weatherEndTime: Date.now() + 3600000 // 1 hour duration
         });
-        await globalState.save();
     }
 
     // Check if weather expired

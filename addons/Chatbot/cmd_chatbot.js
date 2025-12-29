@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { getCommands } = require('../../utils/configLoader');
+const { loadLang } = require('../../utils/langLoader');
 const chatbot = require('./chatbot');
 
 module.exports = {
@@ -14,9 +15,11 @@ module.exports = {
             option.setName('private')
                 .setDescription('🔒 Chỉ mình bạn thấy phản hồi (ephemeral)')),
     async execute(interaction) {
+        const lang = loadLang(interaction.guild.id);
+        const chatbotLang = lang.Addons.Chatbot;
         const enabledCommands = getCommands();
         if (enabledCommands && enabledCommands.chatbot === false) {
-            return interaction.reply({ content: 'Lệnh này đang bị tắt.', ephemeral: true });
+            return interaction.reply({ content: chatbotLang.UI.Disabled, ephemeral: true });
         }
 
         const prompt = interaction.options.getString('prompt', true);

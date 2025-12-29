@@ -1,0 +1,1889 @@
+# ===========================================================================
+# TIN NHẮN CƠ BẢN
+# ===========================================================================
+NoPermsMessage: "Bạn không có quyền sử dụng lệnh này."
+SuccessEmbedTitle: "Thành công"
+ErrorEmbedTitle: "Đã xảy ra lỗi"
+
+# ===========================================================================
+# TIN NHẮN LỆNH HELP
+# ===========================================================================
+HelpCommand:
+  MainEmbed:
+    Title: "Chào mừng đến với Menu Trợ giúp của {botName}"
+    Description:
+      - "Chọn một danh mục từ menu thả xuống để xem các lệnh có sẵn."
+    Footer:
+      Text: "KentaBuckets Bot"
+      Icon: ""
+    Author:
+      Text: "{user}" # Tên người dùng, {guild} Tên máy chủ
+      Icon: "{user-avatar}" # Avatar người dùng, {guild-avatar}
+    Color: "#1769FF"
+    Image: ""
+    Thumbnail: "{guild-avatar}"
+
+  CategorySelectPlaceholder: "Chọn một danh mục..."
+  BackButtonLabel: "Quay lại danh mục"
+
+  Categories:
+    General:
+      Name: "Chung"
+      Description: "Các lệnh cơ bản cho sử dụng chung"
+      Emoji: "📋"
+    Moderation:
+      Name: "Quản lý"
+      Description: "Các lệnh để quản lý máy chủ"
+      Emoji: "🛡️"
+    Fun:
+      Name: "Giải trí"
+      Description: "Các lệnh vui vẻ và giải trí"
+      Emoji: "🎉"
+    Economy:
+      Name: "Kinh tế"
+      Description: "Các lệnh để quản lý nền kinh tế ảo của bạn"
+      Emoji: "💰"
+    Utility:
+      Name: "Tiện ích"
+      Description: "Các công cụ và tiện ích hữu ích"
+      Emoji: "🔧"
+    Uncategorized:
+      Name: "Tiện ích mở rộng"
+      Description: "Các lệnh từ tiện ích mở rộng"
+      Emoji: "❓"
+
+  CategoryEmbed:
+    Title: "Lệnh trong {category}"
+    Description: []
+    Color: "#5865F2"
+    Footer:
+      Text: "Sử dụng nút quay lại để trở về lựa chọn danh mục"
+      Icon: ""
+    Author:
+      Text: "Các lệnh của {botName}"
+      Icon: ""
+
+  CommandDetailsEmbed:
+    Footer:
+      Text: "Sử dụng /help để xem tất cả các lệnh"
+      Icon: ""
+    Author:
+      Text: "Chi tiết lệnh"
+      Icon: ""
+    Color: "#5865F2"
+
+# ===========================================================================
+# TIN NHẮN LỆNH BACKUP
+# ===========================================================================
+BackupCreating: "✅ | Đang tạo bản sao lưu, vui lòng đợi..."
+BackupCreatedEmbed: "Đã **tạo bản sao lưu** thành công cho máy chủ này!"
+BackupCreatedMsg: "✅ | Đã tạo bản sao lưu thành công cho máy chủ này, thông tin sao lưu đã được gửi đến tin nhắn riêng của bạn!"
+BackupWrongUsage: "Vui lòng chỉ định một ID sao lưu hợp lệ!"
+BackupDeleted: "Đã xóa bản sao lưu thành công!"
+BackupNotFound: "Không tìm thấy bản sao lưu nào với ID đó!"
+BackupLoadWarning: "⚠️ Tất cả các kênh, vai trò và cài đặt của máy chủ sẽ bị xóa. Bạn có chắc chắn muốn tải bản sao lưu không?"
+BackupLoading: "⚠️ Đang tải bản sao lưu..."
+BackupLoaded: "Tải bản sao lưu thành công!"
+BackupCancelled: "Đã hủy!"
+BackupEmbedUsage: "Cách dùng"
+BackupCreatedBy: "Tạo bởi:"
+BackupButtonConfirm: "Xác nhận"
+BackupButtonCancel: "Hủy"
+
+# ===========================================================================
+# TIN NHẮN LỆNH AVATAR + BANNER
+# ===========================================================================
+AvatarSearchedBy: "Tìm bởi:"
+AvatarClickHere: "Nhấn vào đây để xem ảnh"
+
+BannerClickHere: "Nhấn vào đây để xem toàn bộ banner"
+BannerSearchedBy: "Banner được tìm bởi"
+NoBannerSet: "Người dùng này chưa đặt banner."
+
+# ===========================================================================
+# TIN NHẮN LỆNH MEME
+# ===========================================================================
+MemeViewThread: "Xem chủ đề"
+
+# ===========================================================================
+# TIN NHẮN LỆNH KHEN NGỢI
+# ===========================================================================
+compliments:
+  messages:
+    - "Bạn hữu ích hơn bạn nghĩ nhiều."
+    - "Tài năng tử tế của bạn không ai sánh bằng."
+    - "Bạn có khiếu hài hước tuyệt vời."
+    - "Bạn làm nổi bật những điều tốt đẹp nhất ở người khác."
+    - "Góc nhìn của bạn thật mới mẻ."
+    - "Bạn thắp sáng cả căn phòng."
+    - "Bạn có gu thẩm mỹ tuyệt vời."
+    - "Lòng tốt của bạn là liều thuốc chữa lành cho tất cả những ai gặp bạn."
+    - "Bạn giống như một tia nắng trong một ngày thực sự u ám."
+    - "Bạn là một người thông minh."
+    - "Tôi cá là bạn giải ô chữ bằng bút mực."
+    - "Bạn là lý do khiến ai đó mỉm cười."
+    - "Bạn có những ý tưởng hay nhất."
+    - "Bạn luôn biết cách tìm thấy tia hy vọng."
+    - "Ai cũng có lúc gục ngã; chỉ những người như bạn mới đứng dậy và tiếp tục bước đi."
+    - "Bạn là ngọn nến trong bóng tối."
+    - "Bạn là một tấm gương tuyệt vời cho người khác."
+    - "Ở bên bạn giống như đang trong một kỳ nghỉ nhỏ vui vẻ."
+    - "Bạn luôn biết phải nói gì."
+    - "Bạn luôn học hỏi những điều mới và cố gắng hoàn thiện bản thân, điều đó thật tuyệt vời."
+    - "Sự sáng tạo của bạn có sức lan tỏa."
+    - "Bạn có một vẻ duyên dáng và thanh lịch tự nhiên."
+    - "Lòng tốt của bạn là một kho báu đối với tất cả những ai biết bạn."
+    - "Bạn có một tinh thần làm việc đáng kinh ngạc."
+    - "Sự tích cực của bạn truyền cảm hứng."
+    - "Bạn có cách làm cho mọi thứ trở nên tốt đẹp hơn."
+    - "Bạn dũng cảm hơn bạn tin, và mạnh mẽ hơn bạn tưởng."
+    - "Bạn là một người giải quyết vấn đề thực thụ, luôn tìm ra lối đi."
+    - "Nụ cười của bạn có sức lan tỏa."
+    - "Bạn thắp sáng bất kỳ căn phòng nào bạn bước vào."
+    - "Năng lượng của bạn thật truyền nhiễm."
+    - "Bạn có khiếu hài hước tuyệt vời làm bừng sáng một ngày của mọi người."
+    - "Bạn tuyệt vời về mọi mặt."
+    - "Bạn có một trái tim thật nhân hậu."
+    - "Niềm đam mê của bạn với những gì bạn yêu thích thật đáng ngưỡng mộ."
+    - "Bạn đang tạo ra sự khác biệt trên thế giới."
+    - "Bạn vui hơn cả bọc bong bóng."
+    - "Trên thang điểm từ 1 đến 10, bạn là 11."
+    - "Bạn giống như một làn gió trong lành."
+    - "Bạn là lý do khiến ai đó mỉm cười."
+    - "Bạn còn tuyệt hơn cả kỳ lân vì bạn là thật."
+    - "Làm thế nào bạn có thể luôn hài hước và làm mọi người cười vậy?"
+    - "Bạn có gu rất tốt về [âm nhạc/sách/phim]."
+    - "Khả năng nhớ lại những thông tin ngẫu nhiên vào đúng thời điểm của bạn thật ấn tượng."
+    - "Bạn luôn học hỏi những điều mới và cố gắng hoàn thiện bản thân, điều đó thật tuyệt vời."
+    - "Bạn có thể sống sót qua đại dịch zombie."
+    - "Bạn vui hơn cả một nhà banh chứa đầy kẹo."
+    - "Bạn là phiên bản hoàn hảo nhất của chính mình."
+    - "Lòng tốt của bạn là liều thuốc chữa lành cho tất cả những ai gặp bạn."
+
+# ===========================================================================
+# TIN NHẮN LỆNH ĐÙA ĐEN
+# ===========================================================================
+darkjokes:
+  messages:
+    - "Cho một người que diêm, anh ta sẽ ấm trong vài giờ. Châm lửa một người, anh ta sẽ ấm đến hết đời."
+    - "Vợ chồng tôi đã đi đến quyết định khó khăn là không muốn có con. Nếu ai muốn, chỉ cần gửi cho tôi thông tin liên lạc của bạn và chúng tôi có thể mang chúng đến vào ngày mai."
+    - "Khi nào một câu đùa trở thành một câu đùa của bố?\nKhi nó bỏ đi và không bao giờ quay trở lại."
+    - "Trẻ mồ côi có được ăn ở nhà hàng gia đình không?"
+    - "Suzy đã đi đâu sau khi bị lạc trên một bãi mìn?\nKHẮP MỌI NƠI!"
+    - "Khi bạn cán phải một gờ giảm tốc trong khu vực trường học và nhớ ra, ở đây không có gờ giảm tốc nào cả."
+    - "Người yêu cũ của tôi gần đây gặp tai nạn tồi tệ. Tôi đã nói cho bác sĩ sai nhóm máu. Giờ thì cô ấy sẽ thực sự biết cảm giác bị từ chối là như thế nào."
+    - "Bạn có muốn thử đồ ăn châu Phi không??\nHọ cũng vậy."
+    - "Trẻ con ở ghế sau gây ra tai nạn và tai nạn ở ghế sau tạo ra trẻ con."
+    - "Bạn làm gì khi đọc xong một tạp chí ở bệnh viện? Nạp lại đạn và tiếp tục bắn."
+    - "Làm thế nào để tổ chức một bữa tiệc bất ngờ tại bệnh viện?\nMang đèn nhấp nháy vào khu điều trị động kinh."
+    - "Tôi có một con cá có thể nhảy breakdance! Nhưng chỉ trong 20 giây, và chỉ một lần thôi."
+    - "Vợ chồng tôi đã đưa ra một lựa chọn khó khăn và quyết định không muốn có con.\nNếu ai muốn, chỉ cần gửi cho tôi thông tin liên lạc của bạn, và chúng tôi có thể mang chúng đến vào ngày mai."
+    - "Tôi muốn ra đi thanh thản trong giấc ngủ, giống như ông nội tôi,\nChứ không phải la hét như những hành khách trong xe của ông."
+    - "Tôi đã bắt đầu khóc khi bố đang thái hành. Hành tây là một chú chó ngoan."
+    - "Bác sĩ cho tôi một năm để sống, nên tôi đã bắn ông ta. Thẩm phán cho tôi 15 năm. Vấn đề đã được giải quyết."
+    - "Khi còn nhỏ, chúng ta từng sợ bóng tối.\nNhưng khi lớn lên, hóa đơn tiền điện làm chúng ta sợ ánh sáng!"
+    - "Tôi ghét việc đám tang luôn diễn ra lúc 9 giờ sáng. Tôi không thực sự là người thích buổi sáng (mourning person - chơi chữ với mourning: tang lễ)."
+    - "Tại sao bạn bè lại giống như tuyết? Nếu bạn tè lên họ, họ sẽ biến mất."
+    - "Bác sĩ trị liệu của tôi nói tôi bị ám ảnh bởi việc trả thù. Chúng ta sẽ xem về điều đó."
+    - "Điều quan trọng là phải có vốn từ vựng tốt. Nếu tôi biết sự khác biệt giữa 'thuốc giải độc' (antidote) và 'giai thoại' (anecdote), một trong những người bạn tốt của tôi vẫn còn sống."
+    - "Tại sao bạn không thể nghe thấy một nhà tâm thần học sử dụng phòng tắm? Bởi vì chữ 'P' (pee - đi tiểu) là âm câm."
+    - "Tôi có một câu chuyện đùa về kinh tế học nhỏ giọt. Nhưng 99% các bạn sẽ không bao giờ hiểu được."
+    - "Hóa ra một nghiên cứu lớn mới đây cho thấy con người ăn nhiều chuối hơn khỉ. Tôi không thể nhớ lần cuối cùng mình ăn một con khỉ là khi nào."
+    - "Tôi bảo vợ tôi nên chấp nhận những sai lầm của cô ấy. Cô ấy đã ôm tôi."
+    - "Vợ tôi để lại một tờ giấy trên tủ lạnh ghi rằng, 'Cái này không hoạt động, tạm biệt.' Tôi mở tủ lạnh ra và nó vẫn hoạt động tốt."
+    - "Tại sao các nghĩa trang không bao giờ quá đông? Bởi vì mọi người đang chết để được vào trong."
+    - "Tôi có một cây bút EpiPen. Bạn tôi đã đưa nó cho tôi khi anh ấy đang hấp hối. Dường như đối với anh ấy, việc tôi có nó rất quan trọng."
+    - "Hôm nay là một ngày tồi tệ. Người yêu cũ của tôi bị xe buýt đâm, và tôi mất việc làm tài xế xe buýt."
+    - "Tôi đã nói cho nhân viên y tế sai nhóm máu của người yêu cũ, để anh ta biết cảm giác bị từ chối là như thế nào."
+    - "Người phát minh ra tính năng tự động sửa lỗi đã qua đời hôm nay. Lễ hội của ông ấy sẽ được tổ chức vào Chủ nhật."
+    - "Tôi không tin rằng bố tôi đang ăn cắp từ công việc cảnh sát giao thông của mình, nhưng khi tôi về nhà, tất cả các biển báo (signs) đều ở đó."
+    - "Cho một người một que diêm, anh ta sẽ ấm trong vài giờ. Đốt cháy anh ta, và anh ta sẽ ấm đến hết đời."
+
+# ===========================================================================
+# TIN NHẮN LỆNH FACT
+# ===========================================================================
+
+# ===========================================================================
+# TIN NHẮN LỆNH TRÒ CHƠI
+# ===========================================================================
+Roll: "🎲 Bạn đã tung được ${rollResult}!"
+
+wordSnake:
+  start: "Trò chơi Rắn Săn Từ đã bắt đầu! Từ đầu tiên là: `${word}`. Từ tiếp theo phải bắt đầu bằng chữ `${letter}`."
+  invalidWord: "Từ không hợp lệ! Hãy nhớ, từ phải bắt đầu bằng chữ `${letter}`."
+  timeUp: "Hết giờ! Từ cuối cùng là `${lastWord}`. Trò chơi kết thúc, và điểm cuối cùng là `${score}`."
+  gameOver: "Trò chơi kết thúc! Điểm cuối cùng: `${score}`."
+
+Hangman:
+  commandDescription: "Chơi trò Người Treo Cổ!"
+  activeGameWarning: "Bạn đã có một trò chơi đang diễn ra. Vui lòng hoàn thành nó trước khi bắt đầu một trò mới."
+  gameStartMessage: "Bắt đầu trò chơi Người Treo Cổ... Hãy nhập dự đoán của bạn!"
+  winMessage: "Chúc mừng, {username}! Bạn đã thắng!"
+  gameOverMessage: "Trò chơi kết thúc! Từ cần đoán là: {word}"
+  continueMessage: "Tiếp tục đoán!"
+  words:
+    - DaiDuong
+    - HaiTac
+    - LauDai
+    - CauVong
+    - KhuRung
+    - ConRong
+    - AmNhac
+    - BanhQuy
+    - BiNgo
+    - DenLong
+    - CaiBong
+    - SaoChoi
+    - CayNen
+    - DanGhiTa
+    - CauDo
+    - CaHeo
+    - TenLua
+    - PhuThuy
+    - HiepSi
+    - RapXiec
+    - Discord
+    - KentaBuckets
+    - PhieuLuu
+    - BongBong
+    - XeDap
+    - ConBuom
+    - LuaTrai
+    - SoCoLa
+    - KhungLong
+    - ConVoi
+    - PhaoHoa
+    - ThienHa
+    - DaQuy
+    - TrucThang
+    - LeuBang
+    - ConSua
+    - VanHoa
+    - HaiDang
+    - ThienThach
+    - VongCo
+    - BachTuoc
+    - BucTranh
+    - VungLay
+    - NguoiMay
+    - TauVuTru
+    - KhoBau
+    - KyLan
+    - NuiLua
+    - ThacNuoc
+    - DanMoC
+    - NguoiTuyet
+    - NguaVan
+    - HoaNo
+    - HemNui
+    - SaMac
+    - DieuBiAn
+    - CoTien
+    - KhuVuon
+    - ChanTroi
+    - HonDao
+    - NgheSiXiec
+    - CaiDieu
+    - MeCung
+    - DongCo
+    - TinhVan
+    - OcDao
+    - CungDien
+    - ChuanTinh
+    - RanSanHo
+    - TauSao
+    - DenTho
+    - VuTru
+    - VongXoay
+    - CaiCoi
+    - KhiXenon
+    - CaiSan
+    - KhinhKhiCau
+    - QuaTao
+    - QuaChuoi
+    - QuaAnhDao
+    - QuaChaLa
+    - QuaSung
+    - QuaNho
+    - DuaLuoi
+    - QuaMit
+    - QuaKiwi
+    - QuaChanh
+    - QuaXoai
+    - QuaDao
+    - QuaCam
+    - QuaDuDu
+  embeds:
+    gameTitle: "🔤 Trò chơi Người Treo Cổ: {username}"
+    hangman: "Người Treo Cổ"
+    wordToGuess: "Từ cần đoán"
+    guessesLeft: "Số lần đoán còn lại"
+    progress: "Tiến trình"
+    useChatToGuess: "Sử dụng chat để đoán một chữ cái.\nChỉ nhập một chữ cái mỗi tin nhắn."
+    guessFooter: "Nhập dự đoán của bạn vào chat. Đoán sai sẽ làm giảm số lần đoán còn lại!"
+    gameOverTitle: "Trò chơi kết thúc"
+    finalWord: "Từ cuối cùng:"
+    gameEndMessage: "Trò chơi đã kết thúc."
+    thanksForPlaying: "Cảm ơn đã chơi!"
+
+Wordle: # các từ 5 chữ cái (đây là wordle)
+  Messages:
+    Title: "Wordle"
+    BottomFirst: "Đoán từ có 5 chữ cái"
+    BottomLast: "Sử dụng chat để đoán!"
+    KeepGuess: "Tiếp tục đoán!"
+    GameActive: "Bạn đã có một trò chơi đang hoạt động!"
+    LetsPlay: "Hãy chơi Wordle! Cố gắng đoán từ có 5 chữ cái."
+  Embed:
+    Title: "**Trò chơi kết thúc**"
+    Description: "Trò chơi kết thúc! Từ cần đoán là {word}"
+    Footer: "Cảm ơn đã chơi!"
+  words:
+    - Apple
+    - Bread
+    - Crate
+    - Drink
+    - Eagle
+    - Frost
+    - Grape
+    - House
+    - Ideal
+    - Juice
+    - Knife
+    - Lemon
+    - Mango
+    - Night
+    - Olive
+    - Peach
+    - Quiet
+    - River
+    - Stone
+    - Table
+    - Unity
+    - Vivid
+    - Whale
+    - Xylog
+    - Zebra
+
+Connectfour:
+  Title: "Đến lượt của {user}!"
+  Colors:
+    Win: "#7ff946"
+    Lose: "#df3e3e"
+    Tie: "#ffffff"
+  Embed:
+    Title: "**Trò chơi kết thúc**"
+    Description: "{user} đã thắng!"
+    Footer: "Cảm ơn đã chơi!"
+  Board:
+    Emojis:
+      Player: "🔴"
+      Bot: "🟡"
+      Blank: "⬛"
+      1: "1️⃣"
+      2: "2️⃣"
+      3: "3️⃣"
+      4: "4️⃣"
+      5: "5️⃣"
+      6: "6️⃣"
+      7: "7️⃣"
+  Buttons:
+    Style: "Secondary"
+    Numbers:
+      1:
+        Text: ""
+        Emoji: "1️⃣"
+      2:
+        Text: ""
+        Emoji: "2️⃣"
+      3:
+        Text: ""
+        Emoji: "3️⃣"
+      4:
+        Text: ""
+        Emoji: "4️⃣"
+      5:
+        Text: ""
+        Emoji: "5️⃣"
+      6:
+        Text: ""
+        Emoji: "6️⃣"
+      7:
+        Text: ""
+        Emoji: "7️⃣"
+
+TicTacToe:
+  Board:
+    Emojis:
+      X: "❌"
+      O: "⭕"
+      Blank: "⬛"
+  Colors:
+    Win: "#00FF00"
+    Lose: "#FF0000"
+    Tie: "#FFFF00"
+  Messages:
+    OwnGame: "Hãy bắt đầu trò chơi của riêng bạn!"
+    ColumnFull: "Cột này đã đầy, hãy thử cột khác"
+    Win: "## **Làm tốt lắm {user}! Bạn đã thắng!**"
+    Tie: "## **Hòa rồi {user}!**"
+    Lost: "## **Xin lỗi {user}, bạn đã thua!**"
+    Columns: "Số thứ tự cột. Sử dụng các nút bên dưới để thực hiện nước đi."
+    GameOver: "Trò chơi kết thúc"
+    ThanksForPlaying: "Cảm ơn đã chơi!"
+
+RockPaperScissors:
+  Messages:
+    RockPaperScissors: "**Oẳn Tù Tì**"
+    YourChoice: "## Bạn đã chọn **{userChoice}**, và bot đã chọn **{botChoice}**."
+    Win: "## **Làm tốt lắm {user}! Bạn đã thắng!**"
+    Tie: "## **Hòa rồi {user}!**"
+    Lost: "## **Xin lỗi {user}, bạn đã thua!**"
+    GameEnded: "Trò chơi đã kết thúc!"
+    ThanksForPlaying: "Cảm ơn đã chơi!"
+    CantPlaySomeoneElsesGame: "Bạn không thể chơi trò chơi của người khác!"
+  Embed:
+    Color: "#000000"
+    Title: "👊 Oẳn Tù Tì"
+    Description: "**Hãy chơi nào! Chọn vũ khí của bạn bên dưới:**"
+    Fields:
+      Rock:
+        Name: "Búa"
+        Value: "🪨"
+      Paper:
+        Name: "Bao"
+        Value: "📰"
+      Scissors:
+        Name: "Kéo"
+        Value: "✂️"
+    Footer:
+      Text: "Hãy đưa ra lựa chọn của bạn!"
+    Buttons:
+      Rock:
+        Style: "Secondary"
+        Text: "Búa"
+        Emoji: "🪨"
+      Paper:
+        Style: "Secondary"
+        Text: "Bao"
+        Emoji: "📰"
+      Scissors:
+        Style: "Secondary"
+        Text: "Kéo"
+        Emoji: "✂️"
+
+# ===========================================================================
+# TIN NHẮN LỆNH SNIPE
+# ===========================================================================
+SnipeNoMsg: "Không có tin nhắn nào để snipe trong kênh này."
+ErrorGeneric: "Xin lỗi, đã có lỗi với lệnh này."
+
+# ===========================================================================
+# TIN NHẮN LỆNH GIVEAWAY
+# ===========================================================================
+Giveaways: # Các biến giữ chỗ: {prize} {serverName} {hostedBy} {whitelistRoles} {blacklistRoles} {channel} {winnerCount}
+  EntrySuccessMessage: "🎉 Bạn đã tham gia giveaway do {hostedBy} tổ chức thành công!"
+  LeaveSuccessMessage: "👋 Bạn đã rời khỏi giveaway thành công."
+  EntryErrorMessage: "Đã xảy ra lỗi khi cố gắng tham gia giveaway. Vui lòng liên hệ KentaBuckets Development."
+  CheckChance: "{user} bạn có {percent}% cơ hội thắng giveaway này. ({entries} lượt tham gia)"
+  NotJoinedGiveaway: "Bạn chưa tham gia giveaway này!"
+  CalculationError: "Đã xảy ra lỗi khi tính toán cơ hội của bạn."
+  GiveawayNotFound: "Không tìm thấy giveaway hoặc nó có thể đã bị xóa...."
+  GiveawayAlreadyEnded: "Giveaway đã kết thúc."
+  GiveawayHasntEnded: "Giveaway chưa kết thúc."
+  WinMessage: "Chúc mừng những người chiến thắng trong giveaway **{prize}**! {winners}" # biến giữ chỗ {winners}
+  WinRerollMessage: "Giveaway đã được quay lại! Chúc mừng những người chiến thắng mới của giveaway **{prize}**! {winners}" # biến giữ chỗ {winners}
+  WinnerDirectMessage: "Chúc mừng, bạn đã thắng giveaway **{prize}**! Vui lòng mở một phiếu hỗ trợ trong máy chủ **{serverName}**. {channel}"
+  NoParticipationMessage: "Không có người chiến thắng, không ai tham gia giveaway {prize}."
+  IncorrectRoleMessage: "Bạn không có vai trò cần thiết để tham gia giveaway {prize}!"
+  IncorrectMinimumAccountAgeMessage: "Tài khoản của bạn chưa đủ tuổi để tham gia giveaway {prize}!"
+  IncorrectMinimumServerJoinDateMessage: "Bạn chưa ở trong máy chủ discord {serverName} đủ lâu để tham gia giveaway {prize}!"
+  AlreadyEnteredMessage: "Bạn đã tham gia giveaway {prize} rồi!"
+  IncorrectInviteCountMessage: "Bạn cần ít nhất {minInvites} lượt mời để tham gia giveaway này."
+  IncorrectMessageCountMessage: "Bạn cần {required} tin nhắn để tham gia giveaway này. Bạn hiện có {current} tin nhắn."
+  chanceMessage: "{user}, bạn có **{winChance}%** cơ hội thắng giveaway này. ({userEntries} lượt tham gia: 1 cơ bản + {extraEntries} thưởng)"
+  ExtraEntriesMessage: "Bạn có **{extraEntries}** lượt tham gia thêm từ vai trò của mình! Sử dụng nút `Cơ hội` để xem tỷ lệ thắng của bạn."
+
+  Embeds:
+    ActiveGiveaway:
+      Prize: "## Giveaway {prize} x{winnerCount}!"
+      HostedByField: "Tổ chức bởi:"
+      EndsInField: "Kết thúc sau:"
+      EntriesField: "Lượt tham gia:"
+      WhitelistRoleField: "Ai có thể tham gia"
+      BlacklistRoleField: "Ai không thể tham gia"
+      MinimumSeverJoinDateField: "Ngày tham gia máy chủ tối thiểu"
+      MinimumAccountAgeField: "Tuổi tài khoản tối thiểu"
+
+    EndedGiveaway:
+      Title: "## Giveaway {prize} đã kết thúc!"
+      WinnersField: "Người chiến thắng:"
+      EntriesField: "Lượt tham gia:"
+
+# ===========================================================================
+# TIN NHẮN LỆNH AFK
+# ===========================================================================
+AFK:
+  Success: "Đã đặt trạng thái AFK"
+  ErrorMessges:
+    NoPermission: "Bạn không có quyền sử dụng lệnh AFK."
+    NickNameMissingPermissions: "Không thể đặt biệt danh do thiếu quyền."
+    NickNameOwner: "Trạng thái AFK của bạn đã được đặt, nhưng tôi không thể thay đổi biệt danh của bạn vì bạn là chủ sở hữu máy chủ"
+    AlreadyMarkedAFK: "Bạn đã được đánh dấu là AFK rồi!"
+    TimeFormat: "Định dạng thời gian không hợp lệ. Vui lòng sử dụng các định dạng như: 1s, 1m, 1h, 1d, hoặc kết hợp như 15m 30s."
+    TimeParseError: "Không thể phân tích đầu vào thời gian. Vui lòng đảm bảo nó ở định dạng chính xác."
+    RoleCreate: "Đã có lỗi khi tạo vai trò AFK. Vui lòng kiểm tra quyền của tôi."
+
+# ===========================================================================
+# TIN NHẮN XÁC MINH
+# ===========================================================================
+Verify:
+  Required: "Yêu cầu xác minh"
+  QuestionFormat: "{num1} {operator} {num2} là bao nhiêu? Trả lời nhanh!"
+  AlreadyVerified: "Bạn đã được xác minh rồi!"
+  Success: "Bạn đã xác minh thành công!"
+  Timeout: "Bạn đã mất quá nhiều thời gian để xác minh. Vui lòng thử lại."
+  Incorrect: "Sai, hãy thử lại."
+  NoRole: "Vai trò chưa xác minh được cấu hình trong máy chủ không tồn tại. Vui lòng liên hệ quản trị viên máy chủ."
+  Error: "Đã có lỗi khi xác minh tài khoản của bạn. Vui lòng liên hệ nhân viên máy chủ."
+
+  CaptchaTitle: "Yêu cầu xác minh"
+  CaptchaDescription: "Nhấp vào tất cả các {shape} bạn thấy trong hình ảnh trên."
+  SubmitCaptcha: "Gửi"
+  EnterCaptcha: "Chọn hình"
+  CaptchaInputLabel: "Chọn hình"
+  CaptchaInputPlaceholder: "Nhấp vào các nút được đánh số có chứa hình dạng"
+  IncorrectCaptcha: "Lựa chọn không chính xác. Vui lòng thử lại."
+
+# ===========================================================================
+# TIN NHẮN BẢNG XẾP HẠNG & CẤP ĐỘ
+# ===========================================================================
+Leaderboard:
+  Balance:
+    Top: "🏆 Bảng xếp hạng - Số dư"
+    Footer: "Trang {pageMin}/{pageMax} • Cập nhật lúc {time}"
+    Messages: "{count} 🪙"
+  Levels:
+    Top: "🏆 Bảng xếp hạng - Cấp độ"
+    Footer: "Trang {pageMin}/{pageMax} • Cập nhật lúc {time}"
+    Messages: "Cấp {count_level}, XP {count_xp}"
+  Messages:
+    Top: "🏆 Bảng xếp hạng - Tin nhắn"
+    Footer: "Trang {pageMin}/{pageMax} • Cập nhật lúc {time}"
+    Messages: "{count} tin nhắn"
+  Invites:
+    Top: "🏆 Bảng xếp hạng - Lượt mời"
+    Footer: "Trang {pageMin}/{pageMax} • Cập nhật lúc {time}"
+    Messages: "{count} lượt mời"
+  Error: "Đã xảy ra lỗi khi lấy bảng xếp hạng cho {guild}."
+  Button:
+    Previous: "Trước"
+    Next: "Sau"
+  Embed:
+    Colour: "#000000"
+
+Levels:
+  NoPermission: "Truy cập bị từ chối. Bạn thiếu quyền cần thiết để sửa đổi XP hoặc cấp độ."
+  DataNotFound: "Không tìm thấy hồ sơ nào cho {user}. Vui lòng đảm bảo người dùng tồn tại trong hệ thống."
+  CurrentLevelAndXP: "{user} hiện đang ở cấp {level}, với tổng cộng {xp} XP."
+  UpdatedXP: "XP của {user} đã được cập nhật thành công thành {xp}."
+  UpdatedLevel: "Cấp độ của {user} đã được cập nhật thành công thành {level}."
+  UpdatedXPAndLevel: "XP và cấp độ của {user} đã được cập nhật thành {xp} và {level}."
+
+  LevelMessages:
+    - "{user}, chúc mừng đã đạt cấp {newLevel}! Sự cống hiến của bạn cho việc trì hoãn thật sự truyền cảm hứng. 😅"
+    - "{user} bây giờ là cấp {newLevel}! Hãy tưởng tượng những gì bạn có thể đạt được nếu bạn áp dụng sự cống hiến này ở nơi khác. 😂"
+    - "🚨 Báo động! {user} đã đạt cấp {newLevel}! Vui lòng gửi đồ ăn nhẹ và nước tăng lực để lên cấp tiếp. 🍕🥤"
+    - "Ting! {user} đã lên cấp {newLevel}! Có vẻ như tất cả việc cày XP đó đều đáng giá, phần nào đó. 🤔"
+    - "{user} đã đạt cấp {newLevel}! Đã đến lúc chụp màn hình và đặt nó làm banner hồ sơ của bạn! 📸"
+    - "Cấp {newLevel} đã được {user} đạt được! Tiếp tục cố gắng! 🚀"
+    - "🎉 Chúc mừng {user}! Bạn đã tăng sức mạnh lên cấp {newLevel}! Hãy giữ vững động lực đó! ⚡️"
+    - "🌟 {user} vừa đạt cấp {newLevel}! Điểm dừng tiếp theo, thống trị thế giới! 🗺️"
+    - "🥳 {user}, bạn đã đạt cấp {newLevel}! Các bạn của bạn trong {guildName} đang cổ vũ cho bạn! 🎊"
+    - "📈 Cấp {newLevel} đã được {user} mở khóa! Việc cày cuốc là có thật, nhưng phần thưởng cũng vậy! 💪"
+    - "✨ Bùm! {user} bây giờ ở cấp {newLevel}! Đã đến lúc thể hiện sức mạnh mới! 💥"
+    - "🏆 {user}, bạn đã đạt được cấp {newLevel}! {guildName} tự hào về bạn!"
+    - "🎊 Chúc mừng {user}! Cấp {newLevel} rất hợp với bạn! Hãy tiếp tục công việc tuyệt vời! 🌟"
+    - "💪 {user} đã lên cấp {newLevel}! Tất cả sự chăm chỉ đó chắc chắn đang được đền đáp! 🎉"
+    - "🔥 {user} đã đạt cấp {newLevel}! Hãy giữ lửa và nhắm đến các vì sao! 🚀"
+    - "🎯 {user} bây giờ là cấp {newLevel}! Sự quyết tâm của bạn thật ấn tượng! Hãy tiếp tục! 🏆"
+    - "🚀 {user}, chào mừng đến với cấp {newLevel}! Hành trình của bạn chỉ mới bắt đầu! Cuộc phiêu lưu đang chờ đợi! 🌟"
+    - "😂 {user}, bạn đã lên cấp {newLevel}! Bây giờ hãy nghỉ ngơi, chiếc ghế của bạn cần được nghỉ ngơi! 🪑"
+    - "👏 {user} đã đạt cấp {newLevel}! Có huy chương cho việc này không? Bởi vì bạn xứng đáng có một cái! 🥇"
+    - "😜 Cấp {newLevel} cho {user}! Nhớ khi bạn nghĩ điều này là không thể không? Nhìn bạn bây giờ này!"
+    - "🤣 {user} vừa lên cấp {newLevel}! Đừng quên thỉnh thoảng bước ra ngoài. Mặt trời nhớ bạn đó. 🌞"
+    - "🔥 {user} đã đạt cấp {newLevel}! Bàn phím của bạn gọi, nó muốn một kỳ nghỉ. ✈️"
+    - "💡 {user}, bạn đã đạt cấp {newLevel}! Có lẽ bây giờ là thời điểm tốt để học một cái gì đó hữu ích... hoặc không. 🤷‍♂️"
+    - "😂 {user}, ở cấp {newLevel}, bạn có thể sẽ sớm cần một con chuột mới! Tiếp tục cố gắng! 🖱️"
+    - "🌟 {user} bây giờ là cấp {newLevel}! Thú cưng của bạn chắc hẳn đang tự hỏi bạn đang làm gì. 🐾"
+    - "🥳 {user} đã đạt cấp {newLevel}! Đã đến lúc ăn mừng với bạn bè ảo của bạn! 🎈"
+    - "🤣 {user} ở cấp {newLevel}! Có lẽ bây giờ bạn cuối cùng cũng có thể đi đổ rác? 🗑️"
+    - "🚀 {user}, đã đạt cấp {newLevel}! Nhiệm vụ tiếp theo của bạn: Tìm một cuộc sống bên ngoài Discord! 🌍"
+    - "🎊 {user}, chúc mừng đã lên cấp {newLevel}! Chúng tôi biết bạn có khả năng đó, phần nào. 😅"
+    - "🔥 {user} bây giờ là cấp {newLevel}! Ghế chơi game của bạn chắc đang bốc cháy! 🔥"
+
+# ===========================================================================
+# TIN NHẮN LỆNH ADDROLE/REMOVEROLE
+# ===========================================================================
+AddRole:
+  AddroleSelfRole: "Bạn không thể tự thêm vai trò cho mình."
+  AddroleHighestRole: "Vai trò được chọn cao hơn vai trò cao nhất của tôi."
+  AddroleUserRoleNotAbove: "Bạn không thể thêm một vai trò cao hơn hoặc bằng vai trò cao nhất của bạn."
+  AddroleAlreadyHave: "Người dùng đã có vai trò này."
+  AddroleSuccess: "Đã thêm {role} cho {user} thành công"
+  AddroleError: "Đã có lỗi khi thêm vai trò."
+  RoleAllUserHighestRole: "Bạn không thể gán một vai trò cao hơn hoặc bằng vai trò cao nhất của bạn."
+
+RoleAll:
+  RoleAllConfirmationAdd: "Bạn có chắc muốn thêm vai trò {role} cho tất cả người dùng không?"
+  RoleAllConfirmationRemove: "Bạn có chắc muốn xóa vai trò {role} khỏi tất cả người dùng không?"
+  RoleAllHighestRole: "Vai trò bạn chọn cao hơn hoặc bằng vai trò cao nhất của bot. Hành động không được phép."
+  RoleAllUserHighestRole: "Vai trò bạn chọn cao hơn hoặc bằng vai trò cao nhất của bạn. Hành động không được phép."
+  RoleAllSuccessAdd: "Đã thêm vai trò {role} cho tất cả người dùng thành công."
+  RoleAllSuccessRemove: "Đã xóa vai trò {role} khỏi tất cả người dùng thành công."
+  RoleAllError: "Đã xảy ra lỗi khi thêm/xóa vai trò."
+  RoleAllCancelled: "Hành động đã bị hủy."
+  RoleAllTimeOut: "Lệnh đã hết thời gian. Không có hành động nào được thực hiện."
+
+Temprole:
+  SameOrHigherRoleError: "Bạn không thể gán vai trò có thứ hạng bằng hoặc cao hơn vai trò cao nhất hiện tại của bạn."
+  InvalidDurationFormat: "Định dạng thời gian không hợp lệ. Vui lòng sử dụng các định dạng như 1h, 15m, 1d, v.v."
+  RoleAssigned: "Đã gán vai trò tạm thời {role} cho {user} trong {duration}."
+  ErrorAssigningRole: "Đã có lỗi khi gán vai trò tạm thời."
+  MissingPermissionsError: "Bot không có đủ quyền để gán vai trò này."
+  UnknownRoleError: "Vai trò được chỉ định không hợp lệ hoặc không xác định. Vui lòng chỉ định một vai trò hợp lệ."
+
+# ===========================================================================
+# TIN NHẮN LỆNH HISTORY/CLEARHISTORY
+# ===========================================================================
+History:
+  HistoryEmbedTitle: "Lịch sử người dùng cho {user-tag}"
+  HistoryEmbedUserInfo: "👤 Thông tin người dùng"
+  HistoryEmbedName: "Tên"
+  HistoryEmbedJoinedServer: "📆 Tham gia máy chủ vào"
+  HistoryTotalMessages: "💌 Tổng số tin nhắn"
+  HistoryEmbedNote: "📝 Ghi chú"
+  HistoryEmbedWarnings: "⚠️ Cảnh cáo"
+  HistoryEmbedTimeouts: "⏲️ Cấm chat"
+  HistoryEmbedKicks: "👢 Trục xuất"
+  HistoryEmbedBans: "🔨 Cấm"
+
+ClearhistorySuccess: "Đã xóa lịch sử của {user} thành công!" # Biến có sẵn: {user}
+
+# ===========================================================================
+# TIN NHẮN LỆNH POLL
+# ===========================================================================
+PollEmbedTitle: "Một cuộc thăm dò ý kiến đã được bắt đầu!"
+PollEmbedFooter: "Thăm dò được bắt đầu bởi:"
+
+# ===========================================================================
+# TIN NHẮN LỆNH PURGE
+# ===========================================================================
+Purge:
+  NoPermsMessage: "Bạn không có quyền xóa tin nhắn."
+  PurgeCleared: "Đã xóa thành công {amount} tin nhắn."
+  PurgeOld: "Lỗi: Không thể xóa tin nhắn cũ hơn 14 ngày."
+  ModerationEmbedTitle: "Hành động quản lý"
+  ModerationEmbedAction: "Hành động: Xóa tin nhắn"
+  ModerationEmbedDetails: "Nhân viên: <@{user-id}>\nSố lượng: {amount}\nKênh: {channel}"
+
+# ===========================================================================
+# TIN NHẮN LỆNH SLOWMODE
+# ===========================================================================
+SlowmodeReset: "Thời gian chờ của kênh này đã được đặt lại."
+SlowmodeFailed: "Không thể đặt chế độ chậm trong kênh này, hãy kiểm tra độ dài chế độ chậm của bạn."
+SlowmodeSuccess: "Thời gian chờ của kênh này đã được đặt thành **{time}** giây." # Biến có sẵn: {time}
+
+# ===========================================================================
+# TIN NHẮN LỆNH ANTIHOIST
+# ===========================================================================
+AntiHoist:
+  NoPermission: "Bạn không có quyền sử dụng lệnh chống treo tên."
+  CommandCompleted: "Đã thực hiện thành công lệnh chống treo tên."
+  NotifyUserMessage: "Chào {user}! Tên người dùng của bạn đã được đổi từ `{oldDisplayName}` thành `{newDisplayName}` trong **{guildName}** vì họ không cho phép treo tên."
+# ===========================================================================
+# TIN NHẮN LỆNH WARN
+# ===========================================================================
+Unwarn:
+  NoPermission: "Bạn không có quyền sử dụng lệnh này."
+  NoWarnings: "Không tìm thấy cảnh cáo nào cho người dùng này."
+  InvalidWarningID: "ID cảnh cáo không hợp lệ."
+  WarningRemoved: "Đã xóa cảnh cáo khỏi {userTag}: `{reason}`."
+  Error: "Đã xảy ra lỗi khi xử lý yêu cầu của bạn."
+
+Warn:
+  BotOrSelf: "Bạn không thể cảnh cáo một bot hoặc chính mình."
+  Success: "Người dùng {userTag} đã bị cảnh cáo vì lý do sau: {reason}"
+  Error: "Đã có lỗi khi cố gắng cảnh cáo người dùng này."
+
+# ===========================================================================
+# TIN NHẮN LỆNH REMINDER
+# ===========================================================================
+Reminder:
+  Messages:
+    invalid_mentions: "Bạn không thể bao gồm lượt đề cập trong tin nhắn nhắc nhở của mình."
+    invalid_format: "Định dạng thời gian không hợp lệ. Vui lòng sử dụng các định dạng như '10m', '1h', hoặc '2d'."
+    permission_denied: "Bạn không có quyền đặt lời nhắc cho người dùng khác."
+    no_reminders: "Bạn không có lời nhắc nào đang hoạt động."
+  Embeds:
+    Reminder:
+      Color: "#1769FF"
+      Title: "Đã đặt lời nhắc"
+      Description:
+        - "Tôi sẽ nhắc nhở {user} sau {time}"
+      Footer:
+        Text: "Lời nhắc KentaBuckets Bot"
+        Icon: ""
+    List:
+      Color: "#1769FF"
+      Title: "Lời nhắc đang hoạt động của bạn"
+      Footer:
+        Text: "Sử dụng /reminder create để đặt lời nhắc mới"
+        Icon: ""
+    DM:
+      Color: "#1769FF"
+      Title: "🔔 Lời nhắc!"
+      Description: "{message}"
+      Footer:
+        Text: "Lời nhắc của bạn đã đến!"
+        Icon: ""
+
+# ===========================================================================
+# TIN NHẮN LỆNH ÂM NHẠC
+# ===========================================================================
+
+# ===========================================================================
+# TIN NHẮN PHIẾU HỖ TRỢ
+# ===========================================================================
+Tickets:
+  WorkingHours: "Phiếu hỗ trợ này được tạo ngoài giờ làm việc. Vui lòng đợi đến giờ làm việc của chúng tôi để tiếp tục.\nGiờ làm việc của chúng tôi là từ {workinghours_start} đến {workinghours_end}."
+  Deleting: "Phiếu hỗ trợ này đang được xóa."
+  Deletion: "Phiếu hỗ trợ sẽ bị xóa ngay bây giờ."
+  DeleteCountDown: "Phiếu hỗ trợ này sẽ bị xóa sau {time} giây."
+  Archive: "Phiếu hỗ trợ này đang được lưu trữ."
+  Closed: "Phiếu hỗ trợ này đã được đóng."
+  TicketTypePlaceholder: "Chọn một loại phiếu hỗ trợ"
+  AlreadyOpen: "Bạn đã có một phiếu hỗ trợ đang mở! Hãy đóng nó trước khi mở một phiếu khác."
+  CloseTicketButton: "Đóng phiếu hỗ trợ"
+  ReviewAlreadySubmitted: "Bạn đã gửi đánh giá cho phiếu hỗ trợ này rồi."
+  ReviewTitle: "Phản hồi đánh giá"
+  ReviewPlaceholder: "Vui lòng cho chúng tôi biết tại sao bạn đưa ra đánh giá này:"
+  ReviewNoRating: "Chưa có đánh giá"
+  ReviewComplete: "Cảm ơn phản hồi của bạn!"
+  TicketReopenTitle: "Phiếu hỗ trợ đã được mở lại"
+  TicketReopenDescription: "Phiếu hỗ trợ đã được mở lại bởi <@{userId}>."
+  TicketReopen: "Phiếu hỗ trợ đã được mở lại!"
+  TranscriptTitle: "Bản ghi đã được tạo"
+  TranscriptDescription: "Bản ghi cho phiếu hỗ trợ ID {ticketId} đã được tạo bởi <@{userId}>."
+  TranscriptReady: "Đây là bản ghi cho phiếu hỗ trợ của bạn:"
+  TranscriptNotEnough: "Không đủ tin nhắn để tạo bản ghi."
+
+  TicketCreated:
+    LinkText: "Đến phiếu hỗ trợ"
+    Embed:
+      Title: "Phiếu hỗ trợ đã được tạo"
+      Description:
+        - "Phiếu hỗ trợ của bạn đã được tạo. {link}"
+      Footer:
+        Text: ""
+        Icon: ""
+      Author:
+        Text: ""
+        Icon: ""
+      Color: "#00FF00"
+      Image: ""
+      Thumbnail: ""
+    Button:
+      Text: "Đến phiếu hỗ trợ"
+      Emoji: "🟢"
+
+  Blacklisted:
+    Embed:
+      Title: "🚫 Bị cấm mở phiếu hỗ trợ"
+      Description:
+        - "Bạn bị cấm mở phiếu hỗ trợ."
+        - "Liên hệ với quản trị viên nếu bạn muốn kháng cáo lệnh cấm."
+        - " "
+        - "> **Cấm bởi:** {user}"
+        - "> **Lý do:** {reason}"
+        - "> **Bị cấm lúc:** {time}"
+      Footer:
+        Text: "Liên hệ quản trị viên nếu bạn tin rằng đây là một sai lầm."
+        Icon: "https://e7.pngegg.com/pngimages/1003/312/png-clipart-hammer-game-pension-review-internet-crouton-hammer-technic-discord-thumbnail.png"
+      Author:
+        Text: ""
+        Icon: ""
+      Color: "#FF0000"
+      Image: ""
+      Thumbnail: ""
+
+  Claim:
+    AlreadyClaimed: "Phiếu hỗ trợ này đã được {claimer} nhận."
+    NoPermission: "Bạn không có quyền nhận phiếu hỗ trợ."
+    Success: "Bạn đã nhận thành công phiếu hỗ trợ này."
+    Unclaimed: "Bạn đã bỏ nhận phiếu hỗ trợ này."
+    NotClaimable: "Việc nhận phiếu hỗ trợ không được bật cho loại phiếu này."
+    Announcements:
+      Claimed: "🔒 {user} đã nhận phiếu hỗ trợ này và sẽ hỗ trợ bạn."
+      Unclaimed: "🔓 {user} đã bỏ nhận phiếu hỗ trợ này. Bất kỳ nhân viên hỗ trợ nào cũng có thể trả lời."
+
+# ===========================================================================
+# VAI TRÒ TƯƠNG TÁC
+# ===========================================================================
+Reactions:
+  RolesUpdated: "Vai trò của bạn đã được cập nhật!"
+
+# ===========================================================================
+# NHẬT KÝ QUẢN LÝ
+# ===========================================================================
+ModerationEmbedTitle: "Hành động quản lý"
+ModerationEmbedAction: "Hành động:"
+ModerationEmbedDetails: "Chi tiết:"
+
+ClearChannel:
+  ClearChannelPrompt: "Bạn có chắc muốn xóa kênh này không?"
+  ClearChannelCleared: "Kênh này đã được {user} xóa."
+  ClearChannelGif: "https://media1.tenor.com/images/e275783c9a40b4551481a75a542cdc79/tenor.gif?itemid=3429833"
+  CancelClear: "Việc xóa kênh đã bị hủy."
+  ClearTimeout: "Việc xóa kênh đã hết thời gian."
+
+Nickname:
+  Description: "Thay đổi biệt danh của một người dùng."
+  UserOptionDescription: "Người dùng bạn muốn thay đổi biệt danh."
+  NicknameOptionDescription: "Biệt danh mới cho người dùng."
+  NoPermsMessage: "Bạn không có quyền thay đổi biệt danh."
+  UserNotFound: "Không tìm thấy người dùng được chỉ định trong máy chủ."
+  NicknameChangeSuccess: "Đã thay đổi thành công biệt danh của {user} thành {nickname}."
+  NicknameChangeFailure: "Không thể thay đổi biệt danh của người dùng. Vui lòng thử lại sau."
+
+Ban:
+  UserNotFound: "Không thể tìm thấy người dùng được chỉ định."
+  UserFailedDM: "Người dùng đã bị cấm nhưng tôi không thể gửi tin nhắn riêng cho họ vì họ đã tắt."
+  CantBanSelf: "Bạn không thể tự cấm mình."
+  CantBanUser: "Tôi không thể cấm người dùng này. Họ có thể có vai trò cao hơn tôi hoặc vai trò tương đương tôi."
+  Success: "Đã cấm thành công {userTag} vì {reason}."
+  Error: "Đã có lỗi khi cố gắng cấm người dùng này."
+
+TempBan:
+  NoPermsMessage: "Bạn không có quyền cần thiết để sử dụng lệnh này."
+  UserNotFound: "Không tìm thấy người dùng được chỉ định. Vui lòng kiểm tra lại."
+  InvalidDuration: "Định dạng thời gian không hợp lệ. Vui lòng sử dụng định dạng hợp lệ như '1d 2h 15m'."
+  CantBanUser: "Không thể cấm người dùng này. Họ có thể có vai trò cao hơn hoặc quyền đặc biệt."
+  Success: "Đã cấm tạm thời thành công {userTag} trong {duration}. Lý do: {reason}."
+  Error: "Đã xảy ra lỗi khi cố gắng cấm tạm thời người dùng. Vui lòng thử lại sau."
+
+Unban:
+  UnbanUserNotBanned: "Người dùng này hiện không bị cấm."
+  UnbanMsg: "Đã bỏ cấm {user} thành công."
+  UnbanError: "Đã xảy ra lỗi khi xử lý việc bỏ cấm."
+
+Kick:
+  UserNotFoundInGuild: "Không tìm thấy người dùng trong máy chủ này."
+  CannotKickSelf: "Bạn không thể tự trục xuất mình."
+  CannotKickUser: "Không thể trục xuất người dùng này."
+  DMFailed: "Không thể gửi tin nhắn riêng."
+  KickSuccess: "Đã trục xuất thành công {userTag} vì: {reason}"
+  KickError: "Đã có lỗi khi cố gắng trục xuất người dùng này."
+
+Timeout:
+  NoPermsMessage: "Bạn không có quyền sử dụng lệnh này."
+  UserNotFound: "Không tìm thấy người dùng."
+  InvalidTime: "Thời gian không hợp lệ. Thời gian phải ít nhất 10 giây hoặc 'perm' để cấm chat vĩnh viễn."
+  Success: "Đã cấm chat thành công {user} trong {time}. Lý do: {reason}"
+  LongMuteSuccess: "Đã cấm chat thành công {user} trong {time}. Lý do: {reason}"
+  PermanentMuteSuccess: "Đã cấm chat vĩnh viễn thành công {user}. Lý do: {reason}"
+  Error: "Đã xảy ra lỗi khi cố gắng cấm chat/tắt tiếng người dùng."
+
+ClearTimeout:
+  NoPermsMessage: "Bạn không có quyền sử dụng lệnh này."
+  UserNotFound: "Không tìm thấy người dùng."
+  TimeoutRemoved: "Đã xóa cấm chat cho {user}."
+  MuteRemoved: "Đã xóa cấm chat cho {user}."
+  Error: "Đã xảy ra lỗi khi cố gắng xóa cấm chat/tắt tiếng."
+
+Removerole:
+  Self: "Bạn không thể tự xóa vai trò của mình."
+  NoRole: "{user} không có vai trò {role}."
+  AddroleHighestRole: "Bạn không thể sửa đổi một vai trò cao hơn hoặc bằng vai trò cao nhất của bạn."
+  Error: "Đã xảy ra lỗi khi xóa vai trò."
+  UserMsg: "Bạn đã bị xóa khỏi vai trò **{role}** trong {guild-name}"
+  EmbedTitle: "Đã xóa vai trò"
+  EmbedRemovedBy: "Xóa bởi:"
+  EmbedRemovedFrom: "Xóa khỏi:"
+  EmbedIconURL: "https://i.imgur.com/MdiCK2c.png"
+  RemoveroleNoRole: "{user} không có vai trò {role}"
+  HigherRoleError: "Bạn không thể xóa một vai trò cao hơn hoặc bằng vai trò cao nhất của bạn."
+
+SetNote:
+  NoteLongerThan250: "Ghi chú không thể dài hơn 250 ký tự!"
+  NoteCantAddBot: "Bạn không thể thêm ghi chú cho một bot!"
+  NoteSuccess: "Đã thêm ghi chú thành công cho **{user}**"
+  NoteError: "Đã có lỗi khi đặt ghi chú."
+
+AddroleSuccess: "Đã thêm vai trò {role} cho {user}."
+AddroleError: "Đã xảy ra lỗi khi thêm vai trò."
+
+# ===========================================================================
+# TIN NHẮN LỆNH 8BALL
+# ===========================================================================
+EightBallTitle: "🔮 Quả cầu ma thuật"
+EightBallQuestion: "Câu hỏi"
+EightBallAnswer: "Câu trả lời"
+EightBallFooter: "Quả cầu ma thuật"
+EightBallReplies:
+  [
+    "Không bao giờ",
+    "Chắc chắn rồi",
+    "Chắc chắn, Bạn cũng nên đi mua một ít cổ phiếu",
+    "Không còn nghi ngờ gì nữa",
+    "Có, chắc chắn",
+    "Chắc chắn là vậy",
+    "Không chắc lắm",
+    "Bạn nói cho tôi biết đi",
+    "Không rõ, hỏi lại đi",
+    "Có thể, nhưng không chắc",
+    "Có",
+    "Câu trả lời của tôi là có",
+    "Chắc chắn",
+    "Có thể là vậy",
+    "Phủ định",
+    "Rất có thể",
+    "Theo tôi thấy, có",
+    "Không",
+    "Câu trả lời của tôi là không",
+    "Tôi thấy những điều tốt đẹp đang xảy ra",
+    "Hoàn toàn không",
+    "Tốt hơn là không nói cho bạn bây giờ",
+    "Các dấu hiệu đều chỉ đến 'có'",
+    "Chắc chắn là như vậy",
+  ]
+# ===========================================================================
+# TIN NHẮN HỆ THỐNG GỢI Ý
+# ===========================================================================
+Suggestion:
+  SuggestionCreated: "Gợi ý đã được tạo thành công."
+  Error: "Đã xảy ra lỗi. Vui lòng liên hệ hỗ trợ."
+  SuggestionNotFound: "Không tìm thấy gợi ý."
+  AlreadyVoted: "Bạn đã bỏ phiếu cho gợi ý này rồi."
+  Upvoted: "Bạn đã ủng hộ gợi ý này!"
+  Downvoted: "Bạn đã phản đối gợi ý này!"
+  AlreadyProcessed: "Gợi ý này đã được xử lý."
+  SuggestionAccepted: "Bạn đã chấp nhận gợi ý này."
+  SuggestionDenied: "Bạn đã từ chối gợi ý này."
+  ModalTitle: "Đăng gợi ý của bạn!"
+  ModalQuestion: "Gợi ý của bạn là gì?"
+  SuggestionsDisabled: "Gợi ý hiện đang bị tắt."
+  BlacklistMessage: "Bạn đang trong danh sách đen và không thể tạo gợi ý."
+  Reason: "Không có lý do được cung cấp"
+  ReasonModalTitle: "Phản hồi gợi ý"
+  ModalTimeout: "Bạn đã mất quá nhiều thời gian để cung cấp lý do. Vui lòng thử lại."
+  DirectMessage:
+    Accepted: "Gợi ý của bạn đã được chấp nhận!"
+    Denied: "Gợi ý của bạn đã bị từ chối!"
+  Embed:
+    Button:
+      Discuss: "Thảo luận"
+
+# ===========================================================================
+# LỆNH HỒ SƠ
+# ===========================================================================
+Profile:
+  Embed:
+    Title: ""
+    Description:
+      - "**🔍 Chi tiết thành viên**"
+      - "> **📅 Đã tham gia:** {joinDate}"
+      - "> **🏅 Vai trò cao nhất:** {role}"
+      - "> **🔖 Biệt danh:** {nickname}"
+      - " "
+      - "**👤 Chi tiết người dùng**"
+      - "> **🆔 ID người dùng:** {userID}"
+      - "> **💻 Tên người dùng:** {user}"
+      - "> **📆 Tài khoản được tạo:** {creationDate} ({creationDays})"
+      - "> **🎖️ Huy hiệu:** {badges}"
+      - " "
+      - "**📊 Thống kê người dùng**"
+      - "> **🔢 Cấp độ:** {level}"
+      - "> **🌟 XP:** {xp}"
+      - "> **💬 Tổng số tin nhắn:** {totalMessages}"
+      - "> **🔥 Chuỗi hàng ngày:** {dailyStreak}"
+      - " "
+      - "**💰 Chi tiết tài chính**"
+      - "> **💵 Số dư:** {balance}"
+      - "> **🏦 Ngân hàng:** {bank}"
+      - " "
+      - "**🎒 Kho đồ**"
+      - "> **📦 Vật phẩm:** {inventoryItems}"
+    Footer:
+      Text: "KentaBuckets Bot | Thông tin hồ sơ"
+      Icon: "{guildIcon}"
+    Author:
+      Text: "Hồ sơ của {nickname}"
+      Icon: "{userIcon}"
+    Color: "#1e8fff"
+    Image: ""
+    Thumbnail: "{userIcon}"
+
+# ===========================================================================
+# LỆNH THÔNG TIN MÁY CHỦ
+# ===========================================================================
+ServerInfo:
+  Embed:
+    Title: "📊 Thông tin máy chủ"
+    Description: "{description}\n\n**📈 Thống kê**\n> 👥 **Thành viên:** {memberCount}\n> 🤖 **Bot:** {botCount}\n> 📝 **Vai trò:** {roleCount}"
+    Color: "#1769FF"
+    Footer:
+      Text: "Yêu cầu bởi {user}"
+    Fields:
+      Channels:
+        Name: "📺 Kênh"
+        Value: "> 💬 Văn bản: **{textChannels}**\n> 🔊 Thoại: **{voiceChannels}**\n> 🔧 Khác: **{otherChannels}**"
+      ServerDetails:
+        Name: "⚙️ Chi tiết máy chủ"
+        Value: "> 👑 Chủ sở hữu: {owner}\n> 🆔 ID máy chủ: `{serverId}`\n> 🌍 Ngôn ngữ: `{language}`\n> ⭐ Tăng tốc: **{boostCount}**\n> 📅 Được tạo: {createdAt}"
+      ServerIcon:
+        Name: "🖼️ Biểu tượng máy chủ"
+        Value: "{iconLinks}"
+  NoIcon: "Không có biểu tượng"
+  IconLinks: "[png]({iconPng}) | [jpg]({iconJpg}) | [gif]({iconGif})"
+
+# ===========================================================================
+# LỆNH THÔNG TIN BOT
+# ===========================================================================
+BotInfo:
+  Embed:
+    Title: "Thông tin Bot"
+    Color: "#0099ff"
+    Footer:
+      Text: "Yêu cầu bởi {user}"
+    Fields:
+      BotDetails:
+        Name: "🤖 Chi tiết Bot"
+        Value: "**Tên:** {name}\n**ID:** {id}\n**Phiên bản:** {version}\n**Được tạo:** {createdAt}\n**Tham gia máy chủ:** {joinedAt}\n**Số lần khởi động:** {starts}"
+      Statistics:
+        Name: "📊 Thống kê"
+        Value: "**Người dùng:** {users}\n**Kênh:** {channels}\n**Lệnh:** {commands}\n**Trực tuyến từ:** {uptime}"
+      Technical:
+        Name: "🔧 Kỹ thuật"
+        Value: "**Discord.js:** v{discordVersion}\n**CPU:** {cpuModel}\n**Lõi CPU:** {cpuCores}"
+      Performance:
+        Name: "📶 Hiệu suất"
+        Value: "**Bộ nhớ Bot:** {botMemory}\n**Bộ nhớ hệ thống:** {systemMemory}\n**Ping:** {ping}ms"
+  ErrorMessage: "Xin lỗi, đã có lỗi khi lấy thông tin bot."
+
+# ===========================================================================
+# NHẬT KÝ
+# ===========================================================================
+RoleAddLogs:
+  Embed:
+    Title: ":arrow_up_down: Phát hiện thay đổi vai trò"
+    Description:
+      - "**👤 Thành viên:** {user}"
+      - "**🆕 Vai trò đã thêm:** {addedRoleNames}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🛡️ Hành động cập nhật vai trò | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#1E90FF"
+    Image: ""
+    Thumbnail: ""
+
+RoleRemoveLogs:
+  Embed:
+    Title: ":arrow_down: Phát hiện xóa vai trò"
+    Description:
+      - "**👤 Thành viên:** {user}"
+      - "**❌ Vai trò đã xóa:** {removedRoleNames}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🛡️ Hành động cập nhật vai trò | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#FF4500"
+    Image: ""
+    Thumbnail: ""
+
+ChannelCreatedLogs:
+  Embed:
+    Title: ":white_check_mark: Kênh mới được tạo"
+    Description:
+      - "**👤 Người thực hiện:** {executor}"
+      - "**📺 Tên kênh:** {channelName}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Hành động quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#00FF00"
+    Image: ""
+    Thumbnail: ""
+
+ChannelDeletedLogs:
+  Embed:
+    Title: ":no_entry: Kênh đã bị xóa"
+    Description:
+      - "**👤 Người thực hiện:** {executor}"
+      - "**📺 Tên kênh:** {channelName}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Hành động quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#FF0000"
+    Image: ""
+    Thumbnail: ""
+
+UserUpdateLogs:
+  Embed:
+    Title: "👥 Biệt danh đã thay đổi"
+    Description:
+      - "**👤 Người dùng:** {userTag}"
+      - "**🔵 Biệt danh cũ:** `{oldNickname}`"
+      - "**🟢 Biệt danh mới:** `{newNickname}`"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Hành động quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#00FF00"
+    Image: ""
+    Thumbnail: ""
+
+TimeoutLogs:
+  Embed:
+    Title: "🚫 Hành động cấm chat | Người dùng: {userName}"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**🛠️ Người quản lý:** {moderator}"
+      - "**⏰ Thời gian:** {duration}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Hành động quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#FFA500"
+    Image: ""
+    Thumbnail: ""
+
+UntimeLogs:
+  Embed:
+    Title: "✅ Đã xóa cấm chat | Người dùng: {userName}"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**🛠️ Người quản lý:** {moderator}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Hành động quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#4CAF50"
+    Image: ""
+    Thumbnail: ""
+
+WarnLogs:
+  Embed:
+    Title: "🚫 Hành động cảnh cáo | Người dùng: {userName}"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**🛠️ Người quản lý:** {moderator}"
+      - "**📅 Lý do:** {reason}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Hành động quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#FFA500"
+    Image: ""
+    Thumbnail: ""
+
+WarnList:
+  Embed:
+    Title: "Cảnh cáo cho {userName}"
+    Color: "#FFA500"
+    Footer: "Tổng số cảnh cáo: {totalWarnings}"
+    Thumbnail: true
+    EntryFormat:
+      - "**{index}.** Lý do: {reason}"
+      - "Ngày: {longtime} lúc {shorttime}"
+      - "Người quản lý: <@{moderatorId}>"
+  NoWarnings: "{userName} không có cảnh cáo nào."
+  Error: "Đã xảy ra lỗi khi lấy cảnh cáo."
+
+GuildUpdateLogs:
+  Embed:
+    Title: ":pencil: Tên máy chủ đã thay đổi"
+    Description:
+      - "**🔵 Tên cũ:** `{oldGuildName}`"
+      - "**🟢 Tên mới:** `{newGuildName}`"
+      - "**👤 Cập nhật bởi:** {executor}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#00E676"
+    Image: ""
+    Thumbnail: true
+
+MessageDeleteLogs:
+  Embed:
+    Title: ":wastebasket: Tin nhắn đã bị xóa"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**💬 Tin nhắn:** `{deletedmessage}`"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#DD2C00"
+    Image: ""
+    Thumbnail: true
+  Attachments: "**Tệp đính kèm**"
+
+MessageUpdateLogs:
+  Embed:
+    Title: ":pencil: Tin nhắn đã được chỉnh sửa"
+    Description:
+      - "**👤 Người chỉnh sửa:** {user}"
+      - "**📺 Kênh:** {channel}"
+      - "🔵 **Tin nhắn gốc:** `{oldmessage}`"
+      - "🟢 **Tin nhắn đã cập nhật:** `{newmessage}`"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#FF9800"
+    Image: ""
+    Thumbnail: true
+
+InviteCreateLogs:
+  Embed:
+    Title: "🔗 Lời mời đã được tạo"
+    Description:
+      - "**👤 Người tạo:** {creator}"
+      - "**🔗 Mã mời:** {inviteCode}"
+      - "**⏰ Thời gian:** {expiresAt}"
+      - "**🎯 Lượt sử dụng tối đa:** {maxUses}"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký lời mời | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#4CAF50"
+    Image: ""
+    Thumbnail: true
+
+InviteDeleteLogs:
+  Embed:
+    Title: "❌ Lời mời đã bị xóa"
+    Description:
+      - "**👤 Người tạo:** {creator}"
+      - "**🔗 Mã mời:** {inviteCode}"
+      - "**📊 Lượt sử dụng:** {uses}"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký lời mời | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#E57373"
+    Image: ""
+    Thumbnail: true
+
+InviteJoinLogs:
+  Embed:
+    Title: "✨ Người dùng đã tham gia qua lời mời"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**🔗 Mời bởi:** {inviter}"
+      - "**📊 Tổng số lời mời của người mời:** {inviterCount}"
+      - "**🔗 Mã mời:** {inviteCode}"
+      - "**📺 Kênh mời:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký lời mời | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#8A2BE2"
+    Image: ""
+    Thumbnail: true
+
+VoiceChannelStreamStop:
+  Embed:
+    Title: ":stop_button: Luồng đã kết thúc"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#D50000"
+    Image: ""
+    Thumbnail: true
+
+VoiceChannelJoin:
+  Embed:
+    Title: ":loud_sound: Đã tham gia kênh thoại"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#2196F3"
+    Image: ""
+    Thumbnail: true
+
+VoiceChannelLeave:
+  Embed:
+    Title: ":mute: Đã rời khỏi kênh thoại"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#FF6D00"
+    Image: ""
+    Thumbnail: true
+
+VoiceChannelSwitch:
+  Embed:
+    Title: ":left_right_arrow: Chuyển kênh thoại"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "🔵 **Kênh cũ:** {oldChannel}"
+      - "🟢 **Kênh mới:** {newChannel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#3D5AFE"
+    Image: ""
+    Thumbnail: true
+
+# ===========================================================================
+# TRÒ CHƠI
+# ===========================================================================
+Economy:
+  Messages:
+    balance: "💼 **Số dư tài khoản**\n\n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
+    otherBalance: "📊 **Chi tiết tài khoản**\n\n👤 **Người dùng:** {user} \n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
+    topBalances: "🏆 **5 người dùng hàng đầu:**\n{topUsers}\n\n**Vị trí của bạn:** #{position}"
+    betAmountError: "❌ Số tiền cược không hợp lệ hoặc không đủ. Hãy thử lại với số tiền hợp lệ."
+    transfer: "🔄 **Chi tiết chuyển tiền** \n\nBạn đã chuyển **{amount}** 🪙 cho **{target}**. Sự hào phóng là tên đệm của bạn!"
+    cannotTransferToSelf: "Bạn đang làm gì vậy? Bạn không thể tự chuyển tiền cho mình!"
+    invalidTransferAmount: "Bạn cần chuyển nhiều hơn 0 🪙"
+    withdraw: "🏧 **Chi tiết rút tiền** \n\n💰 Bạn đã rút **{coins}** 🪙 từ ngân hàng. Hãy tiêu dùng thông minh!"
+    deposit: "💸 **Gửi tiền thành công**\n\n{user}, bạn đã gửi {balance} 🪙 vào tài khoản ngân hàng của mình! Tiết kiệm cho những ngày mưa?"
+    targetRob: "🥷 **Cướp bóc**\n\n🚫 Mục tiêu của bạn không có đủ tiền để cướp."
+    cooldown: "⏰ **Thời gian chờ lệnh**\n\n⏳ Bạn có thể sử dụng lại lệnh này <t:{nextUse}:R>. Kiên nhẫn nhé, bạn của tôi!"
+    noBoosters: "🚫 Bạn không có vật phẩm tăng cường nào đang hoạt động. Đã đến lúc kiếm một vài cái!"
+    noMoney: "❌ Bạn không có đủ tiền cho giao dịch này. Hãy kiểm tra số dư và thử lại."
+    invalidAmount: "❌ Bạn đã nhập một số tiền không chính xác."
+    noPermission: "🚫 Bạn không có quyền sử dụng lệnh này. Cố gắng hay đấy!"
+    adminGive: "🛠️ **Lệnh quản trị: Cho** \n\nĐã cho **{amount}** 🪙 vào số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
+    adminTake: "🛠️ **Lệnh quản trị: Lấy** \n\nĐã lấy **{amount}** 🪙 từ số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
+    adminSet: "🛠️ **Lệnh quản trị: Đặt** \n\nĐã đặt thành công số dư của **{user}**. Đã thêm **{amount}** 🪙.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
+    error: "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+    footer: "Số dư: {balance} 🪙"
+    transactionLog: "Nhật ký giao dịch của {user}"
+    gained: "Tổng nhận được"
+    lost: "Tổng đã mất"
+    guess: "Đoán"
+    result: "Kết quả"
+    win: "Thắng"
+    lose: "Thua"
+    rollResult: "Kết quả tung xúc xắc"
+    outcome: "Kết quả"
+    bet: "Cược của bạn"
+    inventoryCategory: "Chọn một danh mục"
+    catch: "Bắt được"
+    reward: "Phần thưởng"
+    location: "Địa điểm"
+    rodBroke: "Ôi không! Cần câu của bạn đã bị gãy. Bạn sẽ cần mua một cái mới từ cửa hàng."
+    NewBalance: "Số dư mới"
+
+  Games:
+    Blackjack:
+      Title: "♠️ Blackjack - {result}!"
+      Hit: "Rút bài"
+      Stand: "Dừng"
+      Double: "Gấp đôi"
+      Player: "Người chơi"
+      Dealer: "Nhà cái"
+      NewBalance: "Số dư mới"
+      Win:
+        - "{user}, bạn đã thắng nhà cái và nhận được **{balance}** 🪙! Ting ting!"
+        - "{user}, bạn đã thắng và kiếm được **{balance}** 🪙! Cảm thấy may mắn chứ?"
+        - "{user}, nữ thần may mắn đang ở bên bạn! Bạn đã bỏ túi **{balance}** 🪙!"
+        - "Chúc mừng, {user}! Bạn đã ra về với **{balance}** 🪙!"
+      Lose:
+        - "{user}, có vẻ như bạn đã thua. Tạm biệt **{balance}** 🪙!"
+        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
+        - "{user}, nhà cái thắng! Bạn đã mất **{balance}** 🪙. Đau đấy!"
+        - "Xin lỗi, {user}. Bạn đã mất **{balance}** 🪙. Thử lại chứ?"
+      Draw:
+        - "Chán quá... Có vẻ như bạn đã hòa."
+        - "{user}, ván này hòa. Bạn đã được hoàn lại **{balance}** 🪙."
+        - "Hòa rồi, {user}. Bạn đã nhận lại **{balance}** 🪙 của mình."
+        - "Hòa! Không ai thắng lần này. {user}, bạn nhận lại **{balance}** 🪙 của mình."
+
+    Slots:
+      Title: "🎰 Máy xèng - {result}!"
+      Win:
+        - "{user}, bạn đã thắng **{balance}** 🪙. Jackpot!"
+        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. May mắn thật!"
+        - "{user}, bạn đang vào phom! Bạn đã thắng **{balance}** 🪙."
+        - "Ting ting ting! {user}, bạn đã trúng jackpot và thắng **{balance}** 🪙!"
+      Lose:
+        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
+        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙. Quay lại chứ?"
+        - "{user}, máy xèng không ủng hộ bạn. Bạn đã mất **{balance}** 🪙."
+        - "Chúc may mắn lần sau, {user}. Bạn đã mất **{balance}** 🪙."
+
+    Roulette:
+      Title: "🎡 Roulette - {result}!"
+      Win:
+        - "{user}, bạn đã thắng **{balance}** 🪙. Hoan hô!"
+        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. Thật không thể tin được!"
+        - "{user}, bạn đã trúng con số may mắn! Bạn đã thắng **{balance}** 🪙."
+        - "Chúc mừng, {user}! Bạn đã thắng **{balance}** 🪙."
+      Lose:
+        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
+        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙."
+        - "{user}, vòng quay không ủng hộ bạn. Bạn đã mất **{balance}** 🪙."
+        - "Lần này không thắng, {user}. Bạn đã mất **{balance}** 🪙."
+
+    Coinflip:
+      Title: "🪙 Tung đồng xu - {result}!"
+      Win:
+        - "{user}, bạn đã thắng **{balance}** 🪙! Sấp hay ngửa, bạn đã đoán đúng!"
+        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. Ấn tượng thật!"
+        - "{user}, bạn đã gọi đúng! Bạn đã thắng **{balance}** 🪙!"
+        - "Chúc mừng, {user}! Bạn đã thắng **{balance}** 🪙 trong trò tung đồng xu!"
+      Lose:
+        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
+        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙."
+        - "Tiếc quá, {user}. Bạn đã mất **{balance}** 🪙. Thử lại chứ?"
+        - "Không may, {user}. Bạn đã mất **{balance}** 🪙."
+
+      heads: "Sấp"
+      tails: "Ngửa"
+
+    Roll:
+      Title: "🎲 Tung xúc xắc - {result}!"
+      Win:
+        - "{user}, bạn đã thắng **{balance}** 🪙. Làm tốt lắm!"
+        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. Tuyệt vời!"
+        - "{user}, bạn đã tung ra con số chiến thắng! Bạn đã thắng **{balance}** 🪙."
+        - "Lần tung may mắn, {user}! Bạn đã thắng **{balance}** 🪙."
+      Lose:
+        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
+        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙."
+        - "{user}, lần tung không ủng hộ bạn. Bạn đã mất **{balance}** 🪙."
+        - "Lần này không thắng, {user}. Bạn đã mất **{balance}** 🪙."
+
+    Crime:
+      Title: "🚨 Tội phạm - {result}!"
+      Win:
+        - "{user}, bạn đã phạm tội và nhận được **{balance}** 🪙! Thật trơn tru!"
+        - "Bạn đã cướp ngân hàng và nhận được **{balance}** 🪙. Chiến lợi phẩm ngon đấy!"
+        - "Thành công! {user}, bạn đã tẩu thoát với **{balance}** 🪙!"
+        - "{user}, bạn là một thiên tài tội phạm! Bạn đã trộm **{balance}** 🪙!"
+      Lose:
+        - "Có vẻ như bạn không hợp với cuộc sống này... Nhiệm vụ thất bại!"
+        - "{user} đã bị tóm trong một vụ phạm tội và mất **{balance}** 🪙. Chúc may mắn lần sau!"
+        - "Bị bắt! {user}, bạn đã thất bại và mất **{balance}** 🪙."
+        - "{user}, tội ác không có lời... lần này. Bạn đã mất **{balance}** 🪙."
+
+    Rob:
+      Title: "🥷 Cướp bóc - {result}!"
+      Win:
+        - "{user}, bạn đã cướp thành công {victim} được **{balance}** 🪙. Thiên tài tội phạm!"
+        - "{user}, bạn đã chĩa súng vào {victim} để lấy **{balance}** 🪙. Một vụ cướp ngoạn mục!"
+        - "Cướp bóc thành công! {user}, bạn đã lấy **{balance}** 🪙 từ {victim}."
+        - "{user}, bạn đã thực hiện vụ cướp hoàn hảo và nhận được **{balance}** 🪙!"
+      Lose:
+        - "{user}, bạn đã thất bại trong việc cướp {victim}. Chúc may mắn lần sau!"
+        - "{user}, thật khó xử... {victim} đã trốn thoát."
+        - "Cướp bóc thất bại! {user}, {victim} đã chạy thoát."
+        - "{user}, vụ cướp đã sai lầm. Bạn không thể cướp {victim}."
+
+    ScratchOff:
+      Title: "Kết quả cào"
+      Win:
+        - "Chúc mừng! Bạn đã thắng {amount} xu!"
+        - "Bạn đang trên đà chiến thắng! Bạn vừa ghi được {amount} xu!"
+        - "May mắn thật! {amount} xu giờ là của bạn!"
+      Lose:
+        - "Chúc may mắn lần sau! Bạn đã mất {amount} xu."
+        - "Ôi không! Lần này bạn không thắng."
+        - "Xin lỗi, bạn đã mất {amount} xu. Thử lại nhé!"
+
+  Activities:
+    Fishing:
+      Title: "🎣 Kết quả câu cá"
+      Messages:
+        - "{user} đã quăng {rod} của họ xuống {location} và bắt được một con {fish}! Họ kiếm được {reward} xu."
+        - "Sử dụng {rod} của mình, {user} đã kéo lên một con {fish} từ {location}! Nó trị giá {reward} xu."
+      noRod: "Tay không"
+      rodUsed: "Cần câu đã dùng"
+      catchBonus: "Thưởng bắt cá"
+      luckBonus: "Thưởng may mắn"
+      cooldownReduction: "Giảm thời gian chờ"
+
+  Actions:
+    Beg:
+      Title: "🙇‍♂️ Ăn xin!"
+      Messages:
+        - "Bạn đã ăn xin và nhận được **{balance}** 🪙. Tích tiểu thành đại!"
+        - "{user}, ăn xin là chân ái! Bạn đã kiếm được **{balance}** 🪙."
+        - "{user}, việc ăn xin của bạn đã có kết quả! Bạn nhận được **{balance}** 🪙."
+        - "Những tâm hồn hào phóng đã cho bạn **{balance}** 🪙, {user}. Cứ tiếp tục nhé!"
+
+    Daily:
+      Title: "📅 Phần thưởng hàng ngày - Đã nhận!"
+      Messages:
+        - "{user}, bạn đã nhận phần thưởng hàng ngày và kiếm được **{balance}** 🪙.\n\n**Chuỗi:** {streak} ngày"
+        - "Woooo, bạn đã nhận được **{balance}** 🪙 từ phần thưởng hàng ngày của mình!\n\n**Chuỗi:** {streak} ngày"
+        - "Thành công hàng ngày! {user}, bạn đã thu thập **{balance}** 🪙. Hãy giữ vững chuỗi!\n\n**Chuỗi:** {streak} ngày"
+        - "Kiên trì! {user}, bạn đã kiếm được **{balance}** 🪙 từ phần thưởng hàng ngày của mình.\n\n**Chuỗi:** {streak} ngày"
+
+    Work:
+      Title: "💼 Làm việc - Công việc hoàn thành!"
+      Messages:
+        - "{user}, bạn đã nhận được **{balance}** 🪙 từ một ngày làm việc chăm chỉ! Làm tốt lắm!"
+        - "Làm tốt công việc hôm nay, {user}! Đây là **{balance}** 🪙."
+        - "Chăm chỉ sẽ được đền đáp! {user}, bạn đã kiếm được **{balance}** 🪙."
+        - "{user}, bạn đã hoàn thành công việc và nhận được **{balance}** 🪙."
+
+  Other:
+    Boosters:
+      title: "🚀 Vật phẩm tăng cường đang hoạt động của bạn"
+      description: "**Vật phẩm tăng cường {type}** (Hệ số: **{multiplier}**, Hết hạn: <t:{endTime}:R>)"
+
+    Fishing:
+      pond: "Ao"
+      lake: "Hồ"
+      ocean: "Đại dương"
+      rodEquipped: "Bạn đang sử dụng {rod}"
+      noBait: "Bạn không có mồi câu. Cơ hội bắt cá của bạn sẽ thấp hơn."
+      usingBait: "Bạn đang sử dụng {bait}. Cơ hội bắt cá của bạn đã được tăng lên!"
+
+    Inventory:
+      empty: "🚫 Kho đồ của bạn trống. Đã đến lúc đi mua sắm!"
+      noItems: "🚫 Không có vật phẩm nào để hiển thị."
+      redeem: "🎁 Bạn đã đổi: **{item}**"
+      Embed:
+        Title: "Kho đồ {category}"
+        Description: ["{itemNum}. **{item}** (x{amount})"]
+        Footer:
+          Text: "Trang {pageCurrent} trên {pageMax}"
+        Color: "#1769FF"
+
+    Store:
+      purchaseSuccess: "✅ Bạn đã mua thành công **{item}**. Số dư mới của bạn là **{balance}** 🪙."
+      higherInterestRate: "Bạn đã có lãi suất cao hơn hoặc bằng."
+      purchaseLimit: "Bạn không thể mua nhiều hơn {limit} của {item}."
+      Embed:
+        Title: "Cửa hàng {shopName}"
+        Description:
+          - "{itemCount}: **{item}** ({price} 🪙)"
+          - "{description}"
+        Footer:
+          Text: "Trang {pageCurrent} trên {pageMax}"
+          Icon: ""
+        Author:
+          Text: ""
+          Icon: ""
+        Color: "#1769FF"
+        Image: ""
+        Thumbnail: ""
+      Categories:
+        - "Hạng"
+        - "Vật phẩm tăng cường"
+        - "Vật phẩm"
+        - "Trang bị"
+
+# ===========================================================================
+# TIN NHẮN ADDONS
+# ===========================================================================
+Addons:
+  Fishing:
+    Errors:
+      Cooldown: "⏰ **Cooldown!** Vui lòng đợi `{time}s` nữa."
+      NoRod: "❌ Bạn chưa có cần câu! Hãy dùng `/store` để mua."
+      RodBrokenTitle: "🔧 Cần Câu Đã Hỏng"
+      RodBrokenDesc: "**{rod}** của bạn đã hết độ bền!\n\nSử dụng `/fixcancau` để sửa hoặc mua cần mới tại `/store`."
+      NoBait: "❌ Bạn không có mồi câu nào."
+      NoFishToSell: "❌ Bạn không có cá để bán."
+      NoFishInInventory: "❌ Bạn không có cá này trong kho."
+      InvalidQuantity: "❌ Số lượng không hợp lệ. Bạn có {quantity} con."
+      NoRodsOwned: "❌ Bạn không sở hữu cần câu nào."
+      NotYourMenu: "❌ Đây không phải menu của bạn."
+      InvalidCommand: "❌ Lệnh không hợp lệ."
+      GenericError: "❌ Đã có lỗi xảy ra khi thực hiện lệnh. Vui lòng thử lại sau."
+    UI:
+      NoBaitButton: "Không dùng mồi"
+      SelectBaitTitle: "🎣 Chọn Mồi Câu"
+      SelectBaitDesc: "Bạn có muốn sử dụng mồi câu không?\n*Mồi câu sẽ tăng cơ hội câu được cá hiếm.*"
+      SelectBaitFooter: "Thời gian chọn: 30 giây"
+      CastingLine: "🎣 Đang quăng câu..."
+      Timeout: "⏰ Hết thời gian! Sử dụng mồi: {bait}"
+      NoCatchTitle: "😞 Không Câu Được Gì"
+      NoCatchDesc: "Bạn không câu được cá lần này. Chúc may mắn lần sau!"
+      NoCatchFooter: "{rod} còn {durability} độ bền"
+      SuccessTitle: "🎉 Câu Cá Thành Công!"
+      Weight: "⚖️ Trọng Lượng"
+      Rarity: "✨ Độ Hiếm"
+      XPGained: "🌟 XP Nhận"
+      BaitUsed: "🪱 Mồi Đã Dùng"
+      InventoryTitle: "🎒 Kho Đồ Câu Cá - {user}"
+      NoRodStatus: "❌ Chưa có cần câu"
+      RodHeader: "🎣 Cần Câu"
+      NoBaitStatus: "❌ Không có mồi câu"
+      BaitHeader: "🪱 Mồi Câu"
+      EmptyFishInventory: "❌ Kho cá trống"
+      MoreFish: "\n\n*...và {count} loại khác*"
+      FishHeader: "🐠 Kho Cá"
+      SellSuccessTitle: "💰 Bán Cá Thành Công"
+      SellAllDesc: "Đã bán **tất cả cá** trong kho!"
+      TotalIncome: "💵 Tổng Thu"
+      SpeciesCount: "🐟 Số Loài"
+      NewBalance: "💳 Số Dư Mới"
+      Quantity: "🐟 Số Lượng"
+      TotalWeight: "⚖️ Tổng Cân"
+      SelectRodTitle: "🎣 Chọn Cần Câu"
+      SelectRodDesc: "Hãy chọn cần câu bạn muốn sử dụng:"
+      SelectRodPlaceholder: "Chọn cần câu để trang bị"
+      EquippedRodConfig: "✅ Đã trang bị: **{rod}**"
+      SelectBaitConfigTitle: "🪱 Chọn Mồi Câu"
+      SelectBaitConfigDesc: "Hãy chọn loại mồi bạn muốn ưu tiên sử dụng:"
+      SelectBaitPlaceholder: "Chọn mồi câu mặc định"
+      EquippedBaitConfig: "✅ Đã chọn: **{bait}** làm mồi mặc định"
+    Help:
+      Title: "🎣 Hướng Dẫn Câu Cá"
+      Desc: "Chào mừng đến với hệ thống câu cá! Dưới đây là các lệnh bạn có thể sử dụng:"
+      Fields:
+        Fish:
+          Name: "🎣 Câu Cá"
+          Value: "`/cauca fish <địa điểm>` - Bắt đầu câu cá tại địa điểm đã chọn\n*Mỗi lần câu sẽ tiêu tốn 1 độ bền cần câu*"
+        Inventory:
+          Name: "🎒 Quản Lý Đồ"
+          Value: "`/cauca inventory` - Xem kho đồ câu cá của bạn\n`/cauca select <rod/bait>` - Chọn cần câu hoặc mồi để trang bị\n`/fixcancau` - Sửa cần câu (chỉ khi độ bền < 30%)"
+        Economy:
+          Name: "💰 Kinh Tế"
+          Value: "`/cauca sell <tên cá|all> [số lượng]` - Bán cá để kiếm xu\n`/store` - Mở cửa hàng mua cần câu và mồi"
+        Stats:
+          Name: "📊 Thống Kê"
+          Value: "`/leaderboard cauca` - Xem bảng xếp hạng câu cá\n`/cauca help` - Hiển thị tin nhắn này"
+        Rarity:
+          Name: "✨ Độ Hiếm Cá"
+          Value: "{common} Common • {uncommon} Uncommon • {rare} Rare\n{epic} Epic • {legendary} Legendary"
+        Tips:
+          Name: "💡 Mẹo"
+          Value: "• Sử dụng mồi câu để tăng cơ hội câu được cá hiếm\n• Cần câu tốt hơn = độ bền cao hơn + hiệu ứng đặc biệt\n• Cá Epic và Legendary thay đổi mỗi giờ!"
+      Footer: "Chúc bạn câu được nhiều cá hiếm! 🐟"
+
+  Farming:
+    Errors:
+      NoSeed: "Bạn không có hạt giống {seed} để trồng."
+      InvalidQuantity: "Số lượng không hợp lệ."
+      NotEnoughSeed: "Bạn không có đủ hạt giống {seed} để trồng."
+      NoPlantsReady: "Bạn không có cây trồng nào sẵn sàng để thu hoạch."
+      NotPlanted: "Bạn chưa trồng {plant}."
+      NotReady: "{plant} của bạn chưa sẵn sàng để thu hoạch. Thời gian còn lại: {time}."
+      NoPlants: "Bạn chưa trồng cây nào."
+      NoSeeds: "Bạn không có hạt giống nào."
+      NoProduce: "Bạn không có nông sản hay phân bón nào."
+      NoFertilizer: "Bạn không có {fertilizer}."
+      NoPlantsToFertilize: "Bạn không có cây trồng nào để bón phân."
+    UI:
+      PlantSuccess: "Bạn đã trồng thành công {quantity} {emoji} {name}."
+      PlantMutation: "\n✨ **May mắn!** Cây của bạn đã bị đột biến: {emoji} **{name}** do ảnh hưởng của thời tiết {weatherEmoji} {weatherName}!"
+      HarvestSuccess: "Bạn đã thu hoạch được:\n"
+      HarvestBonus: "\n✨ Cây đột biến: **{mutations}** đã mang lại cho bạn thêm **{amount}** xu!"
+      HarvestMutationOnly: "\n✨ Cây đột biến: **{mutations}**"
+      SellAllButton: "Bán Tất Cả"
+      FieldTitle: "Nông Trại Của Bạn"
+      FieldEmpty: "Bạn không có cây trồng nào."
+      WeatherCurrent: "🌤️ **Thời tiết hiện tại**: {emoji} **{name}** (Kết thúc: {time})\n{desc}"
+      WeatherEventTitle: "🌤️ Sự Kiện Thời Tiết Nông Trại"
+      WeatherEventCurrent: "**Hiện tại:** {emoji} **{name}**\n\n{desc}"
+      WeatherEnds: "⏳ Kết thúc"
+      WeatherEffect: "✨ Hiệu ứng"
+      WeatherFooter: "Thời tiết ảnh hưởng đến tốc độ lớn và tỉ lệ đột biến khi trồng cây."
+      SeedInventoryTitle: "Kho Hạt Giống Của Bạn"
+      InventoryTitle: "Kho Nông Sản & Phân Bón"
+      InventoryProduce: "**Nông Sản:**\n"
+      InventoryFertilizer: "\n**Phân Bón:**\n"
+      None: "Không có."
+      QuickSellPlaceholder: "Chọn nông sản để bán nhanh"
+      FertilizeSuccess: "Bạn đã sử dụng thành công {fertilizer} cho {plant}."
+
+  Bypass:
+    Errors:
+      Unknown: "Lỗi không xác định từ API"
+      UnexpectedStatus: "API trả về trạng thái không mong muốn: {status}"
+      NoTaskId: "API không trả về task_id."
+      Failed: "Bypass thất bại: {error}"
+      Timeout: "⏱️ Timeout: Không thể lấy kết quả sau {time} giây.{status}\n\n💡 Link có thể quá phức tạp hoặc API đang quá tải. Vui lòng thử lại sau."
+      Generic: "Đã xảy ra lỗi không xác định."
+      ApiKeyHint: "\n\n💡 **Gợi ý:** Kiểm tra lại API key trong file `config.yml`"
+      UrlHint: "\n\n💡 **Gợi ý:** Đảm bảo URL là shortlink hợp lệ và được hỗ trợ"
+    UI:
+      Processing: "⏳ Đang xử lý yêu cầu bypass..."
+      Received: "⏳ Yêu cầu của bạn đã được nhận!\n📋 Task ID: `{taskId}`\n📍 Vị trí trong hàng đợi: {queue}\nVui lòng đợi..."
+      StillProcessing: "⏳ Vẫn đang xử lý... ({current}s / {max}s)\n📋 Task ID: `{taskId}`\n🔄 Trạng thái: {status}"
+      SuccessTitle: "✅ Bypass Thành Công!"
+      SuccessDesc: "Link của bạn đã được bypass thành công."
+      OriginalLink: "Link Gốc"
+      BypassedLink: "Link Đã Bypass"
+      ProcessTime: "Thời gian xử lý"
+      Footer: "Powered by meobypass.click"
+      FailTitle: "❌ Bypass Thất Bại"
+      TriedUrl: "URL đã thử"
+
+  System:
+    Prefix:
+      Errors:
+        Spaces: "Prefix không được chứa khoảng trắng."
+      UI:
+        Updated: "Prefix Đã Cập Nhật"
+        UpdatedDesc: "Prefix của server đã được đặt thành `{prefix}`"
+        Reset: "Prefix Đã Reset"
+        ResetDesc: "Prefix của server đã được reset về mặc định: `k`"
+        Current: "Prefix Hiện Tại"
+        CurrentDesc: "Prefix hiện tại của server là: `{prefix}`"
+        RequestedBy: "Yêu cầu bởi {user}"
+
+  Help:
+    Errors:
+      NotReady: "⏳ Các lệnh vẫn đang được đăng ký. Vui lòng thử lại sau."
+      NotFound: "❌ Không tìm thấy lệnh `{command}`\n💡 Dùng `/help` để xem tất cả lệnh."
+      Generic: "❌ Đã có lỗi xảy ra!"
+    UI:
+      NoDesc: "Không có mô tả"
+      Greeting: "Chào **{user}**! 👋\n\n"
+      Desc: "> **KentaBucket** là bot Discord đa năng, đáp ứng hầu hết mọi nhu cầu của máy chủ.\n> Để xem chi tiết một lệnh, sử dụng: `/help lệnh:<tên_lệnh>`\n\n"
+      Links: "🔗 [Hỗ trợ](https://discord.gg/96hgDj4b4j) • [Mời Bot]({invite})\n\n**━━━━━━━━━━━━━━━━━━━━**\n\n"
+      Title: "📖 Danh sách lệnh"
+      PageFooter: "Trang {current}/{total} • Tổng {count} lệnh"
+      CommandDesc: "**📝 Mô tả:**\n{desc}\n\n"
+      Usage: "**💡 Cách dùng:** `{usage}`\n\n"
+      Options: "**⚙️ Tùy chọn:**\n"
+      Required: "`[Bắt buộc]`"
+      Optional: "`[Tùy chọn]`"
+      Values: "  Giá trị: {values}\n"
+      DetailTitle: "📘 Chi tiết: /{command}"
+      BackFooter: "Nhấn nút bên dưới để quay lại danh sách"
+      ButtonPrev: "◀ Trước"
+      ButtonNext: "Sau ▶"
+      ButtonBack: "↩ Quay lại danh sách"
+
+  AFK:
+    Errors:
+      NoPermission: "Bạn không có quyền sử dụng lệnh này"
+      InvalidDuration: "⚠️ Sai định dạng thời gian! Ví dụ: 1h, 30m, 1h 30m"
+      AlreadyAFK: "Bạn đã đang ở trạng thái AFK rồi!"
+      NotAFK: "Bạn hiện không ở trạng thái AFK!"
+    UI:
+      SetAFKSuccessTitle: "⌛ Trạng Thái Treo Máy (Bật)"
+      SetAFKSuccessDesc: "**💤 Trạng thái AFK đã được kích hoạt**"
+      Reason: "📝 Lí do"
+      StartTime: "⏰ Thời gian bắt đầu"
+      ReturnTime: "🔙 Quay lại sau"
+      Footer: "Bot sẽ thông báo khi bạn trở lại"
+      WelcomeBackTitle: "👋 Chào Mừng Trở Lại!"
+      WelcomeBackDesc: "**👋 Chào mừng trở lại!**\n\n*Bạn đã rời máy trong {duration}*"
+      WelcomeBackFallback: "👋 Chào mừng trở lại **{username}**! Bạn đã AFK trong {duration}"
+      AFKDuration: "⏱️ Thời gian AFK"
+      ReasonField: "📝 Lí do trước đó"
+      WelcomeBackFooter: "Trạng thái AFK đã được tự động xóa"
+      UserAFKTitle: "{username} đang AFK"
+      UserAFKDesc: "**💤 Người dùng này hiện đang rời máy**"
+      UserAFKFooter: "Họ sẽ nhận được tin nhắn của bạn khi quay lại"
+
+  Chatbot:
+    Errors:
+      Config: "⚠️ Thiếu **GEMINI_API_KEY**.\n\nVui lòng cấu hình API key."
+      API: "🔧 **Model không hợp lệ hoặc API đã thay đổi**"
+      Auth: "🔑 **API key không hợp lệ hoặc không có quyền**"
+      Unknown: "⚠️ **Đã xảy ra lỗi không xác định**"
+      Timeout: "⏱️ **Yêu cầu đã hết thời gian chờ**"
+    UI:
+      ThinkingTitle: "🤖 AI đang suy nghĩ..."
+      ThinkingDesc: "**Câu hỏi của bạn:**\n> {prompt}"
+      ThinkingFooter: "⏳ Đang xử lý yêu cầu..."
+      ResponseTitle: "💬 Câu trả lời"
+      ResponseFooter: "Model: {model} • Thời gian: {time}s • Độ dài: {chars} ký tự"
+      Disabled: "Lệnh này đang bị tắt."
+
+  Autoresponder:
+    Errors:
+      AlreadyExists: "Một auto-responder với trigger `{trigger}` đã tồn tại."
+      NotFound: "Không tìm thấy auto-responder với trigger này."
+      InvalidEdit: "Bạn phải cung cấp ít nhất một tùy chọn để chỉnh sửa."
+      ConflictError: "Bạn không thể vừa thêm tệp đính kèm mới vừa xóa tệp hiện có."
+    UI:
+      AddSuccess: "Đã tạo auto-responder cho trigger: `{trigger}`"
+      EditSuccess: "Đã cập nhật auto-responder cho trigger: `{trigger}`"
+      DeleteSuccess: "Đã xóa auto-responder cho trigger: `{trigger}`"
+      ListTitle: "Danh sách Auto-responder"
+      ListEmpty: "Không có auto-responder nào trên máy chủ này."
+      ViewTitle: "Auto-responder: {trigger}"
+      ViewMode: "Mode"
+      ViewIgnoreCase: "Ignore Case"
+      ViewAttachment: "Attachment URL"
+      ModeUpdateSuccess: "Đã cập nhật mode cho trigger `{trigger}` thành `{mode}`."
+      PlaceholdersTitle: "Placeholders & Functions"
+      PlaceholdersDesc: "Đây là danh sách các placeholders và functions bạn có thể sử dụng."

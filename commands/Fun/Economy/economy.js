@@ -4,14 +4,6 @@ const { getConfig } = require('../../../utils/configLoader.js');
 
 const config = getConfig();
 
-// Danh sách ID được phép sử dụng economy commands
-const ALLOWED_OWNERS = [
-    '727497287777124414',
-    '1316287191634149377',
-    '710025322497572926',
-    '808974657994752050'
-];
-
 module.exports = {
     name: 'economy',
 
@@ -19,9 +11,10 @@ module.exports = {
     usage: '!economy <give|take|set|reset> <user> [amount] [type]',
     
     async run(client, message, args) {
-        // Kiểm tra quyền owner
-        if (!ALLOWED_OWNERS.includes(message.author.id)) {
-            return message.reply('❌ Chỉ có owner bot mới có thể sử dụng lệnh này!');
+        // Kiểm tra quyền owner từ config
+        const ownerIDs = config.OwnerIDs || [];
+        if (!ownerIDs.includes(message.author.id)) {
+            return message.reply('❌ Chỉ có owner bot (được cấu hình trong config.yml) mới có thể sử dụng lệnh này!');
         }
 
         const subcommand = args[0]?.toLowerCase();

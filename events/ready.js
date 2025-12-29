@@ -7,7 +7,8 @@ const GuildData = require('../models/guildDataSchema');
 const Verification = require('../models/verificationSchema');
 const Ticket = require('../models/tickets');
 const BotActivity = require('../models/BotActivity');
-const { handleVerification, createUnverifiedRoleIfNeeded } = require('../events/Verification/VerificationEvent');
+const { handleVerification } = require('../events/Verification/VerificationEvent');
+const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
 const botStartTime = Date.now();
 
 const { getConfig } = require('../utils/configLoader.js');

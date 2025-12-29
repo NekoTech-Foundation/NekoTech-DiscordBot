@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const AutoResponse = require('../../models/autoResponse');
+const { loadLang } = require('../../utils/langLoader');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -66,13 +67,15 @@ module.exports = {
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
+        const lang = loadLang(guildId);
+        const autoLang = lang.Addons.Autoresponder;
 
         if (subcommand === 'add') {
             const trigger = interaction.options.getString('trigger');
 
             const existing = await AutoResponse.findOne({ guildId, trigger });
             if (existing) {
-                return interaction.reply({ content: `Một auto-responder với trigger \`${trigger}\` đã tồn tại.`, ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.AlreadyExists.replace('{trigger}', trigger), ephemeral: true });
             }
 
             const response = interaction.options.getString('response');
@@ -91,26 +94,27 @@ module.exports = {
             });
 
             await newAutoResponse.save();
-            await interaction.reply({ content: `Đã tạo auto-responder cho trigger: \`${trigger}\``, ephemeral: true });
+            await newAutoResponse.save();
+            await interaction.reply({ content: autoLang.UI.AddSuccess.replace('{trigger}', trigger), ephemeral: true });
 
         } else if (subcommand === 'view') {
             const trigger = interaction.options.getString('trigger');
             const autoResponse = await AutoResponse.findOne({ guildId, trigger });
 
             if (!autoResponse) {
-                return interaction.reply({ content: 'Không tìm thấy auto-responder với trigger này.', ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.NotFound, ephemeral: true });
             }
 
             const embed = new EmbedBuilder()
-                .setTitle(`Auto-responder: ${trigger}`)
+                .setTitle(autoLang.UI.ViewTitle.replace('{trigger}', trigger))
                 .addFields(
                     { name: 'Response', value: `\`\`\`${autoResponse.response}\`\`\`` },
-                    { name: 'Mode', value: autoResponse.mode, inline: true },
-                    { name: 'Ignore Case', value: autoResponse.ignoreCase.toString(), inline: true }
+                    { name: autoLang.UI.ViewMode, value: autoResponse.mode, inline: true },
+                    { name: autoLang.UI.ViewIgnoreCase, value: autoResponse.ignoreCase.toString(), inline: true }
                 );
 
             if (autoResponse.attachmentUrl) {
-                embed.addFields({ name: 'Attachment URL', value: autoResponse.attachmentUrl });
+                embed.addFields({ name: autoLang.UI.ViewAttachment, value: autoResponse.attachmentUrl });
                 embed.setImage(autoResponse.attachmentUrl);
             }
 
@@ -123,7 +127,7 @@ module.exports = {
             const removeAttachment = interaction.options.getBoolean('remove_attachment');
 
             if (newAttachment && removeAttachment) {
-                return interaction.reply({ content: 'Bạn không thể vừa thêm tệp đính kèm mới vừa xóa tệp hiện có. Vui lòng chọn một hành động.', ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.ConflictError, ephemeral: true });
             }
 
             const update = {};
@@ -137,7 +141,7 @@ module.exports = {
             }
 
             if (Object.keys(update).length === 0) {
-                return interaction.reply({ content: 'Bạn phải cung cấp ít nhất một tùy chọn để chỉnh sửa (response, attachment, hoặc remove_attachment).', ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.InvalidEdit, ephemeral: true });
             }
 
             const updated = await AutoResponse.findOneAndUpdate(
@@ -147,9 +151,9 @@ module.exports = {
             );
 
             if (!updated) {
-                return interaction.reply({ content: 'Không tìm thấy auto-responder với trigger này.', ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.NotFound, ephemeral: true });
             }
-            await interaction.reply({ content: `Đã cập nhật auto-responder cho trigger: \`${trigger}\``, ephemeral: true });
+            await interaction.reply({ content: autoLang.UI.EditSuccess.replace('{trigger}', trigger), ephemeral: true });
 
         } else if (subcommand === 'matchmode') {
             const trigger = interaction.options.getString('trigger');
@@ -162,36 +166,36 @@ module.exports = {
             );
 
             if (!updated) {
-                return interaction.reply({ content: 'Không tìm thấy auto-responder với trigger này.', ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.NotFound, ephemeral: true });
             }
-            await interaction.reply({ content: `Đã cập nhật mode cho trigger \`${trigger}\` thành \`${newMode}\`.`, ephemeral: true });
+            await interaction.reply({ content: autoLang.UI.ModeUpdateSuccess.replace('{trigger}', trigger).replace('{mode}', newMode), ephemeral: true });
 
         } else if (subcommand === 'delete') {
             const trigger = interaction.options.getString('trigger');
             const deleted = await AutoResponse.findOneAndDelete({ guildId, trigger });
 
             if (!deleted) {
-                return interaction.reply({ content: 'Không tìm thấy auto-responder với trigger này.', ephemeral: true });
+                return interaction.reply({ content: autoLang.Errors.NotFound, ephemeral: true });
             }
-            await interaction.reply({ content: `Đã xóa auto-responder cho trigger: \`${trigger}\``, ephemeral: true });
+            await interaction.reply({ content: autoLang.UI.DeleteSuccess.replace('{trigger}', trigger), ephemeral: true });
 
         } else if (subcommand === 'list') {
             const responses = await AutoResponse.find({ guildId });
             if (responses.length === 0) {
-                return interaction.reply({ content: 'Không có auto-responder nào trên máy chủ này.', ephemeral: true });
+                return interaction.reply({ content: autoLang.UI.ListEmpty, ephemeral: true });
             }
 
             const list = responses.map(r => `\`${r.trigger}\``).join(', ');
             const embed = new EmbedBuilder()
-                .setTitle('Danh sách Auto-responder')
+                .setTitle(autoLang.UI.ListTitle)
                 .setDescription(list);
             await interaction.reply({ embeds: [embed], ephemeral: true });
 
         } else if (subcommand === 'placeholders') {
             // This will be a very long message. I will create a separate file for it.
             const placeholderEmbed = new EmbedBuilder()
-                .setTitle('Placeholders & Functions')
-                .setDescription('Đây là danh sách các placeholders và functions bạn có thể sử dụng trong response của auto-responder. (Đang trong quá trình phát triển)');
+                .setTitle(autoLang.UI.PlaceholdersTitle)
+                .setDescription(autoLang.UI.PlaceholdersDesc);
             await interaction.reply({ embeds: [placeholderEmbed], ephemeral: true });
         }
     }

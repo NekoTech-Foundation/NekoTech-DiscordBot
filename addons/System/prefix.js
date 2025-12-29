@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 const GuildSettings = require('../../models/GuildSettings');
-const { getConfig, getLang } = require('../../utils/configLoader');
+const { getConfig } = require('../../utils/configLoader');
+const { loadLang } = require('../../utils/langLoader');
 
 const config = getConfig();
-const lang = getLang();
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,6 +31,8 @@ module.exports = {
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
+        const lang = loadLang(guildId);
+        const prefixLang = lang.Addons.System.Prefix;
 
         let guildSettings = await GuildSettings.findOne({ guildId });
         if (!guildSettings) {
@@ -42,7 +44,7 @@ module.exports = {
 
             if (newPrefix.includes(' ')) {
                 return interaction.reply({
-                    content: 'Prefix cannot contain spaces.',
+                    content: prefixLang.Errors.Spaces,
                     ephemeral: true
                 });
             }
@@ -52,9 +54,10 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(config.EmbedColors.Success || '#00FF00')
-                .setTitle('Prefix Updated')
-                .setDescription(`The prefix for this server has been set to \`${newPrefix}\``)
-                .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
+                .setColor(config.EmbedColors.Success || '#00FF00')
+                .setTitle(prefixLang.UI.Updated)
+                .setDescription(prefixLang.UI.UpdatedDesc.replace('{prefix}', newPrefix))
+                .setFooter({ text: prefixLang.UI.RequestedBy.replace('{user}', interaction.user.tag), iconURL: interaction.user.displayAvatarURL() })
                 .setTimestamp();
 
             return interaction.reply({ embeds: [embed] });
@@ -65,9 +68,10 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(config.EmbedColors.Success || '#00FF00')
-                .setTitle('Prefix Reset')
-                .setDescription(`The prefix for this server has been reset to default: \`k\``)
-                .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
+                .setColor(config.EmbedColors.Success || '#00FF00')
+                .setTitle(prefixLang.UI.Reset)
+                .setDescription(prefixLang.UI.ResetDesc)
+                .setFooter({ text: prefixLang.UI.RequestedBy.replace('{user}', interaction.user.tag), iconURL: interaction.user.displayAvatarURL() })
                 .setTimestamp();
 
             return interaction.reply({ embeds: [embed] });
@@ -77,9 +81,10 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor(config.EmbedColors.Default || '#0099ff')
-                .setTitle('Current Prefix')
-                .setDescription(`The current prefix for this server is: \`${currentPrefix}\``)
-                .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
+                .setColor(config.EmbedColors.Default || '#0099ff')
+                .setTitle(prefixLang.UI.Current)
+                .setDescription(prefixLang.UI.CurrentDesc.replace('{prefix}', currentPrefix))
+                .setFooter({ text: prefixLang.UI.RequestedBy.replace('{user}', interaction.user.tag), iconURL: interaction.user.displayAvatarURL() })
                 .setTimestamp();
 
             return interaction.reply({ embeds: [embed] });

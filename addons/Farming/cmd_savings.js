@@ -42,7 +42,7 @@ module.exports = {
 
             let savingsData = await bankSchema.findOne({ userId });
             if (!savingsData) {
-                savingsData = new bankSchema({ userId });
+                savingsData = await bankSchema.create({ userId, balance: 0 });
             }
             savingsData.balance += amount;
             await savingsData.save();

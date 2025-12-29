@@ -6,7 +6,7 @@ const {
     ButtonStyle,
     ApplicationCommandOptionType
 } = require('discord.js');
-const { getLang } = require('../../utils/configLoader');
+const { loadLang } = require('../../utils/langLoader');
 
 // Lấy tất cả commands dưới dạng list
 function getAllCommands(client) {
@@ -42,7 +42,7 @@ function getAllCommands(client) {
 }
 
 // Tạo embed cho từng trang
-function createPageEmbed(client, interaction, commands, page) {
+function createPageEmbed(client, interaction, commands, page, helpLang) {
     const itemsPerPage = 7;
     const totalPages = Math.ceil(commands.length / itemsPerPage);
     const start = page * itemsPerPage;
@@ -51,11 +51,9 @@ function createPageEmbed(client, interaction, commands, page) {
 
     const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands`;
 
-    let description = `Chào **${interaction.user.username}**! 👋\n\n`;
-    description += `> **KentaBucket** là bot Discord đa năng, đáp ứng hầu hết mọi nhu cầu của máy chủ.\n`;
-    description += `> Để xem chi tiết một lệnh, sử dụng: \`/help lệnh:<tên_lệnh>\`\n\n`;
-    description += `🔗 [Support](https://discord.gg/96hgDj4b4j) • [Hướng dẫn](https://your-docs-link.com) • [Điều khoản](https://your-tos-link.com) • [Mời Bot](${inviteLink})\n\n`;
-    description += `**━━━━━━━━━━━━━━━━━━━━**\n\n`;
+    let description = helpLang.UI.Greeting.replace('{user}', interaction.user.username);
+    description += helpLang.UI.Desc;
+    description += helpLang.UI.Links.replace('{invite}', inviteLink);
 
     commandsOnPage.forEach(cmd => {
         description += `**\`/${cmd.name}\`** - ${cmd.description}\n`;
@@ -69,30 +67,33 @@ function createPageEmbed(client, interaction, commands, page) {
 
     return new EmbedBuilder()
         .setColor('#1769FF')
-        .setTitle('📖 Danh sách lệnh')
+        .setTitle(helpLang.UI.Title)
         .setDescription(description)
         .setThumbnail(client.user.displayAvatarURL())
         .setFooter({
-            text: `Trang ${page + 1}/${totalPages} • Tổng ${commands.length} lệnh`,
+            text: helpLang.UI.PageFooter
+                .replace('{current}', page + 1)
+                .replace('{total}', totalPages)
+                .replace('{count}', commands.length),
             iconURL: interaction.user.displayAvatarURL()
         })
         .setTimestamp();
 }
 
 // Tạo embed cho lệnh cụ thể
-function createCommandEmbed(client, commandName) {
+function createCommandEmbed(client, commandName, helpLang) {
     const command = client.slashCommands.get(commandName.toLowerCase());
 
     if (!command) return null;
 
     const commandJSON = command.data.toJSON();
-    let description = `**📝 Mô tả:**\n${commandJSON.description || 'Không có mô tả'}\n\n`;
-    description += `**💡 Cách dùng:** \`/${commandJSON.name}\`\n\n`;
+    let description = helpLang.UI.CommandDesc.replace('{desc}', commandJSON.description || helpLang.UI.NoDesc);
+    description += helpLang.UI.Usage.replace('{usage}', `/${commandJSON.name}`);
 
     if (commandJSON.options && commandJSON.options.length > 0) {
-        description += `**⚙️ Tùy chọn:**\n`;
+        description += helpLang.UI.Options;
         commandJSON.options.forEach(option => {
-            const required = option.required ? '`[Bắt buộc]`' : '`[Tùy chọn]`';
+            const required = option.required ? helpLang.UI.Required : helpLang.UI.Optional;
 
             if (option.type === ApplicationCommandOptionType.Subcommand) {
                 description += `\n**/${commandJSON.name} ${option.name}**\n`;
@@ -100,7 +101,7 @@ function createCommandEmbed(client, commandName) {
 
                 if (option.options && option.options.length > 0) {
                     option.options.forEach(subOpt => {
-                        const subRequired = subOpt.required ? '`[Bắt buộc]`' : '`[Tùy chọn]`';
+                        const subRequired = subOpt.required ? helpLang.UI.Required : helpLang.UI.Optional;
                         description += `  • \`${subOpt.name}\` ${subRequired} - ${subOpt.description}\n`;
                     });
                 }
@@ -108,7 +109,7 @@ function createCommandEmbed(client, commandName) {
                 description += `• \`${option.name}\` ${required} - ${option.description}\n`;
 
                 if (option.choices && option.choices.length > 0) {
-                    description += `  Giá trị: ${option.choices.map(c => `\`${c.name}\``).join(', ')}\n`;
+                    description += helpLang.UI.Values.replace('{values}', option.choices.map(c => `\`${c.name}\``).join(', '));
                 }
             }
         });
@@ -116,10 +117,10 @@ function createCommandEmbed(client, commandName) {
 
     return new EmbedBuilder()
         .setColor('#1769FF')
-        .setTitle(`📘 Chi tiết: /${commandJSON.name}`)
+        .setTitle(helpLang.UI.DetailTitle.replace('{command}', commandJSON.name))
         .setDescription(description)
         .setThumbnail(client.user.displayAvatarURL())
-        .setFooter({ text: 'Nhấn nút bên dưới để quay lại danh sách' })
+        .setFooter({ text: helpLang.UI.BackFooter })
         .setTimestamp();
 }
 
@@ -129,7 +130,7 @@ function createPaginationButtons(currentPage, totalPages, disabled = false) {
         .addComponents(
             new ButtonBuilder()
                 .setCustomId('previous_page')
-                .setLabel('◀ Trước')
+                .setLabel('◀')
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(disabled || currentPage === 0),
             new ButtonBuilder()
@@ -139,7 +140,7 @@ function createPaginationButtons(currentPage, totalPages, disabled = false) {
                 .setDisabled(true),
             new ButtonBuilder()
                 .setCustomId('next_page')
-                .setLabel('Sau ▶')
+                .setLabel('▶')
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(disabled || currentPage >= totalPages - 1)
         );
@@ -158,11 +159,14 @@ module.exports = {
     category: 'Chung',
 
     async execute(interaction, client) {
+        const lang = loadLang(interaction.guild.id);
+        const helpLang = lang.Addons.Help;
+
         try {
             // Kiểm tra commands đã ready
             if (!client.commandsReady) {
                 return await interaction.reply({
-                    content: '⏳ Các lệnh vẫn đang được đăng ký. Vui lòng thử lại sau.',
+                    content: helpLang.Errors.NotReady,
                     ephemeral: true
                 });
             }
@@ -173,11 +177,11 @@ module.exports = {
 
             // Nếu tìm kiếm lệnh cụ thể
             if (commandQuery) {
-                const commandEmbed = createCommandEmbed(client, commandQuery);
+                const commandEmbed = createCommandEmbed(client, commandQuery, helpLang);
 
                 if (!commandEmbed) {
                     return await interaction.editReply({
-                        content: `❌ Không tìm thấy lệnh \`${commandQuery}\`\n💡 Dùng \`/help\` để xem tất cả lệnh.`
+                        content: helpLang.Errors.NotFound.replace('{command}', commandQuery)
                     });
                 }
 
@@ -185,7 +189,7 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('back_to_list')
-                            .setLabel('↩ Quay lại danh sách')
+                            .setLabel(helpLang.UI.ButtonBack)
                             .setStyle(ButtonStyle.Success)
                     );
 
@@ -202,7 +206,7 @@ module.exports = {
                 collector.on('collect', async i => {
                     if (i.customId === 'back_to_list') {
                         const commands = getAllCommands(client);
-                        const embed = createPageEmbed(client, interaction, commands, 0);
+                        const embed = createPageEmbed(client, interaction, commands, 0, helpLang);
                         const buttons = createPaginationButtons(0, Math.ceil(commands.length / 7));
 
                         await i.update({
@@ -211,7 +215,7 @@ module.exports = {
                         });
 
                         collector.stop();
-                        startMainCollector(response, interaction, client);
+                        startMainCollector(response, interaction, client, helpLang);
                     }
                 });
 
@@ -224,7 +228,7 @@ module.exports = {
             const totalPages = Math.ceil(commands.length / itemsPerPage);
             let currentPage = 0;
 
-            const initialEmbed = createPageEmbed(client, interaction, commands, currentPage);
+            const initialEmbed = createPageEmbed(client, interaction, commands, currentPage, helpLang);
             const initialButtons = createPaginationButtons(currentPage, totalPages);
 
             const response = await interaction.editReply({
@@ -232,11 +236,11 @@ module.exports = {
                 components: [initialButtons]
             });
 
-            startMainCollector(response, interaction, client);
+            startMainCollector(response, interaction, client, helpLang);
 
         } catch (error) {
             console.error(`Lỗi khi thực thi lệnh help:`, error);
-            const errorMessage = '❌ Đã có lỗi xảy ra!';
+            const errorMessage = helpLang.Errors.Generic;
 
             try {
                 if (!interaction.replied && !interaction.deferred) {
@@ -252,7 +256,7 @@ module.exports = {
 };
 
 // Collector chính cho pagination
-function startMainCollector(response, interaction, client) {
+function startMainCollector(response, interaction, client, helpLang) {
     const commands = getAllCommands(client);
     const itemsPerPage = 7;
     const totalPages = Math.ceil(commands.length / itemsPerPage);
@@ -271,7 +275,7 @@ function startMainCollector(response, interaction, client) {
                 currentPage++;
             }
 
-            const newEmbed = createPageEmbed(client, interaction, commands, currentPage);
+            const newEmbed = createPageEmbed(client, interaction, commands, currentPage, helpLang);
             const newButtons = createPaginationButtons(currentPage, totalPages);
 
             await i.update({

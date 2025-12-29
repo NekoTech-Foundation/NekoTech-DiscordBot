@@ -4,7 +4,8 @@ const { seeds, getUserFarm, addToFarm, removeFromFarm } = require('./farmUtils')
 const { events, getRandomMutation } = require('./farmEvents');
 const { getGlobalWeather } = require('./farmWeather');
 const EconomyUserData = require('../../models/EconomyUserData');
-const { getConfig } = require('../../utils/configLoader'); // Added missing import for config
+const { getConfig } = require('../../utils/configLoader');
+const { loadLang } = require('../../utils/langLoader');
 
 // Helper function to format effects
 function formatEffect(effect) {
@@ -76,7 +77,9 @@ module.exports = {
         await interaction.deferReply();
         const subcommand = interaction.options.getSubcommand();
         const userId = interaction.user.id;
-        const config = getConfig(); // Ensure config is available
+        const config = getConfig();
+        const lang = loadLang(interaction.guild.id);
+        const farmingLang = lang.Addons.Farming;
 
         if (subcommand === 'plant') {
             const seedName = interaction.options.getString('seed');
@@ -89,23 +92,24 @@ module.exports = {
             let quantity;
             if (quantityInput.toLowerCase() === 'all') {
                 if (!seedItem || seedItem.quantity === 0) {
-                    return interaction.editReply({ content: `Bạn không có hạt giống ${seed.name} để trồng.` });
+                    return interaction.editReply({ content: farmingLang.Errors.NoSeed.replace('{seed}', seed.name) });
                 }
                 quantity = seedItem.quantity;
             } else {
-                quantity = parseInt(quantityInput);
+                const quantity = parseInt(quantityInput);
                 if (isNaN(quantity) || quantity <= 0) {
-                    return interaction.editReply({ content: 'Số lượng không hợp lệ.' });
+                    return interaction.editReply({ content: farmingLang.Errors.InvalidQuantity });
                 }
             }
 
             if (!seedItem || seedItem.quantity < quantity) {
-                return interaction.editReply({ content: `Bạn không có đủ hạt giống ${seed.name} để trồng.` });
+                return interaction.editReply({ content: farmingLang.Errors.NotEnoughSeed.replace('{seed}', seed.name) });
             }
 
             const hasSeed = await removeFromFarm(userId, seed.name, quantity, 'seed');
+
             if (!hasSeed) {
-                return interaction.editReply({ content: `Bạn không có đủ hạt giống ${seed.name} để trồng.` });
+                return interaction.editReply({ content: farmingLang.Errors.NotEnoughSeed.replace('{seed}', seed.name) });
             }
 
             const existingPlant = await plantSchema.findOne({ userId, plant: seedName });
@@ -125,18 +129,21 @@ module.exports = {
                 }
                 await existingPlant.save();
             } else {
-                const newPlant = new plantSchema({
+                const newPlant = await plantSchema.create({
                     userId,
                     plant: seedName,
                     quantity,
                     mutation: mutation
                 });
-                await newPlant.save();
             }
 
-            let reply = `Bạn đã trồng thành công ${quantity} ${seed.emoji} ${seed.name}.`;
+            let reply = farmingLang.UI.PlantSuccess.replace('{quantity}', quantity).replace('{emoji}', seed.emoji).replace('{name}', seed.name);
             if (mutation) {
-                reply += `\n✨ **May mắn!** Cây của bạn đã bị đột biến: ${mutation.emoji} **${mutation.name}** do ảnh hưởng của thời tiết ${currentWeather.emoji} ${currentWeather.name}!`;
+                reply += farmingLang.UI.PlantMutation
+                    .replace('{emoji}', mutation.emoji)
+                    .replace('{name}', mutation.name)
+                    .replace('{weatherEmoji}', currentWeather.emoji)
+                    .replace('{weatherName}', currentWeather.name);
             }
             await interaction.editReply({ content: reply });
 
@@ -155,13 +162,13 @@ module.exports = {
                     }
                 }
                 if (plantsToHarvest.length === 0) {
-                    return interaction.editReply({ content: 'Bạn không có cây trồng nào sẵn sàng để thu hoạch.' });
+                    return interaction.editReply({ content: farmingLang.Errors.NoPlantsReady });
                 }
             } else {
                 const plant = seeds[plantName];
                 const planted = await plantSchema.findOne({ userId, plant: plantName });
                 if (!planted) {
-                    return interaction.editReply({ content: `Bạn chưa trồng ${plant.name}.` });
+                    return interaction.editReply({ content: farmingLang.Errors.NotPlanted.replace('{plant}', plant.name) });
                 }
                 const timeSincePlanted = Date.now() - planted.plantedAt.getTime();
                 const timeRemaining = plant.growthTime - timeSincePlanted;
@@ -228,7 +235,7 @@ module.exports = {
                 harvestedItemsForSale.push({ name: plant.name, quantity: harvestedQuantity });
             }
 
-            let replyContent = 'Bạn đã thu hoạch được:\n';
+            let replyContent = farmingLang.UI.HarvestSuccess;
             for (const [name, data] of Object.entries(totalHarvested)) {
                 replyContent += `- ${data.quantity} ${data.emoji} ${name}\n`;
             }
@@ -238,14 +245,14 @@ module.exports = {
                 if (!economyData) economyData = await EconomyUserData.create({ userId });
                 economyData.balance += totalBonusMoney;
                 await economyData.save();
-                replyContent += `\n✨ Cây đột biến: **${mutationDetails.join(', ')}** đã mang lại cho bạn thêm **${totalBonusMoney.toLocaleString()}** xu!`;
+                replyContent += farmingLang.UI.HarvestBonus.replace('{mutations}', mutationDetails.join(', ')).replace('{amount}', totalBonusMoney.toLocaleString());
             } else if (mutationDetails.length > 0) {
-                replyContent += `\n✨ Cây đột biến: **${mutationDetails.join(', ')}**`;
+                replyContent += farmingLang.UI.HarvestMutationOnly.replace('{mutations}', mutationDetails.join(', '));
             }
 
             const sellAllButton = new ButtonBuilder()
                 .setCustomId('sell_all_harvested')
-                .setLabel('Bán Tất Cả')
+                .setLabel(farmingLang.UI.SellAllButton)
                 .setStyle(ButtonStyle.Success)
                 .setEmoji('💰');
 
@@ -257,10 +264,10 @@ module.exports = {
             const userPlants = await plantSchema.find({ userId });
             const embed = new EmbedBuilder()
                 .setColor('#00ff00')
-                .setTitle('Nông Trại Của Bạn');
+                .setTitle(farmingLang.UI.FieldTitle);
 
             if (userPlants.length === 0) {
-                embed.setDescription('Bạn chưa trồng cây nào.');
+                embed.setDescription(farmingLang.UI.FieldEmpty);
             } else {
                 let description = '';
                 for (const p of userPlants) {
@@ -289,10 +296,14 @@ module.exports = {
                 const endTime = Math.floor(globalWeather.weatherEndTime / 1000);
 
                 if (description === '') {
-                    description = 'Bạn không có cây trồng nào.';
+                    description = farmingLang.UI.FieldEmpty;
                 }
 
-                embed.setDescription(`🌤️ **Thời tiết hiện tại**: ${currentWeather.emoji} **${currentWeather.name}** (Kết thúc: <t:${endTime}:R>)\n${currentWeather.description}\n\n` + description);
+                embed.setDescription(farmingLang.UI.WeatherCurrent
+                    .replace('{emoji}', currentWeather.emoji)
+                    .replace('{name}', currentWeather.name)
+                    .replace('{time}', `<t:${endTime}:R>`)
+                    .replace('{desc}', currentWeather.description) + '\n\n' + description);
             }
 
             await interaction.editReply({ embeds: [embed] });
@@ -304,13 +315,13 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
-                .setTitle('🌤️ Sự Kiện Thời Tiết Nông Trại')
-                .setDescription(`**Hiện tại:** ${currentWeather.emoji} **${currentWeather.name}**\n\n${currentWeather.description}`)
+                .setTitle(farmingLang.UI.WeatherEventTitle)
+                .setDescription(farmingLang.UI.WeatherEventCurrent.replace('{emoji}', currentWeather.emoji).replace('{name}', currentWeather.name).replace('{desc}', currentWeather.description))
                 .addFields(
-                    { name: '⏳ Kết thúc', value: `<t:${endTime}:R>`, inline: true },
-                    { name: '✨ Hiệu ứng', value: formatEffect(currentWeather.effect), inline: true }
+                    { name: farmingLang.UI.WeatherEnds, value: `<t:${endTime}:R>`, inline: true },
+                    { name: farmingLang.UI.WeatherEffect, value: formatEffect(currentWeather.effect), inline: true }
                 )
-                .setFooter({ text: 'Thời tiết ảnh hưởng đến tốc độ lớn và tỉ lệ đột biến khi trồng cây.' });
+                .setFooter({ text: farmingLang.UI.WeatherFooter });
 
             await interaction.editReply({ embeds: [embed] });
 
@@ -320,10 +331,10 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#00ff00')
-                .setTitle('Kho Hạt Giống Của Bạn');
+                .setTitle(farmingLang.UI.SeedInventoryTitle);
 
             if (seedItems.length === 0) {
-                embed.setDescription('Bạn không có hạt giống nào.');
+                embed.setDescription(farmingLang.Errors.NoSeeds);
             } else {
                 let description = '';
                 for (const item of seedItems) {
@@ -344,13 +355,13 @@ module.exports = {
 
             const embed = new EmbedBuilder()
                 .setColor('#00ff00')
-                .setTitle('Kho Nông Sản & Phân Bón');
+                .setTitle(farmingLang.UI.InventoryTitle);
 
             if (produceItems.length === 0 && fertilizerItems.length === 0) {
-                embed.setDescription('Bạn không có nông sản hay phân bón nào.');
+                embed.setDescription(farmingLang.Errors.NoProduce);
                 return interaction.editReply({ embeds: [embed] });
             } else {
-                let description = '**Nông Sản:**\n';
+                let description = farmingLang.UI.InventoryProduce;
                 if (produceItems.length > 0) {
                     for (const item of produceItems) {
                         const seed = Object.values(seeds).find(s => s.name === item.name);
@@ -359,16 +370,16 @@ module.exports = {
                         }
                     }
                 } else {
-                    description += 'Không có.\n';
+                    description += `${farmingLang.UI.None}\n`;
                 }
 
-                description += '\n**Phân Bón:**\n';
+                description += farmingLang.UI.InventoryFertilizer;
                 if (fertilizerItems.length > 0) {
                     for (const item of fertilizerItems) {
                         description += `🌱 ${item.name}: ${item.quantity}\n`;
                     }
                 } else {
-                    description += 'Không có.\n';
+                    description += `${farmingLang.UI.None}\n`;
                 }
 
                 embed.setDescription(description);
@@ -376,11 +387,11 @@ module.exports = {
 
             const selectMenu = new StringSelectMenuBuilder()
                 .setCustomId('quick_sell_produce')
-                .setPlaceholder('Chọn nông sản để bán nhanh')
+                .setPlaceholder(farmingLang.UI.QuickSellPlaceholder)
                 .addOptions(produceItems.length > 0 ? produceItems.map(item => ({
                     label: item.name,
                     value: item.name.replace(/ /g, '-'),
-                })) : [{ label: 'Không có nông sản', value: 'none' }]);
+                })) : [{ label: 'Empty', value: 'none' }]);
 
             const row = new ActionRowBuilder().addComponents(selectMenu);
             if (produceItems.length === 0) row.components[0].setDisabled(true);
@@ -396,18 +407,18 @@ module.exports = {
             const fertilizerItem = userFarm.items.find(i => i.name === fertilizer.Name && i.type === 'Fertilizer');
 
             if (!fertilizerItem || fertilizerItem.quantity < 1) {
-                return interaction.editReply({ content: `Bạn không có ${fertilizer.Name}.` });
+                return interaction.editReply({ content: farmingLang.Errors.NoFertilizer.replace('{fertilizer}', fertilizer.Name) });
             }
 
             const hasFertilizer = await removeFromFarm(userId, fertilizer.Name, 1, 'Fertilizer');
             if (!hasFertilizer) {
-                return interaction.editReply({ content: `Bạn không có ${fertilizer.Name}.` });
+                return interaction.editReply({ content: farmingLang.Errors.NoFertilizer.replace('{fertilizer}', fertilizer.Name) });
             }
 
             const plantsToFertilize = plantName ? await plantSchema.find({ userId, plant: plantName }) : await plantSchema.find({ userId });
 
             if (plantsToFertilize.length === 0) {
-                return interaction.editReply({ content: 'Bạn không có cây trồng nào để bón phân.' });
+                return interaction.editReply({ content: farmingLang.Errors.NoPlantsToFertilize });
             }
 
             for (const plant of plantsToFertilize) {
@@ -437,7 +448,7 @@ module.exports = {
                 await plant.save();
             }
 
-            await interaction.editReply({ content: `Bạn đã sử dụng thành công ${fertilizer.Name} cho ${plantName ? seeds[plantName].name : 'tất cả các cây trồng'}.` });
+            await interaction.editReply({ content: farmingLang.UI.FertilizeSuccess.replace('{fertilizer}', fertilizer.Name).replace('{plant}', plantName ? seeds[plantName].name : 'all plants') });
         }
     }
 };

@@ -2,6 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
+const { loadLang } = require('../../utils/langLoader');
 
 module.exports.run = async (client) => {
     client.afkUsers = new Map();
@@ -57,6 +58,8 @@ module.exports.run = async (client) => {
             if (data.returnTime && now >= data.returnTime) {
                 const user = client.users.cache.get(userId);
                 if (user) {
+                    const lang = loadLang(data.guildId);
+                    const afkLang = lang.Addons.AFK;
                     const guild = client.guilds.cache.get(data.guildId);
                     if (guild) {
                         const channel = guild.channels.cache.get(data.channelId);
@@ -71,25 +74,26 @@ module.exports.run = async (client) => {
                             const embed = new EmbedBuilder()
                                 .setColor('#4CAF50')
                                 .setAuthor({
-                                    name: `${user.username} đã trở lại!`,
+                                    name: afkLang.UI.WelcomeBackTitle,
                                     iconURL: user.displayAvatarURL({ dynamic: true })
                                 })
-                                .setDescription(`**👋 Chào mừng trở lại!**`)
+                                .setDescription(afkLang.UI.WelcomeBackDesc
+                                    .replace('{duration}', messageData.duration))
                                 .addFields(
                                     {
-                                        name: '⏱️ Thời gian AFK',
+                                        name: afkLang.UI.AFKDuration,
                                         value: `\`${messageData.duration}\``,
                                         inline: true
                                     },
                                     {
-                                        name: '📝 Lí do trước đó',
+                                        name: afkLang.UI.ReasonField,
                                         value: `\`${data.reason}\``,
                                         inline: true
                                     }
                                 )
                                 .setThumbnail(user.displayAvatarURL({ dynamic: true, size: 256 }))
                                 .setFooter({
-                                    text: 'Trạng thái AFK đã được tự động xóa',
+                                    text: afkLang.UI.WelcomeBackFooter,
                                     iconURL: client.user.displayAvatarURL()
                                 })
                                 .setTimestamp();
@@ -112,6 +116,8 @@ module.exports.run = async (client) => {
         
         // Check if the message author is returning from AFK
         if (client.afkUsers.has(message.author.id)) {
+            const lang = loadLang(message.guild.id);
+            const afkLang = lang.Addons.AFK;
             const data = client.afkUsers.get(message.author.id);
             const afkDuration = formatDuration(Date.now() - data.timestamp);
             
@@ -123,30 +129,30 @@ module.exports.run = async (client) => {
                 const embed = new EmbedBuilder()
                     .setColor('#4CAF50')
                     .setAuthor({
-                        name: `${message.author.username} đã trở lại!`,
+                        name: afkLang.UI.WelcomeBackTitle,
                         iconURL: message.author.displayAvatarURL({ dynamic: true })
                     })
-                    .setDescription(`**👋 Chào mừng trở lại!**\n\n*Bạn đã rời máy trong ${afkDuration}*`)
+                    .setDescription(afkLang.UI.WelcomeBackDesc.replace('{duration}', afkDuration))
                     .addFields(
                         {
-                            name: '📝 Lí do AFK',
+                            name: afkLang.UI.ReasonField,
                             value: `\`\`\`${data.reason}\`\`\``,
                             inline: false
                         },
                         {
-                            name: '⏰ Bắt đầu AFK',
+                            name: afkLang.UI.StartTime,
                             value: `<t:${Math.floor(data.timestamp/1000)}:F>`,
                             inline: true
                         },
                         {
-                            name: '🔙 Trở lại lúc',
+                            name: 'Return',
                             value: `<t:${Math.floor(Date.now()/1000)}:F>`,
                             inline: true
                         }
                     )
                     .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 256 }))
                     .setFooter({
-                        text: 'Trạng thái AFK đã được xóa',
+                        text: afkLang.UI.WelcomeBackFooter,
                         iconURL: client.user.displayAvatarURL()
                     })
                     .setTimestamp();
@@ -158,7 +164,7 @@ module.exports.run = async (client) => {
                 console.error('Error removing AFK status:', error);
                 // Fallback to simple message if embed fails
                 try {
-                    await message.reply(`👋 Chào mừng trở lại **${message.author.username}**! Bạn đã AFK trong ${afkDuration}`);
+                    await message.reply(afkLang.UI.WelcomeBackFallback.replace('{username}', message.author.username).replace('{duration}', afkDuration));
                 } catch (err) {
                     console.error('Error sending fallback message:', err);
                 }
@@ -169,6 +175,8 @@ module.exports.run = async (client) => {
         if (message.mentions.users.size > 0) {
             message.mentions.users.forEach(async mentionedUser => {
                 if (client.afkUsers.has(mentionedUser.id)) {
+                    const lang = loadLang(message.guild.id);
+                    const afkLang = lang.Addons.AFK;
                     const afkData = client.afkUsers.get(mentionedUser.id);
                     const afkTime = formatDuration(Date.now() - afkData.timestamp);
 
@@ -176,30 +184,30 @@ module.exports.run = async (client) => {
                         const embed = new EmbedBuilder()
                             .setColor('#FF6B6B')
                             .setAuthor({
-                                name: `${mentionedUser.username} đang AFK`,
+                                name: afkLang.UI.UserAFKTitle.replace('{username}', mentionedUser.username),
                                 iconURL: mentionedUser.displayAvatarURL({ dynamic: true })
                             })
-                            .setDescription(`**💤 Người dùng này hiện đang rời máy**`)
+                            .setDescription(afkLang.UI.UserAFKDesc)
                             .addFields(
                                 {
-                                    name: '📝 Lí do',
+                                    name: afkLang.UI.Reason,
                                     value: `\`\`\`${afkData.reason}\`\`\``,
                                     inline: false
                                 },
                                 {
-                                    name: '⏰ Đã AFK',
+                                    name: afkLang.UI.AFKDuration,
                                     value: afkTime,
                                     inline: true
                                 },
                                 {
-                                    name: '🔙 Quay lại',
-                                    value: afkData.returnTime ? `<t:${Math.floor(afkData.returnTime/1000)}:R>` : '`Không xác định`',
+                                    name: afkLang.UI.ReturnTime,
+                                    value: afkData.returnTime ? `<t:${Math.floor(afkData.returnTime/1000)}:R>` : '`N/A`',
                                     inline: true
                                 }
                             )
                             .setThumbnail(mentionedUser.displayAvatarURL({ dynamic: true, size: 256 }))
                             .setFooter({
-                                text: 'Họ sẽ nhận được thông báo khi quay lại',
+                                text: afkLang.UI.UserAFKFooter,
                                 iconURL: client.user.displayAvatarURL()
                             })
                             .setTimestamp();

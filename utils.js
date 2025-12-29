@@ -25,7 +25,7 @@ const ReactionRole = require('./models/ReactionRole');
 const packageJson = require('./package.json');
 // old giveaway scheduler removed
 //const { handleUserJoiningTriggerChannel, handleUserLeavingChannel } = require('./events/voiceStateUpdate');
-const { startAlertScheduler } = require('./events/Tickets/checkAlerts');
+
 const { handleVoiceXP } = require('./events/Levels/handleXP');
 const ChannelStat = require('./models/channelStatSchema');
 const TempRole = require('./models/TempRole');
@@ -102,14 +102,7 @@ module.exports = async (client) => {
     client.on('error', handleError);
     client.on('warn', handleWarn);
 
-    const ticketsCommand = require('./commands/Utility/tickets.js');
-    client.messageCommands.set(ticketsCommand.name, ticketsCommand);
-    if (ticketsCommand.aliases) {
-        ticketsCommand.aliases.forEach(alias => {
-            client.messageCommands.set(alias, ticketsCommand);
-        });
-    }
-    console.log(`${colors.green('[Message Commands]')} Loaded: !tickets`);
+
 
     const panelHandlers = {};
     const interactionDebounce = new Map();
@@ -284,76 +277,7 @@ module.exports = async (client) => {
                 }
             }, 100));
         } else if (interaction.isStringSelectMenu()) {
-            if (interaction.customId.startsWith('ticket-panel-')) {
-                const panelId = interaction.customId.replace('ticket-panel-', '');
-                const categoryId = interaction.values[0];
 
-                const guildSettings = await GuildSettings.findOne({ guildId: interaction.guild.id });
-                if (!guildSettings) return;
-
-                const panel = guildSettings.tickets.panels.id(panelId);
-                const category = guildSettings.tickets.categories.id(categoryId);
-
-                if (!panel || !category) return;
-
-                const ticketChannel = await interaction.guild.channels.create({
-                    name: category.channelName.replace('{user}', interaction.user.username).replace('{id}', interaction.id),
-                    type: ChannelType.GuildText,
-                    parent: category.categoryId,
-                    permissionOverwrites: [
-                        {
-                            id: interaction.guild.id,
-                            deny: [PermissionsBitField.Flags.ViewChannel],
-                        },
-                        {
-                            id: interaction.user.id,
-                            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ReadMessageHistory],
-                        },
-                        ...category.supportRoles.map(roleId => ({
-                            id: roleId,
-                            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ReadMessageHistory],
-                        })),
-                    ],
-                });
-
-                const modal = new ModalBuilder()
-                    .setCustomId(`ticket-modal-${ticketChannel.id}`)
-                    .setTitle(category.name);
-
-                category.questions.forEach((question, index) => {
-                    const textInput = new TextInputBuilder()
-                        .setCustomId(`question_${index}`)
-                        .setLabel(question.label)
-                        .setStyle(question.style === 'Paragraph' ? TextInputStyle.Paragraph : TextInputStyle.Short)
-                        .setPlaceholder(question.placeholder || '')
-                        .setRequired(question.required)
-                        .setMinLength(question.minLength)
-                        .setMaxLength(question.maxLength);
-                    const actionRow = new ActionRowBuilder().addComponents(textInput);
-                    modal.addComponents(actionRow);
-                });
-
-                await interaction.showModal(modal);
-
-                const filter = (i) => i.customId === `ticket-modal-${ticketChannel.id}`;
-                try {
-                    const modalSubmission = await interaction.awaitModalSubmit({ filter, time: 300000 });
-
-                    const answers = category.questions.map((_, index) => modalSubmission.fields.getTextInputValue(`question_${index}`)).join('\n');
-
-                    const ticketEmbed = new EmbedBuilder()
-                        .setTitle(`Ticket: ${category.name}`)
-                        .setDescription(`**Người tạo:** ${interaction.user}\n\n**Câu trả lời:**\n${answers}`)
-                        .setColor('#0099ff')
-                        .setTimestamp();
-
-                    await ticketChannel.send({ embeds: [ticketEmbed] });
-                    await modalSubmission.reply({ content: `Đã tạo ticket của bạn trong ${ticketChannel}`, ephemeral: true });
-
-                } catch (error) {
-                    console.error('Lỗi khi xử lý modal ticket:', error);
-                }
-            }
             if (interaction.customId.startsWith('reaction_role_')) {
                 await handleReactionRoleSelect(interaction);
             }
@@ -677,6 +601,27 @@ module.exports = async (client) => {
                 console.error(addonError.stack);
             }
         });
+
+        // Scan 'commands' directory for slash commands
+        const commandFiles = getFilesRecursively('./commands');
+        commandFiles.forEach(file => {
+             const absolutePath = path.resolve(file);
+             try {
+                 const command = require(absolutePath);
+                 if (command.data && typeof command.data.toJSON === 'function') {
+                     const name = command.data.name;
+                     // Prevent duplicates if already loaded from addons (unlikely but safe)
+                     if (!client.slashCommands.has(name)) {
+                        const json = command.data.toJSON();
+                        global.slashCommands.push(json);
+                        client.slashCommands.set(name, command);
+                     }
+                 }
+                 // Message commands are handled in index.js via client.messageCommands loader
+             } catch (err) {
+                 console.error(`[ERROR] Failed to load command ${file}:`, err);
+             }
+        });
     }
 
     function setupSchedulers() {
@@ -685,9 +630,9 @@ module.exports = async (client) => {
             // Core giveaway scheduler
             { condition: commandConfig && commandConfig.giveaway, fn: startGiveawayScheduler, name: 'Giveaway' },
             // new giveaway addon includes its own scheduler via addons/Giveaway/giveaway.js
-            { condition: config.TicketSettings.Enabled, fn: () => setInterval(() => checkAndUpdateTicketStatus(client), 300000), name: 'Ticket' },
+
             { condition: true, fn: startInterestScheduler, name: 'Interest' },
-            { condition: config.Alert?.Enabled, fn: () => startAlertScheduler(client), name: 'Alert' },
+
             {
                 condition: true,
                 fn: () => {

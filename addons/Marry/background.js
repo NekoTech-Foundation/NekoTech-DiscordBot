@@ -101,11 +101,10 @@ module.exports = {
       await anhcuoi.deleteMany({ $or: [{ authorid: husband.id }, { authorid: data.wifeid }] });
 
       // Save new wedding photos
-      const newAnhCuoi1 = new anhcuoi({ authorid: husband.id, wifeid: data.wifeid, anhcuoi: link });
-      await newAnhCuoi1.save();
+      // Save new wedding photos
+      const newAnhCuoi1 = await anhcuoi.create({ authorid: husband.id, wifeid: data.wifeid, anhcuoi: link });
 
-      const newAnhCuoi2 = new anhcuoi({ authorid: data.wifeid, wifeid: husband.id, anhcuoi: link });
-      await newAnhCuoi2.save();
+      const newAnhCuoi2 = await anhcuoi.create({ authorid: data.wifeid, wifeid: husband.id, anhcuoi: link });
 
       const successEmbed = new EmbedBuilder()
         .setColor('#FF69B4')

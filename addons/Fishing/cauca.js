@@ -12,7 +12,8 @@ const path = require('path');
 const { loadConfig: loadFishingConfig, getUserFishing } = require('./fishingUtils');
 const EconomyUserData = require('../../models/EconomyUserData');
 const UserData = require('../../models/UserData');
-const { getConfig, getLang } = require('../../utils/configLoader');
+const { getConfig } = require('../../utils/configLoader');
+const { loadLang } = require('../../utils/langLoader');
 const { checkActiveBooster } = require('../../commands/Fun/Economy/Utility/helpers');
 
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
@@ -251,18 +252,13 @@ async function handleFish(interaction, config) {
     if (cooldownData && Date.now() < cooldownData) {
         const remaining = Math.ceil((cooldownData - Date.now()) / 1000);
         return interaction.reply({
-            embeds: [new EmbedBuilder()
-                .setColor('#E74C3C')
-                .setDescription(`⏰ **Cooldown!** Vui lòng đợi \`${remaining}s\` nữa.`)
-            ],
+            content: fishingLang.Errors.Cooldown.replace('{time}', remaining.toFixed(1)),
             ephemeral: true
         });
     }
 
-    const locationKey = interaction.options.getString('location');
     const location = config.locations[locationKey];
 
-    const userFishing = await getUserFishing(userId);
     const equippedRodKey = userFishing.equippedRod;
 
     // Check rod
@@ -270,7 +266,7 @@ async function handleFish(interaction, config) {
         return interaction.reply({
             embeds: [new EmbedBuilder()
                 .setColor('#E74C3C')
-                .setDescription('❌ Bạn chưa có cần câu! Hãy dùng `/store` để mua.')
+                .setDescription(fishingLang.Errors.NoRod)
             ],
             ephemeral: true
         });
@@ -278,15 +274,12 @@ async function handleFish(interaction, config) {
 
     const equippedRod = userFishing.rods.find(r => r.key === equippedRodKey);
     if (equippedRod.durability <= 0) {
-        return interaction.reply({
-            embeds: [new EmbedBuilder()
-                .setColor('#E74C3C')
-                .setTitle('🔧 Cần Câu Đã Hỏng')
-                .setDescription(`**${equippedRod.name}** của bạn đã hết độ bền!\n\n` +
-                    `Sử dụng \`/fixcancau\` để sửa hoặc mua cần mới tại \`/store\`.`)
-            ],
-            ephemeral: true
-        });
+        const brokenEmbed = new EmbedBuilder()
+            .setColor('#E74C3C')
+            .setTitle(fishingLang.Errors.RodBrokenTitle)
+            .setDescription(fishingLang.Errors.RodBrokenDesc.replace('{rod}', equippedRod.name));
+
+        return interaction.reply({ embeds: [brokenEmbed], ephemeral: true });
     }
 
     // Set cooldown
@@ -311,7 +304,7 @@ async function handleFish(interaction, config) {
 
         const noBaitButton = new ButtonBuilder()
             .setCustomId('no_bait')
-            .setLabel('Không dùng mồi')
+            .setLabel(fishingLang.UI.NoBaitButton)
             .setStyle(ButtonStyle.Primary)
             .setEmoji('❌');
 
@@ -319,9 +312,9 @@ async function handleFish(interaction, config) {
 
         const baitEmbed = new EmbedBuilder()
             .setColor('#3498DB')
-            .setTitle('🎣 Chọn Mồi Câu')
-            .setDescription('Bạn có muốn sử dụng mồi câu không?\n*Mồi câu sẽ tăng cơ hội câu được cá hiếm.*')
-            .setFooter({ text: 'Thời gian chọn: 30 giây' });
+            .setTitle(fishingLang.UI.SelectBaitTitle)
+            .setDescription(fishingLang.UI.SelectBaitDesc)
+            .setFooter({ text: fishingLang.UI.SelectBaitFooter });
 
         const baitMessage = await interaction.editReply({
             embeds: [baitEmbed],
@@ -344,13 +337,13 @@ async function handleFish(interaction, config) {
 
             const fishingEmbed = new EmbedBuilder()
                 .setColor('#2ECC71')
-                .setDescription('🎣 Đang quăng câu...');
+                .setDescription(fishingLang.UI.CastingLine);
 
             await buttonInteraction.update({ embeds: [fishingEmbed], components: [] });
         } catch (error) {
             const timeoutEmbed = new EmbedBuilder()
                 .setColor('#95A5A6')
-                .setDescription(`⏰ Hết thời gian! Sử dụng mồi: ${usedBaitKey ? config.baits[usedBaitKey].name : 'Không có'}`);
+                .setDescription(fishingLang.UI.Timeout.replace('{bait}', usedBaitKey ? config.baits[usedBaitKey].name : 'Không có'));
 
             await interaction.editReply({ embeds: [timeoutEmbed], components: [] });
         }
@@ -380,9 +373,9 @@ async function handleFish(interaction, config) {
 
         const failEmbed = new EmbedBuilder()
             .setColor('#95A5A6')
-            .setTitle('😞 Không Câu Được Gì')
-            .setDescription('Bạn không câu được cá lần này. Chúc may mắn lần sau!')
-            .setFooter({ text: `${equippedRod.name} còn ${equippedRod.durability} độ bền` });
+            .setTitle(fishingLang.UI.NoCatchTitle)
+            .setDescription(fishingLang.UI.NoCatchDesc)
+            .setFooter({ text: fishingLang.UI.NoCatchFooter.replace('{rod}', equippedRod.name).replace('{durability}', equippedRod.durability) });
 
         return interaction.editReply({ embeds: [failEmbed] });
     }
@@ -419,21 +412,21 @@ async function handleFish(interaction, config) {
     // Create success embed
     const successEmbed = new EmbedBuilder()
         .setColor(RARITY_COLORS[caughtFishInfo.rarity])
-        .setTitle('🎉 Câu Cá Thành Công!')
+        .setTitle(fishingLang.UI.SuccessTitle)
         .setDescription(`${caughtFishInfo.emoji} **${caughtFishInfo.name}**`)
         .addFields(
-            { name: '⚖️ Trọng Lượng', value: formatWeight(weight), inline: true },
-            { name: '✨ Độ Hiếm', value: getRarityDisplay(caughtFishInfo.rarity), inline: true },
-            { name: '🌟 XP Nhận', value: `+${finalXp} XP`, inline: true }
+            { name: fishingLang.UI.Weight, value: formatWeight(weight), inline: true },
+            { name: fishingLang.UI.Rarity, value: getRarityDisplay(caughtFishInfo.rarity), inline: true },
+            { name: fishingLang.UI.XPGained, value: `+${finalXp} XP`, inline: true }
         )
         .setFooter({
-            text: `${equippedRod.name} | Độ bền: ${createProgressBar(equippedRod.durability, rodConfig.durability)} (${equippedRod.durability}/${rodConfig.durability})`
+            text: `${equippedRod.name} | ${createProgressBar(equippedRod.durability, rodConfig.durability)} (${equippedRod.durability}/${rodConfig.durability})`
         })
         .setTimestamp();
 
     if (usedBaitKey) {
         successEmbed.addFields({
-            name: '🪱 Mồi Đã Dùng',
+            name: fishingLang.UI.BaitUsed,
             value: config.baits[usedBaitKey].name,
             inline: true
         });
@@ -444,15 +437,17 @@ async function handleFish(interaction, config) {
 
 async function handleInventory(interaction, config) {
     const userFishing = await getUserFishing(interaction.user.id);
+    const lang = loadLang(interaction.guild.id);
+    const fishingLang = lang.Addons.Fishing;
 
     const embed = new EmbedBuilder()
-        .setTitle(`🎒 Kho Đồ Câu Cá - ${interaction.user.username}`)
+        .setTitle(fishingLang.UI.InventoryTitle.replace('{user}', interaction.user.username))
         .setColor('#3498DB')
         .setThumbnail(interaction.user.displayAvatarURL())
         .setTimestamp();
 
     // Rods section
-    let rodInfo = '```\n❌ Chưa có cần câu\n```\n*Mua tại `/store`*';
+    let rodInfo = `\`\`\`\n${fishingLang.UI.NoRodStatus}\n\`\`\``;
     if (userFishing.rods && userFishing.rods.length > 0) {
         rodInfo = userFishing.rods.map(r => {
             const rodConfig = config.rods[r.key];
@@ -461,10 +456,10 @@ async function handleInventory(interaction, config) {
             return `${equipped}**${r.name}**\n${durabilityBar} (${r.durability})`;
         }).join('\n\n');
     }
-    embed.addFields({ name: '🎣 Cần Câu', value: rodInfo });
+    embed.addFields({ name: fishingLang.UI.RodHeader, value: rodInfo });
 
     // Baits section
-    let baitInfo = '```\n❌ Không có mồi câu\n```';
+    let baitInfo = `\`\`\`\n${fishingLang.UI.NoBaitStatus}\n\`\`\``;
     if (userFishing.baits && userFishing.baits.some(b => b.quantity > 0)) {
         baitInfo = userFishing.baits.filter(b => b.quantity > 0).map(b => {
             const baitDetails = getBaitConfigByName(b.name);
@@ -472,10 +467,10 @@ async function handleInventory(interaction, config) {
             return `${equipped} **${b.name}** × ${b.quantity}`;
         }).join('\n');
     }
-    embed.addFields({ name: '🪱 Mồi Câu', value: baitInfo });
+    embed.addFields({ name: fishingLang.UI.BaitHeader, value: baitInfo });
 
     // Fish inventory
-    let fishInfo = '```\n❌ Kho cá trống\n```';
+    let fishInfo = `\`\`\`\n${fishingLang.UI.EmptyFishInventory}\n\`\`\``;
     if (userFishing.inventory && userFishing.inventory.length > 0) {
         const sortedFish = userFishing.inventory.sort((a, b) => {
             const rarityOrder = { legendary: 0, epic: 1, rare: 2, uncommon: 3, common: 4 };
@@ -491,10 +486,10 @@ async function handleInventory(interaction, config) {
         }).join('\n');
 
         if (userFishing.inventory.length > 15) {
-            fishInfo += `\n\n*...và ${userFishing.inventory.length - 15} loại khác*`;
+            fishInfo += fishingLang.UI.MoreFish.replace('{count}', userFishing.inventory.length - 15);
         }
     }
-    embed.addFields({ name: '🐠 Kho Cá', value: fishInfo });
+    embed.addFields({ name: fishingLang.UI.FishHeader, value: fishInfo });
 
     await interaction.reply({ embeds: [embed] });
 }
@@ -503,6 +498,8 @@ async function handleSell(interaction, config) {
     const fishName = interaction.options.getString('fish');
     const quantityInput = interaction.options.getString('quantity');
     const userFishing = await getUserFishing(interaction.user.id);
+    const lang = loadLang(interaction.guild.id);
+    const fishingLang = lang.Addons.Fishing;
 
     let economyData = await EconomyUserData.findOne({ userId: interaction.user.id });
     if (!economyData) economyData = await EconomyUserData.create({ userId: interaction.user.id, balance: 0 });
@@ -512,7 +509,7 @@ async function handleSell(interaction, config) {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor('#E74C3C')
-                    .setDescription('❌ Bạn không có cá để bán.')
+                    .setDescription(fishingLang.Errors.NoFishToSell)
                 ],
                 ephemeral: true
             });
@@ -538,12 +535,12 @@ async function handleSell(interaction, config) {
 
         const embed = new EmbedBuilder()
             .setColor('#2ECC71')
-            .setTitle('💰 Bán Cá Thành Công')
-            .setDescription(`Đã bán **tất cả cá** trong kho!`)
+            .setTitle(fishingLang.UI.SellSuccessTitle)
+            .setDescription(fishingLang.UI.SellAllDesc)
             .addFields(
-                { name: '💵 Tổng Thu', value: formatCurrency(totalGain), inline: true },
-                { name: '🐟 Số Loài', value: `${soldFish.length} loài`, inline: true },
-                { name: '💳 Số Dư Mới', value: formatCurrency(economyData.balance), inline: true }
+                { name: fishingLang.UI.TotalIncome, value: formatCurrency(totalGain), inline: true },
+                { name: fishingLang.UI.SpeciesCount, value: `${soldFish.length}`, inline: true },
+                { name: fishingLang.UI.NewBalance, value: formatCurrency(economyData.balance), inline: true }
             )
             .setTimestamp();
 
@@ -554,7 +551,7 @@ async function handleSell(interaction, config) {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor('#E74C3C')
-                    .setDescription('❌ Bạn không có cá này trong kho.')
+                    .setDescription(fishingLang.Errors.NoFishInInventory)
                 ],
                 ephemeral: true
             });
@@ -569,7 +566,7 @@ async function handleSell(interaction, config) {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor('#E74C3C')
-                    .setDescription(`❌ Số lượng không hợp lệ. Bạn có ${fish.quantity} con.`)
+                    .setDescription(fishingLang.Errors.InvalidQuantity.replace('{quantity}', fish.quantity))
                 ],
                 ephemeral: true
             });
@@ -597,13 +594,13 @@ async function handleSell(interaction, config) {
 
         const embed = new EmbedBuilder()
             .setColor('#2ECC71')
-            .setTitle('💰 Bán Cá Thành Công')
+            .setTitle(fishingLang.UI.SellSuccessTitle)
             .setDescription(`${fishDetails?.emoji || '🐟'} **${fishName}** ${RARITY_EMOJIS[fish.rarity]}`)
             .addFields(
-                { name: '🐟 Số Lượng', value: `${quantity} con`, inline: true },
-                { name: '⚖️ Tổng Cân', value: formatWeight(weightToSell), inline: true },
-                { name: '💵 Thu Nhập', value: formatCurrency(totalGain), inline: true },
-                { name: '💳 Số Dư Mới', value: formatCurrency(economyData.balance), inline: false }
+                { name: fishingLang.UI.Quantity, value: `${quantity}`, inline: true },
+                { name: fishingLang.UI.TotalWeight, value: formatWeight(weightToSell), inline: true },
+                { name: fishingLang.UI.TotalIncome, value: formatCurrency(totalGain), inline: true },
+                { name: fishingLang.UI.NewBalance, value: formatCurrency(economyData.balance), inline: false }
             )
             .setTimestamp();
 
@@ -614,13 +611,15 @@ async function handleSell(interaction, config) {
 async function handleSelect(interaction, config) {
     const type = interaction.options.getString('type');
     const userFishing = await getUserFishing(interaction.user.id);
+    const lang = loadLang(interaction.guild.id);
+    const fishingLang = lang.Addons.Fishing;
 
     if (type === 'rod') {
         if (!userFishing.rods || userFishing.rods.length === 0) {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor('#E74C3C')
-                    .setDescription('❌ Bạn không sở hữu cần câu nào.')
+                    .setDescription(fishingLang.Errors.NoRodsOwned)
                 ],
                 ephemeral: true
             });
@@ -639,15 +638,15 @@ async function handleSelect(interaction, config) {
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId('select_rod')
-            .setPlaceholder('Chọn cần câu để trang bị')
+            .setPlaceholder(fishingLang.UI.SelectRodPlaceholder)
             .addOptions(rodOptions);
 
         const row = new ActionRowBuilder().addComponents(selectMenu);
 
         const embed = new EmbedBuilder()
             .setColor('#3498DB')
-            .setTitle('🎣 Chọn Cần Câu')
-            .setDescription('Hãy chọn cần câu bạn muốn sử dụng:');
+            .setTitle(fishingLang.UI.SelectRodTitle)
+            .setDescription(fishingLang.UI.SelectRodDesc);
 
         const selectMessage = await interaction.reply({
             embeds: [embed],
@@ -663,7 +662,7 @@ async function handleSelect(interaction, config) {
 
         collector.on('collect', async i => {
             if (i.user.id !== interaction.user.id) {
-                return i.reply({ content: '❌ Đây không phải menu của bạn.', ephemeral: true });
+                return i.reply({ content: fishingLang.Errors.NotYourMenu, ephemeral: true });
             }
 
             const selectedRodKey = i.values[0];
@@ -673,7 +672,7 @@ async function handleSelect(interaction, config) {
             const selectedRod = userFishing.rods.find(r => r.key === selectedRodKey);
             const successEmbed = new EmbedBuilder()
                 .setColor('#2ECC71')
-                .setDescription(`✅ Đã trang bị: **${selectedRod.name}**`);
+                .setDescription(fishingLang.UI.EquippedRodConfig.replace('{rod}', selectedRod.name));
 
             await i.update({ embeds: [successEmbed], components: [] });
         });
@@ -684,7 +683,7 @@ async function handleSelect(interaction, config) {
             return interaction.reply({
                 embeds: [new EmbedBuilder()
                     .setColor('#E74C3C')
-                    .setDescription('❌ Bạn không có mồi câu nào.')
+                    .setDescription(fishingLang.Errors.NoBait)
                 ],
                 ephemeral: true
             });
@@ -703,15 +702,15 @@ async function handleSelect(interaction, config) {
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId('select_bait')
-            .setPlaceholder('Chọn mồi câu mặc định')
+            .setPlaceholder(fishingLang.UI.SelectBaitPlaceholder)
             .addOptions(baitOptions);
 
         const row = new ActionRowBuilder().addComponents(selectMenu);
 
         const embed = new EmbedBuilder()
             .setColor('#3498DB')
-            .setTitle('🪱 Chọn Mồi Câu')
-            .setDescription('Hãy chọn loại mồi bạn muốn ưu tiên sử dụng:');
+            .setTitle(fishingLang.UI.SelectBaitConfigTitle)
+            .setDescription(fishingLang.UI.SelectBaitConfigDesc);
 
         const selectMessage = await interaction.reply({
             embeds: [embed],
@@ -727,7 +726,7 @@ async function handleSelect(interaction, config) {
 
         collector.on('collect', async i => {
             if (i.user.id !== interaction.user.id) {
-                return i.reply({ content: '❌ Đây không phải menu của bạn.', ephemeral: true });
+                return i.reply({ content: fishingLang.Errors.NotYourMenu, ephemeral: true });
             }
 
             const selectedBaitKey = i.values[0];
@@ -736,7 +735,7 @@ async function handleSelect(interaction, config) {
 
             const successEmbed = new EmbedBuilder()
                 .setColor('#2ECC71')
-                .setDescription(`✅ Đã chọn: **${config.baits[selectedBaitKey].name}** làm mồi mặc định`);
+                .setDescription(fishingLang.UI.EquippedBaitConfig.replace('{bait}', config.baits[selectedBaitKey].name));
 
             await i.update({ embeds: [successEmbed], components: [] });
         });
@@ -744,55 +743,56 @@ async function handleSelect(interaction, config) {
 }
 
 async function handleHelp(interaction) {
+    const lang = loadLang(interaction.guild.id);
+    const fishingLang = lang.Addons.Fishing;
+
     const embed = new EmbedBuilder()
-        .setTitle('🎣 Hướng Dẫn Câu Cá')
+        .setTitle(fishingLang.Help.Title)
         .setColor('#0099ff')
-        .setDescription('Chào mừng đến với hệ thống câu cá! Dưới đây là các lệnh bạn có thể sử dụng:')
+        .setDescription(fishingLang.Help.Desc)
         .addFields(
             {
-                name: '🎣 Câu Cá',
-                value: '`/cauca fish <địa điểm>` - Bắt đầu câu cá tại địa điểm đã chọn\n' +
-                    '*Mỗi lần câu sẽ tiêu tốn 1 độ bền cần câu*',
+                name: fishingLang.Help.Fields.Fish.Name,
+                value: fishingLang.Help.Fields.Fish.Value,
                 inline: false
             },
             {
-                name: '🎒 Quản Lý Đồ',
-                value: '`/cauca inventory` - Xem kho đồ câu cá của bạn\n' +
-                    '`/cauca select <rod/bait>` - Chọn cần câu hoặc mồi để trang bị\n' +
-                    '`/fixcancau` - Sửa cần câu (chỉ khi độ bền < 30%)',
+                name: fishingLang.Help.Fields.Inventory.Name,
+                value: fishingLang.Help.Fields.Inventory.Value,
                 inline: false
             },
             {
-                name: '💰 Kinh Tế',
-                value: '`/cauca sell <tên cá|all> [số lượng]` - Bán cá để kiếm xu\n' +
-                    '`/store` - Mở cửa hàng mua cần câu và mồi',
+                name: fishingLang.Help.Fields.Economy.Name,
+                value: fishingLang.Help.Fields.Economy.Value,
                 inline: false
             },
             {
-                name: '📊 Thống Kê',
-                value: '`/leaderboard cauca` - Xem bảng xếp hạng câu cá\n' +
-                    '`/cauca help` - Hiển thị tin nhắn này',
+                name: fishingLang.Help.Fields.Stats.Name,
+                value: fishingLang.Help.Fields.Stats.Value,
                 inline: false
             },
             {
-                name: '✨ Độ Hiếm Cá',
-                value: `${RARITY_EMOJIS.common} Common • ${RARITY_EMOJIS.uncommon} Uncommon • ${RARITY_EMOJIS.rare} Rare\n` +
-                    `${RARITY_EMOJIS.epic} Epic • ${RARITY_EMOJIS.legendary} Legendary`,
+                name: fishingLang.Help.Fields.Rarity.Name,
+                value: fishingLang.Help.Fields.Rarity.Value
+                    .replace('{common}', RARITY_EMOJIS.common)
+                    .replace('{uncommon}', RARITY_EMOJIS.uncommon)
+                    .replace('{rare}', RARITY_EMOJIS.rare)
+                    .replace('{epic}', RARITY_EMOJIS.epic)
+                    .replace('{legendary}', RARITY_EMOJIS.legendary),
                 inline: false
             },
             {
-                name: '💡 Mẹo',
-                value: '• Sử dụng mồi câu để tăng cơ hội câu được cá hiếm\n' +
-                    '• Cần câu tốt hơn = độ bền cao hơn + hiệu ứng đặc biệt\n' +
-                    '• Cá Epic và Legendary thay đổi mỗi giờ!',
+                name: fishingLang.Help.Fields.Tips.Name,
+                value: fishingLang.Help.Fields.Tips.Value,
                 inline: false
             }
         )
-        .setFooter({ text: 'Chúc bạn câu được nhiều cá hiếm! 🐟' })
+        .setFooter({ text: fishingLang.Help.Footer })
         .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
 }
+
 
 // ============================================
 // MAIN COMMAND EXPORT
@@ -887,6 +887,8 @@ module.exports = {
     async execute(interaction, client) {
         const subcommand = interaction.options.getSubcommand();
         const config = loadFishingConfig();
+        const lang = loadLang(interaction.guild.id);
+        const fishingLang = lang.Addons.Fishing;
 
         try {
             switch (subcommand) {
@@ -907,7 +909,7 @@ module.exports = {
                     break;
                 default:
                     await interaction.reply({
-                        content: '❌ Lệnh không hợp lệ.',
+                        content: fishingLang.Errors.InvalidCommand,
                         ephemeral: true
                     });
             }
@@ -916,8 +918,8 @@ module.exports = {
 
             const errorEmbed = new EmbedBuilder()
                 .setColor('#E74C3C')
-                .setTitle('❌ Đã Xảy Ra Lỗi')
-                .setDescription('Đã có lỗi xảy ra khi thực hiện lệnh. Vui lòng thử lại sau.');
+                .setTitle('❌ Error')
+                .setDescription(fishingLang.Errors.GenericError);
 
             if (interaction.deferred || interaction.replied) {
                 await interaction.editReply({ embeds: [errorEmbed], components: [] });

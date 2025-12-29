@@ -22,8 +22,7 @@ const seeds = {
 async function getUserFarm(userId) {
     let userFarm = await farmSchema.findOne({ userId });
     if (!userFarm) {
-        userFarm = new farmSchema({ userId, items: [] });
-        await userFarm.save();
+        userFarm = await farmSchema.create({ userId, items: [] });
     }
     return userFarm;
 }

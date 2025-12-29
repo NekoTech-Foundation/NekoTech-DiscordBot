@@ -7,6 +7,7 @@ const Invite = require('../models/inviteSchema');
 const GuildData = require('../models/guildDataSchema');
 const UserData = require('../models/UserData');
 const { getConfig, getLang, getCommands } = require('../utils/configLoader.js');
+const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
 
 const lang = getLang();
 const config = getConfig();

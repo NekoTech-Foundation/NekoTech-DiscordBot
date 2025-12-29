@@ -1,0 +1,790 @@
+NoPermsMessage: "このコマンドを使用する権限がありません。"
+SuccessEmbedTitle: "成功"
+ErrorEmbedTitle: "エラーが発生しました"
+
+# ===========================================================================
+# ヘルプコマンドのメッセージ
+# ===========================================================================
+HelpCommand:
+  MainEmbed:
+    Title: "{botName} ヘルプメニューへようこそ"
+    Description:
+      - "下のメニューからカテゴリを選択して、利用可能なコマンドを確認してください。"
+    Footer:
+      Text: "KentaBuckets Bot"
+      Icon: ""
+    Author:
+      Text: "{user}"
+      Icon: "{user-avatar}"
+    Color: "#1769FF"
+    Image: ""
+    Thumbnail: "{guild-avatar}"
+
+  CategorySelectPlaceholder: "カテゴリを選択..."
+  BackButtonLabel: "カテゴリに戻る"
+
+  Categories:
+    General:
+      Name: "一般"
+      Description: "一般的な使用のための基本コマンド"
+      Emoji: "📋"
+    Moderation:
+      Name: "管理"
+      Description: "サーバー管理用コマンド"
+      Emoji: "🛡️"
+    Fun:
+      Name: "娯楽"
+      Description: "楽しむためのコマンド"
+      Emoji: "🎉"
+    Economy:
+      Name: "経済"
+      Description: "仮想経済を管理するコマンド"
+      Emoji: "💰"
+    Utility:
+      Name: "ユーティリティ"
+      Description: "便利なツールとユーティリティ"
+      Emoji: "🔧"
+    Uncategorized:
+      Name: "拡張機能"
+      Description: "拡張機能のコマンド"
+      Emoji: "❓"
+
+  CategoryEmbed:
+    Title: "{category} のコマンド"
+    Description: []
+    Color: "#5865F2"
+    Footer:
+      Text: "戻るボタンでカテゴリ選択に戻ります"
+      Icon: ""
+    Author:
+      Text: "{botName} コマンド"
+      Icon: ""
+
+  CommandDetailsEmbed:
+    Footer:
+      Text: "/help で全コマンドを表示"
+      Icon: ""
+    Author:
+      Text: "コマンド詳細"
+      Icon: ""
+    Color: "#5865F2"
+
+Verify:
+  AlreadyVerified: "すでに認証済みです！"
+  Success: "認証に成功しました！ようこそ。"
+  Error: "認証中にエラーが発生しました。"
+  CaptchaTitle: "CAPTCHA 認証"
+  CaptchaDescription: "次の図形が含まれるマスを選択してください: **{shape}**"
+  SubmitCaptcha: "送信"
+  IncorrectCaptcha: "CAPTCHAが間違っています。もう一度お試しください。"
+  Timeout: "認証の制限時間を過ぎました。"
+  Required: "計算問題を解いてください"
+  QuestionFormat: "{num1} {operator} {num2} はいくつですか？"
+  Incorrect: "不正解です。"
+
+# ===========================================================================
+# バックアップコマンド
+# ===========================================================================
+BackupCreating: "✅ | バックアップを作成中、お待ちください..."
+BackupCreatedEmbed: "このサーバーの**バックアップ**が正常に作成されました！"
+BackupCreatedMsg: "✅ | バックアップが正常に作成されました。バックアップ情報はDMに送信されました！"
+BackupWrongUsage: "有効なバックアップIDを指定してください！"
+BackupDeleted: "バックアップを削除しました！"
+BackupNotFound: "そのIDのバックアップは見つかりませんでした！"
+BackupLoadWarning: "⚠️ サーバーのすべてのチャンネル、ロール、設定が削除されます。バックアップを読み込みますか？"
+BackupLoading: "⚠️ バックアップを読み込み中..."
+BackupLoaded: "バックアップの読み込みに成功しました！"
+BackupCancelled: "キャンセルされました！"
+BackupEmbedUsage: "使用法"
+BackupCreatedBy: "作成者:"
+BackupButtonConfirm: "確認"
+BackupButtonCancel: "キャンセル"
+
+# ===========================================================================
+# アバター + バナー コマンド
+# ===========================================================================
+AvatarSearchedBy: "検索者:"
+AvatarClickHere: "ここをクリックして画像を表示"
+
+BannerClickHere: "ここをクリックしてバナーを表示"
+BannerSearchedBy: "バナー検索者"
+NoBannerSet: "このユーザーはバナーを設定していません。"
+
+# ===========================================================================
+# MEME COMMAND
+# ===========================================================================
+MemeViewThread: "スレッドを表示"
+
+# ===========================================================================
+# 褒めるコマンド
+# ===========================================================================
+compliments:
+  messages:
+    - "あなたは自分が思っている以上に役に立っています。"
+    - "あなたの優しさは誰にも負けません。"
+    - "あなたは素晴らしいユーモアのセンスを持っています。"
+    - "あなたは他人の良さを引き出します。"
+    - "あなたは部屋を明るくします。"
+
+# ===========================================================================
+# ブラックジョークコマンド
+# ===========================================================================
+darkjokes:
+  messages:
+    - "なぜカニバリズムの人はピエロを食べないの？ 面白い味がするから。（funny taste = 変な味/面白い味）"
+
+# ===========================================================================
+# ゲームコマンド
+# ===========================================================================
+Roll: "🎲 転がした結果: ${rollResult}!"
+
+wordSnake:
+  start: "しりとり開始！最初の単語は `${word}` です。次の単語は `${letter}` で始まる必要があります。"
+  invalidWord: "無効な単語です！ `${letter}` で始まる必要があります。"
+  timeUp: "時間切れ！最後の単語は `${lastWord}` でした。ゲーム終了、スコア: `${score}`。"
+  gameOver: "ゲームオーバー！最終スコア: `${score}`。"
+
+Hangman:
+  commandDescription: "ハングマンをプレイ！"
+  activeGameWarning: "進行中のゲームがあります。先にそちらを終了してください。"
+  gameStartMessage: "ハングマンを開始します... 文字を予想してください！"
+  winMessage: "おめでとうございます、{username}！あなたの勝ちです！"
+  gameOverMessage: "ゲームオーバー！正解は: {word}"
+  continueMessage: "予想を続けてください！"
+  words:
+    - Discord
+    - Adventure
+    - Galaxy
+    - Robot
+    - Anime
+    - Manga
+    - Ninja
+    - Samurai
+    - Ramen
+    - Sushi
+    - Tempura
+    - Tokyo
+    - Sakura
+    - Kimono
+    - Music
+    - Game
+  embeds:
+    gameTitle: "🔤 ハングマン: {username}"
+    hangman: "ハングマン"
+    wordToGuess: "推測する単語"
+    guessesLeft: "残りの推測回数"
+    progress: "進行状況"
+    useChatToGuess: "チャットを使って文字を推測してください。\n1メッセージにつき1文字のみ。"
+    guessFooter: "チャットに予想を入力してください。間違えると残りの回数が減ります！"
+    gameOverTitle: "ゲームオーバー"
+    finalWord: "正解の単語:"
+    gameEndMessage: "ゲームが終了しました。"
+    thanksForPlaying: "遊んでくれてありがとう！"
+
+Wordle:
+  Messages:
+    Title: "Wordle"
+    BottomFirst: "5文字の単語を推測"
+    BottomLast: "チャットで推測してください！"
+    KeepGuess: "推測を続けてください！"
+    GameActive: "すでに有効なゲームがあります！"
+    LetsPlay: "Wordleをしましょう！5文字の単語を当ててください。"
+  Embed:
+    Title: "**ゲームオーバー**"
+    Description: "ゲーム終了！正解は {word} でした。"
+    Footer: "遊んでくれてありがとう！"
+  words:
+    - Apple
+    - Bread
+    - Crate
+    - Drink
+    - Eagle
+    - Frost
+    - Grape
+    - House
+    - Ideal
+    - Juice
+    - Knife
+    - Lemon
+    - Mango
+    - Night
+    - Olive
+    - Peach
+    - Quiet
+    - River
+    - Stone
+    - Table
+    - Unity
+    - Vivid
+    - Whale
+    - Zebra
+
+Connectfour:
+  Title: "{user} のターン！"
+  Colors:
+    Win: "#7ff946"
+    Lose: "#df3e3e"
+    Tie: "#ffffff"
+  Embed:
+    Title: "**ゲーム終了**"
+    Description: "{user} が勝ちました！"
+    Footer: "遊んでくれてありがとう！"
+  Board:
+    Emojis:
+      Player: "🔴"
+      Bot: "🟡"
+      Blank: "⬛"
+      1: "1️⃣"
+      2: "2️⃣"
+      3: "3️⃣"
+      4: "4️⃣"
+      5: "5️⃣"
+      6: "6️⃣"
+      7: "7️⃣"
+  Buttons:
+    Style: "Secondary"
+    Numbers:
+      1:
+        Text: ""
+        Emoji: "1️⃣"
+      2:
+        Text: ""
+        Emoji: "2️⃣"
+      3:
+        Text: ""
+        Emoji: "3️⃣"
+      4:
+        Text: ""
+        Emoji: "4️⃣"
+      5:
+        Text: ""
+        Emoji: "5️⃣"
+      6:
+        Text: ""
+        Emoji: "6️⃣"
+      7:
+        Text: ""
+        Emoji: "7️⃣"
+
+TicTacToe:
+  Board:
+    Emojis:
+      X: "❌"
+      O: "⭕"
+      Blank: "⬛"
+  Colors:
+    Win: "#00FF00"
+    Lose: "#FF0000"
+    Tie: "#FFFF00"
+  Messages:
+    OwnGame: "自分のゲームを開始してください！"
+    ColumnFull: "この場所は埋まっています。"
+    Win: "## **よくやりました {user}！あなたの勝ちです！**"
+    Tie: "## **引き分けです {user}！**"
+    Lost: "## **残念 {user}、あなたの負けです！**"
+    Columns: "下のボタンを使って動かしてください。"
+    GameOver: "ゲーム終了"
+    ThanksForPlaying: "遊んでくれてありがとう！"
+
+RockPaperScissors:
+  Messages:
+    RockPaperScissors: "**じゃんけん**"
+    YourChoice: "## あなたは **{userChoice}** を選び、ボットは **{botChoice}** を選びました。"
+    Win: "## **よくやりました {user}！あなたの勝ちです！**"
+    Tie: "## **引き分けです {user}！**"
+    Lost: "## **残念 {user}、あなたの負けです！**"
+    GameEnded: "ゲーム終了！"
+    ThanksForPlaying: "遊んでくれてありがとう！"
+    CantPlaySomeoneElsesGame: "他人のゲームはプレイできません！"
+  Embed:
+    Color: "#000000"
+    Title: "👊 じゃんけん"
+    Description: "**勝負しましょう！以下から手を選んでください:**"
+    Fields:
+      Rock:
+        Name: "グー"
+        Value: "🪨"
+      Paper:
+        Name: "パー"
+        Value: "📰"
+      Scissors:
+        Name: "チョキ"
+        Value: "✂️"
+    Footer:
+      Text: "選択してください！"
+    Buttons:
+      Rock:
+        Style: "Secondary"
+        Text: "グー"
+        Emoji: "🪨"
+      Paper:
+        Style: "Secondary"
+        Text: "パー"
+        Emoji: "📰"
+      Scissors:
+        Style: "Secondary"
+        Text: "チョキ"
+        Emoji: "✂️"
+
+# ===========================================================================
+# SNIPE COMMAND
+# ===========================================================================
+SnipeNoMsg: "スナイプできるメッセージはありません。"
+ErrorGeneric: "申し訳ありません、エラーが発生しました。"
+
+# ===========================================================================
+# GIVEAWAY COMMAND
+# ===========================================================================
+Giveaways:
+  EntrySuccessMessage: "🎉 {hostedBy} が主催する **{prize}** のギブアウェイに参加しました！"
+  LeaveSuccessMessage: "👋 ギブアウェイから退出しました。"
+  EntryErrorMessage: "エラーが発生しました。サポートに連絡してください。"
+  CheckChance: "{user}、このギブアウェイに当選する確率は {percent}% です。({entries} エントリー)"
+  NotJoinedGiveaway: "このギブアウェイに参加していません！"
+  CalculationError: "確率の計算中にエラーが発生しました。"
+  GiveawayNotFound: "ギブアウェイが見つからないか、削除された可能性があります..."
+  GiveawayAlreadyEnded: "ギブアウェイはすでに終了しています。"
+  GiveawayHasntEnded: "ギブアウェイはまだ終了していません。"
+  WinMessage: "**{prize}** の当選者、おめでとうございます！ {winners}"
+  WinRerollMessage: "再抽選！ **{prize}** の新しい当選者、おめでとうございます！ {winners}"
+  WinnerDirectMessage: "おめでとうございます、**{prize}** に当選しました！ **{serverName}** でチケットを開いて受け取ってください。 {channel}"
+  NoParticipationMessage: "参加者がいなかったため、当選者はいません。"
+  IncorrectRoleMessage: "このギブアウェイに参加するために必要なロールを持っていません！"
+  IncorrectMinimumAccountAgeMessage: "アカウント作成からの日数が足りません！"
+  IncorrectMinimumServerJoinDateMessage: "**{serverName}** に参加してからの日数が足りません！"
+  AlreadyEnteredMessage: "すでに参加しています！"
+  IncorrectInviteCountMessage: "このギブアウェイに参加するには、少なくとも {minInvites} 回の招待が必要です。"
+  IncorrectMessageCountMessage: "このギブアウェイに参加するには {required} 件のメッセージが必要です。現在 {current} 件です。"
+  chanceMessage: "{user}、当選確率は **{winChance}%** です。({userEntries} エントリー: 1 基本 + {extraEntries} ボーナス)"
+  ExtraEntriesMessage: "ロールのおかげで **{extraEntries}** 回の追加エントリーがあります！"
+
+  Embeds:
+    ActiveGiveaway:
+      Prize: "## ギブアウェイ {prize} x{winnerCount}!"
+      HostedByField: "主催者:"
+      EndsInField: "終了時間:"
+      EntriesField: "エントリー数:"
+      WhitelistRoleField: "参加可能"
+      BlacklistRoleField: "参加在不可"
+      MinimumSeverJoinDateField: "最小サーバー参加日数"
+      MinimumAccountAgeField: "最小アカウント年齢"
+
+    EndedGiveaway:
+      Title: "## ギブアウェイ {prize} 終了！"
+      WinnersField: "当選者:"
+      EntriesField: "エントリー数:"
+
+# ===========================================================================
+# AFK COMMAND
+# ===========================================================================
+AFK:
+  Success: "AFKステータスを設定しました"
+  ErrorMessges:
+    NoPermission: "AFKコマンドを使用する権限がありません。"
+    NickNameMissingPermissions: "権限がないためニックネームを変更できませんでした。"
+    NickNameOwner: "AFKステータスは設定されましたが、あなたがサーバー所有者であるため、ニックネームを変更できません。"
+    AlreadyMarkedAFK: "すでにAFKとしてマークされています！"
+    TimeFormat: "無効な時間形式です。1s, 1m, 1h, 1d のように指定してください。"
+    TimeParseError: "時間を解析できませんでした。"
+    RoleCreate: "AFKロールの作成中にエラーが発生しました。"
+
+# ===========================================================================
+# LEADERBOARD & LEVELS
+# ===========================================================================
+Leaderboard:
+  Balance:
+    Top: "🏆 ランキング - 残高"
+    Footer: "ページ {pageMin}/{pageMax} • 更新日時 {time}"
+    Messages: "{count} 🪙"
+  Levels:
+    Top: "🏆 ランキング - レベル"
+    Footer: "ページ {pageMin}/{pageMax} • 更新日時 {time}"
+    Messages: "レベル {count_level}, XP {count_xp}"
+  Messages:
+    Top: "🏆 ランキング - メッセージ"
+    Footer: "ページ {pageMin}/{pageMax} • 更新日時 {time}"
+    Messages: "{count} メッセージ"
+  Invites:
+    Top: "🏆 ランキング - 招待"
+    Footer: "ページ {pageMin}/{pageMax} • 更新日時 {time}"
+    Messages: "{count} 招待"
+  Error: "ランキングの取得中にエラーが発生しました。"
+  Button:
+    Previous: "前へ"
+    Next: "次へ"
+  Embed:
+    Colour: "#000000"
+
+Levels:
+  NoPermission: "アクセス拒否。必要な権限がありません。"
+  DataNotFound: "{user} のプロファイルが見つかりません。"
+  CurrentLevelAndXP: "{user} は現在レベル {level} で、合計 {xp} XP です。"
+  UpdatedXP: "{user} のXPを {xp} に更新しました。"
+  UpdatedLevel: "{user} のレベルを {level} に更新しました。"
+  UpdatedXPAndLevel: "{user} のXPとレベルを更新しました。"
+
+  LevelMessages:
+    - "{user}、レベル {newLevel} おめでとう！"
+    - "レベルアップ！ {user} がレベル {newLevel} になりました！"
+    - "🎉 おめでとう {user}！ レベル {newLevel} になりました！"
+
+# ===========================================================================
+# ROLE COMMANDS
+# ===========================================================================
+AddRole:
+  AddroleSelfRole: "自分自身にロールを追加することはできません。"
+  AddroleHighestRole: "選択されたロールは私の最高ロールより上位です。"
+  AddroleUserRoleNotAbove: "あなたの最高ロール以上のロールを追加することはできません。"
+  AddroleAlreadyHave: "ユーザーはすでにこのロールを持っています。"
+  AddroleSuccess: "{user} に {role} を追加しました。"
+  AddroleError: "ロールの追加中にエラーが発生しました。"
+  RoleAllUserHighestRole: "あなたの最高ロール以上のロールを割り当てることはできません。"
+
+RoleAll:
+  RoleAllConfirmationAdd: "本当にすべてのユーザーにロール {role} を追加しますか？"
+  RoleAllConfirmationRemove: "本当にすべてのユーザーからロール {role} を削除しますか？"
+  RoleAllHighestRole: "選択されたロールが高すぎます。"
+  RoleAllUserHighestRole: "選択されたロールが高すぎます。"
+  RoleAllSuccessAdd: "すべてのユーザーにロールを追加しました。"
+  RoleAllSuccessRemove: "すべてのユーザーからロールを削除しました。"
+  RoleAllError: "エラーが発生しました。"
+  RoleAllCancelled: "キャンセルされました。"
+  RoleAllTimeOut: "タイムアウトしました。"
+
+Temprole:
+  SameOrHigherRoleError: "現在の最高ロール以上のロールを割り当てることはできません。"
+  InvalidDurationFormat: "無効な時間形式です。"
+  RoleAssigned: "{duration} の間、{user} に {role} を割り当てました。"
+  ErrorAssigningRole: "一時ロールの割り当て中にエラーが発生しました。"
+  MissingPermissionsError: "ボットに十分な権限がありません。"
+  UnknownRoleError: "無効なロールです。"
+
+# ===========================================================================
+# HISTORY COMMAND
+# ===========================================================================
+History:
+  HistoryEmbedTitle: "{user-tag} のユーザー履歴"
+  HistoryEmbedUserInfo: "👤 ユーザー情報"
+  HistoryEmbedName: "名前"
+  HistoryEmbedJoinedServer: "📆 サーバー参加日"
+  HistoryTotalMessages: "💌 総メッセージ数"
+  HistoryEmbedNote: "📝 ノート"
+  HistoryEmbedWarnings: "⚠️ 警告"
+  HistoryEmbedTimeouts: "⏲️ タイムアウト"
+  HistoryEmbedKicks: "👢 キック"
+  HistoryEmbedBans: "🔨 BAN"
+
+ClearhistorySuccess: "{user} の履歴を削除しました！"
+
+# ===========================================================================
+# POLL COMMAND
+# ===========================================================================
+PollEmbedTitle: "投票が開始されました！"
+PollEmbedFooter: "投票開始者:"
+
+# ===========================================================================
+# PURGE COMMAND
+# ===========================================================================
+Purge:
+  NoPermsMessage: "メッセージを削除する権限がありません。"
+  PurgeCleared: "{amount} 件のメッセージを削除しました。"
+  PurgeOld: "エラー: 14日以上前のメッセージは削除できません。"
+  ModerationEmbedTitle: "管理アクション"
+  ModerationEmbedAction: "アクション: パージ"
+  ModerationEmbedDetails: "モデレーター: <@{user-id}>\n量: {amount}\nチャンネル: {channel}"
+
+# ===========================================================================
+# SLOWMODE COMMAND
+# ===========================================================================
+SlowmodeReset: "このチャンネルのスローモードはリセットされました。"
+SlowmodeFailed: "スローモードの設定に失敗しました。"
+SlowmodeSuccess: "スローモードを **{time}** 秒に設定しました。"
+
+# ===========================================================================
+# ANTIHOIST COMMAND
+# ===========================================================================
+AntiHoist:
+  NoPermission: "権限がありません。"
+  CommandCompleted: "アンチホイストコマンドが完了しました。"
+  NotifyUserMessage: "こんにちは {user}！ アンチホイストルールにより、**{guildName}** でのニックネームが `{oldDisplayName}` から `{newDisplayName}` に変更されました。"
+
+# ===========================================================================
+# WARN COMMAND
+# ===========================================================================
+Unwarn:
+  NoPermission: "権限がありません。"
+  NoWarnings: "警告が見つかりません。"
+  InvalidWarningID: "無効な警告IDです。"
+  WarningRemoved: "{userTag} から警告を削除しました: `{reason}`。"
+  Error: "エラーが発生しました。"
+
+Warn:
+  BotOrSelf: "ボットや自分自身を警告することはできません。"
+  Success: "ユーザー {userTag} は次の理由で警告されました: {reason}"
+  Error: "ユーザーの警告中にエラーが発生しました。"
+
+# ===========================================================================
+# REMINDER COMMAND
+# ===========================================================================
+Reminder:
+  Messages:
+    invalid_mentions: "リマインダーにメンションを含めることはできません。"
+    invalid_format: "無効な形式です。'10m', '1h' などを使用してください。"
+    permission_denied: "権限がありません。"
+    no_reminders: "アクティブなリマインダーはありません。"
+  Embeds:
+    Reminder:
+      Color: "#1769FF"
+      Title: "リマインダー設定完了"
+      Description:
+        - "{time} 後に {user} に通知します"
+      Footer:
+        Text: "KentaBuckets Bot リマインダー"
+        Icon: ""
+    List:
+      Color: "#1769FF"
+      Title: "アクティブなリマインダー"
+      Footer:
+        Text: "/reminder create で新しいリマインダーを作成"
+        Icon: ""
+    DM:
+      Color: "#1769FF"
+      Title: "🔔 リマインダー！"
+      Description: "{message}"
+      Footer:
+        Text: "時間です！"
+        Icon: ""
+
+# ===========================================================================
+# ADDON MESSAGES
+# ===========================================================================
+Addons:
+  Fishing:
+    Errors:
+      Cooldown: "⏰ **クールダウン！** あと `{time}秒` 待ってください。"
+      NoRod: "❌ 釣り竿を持っていません！ `/store` で購入してください。"
+      RodBrokenTitle: "🔧 釣り竿が壊れました"
+      RodBrokenDesc: "**{rod}** の耐久値がなくなりました！\n\n`/fixcancau` で修理するか、`/store` で新しい竿を購入してください。"
+      NoBait: "❌ 釣り餌がありません。"
+      NoFishToSell: "❌ 売る魚がありません。"
+      NoFishInInventory: "❌ この魚はインベントリにありません。"
+      InvalidQuantity: "❌ 無効な数量です。あなたは {quantity} 匹持っています。"
+      NoRodsOwned: "❌ 釣り竿を持っていません。"
+      NotYourMenu: "❌ これはあなたのメニューではありません。"
+      InvalidCommand: "❌ 無効なコマンドです。"
+      GenericError: "❌ コマンドの実行中にエラーが発生しました。後でもう一度お試しください。"
+    UI:
+      NoBaitButton: "餌を使わない"
+      SelectBaitTitle: "🎣 餌の選択"
+      SelectBaitDesc: "餌を使用しますか？\n*餌を使うとレアな魚が釣れる確率が上がります。*"
+      SelectBaitFooter: "選択時間: 30秒"
+      CastingLine: "🎣 釣り糸を垂らしています..."
+      Timeout: "⏰ 時間切れ！ 使用する餌: {bait}"
+      NoCatchTitle: "😞 何も釣れませんでした"
+      NoCatchDesc: "今回は何も釣れませんでした。次は運がありますように！"
+      NoCatchFooter: "{rod} の耐久値は残り {durability} です"
+      SuccessTitle: "🎉 釣り成功！"
+      Weight: "⚖️ 重さ"
+      Rarity: "✨ レア度"
+      XPGained: "🌟 獲得XP"
+      BaitUsed: "🪱 使用した餌"
+      InventoryTitle: "🎒 釣りインベントリ - {user}"
+      NoRodStatus: "❌ 竿なし"
+      RodHeader: "🎣 釣り竿"
+      NoBaitStatus: "❌ 餌なし"
+      BaitHeader: "🪱 餌"
+      EmptyFishInventory: "❌ 魚インベントリは空です"
+      MoreFish: "\n\n*...他 {count} 種*"
+      FishHeader: "🐠 魚インベントリ"
+      SellSuccessTitle: "💰 売却成功"
+      SellAllDesc: "インベントリ内の**すべての魚**を売却しました！"
+      TotalIncome: "💵 総収入"
+      SpeciesCount: "🐟 魚の種類"
+      NewBalance: "💳 新しい残高"
+      Quantity: "🐟 数量"
+      TotalWeight: "⚖️ 総重量"
+      SelectRodTitle: "🎣 釣り竿の選択"
+      SelectRodDesc: "使用したい釣り竿を選択してください:"
+      SelectRodPlaceholder: "装備する竿を選択"
+      EquippedRodConfig: "✅ 装備中: **{rod}**"
+      SelectBaitConfigTitle: "🪱 餌の選択"
+      SelectBaitConfigDesc: "優先して使用する餌を選択してください:"
+      SelectBaitPlaceholder: "デフォルトの餌を選択"
+      EquippedBaitConfig: "✅ **{bait}** をデフォルトの餌に設定しました"
+    Help:
+      Title: "🎣 釣りガイド"
+      Desc: "釣りシステムへようこそ！ 使用できるコマンドは以下の通りです:"
+      Fields:
+        Fish:
+          Name: "🎣 釣り"
+          Value: "`/cauca fish <場所>` - 指定した場所で釣りを開始します\n*1回の釣りで竿の耐久値を1消費します*"
+        Inventory:
+          Name: "🎒 インベントリ管理"
+          Value: "`/cauca inventory` - 釣りインベントリを確認します\n`/cauca select <rod/bait>` - 竿または餌を装備します\n`/fixcancau` - 竿を修理します (耐久値30%未満のみ)"
+        Economy:
+          Name: "💰 経済"
+          Value: "`/cauca sell <魚/all> [数量]` - 魚を売ってコインを稼ぎます\n`/store` - ストアを開いて竿や餌を購入します"
+        Stats:
+          Name: "📊 統計"
+          Value: "`/leaderboard cauca` - 釣りランキングを表示します\n`/cauca help` - このメッセージを表示します"
+        Rarity:
+          Name: "✨ 魚のレア度"
+          Value: "{common} Common • {uncommon} Uncommon • {rare} Rare\n{epic} Epic • {legendary} Legendary"
+        Tips:
+          Name: "💡 ヒント"
+          Value: "• 餌を使うとレアな魚が釣れる確率が上がります\n• 良い竿 = 高い耐久値 + 特殊効果\n• EpicとLegendaryの魚は毎時変わります！"
+      Footer: "たくさんのレアな魚が釣れますように！ 🐟"
+
+  Farming:
+    Errors:
+      NoSeed: "植えるための {seed} の種がありません。"
+      InvalidQuantity: "無効な数量です。"
+      NotEnoughSeed: "植えるための {seed} の種が足りません。"
+      NoPlantsReady: "収穫できる作物がありません。"
+      NotPlanted: "{plant} を植えていません。"
+      NotReady: "あなたの {plant} はまだ収穫できません。残り時間: {time}。"
+      NoPlants: "作物を植えていません。"
+      NoSeeds: "種を持っていません。"
+      NoProduce: "農産物や肥料を持っていません。"
+      NoFertilizer: "{fertilizer} を持っていません。"
+      NoPlantsToFertilize: "肥料を与える作物がありません。"
+    UI:
+      PlantSuccess: "{quantity} 個の {emoji} {name} を正常に植えました。"
+      PlantMutation: "\n✨ **ラッキー！** {weatherEmoji} {weatherName} の天気の影響で、作物が {emoji} **{name}** に突然変異しました！"
+      HarvestSuccess: "以下を収穫しました:\n"
+      HarvestBonus: "\n✨ 突然変異した作物: **{mutations}** により追加で **{amount}** コインを獲得しました！"
+      HarvestMutationOnly: "\n✨ 突然変異した作物: **{mutations}**"
+      SellAllButton: "すべて売却"
+      FieldTitle: "あなたの農場"
+      FieldEmpty: "作物は植えられていません。"
+      WeatherCurrent: "🌤️ **現在の天気**: {emoji} **{name}** (終了: {time})\n{desc}"
+      WeatherEventTitle: "🌤️ 農場天気イベント"
+      WeatherEventCurrent: "**現在:** {emoji} **{name}**\n\n{desc}"
+      WeatherEnds: "⏳ 終了"
+      WeatherEffect: "✨ 効果"
+      WeatherFooter: "天気は作物の成長速度と突然変異率に影響します。"
+      SeedInventoryTitle: "あなたの種インベントリ"
+      InventoryTitle: "農産物 & 肥料インベントリ"
+      InventoryProduce: "**農産物:**\n"
+      InventoryFertilizer: "\n**肥料:**\n"
+      None: "なし。"
+      QuickSellPlaceholder: "即売却する農産物を選択"
+      FertilizeSuccess: "{plant} に {fertilizer} を正常に使用しました。"
+
+  Bypass:
+    Errors:
+      Unknown: "不明なAPIエラー"
+      UnexpectedStatus: "APIが予期しないステータスを返しました: {status}"
+      NoTaskId: "APIがtask_idを返しませんでした。"
+      Failed: "バイパス失敗: {error}"
+      Timeout: "⏱️ タイムアウト: {time}秒後に結果を取得できませんでした。{status}\n\n💡 リンクが複雑すぎるか、APIが過負荷の可能性があります。後でもう一度お試しください。"
+      Generic: "不明なエラーが発生しました。"
+      ApiKeyHint: "\n\n💡 **ヒント:** `config.yml` のAPIキーを確認してください"
+      UrlHint: "\n\n💡 **ヒント:** URLが有効な対応ショートリンクであることを確認してください"
+    UI:
+      Processing: "⏳ バイパスリクエストを処理中..."
+      Received: "⏳ リクエストを受け付けました！\n📋 タスクID: `{taskId}`\n📍 待ち行列の位置: {queue}\nお待ちください..."
+      StillProcessing: "⏳ 処理中... ({current}s / {max}s)\n📋 タスクID: `{taskId}`\n🔄 ステータス: {status}"
+      SuccessTitle: "✅ バイパス成功！"
+      SuccessDesc: "リンクのバイパスに成功しました。"
+      OriginalLink: "元のリンク"
+      BypassedLink: "バイパスされたリンク"
+      ProcessTime: "処理時間"
+      Footer: "Powered by meobypass.click"
+      FailTitle: "❌ バイパス失敗"
+      TriedUrl: "試したURL"
+
+  System:
+    Prefix:
+      Errors:
+        Spaces: "プレフィックスにスペースを含めることはできません。"
+      UI:
+        Updated: "プレフィックス更新"
+        UpdatedDesc: "このサーバーのプレフィックスが `{prefix}` に設定されました"
+        Reset: "プレフィックスリセット"
+        ResetDesc: "このサーバーのプレフィックスがデフォルトの `k` にリセットされました"
+        Current: "現在のプレフィックス"
+        CurrentDesc: "このサーバーの現在のプレフィックスは `{prefix}` です"
+        RequestedBy: "{user} によるリクエスト"
+
+  Help:
+    Errors:
+      NotReady: "⏳ コマンドを登録中です。後でもう一度お試しください。"
+      NotFound: "❌ コマンド `{command}` が見つかりません\n💡 `/help` ですべてのコマンドを表示します。"
+      Generic: "❌ エラーが発生しました！"
+    UI:
+      NoDesc: "説明なし"
+      Greeting: "こんにちは **{user}**! 👋\n\n"
+      Desc: "> **KentaBucket** は多目的Discordボットです。\n> コマンドの詳細を見るには `/help command:<name>` を使用してください\n\n"
+      Links: "🔗 [サポート](https://discord.gg/96hgDj4b4j) • [ボットを招待]({invite})\n\n**━━━━━━━━━━━━━━━━━━━━**\n\n"
+      Title: "📖 コマンドリスト"
+      PageFooter: "ページ {current}/{total} • 合計 {count} コマンド"
+      CommandDesc: "**📝 説明:**\n{desc}\n\n"
+      Usage: "**💡 使用法:** `{usage}`\n\n"
+      Options: "**⚙️ オプション:**\n"
+      Required: "`[必須]`"
+      Optional: "`[任意]`"
+      Values: "  値: {values}\n"
+      DetailTitle: "📘 詳細: /{command}"
+      BackFooter: "リストに戻るには下のボタンをクリックしてください"
+      ButtonPrev: "◀ 前へ"
+      ButtonNext: "次へ ▶"
+      ButtonBack: "↩ リストに戻る"
+
+  AFK:
+    Errors:
+      NoPermission: "このコマンドを使用する権限がありません。"
+      InvalidDuration: "⚠️ 無効な時間形式です！例：1h, 30m, 1h 30m"
+      AlreadyAFK: "すでにAFK状態です！"
+      NotAFK: "現在AFK状態ではありません！"
+    UI:
+      SetAFKSuccessTitle: "⌛ AFK状態（オン）"
+      SetAFKSuccessDesc: "**💤 AFK状態が有効になりました**"
+      Reason: "📝 理由"
+      StartTime: "⏰ 開始時間"
+      ReturnTime: "🔙 戻り予定"
+      Footer: "戻ってきたときにお知らせします"
+      WelcomeBackTitle: "👋 おかわりなさい！"
+      WelcomeBackDesc: "**👋 おかわりなさい！**\n\n*{duration}の間、離席していました*"
+      WelcomeBackFallback: "👋 おかわりなさい **{username}**！ {duration} AFKでした"
+      AFKDuration: "⏱️ AFK期間"
+      ReasonField: "📝 前回の理由"
+      WelcomeBackFooter: "AFK状態は自動的に解除されました"
+      UserAFKTitle: "{username} はAFK中です"
+      UserAFKDesc: "**💤 このユーザーは現在離席しています**"
+      UserAFKFooter: "彼らが戻ってきたときにメッセージが届きます"
+
+  Chatbot:
+    Errors:
+      Config: "⚠️ **GEMINI_API_KEY** が不足しています。\n\nAPIキーを設定してください。"
+      API: "🔧 **モデルが無効か、APIが変更されました**"
+      Auth: "🔑 **APIキーが無効か、権限がありません**"
+      Unknown: "⚠️ **不明なエラーが発生しました**"
+      Timeout: "⏱️ **リクエストがタイムアウトしました**"
+    UI:
+      ThinkingTitle: "🤖 AIが考え中..."
+      ThinkingDesc: "**あなたの質問：**\n> {prompt}"
+      ThinkingFooter: "⏳ リクエストを処理中..."
+      ResponseTitle: "💬 回答"
+      ResponseFooter: "モデル: {model} • 時間: {time}秒 •長さ: {chars}文字"
+      Disabled: "このコマンドは現在無効になっています。"
+
+  Autoresponder:
+    Errors:
+      AlreadyExists: "トリガー `{trigger}` を持つ自動応答はすでに存在します。"
+      NotFound: "このトリガーの自動応答は見つかりませんでした。"
+      InvalidEdit: "編集するには少なくとも1つのオプションを指定する必要があります。"
+      ConflictError: "新しい添付ファイルを追加しながら同時に既存のものを削除することはできません。"
+    UI:
+      AddSuccess: "トリガー `{trigger}` の自動応答を作成しました。"
+      EditSuccess: "トリガー `{trigger}` の自動応答を更新しました。"
+      DeleteSuccess: "トリガー `{trigger}` の自動応答を削除しました。"
+      ListTitle: "自動応答リスト"
+      ListEmpty: "このサーバーには自動応答がありません。"
+      ViewTitle: "自動応答: {trigger}"
+      ViewMode: "モード"
+      ViewIgnoreCase: "大文字小文字無視"
+      ViewAttachment: "添付ファイルURL"
+      ModeUpdateSuccess: "トリガー `{trigger}` のモードを `{mode}` に更新しました。"
+      PlaceholdersTitle: "プレースホルダーと関数"
+      PlaceholdersDesc: "使用できるプレースホルダーと関数のリストはこちらです。"
