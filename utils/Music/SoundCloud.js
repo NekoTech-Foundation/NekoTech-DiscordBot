@@ -2,6 +2,7 @@ const youtubedl = require('youtube-dl-exec');
 const axios = require('axios');
 const config = require('./config');
 const { getLang } = require('../langLoader');
+const ffmpegPath = require('ffmpeg-static');
 
 class SoundCloud {
     // SoundCloud no longer requires client ID, we'll use yt-dlp directly
@@ -25,6 +26,7 @@ class SoundCloud {
                 flatPlaylist: true,
                 noCheckCertificates: true,
                 noWarnings: true,
+                ffmpegLocation: ffmpegPath,
             });
 
             if (!results || !results.entries) {
@@ -91,6 +93,7 @@ class SoundCloud {
                 getUrl: true,
                 noCheckCertificates: true,
                 noWarnings: true,
+                ffmpegLocation: ffmpegPath,
             });
 
             if (!result) {
@@ -118,6 +121,7 @@ class SoundCloud {
                 flatPlaylist: true,
                 noCheckCertificates: true,
                 noWarnings: true,
+                ffmpegLocation: ffmpegPath,
             });
 
             if (!result || !result.entries) {
@@ -164,6 +168,7 @@ class SoundCloud {
                 playlistEnd: limit,
                 noCheckCertificates: true,
                 noWarnings: true,
+                ffmpegLocation: ffmpegPath,
             });
 
             if (!result || !result.entries) {

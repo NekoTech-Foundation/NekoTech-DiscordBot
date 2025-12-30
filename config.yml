@@ -280,32 +280,31 @@ Giveaways:
 # ===========================================================================
 MusicBot:
   Spotify:
-    ClientID: 'd1f2359406bb44efa9a7e8556f1d67d5'
-    ClientSecret: '0e9f0bb1ce5548d4834f4fc468c86f89'
-  
+    ClientID: "d1f2359406bb44efa9a7e8556f1d67d5"
+    ClientSecret: "0e9f0bb1ce5548d4834f4fc468c86f89"
+
   Genius:
-    ClientID: ''
-    ClientSecret: ''
+    ClientID: ""
+    ClientSecret: ""
 
   Settings:
-    DefaultVolume: 100
+    DefaultVolume: 50
     MaxQueueSize: 100
     MaxPlaylistSize: 50
-    Status: '🎵 NekoMusic | /play'
-    SupportServer: 'https://discord.gg/96hgDj4b4j'
-    Website: 'https://nekocomics.xyz'
-  
+    Status: ""
+    SupportServer: "https://discord.gg/96hgDj4b4j"
+    Website: "https://nekocomics.xyz"
+
   Audio:
-    Quality: 'highestaudio'
-    Format: 'mp3'
+    Quality: "highestaudio"
+    Format: "mp3"
     Bitrate: 320
-  
+
   YTDL:
     CookiesFromBrowser: null # 'chrome', 'firefox', 'edge'
     CookiesFile: null # './cookies.txt'
-  
+
   Sharding:
     Enabled: false
-    TotalShards: 'auto'
-    Mode: 'process'
-
+    TotalShards: "auto"
+    Mode: "process"
