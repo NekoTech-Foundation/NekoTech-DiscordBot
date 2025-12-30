@@ -308,3 +308,20 @@ MusicBot:
     Enabled: false
     TotalShards: "auto"
     Mode: "process"
+
+# ===========================================================================
+# ACTIVITY SETTINGS
+# ===========================================================================
+ActivitySettings:
+  Enabled: true
+  Interval: 10000
+  Activities:
+    - Type: "PLAYING"
+      Status: "online"
+      Text: "KentaBucket | /help"
+    - Type: "WATCHING"
+      Status: "online"
+      Text: "{total-users} users"
+    - Type: "LISTENING"
+      Status: "online"
+      Text: "Music"

@@ -6,17 +6,19 @@ const packageFile = require('../package.json');
 const GuildData = require('../models/guildDataSchema');
 const Verification = require('../models/verificationSchema');
 const Ticket = require('../models/tickets');
-const BotActivity = require('../models/BotActivity');
 // const { handleVerification } = require('../events/Verification/VerificationEvent');
 const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
 const botStartTime = Date.now();
 
 const { getConfig } = require('../utils/configLoader.js');
-const config = getConfig();
+
+let currentActivityIndex = 0;
 
 const updateActivity = async (client) => {
-    const botActivityData = await BotActivity.findOne({ botId: 'global_settings' });
-    if (!botActivityData || botActivityData.activities.length === 0) {
+    const config = getConfig(); // Reload config to get latest updates
+    const settings = config.ActivitySettings;
+
+    if (!settings || !settings.Enabled || !settings.Activities || settings.Activities.length === 0) {
         client.user.setPresence({
             activities: [{ name: 'NekoTech', type: ActivityType.Watching }],
             status: 'online',
@@ -24,33 +26,33 @@ const updateActivity = async (client) => {
         return;
     }
 
-    const activity = botActivityData.activities[botActivityData.lastActivityIndex || 0];
-    botActivityData.lastActivityIndex = (botActivityData.lastActivityIndex + 1) % botActivityData.activities.length;
-    await botActivityData.save();
+    const activity = settings.Activities[currentActivityIndex];
+    currentActivityIndex = (currentActivityIndex + 1) % settings.Activities.length;
 
     const totalUsers = client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
     const totalChannels = client.guilds.cache.reduce((acc, guild) => acc + guild.channels.cache.size, 0);
     const onlineMembers = client.guilds.cache.reduce((acc, guild) => acc + guild.members.cache.filter(member => member.presence?.status === 'online').size, 0);
     const totalBoosts = client.guilds.cache.reduce((acc, guild) => acc + guild.premiumSubscriptionCount, 0);
 
-    let status = activity.status;
-    status = status.replace(/{total-users}/g, totalUsers);
-    status = status.replace(/{total-channels}/g, totalChannels);
-    status = status.replace(/{online-members}/g, onlineMembers);
-    status = status.replace(/{uptime}/g, moment.duration(client.uptime).humanize());
-    status = status.replace(/{total-boosts}/g, totalBoosts);
+    let statusText = activity.Text;
+    statusText = statusText.replace(/{total-users}/g, totalUsers);
+    statusText = statusText.replace(/{total-channels}/g, totalChannels);
+    statusText = statusText.replace(/{online-members}/g, onlineMembers);
+    statusText = statusText.replace(/{uptime}/g, moment.duration(client.uptime).humanize());
+    statusText = statusText.replace(/{total-boosts}/g, totalBoosts);
 
     client.user.setPresence({
         activities: [{
-            name: status,
-            type: ActivityType[activity.activityType],
-            url: activity.streamingURL,
+            name: statusText,
+            type: ActivityType[activity.Type] || ActivityType.Playing,
+            url: activity.URL || null,
         }],
-        status: activity.statusType,
+        status: activity.Status || 'online',
     });
 };
 
 module.exports = async client => {
+    const config = getConfig();
     console.log(colors.green(`[INFO] ${client.user.tag} is online!`));
     console.log(colors.cyan(`[INFO] Bot Version: ${packageFile.version}`));
     console.log(colors.cyan(`[INFO] Node.js Version: ${process.version}`));
@@ -105,6 +107,13 @@ module.exports = async client => {
         }
     });
 
-    setInterval(() => updateActivity(client), 60000);
+    // Initial update
     updateActivity(client);
+
+    // Set interval based on config or default to 60s
+    let intervalTime = config.ActivitySettings?.Interval || 60000;
+    // ensure minimum 10s to avoid api spam
+    if (intervalTime < 10000) intervalTime = 10000;
+
+    setInterval(() => updateActivity(client), intervalTime);
 };
