@@ -11,16 +11,16 @@ async function handleError(error, context) {
     const errorStack = error.stack || error.message || String(error);
     const cleanError = errorStack.length > 1900 ? errorStack.substring(0, 1900) + '...' : errorStack;
 
-    const content = `❌ **Đã xảy ra lỗi khi thực hiện lệnh!**\n\n\`\`\`js\n${cleanError}\n\`\`\``;
+    const content = `❌ **${global.lang.Errors.Generic}**\n\n\`\`\`js\n${cleanError}\n\`\`\``;
 
     const row = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()
-                .setLabel('Báo Lỗi (Support Server)')
+                .setLabel(global.lang.Errors.ReportButton)
                 .setStyle(ButtonStyle.Link)
                 .setURL('https://discord.gg/96hgDj4b4j'),
             new ButtonBuilder()
-                .setLabel('Server Chính')
+                .setLabel(global.lang.Errors.SupportServerButton)
                 .setStyle(ButtonStyle.Link)
                 .setURL('https://dsc.gg/nekocomics')
         );

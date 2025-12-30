@@ -1,6 +1,11 @@
 NoPermsMessage: "You do not have permission to use this command."
 SuccessEmbedTitle: "Success"
 ErrorEmbedTitle: "An error occurred"
+Errors:
+  Title: "An error occurred"
+  Generic: "An error occurred while executing the command, please try again later!"
+  ReportButton: "Report Error (Support Server)"
+  SupportServerButton: "Main Server"
 
 # ===========================================================================
 # HELP COMMAND MESSAGES
@@ -831,6 +836,38 @@ Economy:
     withdraw: "🏧 **Withdrawal Details** \n\n💰 You withdrew **{coins}** 🪙 from the bank. Spend wisely!"
     deposit: "💸 **Deposit Successful**\n\n{user}, you deposited {balance} 🪙 into your bank account! Saving for a rainy day?"
     targetRob: "🥷 **Robbery**\n\n🚫 Your target doesn't have enough money to rob."
+    cooldown: "⏰ **Cooldown**\n\n⏳ You can use this command again <t:{nextUse}:R>. Be patient!"
+    noBoosters: "🚫 You don't have any active boosters. Time to get some!"
+    noMoney: "❌ You don't have enough money for this transaction. Check your balance."
+    invalidAmount: "❌ You entered an invalid amount."
+    noPermission: "🚫 You don't have permission to use this command."
+    adminGive: "🛠️ **Admin: Give** \n\nSuccessfully gave **{amount}** 🪙 to **{user}**.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
+    adminTake: "🛠️ **Admin: Take** \n\nSuccessfully took **{amount}** 🪙 from **{user}**.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
+    adminSet: "🛠️ **Admin: Set** \n\nSuccessfully set balance of **{user}**. Added **{amount}** 🪙.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
+    error: "An unexpected error occurred. Please try again later."
+    paySuccess: "Successfully transferred {amount} to {user}!"
+  Other:
+    Store:
+      Embed:
+        Title: "Store: {shopName}"
+        Color: "#0099ff"
+        Description:
+          - "**{itemCount}. {item}**"
+          - "{description}"
+          - "💰 Price: **{price}**"
+        Footer:
+          Text: "Page {pageCurrent}/{pageMax}"
+    footer: "Balance: {balance} 🪙"
+    transactionLog: "Transaction Log for {user}"
+    gained: "Total Gained"
+    lost: "Total Lost"
+    guess: "Guess"
+    result: "Result"
+    win: "Win"
+    lose: "Lose"
+    rollResult: "Roll Result"
+    outcome: "Outcome"
+    bet: "Your Bet"
     cooldown: "⏰ **Command Cooldown**\n\n⏳ You can use this command again <t:{nextUse}:R>. Patience, my friend!"
     noBoosters: "🚫 You don't have any active boosters. Time to get some!"
     noMoney: "❌ You don't have enough money for this transaction. Check your balance."

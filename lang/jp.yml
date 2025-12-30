@@ -1,6 +1,11 @@
 NoPermsMessage: "このコマンドを使用する権限がありません。"
 SuccessEmbedTitle: "成功"
 ErrorEmbedTitle: "エラーが発生しました"
+Errors:
+  Title: "エラーが発生しました"
+  Generic: "コマンドの実行中にエラーが発生しました。後でもう一度お試しください！"
+  ReportButton: "エラー報告 (サポートサーバー)"
+  SupportServerButton: "メインサーバー"
 
 # ===========================================================================
 # ヘルプコマンドのメッセージ
@@ -798,6 +803,38 @@ Economy:
     withdraw: "🏧 **引き出し詳細** \n\n💰 銀行から**{coins}** 🪙を引き出しました。賢く使いましょう！"
     deposit: "💸 **入金成功**\n\n{user}、銀行口座に{balance} 🪙を入金しました！万が一のために貯金ですか？"
     targetRob: "🥷 **強盗**\n\n🚫 ターゲットには強盗するのに十分なお金がありません。"
+    cooldown: "⏰ **クールダウン**\n\n⏳ あと<t:{nextUse}:R>このコマンドを使用できます。お待ちください！"
+    noBoosters: "🚫 有効なブースターがありません。"
+    noMoney: "❌ 取引に十分な資金がありません。残高を確認してください。"
+    invalidAmount: "❌ 無効な金額を入力しました。"
+    noPermission: "🚫 このコマンドを使用する権限がありません。"
+    adminGive: "🛠️ **管理: 付与** \n\n**{user}** に **{amount}** 🪙 を付与しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
+    adminTake: "🛠️ **管理: 没収** \n\n**{user}** から **{amount}** 🪙 を没収しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
+    adminSet: "🛠️ **管理: 設定** \n\n**{user}** の残高を設定しました。**{amount}** 🪙 を追加しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
+    error: "予期しないエラーが発生しました。後でもう一度お試しください。"
+    paySuccess: "{user} に {amount} を送金しました！"
+  Other:
+    Store:
+      Embed:
+        Title: "ストア: {shopName}"
+        Color: "#0099ff"
+        Description:
+          - "**{itemCount}. {item}**"
+          - "{description}"
+          - "💰 価格: **{price}**"
+        Footer:
+          Text: "ページ {pageCurrent}/{pageMax}"
+    footer: "残高: {balance} 🪙"
+    transactionLog: "{user} の取引履歴"
+    gained: "獲得総額"
+    lost: "損失総額"
+    guess: "予想"
+    result: "結果"
+    win: "勝ち"
+    lose: "負け"
+    rollResult: "サイコロの結果"
+    outcome: "結果"
+    bet: "賭け金"
     cooldown: "⏰ **コマンドクールダウン**\n\n⏳ このコマンドは<t:{nextUse}:R>に再使用できます。我慢してください、友よ！"
     noBoosters: "🚫 アクティブなブースターはありません。いくつか入手する時間です！"
     noMoney: "❌ 取引に必要な資金がありません。残高を確認してください。"

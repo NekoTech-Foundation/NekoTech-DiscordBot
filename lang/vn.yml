@@ -4,6 +4,11 @@
 NoPermsMessage: "Bạn không có quyền sử dụng lệnh này."
 SuccessEmbedTitle: "Thành công"
 ErrorEmbedTitle: "Đã xảy ra lỗi"
+Errors:
+  Title: "Đã xảy ra lỗi"
+  Generic: "Đã có lỗi khi thực thi câu lệnh, hãy thử lại sau!"
+  ReportButton: "Báo Lỗi (Support Server)"
+  SupportServerButton: "Server Chính"
 
 # ===========================================================================
 # TIN NHẮN LỆNH HELP
