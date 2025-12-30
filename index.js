@@ -131,18 +131,9 @@ client.on('interactionCreate', async interaction => {
         try {
             const handled = await pixivAddon.handleButtonInteraction(interaction);
             if (handled) return;
-        } catch (error) {
-            console.error('Error handling Pixiv button interaction:', error);
-            if (!interaction.replied && !interaction.deferred) {
-                try {
-                    await interaction.reply({
-                        content: 'Đã có lỗi khi thực thi câu lệnh, hãy thử lại nhé.',
-                        ephemeral: true
-                    });
-                } catch (replyError) {
-                    console.error('Failed to send Pixiv error reply:', replyError);
-                }
-            }
+    } catch (error) {
+            const { handleError } = require('./utils/errorHandler.js');
+            await handleError(error, interaction);
         }
     }
 
@@ -166,8 +157,8 @@ client.on('interactionCreate', async interaction => {
             await pixiv.bookmarkIllust(illustId);
             return await interaction.editReply({ content: 'Đã lưu ảnh vào bộ sưu tập Pixiv của bạn!' });
         } catch (error) {
-            console.error(error);
-            return await interaction.editReply({ content: 'Không thể lưu ảnh. Có thể bạn đã lưu ảnh này rồi hoặc token đã hết hạn.' });
+            const { handleError } = require('./utils/errorHandler.js');
+            await handleError(error, interaction);
         }
     }
 
@@ -180,12 +171,8 @@ client.on('interactionCreate', async interaction => {
     try {
         await command.execute(interaction);
     } catch (error) {
-        console.error(error);
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'Đã có lỗi khi thực thi câu lệnh, hãy thử lại nhé!', ephemeral: true });
-        } else {
-            await interaction.reply({ content: 'Đã có lỗi khi thực thi câu lệnh, hãy thử lại nhé!', ephemeral: true });
-        }
+        const { handleError } = require('./utils/errorHandler.js');
+        await handleError(error, interaction);
     }
 });
 

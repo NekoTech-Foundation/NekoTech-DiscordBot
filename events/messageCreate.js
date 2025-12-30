@@ -384,6 +384,8 @@ module.exports = async (client, message) => {
                     return message.reply(usageMsg);
                 }
 
+                let sentReply = null;
+
                 const fakeInteraction = {
                     user: message.author,
                     member: message.member,
@@ -397,25 +399,24 @@ module.exports = async (client, message) => {
                     isSelectMenu: () => false,
                     isModalSubmit: () => false,
                     reply: async (content) => {
-                        if (typeof content === 'string') {
-                            return message.reply(content);
-                        }
-                        return message.reply(content);
+                        sentReply = await message.reply(content);
+                        return sentReply;
                     },
                     editReply: async (content) => {
-                        if (typeof content === 'string') {
-                            return message.channel.send(content);
+                        if (sentReply) {
+                            return sentReply.edit(content);
                         }
-                        return message.channel.send(content);
+                        sentReply = await message.channel.send(content);
+                        return sentReply;
                     },
+                    fetchReply: async () => sentReply,
                     deferReply: async () => {
                         await message.channel.sendTyping();
                     },
                     followUp: async (content) => {
-                        if (typeof content === 'string') {
-                            return message.channel.send(content);
-                        }
-                        return message.channel.send(content);
+                         const msg = await message.channel.send(content);
+                         // followUp usually returns the new message, doesn't affect main reply
+                         return msg;
                     },
                     options: {
                         _parsed: parsedOptions,
@@ -463,8 +464,8 @@ module.exports = async (client, message) => {
 
                 await slashCommand.execute(fakeInteraction, client);
             } catch (error) {
-                console.error(`Error executing slash command ${slashCommand.data.name} via prefix:`, error);
-                message.reply('There was an error trying to execute that command!');
+                const { handleError } = require('../utils/errorHandler.js');
+                await handleError(error, message);
             }
             return;
         }
@@ -1132,14 +1133,17 @@ async function processCustomCommands(client, message) {
                 try {
                     await message.delete();
                 } catch (error) {
-                    console.error(`Error deleting message: ${error}`);
+                    const { handleError } = require('../utils/errorHandler.js');
+                    await handleError(error, message);
                 }
             }
         } catch (error) {
-            console.error('Error sending message:', error);
+            const { handleError } = require('../utils/errorHandler.js');
+            await handleError(error, message);
         }
     } catch (error) {
-        console.error('Error processing custom commands:', error);
+        const { handleError } = require('../utils/errorHandler.js');
+        await handleError(error, message);
     }
 }
 
