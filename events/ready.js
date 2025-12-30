@@ -7,7 +7,7 @@ const GuildData = require('../models/guildDataSchema');
 const Verification = require('../models/verificationSchema');
 const Ticket = require('../models/tickets');
 const BotActivity = require('../models/BotActivity');
-const { handleVerification } = require('../events/Verification/VerificationEvent');
+// const { handleVerification } = require('../events/Verification/VerificationEvent');
 const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
 const botStartTime = Date.now();
 
@@ -84,7 +84,7 @@ module.exports = async client => {
             }
 
             await createUnverifiedRoleIfNeeded(guild, verificationData);
-            await handleVerification(client, guild);
+            // await handleVerification(client, guild);
         } catch (error) {
             console.error(`Failed to initialize verification for guild ${guild.id}: ${error}`);
         }

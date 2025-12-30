@@ -497,7 +497,7 @@ module.exports = {
                     row.addComponents(
                         new ButtonBuilder()
                             .setCustomId(`ttt_${idx}`)
-                            .setLabel(board[idx] === TTT_EMPTY ? ' ' : board[idx] === TTT_X ? 'X' : 'O')
+                            .setLabel(board[idx] === TTT_EMPTY ? '\u200b' : board[idx] === TTT_X ? 'X' : 'O')
                             .setStyle(board[idx] === TTT_EMPTY ? ButtonStyle.Secondary : (board[idx] === TTT_X ? ButtonStyle.Danger : ButtonStyle.Success))
                             .setDisabled(disabled || board[idx] !== TTT_EMPTY)
                     );

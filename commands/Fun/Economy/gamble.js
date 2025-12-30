@@ -7,7 +7,30 @@ const lang = getLang();
 const parseDuration = require('./Utility/parseDuration');
 const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
 
-// --- Helper Functions ---
+// --- Quotes ---
+const winQuotes = [
+    "Thần bài nhập rồi! 🎰",
+    "Tiền về túi ai? Túi bạn chứ ai! 💸",
+    "Đỏ hơn son, chúc mừng đại gia! 💎",
+    "Hôm nay trời đẹp, kèo thơm quá! ☀️",
+    "Tuyệt vời ông mặt trời! 🌈",
+    "Được ăn cả, ngã... vào lòng đại gia! 🤑"
+];
+
+const loseQuotes = [
+    "Đen thôi, đỏ quên đi... 🥀",
+    "Còn cái nịt cũng phải đánh! 😭",
+    "Thua keo này ta bày keo khác! 💪",
+    "Ra đê mà ở thật rồi... 🏠",
+    "Vận may đang tắc đường thôi! 🚦",
+    "Đừng buồn, admin vẫn yêu bạn... (chắc thế) 💔"
+];
+
+function getRandomQuote(isWin) {
+    const list = isWin ? winQuotes : loseQuotes;
+    return list[Math.floor(Math.random() * list.length)];
+}
+
 function getRandomMessage(messages) {
     return messages[Math.floor(Math.random() * messages.length)];
 }
@@ -160,7 +183,8 @@ module.exports = {
             const last = user.commandData[key];
             const duration = parseDuration(durationStr);
             if (last && duration > 0) {
-                const next = new Date(last.getTime() + duration);
+                const lastTime = new Date(last).getTime();
+                const next = new Date(lastTime + duration);
                 if (now < next) return next;
             }
             return null;
@@ -207,15 +231,18 @@ module.exports = {
                 
                 const attachment = await createBlackjackCanvas(playerHand, dealerHand);
                  const embed = new EmbedBuilder()
-                    .setTitle(`Xì Dách - ${title} (Blackjack!)`)
-                    .setDescription(`**${user.userId === interaction.user.id ? 'Bạn' : `<@${user.userId}>`}** có Blackjack!`)
+                    .setAuthor({ name: 'Kết Quả Xì Dách (Blackjack)', iconURL: interaction.user.displayAvatarURL() })
+                    .setTitle(`${title} (Blackjack!)`)
+                    .setDescription(`**${user.userId === interaction.user.id ? 'Bạn' : `<@${user.userId}>`}** đã đạt Blackjack! 🃏\n\n*${getRandomQuote(true)}*`)
                     .addFields(
                         { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                        { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                        { name: '💵 Kết quả', value: `+${winnings.toLocaleString()}`, inline: true },
-                        { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                        { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                        { name: '💵 Thắng', value: `**+${winnings.toLocaleString()}**`, inline: true },
+                        { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
                     )
-                    .setColor(color);
+                    .setColor(color)
+                    .setThumbnail('https://cdn-icons-png.flaticon.com/512/1068/1068224.png') // Blackjack Icon
+                    .setTimestamp();
                 return interaction.editReply({ embeds: [embed], files: [attachment] });
             }
 
@@ -244,15 +271,18 @@ module.exports = {
                         const att = await createBlackjackCanvas(playerHand, dealerHand);
                         
                         const embed = new EmbedBuilder()
-                            .setTitle('Xì Dách - Thua (Quắc)')
+                            .setAuthor({ name: 'Kết Quả Xì Dách', iconURL: interaction.user.displayAvatarURL() })
+                            .setTitle('Thua (Bust)')
                             .setColor('#FF0000')
-                            .setDescription(`Bạn đã quắc (Bust)!`)
+                            .setDescription(`Oops! Bạn đã rút quá 21 điểm (Quắc)! 💥\n\n*${getRandomQuote(false)}*`)
                             .addFields(
                                 { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                                { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                                { name: '💵 Mất', value: `-${bet.toLocaleString()}`, inline: true },
-                                { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
-                            );
+                                { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                                { name: '💸 Mất', value: `**-${bet.toLocaleString()}**`, inline: true },
+                                { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
+                            )
+                            .setThumbnail('https://cdn-icons-png.flaticon.com/512/1618/1618367.png') // Bust Icon
+                            .setTimestamp();
 
                         interaction.editReply({ embeds: [embed], files: [att], components: [] });
                         return;
@@ -305,18 +335,21 @@ module.exports = {
                     const color = win ? '#00FF00' : draw ? '#FFFF00' : '#FF0000';
                     const title = win ? 'Thắng' : draw ? 'Hòa' : 'Thua';
                     
-                    const resultMoney = win ? `+${(finalBet + (finalBet * (multiplier - 1) * booster) - finalBet).toLocaleString()}` : draw ? '0' : `-${finalBet.toLocaleString()}`;
+                    const resultMoneyStr = win ? `**+${(finalBet + (finalBet * (multiplier - 1) * booster) - finalBet).toLocaleString()}**` : draw ? '**0**' : `**-${finalBet.toLocaleString()}**`;
 
                     const embed = new EmbedBuilder()
-                        .setTitle(`Xì Dách - ${title}`)
+                        .setAuthor({ name: 'Kết Quả Xì Dách', iconURL: interaction.user.displayAvatarURL() })
+                        .setTitle(title)
                         .setColor(color)
-                        .setDescription(`Bạn: **${pVal}** - Nhà cái: **${dVal}**`)
+                        .setDescription(`**Bạn:** ${pVal} 🆚 **Nhà cái:** ${dVal}\n\n*${win ? getRandomQuote(true) : draw ? 'Không thắng không thua, đời không nể!' : getRandomQuote(false)}*`)
                         .addFields(
                             { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                            { name: '💰 Cược', value: `${finalBet.toLocaleString()}`, inline: true },
-                            { name: '💵 Kết quả', value: resultMoney, inline: true },
-                            { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
-                        );
+                            { name: '💰 Cược', value: `\`${finalBet.toLocaleString()}\``, inline: true },
+                            { name: '💵 Kết quả', value: resultMoneyStr, inline: true },
+                            { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
+                        )
+                        .setThumbnail(win ? 'https://cdn-icons-png.flaticon.com/512/755/755195.png' : 'https://cdn-icons-png.flaticon.com/512/1008/1008953.png')
+                        .setTimestamp();
 
                     interaction.editReply({ 
                         embeds: [embed],
@@ -342,15 +375,18 @@ module.exports = {
              await user.save();
              
              const embed = new EmbedBuilder()
-                 .setTitle(win ? 'Thắng Coinflip!' : 'Thua Coinflip!')
-                 .setDescription(`Kết quả: **${result === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}**\nBạn chọn: **${guess === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}**`)
+                 .setAuthor({ name: 'Kết Quả Coinflip', iconURL: interaction.user.displayAvatarURL() })
+                 .setTitle(win ? 'Thắng Lớn! 🎉' : 'Thất Bại! 🥀')
+                 .setDescription(`Kết quả: **${result === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}**\nBạn chọn: **${guess === 'heads' ? 'Mặt Sấp' : 'Mặt Ngửa'}**\n\n*${getRandomQuote(win)}*`)
                  .addFields(
                     { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                    { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                    { name: '💵 Kết quả', value: win ? `+${amount.toLocaleString()}` : `${amount.toLocaleString()}`, inline: true },
-                    { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                    { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                    { name: '💵 Kết quả', value: win ? `**+${amount.toLocaleString()}**` : `**${amount.toLocaleString()}**`, inline: true },
+                    { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
                  )
-                 .setColor(win ? '#00FF00' : '#FF0000');
+                 .setColor(win ? '#00FF00' : '#FF0000')
+                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/1490/1490817.png')
+                 .setTimestamp();
              interaction.reply({ embeds: [embed] });
 
         } else if (subcommand === 'roll') {
@@ -373,15 +409,18 @@ module.exports = {
              await user.save();
 
              interaction.reply({ embeds: [new EmbedBuilder()
-                 .setTitle(win ? 'Thắng Roll!' : 'Thua Roll!')
-                 .setDescription(`Xúc xắc: **${roll}**. Bạn chọn: **${guess}**\n${win ? `Ăn ${bet * multiplier}` : `Mất ${bet}`}`)
+                 .setAuthor({ name: 'Kết Quả Xúc Xắc (Roll)', iconURL: interaction.user.displayAvatarURL() })
+                 .setTitle(win ? 'Lăn Trúng Thưởng! 🎲' : 'Xúc Xắc Phản Bội! 🎲')
+                 .setDescription(`Xúc xắc: **${roll}**\nBạn chọn: **${guess === 'low' ? 'Thấp (1-50)' : 'Cao (51-100)'}**\n\n*${getRandomQuote(win)}*`)
                  .addFields(
                     { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                    { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                    { name: '💵 Kết quả', value: win ? `+${(bet * multiplier).toLocaleString()}` : `-${bet.toLocaleString()}`, inline: true },
-                    { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                    { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                    { name: '💵 Kết quả', value: win ? `**+${(bet * multiplier).toLocaleString()}**` : `**-${bet.toLocaleString()}**`, inline: true },
+                    { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
                  )
-                 .setColor(win ? '#00FF00' : '#FF0000')] });
+                 .setColor(win ? '#00FF00' : '#FF0000')
+                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/2821/2821898.png')
+                 .setTimestamp()] });
 
         } else if (subcommand === 'roulette') {
              const nextUse = checkCooldown('lastRoulette', config.Economy.Roulette.cooldown);
@@ -399,27 +438,33 @@ module.exports = {
                  user.balance += winnings;
                  user.transactionLogs.push({ type: 'roulette', amount: winnings - bet, timestamp: now });
                  interaction.reply({ embeds: [new EmbedBuilder()
-                    .setTitle('Thắng Roulette!')
-                    .setDescription(`Về **${result}**! Bạn ăn **${winnings.toLocaleString()}**`)
+                    .setAuthor({ name: 'Vòng Quay Roulette', iconURL: interaction.user.displayAvatarURL() })
+                    .setTitle('Thắng Roulette! 🎉')
+                    .setDescription(`Bóng lăn vào ô: **${result.toUpperCase()}**\nBạn chọn: **${color.toUpperCase()}**\n\n*${getRandomQuote(true)}*`)
                     .addFields(
                         { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                        { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                        { name: '💵 Thắng', value: `+${winnings.toLocaleString()}`, inline: true },
-                        { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                        { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                        { name: '💵 Thắng', value: `**+${winnings.toLocaleString()}**`, inline: true },
+                        { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
                     )
-                    .setColor('#00FF00')] });
+                    .setColor('#00FF00')
+                    .setThumbnail('https://cdn-icons-png.flaticon.com/512/1055/1055905.png')
+                    .setTimestamp()] });
              } else {
                  user.transactionLogs.push({ type: 'roulette', amount: -bet, timestamp: now });
                  interaction.reply({ embeds: [new EmbedBuilder()
-                    .setTitle('Thua Roulette!')
-                    .setDescription(`Về **${result}**! Bạn mất **${bet.toLocaleString()}**`)
+                    .setAuthor({ name: 'Vòng Quay Roulette', iconURL: interaction.user.displayAvatarURL() })
+                    .setTitle('Thua Roulette! 🥀')
+                    .setDescription(`Bóng lăn vào ô: **${result.toUpperCase()}**\nBạn chọn: **${color.toUpperCase()}**\n\n*${getRandomQuote(false)}*`)
                     .addFields(
                         { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                        { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                        { name: '💵 Mất', value: `-${bet.toLocaleString()}`, inline: true },
-                        { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                        { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                        { name: '💸 Mất', value: `**-${bet.toLocaleString()}**`, inline: true },
+                        { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
                     )
-                    .setColor('#FF0000')] });
+                    .setColor('#FF0000')
+                    .setThumbnail('https://cdn-icons-png.flaticon.com/512/1055/1055905.png')
+                    .setTimestamp()] });
              }
              await user.save();
 
@@ -440,15 +485,18 @@ module.exports = {
              await user.save();
              
              interaction.reply({ embeds: [new EmbedBuilder()
-                 .setTitle('Slots')
-                 .setDescription(`🎰 ${r.join(' ')} 🎰\n\n${win ? `JACKPOT! Thắng **${amount.toLocaleString()}**` : `Thua **${bet.toLocaleString()}**`}`)
+                 .setAuthor({ name: 'Máy Slots (Xèng)', iconURL: interaction.user.displayAvatarURL() })
+                 .setTitle(win ? 'JACKPOT! Nổ Hũ! 🎰' : 'Chúc Bạn May Mắn Lần Sau...')
+                 .setDescription(`🎰 | ${r.join(' | ')} | 🎰\n\n*${getRandomQuote(win)}*`)
                  .addFields(
                     { name: '👤 Người chơi', value: `<@${interaction.user.id}>`, inline: true },
-                    { name: '💰 Cược', value: `${bet.toLocaleString()}`, inline: true },
-                    { name: '💵 Kết quả', value: win ? `+${amount.toLocaleString()}` : `${amount.toLocaleString()}`, inline: true },
-                    { name: '💳 Số dư mới', value: `${user.balance.toLocaleString()}`, inline: true }
+                    { name: '💰 Cược', value: `\`${bet.toLocaleString()}\``, inline: true },
+                    { name: '💵 Kết quả', value: win ? `**+${amount.toLocaleString()}**` : `**${amount.toLocaleString()}**`, inline: true },
+                    { name: '💳 Số dư mới', value: `\`${user.balance.toLocaleString()}\``, inline: true }
                  )
-                 .setColor(win ? '#00FF00' : '#FF0000')] });
+                 .setColor(win ? '#00FF00' : '#FF0000')
+                 .setThumbnail('https://cdn-icons-png.flaticon.com/512/1068/1068228.png')
+                 .setTimestamp()] });
         }
     }
 };

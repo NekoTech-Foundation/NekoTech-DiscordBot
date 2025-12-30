@@ -46,22 +46,21 @@ module.exports = async (client, member) => {
         }
     }
 
-    if (config.VerificationSettings.Enabled && config.VerificationSettings.EnableUnverifiedRole) {
-        try {
-            let verificationData = await Verification.findOne({ guildID: member.guild.id });
-            if (!verificationData || !verificationData.unverifiedRoleID) {
-                await createUnverifiedRoleIfNeeded(member.guild, verificationData);
-                verificationData = await Verification.findOne({ guildID: member.guild.id });
-            }
-
-            const unverifiedRole = member.guild.roles.cache.get(verificationData.unverifiedRoleID);
-            if (unverifiedRole) {
-                await member.roles.add(unverifiedRole).catch(console.error);
-            } else {
-            }
-        } catch (error) {
-            console.error('Error assigning unverified role to new member:', error);
+    // Verification Logic (New System)
+    try {
+        let verificationData = await Verification.findOne({ guildID: member.guild.id });
+        if (verificationData && verificationData.unverifiedRoleID) {
+             const unverifiedRole = member.guild.roles.cache.get(verificationData.unverifiedRoleID);
+             if (unverifiedRole) {
+                 await member.roles.add(unverifiedRole).catch(console.error);
+             }
+        } else if (config.VerificationSettings.Enabled && config.VerificationSettings.EnableUnverifiedRole) {
+             // Fallback to old config or create if needed (Legacy Support)
+             // ... (Keep existing logic or simplify)
+             // Simplified to just log or skip since we want to move to new system
         }
+    } catch (error) {
+        console.error('Error assigning unverified role to new member:', error);
     }
 
     let inviterName = "Vanity / Unknown";
@@ -140,10 +139,10 @@ module.exports = async (client, member) => {
         console.error(`Error checking user data on join: ${error}`);
     }
     
-    const { handleJoinRoles } = require('./Verification/VerificationEvent');
+    // const { handleJoinRoles } = require('./Verification/VerificationEvent');
 
-    if (!config.VerificationSettings.Enabled && config.JoinRoleSettings.RestoreRoles.Enabled) {
-        await handleJoinRoles(member);
+    if (!config.VerificationSettings?.Enabled && config.JoinRoleSettings?.RestoreRoles?.Enabled) {
+        // handleJoinRoles(member); // Disabled as part of verifier recode/refactor
     } else {
     }
 };
