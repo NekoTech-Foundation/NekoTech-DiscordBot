@@ -4,7 +4,7 @@ const yaml = require('js-yaml');
 const path = require('path');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
-const lang = getLang();
+
 const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
@@ -48,6 +48,7 @@ module.exports = {
     category: 'Economy',
 
     async execute(interaction) {
+        const lang = await getLang(interaction.guildId);
         try {
             const category = interaction.options.getString('category');
 
@@ -80,8 +81,18 @@ module.exports = {
                 const end = start + itemsPerPage;
                 return items.slice(start, end).map((item, index) => {
                     // Safely handle missing description array
-                    const descriptionTemplate = lang.Economy?.Other?.Store?.Embed?.Description || [];
+                    let descriptionTemplate = lang.Economy?.Other?.Store?.Embed?.Description;
                     
+                    if (!descriptionTemplate) {
+                        console.log('[DEBUG Store] Missing description template, using fallback.');
+                        descriptionTemplate = ['{itemCount}. {item} - {price}'];
+                    }
+
+                    if (!Array.isArray(descriptionTemplate)) {
+                         console.log('[DEBUG Store] descriptionTemplate is not array, wrapping.');
+                         descriptionTemplate = [descriptionTemplate];
+                    }
+
                     let stockDisplay = '';
                     if (item.Stock !== undefined) {
                         if (item.Stock > 0) {
@@ -91,10 +102,20 @@ module.exports = {
                         }
                     }
 
+                    const localizedItemName = lang.Economy?.Other?.Store?.Items?.[item.Key] || item.Name || 'Unknown Item';
+
+                    let descriptionText = item.Description || 'No description';
+                    if (item.Type === 'Seed' && item.GrowthTime) {
+                        const template = lang.Economy?.Other?.Store?.SeedDescription;
+                        if (template) {
+                             descriptionText = replacePlaceholders(template, { time: item.GrowthTime / 60000 });
+                        }
+                    }
+
                     return descriptionTemplate.map(line => replacePlaceholders(line, {
                         itemCount: `${start + index + 1}`,
-                        item: item.Name || 'Unknown Item',
-                        description: (item.Description || 'No description') + stockDisplay,
+                        item: localizedItemName,
+                        description: descriptionText + stockDisplay,
                         price: item.Price || 0
                     })).join('\n');
                 }).join('\n\n');
@@ -103,9 +124,11 @@ module.exports = {
             const createEmbed = (currentPage) => {
                 const embedConfig = lang.Economy?.Other?.Store?.Embed || {};
                 const embed = new EmbedBuilder().setColor(embedConfig.Color || '#0099ff');
+                
+                const localizedCategoryName = lang.Economy?.Other?.Store?.Categories?.[category] || category;
 
                 if (embedConfig.Title) {
-                    embed.setTitle(replacePlaceholders(embedConfig.Title, { shopName: category }));
+                    embed.setTitle(replacePlaceholders(embedConfig.Title, { shopName: localizedCategoryName }));
                 }
 
                 const itemList = getItemList(currentPage);

@@ -38,7 +38,8 @@ function updateStock() {
             Name: seedData.name,
             Key: key, // Important for ID reference
             Price: price,
-            Description: `Trồng trong ${seedData.growthTime / 60000} phút.`,
+            Description: `Trồng trong ${seedData.growthTime / 60000} phút.`, // Fallback
+            GrowthTime: seedData.growthTime,
             Type: 'Seed',
             Stock: stock,
             Emoji: seedData.emoji

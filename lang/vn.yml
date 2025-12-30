@@ -759,113 +759,6 @@ Reminder:
 # ===========================================================================
 # TIN NHẮN GAME & FUN
 # ===========================================================================
-Economy:
-  Messages:
-    balance: "💼 **Số dư tài khoản**\n\n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
-    otherBalance: "📊 **Chi tiết tài khoản**\n\n👤 **Người dùng:** {user} \n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
-    topBalances: "🏆 **5 người dùng hàng đầu:**\n{topUsers}\n\n**Vị trí của bạn:** #{position}"
-    betAmountError: "❌ Số tiền cược không hợp lệ hoặc không đủ. Hãy thử lại với số tiền hợp lệ."
-    transfer: "🔄 **Chi tiết chuyển tiền** \n\nBạn đã chuyển **{amount}** 🪙 cho **{target}**. Sự hào phóng là tên đệm của bạn!"
-    cannotTransferToSelf: "Bạn đang làm gì vậy? Bạn không thể tự chuyển tiền cho mình!"
-    invalidTransferAmount: "Bạn cần chuyển nhiều hơn 0 🪙"
-    withdraw: "🏧 **Chi tiết rút tiền** \n\n💰 Bạn đã rút **{coins}** 🪙 từ ngân hàng. Hãy tiêu dùng thông minh!"
-    deposit: "💸 **Gửi tiền thành công**\n\n{user}, bạn đã gửi {balance} 🪙 vào tài khoản ngân hàng của mình! Tiết kiệm cho những ngày mưa?"
-    targetRob: "🥷 **Cướp bóc**\n\n🚫 Mục tiêu của bạn không có đủ tiền để cướp."
-    cooldown: "⏰ **Thời gian chờ lệnh**\n\n⏳ Bạn có thể sử dụng lại lệnh này <t:{nextUse}:R>. Kiên nhẫn nhé, bạn của tôi!"
-    noBoosters: "🚫 Bạn không có vật phẩm tăng cường nào đang hoạt động. Đã đến lúc kiếm một vài cái!"
-    noMoney: "❌ Bạn không có đủ tiền cho giao dịch này. Hãy kiểm tra số dư và thử lại."
-    invalidAmount: "❌ Bạn đã nhập một số tiền không chính xác."
-    noPermission: "🚫 Bạn không có quyền sử dụng lệnh này. Cố gắng hay đấy!"
-    adminGive: "🛠️ **Lệnh quản trị: Cho** \n\nĐã cho **{amount}** 🪙 vào số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
-    adminTake: "🛠️ **Lệnh quản trị: Lấy** \n\nĐã lấy **{amount}** 🪙 từ số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
-    adminSet: "🛠️ **Lệnh quản trị: Đặt** \n\nĐã đặt thành công số dư của **{user}**. Đã thêm **{amount}** 🪙.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
-    error: "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
-    paySuccess: "Đã chuyển {amount} cho {user} thành công!"
-  Other:
-    Store:
-      Embed:
-        Title: "Cửa hàng: {shopName}"
-        Color: "#0099ff"
-        Description:
-          - "**{itemCount}. {item}**"
-          - "{description}"
-          - "💰 Giá: **{price}**"
-        Footer:
-          Text: "Trang {pageCurrent}/{pageMax}"
-    footer: "Số dư: {balance} 🪙"
-    transactionLog: "Nhật ký giao dịch của {user}"
-    gained: "Tổng nhận được"
-    lost: "Tổng đã mất"
-    guess: "Đoán"
-    result: "Kết quả"
-    win: "Thắng"
-    lose: "Thua"
-    rollResult: "Kết quả tung xúc xắc"
-    outcome: "Kết quả"
-    bet: "Cược của bạn"
-    inventoryCategory: "Chọn một danh mục"
-    catch: "Bắt được"
-    reward: "Phần thưởng"
-    location: "Địa điểm"
-    rodBroke: "Ôi không! Cần câu của bạn đã bị gãy. Bạn sẽ cần mua một cái mới từ cửa hàng."
-    NewBalance: "Số dư mới"
-  Gamble:
-    Quotes:
-      Win:
-        - "Thần bài nhập rồi! 🎰"
-        - "Tiền về túi ai? Túi bạn chứ ai! 💸"
-        - "Đỏ hơn son, chúc mừng đại gia! 💎"
-        - "Hôm nay trời đẹp, kèo thơm quá! ☀️"
-        - "Tuyệt vời ông mặt trời! 🌈"
-        - "Được ăn cả, ngã... vào lòng đại gia! 🤑"
-      Lose:
-        - "Đen thôi, đỏ quên đi... 🥀"
-        - "Còn cái nịt cũng phải đánh! 😭"
-        - "Thua keo này ta bày keo khác! 💪"
-        - "Ra đê mà ở thật rồi... 🏠"
-        - "Vận may đang tắc đường thôi! 🚦"
-        - "Đừng buồn, admin vẫn yêu bạn... (chắc thế) 💔"
-    Blackjack:
-      WinTitle: "Thắng (Blackjack!)"
-      WinDesc: "**{user}** đã đạt Blackjack! 🃏"
-      BustTitle: "Thua (Bust)"
-      BustDesc: "Oops! Bạn đã rút quá 21 điểm (Quắc)! 💥"
-      ResultTitle: "Kết Quả Xì Dách"
-      ResultDesc: "**Bạn:** {pVal} 🆚 **Nhà cái:** {dVal}"
-      Win: "Thắng"
-      Lose: "Thua"
-      Draw: "Hòa"
-      Fields:
-        Player: "👤 Người chơi"
-        Bet: "💰 Cược"
-        Win: "💵 Thắng"
-        Lose: "💸 Mất"
-        Result: "💵 Kết quả"
-        Balance: "💳 Số dư mới"
-    Coinflip:
-      WinTitle: "Thắng Lớn! 🎉"
-      LoseTitle: "Thất Bại! 🥀"
-      ResultDesc: "Kết quả: **{result}**\nBạn chọn: **{guess}**"
-      Heads: "Mặt Sấp"
-      Tails: "Mặt Ngửa"
-    Roll:
-      WinTitle: "Lăn Trúng Thưởng! 🎲"
-      LoseTitle: "Xúc Xắc Phản Bội! 🎲"
-      ResultDesc: "Xúc xắc: **{roll}**\nBạn chọn: **{guess}**"
-      Low: "Thấp (1-50)"
-      High: "Cao (51-100)"
-    Roulette:
-      WinTitle: "Thắng Roulette! 🎉"
-      LoseTitle: "Thua Roulette! 🥀"
-      ResultDesc: "Bóng lăn vào ô: **{result}**\nBạn chọn: **{color}**"
-      Red: "ĐỎ"
-      Black: "ĐEN"
-      Green: "XANH"
-    Slot:
-      SpinningTitle: "Đang Quay... 🎰"
-      WinTitle: "JACKPOT! Nổ Hũ! 🎰"
-      LoseTitle: "Chúc Bạn May Mắn Lần Sau..."
-      WinDesc: "🎰 | {r} | 🎰"
 
 Fun:
   Rizz:
@@ -1577,6 +1470,7 @@ VoiceChannelSwitch:
     Image: ""
     Thumbnail: true
 
+Economy:
   Messages:
     balance: "💼 **Số dư tài khoản**\n\n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
     otherBalance: "📊 **Chi tiết tài khoản**\n\n👤 **Người dùng:** {user} \n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
@@ -1732,28 +1626,63 @@ VoiceChannelSwitch:
         Color: "#1769FF"
 
     Store:
+      Embed:
+        Title: "Cửa hàng: {shopName}"
+        Color: "#0099ff"
+        Description:
+          - "**{itemCount}. {item}**"
+          - "{description}"
+          - "💰 Giá: **{price}**"
+        Footer:
+          Text: "Trang {pageCurrent}/{pageMax}"
       purchaseSuccess: "✅ Bạn đã mua thành công **{item}**. Số dư mới của bạn là **{balance}** 🪙."
       higherInterestRate: "Bạn đã có lãi suất cao hơn hoặc bằng."
       purchaseLimit: "Bạn không thể mua nhiều hơn {limit} của {item}."
-      Embed:
-        Title: "Cửa hàng {shopName}"
-        Description:
-          - "{itemCount}: **{item}** ({price} 🪙)"
-          - "{description}"
-        Footer:
-          Text: "Trang {pageCurrent} trên {pageMax}"
-          Icon: ""
-        Author:
-          Text: ""
-          Icon: ""
-        Color: "#1769FF"
-        Image: ""
-        Thumbnail: ""
+
       Categories:
-        - "Hạng"
-        - "Vật phẩm tăng cường"
-        - "Vật phẩm"
-        - "Trang bị"
+        "Hạt Giống": "Hạt Giống"
+        "Cần Câu": "Cần Câu"
+        "Mồi Câu": "Mồi Câu"
+        "Other": "Khác"
+        "Phân bón": "Phân Bón"
+
+      Items:
+        tap_su: "Cần câu tập sự"
+        go: "Cần Câu Gỗ"
+        meo: "Cần Câu Mèo"
+        bo_tui: "Cần Câu Bỏ Túi"
+        vit: "Cần Câu Vịt"
+        nghiep_du: "Cần Câu Nghiệp Dư"
+        phep_thuat: "Cần Câu Phép Thuật"
+        chuyen_nghiep: "Cần câu chuyên nghiệp"
+        quyen_truong_phep: "Cần Câu Quyền Trượng Phép"
+        giun: "Mồi câu giun"
+        xa: "Mồi câu xả"
+        tom: "Mồi tôm"
+        thuoc_bac: "Mồi thuốc bắc"
+        RenameCard: "Thẻ Đổi Tên"
+        growth_fertilizer: "Phân bón tăng trưởng"
+        super_speed_fertilizer: "Phân bón siêu tốc"
+        bumper_harvest_fertilizer: "Phân bón bội thu"
+        all_purpose_fertilizer: "Phân bón đa năng"
+        chili: "Ớt"
+        rice: "Lúa"
+        strawberry: "Dâu Tây"
+        corn: "Ngô"
+        tomato: "Cà Chua"
+        peach: "Đào"
+        cassava: "Khoai Mì"
+        sugarcane: "Mía"
+        potato: "Khoai Tây"
+        melon: "Dưa Gang"
+        carrot: "Cà Rốt"
+        cabbage: "Cải Ngọt"
+        jackfruit: "Mít"
+        pumpkin: "Bí ngô"
+        watermelon: "Dưa hấu"
+        grapes: "Nho"
+
+      SeedDescription: "Trồng trong {time} phút."
 
 # ===========================================================================
 # TIN NHẮN ADDONS

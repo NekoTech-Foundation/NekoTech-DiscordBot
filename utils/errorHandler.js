@@ -4,46 +4,52 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('
  * Standardized Error Handler
  * @param {Error} error The error object
  * @param {Object} context The interaction or message object
+ * @param {Object} [lang] The language object (optional)
  */
-async function handleError(error, context) {
-    console.error(error);
-
-    const errorStack = error.stack || error.message || String(error);
-    const cleanError = errorStack.length > 1900 ? errorStack.substring(0, 1900) + '...' : errorStack;
-
-    const content = `❌ **${global.lang.Errors.Generic}**\n\n\`\`\`js\n${cleanError}\n\`\`\``;
-
-    const row = new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
-                .setLabel(global.lang.Errors.ReportButton)
-                .setStyle(ButtonStyle.Link)
-                .setURL('https://discord.gg/96hgDj4b4j'),
-            new ButtonBuilder()
-                .setLabel(global.lang.Errors.SupportServerButton)
-                .setStyle(ButtonStyle.Link)
-                .setURL('https://dsc.gg/nekocomics')
-        );
-
+async function handleError(error, context, lang = global.lang) {
     try {
-        // Check if context is an Interaction (Slash Command) or Message (Text Command)
-        const isInteraction = context.isRepliable ? context.isRepliable() : false; // context.isRepliable valid check for interaction? No, check property
-        // Better check:
+        console.error(error);
+
+        const errorStack = error.stack || error.message || String(error);
+        const cleanError = errorStack.length > 1900 ? errorStack.substring(0, 1900) + '...' : errorStack;
+
+        // Safety check for lang
+        const errorTitle = lang?.Errors?.Generic || "An error occurred while executing the command.";
+        const reportLabel = lang?.Errors?.ReportButton || "Report Error";
+        const supportLabel = lang?.Errors?.SupportServerButton || "Support Server";
+
+        // Simplified Text Error (User Request)
+        const content = `❌ **${errorTitle}**\n\`\`\`diff\n- ${cleanError}\n\`\`\``;
+
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel(reportLabel)
+                    .setStyle(ButtonStyle.Link)
+                    .setURL('https://discord.gg/96hgDj4b4j'),
+                new ButtonBuilder()
+                    .setLabel(supportLabel)
+                    .setStyle(ButtonStyle.Link)
+                    .setURL('https://dsc.gg/nekocomics')
+            );
+
         const isSlash = !!context.commandName && !!context.options; 
 
         if (isSlash) {
             if (context.replied || context.deferred) {
-                await context.followUp({ content, components: [row], ephemeral: true });
+                await context.followUp({ content, components: [row], ephemeral: true }).catch(() => {});
             } else {
-                await context.reply({ content, components: [row], ephemeral: true });
+                await context.reply({ content, components: [row], ephemeral: true }).catch(() => {});
             }
         } else {
-            // Text Command (Message)
-            // context is message object
-             await context.reply({ content, components: [row] });
+            // Text Command
+            await context.reply({ content, components: [row] }).catch((err) => {
+                console.error('Failed to reply with error:', err);
+                context.channel.send({ content, components: [row] }).catch(() => {});
+            });
         }
     } catch (err) {
-        console.error('Failed to send error message:', err);
+        console.error('CRITICAL: Failed to handle error:', err);
     }
 }
 

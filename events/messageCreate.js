@@ -244,8 +244,8 @@ module.exports = async (client, message) => {
             try {
                 await command.run(client, message, args);
             } catch (error) {
-                console.error(`Error executing message command ${command.name}:`, error);
-                message.reply('There was an error trying to execute that command!');
+                const { handleError } = require('../utils/errorHandler.js');
+                await handleError(error, message);
             }
             return;
         }
