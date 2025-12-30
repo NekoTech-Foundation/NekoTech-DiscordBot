@@ -473,6 +473,34 @@ module.exports = {
              if (nextUse) return interaction.reply({ content: `Cooldown! Đợi đến <t:${Math.floor(nextUse.getTime()/1000)}:R>`, flags: MessageFlags.Ephemeral });
 
              const symbols = ['🍒', '🍋', '🍉', '🔔', '⭐'];
+             
+             // Initial Spinning Message
+             const spinMsg = await interaction.reply({ 
+                 embeds: [new EmbedBuilder()
+                    .setAuthor({ name: 'Máy Slots (Xèng)', iconURL: interaction.user.displayAvatarURL() })
+                    .setTitle('Đang Quay... 🎰')
+                    .setDescription('🎰 | 🟩 | 🟩 | 🟩 | 🎰')
+                    .setColor('#FFFF00')
+                    .setThumbnail('https://cdn-icons-png.flaticon.com/512/1068/1068228.png')]
+                 , fetchReply: true
+             });
+
+             // Animation loop
+             for (let i = 0; i < 3; i++) {
+                 await new Promise(r => setTimeout(r, 1000));
+                 const tempR = [symbols[Math.floor(Math.random()*5)], symbols[Math.floor(Math.random()*5)], symbols[Math.floor(Math.random()*5)]];
+                 await interaction.editReply({
+                     embeds: [new EmbedBuilder()
+                        .setAuthor({ name: 'Máy Slots (Xèng)', iconURL: interaction.user.displayAvatarURL() })
+                        .setTitle('Đang Quay... 🎰')
+                        .setDescription(`🎰 | ${tempR.join(' | ')} | 🎰`)
+                        .setColor('#FFFF00')
+                        .setThumbnail('https://cdn-icons-png.flaticon.com/512/1068/1068228.png')]
+                 });
+             }
+             
+             await new Promise(r => setTimeout(r, 1000));
+
              const r = [symbols[Math.floor(Math.random()*5)], symbols[Math.floor(Math.random()*5)], symbols[Math.floor(Math.random()*5)]];
              const win = r[0] === r[1] && r[1] === r[2];
              
@@ -484,7 +512,7 @@ module.exports = {
              user.transactionLogs.push({ type: 'slot', amount, timestamp: now });
              await user.save();
              
-             interaction.reply({ embeds: [new EmbedBuilder()
+             await interaction.editReply({ embeds: [new EmbedBuilder()
                  .setAuthor({ name: 'Máy Slots (Xèng)', iconURL: interaction.user.displayAvatarURL() })
                  .setTitle(win ? 'JACKPOT! Nổ Hũ! 🎰' : 'Chúc Bạn May Mắn Lần Sau...')
                  .setDescription(`🎰 | ${r.join(' | ')} | 🎰\n\n*${getRandomQuote(win)}*`)
