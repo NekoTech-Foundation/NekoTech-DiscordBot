@@ -48,6 +48,8 @@ if (version < 18) {
 
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
 const pixivAddon = require('./commands/Addons/Pixiv/pixiv.js');
+const musicButtonHandler = require('./utils/Music/buttonHandler.js');
+const musicModalHandler = require('./utils/Music/modalHandler.js');
 
 const client = new Client({
     intents: [
@@ -98,6 +100,16 @@ global.client = client;
 
 client.invites = new Map();
 
+// --- Music Bot Initialization ---
+const { Collection } = require('discord.js');
+client.players = new Collection();
+const MusicEmbedManager = require('./utils/Music/MusicEmbedManager');
+client.musicEmbedManager = new MusicEmbedManager(client);
+if (!global.clients) global.clients = {};
+global.clients.musicEmbedManager = client.musicEmbedManager;
+// --------------------------------
+
+
 
 
 
@@ -126,6 +138,23 @@ client.on('inviteDelete', async invite => {
 });
 
 client.on('interactionCreate', async interaction => {
+    // Music Bot Handlers
+    if (interaction.isButton() || interaction.isStringSelectMenu()) {
+        if (interaction.customId.startsWith('music_') || 
+            interaction.customId.startsWith('search_') || 
+            interaction.customId.startsWith('language_') || 
+            interaction.customId.startsWith('autoplay_genre') ||
+            interaction.customId === 'help_refresh') {
+            await musicButtonHandler.execute(interaction);
+            return;
+        }
+    }
+
+    if (interaction.isModalSubmit() && interaction.customId === 'volume_modal') {
+             await musicModalHandler.execute(interaction);
+             return;
+    }
+
     // Handle all Pixiv buttons (save, collection pagination, remove, ...)
     if (interaction.isButton() && interaction.customId.startsWith('pixiv_')) {
         try {

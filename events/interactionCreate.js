@@ -27,6 +27,8 @@ const Blacklist = require('../models/blacklist');
 const Giveaway = require('../models/Giveaway');
 const client = require("../index");
 const tiktok = require('@tobyg74/tiktok-api-dl'); // Require the new library
+const musicButtonHandler = require('../utils/Music/buttonHandler.js');
+const musicModalHandler = require('../utils/Music/modalHandler.js');
 
 function getFormattedReason(reasonValue, customReason = null) {
     if (customReason) return customReason;

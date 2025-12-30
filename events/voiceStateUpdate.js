@@ -34,6 +34,60 @@ async function handleVoiceStateUpdate(client, oldState, newState) {
         if (voiceConfigKey) {
             await sendVoiceStateEmbed(oldState, newState, voiceConfigKey);
         }
+
+        // --- Music Bot Logic ---
+        if (client.players) {
+            const guild = oldState.guild || newState.guild;
+            const player = client.players.get(guild.id);
+
+            if (player) {
+                const oldChannelId = oldState.channelId;
+                const newChannelId = newState.channelId;
+
+                // 1. Check if bot was disconnected
+                if (oldState.member.id === client.user.id) {
+                    if (!newChannelId) {
+                        // Bot disconnected
+                        try {
+                            if (client.musicEmbedManager) {
+                                await client.musicEmbedManager.handlePlaybackEnd(player);
+                            }
+                        } catch (err) {
+                            console.error('Error handling playback end on disconnect:', err);
+                        } finally {
+                            player.cleanup();
+                            client.players.delete(guild.id);
+                        }
+                        return;
+                    } 
+                    // Bot moved
+                    else if (oldChannelId !== newChannelId) {
+                        if (newState.channel) {
+                             await player.moveToChannel(newState.channel);
+                             player.clearInactivityTimer(false);
+                             if (client.musicEmbedManager) await client.musicEmbedManager.updateNowPlayingEmbed(player);
+                        }
+                    }
+                }
+
+                // 2. Check if channel is empty
+                const voiceChannelId = player.voiceChannel?.id;
+                if (voiceChannelId && (oldChannelId === voiceChannelId || newChannelId === voiceChannelId)) {
+                    const channel = guild.channels.cache.get(voiceChannelId);
+                    if (channel) {
+                        const listeners = channel.members.filter(m => !m.user.bot).size;
+                        if (listeners === 0) {
+                            player.startInactivityTimer();
+                            if (client.musicEmbedManager && player.currentTrack) await client.musicEmbedManager.updateNowPlayingEmbed(player);
+                        } else {
+                            player.clearInactivityTimer(true);
+                            if (client.musicEmbedManager && player.currentTrack && player.pauseReasons?.has('alone')) await client.musicEmbedManager.updateNowPlayingEmbed(player);
+                        }
+                    }
+                }
+            }
+        }
+        // -----------------------
     } catch (error) {
         console.error('Error in voiceStateUpdate event:', error);
     }
