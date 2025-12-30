@@ -274,21 +274,19 @@ module.exports = {
     },
 
     async handleQuote(interaction) {
-        const quotes = [
-            "Không có gì là vĩnh cửu ngoại trừ sự thay đổi. - {Heraclitus}", 
-            "Học, học nữa, học mãi. - {Vladimir Lenin}",
-            "Người biết thì không nói, người nói thì không biết. - {Lão Tử}",
-            "Hạnh phúc không phải là điểm đến, mà là hành trình. - {Zig Ziglar}"
-        ]; 
+        const lang = await getLang(interaction.guild?.id);
+        const quotes = lang.Fun.Quotes || ["Không có dữ liệu - {Admin}"]; 
         const quote = quotes[Math.floor(Math.random() * quotes.length)];
         const parts = quote.split(' - ');
+        if (parts.length < 2) return interaction.reply(quote);
         await interaction.reply(`\`\`\`ansi\n"${parts[0]}" - \x1b[2;34m[${parts[1].replace(/[{}]/g, '')}]\x1b[0m\n\`\`\``);
     },
 
     async handleRizz(interaction) {
         const config = getConfig();
+        const lang = await getLang(interaction.guild?.id);
         const user = interaction.options.getUser('user');
-        const lines = ["Cậu có bản đồ không? Vì tớ lạc vào mắt cậu rồi.", "Nhà cậu có bán rượu không, mà sao nói chuyện với cậu tớ say quá.", "Tớ cho phép cậu bắt cóc tớ đấy."];
+        const lines = lang.Fun.Rizz.Lines;
         const gifs = ["https://media1.tenor.com/m/8EBYtwaGjmwAAAAC/rizz-hey-girl.gif", "https://media.tenor.com/Fj7YEYy1c4AAAAAC/rizz.gif"];
         
         const embed = new EmbedBuilder()
@@ -300,23 +298,18 @@ module.exports = {
     },
 
     async handleRoast(interaction) {
+        const lang = await getLang(interaction.guild?.id);
         const target = interaction.options.getUser('target');
-        const roasts = [
-            "Bạn giống như đám mây. Khi bạn biến mất, ngày trở nên đẹp trời.",
-            "Tôi không nói bạn ngu, tôi chỉ nói bạn gặp may khi suy nghĩ thôi.",
-            "Nếu sự dốt nát là một cái cây, bạn hẳn là rừng Amazon."
-        ];
+        const roasts = lang.Fun.Roast.Lines;
         const roast = roasts[Math.floor(Math.random() * roasts.length)];
         await interaction.reply(`<@${target.id}>, ${roast}`);
     },
 
     async handleKill(interaction) {
         const config = getConfig();
+        const lang = await getLang(interaction.guild?.id);
         const target = interaction.options.getUser('target');
-        const scenarios = [
-            { text: "ném bạn xuống vách đá.", image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif" },
-            { text: "đã ra tay tàn độc.", image: "https://media1.tenor.com/m/J7JjVjF8_GgAAAAC/wasted-gta.gif" }
-        ];
+        const scenarios = lang.Fun.Kill.Scenarios;
         const sc = scenarios[Math.floor(Math.random() * scenarios.length)];
         const embed = new EmbedBuilder()
             .setDescription(`<@${interaction.user.id}> ${sc.text} <@${target.id}>.`)

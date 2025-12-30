@@ -783,6 +783,95 @@ Addons:
       ButtonNext: "次へ ▶"
       ButtonBack: "↩ リストに戻る"
 
+# ===========================================================================
+# GAME & FUN MESSAGES
+# ===========================================================================
+Economy:
+  Messages:
+    betAmountError: "賭け金が無効です！"
+    noMoney: "賭けるお金が足りません！"
+    cooldown: "クールダウン中です！ {nextUse}秒後にもう一度試してください。"
+  Gamble:
+    Quotes:
+      Win:
+        - "ギャンブルの神様が微笑んでいます！ 🎰"
+        - "勝者にはフライドチキンを！ 💸"
+        - "絶好調ですね！ 💎"
+        - "今日はツイてますね！ ☀️"
+        - "素晴らしい！ 🌈"
+        - "大金持ちだ！ 🤑"
+      Lose:
+        - "次はきっと勝てますよ... 🥀"
+        - "痛いですね！ 😭"
+        - "諦めないで！ 💪"
+        - "家賃が... 🏠"
+        - "運が悪かっただけです！ 🚦"
+        - "悲しまないで、管理人はまだあなたを愛しています...（たぶん） 💔"
+    Blackjack:
+      WinTitle: "勝利 (ブラックジャック!)"
+      WinDesc: "**{user}** がブラックジャックを出しました！ 🃏"
+      BustTitle: "敗北 (バースト)"
+      BustDesc: "おっと！21を超えました（バースト）！ 💥"
+      ResultTitle: "ブラックジャック結果"
+      ResultDesc: "**あなた:** {pVal} 🆚 **ディーラー:** {dVal}"
+      Win: "勝利"
+      Lose: "敗北"
+      Draw: "引き分け"
+      Fields:
+        Player: "👤 プレイヤー"
+        Bet: "💰 賭け金"
+        Win: "💵 勝ち"
+        Lose: "💸 負け"
+        Result: "💵 結果"
+        Balance: "💳 新しい残高"
+    Coinflip:
+      WinTitle: "大当たり！ 🎉"
+      LoseTitle: "残念！ 🥀"
+      ResultDesc: "結果: **{result}**\nあなたの予想: **{guess}**"
+      Heads: "表"
+      Tails: "裏"
+    Roll:
+      WinTitle: "ラッキーロール！ 🎲"
+      LoseTitle: "アンラッキーロール！ 🎲"
+      ResultDesc: "サイコロ: **{roll}**\nあなたの予想: **{guess}**"
+      Low: "低 (1-50)"
+      High: "高 (51-100)"
+    Roulette:
+      WinTitle: "ルーレット勝利！ 🎉"
+      LoseTitle: "ルーレット敗北！ 🥀"
+      ResultDesc: "ボールは **{result}** に止まりました\nあなたの予想: **{color}**"
+      Red: "赤"
+      Black: "黒"
+      Green: "緑"
+    Slot:
+      SpinningTitle: "回転中... 🎰"
+      WinTitle: "ジャックポット！ 🎰"
+      LoseTitle: "次は幸運を..."
+      WinDesc: "🎰 | {r} | 🎰"
+
+Fun:
+  Rizz:
+    Lines:
+      - "地図を持っていますか？あなたの瞳の中で迷子になってしまったようです。"
+      - "あなたはマジシャンですか？あなたを見ると、他の誰もが見えなくなります。"
+      - "あなたの名前はGoogleですか？私が探しているものすべてを持っています。"
+  Roast:
+    Lines:
+      - "あなたは雲のようです。あなたが消えると、その日は美しい日になります。"
+      - "あなたが馬鹿だとは言っていません。考えるときに運が悪いだけだと言っているのです。"
+      - "無知が至福なら、あなたは地球上で最も幸せな人でしょう。"
+  Kill:
+    Scenarios:
+      - text: "あなたを崖から投げ落としました。"
+        image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif"
+      - text: "あなたを消滅させました。"
+        image: "https://media1.tenor.com/m/J7JjVjF8_GgAAAAC/wasted-gta.gif"
+  Quotes:
+    - "変化以外に永続するものはない。 - {Heraclitus}"
+    - "学べば学ぶほど、自分がどれだけ知らないかに気づく。 - {Albert Einstein}"
+    - "知る者は言わず、言う者は知らず。 - {Lao Tzu}"
+    - "幸福は目的地ではなく、旅である。 - {Zig Ziglar}"
+
   AFK:
     Errors:
       NoPermission: "このコマンドを使用する権限がありません。"

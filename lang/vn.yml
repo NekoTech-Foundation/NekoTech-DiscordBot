@@ -753,6 +753,128 @@ Reminder:
 # ===========================================================================
 
 # ===========================================================================
+# TIN NHẮN GAME & FUN
+# ===========================================================================
+Economy:
+  Messages:
+    balance: "💼 **Số dư tài khoản**\n\n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
+    otherBalance: "📊 **Chi tiết tài khoản**\n\n👤 **Người dùng:** {user} \n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
+    topBalances: "🏆 **5 người dùng hàng đầu:**\n{topUsers}\n\n**Vị trí của bạn:** #{position}"
+    betAmountError: "❌ Số tiền cược không hợp lệ hoặc không đủ. Hãy thử lại với số tiền hợp lệ."
+    transfer: "🔄 **Chi tiết chuyển tiền** \n\nBạn đã chuyển **{amount}** 🪙 cho **{target}**. Sự hào phóng là tên đệm của bạn!"
+    cannotTransferToSelf: "Bạn đang làm gì vậy? Bạn không thể tự chuyển tiền cho mình!"
+    invalidTransferAmount: "Bạn cần chuyển nhiều hơn 0 🪙"
+    withdraw: "🏧 **Chi tiết rút tiền** \n\n💰 Bạn đã rút **{coins}** 🪙 từ ngân hàng. Hãy tiêu dùng thông minh!"
+    deposit: "💸 **Gửi tiền thành công**\n\n{user}, bạn đã gửi {balance} 🪙 vào tài khoản ngân hàng của mình! Tiết kiệm cho những ngày mưa?"
+    targetRob: "🥷 **Cướp bóc**\n\n🚫 Mục tiêu của bạn không có đủ tiền để cướp."
+    cooldown: "⏰ **Thời gian chờ lệnh**\n\n⏳ Bạn có thể sử dụng lại lệnh này <t:{nextUse}:R>. Kiên nhẫn nhé, bạn của tôi!"
+    noBoosters: "🚫 Bạn không có vật phẩm tăng cường nào đang hoạt động. Đã đến lúc kiếm một vài cái!"
+    noMoney: "❌ Bạn không có đủ tiền cho giao dịch này. Hãy kiểm tra số dư và thử lại."
+    invalidAmount: "❌ Bạn đã nhập một số tiền không chính xác."
+    noPermission: "🚫 Bạn không có quyền sử dụng lệnh này. Cố gắng hay đấy!"
+    adminGive: "🛠️ **Lệnh quản trị: Cho** \n\nĐã cho **{amount}** 🪙 vào số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
+    adminTake: "🛠️ **Lệnh quản trị: Lấy** \n\nĐã lấy **{amount}** 🪙 từ số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
+    adminSet: "🛠️ **Lệnh quản trị: Đặt** \n\nĐã đặt thành công số dư của **{user}**. Đã thêm **{amount}** 🪙.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
+    error: "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+    footer: "Số dư: {balance} 🪙"
+    transactionLog: "Nhật ký giao dịch của {user}"
+    gained: "Tổng nhận được"
+    lost: "Tổng đã mất"
+    guess: "Đoán"
+    result: "Kết quả"
+    win: "Thắng"
+    lose: "Thua"
+    rollResult: "Kết quả tung xúc xắc"
+    outcome: "Kết quả"
+    bet: "Cược của bạn"
+    inventoryCategory: "Chọn một danh mục"
+    catch: "Bắt được"
+    reward: "Phần thưởng"
+    location: "Địa điểm"
+    rodBroke: "Ôi không! Cần câu của bạn đã bị gãy. Bạn sẽ cần mua một cái mới từ cửa hàng."
+    NewBalance: "Số dư mới"
+  Gamble:
+    Quotes:
+      Win:
+        - "Thần bài nhập rồi! 🎰"
+        - "Tiền về túi ai? Túi bạn chứ ai! 💸"
+        - "Đỏ hơn son, chúc mừng đại gia! 💎"
+        - "Hôm nay trời đẹp, kèo thơm quá! ☀️"
+        - "Tuyệt vời ông mặt trời! 🌈"
+        - "Được ăn cả, ngã... vào lòng đại gia! 🤑"
+      Lose:
+        - "Đen thôi, đỏ quên đi... 🥀"
+        - "Còn cái nịt cũng phải đánh! 😭"
+        - "Thua keo này ta bày keo khác! 💪"
+        - "Ra đê mà ở thật rồi... 🏠"
+        - "Vận may đang tắc đường thôi! 🚦"
+        - "Đừng buồn, admin vẫn yêu bạn... (chắc thế) 💔"
+    Blackjack:
+      WinTitle: "Thắng (Blackjack!)"
+      WinDesc: "**{user}** đã đạt Blackjack! 🃏"
+      BustTitle: "Thua (Bust)"
+      BustDesc: "Oops! Bạn đã rút quá 21 điểm (Quắc)! 💥"
+      ResultTitle: "Kết Quả Xì Dách"
+      ResultDesc: "**Bạn:** {pVal} 🆚 **Nhà cái:** {dVal}"
+      Win: "Thắng"
+      Lose: "Thua"
+      Draw: "Hòa"
+      Fields:
+        Player: "👤 Người chơi"
+        Bet: "💰 Cược"
+        Win: "💵 Thắng"
+        Lose: "💸 Mất"
+        Result: "💵 Kết quả"
+        Balance: "💳 Số dư mới"
+    Coinflip:
+      WinTitle: "Thắng Lớn! 🎉"
+      LoseTitle: "Thất Bại! 🥀"
+      ResultDesc: "Kết quả: **{result}**\nBạn chọn: **{guess}**"
+      Heads: "Mặt Sấp"
+      Tails: "Mặt Ngửa"
+    Roll:
+      WinTitle: "Lăn Trúng Thưởng! 🎲"
+      LoseTitle: "Xúc Xắc Phản Bội! 🎲"
+      ResultDesc: "Xúc xắc: **{roll}**\nBạn chọn: **{guess}**"
+      Low: "Thấp (1-50)"
+      High: "Cao (51-100)"
+    Roulette:
+      WinTitle: "Thắng Roulette! 🎉"
+      LoseTitle: "Thua Roulette! 🥀"
+      ResultDesc: "Bóng lăn vào ô: **{result}**\nBạn chọn: **{color}**"
+      Red: "ĐỎ"
+      Black: "ĐEN"
+      Green: "XANH"
+    Slot:
+      SpinningTitle: "Đang Quay... 🎰"
+      WinTitle: "JACKPOT! Nổ Hũ! 🎰"
+      LoseTitle: "Chúc Bạn May Mắn Lần Sau..."
+      WinDesc: "🎰 | {r} | 🎰"
+
+Fun:
+  Rizz:
+    Lines:
+      - "Cậu có bản đồ không? Vì tớ lạc vào mắt cậu rồi."
+      - "Nhà cậu có bán rượu không, mà sao nói chuyện với cậu tớ say quá."
+      - "Tớ cho phép cậu bắt cóc tớ đấy."
+  Roast:
+    Lines:
+      - "Bạn giống như đám mây. Khi bạn biến mất, ngày trở nên đẹp trời."
+      - "Tôi không nói bạn ngu, tôi chỉ nói bạn gặp may khi suy nghĩ thôi."
+      - "Nếu sự dốt nát là một cái cây, bạn hẳn là rừng Amazon."
+  Kill:
+    Scenarios:
+      - text: "ném bạn xuống vách đá."
+        image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif"
+      - text: "đã ra tay tàn độc."
+        image: "https://media1.tenor.com/m/J7JjVjF8_GgAAAAC/wasted-gta.gif"
+  Quotes:
+    - "Không có gì là vĩnh cửu ngoại trừ sự thay đổi. - {Heraclitus}"
+    - "Học, học nữa, học mãi. - {Vladimir Lenin}"
+    - "Người biết thì không nói, người nói thì không biết. - {Lão Tử}"
+    - "Hạnh phúc không phải là điểm đến, mà là hành trình. - {Zig Ziglar}"
+
+# ===========================================================================
 # TIN NHẮN PHIẾU HỖ TRỢ
 # ===========================================================================
 Tickets:
@@ -1410,10 +1532,6 @@ VoiceChannelSwitch:
     Image: ""
     Thumbnail: true
 
-# ===========================================================================
-# TRÒ CHƠI
-# ===========================================================================
-Economy:
   Messages:
     balance: "💼 **Số dư tài khoản**\n\n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
     otherBalance: "📊 **Chi tiết tài khoản**\n\n👤 **Người dùng:** {user} \n📂 **Ví:** {balance} \n🏦 **Ngân hàng:** {bank}"
@@ -1451,64 +1569,6 @@ Economy:
     location: "Địa điểm"
     rodBroke: "Ôi không! Cần câu của bạn đã bị gãy. Bạn sẽ cần mua một cái mới từ cửa hàng."
     NewBalance: "Số dư mới"
-
-  Games:
-    Blackjack:
-      Title: "♠️ Blackjack - {result}!"
-      Hit: "Rút bài"
-      Stand: "Dừng"
-      Double: "Gấp đôi"
-      Player: "Người chơi"
-      Dealer: "Nhà cái"
-      NewBalance: "Số dư mới"
-      Win:
-        - "{user}, bạn đã thắng nhà cái và nhận được **{balance}** 🪙! Ting ting!"
-        - "{user}, bạn đã thắng và kiếm được **{balance}** 🪙! Cảm thấy may mắn chứ?"
-        - "{user}, nữ thần may mắn đang ở bên bạn! Bạn đã bỏ túi **{balance}** 🪙!"
-        - "Chúc mừng, {user}! Bạn đã ra về với **{balance}** 🪙!"
-      Lose:
-        - "{user}, có vẻ như bạn đã thua. Tạm biệt **{balance}** 🪙!"
-        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
-        - "{user}, nhà cái thắng! Bạn đã mất **{balance}** 🪙. Đau đấy!"
-        - "Xin lỗi, {user}. Bạn đã mất **{balance}** 🪙. Thử lại chứ?"
-      Draw:
-        - "Chán quá... Có vẻ như bạn đã hòa."
-        - "{user}, ván này hòa. Bạn đã được hoàn lại **{balance}** 🪙."
-        - "Hòa rồi, {user}. Bạn đã nhận lại **{balance}** 🪙 của mình."
-        - "Hòa! Không ai thắng lần này. {user}, bạn nhận lại **{balance}** 🪙 của mình."
-
-    Slots:
-      Title: "🎰 Máy xèng - {result}!"
-      Win:
-        - "{user}, bạn đã thắng **{balance}** 🪙. Jackpot!"
-        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. May mắn thật!"
-        - "{user}, bạn đang vào phom! Bạn đã thắng **{balance}** 🪙."
-        - "Ting ting ting! {user}, bạn đã trúng jackpot và thắng **{balance}** 🪙!"
-      Lose:
-        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
-        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙. Quay lại chứ?"
-        - "{user}, máy xèng không ủng hộ bạn. Bạn đã mất **{balance}** 🪙."
-        - "Chúc may mắn lần sau, {user}. Bạn đã mất **{balance}** 🪙."
-
-    Roulette:
-      Title: "🎡 Roulette - {result}!"
-      Win:
-        - "{user}, bạn đã thắng **{balance}** 🪙. Hoan hô!"
-        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. Thật không thể tin được!"
-        - "{user}, bạn đã trúng con số may mắn! Bạn đã thắng **{balance}** 🪙."
-        - "Chúc mừng, {user}! Bạn đã thắng **{balance}** 🪙."
-      Lose:
-        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
-        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙."
-        - "{user}, vòng quay không ủng hộ bạn. Bạn đã mất **{balance}** 🪙."
-        - "Lần này không thắng, {user}. Bạn đã mất **{balance}** 🪙."
-
-    Coinflip:
-      Title: "🪙 Tung đồng xu - {result}!"
-      Win:
-        - "{user}, bạn đã thắng **{balance}** 🪙! Sấp hay ngửa, bạn đã đoán đúng!"
-        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. Ấn tượng thật!"
-        - "{user}, bạn đã gọi đúng! Bạn đã thắng **{balance}** 🪙!"
         - "Chúc mừng, {user}! Bạn đã thắng **{balance}** 🪙 trong trò tung đồng xu!"
       Lose:
         - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"

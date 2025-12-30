@@ -816,6 +816,95 @@ Addons:
       ButtonNext: "Next ▶"
       ButtonBack: "↩ Back to List"
 
+# ===========================================================================
+# GAME & FUN MESSAGES
+# ===========================================================================
+Economy:
+  Messages:
+    betAmountError: "Invalid bet amount!"
+    noMoney: "You don't have enough money to bet!"
+    cooldown: "You are on cooldown! Please try again in {nextUse} seconds."
+  Gamble:
+    Quotes:
+      Win:
+        - "Lady Luck is on your side! 🎰"
+        - "Winner winner chicken dinner! 💸"
+        - "You're on fire! 💎"
+        - "Today is your lucky day! ☀️"
+        - "Amazing! 🌈"
+        - "Money money money! 🤑"
+      Lose:
+        - "Better luck next time... 🥀"
+        - "Ouch, that hurt! 😭"
+        - "Don't give up! 💪"
+        - "There goes the rent money... 🏠"
+        - "Just a bad streak! 🚦"
+        - "Don't be sad, the admin still loves you... (maybe) 💔"
+    Blackjack:
+      WinTitle: "Win (Blackjack!)"
+      WinDesc: "**{user}** got a Blackjack! 🃏"
+      BustTitle: "Lose (Bust)"
+      BustDesc: "Oops! You busted (Over 21)! 💥"
+      ResultTitle: "Blackjack Result"
+      ResultDesc: "**You:** {pVal} 🆚 **Dealer:** {dVal}"
+      Win: "Win"
+      Lose: "Lose"
+      Draw: "Draw"
+      Fields:
+        Player: "👤 Player"
+        Bet: "💰 Bet"
+        Win: "💵 Win"
+        Lose: "💸 Lose"
+        Result: "💵 Result"
+        Balance: "💳 New Balance"
+    Coinflip:
+      WinTitle: "Big Win! 🎉"
+      LoseTitle: "Defeat! 🥀"
+      ResultDesc: "Result: **{result}**\nYou picked: **{guess}**"
+      Heads: "Heads"
+      Tails: "Tails"
+    Roll:
+      WinTitle: "Lucky Roll! 🎲"
+      LoseTitle: "Unlucky Roll! 🎲"
+      ResultDesc: "Roll: **{roll}**\nYou picked: **{guess}**"
+      Low: "Low (1-50)"
+      High: "High (51-100)"
+    Roulette:
+      WinTitle: "Roulette Win! 🎉"
+      LoseTitle: "Roulette Lose! 🥀"
+      ResultDesc: "Ball landed on: **{result}**\nYou picked: **{color}**"
+      Red: "RED"
+      Black: "BLACK"
+      Green: "GREEN"
+    Slot:
+      SpinningTitle: "Spinning... 🎰"
+      WinTitle: "JACKPOT! 🎰"
+      LoseTitle: "Better Luck Next Time..."
+      WinDesc: "🎰 | {r} | 🎰"
+
+Fun:
+  Rizz:
+    Lines:
+      - "Do you have a map? because I just got lost in your eyes."
+      - "Are you a magician? Because whenever I look at you, everyone else disappears."
+      - "Is your name Google? Because you have everything I've been searching for."
+  Roast:
+    Lines:
+      - "You're like a cloud. When you disappear, it's a beautiful day."
+      - "I'm not saying you're stupid, I'm just saying you have bad luck when thinking."
+      - "If ignorance is bliss, you must be the happiest person on earth."
+  Kill:
+    Scenarios:
+      - text: "threw you off a cliff."
+        image: "https://media1.tenor.com/m/lzeoLQIX-Q8AAAAd/bette-midler-danny-devito.gif"
+      - text: "annihilated you."
+        image: "https://media1.tenor.com/m/J7JjVjF8_GgAAAAC/wasted-gta.gif"
+  Quotes:
+    - "There is nothing permanent except change. - {Heraclitus}"
+    - "The more I learn, the more I realize how much I don't know. - {Albert Einstein}"
+    - "Those who know do not speak. Those who speak do not know. - {Lao Tzu}"
+    - "Happiness is not a destination, it's a journey. - {Zig Ziglar}"
+
   AFK:
     Errors:
       NoPermission: "You do not have permission to use this command."
