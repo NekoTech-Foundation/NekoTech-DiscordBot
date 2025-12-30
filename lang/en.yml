@@ -821,9 +821,42 @@ Addons:
 # ===========================================================================
 Economy:
   Messages:
-    betAmountError: "Invalid bet amount!"
-    noMoney: "You don't have enough money to bet!"
-    cooldown: "You are on cooldown! Please try again in {nextUse} seconds."
+    balance: "💼 **Account Balance**\n\n📂 **Wallet:** {balance} \n🏦 **Bank:** {bank}"
+    otherBalance: "📊 **Account Details**\n\n👤 **User:** {user} \n📂 **Wallet:** {balance} \n🏦 **Bank:** {bank}"
+    topBalances: "🏆 **Top 5 Users:**\n{topUsers}\n\n**Your Position:** #{position}"
+    betAmountError: "❌ Invalid or insufficient bet amount. Please try again."
+    transfer: "🔄 **Transfer Details** \n\nYou transferred **{amount}** 🪙 to **{target}**. Generosity is your middle name!"
+    cannotTransferToSelf: "What are you doing? You can't transfer money to yourself!"
+    invalidTransferAmount: "You need to transfer more than 0 🪙"
+    withdraw: "🏧 **Withdrawal Details** \n\n💰 You withdrew **{coins}** 🪙 from the bank. Spend wisely!"
+    deposit: "💸 **Deposit Successful**\n\n{user}, you deposited {balance} 🪙 into your bank account! Saving for a rainy day?"
+    targetRob: "🥷 **Robbery**\n\n🚫 Your target doesn't have enough money to rob."
+    cooldown: "⏰ **Command Cooldown**\n\n⏳ You can use this command again <t:{nextUse}:R>. Patience, my friend!"
+    noBoosters: "🚫 You don't have any active boosters. Time to get some!"
+    noMoney: "❌ You don't have enough money for this transaction. Check your balance."
+    invalidAmount: "❌ You entered an incorrect amount."
+    noPermission: "🚫 You don't have permission to use this command. Nice try!"
+    adminGive: "🛠️ **Admin Command: Give** \n\nSuccessfully gave **{amount}** 🪙 to **{user}**.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
+    adminTake: "🛠️ **Admin Command: Take** \n\nSuccessfully took **{amount}** 🪙 from **{user}**.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
+    adminSet: "🛠️ **Admin Command: Set** \n\nSuccessfully set **{user}**'s balance. Added **{amount}** 🪙.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
+    error: "An unexpected error occurred. Please try again later."
+    footer: "Balance: {balance} 🪙"
+    transactionLog: "Transaction Log for {user}"
+    gained: "Total Gained"
+    lost: "Total Lost"
+    guess: "Guess"
+    result: "Result"
+    win: "Win"
+    lose: "Lose"
+    rollResult: "Roll Result"
+    outcome: "Outcome"
+    bet: "Your Bet"
+    inventoryCategory: "Select a category"
+    catch: "Caught"
+    reward: "Reward"
+    location: "Location"
+    rodBroke: "Oh no! Your fishing rod broke. You'll need to buy a new one from the store."
+    NewBalance: "New Balance"
   Gamble:
     Quotes:
       Win:
@@ -881,6 +914,44 @@ Economy:
       WinTitle: "JACKPOT! 🎰"
       LoseTitle: "Better Luck Next Time..."
       WinDesc: "🎰 | {r} | 🎰"
+
+  Games:
+    Crime:
+      Title: "🚨 Crime - {result}!"
+      Win:
+        - "{user}, you committed a crime and got **{balance}** 🪙! Smooth!"
+        - "You robbed a bank and got **{balance}** 🪙. Nice loot!"
+        - "Success! {user}, you got away with **{balance}** 🪙!"
+        - "{user}, you are a criminal mastermind! You stole **{balance}** 🪙!"
+      Lose:
+        - "Seems like you are not cut out for this life... Mission failed!"
+        - "{user} was caught in a crime and lost **{balance}** 🪙. Better luck next time!"
+        - "Busted! {user}, you failed and lost **{balance}** 🪙."
+        - "{user}, crime doesn't pay... this time. You lost **{balance}** 🪙."
+
+    Rob:
+      Title: "🥷 Robbery - {result}!"
+      Win:
+        - "{user}, you successfully robbed {victim} of **{balance}** 🪙. Criminal genius!"
+        - "{user}, you held up {victim} for **{balance}** 🪙. A spectacular robbery!"
+        - "Robbery successful! {user}, you took **{balance}** 🪙 from {victim}."
+        - "{user}, you pulled off the perfect robbery and got **{balance}** 🪙!"
+      Lose:
+        - "{user}, you failed to rob {victim}. Better luck next time!"
+        - "{user}, awkward... {victim} got away."
+        - "Robbery failed! {user}, {victim} escaped."
+        - "{user}, the robbery went wrong. You couldn't rob {victim}."
+
+    ScratchOff:
+      Title: "Scratch Result"
+      Win:
+        - "Congratulations! You won {amount} coins!"
+        - "You're on a winning streak! You just scored {amount} coins!"
+        - "Lucky! {amount} coins are now yours!"
+      Lose:
+        - "Better luck next time! You lost {amount} coins."
+        - "Oh no! You didn't win this time."
+        - "Sorry, you lost {amount} coins. Try again!"
 
 Fun:
   Rizz:

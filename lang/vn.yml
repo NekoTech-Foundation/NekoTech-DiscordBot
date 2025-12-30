@@ -160,7 +160,6 @@ compliments:
     - "Bạn là phiên bản hoàn hảo nhất của chính mình."
     - "Lòng tốt của bạn là liều thuốc chữa lành cho tất cả những ai gặp bạn."
 
-# ===========================================================================
 # TIN NHẮN LỆNH ĐÙA ĐEN
 # ===========================================================================
 darkjokes:
@@ -776,6 +775,18 @@ Economy:
     adminTake: "🛠️ **Lệnh quản trị: Lấy** \n\nĐã lấy **{amount}** 🪙 từ số dư của **{user}** thành công.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
     adminSet: "🛠️ **Lệnh quản trị: Đặt** \n\nĐã đặt thành công số dư của **{user}**. Đã thêm **{amount}** 🪙.\n\n📂 **Số dư:** {balance}\n🏦 **Ngân hàng:** {bank}"
     error: "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+    paySuccess: "Đã chuyển {amount} cho {user} thành công!"
+  Other:
+    Store:
+      Embed:
+        Title: "Cửa hàng: {shopName}"
+        Color: "#0099ff"
+        Description:
+          - "**{itemCount}. {item}**"
+          - "{description}"
+          - "💰 Giá: **{price}**"
+        Footer:
+          Text: "Trang {pageCurrent}/{pageMax}"
     footer: "Số dư: {balance} 🪙"
     transactionLog: "Nhật ký giao dịch của {user}"
     gained: "Tổng nhận được"
@@ -1569,29 +1580,25 @@ VoiceChannelSwitch:
     location: "Địa điểm"
     rodBroke: "Ôi không! Cần câu của bạn đã bị gãy. Bạn sẽ cần mua một cái mới từ cửa hàng."
     NewBalance: "Số dư mới"
-        - "Chúc mừng, {user}! Bạn đã thắng **{balance}** 🪙 trong trò tung đồng xu!"
-      Lose:
-        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
-        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙."
-        - "Tiếc quá, {user}. Bạn đã mất **{balance}** 🪙. Thử lại chứ?"
-        - "Không may, {user}. Bạn đã mất **{balance}** 🪙."
 
-      heads: "Sấp"
-      tails: "Ngửa"
-
-    Roll:
-      Title: "🎲 Tung xúc xắc - {result}!"
+  Gamble:
+    Quotes:
       Win:
-        - "{user}, bạn đã thắng **{balance}** 🪙. Làm tốt lắm!"
-        - "Có gian lận không vậy? Bạn đã thắng **{balance}** 🪙. Tuyệt vời!"
-        - "{user}, bạn đã tung ra con số chiến thắng! Bạn đã thắng **{balance}** 🪙."
-        - "Lần tung may mắn, {user}! Bạn đã thắng **{balance}** 🪙."
+        - "Thần bài nhập rồi! 🎰"
+        - "Tiền về túi ai? Túi bạn chứ ai! 💸"
+        - "Đỏ hơn son, chúc mừng đại gia! 💎"
+        - "Hôm nay trời đẹp, kèo thơm quá! ☀️"
+        - "Tuyệt vời ông mặt trời! 🌈"
+        - "Được ăn cả, ngã... vào lòng đại gia! 🤑"
       Lose:
-        - "Bạn đã mất **{balance}** 🪙. Chúc may mắn lần sau!"
-        - "{user}, thật khó xử... bạn đã mất **{balance}** 🪙."
-        - "{user}, lần tung không ủng hộ bạn. Bạn đã mất **{balance}** 🪙."
-        - "Lần này không thắng, {user}. Bạn đã mất **{balance}** 🪙."
+        - "Đen thôi, đỏ quên đi... 🥀"
+        - "Còn cái nịt cũng phải đánh! 😭"
+        - "Thua keo này ta bày keo khác! 💪"
+        - "Ra đê mà ở thật rồi... 🏠"
+        - "Vận may đang tắc đường thôi! 🚦"
+        - "Đừng buồn, admin vẫn yêu bạn... (chắc thế) 💔"
 
+  Games:
     Crime:
       Title: "🚨 Tội phạm - {result}!"
       Win:

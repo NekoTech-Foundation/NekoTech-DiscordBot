@@ -98,7 +98,8 @@ LevelingSystem:
 
 # Reaction Roles
 ReactionRoles:
-  Enabled: false
+
+# Store System
 
 # Verification System
 VerificationSettings:
@@ -152,6 +153,83 @@ Economy:
 
 Store:
   Categories: []
+  "Hạt Giống":
+    # Dynamic content handled by seedShop.js
+
+  "Cần Câu":
+    TapSu:
+      Name: "Cần câu tập sự"
+      Key: "tap_su"
+      Price: 350
+      Description: "Cần câu cho người mới bắt đầu."
+    Go:
+      Name: "Cần Câu Gỗ"
+      Key: "go"
+      Price: 450
+      Description: "Cần câu làm từ gỗ chắc chắn."
+    Meo:
+      Name: "Cần Câu Mèo"
+      Key: "meo"
+      Price: 750
+      Description: "Cần câu dễ thương hình mèo."
+    BoTui:
+      Name: "Cần Câu Bỏ Túi"
+      Key: "bo_tui"
+      Price: 1500
+      Description: "Nhỏ gọn, tiện lợi để mang đi."
+    Vit:
+      Name: "Cần Câu Vịt"
+      Key: "vit"
+      Price: 2250
+      Description: "Quack quack! Cần câu hình vịt."
+    NghiepDu:
+      Name: "Cần Câu Nghiệp Dư"
+      Key: "nghiep_du"
+      Price: 3000
+      Description: "Dành cho những người đã quen tay."
+    PhepThuat:
+      Name: "Cần Câu Phép Thuật"
+      Key: "phep_thuat"
+      Price: 20000
+      Description: "Toả sáng lấp lánh với phép thuật."
+    ChuyenNghiep:
+      Name: "Cần câu chuyên nghiệp"
+      Key: "chuyen_nghiep"
+      Price: 15000
+      Description: "Dành cho các cần thủ lão luyện."
+    QuyenTruongPhep:
+      Name: "Cần Câu Quyền Trượng Phép"
+      Key: "quyen_truong_phep"
+      Price: 120000
+      Description: "Sức mạnh tối thượng của đại dương."
+
+  "Mồi Câu":
+    Giun:
+      Name: "Mồi câu giun"
+      Key: "giun"
+      Price: 50
+      Description: "Mồi câu cơ bản, cá nào cũng ăn."
+    Xa:
+      Name: "Mồi câu xả"
+      Key: "xa"
+      Price: 200
+      Description: "Thu hút cá hiếm hơn một chút."
+    Tom:
+      Name: "Mồi tôm"
+      Key: "tom"
+      Price: 600
+      Description: "Món khoái khẩu của cá lớn."
+    ThuocBac:
+      Name: "Mồi thuốc bắc"
+      Key: "thuoc_bac"
+      Price: 1200
+      Description: "Mùi hương đặc biệt thu hút cá huyền thoại."
+
+  "Other":
+    RenameCard:
+      Name: "Thẻ Đổi Tên"
+      Price: 5000
+      Description: "Dùng để đổi tên tài khoản bot."
   Phân bón:
     growth_fertilizer:
       Name: "Growth Fertilizer"

@@ -13,6 +13,9 @@ const packageFile = require('./package.json');
 const config = getConfig();
 const lang = getLang();
 
+const { startSeedShop } = require('./commands/Addons/Farming/seedShop');
+startSeedShop();
+
 
 global.config = config;
 global.lang = lang;

@@ -81,10 +81,20 @@ module.exports = {
                 return items.slice(start, end).map((item, index) => {
                     // Safely handle missing description array
                     const descriptionTemplate = lang.Economy?.Other?.Store?.Embed?.Description || [];
+                    
+                    let stockDisplay = '';
+                    if (item.Stock !== undefined) {
+                        if (item.Stock > 0) {
+                            stockDisplay = `\n📦 Kho: **${item.Stock}**`;
+                        } else {
+                            stockDisplay = `\n🚫 **HẾT HÀNG**`;
+                        }
+                    }
+
                     return descriptionTemplate.map(line => replacePlaceholders(line, {
                         itemCount: `${start + index + 1}`,
                         item: item.Name || 'Unknown Item',
-                        description: item.Description || 'No description',
+                        description: (item.Description || 'No description') + stockDisplay,
                         price: item.Price || 0
                     })).join('\n');
                 }).join('\n\n');
@@ -613,6 +623,14 @@ module.exports = {
                                 console.error('Bait purchase failed:', err);
                             }
                         } else if (item.Type === 'Seed') {
+                             if (item.Stock !== undefined && item.Stock <= 0) {
+                                await i.reply({
+                                    content: '🚫 Vật phẩm này đã hết hàng! Vui lòng chờ đợt hàng sau.',
+                                    flags: MessageFlags.Ephemeral
+                                });
+                                return;
+                            }
+                            
                             const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
 
                             const modal = new ModalBuilder()
@@ -621,9 +639,9 @@ module.exports = {
 
                             const quantityInput = new TextInputBuilder()
                                 .setCustomId('seed_quantity')
-                                .setLabel('Nhập số lượng muốn mua')
+                                .setLabel(`Nhập số lượng (Kho: ${item.Stock})`)
                                 .setStyle(TextInputStyle.Short)
-                                .setPlaceholder('Ví dụ: 10')
+                                .setPlaceholder(`Tối đa: ${item.Stock}`)
                                 .setRequired(true);
 
                             const actionRow = new ModalActionRow().addComponents(quantityInput);

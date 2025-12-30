@@ -788,9 +788,42 @@ Addons:
 # ===========================================================================
 Economy:
   Messages:
-    betAmountError: "賭け金が無効です！"
-    noMoney: "賭けるお金が足りません！"
-    cooldown: "クールダウン中です！ {nextUse}秒後にもう一度試してください。"
+    balance: "💼 **口座残高**\n\n📂 **財布:** {balance} \n🏦 **銀行:** {bank}"
+    otherBalance: "📊 **口座詳細**\n\n👤 **ユーザー:** {user} \n📂 **財布:** {balance} \n🏦 **銀行:** {bank}"
+    topBalances: "🏆 **トップ5ユーザー:**\n{topUsers}\n\n**あなたの順位:** #{position}"
+    betAmountError: "❌ 賭け金が無効または不足しています。有効な金額で再試行してください。"
+    transfer: "🔄 **送金詳細** \n\n**{target}**に**{amount}** 🪙を送金しました。気前がいいですね！"
+    cannotTransferToSelf: "何をしているのですか？自分自身に送金することはできません！"
+    invalidTransferAmount: "0 🪙以上を送金する必要があります"
+    withdraw: "🏧 **引き出し詳細** \n\n💰 銀行から**{coins}** 🪙を引き出しました。賢く使いましょう！"
+    deposit: "💸 **入金成功**\n\n{user}、銀行口座に{balance} 🪙を入金しました！万が一のために貯金ですか？"
+    targetRob: "🥷 **強盗**\n\n🚫 ターゲットには強盗するのに十分なお金がありません。"
+    cooldown: "⏰ **コマンドクールダウン**\n\n⏳ このコマンドは<t:{nextUse}:R>に再使用できます。我慢してください、友よ！"
+    noBoosters: "🚫 アクティブなブースターはありません。いくつか入手する時間です！"
+    noMoney: "❌ 取引に必要な資金がありません。残高を確認してください。"
+    invalidAmount: "❌ 不正な金額を入力しました。"
+    noPermission: "🚫 このコマンドを使用する権限がありません。おしい！"
+    adminGive: "🛠️ **管理コマンド: 付与** \n\n**{user}**に**{amount}** 🪙を付与しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
+    adminTake: "🛠️ **管理コマンド: 没収** \n\n**{user}**から**{amount}** 🪙を没収しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
+    adminSet: "🛠️ **管理コマンド: 設定** \n\n**{user}**の残高を設定しました。**{amount}** 🪙を追加しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
+    error: "予期しないエラーが発生しました。後でもう一度お試しください。"
+    footer: "残高: {balance} 🪙"
+    transactionLog: "{user}の取引履歴"
+    gained: "総収入"
+    lost: "総損失"
+    guess: "予想"
+    result: "結果"
+    win: "勝ち"
+    lose: "負け"
+    rollResult: "サイコロの結果"
+    outcome: "結果"
+    bet: "あなたの賭け"
+    inventoryCategory: "カテゴリーを選択"
+    catch: "釣果"
+    reward: "報酬"
+    location: "場所"
+    rodBroke: "ああっ！釣り竿が壊れてしまいました。店で新しいものを購入する必要があります。"
+    NewBalance: "新しい残高"
   Gamble:
     Quotes:
       Win:
@@ -848,6 +881,44 @@ Economy:
       WinTitle: "ジャックポット！ 🎰"
       LoseTitle: "次は幸運を..."
       WinDesc: "🎰 | {r} | 🎰"
+
+  Games:
+    Crime:
+      Title: "🚨 犯罪 - {result}!"
+      Win:
+        - "{user}、犯罪を犯して**{balance}** 🪙を手に入れました！スムーズですね！"
+        - "銀行強盗をして**{balance}** 🪙を手に入れました。いい戦利品です！"
+        - "成功！ {user}、**{balance}** 🪙を持って逃げ切りました！"
+        - "{user}、あなたは犯罪の天才です！ **{balance}** 🪙を盗みました！"
+      Lose:
+        - "この生活には向いていないようです... 任務失敗！"
+        - "{user}は犯罪で捕まり、**{balance}** 🪙を失いました。次はもっとうまくいくといいですね！"
+        - "逮捕！ {user}、失敗して**{balance}** 🪙を失いました。"
+        - "{user}、犯罪は割に合わない... 今回はね。**{balance}** 🪙を失いました。"
+
+    Rob:
+      Title: "🥷 強盗 - {result}!"
+      Win:
+        - "{user}、{victim}から**{balance}** 🪙を強奪することに成功しました。犯罪の天才！"
+        - "{user}、{victim}を襲って**{balance}** 🪙を奪いました。壮大な強盗です！"
+        - "強盗成功！ {user}、{victim}から**{balance}** 🪙を奪いました。"
+        - "{user}、完全な強盗を成し遂げ、**{balance}** 🪙を手に入れました！"
+      Lose:
+        - "{user}、{victim}の強盗に失敗しました。次はもっとうまくいくといいですね！"
+        - "{user}、気まずい... {victim}に逃げられました。"
+        - "強盗失敗！ {user}、{victim}は逃げました。"
+        - "{user}、強盗は失敗しました。{victim}を強盗できませんでした。"
+
+    ScratchOff:
+      Title: "スクラッチ結果"
+      Win:
+        - "おめでとうございます！ {amount}コインを獲得しました！"
+        - "勝ち運に乗っています！ {amount}コインを獲得しました！"
+        - "ラッキー！ {amount}コインがあなたのものです！"
+      Lose:
+        - "次はもっとうまくいくといいですね！ {amount}コインを失いました。"
+        - "ああっ！ 今回は勝てませんでした。"
+        - "残念ながら、{amount}コインを失いました。もう一度試してください！"
 
 Fun:
   Rizz:

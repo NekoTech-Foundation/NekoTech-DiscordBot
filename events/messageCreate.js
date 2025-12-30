@@ -226,7 +226,10 @@ module.exports = async (client, message) => {
     const prefix = guildSettings?.prefix || config.CommandsPrefix || 'k';
 
     if (message.content.startsWith(prefix)) {
-        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        // Regex to match args while respecting quotes
+        const args = message.content.slice(prefix.length).trim().match(/("[^"]+"|[^\s"]+)/g)?.map(arg => arg.replace(/^"|"$/g, '')) || [];
+        if (args.length === 0) return; // Handle empty command
+        
         const commandName = args.shift().toLowerCase();
 
         console.log(`[DEBUG] Prefix: '${prefix}', Command: '${commandName}'`);
@@ -252,8 +255,10 @@ module.exports = async (client, message) => {
                 // Argument Parsing Logic
                 let parsedOptions = {};
                 let currentArgs = [...args];
-
-                const commandDataOptions = slashCommand.data.options || [];
+                
+                // Convert to JSON to access options and types reliably
+                const commandData = slashCommand.data.toJSON ? slashCommand.data.toJSON() : slashCommand.data;
+                const commandDataOptions = commandData.options || [];
 
                 // Check for subcommands first
                 const subcommands = commandDataOptions.filter(opt => opt.type === 1); // 1 is SUB_COMMAND
@@ -281,28 +286,23 @@ module.exports = async (client, message) => {
                         }
                     }
 
-                    // If no subcommand found (and no typo caught above), show Interactive Menu
+                    // If no subcommand found (and no typo caught above), show Text List of Subcommands
                     if (!subcommandName) {
-                        const embed = new EmbedBuilder()
-                            .setColor('#0099ff')
-                            .setTitle(`📂 Lệnh: ${prefix}${commandName}`)
-                            .setDescription('Vui lòng chọn một tùy chọn bên dưới để tiếp tục:')
-                            .setFooter({ text: 'Sử dụng menu bên dưới để chọn chức năng' });
+                        const subcommandNames = subcommands.map(sc => sc.name).join(', ');
+                        let helpMsg = `📂 **Lệnh:** \`${prefix}${commandName}\`\n\nVui lòng chọn một tùy chọn bên dưới để tiếp tục:\n\n`;
 
-                        const selectMenu = new StringSelectMenuBuilder()
-                            .setCustomId(`cmd_menu_${commandName}`)
-                            .setPlaceholder('Chọn chức năng...')
-                            .addOptions(
-                                subcommands.map(sc => ({
-                                    label: sc.name,
-                                    description: sc.description ? sc.description.substring(0, 100) : 'Không có mô tả',
-                                    value: sc.name,
-                                    emoji: '🔧'
-                                })).slice(0, 25)
-                            );
+                        subcommands.forEach(sc => {
+                             helpMsg += `🔹 \`${prefix}${commandName} ${sc.name}\`: ${sc.description || 'Không có mô tả'}\n`;
+                        });
+                        
+                        // Custom examples
+                        if (commandName === 'gamble') {
+                             helpMsg += `\n💡 **Ví dụ:** \`${prefix}gamble coinflip 5000 tails\``;
+                        } else if (commandName === 'farm') {
+                             helpMsg += `\n💡 **Ví dụ:** \`${prefix}farm plant rice\``;
+                        }
 
-                        const row = new ActionRowBuilder().addComponents(selectMenu);
-                        return message.reply({ embeds: [embed], components: [row] });
+                        return message.reply(helpMsg);
                     }
                 }
 
@@ -358,6 +358,14 @@ module.exports = async (client, message) => {
                     const missingNames = missingOptions.map(o => o.name).join(', ');
                     let usageMsg = `❌ Thiếu tham số bắt buộc: **${missingNames}**`;
 
+                    // Helper: Show valid choices
+                    missingOptions.forEach(opt => {
+                        if (opt.choices && opt.choices.length > 0) {
+                            const choices = opt.choices.map(c => `\`${c.value}\``).join(', ');
+                            usageMsg += `\n\n🔹 **Lựa chọn cho \`${opt.name}\`:** ${choices}`;
+                        }
+                    });
+
                     // Custom guides for specific commands
                     if (commandName === 'farm') {
                         if (subcommandName === 'plant') {
@@ -369,6 +377,8 @@ module.exports = async (client, message) => {
                         }
                     } else if (commandName === 'fish') {
                         usageMsg += `\n\n💡 **Cách dùng đúng:**\n\`${prefix}fish <địa_điểm>\`\nVí dụ: \`${prefix}fish lake\``;
+                    } else if (commandName === 'store') {
+                         usageMsg += `\n\n💡 **Ví dụ:** \`${prefix}store "Cần Câu"\``;
                     }
 
                     return message.reply(usageMsg);

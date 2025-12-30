@@ -40,6 +40,21 @@ module.exports.run = async (client) => {
             });
         }
 
+        if (item.Stock !== undefined) {
+             if (item.Stock <= 0) {
+                 return interaction.reply({
+                     content: '❌ Vật phẩm này đã hết hàng!',
+                     ephemeral: true
+                 });
+             }
+             if (quantity > item.Stock) {
+                 return interaction.reply({
+                     content: `❌ Số lượng mua vượt quá hàng tồn kho (${item.Stock}).`,
+                     ephemeral: true
+                 });
+             }
+        }
+
         let user = await EconomyUserData.findOne({ userId: interaction.user.id });
         if (!user) {
             user = await EconomyUserData.create({ userId: interaction.user.id, balance: 0 });
@@ -55,6 +70,9 @@ module.exports.run = async (client) => {
         }
 
         user.balance -= totalCost;
+        if (item.Stock !== undefined) {
+            item.Stock -= quantity;
+        }
         await user.save();
 
         await addToFarm(interaction.user.id, item.Name, quantity, 'seed');
