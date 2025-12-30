@@ -603,6 +603,35 @@ AntiHoist:
 # ===========================================================================
 Unwarn:
   NoPermission: "You do not have permission to use this command."
+  WaitCooldown: "Please wait {time} seconds before using this command again."
+  UnknownCommand: "Command not found."
+  SelectOption: "Please select an option below to continue:"
+  Example: "Example"
+  Usage: "Usage"
+  Choices: "Choices for"
+  MissingParams: "Missing required parameter"
+  DidYouMean: "Did you mean"
+  Command: "Command"
+
+Commands:
+  gamble:
+    Subcommands:
+      blackjack: "Play a game of Blackjack"
+      coinflip: "Flip a coin to test your luck"
+      roll: "Bet on Low or High dice roll"
+      roulette: "Spin the Roulette"
+      slot: "Play Slots"
+  farm:
+    Subcommands:
+      plant: "Plant a new crop"
+      harvest: "Harvest your crops"
+      field: "View farm status"
+      events: "View farm events"
+      inventory: "View seed/produce inventory"
+      fertilize: "Fertilize your crops"
+      shop: "Seed Shop"
+      sell: "Sell produce"
+      savings: "Savings Account"
   NoWarnings: "No warnings found for this user."
   InvalidWarningID: "Invalid Warning ID."
   WarningRemoved: "Removed warning from {userTag}: `{reason}`."

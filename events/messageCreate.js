@@ -204,10 +204,13 @@ const checkBlacklistWords = async (message, dmSent) => {
 
 }
 
+
+
 module.exports = async (client, message) => {
     if (!message.guild || !message.member || message.author.bot) {
         return;
     }
+    const lang = await getLang(message.guild.id);
 
 
 
@@ -289,15 +292,21 @@ module.exports = async (client, message) => {
                     // If no subcommand found (and no typo caught above), show Text List of Subcommands
                     if (!subcommandName) {
                         const subcommandNames = subcommands.map(sc => sc.name).join(', ');
-                        let helpMsg = `📂 **Lệnh:** \`${prefix}${commandName}\`\n\nVui lòng chọn một tùy chọn bên dưới để tiếp tục:\n\n`;
+                        let helpMsg = `📂 **${lang.Command || 'Lệnh'}:** \`${prefix}${commandName}\`\n\n${lang.SelectOption || 'Vui lòng chọn một tùy chọn bên dưới để tiếp tục:'}\n\n`;
 
                         subcommands.forEach(sc => {
-                             helpMsg += `🔹 \`${prefix}${commandName} ${sc.name}\`: ${sc.description || 'Không có mô tả'}\n`;
+                             // Try to get localized description
+                             let desc = sc.description;
+                             if (lang.Commands && lang.Commands[commandName] && lang.Commands[commandName].Subcommands && lang.Commands[commandName].Subcommands[sc.name]) {
+                                 desc = lang.Commands[commandName].Subcommands[sc.name];
+                             }
+                             helpMsg += `🔹 \`${prefix}${commandName} ${sc.name}\`: ${desc || 'Không có mô tả'}\n`;
                         });
                         
                         // Custom examples
                         if (commandName === 'gamble') {
-                             helpMsg += `\n💡 **Ví dụ:** \`${prefix}gamble coinflip 5000 tails\``;
+                             helpMsg += `\n💡 **${lang.Example || 'Ví dụ'}:** \`${prefix}gamble coinflip 5000 tails\``;
+                        
                         } else if (commandName === 'farm') {
                              helpMsg += `\n💡 **Ví dụ:** \`${prefix}farm plant rice\``;
                         }

@@ -1002,6 +1002,35 @@ Ban:
   Success: "Đã cấm thành công {userTag} vì {reason}."
   Error: "Đã có lỗi khi cố gắng cấm người dùng này."
 
+WaitCooldown: "Vui lòng đợi {time} giây trước khi sử dụng lại lệnh này."
+UnknownCommand: "Lệnh không tồn tại."
+SelectOption: "Vui lòng chọn một tùy chọn bên dưới để tiếp tục:"
+Example: "Ví dụ"
+Usage: "Cách dùng đúng"
+Choices: "Lựa chọn cho"
+MissingParams: "Thiếu tham số bắt buộc"
+DidYouMean: "Có phải ý bạn là"
+Command: "Lệnh"
+
+Commands:
+  gamble:
+    Subcommands:
+      blackjack: "Chơi một ván Xì Dách"
+      coinflip: "Tung đồng xu thử vận may"
+      roll: "Cược xúc xắc Thấp hoặc Cao"
+      roulette: "Quay Roulette"
+      slot: "Chơi máy xèng (Slots)"
+  farm:
+    Subcommands:
+      plant: "Trồng cây mới"
+      harvest: "Thu hoạch cây trồng"
+      field: "Xem trạng thái nông trại"
+      events: "Xem sự kiện nông trại"
+      inventory: "Xem kho hạt giống/nông sản"
+      fertilize: "Bón phân cho cây"
+      shop: "Cửa hàng hạt giống"
+      sell: "Bán nông sản"
+      savings: "Gửi tiết kiệm"
 TempBan:
   NoPermsMessage: "Bạn không có quyền cần thiết để sử dụng lệnh này."
   UserNotFound: "Không tìm thấy người dùng được chỉ định. Vui lòng kiểm tra lại."

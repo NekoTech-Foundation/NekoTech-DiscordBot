@@ -3,7 +3,7 @@ const yaml = require('js-yaml');
 const path = require('path');
 require('dotenv').config(); // Add this line back
 
-const { getLangSync } = require('./langLoader');
+const { getLangSync, getLang } = require('./langLoader');
 
 const CONFIG_PATH = path.join(__dirname, '..', 'config.yml');
 const COMMANDS_PATH = path.join(__dirname, '..', 'commands.yml');
@@ -29,10 +29,6 @@ const getConfig = () => {
         loadAllConfigs();
     }
     return configCache;
-};
-
-const getLang = () => {
-    return getLangSync('vn'); // Default fallback for legacy calls
 };
 
 const getCommands = () => {

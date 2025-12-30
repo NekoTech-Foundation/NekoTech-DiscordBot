@@ -6,10 +6,10 @@
     "max_weight": 0.2
   },
   "epic": {
-    "name": "Cá heo",
-    "emoji": "<:Fish_dolphin:1433392934551552091>",
-    "min_weight": 150,
-    "max_weight": 400
+    "name": "Mực zombie",
+    "emoji": "<:Fish_zombiesquid:1433392936246050938>",
+    "min_weight": 1,
+    "max_weight": 5
   },
-  "updatedAt": "2025-12-30T05:24:30.956Z"
+  "updatedAt": "2025-12-30T05:40:40.659Z"
 }
