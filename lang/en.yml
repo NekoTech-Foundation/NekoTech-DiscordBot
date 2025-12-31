@@ -875,6 +875,14 @@ Economy:
     adminSet: "🛠️ **Admin: Set** \n\nSuccessfully set balance of **{user}**. Added **{amount}** 🪙.\n\n📂 **Balance:** {balance}\n🏦 **Bank:** {bank}"
     error: "An unexpected error occurred. Please try again later."
     paySuccess: "Successfully transferred {amount} to {user}!"
+    footer: "Current balance: {balance} 🪙"
+  Actions:
+    Daily:
+      Title: "📅 Daily Check-in"
+      Messages:
+        - "{user}, you checked in today! Streak: **{streak}** days."
+        - "Hello {user}, your daily reward has arrived! Streak: **{streak}** days."
+        - "Cha-ching! {user} received their daily pay. Current streak: **{streak}**."
   Other:
     Store:
       Embed:

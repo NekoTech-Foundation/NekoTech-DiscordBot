@@ -753,6 +753,8 @@ Reminder:
         Icon: ""
 
 # ===========================================================================
+
+# ===========================================================================
 # TIN NHẮN LỆNH ÂM NHẠC
 # ===========================================================================
 
@@ -1586,12 +1588,11 @@ Economy:
         - "Những tâm hồn hào phóng đã cho bạn **{balance}** 🪙, {user}. Cứ tiếp tục nhé!"
 
     Daily:
-      Title: "📅 Phần thưởng hàng ngày - Đã nhận!"
+      Title: "📅 Điểm danh hàng ngày"
       Messages:
-        - "{user}, bạn đã nhận phần thưởng hàng ngày và kiếm được **{balance}** 🪙.\n\n**Chuỗi:** {streak} ngày"
-        - "Woooo, bạn đã nhận được **{balance}** 🪙 từ phần thưởng hàng ngày của mình!\n\n**Chuỗi:** {streak} ngày"
-        - "Thành công hàng ngày! {user}, bạn đã thu thập **{balance}** 🪙. Hãy giữ vững chuỗi!\n\n**Chuỗi:** {streak} ngày"
-        - "Kiên trì! {user}, bạn đã kiếm được **{balance}** 🪙 từ phần thưởng hàng ngày của mình.\n\n**Chuỗi:** {streak} ngày"
+        - "{user}, bạn đã điểm danh ngày hôm nay! Chuỗi: **{streak}** ngày."
+        - "Chào {user}, quà hàng ngày của bạn đã đến! Chuỗi: **{streak}** ngày."
+        - "Ting ting! {user} đã nhận lương hàng ngày. Chuỗi hiện tại: **{streak}**."
 
     Work:
       Title: "💼 Làm việc - Công việc hoàn thành!"

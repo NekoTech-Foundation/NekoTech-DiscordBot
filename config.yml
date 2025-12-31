@@ -141,6 +141,12 @@ Economy:
   Coinflip:
     cooldown: "5s"
 
+  Daily:
+    baseAmount: 1000
+    increasePerDay: 500
+    maxAmount: 10000
+    Items: []
+
   Roll:
     cooldown: "10s"
 

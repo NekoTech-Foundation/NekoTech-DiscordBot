@@ -871,6 +871,14 @@ Economy:
     adminSet: "🛠️ **管理: 設定** \n\n**{user}** の残高を設定しました。**{amount}** 🪙 を追加しました。\n\n📂 **残高:** {balance}\n🏦 **銀行:** {bank}"
     error: "予期しないエラーが発生しました。後でもう一度お試しください。"
     paySuccess: "{user} に {amount} を送金しました！"
+    footer: "現在の残高: {balance} 🪙"
+  Actions:
+    Daily:
+      Title: "📅 毎日のチェックイン"
+      Messages:
+        - "{user}、今日のチェックインが完了しました！ストリーク: **{streak}**日。"
+        - "こんにちは {user}、毎日の報酬が届きました！ストリーク: **{streak}**日。"
+        - "チャリン！ {user}は日給を受け取りました。現在のストリーク: **{streak}**。"
   Other:
     Store:
       Embed:

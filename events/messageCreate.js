@@ -419,7 +419,11 @@ module.exports = async (client, message) => {
                         return sentReply;
                     },
                     fetchReply: async () => sentReply,
-                    deferReply: async () => {
+                    deferReply: async (options) => {
+                        if (options && options.fetchReply) {
+                            sentReply = await message.reply({ content: '🔄 Đang xử lí...', fetchReply: true });
+                            return sentReply;
+                        }
                         await message.channel.sendTyping();
                     },
                     followUp: async (content) => {
@@ -487,7 +491,7 @@ module.exports = async (client, message) => {
                 .setColor('#E74C3C')
                 .setTitle('❌ Không tìm thấy lệnh')
                 .setDescription(`Lệnh \`${commandName}\` không tồn tại.\nCó phải ý bạn là: **${prefix}${bestMatch}**?`)
-                .setFooter({ text: 'Hệ thống gợi ý thông minh' });
+                .setFooter({ text: 'Hệ thống gợi ý lệnh thông minh' });
              return message.reply({ embeds: [embed] });
         }
 
