@@ -84,40 +84,51 @@ module.exports = {
                 return; // PermissionManager already replied
             }
 
+            // Defer update immediately for known music buttons to prevent 10062 timeout
+            // BUT NOT for volume modal (needs showModal) or lyrics (needs deferReply)
+            if (['music_pause', 'music_skip', 'music_stop', 'music_shuffle', 'music_loop', 'music_autoplay', 'music_queue', 'music_previous'].includes(buttonType)) {
+                 if (!interaction.deferred && !interaction.replied) {
+                    await interaction.deferUpdate().catch(() => {});
+                }
+            }
+
             switch (buttonType) {
                 case 'music_pause':
-                    await this.handlePause(interaction, player);
+                    await this.handlePause(interaction, player, requesterId);
                     break;
 
                 case 'music_skip':
-                    await this.handleSkip(interaction, player);
+                    await this.handleSkip(interaction, player, requesterId);
                     break;
 
                 case 'music_stop':
-                    await this.handleStop(interaction, player, client);
+                    await this.handleStop(interaction, player, client, requesterId);
                     break;
 
                 case 'music_shuffle':
-                    await this.handleShuffle(interaction, player);
+                    await this.handleShuffle(interaction, player, requesterId);
                     break;
 
+                // Volume modal MUST NOT be deferred with deferUpdate, it needs showModal
                 case 'music_volume':
-                    await this.handleVolumeModal(interaction, player);
+                    await this.handleVolumeModal(interaction, player, requesterId);
                     break;
 
                 case 'music_loop':
-                    await this.handleLoop(interaction, player);
+                    await this.handleLoop(interaction, player, requesterId);
                     break;
 
                 case 'music_autoplay':
-                    await this.handleAutoplay(interaction, player);
+                    await this.handleAutoplay(interaction, player, requesterId);
                     break;
 
                 default:
-                    await interaction.reply({
-                        content: "Unknown button interaction",
-                        ephemeral: true
-                    });
+                    if (!interaction.deferred && !interaction.replied) {
+                        await interaction.reply({
+                            content: "Unknown button interaction",
+                            ephemeral: true
+                        });
+                    }
             }
         } catch (error) {
             console.error('Button handler error:', error);
@@ -138,8 +149,12 @@ module.exports = {
     isAuthorized(interaction, requesterId) {
         const member = interaction.member;
 
+
         // ManageGuild permission check (Sunucuyu Yönet)
         if (member.permissions.has('ManageGuild')) return true;
+
+        const modRoleName = config.bot.modRoleName || 'Moderator';
+        if (member.roles.cache.some(role => role.name.toLowerCase() === modRoleName.toLowerCase())) return true;
 
         // DJ role check (if exists)
         if (member.roles.cache.some(role => role.name.toLowerCase().includes('dj'))) return true;
@@ -150,21 +165,15 @@ module.exports = {
         return false;
     },
 
-    async handlePause(interaction, player, requesterId) {
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            const lang = await getLang(interaction.guild?.id);
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
+    async handlePause(interaction, player) {
+        // Defer handled in execute
+
 
         if (!player.currentTrack) {
              const lang = await getLang(interaction.guild?.id);
-            return await interaction.reply({
-                content: lang.Music.Errors.NoMusic,
-                flags: [1 << 6]
+            return await interaction.followUp({
+                content: lang.Music.Errors.NoMusic || "❌ No song playing",
+                ephemeral: true
             });
         }
 
@@ -199,42 +208,38 @@ module.exports = {
                 embed.setThumbnail(player.currentTrack.thumbnail);
             }
 
-            await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
 
             // Ana embed'deki butonları güncelle (pause/resume değişimi)
             if (interaction.client.musicEmbedManager) {
                 await interaction.client.musicEmbedManager.updateNowPlayingEmbed(player);
             }
         } else {
-            await interaction.reply({
+            await interaction.followUp({
                 content: "❌ Operation failed.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
     },
 
-    async handleSkip(interaction, player, requesterId) {
+    async handleSkip(interaction, player) {
+        // Defer handled in execute
+
+
         const lang = await getLang(interaction.guild?.id);
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
 
         if (!player.currentTrack) {
-            return await interaction.reply({
-                content: lang.Music.Errors.NoMusic,
-                flags: [1 << 6]
+            return await interaction.followUp({
+                content: lang.Music.Errors.NoMusic || "❌ No song playing",
+                ephemeral: true
             });
         }
 
         // Sırada müzik yoksa atlanamaz
         if (player.queue.length === 0) {
-            return await interaction.reply({
+            return await interaction.followUp({
                 content: "❌ No more songs to skip to.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
 
@@ -272,52 +277,49 @@ module.exports = {
                 embed.setThumbnail(currentTrack.thumbnail);
             }
 
-            await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
 
             // Embed Manager ile ana embed'i güncelle
             if (interaction.client.musicEmbedManager && player.currentTrack) {
                 await interaction.client.musicEmbedManager.updateNowPlayingEmbed(player);
             }
         } else {
-            await interaction.reply({
+            await interaction.followUp({
                 content: "❌ Failed to skip song.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
     },
 
     async handlePrevious(interaction, player) {
+        // Defer handled in execute
+
+
         if (player.previousTracks.length === 0) {
-            return await interaction.reply({
+            return await interaction.followUp({
                 content: "❌ No previous song found.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
 
         const result = player.previous();
 
         if (result) {
-            await interaction.reply({
+            await interaction.followUp({
                 content: "⏮️ Moved to previous song.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         } else {
-            await interaction.reply({
+            await interaction.followUp({
                 content: "❌ Failed to move to previous song.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
     },
 
-    async handleStop(interaction, player, client, requesterId) {
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            const lang = await getLang(interaction.guild?.id);
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
+    async handleStop(interaction, player, client) {
+        // Defer handled in execute
+
 
         const queueLength = player.queue.length;
         const currentTrack = player.currentTrack;
@@ -342,7 +344,7 @@ module.exports = {
             });
         }
 
-        await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+        await interaction.followUp({ embeds: [embed], ephemeral: true });
 
         // Ana embed'deki butonları disable yap
         if (client.musicEmbedManager) {
@@ -351,12 +353,15 @@ module.exports = {
     },
 
     async handleQueue(interaction, player) {
+        // Defer handled in execute
+
+
         const queueInfo = player.getQueue();
 
         if (!queueInfo.current && queueInfo.queue.length === 0) {
-            return await interaction.reply({
+            return await interaction.followUp({
                 content: "❌ No songs in queue.",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
 
@@ -401,23 +406,19 @@ module.exports = {
             text: `Total Songs: ${queueInfo.queue.length + (queueInfo.current ? 1 : 0)}`
         });
 
-        await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+        await interaction.followUp({ embeds: [embed], ephemeral: true });
     },
 
-    async handleShuffle(interaction, player, requesterId) {
+    async handleShuffle(interaction, player) {
+         // Defer handled in execute
+
+        
         const lang = await getLang(interaction.guild?.id);
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
 
         if (player.queue.length < 2) {
-            return await interaction.reply({
-                content: "❌ Not enough songs to shuffle.",
-                flags: [1 << 6]
+            return await interaction.followUp({
+                content: lang.Music.Errors.NotEnoughSongs || "❌ Not enough songs to shuffle",
+                ephemeral: true
             });
         }
 
@@ -450,7 +451,7 @@ module.exports = {
             });
         }
 
-        await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+        await interaction.followUp({ embeds: [embed], ephemeral: true });
 
         // Ana embed'i güncelle
         if (interaction.client.musicEmbedManager) {
@@ -458,15 +459,8 @@ module.exports = {
         }
     },
 
-    async handleVolumeModal(interaction, player, requesterId) {
+    async handleVolumeModal(interaction, player) {
         const lang = await getLang(interaction.guild?.id);
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
 
         const modal = new ModalBuilder()
             .setCustomId('volume_modal')
@@ -487,7 +481,7 @@ module.exports = {
         if (interaction.replied || interaction.deferred) {
             return await interaction.followUp({ 
                 content: "❌ Cannot open volume modal because the interaction was already processed.", 
-                flags: [1 << 6] 
+                ephemeral: true 
             });
         }
         
@@ -500,20 +494,16 @@ module.exports = {
         }
     },
 
-    async handleLoop(interaction, player, requesterId) {
+    async handleLoop(interaction, player) {
+         // Defer handled in execute
+
+
         const lang = await getLang(interaction.guild?.id);
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
 
         if (!player.currentTrack) {
-            return await interaction.reply({
+            return await interaction.followUp({
                 content: lang.Music.Errors.NoMusic || "❌ No song playing",
-                flags: [1 << 6]
+                ephemeral: true
             });
         }
 
@@ -554,7 +544,7 @@ module.exports = {
             embed.setThumbnail(player.currentTrack.thumbnail);
         }
 
-        await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+        await interaction.followUp({ embeds: [embed], ephemeral: true });
 
         // Update the main embed to reflect the new loop mode
         if (interaction.client.musicEmbedManager) {
@@ -562,29 +552,24 @@ module.exports = {
         }
     },
 
-    async handleAutoplay(interaction, player, requesterId) {
+    async handleAutoplay(interaction, player) {
+         // Defer handled in execute
+
+
         const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
         const lang = await getLang(interaction.guild?.id);
-        
-        // Authorization check
-        if (!this.isAuthorized(interaction, requesterId)) {
-            return await interaction.reply({
-                content: lang.Music.Fields.PermissionInfo || "❌ Not authorized",
-                flags: [1 << 6]
-            });
-        }
 
         // If autoplay is already enabled, turn it off
         if (player.autoplay) {
             player.autoplay = false;
             
             const embed = new EmbedBuilder()
-                .setTitle('🎲 Autoplay Disabled')
+                .setTitle(lang.Music.Autoplay.DisabledTitle || '🎲 Autoplay Disabled')
                 .setDescription("Autoplay has been turned off.")
                 .setColor(config.bot.embedColor)
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [embed], flags: [1 << 6] });
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
             
             // Update the main embed
             if (interaction.client.musicEmbedManager) {
@@ -595,7 +580,7 @@ module.exports = {
 
         // Show genre selection menu
         const select = new StringSelectMenuBuilder()
-            .setCustomId(`autoplay_genre:${requesterId}:${player.sessionId}`)
+            .setCustomId(`autoplay_genre:${interaction.user.id}:${player.sessionId}`) // Use interaction.user.id for requesterId
             .setPlaceholder("Select a genre for Autoplay")
             .addOptions(
                 new StringSelectMenuOptionBuilder().setLabel("Pop").setValue('pop').setEmoji('🎤'),
@@ -622,10 +607,10 @@ module.exports = {
             .setDescription("To enable autoplay, please select a genre from the menu below.")
             .setColor(config.bot.embedColor);
 
-        await interaction.reply({
+        await interaction.followUp({
             embeds: [embed],
             components: [row],
-            flags: [1 << 6]
+            ephemeral: true
         });
     },
 
@@ -803,7 +788,6 @@ module.exports = {
             });
         }
 
-        await interaction.deferUpdate();
 
         // Işlem mesajı göster
         const processingEmbed = new EmbedBuilder()
@@ -885,22 +869,25 @@ module.exports = {
         const lang = await getLang(guildId);
 
         try {
-            if (!player.currentTrack) {
-                return await interaction.reply({
-                    content: lang.Music.Errors.NoMusic || "❌ No song playing",
-                    flags: [1 << 6]
+            // Immediately defer reply to prevent "Unknown Interaction"
+            if (!interaction.deferred && !interaction.replied) {
+                await interaction.deferReply({ ephemeral: true });
+            }
+
+             if (!player.currentTrack) {
+                return await interaction.editReply({
+                    content: lang.Music.Errors.NoMusic || "❌ No song playing"
                 });
             }
 
             if (!player.hasLyrics || !player.hasLyrics()) {
                 const noLyricsMsg = "No lyrics found for this song.";
-                return await interaction.reply({
-                    content: `🎤 ${noLyricsMsg}`,
-                    flags: [1 << 6]
+                return await interaction.editReply({
+                    content: `🎤 ${noLyricsMsg}`
                 });
             }
 
-            await interaction.deferReply({ ephemeral: true });
+            // Already deferred at start
 
             const lyricsData = player.currentLyrics;
             const pages = LyricsManager.formatFullLyrics(lyricsData, 4000);

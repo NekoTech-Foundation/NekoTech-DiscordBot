@@ -26,6 +26,13 @@ class PermissionManager {
             return true;
         }
 
+        // 2.5 User has "Moderator" role
+        const modRoleName = config.bot.modRoleName || 'Moderator';
+        const modRole = guild.roles.cache.find(role => role.name.toLowerCase() === modRoleName.toLowerCase());
+        if (modRole && member.roles.cache.has(modRole.id)) {
+            return true;
+        }
+
         // 3. User is the one who requested the current track
         if (player && player.currentTrack && player.currentTrack.requestedBy && player.currentTrack.requestedBy.id === member.id) {
             return true;
