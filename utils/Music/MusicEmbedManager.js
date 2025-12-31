@@ -279,12 +279,13 @@ class MusicEmbedManager {
         const footerParts = [];
         
         // Add permission info
-        const permissionInfo = lM.Fields.PermissionInfo;
+        const permissionInfo = lM?.Fields?.PermissionInfo || "Use buttons to control playback";
         footerParts.push(permissionInfo);
         
         // Add queue info if available
         if (player.queue.length > 0) {
-            const queueInfo = lM.Queue.Footer.replace('{count}', player.queue.length).replace('{duration}', ''); // Simplify
+            const queueFooter = lM?.Queue?.Footer || "{count} songs in queue";
+            const queueInfo = queueFooter.replace('{count}', player.queue.length).replace('{duration}', ''); // Simplify
             footerParts.push(queueInfo);
         }
         
@@ -318,7 +319,7 @@ class MusicEmbedManager {
      * Şarkı bittiğinde çağrılır
      */
     async handleTrackEnd(player) {
-        if (player.queue.length > 0) {
+         if (player.queue.length > 0) {
             // Sıradaki şarkıya geç
             const nextTrack = player.queue.shift();
             player.currentTrack = nextTrack;
@@ -339,9 +340,11 @@ class MusicEmbedManager {
         if (player.nowPlayingMessage) {
             try {
                 const disabledButtons = await this.createControlButtons(player, true);
-                await player.nowPlayingMessage.edit({
-                    components: disabledButtons
-                });
+                if (disabledButtons) { // Check if buttons generated successfully
+                     await player.nowPlayingMessage.edit({
+                        components: disabledButtons
+                    });
+                }
             } catch (error) {
                 console.error('Error disabling buttons:', error);
             }
@@ -352,8 +355,8 @@ class MusicEmbedManager {
 
         try {
             const lang = await getLang(guildId);
-            const title = lang.Music.Queue.Empty; // using Queue Empty as title/desc approximation
-            const description = lang.Music.Queue.Empty;
+            const title = lang?.Music?.Queue?.Empty || "Queue Empty"; 
+            const description = lang?.Music?.Queue?.Empty || "No more songs in queue.";
 
             endEmbed = new EmbedBuilder()
                 .setTitle(`🎵 ${title}`)

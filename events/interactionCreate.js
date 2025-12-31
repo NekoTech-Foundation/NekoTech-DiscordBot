@@ -723,8 +723,8 @@ async function handleButtonInteraction(client, interaction) {
     const [action, uniqueId, subAction] = interaction.customId.split('-');
 
     if (interaction.customId.startsWith('music_') || interaction.customId.startsWith('queue_')) {
-        const musicInteractionHandler = require('./musicInteraction');
-        return musicInteractionHandler(client, interaction);
+        const buttonHandler = require('../utils/Music/buttonHandler');
+        return buttonHandler.execute(interaction);
     }
 
     switch (action) {

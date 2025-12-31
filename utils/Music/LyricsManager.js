@@ -129,7 +129,7 @@ class LyricsManager {
                 try {
                     const response = await axios.get(searchUrl, {
                         params,
-                        timeout: 5000
+                        timeout: 10000
                     });
 
                     if (response.data && response.data.length > 0) {

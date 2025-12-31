@@ -484,7 +484,20 @@ module.exports = {
         const actionRow = new ActionRowBuilder().addComponents(volumeInput);
         modal.addComponents(actionRow);
 
-        await interaction.showModal(modal);
+        if (interaction.replied || interaction.deferred) {
+            return await interaction.followUp({ 
+                content: "❌ Cannot open volume modal because the interaction was already processed.", 
+                flags: [1 << 6] 
+            });
+        }
+        
+        try {
+            await interaction.showModal(modal);
+        } catch (error) {
+            if (error.code !== 40060) { // Ignore "already acknowledged" errors if they still slip through
+                throw error;
+            }
+        }
     },
 
     async handleLoop(interaction, player, requesterId) {
