@@ -65,6 +65,7 @@ module.exports = {
     async execute(interaction) {
         // Check Owner/Admin Permission
         const ownerIDs = config.OwnerIDs || [];
+        
         if (!ownerIDs.includes(interaction.user.id)) {
             return interaction.reply({ 
                 content: '❌ Bạn không có quyền sử dụng lệnh này.', 

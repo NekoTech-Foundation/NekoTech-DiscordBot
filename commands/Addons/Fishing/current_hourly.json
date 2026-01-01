@@ -6,10 +6,10 @@
     "max_weight": 5
   },
   "epic": {
-    "name": "Cá hải tượng",
-    "emoji": "<:Fish_pirarucu:1433392966575198351>",
-    "min_weight": 50,
-    "max_weight": 200
+    "name": "Cá mập diềm",
+    "emoji": "<:Fish_frilledshark:1433392941451317392>",
+    "min_weight": 10,
+    "max_weight": 30
   },
-  "updatedAt": "2026-01-01T01:28:47.840Z"
+  "updatedAt": "2026-01-01T01:42:48.447Z"
 }
