@@ -13,7 +13,7 @@ const { loadConfig: loadFishingConfig, getUserFishing } = require('./fishingUtil
 const EconomyUserData = require('../../../models/EconomyUserData');
 const UserData = require('../../../models/UserData');
 const { getConfig } = require('../../../utils/configLoader');
-const { loadLang } = require('../../../utils/langLoader');
+const { getLang } = require('../../../utils/langLoader');
 const { checkActiveBooster } = require('../../../commands/Fun/Economy/Utility/helpers');
 
 const HOURLY_FISH_PATH = path.join(__dirname, 'current_hourly.json');
@@ -442,7 +442,8 @@ async function handleFish(interaction, config, fishingLang) {
 
 async function handleInventory(interaction, config) {
     const userFishing = await getUserFishing(interaction.user.id);
-    const lang = loadLang(interaction.guild.id);
+    const { getLang } = require('../../../utils/langLoader');
+    const lang = await getLang(interaction.guild.id);
     const fishingLang = lang.Addons.Fishing;
 
     const embed = new EmbedBuilder()
@@ -503,7 +504,8 @@ async function handleSell(interaction, config) {
     const fishName = interaction.options.getString('fish');
     const quantityInput = interaction.options.getString('quantity');
     const userFishing = await getUserFishing(interaction.user.id);
-    const lang = loadLang(interaction.guild.id);
+    const { getLang } = require('../../../utils/langLoader');
+    const lang = await getLang(interaction.guild.id);
     const fishingLang = lang.Addons.Fishing;
 
     let economyData = await EconomyUserData.findOne({ userId: interaction.user.id });
@@ -616,7 +618,8 @@ async function handleSell(interaction, config) {
 async function handleSelect(interaction, config) {
     const type = interaction.options.getString('type');
     const userFishing = await getUserFishing(interaction.user.id);
-    const lang = loadLang(interaction.guild.id);
+    const { getLang } = require('../../../utils/langLoader');
+    const lang = await getLang(interaction.guild.id);
     const fishingLang = lang.Addons.Fishing;
 
     if (type === 'rod') {

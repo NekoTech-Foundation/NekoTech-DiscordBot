@@ -119,6 +119,7 @@ VerificationSettings:
     Image: ""
 
 # Custom Commands
+CustomCommands: {}
 CommandsEnabled: true
 CommandsPrefix: "K"
 

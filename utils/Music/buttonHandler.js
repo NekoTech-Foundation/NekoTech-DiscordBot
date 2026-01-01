@@ -344,7 +344,11 @@ module.exports = {
             });
         }
 
-        await interaction.followUp({ embeds: [embed], ephemeral: true });
+        if (interaction.deferred || interaction.replied) {
+            await interaction.followUp({ embeds: [embed], ephemeral: true });
+        } else {
+            await interaction.reply({ embeds: [embed], ephemeral: true });
+        }
 
         // Ana embed'deki butonları disable yap
         if (client.musicEmbedManager) {

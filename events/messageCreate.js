@@ -1054,6 +1054,7 @@ async function processCustomCommands(client, message) {
     try {
         const content = message.content.trim();
         const commandName = content.split(' ')[0].toLowerCase();
+        if (!config.CustomCommands) return;
         const command = config.CustomCommands[commandName];
 
         if (!command) {
