@@ -43,5 +43,6 @@ loadAllConfigs();
 module.exports = {
     getConfig,
     getLang,
+    getLangSync,
     getCommands
 }; 

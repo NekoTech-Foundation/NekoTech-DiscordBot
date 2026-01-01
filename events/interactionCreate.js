@@ -18,7 +18,7 @@ const sharp = require('sharp');
 const axios = require('axios');
 const { getConfig, getLang, getCommands } = require('../utils/configLoader.js');
 const config = getConfig();
-const lang = getLang();
+// const lang = getLang(); // REMOVED: Global lang is a Promise, not object. Loaded in handler instead.
 const { handleVerificationInteraction } = require('../commands/Addons/Verification/interaction');
 const suggestionActions = require('../events/Suggestions/suggestionActions');
 const giveawayActions = require('../events/Giveaways/giveawayActions.js');
@@ -79,6 +79,7 @@ async function processTicketDeletion(client, interaction, ticket, forceDelete = 
         );
 
         if (!updatedTicket) {
+            const lang = interaction.lang || await getLang(interaction.guildId);
             const responseMessage = lang.Tickets.Deleting;
             await replyOrFollowUp(interaction, responseMessage);
             return;
@@ -119,6 +120,7 @@ async function processTicketDeletion(client, interaction, ticket, forceDelete = 
             };
 
             if (deletionTime > 0) {
+                const lang = interaction.lang || await getLang(interaction.guildId);
                 const countdownEmbed = new EmbedBuilder()
                     .setDescription(lang.Tickets.DeleteCountDown.replace('{time}', deletionTime))
                     .setColor('#FF0000');
@@ -201,6 +203,7 @@ async function handleTicketClose(client, interaction, uniqueId, closeReason = nu
         const ticketType = config.TicketTypes[ticket.ticketType];
 
         if (ticket.status === 'deleting' || ticket.status === 'deleted') {
+            const lang = interaction.lang || await getLang(interaction.guildId);
             const responseMessage = lang.Tickets.Deleting;
             await replyOrFollowUp(interaction, responseMessage);
             return;
@@ -214,6 +217,7 @@ async function handleTicketClose(client, interaction, uniqueId, closeReason = nu
         if (ticket.status === 'closed' && !isAutoAlert) {
             await deferIfNeeded(interaction);
             if (archiveCategoryId) {
+                const lang = interaction.lang || await getLang(interaction.guildId);
                 const archiveCategory = interaction.guild.channels.cache.get(archiveCategoryId);
                 if (!isArchived) {
                     await replyOrFollowUp(interaction, lang.Tickets.Archive);
@@ -268,6 +272,7 @@ async function handleTicketClose(client, interaction, uniqueId, closeReason = nu
         );
 
         if (!updatedTicket) {
+            const lang = interaction.lang || await getLang(interaction.guildId);
             const responseMessage = lang.Tickets.Closed;
             await replyOrFollowUp(interaction, responseMessage);
             return;
@@ -309,8 +314,10 @@ async function handleTicketClose(client, interaction, uniqueId, closeReason = nu
             }
 
             await sendArchiveEmbed(interaction, uniqueId, ticket.userId);
+            const lang = interaction.lang || await getLang(interaction.guildId);
             await replyOrFollowUp(interaction, lang.Tickets.Archive);
         } else {
+            const lang = interaction.lang || await getLang(interaction.guildId);
             await replyOrFollowUp(interaction, lang.Tickets.Deletion);
             const forceDelete = isAutoAlert;
             await processTicketDeletion(client, interaction, updatedTicket, forceDelete);
@@ -436,7 +443,7 @@ async function sendLog(client, interaction, ticket, userMessages, transcriptAtta
                 ticketCreator: `<@${ticket.userId}>`,
                 messageCount: userMessages.size.toString(),
                 priority: ticket.priority || 'N/A',
-                rating: ticket.rating || lang.Tickets.ReviewNoRating,
+                rating: ticket.rating || (interaction.lang ? interaction.lang.Tickets.ReviewNoRating : 'No Rating'),
                 channelName: interaction.channel.name,
                 claimer: ticket.claimed ? `<@${ticket.claimedBy}>` : "Unclaimed",
                 reason: closeReason || config.TicketSettings.CloseReasons.DefaultReason
@@ -618,11 +625,15 @@ async function sendArchiveEmbed(interaction, uniqueId, userId) {
 }
 
 module.exports = async (client, interaction) => {
+    // Load language for this interaction
+    const lang = await getLang(interaction.guildId);
+    interaction.lang = lang; // Attach to interaction for helpers
+
     if (interaction.isCommand()) {
         const command = client.slashCommands.get(interaction.commandName);
         if (!command) return;
         try {
-            await command.execute(interaction, client);
+            await command.execute(interaction, lang);
         } catch (error) {
             console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
             
@@ -701,7 +712,7 @@ async function handleSelectMenuInteraction(client, interaction) {
             const row = new ActionRowBuilder().addComponents(
                 new StringSelectMenuBuilder()
                     .setCustomId('ticketcreate')
-                    .setPlaceholder(lang.Tickets.TicketTypePlaceholder)
+                    .setPlaceholder(interaction.lang.Tickets.TicketTypePlaceholder)
                     .addOptions(selectMenu.options.map(option => ({
                         label: option.label,
                         emoji: option.emoji,
@@ -848,6 +859,7 @@ function convertSimplePatternToRegex(simplePattern) {
 }
 
 async function handleModalSubmitInteraction(client, interaction) {
+    const lang = interaction.lang || await getLang(interaction.guildId);
     try {
         const [modalAction, actionType] = interaction.customId.split('-');
         if (modalAction === 'suggestionModal') {
@@ -990,6 +1002,7 @@ async function handleCheckPercent(client, interaction) {
             percent = ((userEntries / totalEntries) * 100).toFixed(2);
         }
 
+        const lang = interaction.lang || await getLang(interaction.guildId);
         const response = lang.Giveaways.CheckChance
             .replace('{user}', `<@${userId}>`)
             .replace('{percent}', percent)

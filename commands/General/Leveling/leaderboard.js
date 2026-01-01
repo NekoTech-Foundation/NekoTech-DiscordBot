@@ -219,8 +219,7 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             ]);
         case 'cauca': {
             const docs = await fishingSchema
-                .find({ 'inventory.0': { $exists: true } })
-                .lean();
+                .find({ 'inventory.0': { $exists: true } });
 
             const scored = docs
                 .map(doc => ({

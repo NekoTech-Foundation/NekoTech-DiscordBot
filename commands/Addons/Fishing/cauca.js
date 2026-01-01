@@ -244,7 +244,7 @@ function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
 // SUBCOMMAND HANDLERS
 // ============================================
 
-async function handleFish(interaction, config) {
+async function handleFish(interaction, config, fishingLang) {
     const userId = interaction.user.id;
 
     // Check cooldown
@@ -901,7 +901,7 @@ module.exports = {
         try {
             switch (subcommand) {
                 case 'fish':
-                    await handleFish(interaction, config);
+                    await handleFish(interaction, config, fishingLang);
                     break;
                 case 'inventory':
                     await handleInventory(interaction, config);

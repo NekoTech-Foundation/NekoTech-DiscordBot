@@ -1993,3 +1993,41 @@ Music:
     Completed: "Đã phát hết hàng đợi!"
     CompletedDesc: "Hãy thêm bài hát mới để tiếp tục nghe nhạc."
     EmptyQueue: "Hàng đợi trống!"
+
+# ===========================================================================
+# ECONOMY COMMANDS
+# ===========================================================================
+Economy:
+  Messages:
+    cooldown: "Bạn phải đợi <t:{nextUse}:R> để sử dụng lại lệnh này!"
+    footer: "Số dư: {balance} 🪙"
+    error: "Đã xảy ra lỗi khi thực hiện lệnh!"
+    win: "Thắng"
+    lose: "Thua"
+    targetRob: "Người này quá nghèo để cướp!"
+  Actions:
+    Beg:
+      Title: "Ăn xin"
+      Messages:
+        - "{user}, cậu thật tội nghiệp! Cầm lấy {balance} 🪙 và đi mua gì ăn đi."
+        - "Một người lạ mặt tốt bụng đã cho {user} {balance} 🪙."
+        - "{user} van xin thảm thiết và nhận được {balance} 🪙."
+    Daily:
+      Title: "Điểm danh hàng ngày"
+      Messages:
+        - "{user} đã điểm danh và nhận được {balance} 🪙! (Chuỗi: {streak} ngày)"
+  Games:
+    Crime:
+      Title: "Phạm tội - {result}"
+      Win:
+        - "Bạn đã cướp ngân hàng thành công và trốn thoát với {balance} 🪙!"
+        - "Bạn đã móc túi một người qua đường và lấy được {balance} 🪙!"
+      Lose:
+        - "Cảnh sát đã bắt được bạn! Bạn bị phạt {balance} 🪙."
+        - "Bạn đã cố gắng trộm xe nhưng bị chủ xe bắt gặp. Bạn đền {balance} 🪙."
+    Rob:
+      Title: "Cướp bóc - {result}"
+      Win:
+        - "Bạn đã cướp {balance} 🪙 từ {victim}!"
+      Lose:
+        - "Bạn đã thất bại khi cố cướp {victim} và phải bỏ chạy!"
