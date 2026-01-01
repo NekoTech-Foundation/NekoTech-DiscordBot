@@ -157,8 +157,9 @@ module.exports = {
         ),
     category: 'Music',
 
-    async execute(interaction, client) {
-        const lang = await getLang(interaction.guild?.id);
+    async execute(interaction, lang) {
+        // lang passed from handler
+        const client = interaction.client;
         const lM = lang.Music;
         const subcommand = interaction.options.getSubcommand();
         const member = interaction.member;

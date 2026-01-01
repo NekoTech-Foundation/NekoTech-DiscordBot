@@ -36,7 +36,8 @@ module.exports = {
                         .setRequired(true)))
         ,
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const configPath = path.join(__dirname, 'config.yml');
         const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
         

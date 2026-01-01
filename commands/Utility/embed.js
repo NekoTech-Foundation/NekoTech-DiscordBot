@@ -806,7 +806,7 @@ module.exports = {
         // Khởi tạo embed
         let embed = new EmbedBuilder()
             .setAuthor({ name: 'Embed Builder' })
-            .setColor(config.EmbedColors)
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setDescription('Chào mừng đến với **Embed Builder**! Sử dụng các nút bên dưới để xây dựng embed.');
 
         let messageId = null;

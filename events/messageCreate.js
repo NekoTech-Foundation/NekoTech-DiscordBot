@@ -475,7 +475,7 @@ module.exports = async (client, message) => {
                     }
                 };
 
-                await slashCommand.execute(fakeInteraction, client);
+                await slashCommand.execute(fakeInteraction, lang);
             } catch (error) {
                 const { handleError } = require('../utils/errorHandler.js');
                 await handleError(error, message);

@@ -31,7 +31,8 @@ module.exports = {
             .setRequired(false)
         ),
     category: 'Moderation',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const requiredRoles = config.ModerationRoles.poll;
         const hasPermission = requiredRoles.some(roleId => interaction.member.roles.cache.has(roleId));
         const isAdministrator = interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
@@ -56,7 +57,7 @@ module.exports = {
         const pollEmbed = new EmbedBuilder()
             .setAuthor({ name: `${interaction.guild.name}`, iconURL: guildIcon })
             .setTitle(question)
-            .setColor(config.EmbedColors)
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setFooter({ text: `Cuộc thăm dò được tạo bởi ${userDisplayName}`, iconURL: userIcon });
 
         let description = '';

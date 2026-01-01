@@ -125,7 +125,8 @@ module.exports = {
                         .setDescription('👤 Người bạn muốn gửi lời chào')
                         .setRequired(true))),
     category: 'Fun',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const subcommand = interaction.options.getSubcommand();
         const target = interaction.options.getUser('target');
         const action = actions[subcommand];
@@ -143,7 +144,7 @@ module.exports = {
             if (target.id === client.user.id) {
                 const embed = new EmbedBuilder()
                     .setDescription(`<@${interaction.user.id}> bro trying to fuck me? uno reverse and take a L bitch ez`)
-                    .setColor(config.EmbedColors);
+                    .setColor(config.EmbedColors?.Default || '#0099ff');
 
                 return await interaction.reply({ embeds: [embed] });
             }
@@ -151,7 +152,7 @@ module.exports = {
             // Normal case - target is another user
             const embed = new EmbedBuilder()
                 .setDescription(`yo <@${target.id}> get a fuck from <@${interaction.user.id}>`)
-                .setColor(config.EmbedColors);
+                .setColor(config.EmbedColors?.Default || '#0099ff');
 
             return await interaction.reply({ embeds: [embed] });
         }
@@ -178,7 +179,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setDescription(`<@${interaction.user.id}> ${action.message} <@${target.id}>.`)
                 .setImage(gifUrl)
-                .setColor(config.EmbedColors);
+                .setColor(config.EmbedColors?.Default || '#0099ff');
 
             await interaction.editReply({ content: null, embeds: [embed] });
         } catch (error) {

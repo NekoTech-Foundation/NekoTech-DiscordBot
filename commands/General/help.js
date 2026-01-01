@@ -294,10 +294,10 @@ module.exports = {
         );
     },
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
         await interaction.deferReply();
-
-        const lang = await getLang(interaction.guild?.id);
+        
+        const client = interaction.client;
         const commandName = interaction.options.getString('command');
 
         if (commandName) {

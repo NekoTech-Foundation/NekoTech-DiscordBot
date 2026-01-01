@@ -23,7 +23,7 @@ module.exports = {
 
     async execute(interaction) {
         try {
-            await interaction.deferReply();
+            await interaction.deferReply({ fetchReply: true });
 
             const bot = interaction.client;
             const uptimeTimestamp = Math.floor((Date.now() - bot.uptime) / 1000);

@@ -41,7 +41,8 @@ module.exports = {
                 .setName('clear')
                 .setDescription('Xóa tin nhắn đã snipe gần nhất')),
     category: 'Chung',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const subCommand = interaction.options.getSubcommand();
 
         if (subCommand === 'clear') {
@@ -65,7 +66,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setAuthor({ name: `${snipeMsg.author}`, iconURL: `${snipeMsg.member.user.displayAvatarURL()}` })
-            .setColor(config.EmbedColors)
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setTimestamp(snipeMsg.timestamp);
 
         if (subCommand === 'edited' && snipeMsg.edited) {

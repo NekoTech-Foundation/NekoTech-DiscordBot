@@ -36,7 +36,7 @@ module.exports = {
         .setName('serverinfo')
         .setDescription('Xem thông tin chi tiết về máy chủ hiện tại'),
     category: 'Chung',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         try {
             const guild = interaction.guild;
             const createdTimestamp = Math.floor(guild.createdAt.getTime() / 1000);
@@ -68,7 +68,7 @@ module.exports = {
             }
 
             const serverInfo = new EmbedBuilder()
-                .setColor(config.EmbedColors || '#5865F2')
+                .setColor(config.EmbedColors?.Default || '#5865F2')
                 .setAuthor({
                     name: `📊 Thông tin máy chủ`,
                     iconURL: icon || interaction.client.user.displayAvatarURL()

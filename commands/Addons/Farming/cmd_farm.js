@@ -118,12 +118,13 @@ module.exports = {
         }
     },
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         await interaction.deferReply();
         const subcommand = interaction.options.getSubcommand();
         const userId = interaction.user.id;
         const config = getConfig();
-        const lang = await getLang(interaction.guild.id);
+        // const lang = await getLang(interaction.guild.id); // lang passed from handler
         const farmingLang = lang.Addons.Farming;
 
         if (subcommand === 'plant') {

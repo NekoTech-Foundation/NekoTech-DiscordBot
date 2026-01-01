@@ -145,7 +145,8 @@ module.exports = {
                 .setDescription('Get information about a backup')
                 .addStringOption(option => option.setName('id').setDescription('The backup ID').setRequired(true))),
     category: 'Utility',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
             return interaction.reply({ content: lang.NoPermsMessage, flags: MessageFlags.Ephemeral });
         }
@@ -179,7 +180,7 @@ module.exports = {
 async function createBackup(interaction) {
     const loadingEmbed = new EmbedBuilder()
         .setAuthor({ name: 'Creating Backup...', iconURL: 'https://i.imgur.com/7SlmRRa.png' })
-        .setColor(config.EmbedColors)
+        .setColor(config.EmbedColors?.Default || '#0099ff')
         .setDescription('⏳ Please wait while the backup is being created...')
         .setTimestamp();
 
@@ -302,7 +303,7 @@ async function loadBackup(interaction, backupID) {
 
         const loadingEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Loading Backup', iconURL: 'https://i.imgur.com/7SlmRRa.png' })
-            .setColor(config.EmbedColors)
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setDescription('⏳ Loading backup, please wait...')
             .setTimestamp();
 
@@ -406,7 +407,7 @@ async function listBackups(interaction) {
 
         const embed = new EmbedBuilder()
             .setAuthor({ name: 'Server Backups', iconURL: interaction.guild.iconURL() })
-            .setColor(config.EmbedColors)
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setDescription(backupList)
             .addFields(
                 { name: 'Total Backups', value: `\`${backups.length}\``, inline: true },
@@ -454,7 +455,7 @@ async function backupInfo(interaction, backupID) {
 
         const embed = new EmbedBuilder()
             .setAuthor({ name: 'Backup Information', iconURL: interaction.guild.iconURL() })
-            .setColor(config.EmbedColors)
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setDescription(`Information about backup \`${backupID}\``)
             .addFields(
                 { name: '📅 Created', value: `<t:${timestamp}:F> (<t:${timestamp}:R>)`, inline: false },

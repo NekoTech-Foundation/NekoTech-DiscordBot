@@ -15,7 +15,7 @@ module.exports = {
         .setName('daily')
         .setDescription('Nhận quà hàng ngày nào!'),
     category: 'Economy',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         try {
             let user = await EconomyUserData.findOne(
                 { userId: interaction.user.id },

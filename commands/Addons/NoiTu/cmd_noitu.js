@@ -40,7 +40,8 @@ module.exports = {
                     .setDescription('Từ cần test')
                     .setRequired(true))),
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const config = loadConfig();
         const subcommand = interaction.options.getSubcommand();
 

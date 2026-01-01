@@ -21,8 +21,9 @@ module.exports = {
                 .setDescription('⏱️ Thời gian dự kiến trở lại (vd: 1h, 30m)')
                 .setRequired(false)),
 
-    async execute(interaction, client) {
-        const lang = await getLang(interaction.guild.id);
+    async execute(interaction, lang) {
+        const client = interaction.client;
+        // lang passed from handler
         const afkLang = lang.Addons.AFK;
         // Check permissions
         if (config.settings.allowed_roles.length > 0) {

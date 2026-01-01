@@ -78,7 +78,8 @@ module.exports = {
             subcommand
                 .setName('bosuutap')
                 .setDescription('Xem các ảnh bạn đã yêu thích')),
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         await interaction.deferReply();
 
         try {

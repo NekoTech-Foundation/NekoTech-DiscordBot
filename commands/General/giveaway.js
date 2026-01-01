@@ -208,7 +208,8 @@ module.exports = {
                 )
         ),
     category: 'General',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         try {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 

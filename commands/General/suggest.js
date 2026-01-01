@@ -162,7 +162,8 @@ function convertSimplePatternToRegex(simplePattern) {
 module.exports = {
     data: command,
     category: 'General',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         try {
             if (!config.SuggestionSettings.Enabled) {
                 await interaction.reply({

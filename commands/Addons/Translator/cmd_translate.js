@@ -17,7 +17,8 @@ module.exports = {
             option.setName('from')
                 .setDescription('Ngôn ngữ nguồn (mặc định: tự động phát hiện)')),
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const text = interaction.options.getString('text');
         const targetLang = interaction.options.getString('to');
         const sourceLang = interaction.options.getString('from') || 'auto';

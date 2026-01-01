@@ -43,10 +43,11 @@ module.exports = {
                 .setDescription('View current verification settings')
         ),
     
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const subcommand = interaction.options.getSubcommand();
         const config = getConfig();
-        const lang = getLang(); // Or fetch per guild if supported
+        // const lang = getLang(); // lang passed from handler
 
         if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
             return interaction.reply({ content: lang.Global.Permissions, flags: MessageFlags.Ephemeral });

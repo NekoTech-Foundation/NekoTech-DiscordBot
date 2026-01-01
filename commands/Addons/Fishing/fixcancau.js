@@ -7,7 +7,8 @@ module.exports = {
         .setName('fixcancau')
         .setDescription('Sửa cần câu đã trang bị của bạn.'),
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const userId = interaction.user.id;
         const config = loadConfig();
         const userFishing = await getUserFishing(userId);

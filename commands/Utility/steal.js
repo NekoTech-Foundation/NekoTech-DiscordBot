@@ -50,7 +50,8 @@ module.exports = {
                     option.setName('addtoserver')
                         .setDescription('Tùy chọn thêm sticker vào máy chủ của bạn'))),
     category: 'Tiện ích',
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
             return interaction.reply({
                 content: "Bạn không có quyền sử dụng lệnh này.",

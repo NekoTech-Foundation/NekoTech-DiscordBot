@@ -890,12 +890,12 @@ module.exports = {
         }
     },
 
-    async execute(interaction, client) {
+    async execute(interaction, lang) {
+        const client = interaction.client;
         const { getConfig } = require('../../../utils/configLoader');
         const { getLang } = require('../../../utils/langLoader');        
         const subcommand = interaction.options.getSubcommand();
         const config = loadFishingConfig();
-        const lang = await getLang(interaction.guild?.id);
         const fishingLang = lang.Addons.Fishing;
 
         try {
