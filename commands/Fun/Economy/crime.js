@@ -4,9 +4,6 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
-const lang = getLang();
-const parseDuration = require('./Utility/parseDuration');
-
 const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
 
 module.exports = {
@@ -14,7 +11,7 @@ module.exports = {
         .setName('crime')
         .setDescription('Đi ăn cướp thử xem sao..!'),
     category: 'Economy',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         try {
             let user = await EconomyUserData.findOne(
                 { userId: interaction.user.id },

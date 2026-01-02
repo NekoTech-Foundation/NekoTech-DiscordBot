@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const EconomyUserData = require('../../../models/EconomyUserData');
 const { getConfig, getLang } = require('../../../utils/configLoader.js');
-const lang = getLang();
 const { replacePlaceholders } = require('./Utility/helpers');
 
 module.exports = {
@@ -25,7 +24,7 @@ module.exports = {
                 .addIntegerOption(opt => opt.setName('amount').setDescription('Số lượng').setRequired(true))
         ),
     category: 'Economy',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         const subcommand = interaction.options.getSubcommand();
         const amount = interaction.options.getInteger('amount');
         

@@ -84,7 +84,7 @@ module.exports = {
             const attachment = interaction.options.getAttachment('attachment');
             const attachmentUrl = attachment ? attachment.url : null;
 
-            const newAutoResponse = new AutoResponse({
+            await AutoResponse.create({
                 guildId,
                 trigger,
                 response,
@@ -93,8 +93,6 @@ module.exports = {
                 attachmentUrl
             });
 
-            await newAutoResponse.save();
-            await newAutoResponse.save();
             await interaction.reply({ content: autoLang.UI.AddSuccess.replace('{trigger}', trigger), ephemeral: true });
 
         } else if (subcommand === 'view') {

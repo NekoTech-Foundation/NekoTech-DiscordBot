@@ -3,7 +3,6 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
-const lang = getLang();
 const { replacePlaceholders } = require('./Utility/helpers');
 
 module.exports = {
@@ -15,7 +14,7 @@ module.exports = {
                 .setName('view')
                 .setDescription('View your active boosters')),
     category: 'Economy',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         const user = await EconomyUserData.findOne(
             { userId: interaction.user.id },
             { boosters: 1 }

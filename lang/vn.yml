@@ -1528,6 +1528,21 @@ Economy:
         - "Vận may đang tắc đường thôi! 🚦"
         - "Đừng buồn, admin vẫn yêu bạn... (chắc thế) 💔"
 
+    Roll:
+      WinTitle: "Số Đỏ! 🎲"
+      LoseTitle: "Số Đen! 🎲"
+      ResultDesc: "Xúc xắc: **{roll}**\nBạn chọn: **{guess}**"
+      Low: "Xỉu (1-50)"
+      High: "Tài (51-100)"
+
+    Roulette:
+      WinTitle: "Roulette Thắng! 🎉"
+      LoseTitle: "Roulette Thua! 🥀"
+      ResultDesc: "Bóng rơi vào: **{result}**\nBạn chọn: **{color}**"
+      Red: "ĐỎ"
+      Black: "ĐEN"
+      Green: "XANHL"
+
   Games:
     Crime:
       Title: "🚨 Tội phạm - {result}!"

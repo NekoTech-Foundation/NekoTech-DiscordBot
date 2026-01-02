@@ -92,7 +92,7 @@ module.exports = {
                     .setTitle(`📸 Kết quả #${index + 1}`)
                     .setURL(`https://rule34.xxx/index.php?page=post&s=view&id=${post.id}`)
                     .setImage(post.file_url)
-                    .setColor(config.EmbedColors || '#00D9FF')
+                    .setColor(config.EmbedColors?.Default || '#00D9FF')
                     .addFields(
                         { 
                             name: '⭐ Score', 

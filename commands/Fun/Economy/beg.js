@@ -4,7 +4,6 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
-const lang = getLang();
 const parseDuration = require('./Utility/parseDuration');
 
 const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
@@ -14,7 +13,7 @@ module.exports = {
         .setName('beg')
         .setDescription('Đi ăn xin... đúng vậy,ăn xin kiếm xèng'),
     category: 'Economy',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         await interaction.deferReply();
         let user = await EconomyUserData.findOne(
             { userId: interaction.user.id },

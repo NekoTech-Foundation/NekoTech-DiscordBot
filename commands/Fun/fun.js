@@ -136,7 +136,7 @@ module.exports = {
         const result = replies[Math.floor(Math.random() * replies.length)];
         
         const embed = new EmbedBuilder()
-            .setColor(config.EmbedColors || '#0099ff')
+            .setColor(config.EmbedColors?.Default || '#0099ff')
             .setTitle(lang.EightBallTitle || "8 Ball")
             .addFields({ name: "Câu hỏi", value: question }, { name: "Trả lời", value: result })
             .setFooter({ text: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() });
@@ -233,7 +233,7 @@ module.exports = {
                     .setTitle(json.title)
                     .setURL(json.postLink)
                     .setImage(json.url)
-                    .setColor(config.EmbedColors || '#000000')
+                    .setColor(config.EmbedColors?.Default || '#000000')
                     .setFooter({ text: `👍 ${json.ups} | Author: ${json.author}` });
                 await interaction.editReply({ embeds: [embed] });
             } else if (type === 'text') {
@@ -245,7 +245,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setTitle('😂 Meme')
                     .setImage(url)
-                    .setColor(config.EmbedColors || '#000000');
+                    .setColor(config.EmbedColors?.Default || '#000000');
                 await interaction.editReply({ embeds: [embed] });
             } else if (type === 'sadcat') {
                 const text = interaction.options.getString('text');
@@ -293,7 +293,7 @@ module.exports = {
             .setTitle(`Gửi tới ${user.username}`)
             .setDescription(lines[Math.floor(Math.random() * lines.length)])
             .setImage(gifs[Math.floor(Math.random() * gifs.length)])
-            .setColor(config.EmbedColors || '#000000');
+            .setColor(config.EmbedColors?.Default || '#000000');
         await interaction.reply({ embeds: [embed] });
     },
 
@@ -314,7 +314,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setDescription(`<@${interaction.user.id}> ${sc.text} <@${target.id}>.`)
             .setImage(sc.image)
-            .setColor(config.EmbedColors || '#FF0000');
+            .setColor(config.EmbedColors?.Error || '#FF0000');
         await interaction.reply({ embeds: [embed] });
     }
 };

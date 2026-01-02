@@ -102,7 +102,7 @@ async function createAutoBackup(guild, client) {
             if (logsChannel) {
                 const embed = new EmbedBuilder()
                     .setAuthor({ name: 'Automatic Backup Created', iconURL: 'https://i.imgur.com/7SlmRRa.png' })
-                    .setColor(config.SuccessEmbedColor)
+                    .setColor(config.EmbedColors.Success)
                     .setDescription(`A new backup has been automatically created.\nBackup ID: ${backupData.id}`)
                     .setTimestamp();
                 
@@ -228,7 +228,7 @@ async function createBackup(interaction) {
 
         const successEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Backup Created', iconURL: 'https://i.imgur.com/7SlmRRa.png' })
-            .setColor(config.SuccessEmbedColor)
+            .setColor(config.EmbedColors.Success)
             .setDescription(`✅ Backup created successfully!\n\n**Backup ID:** \`${backupData.id}\`\n\nUse \`/backup info ${backupData.id}\` to view details.`)
             .setFooter({ text: interaction.guild.name })
             .setTimestamp();
@@ -238,7 +238,7 @@ async function createBackup(interaction) {
         console.error('Error creating backup:', err);
         const errorEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-            .setColor(config.ErrorEmbedColor)
+            .setColor(config.EmbedColors.Error)
             .setDescription('❌ An error occurred while creating the backup.\nPlease try again with fewer channels or messages.')
             .setTimestamp();
         
@@ -252,7 +252,7 @@ async function deleteBackup(interaction, backupID) {
         if (!deletedBackup) {
             const errorEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-                .setColor(config.ErrorEmbedColor)
+                .setColor(config.EmbedColors.Error)
                 .setDescription(`❌ No backup found with ID: \`${backupID}\``)
                 .setTimestamp();
             
@@ -262,7 +262,7 @@ async function deleteBackup(interaction, backupID) {
 
         const successEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Backup Deleted', iconURL: 'https://i.imgur.com/7SlmRRa.png' })
-            .setColor(config.SuccessEmbedColor)
+            .setColor(config.EmbedColors.Success)
             .setDescription(`✅ Successfully deleted backup with ID: \`${backupID}\``)
             .setFooter({ text: interaction.guild.name })
             .setTimestamp();
@@ -272,7 +272,7 @@ async function deleteBackup(interaction, backupID) {
         console.error('Error deleting backup:', err);
         const errorEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-            .setColor(config.ErrorEmbedColor)
+            .setColor(config.EmbedColors.Error)
             .setDescription(`❌ An error occurred while deleting the backup: ${err.message}`)
             .setTimestamp();
         
@@ -286,7 +286,7 @@ async function loadBackup(interaction, backupID) {
         if (!backupExists) {
             const errorEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-                .setColor(config.ErrorEmbedColor)
+                .setColor(config.EmbedColors.Error)
                 .setDescription(`❌ No backup found with ID: \`${backupID}\``)
                 .setTimestamp();
             
@@ -309,7 +309,7 @@ async function loadBackup(interaction, backupID) {
 
         const successEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Backup Loaded', iconURL: 'https://i.imgur.com/7SlmRRa.png' })
-            .setColor(config.SuccessEmbedColor)
+            .setColor(config.EmbedColors.Success)
             .setDescription('✅ Backup loaded successfully!')
             .setTimestamp();
 
@@ -356,7 +356,7 @@ async function loadBackup(interaction, backupID) {
             } else {
                 const cancelEmbed = new EmbedBuilder()
                     .setAuthor({ name: 'Cancelled', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-                    .setColor(config.ErrorEmbedColor)
+                    .setColor(config.EmbedColors.Error)
                     .setDescription('❌ Backup load cancelled.')
                     .setTimestamp();
 
@@ -365,7 +365,7 @@ async function loadBackup(interaction, backupID) {
         } catch (e) {
             const timeoutEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Timeout', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-                .setColor(config.ErrorEmbedColor)
+                .setColor(config.EmbedColors.Error)
                 .setDescription('❌ Backup load cancelled - No response received within 30 seconds.')
                 .setTimestamp();
 
@@ -375,7 +375,7 @@ async function loadBackup(interaction, backupID) {
         console.error('Error loading backup:', err);
         const errorEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-            .setColor(config.ErrorEmbedColor)
+            .setColor(config.EmbedColors.Error)
             .setDescription(`❌ An error occurred while loading the backup: ${err.message}`)
             .setTimestamp();
         
@@ -392,7 +392,7 @@ async function listBackups(interaction) {
         if (backups.length === 0) {
             const noBackupsEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Server Backups', iconURL: interaction.guild.iconURL() })
-                .setColor(config.ErrorEmbedColor)
+                .setColor(config.EmbedColors.Error)
                 .setDescription('❌ No backups available for this server.')
                 .setTimestamp();
             
@@ -422,7 +422,7 @@ async function listBackups(interaction) {
         console.error('Error listing backups:', err);
         const errorEmbed = new EmbedBuilder()
             .setAuthor({ name: lang.ErrorEmbedTitle, iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-            .setColor(config.ErrorEmbedColor)
+            .setColor(config.EmbedColors.Error)
             .setDescription('An error occurred while listing the backups.')
             .setTimestamp();
         
@@ -436,7 +436,7 @@ async function backupInfo(interaction, backupID) {
         if (!backupDoc) {
             const errorEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-                .setColor(config.ErrorEmbedColor)
+                .setColor(config.EmbedColors.Error)
                 .setDescription(`❌ No backup found with ID: \`${backupID}\``)
                 .setTimestamp();
             
@@ -474,7 +474,7 @@ async function backupInfo(interaction, backupID) {
         console.error('Error retrieving backup info:', err);
         const errorEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Error', iconURL: 'https://i.imgur.com/MdiCK2c.png' })
-            .setColor(config.ErrorEmbedColor)
+            .setColor(config.EmbedColors.Error)
             .setDescription(`❌ An error occurred while retrieving backup information: ${err.message}`)
             .setTimestamp();
         

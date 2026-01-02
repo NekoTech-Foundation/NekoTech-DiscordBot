@@ -25,6 +25,7 @@ const giveawayActions = require('../events/Giveaways/giveawayActions.js');
 
 const Blacklist = require('../models/blacklist');
 const Giveaway = require('../models/Giveaway');
+const Ticket = require('../models/ticket');
 const client = require("../index");
 const tiktok = require('@tobyg74/tiktok-api-dl'); // Require the new library
 const musicButtonHandler = require('../utils/Music/buttonHandler.js');

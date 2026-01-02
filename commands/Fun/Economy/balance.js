@@ -5,7 +5,6 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 //const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
-const lang = getLang();
 const { replacePlaceholders } = require('./Utility/helpers');
 
 const transactionCache = new Map();
@@ -152,7 +151,7 @@ module.exports = {
             { name: 'Log', value: 'log' }
         )),
     category: 'Economy',
-    async execute(interaction) {
+    async execute(interaction, lang) {
         const userOption = interaction.options.getUser('user');
         const type = interaction.options.getString('type');
         const targetUser = userOption || interaction.user;

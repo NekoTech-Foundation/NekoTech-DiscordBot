@@ -80,7 +80,7 @@ module.exports = {
                 )
                 .setColor('#57F287');
 
-            return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            return interaction.editReply({ embeds: [embed] });
         } else if (subCommand === 'remove') {
             const identifier = interaction.options.getString('identifier');
             let found = false;
@@ -132,7 +132,7 @@ module.exports = {
                 .setColor('#5865F2')
                 .setFooter({ text: 'Use /autoreact add to add more reactions.' });
 
-            return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+            return interaction.editReply({ embeds: [embed] });
         }
     },
 };

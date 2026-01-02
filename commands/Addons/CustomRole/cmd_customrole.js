@@ -152,6 +152,7 @@ module.exports = {
                 )
         ),
     async execute(interaction) {
+        await interaction.deferReply({ ephemeral: true });
         const subcommand = interaction.options.getSubcommand();
         const group = interaction.options.getSubcommandGroup();
 
@@ -160,7 +161,7 @@ module.exports = {
             const customRole = await CustomRole.findOne({ roleId: role.id, guildId: interaction.guild.id });
 
             if (!customRole) {
-                return interaction.reply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
+                return interaction.editReply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
             }
 
             const author = await interaction.guild.members.fetch(customRole.authorId);
@@ -175,17 +176,17 @@ module.exports = {
                     { name: 'Số người dùng tối đa', value: customRole.maxUsers.toString(), inline: true }
                 );
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
         } else if (group === 'user') {
-            const customRole = await CustomRole.findOne({ authorId: interaction.user.id, guildId: interaction.guild.id });
+            const [customRole] = await CustomRole.find({ authorId: interaction.user.id, guildId: interaction.guild.id });
 
             if (!customRole) {
-                return interaction.reply({ content: 'Bạn không sở hữu role tùy chỉnh nào.', ephemeral: true });
+                return interaction.editReply({ content: 'Bạn không sở hữu role tùy chỉnh nào.', ephemeral: true });
             }
 
             const role = await interaction.guild.roles.fetch(customRole.roleId);
             if (!role) {
-                return interaction.reply({ content: 'Không tìm thấy role của bạn. Có thể nó đã bị xóa.', ephemeral: true });
+                return interaction.editReply({ content: 'Không tìm thấy role của bạn. Có thể nó đã bị xóa.', ephemeral: true });
             }
 
             if (subcommand === 'info') {
@@ -200,64 +201,64 @@ module.exports = {
                         { name: 'Số người dùng tối đa', value: customRole.maxUsers.toString(), inline: true }
                     );
 
-                await interaction.reply({ embeds: [embed] });
+                await interaction.editReply({ embeds: [embed] });
             } else if (subcommand === 'add') {
                 if (!customRole.permissions.manageMembers) {
-                    return interaction.reply({ content: 'Bạn không có quyền thêm thành viên vào role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền thêm thành viên vào role này.', ephemeral: true });
                 }
                 if (role.members.size >= customRole.maxUsers) {
-                    return interaction.reply({ content: 'Role của bạn đã đạt số lượng thành viên tối đa.', ephemeral: true });
+                    return interaction.editReply({ content: 'Role của bạn đã đạt số lượng thành viên tối đa.', ephemeral: true });
                 }
                 const userToAdd = interaction.options.getUser('user');
                 const memberToAdd = await interaction.guild.members.fetch(userToAdd.id);
                 await memberToAdd.roles.add(role);
-                await interaction.reply({ content: `Đã thêm ${userToAdd.toString()} vào role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã thêm ${userToAdd.toString()} vào role ${role.name}.`, ephemeral: true });
             } else if (subcommand === 'remove') {
                 if (!customRole.permissions.manageMembers) {
-                    return interaction.reply({ content: 'Bạn không có quyền xóa thành viên khỏi role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền xóa thành viên khỏi role này.', ephemeral: true });
                 }
                 const userToRemove = interaction.options.getUser('user');
                 const memberToRemove = await interaction.guild.members.fetch(userToRemove.id);
                 await memberToRemove.roles.remove(role);
-                await interaction.reply({ content: `Đã xóa ${userToRemove.toString()} khỏi role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã xóa ${userToRemove.toString()} khỏi role ${role.name}.`, ephemeral: true });
             } else if (subcommand === 'color') {
                 if (!customRole.permissions.editColor) {
-                    return interaction.reply({ content: 'Bạn không có quyền thay đổi màu của role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền thay đổi màu của role này.', ephemeral: true });
                 }
                 const color = interaction.options.getString('color');
                 await role.setColor(color);
-                await interaction.reply({ content: `Đã thay đổi màu của role ${role.name} thành ${color}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã thay đổi màu của role ${role.name} thành ${color}.`, ephemeral: true });
             } else if (subcommand === 'name') {
                 if (!customRole.permissions.editName) {
-                    return interaction.reply({ content: 'Bạn không có quyền thay đổi tên của role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền thay đổi tên của role này.', ephemeral: true });
                 }
                 const name = interaction.options.getString('name');
                 await role.setName(name);
-                await interaction.reply({ content: `Đã thay đổi tên của role thành ${name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã thay đổi tên của role thành ${name}.`, ephemeral: true });
             } else if (subcommand === 'icon') {
                 if (!customRole.permissions.editIcon) {
-                    return interaction.reply({ content: 'Bạn không có quyền thay đổi icon của role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền thay đổi icon của role này.', ephemeral: true });
                 }
                 const icon = interaction.options.getAttachment('icon');
                 await role.setIcon(icon.url);
-                await interaction.reply({ content: `Đã thay đổi icon của role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã thay đổi icon của role ${role.name}.`, ephemeral: true });
             } else if (subcommand === 'removeicon') {
                 if (!customRole.permissions.editIcon) {
-                    return interaction.reply({ content: 'Bạn không có quyền thay đổi icon của role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền thay đổi icon của role này.', ephemeral: true });
                 }
                 await role.setIcon(null);
-                await interaction.reply({ content: `Đã xóa icon của role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã xóa icon của role ${role.name}.`, ephemeral: true });
             } else if (subcommand === 'mentionable') {
                 if (!customRole.permissions.mentionable) {
-                    return interaction.reply({ content: 'Bạn không có quyền thay đổi việc có thể nhắc đến của role này.', ephemeral: true });
+                    return interaction.editReply({ content: 'Bạn không có quyền thay đổi việc có thể nhắc đến của role này.', ephemeral: true });
                 }
                 const mentionable = interaction.options.getBoolean('action');
                 await role.setMentionable(mentionable);
-                await interaction.reply({ content: `Đã thay đổi việc có thể nhắc đến của role ${role.name} thành ${mentionable}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã thay đổi việc có thể nhắc đến của role ${role.name} thành ${mentionable}.`, ephemeral: true });
             }
         } else if (group === 'admin') {
             if (!interaction.member.permissions.has('Administrator')) {
-                return interaction.reply({ content: 'Bạn không có quyền sử dụng lệnh này.', ephemeral: true });
+                return interaction.editReply({ content: 'Bạn không có quyền sử dụng lệnh này.', ephemeral: true });
             }
 
             if (subcommand === 'create') {
@@ -305,15 +306,15 @@ module.exports = {
                     },
                 });
 
-                await interaction.reply({ content: `Đã tạo role tùy chỉnh ${newRole.name} cho ${author.toString()}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã tạo role tùy chỉnh ${newRole.name} cho ${author.toString()}.`, ephemeral: true });
             } else if (subcommand === 'terminate') {
                 const user = interaction.options.getUser('user');
                 const deleteRole = interaction.options.getBoolean('delete_role') ?? false;
 
-                const customRole = await CustomRole.findOne({ authorId: user.id, guildId: interaction.guild.id });
+                const [customRole] = await CustomRole.find({ authorId: user.id, guildId: interaction.guild.id });
 
                 if (!customRole) {
-                    return interaction.reply({ content: 'Người dùng này không sở hữu role tùy chỉnh nào.', ephemeral: true });
+                    return interaction.editReply({ content: 'Người dùng này không sở hữu role tùy chỉnh nào.', ephemeral: true });
                 }
 
                 if (deleteRole) {
@@ -325,7 +326,7 @@ module.exports = {
 
                 await CustomRole.deleteOne({ _id: customRole._id });
 
-                await interaction.reply({ content: `Đã ngừng role tùy chỉnh của ${user.toString()}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã ngừng role tùy chỉnh của ${user.toString()}.`, ephemeral: true });
             } else if (subcommand === 'migrate') {
                 const role = interaction.options.getRole('role');
                 const author = interaction.options.getUser('author');
@@ -348,7 +349,7 @@ module.exports = {
                     expiresAt,
                 });
 
-                await interaction.reply({ content: `Đã chuyển role ${role.name} thành role tùy chỉnh cho ${author.toString()}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã chuyển role ${role.name} thành role tùy chỉnh cho ${author.toString()}.`, ephemeral: true });
             } else if (subcommand === 'on_expire') {
                 const action = interaction.options.getString('action');
                 await CustomRoleSettings.findOneAndUpdate(
@@ -357,13 +358,13 @@ module.exports = {
                     { upsert: true }
                 );
 
-                await interaction.reply({ content: `Đã đặt hành động khi hết hạn thành: ${action}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã đặt hành động khi hết hạn thành: ${action}.`, ephemeral: true });
             } else if (subcommand === 'edit_permission') {
                 const role = interaction.options.getRole('role');
                 const customRole = await CustomRole.findOne({ roleId: role.id, guildId: interaction.guild.id });
 
                 if (!customRole) {
-                    return interaction.reply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
+                    return interaction.editReply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
                 }
 
                 customRole.permissions.editName = interaction.options.getBoolean('edit_name') ?? customRole.permissions.editName;
@@ -373,12 +374,12 @@ module.exports = {
                 customRole.permissions.mentionable = interaction.options.getBoolean('make_role_mentionable') ?? customRole.permissions.mentionable;
 
                 await customRole.save();
-                await interaction.reply({ content: `Đã cập nhật quyền cho role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã cập nhật quyền cho role ${role.name}.`, ephemeral: true });
             } else if (subcommand === 'max_users') {
                 const role = interaction.options.getRole('role');
                 const users = interaction.options.getInteger('users');
                 await CustomRole.updateOne({ roleId: role.id, guildId: interaction.guild.id }, { maxUsers: users });
-                await interaction.reply({ content: `Đã cập nhật số người dùng tối đa cho role ${role.name} thành ${users}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã cập nhật số người dùng tối đa cho role ${role.name} thành ${users}.`, ephemeral: true });
             } else if (subcommand === 'default_author_permission') {
                 const editName = interaction.options.getBoolean('edit_name') ?? false;
                 const editIcon = interaction.options.getBoolean('edit_icon') ?? false;
@@ -400,14 +401,14 @@ module.exports = {
                     { upsert: true }
                 );
 
-                await interaction.reply({ content: 'Đã cập nhật quyền mặc định cho role tùy chỉnh.', ephemeral: true });
+                await interaction.editReply({ content: 'Đã cập nhật quyền mặc định cho role tùy chỉnh.', ephemeral: true });
             } else if (subcommand === 'extend') {
                 const role = interaction.options.getRole('role');
                 const timeRange = interaction.options.getString('time_range');
                 const customRole = await CustomRole.findOne({ roleId: role.id, guildId: interaction.guild.id });
 
                 if (!customRole) {
-                    return interaction.reply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
+                    return interaction.editReply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
                 }
 
                 if (timeRange === '0') {
@@ -420,14 +421,14 @@ module.exports = {
                 }
 
                 await customRole.save();
-                await interaction.reply({ content: `Đã gia hạn role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã gia hạn role ${role.name}.`, ephemeral: true });
             } else if (subcommand === 'reduce') {
                 const role = interaction.options.getRole('role');
                 const timeRange = interaction.options.getString('time_range');
                 const customRole = await CustomRole.findOne({ roleId: role.id, guildId: interaction.guild.id });
 
                 if (!customRole) {
-                    return interaction.reply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
+                    return interaction.editReply({ content: 'Role này không phải là role tùy chỉnh.', ephemeral: true });
                 }
 
                 const reduceMilliseconds = parseDuration(timeRange);
@@ -436,9 +437,9 @@ module.exports = {
                 }
 
                 await customRole.save();
-                await interaction.reply({ content: `Đã giảm thời gian của role ${role.name}.`, ephemeral: true });
+                await interaction.editReply({ content: `Đã giảm thời gian của role ${role.name}.`, ephemeral: true });
             } else {
-                await interaction.reply({ content: 'Lệnh đang được phát triển.', ephemeral: true });
+                await interaction.editReply({ content: 'Lệnh đang được phát triển.', ephemeral: true });
             }
         }
     }

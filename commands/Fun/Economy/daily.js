@@ -7,7 +7,6 @@ const { seeds, addToFarm } = require('../../Addons/Farming/farmUtils');
 const { getUserFishing, loadConfig: loadFishingConfig } = require('../../Addons/Fishing/fishingUtils');
 
 const config = getConfig();
-const lang = getLang();
 const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
 
 module.exports = {
