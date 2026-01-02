@@ -49,7 +49,11 @@ if (version < 18) {
 const { Client, GatewayIntentBits, PermissionsBitField } = require('discord.js');
 const pixivAddon = require('./commands/Addons/Pixiv/pixiv.js');
 const musicButtonHandler = require('./utils/Music/buttonHandler.js');
+
 const musicModalHandler = require('./utils/Music/modalHandler.js');
+
+
+
 
 const client = new Client({
     intents: [
@@ -138,6 +142,9 @@ client.on('inviteDelete', async invite => {
 });
 
 client.on('interactionCreate', async interaction => {
+
+
+
     // Music Bot Handlers
     if (interaction.isButton() || interaction.isStringSelectMenu()) {
         if (interaction.customId.startsWith('music_') || 
