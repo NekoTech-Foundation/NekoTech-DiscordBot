@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ChannelType, PermissionsBitField, MessageFlags } = require('discord.js');
 const ChannelStat = require('../../models/channelStatSchema');
-const Ticket = require('../../models/tickets');
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,11 +29,7 @@ module.exports = {
                             { name: 'ServerRegion', value: 'ServerRegion' },
                             { name: 'TotalBannedMembers', value: 'TotalBannedMembers' },
                             { name: 'TotalMembersWithRole', value: 'TotalMembersWithRole' },
-                            { name: 'OnlineMembersWithRole', value: 'OnlineMembersWithRole' },
-                            { name: 'TotalTickets', value: 'TotalTickets' },
-                            { name: 'OpenTickets', value: 'OpenTickets' },
-                            { name: 'ClosedTickets', value: 'ClosedTickets' },
-                            { name: 'DeletedTickets', value: 'DeletedTickets' }
+                            { name: 'OnlineMembersWithRole', value: 'OnlineMembersWithRole' }
                         ))
                 .addChannelOption(option =>
                     option.setName('channel')
@@ -83,17 +79,7 @@ module.exports = {
 
                 let newChannelName = channelName;
 
-                if (['TotalTickets', 'OpenTickets', 'ClosedTickets', 'DeletedTickets'].includes(type)) {
-                    const ticketCount = await Ticket.countDocuments({
-                        guildId,
-                        ...(type === 'OpenTickets' && { status: 'open' }),
-                        ...(type === 'ClosedTickets' && { status: 'closed' }),
-                        ...(type === 'DeletedTickets' && { status: 'deleted' })
-                    });
-
-                    const formattedCount = new Intl.NumberFormat('en-US').format(ticketCount);
-                    newChannelName = channelName.replace('{stats}', formattedCount);
-                } else if (type === 'ServerRegion') {
+                if (type === 'ServerRegion') {
                     const region = interaction.guild.preferredLocale || 'en-US';
                     newChannelName = channelName.replace('{stats}', region);
                 } else if (type === 'ServerCreationDate') {

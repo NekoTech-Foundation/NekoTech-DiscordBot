@@ -62,7 +62,7 @@ rank: true
 level: true
 General: true
 role: false
-antihoist: false
+safety: true
 tempban: true
 clearchannel: true
 clearhistory: true
@@ -80,7 +80,7 @@ temprole: true
 nickname: true
 moderation: true
 "Report Message": true
-tickets: true
+
 tempvoice: true
 afk: true
 botavatar: true

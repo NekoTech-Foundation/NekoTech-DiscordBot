@@ -5,7 +5,7 @@ const moment = require('moment-timezone');
 
 const UserData = require('../models/UserData');
 const GuildData = require('../models/guildDataSchema');
-const Ticket = require('../models/tickets');
+
 const Invite = require('../models/inviteSchema');
 const { getConfig } = require('../utils/configLoader.js');
 const config = getConfig();

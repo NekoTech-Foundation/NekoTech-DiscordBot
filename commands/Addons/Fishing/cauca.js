@@ -528,7 +528,7 @@ async function handleSell(interaction, config) {
         for (const fish of userFishing.inventory) {
             const pricePerKg = config.rarity_prices_per_kg[fish.rarity];
             if (pricePerKg) {
-                const gain = Math.floor(pricePerKg * fish.totalWeight);
+                const gain = Math.max(5 * fish.quantity, Math.floor(pricePerKg * fish.totalWeight));
                 totalGain += gain;
                 soldFish.push({ ...fish, gain });
             }
@@ -582,7 +582,7 @@ async function handleSell(interaction, config) {
         const pricePerKg = config.rarity_prices_per_kg[fish.rarity];
         const weightPerFish = fish.totalWeight / fish.quantity;
         const weightToSell = weightPerFish * quantity;
-        const totalGain = Math.floor(pricePerKg * weightToSell);
+        const totalGain = Math.max(5 * quantity, Math.floor(pricePerKg * weightToSell));
 
         fish.quantity -= quantity;
         fish.totalWeight -= weightToSell;

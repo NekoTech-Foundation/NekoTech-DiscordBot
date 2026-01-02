@@ -5,7 +5,7 @@ const colors = require('ansi-colors');
 const packageFile = require('../package.json');
 const GuildData = require('../models/guildDataSchema');
 const Verification = require('../models/verificationSchema');
-const Ticket = require('../models/tickets');
+
 // const { handleVerification } = require('../events/Verification/VerificationEvent');
 const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
 const botStartTime = Date.now();

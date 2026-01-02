@@ -22,7 +22,7 @@ const config = getConfig();
 const { handleVerificationInteraction } = require('../commands/Addons/Verification/interaction');
 const suggestionActions = require('../events/Suggestions/suggestionActions');
 const giveawayActions = require('../events/Giveaways/giveawayActions.js');
-const Ticket = require('../models/tickets');
+
 const Blacklist = require('../models/blacklist');
 const Giveaway = require('../models/Giveaway');
 const client = require("../index");
@@ -632,6 +632,25 @@ module.exports = async (client, interaction) => {
     if (interaction.isCommand()) {
         const command = client.slashCommands.get(interaction.commandName);
         if (!command) return;
+
+        // Anti-Grief check: Disabled Commands
+        if (interaction.guild) {
+            try {
+                const GuildData = require('../models/guildDataSchema');
+                const guildData = await GuildData.findOne({ guildID: interaction.guild.id });
+                if (guildData && guildData.safety && guildData.safety.disabledCommands) {
+                    if (guildData.safety.disabledCommands.includes(interaction.commandName)) {
+                        return interaction.reply({ 
+                            content: lang.Errors.CommandDisabled || "❌ This command is currently disabled in this server.", 
+                            flags: MessageFlags.Ephemeral 
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error("Error checking disabled commands:", err);
+            }
+        }
+
         try {
             await command.execute(interaction, lang);
         } catch (error) {

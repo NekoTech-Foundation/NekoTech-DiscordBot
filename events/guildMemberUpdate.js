@@ -1,4 +1,5 @@
 ﻿const { EmbedBuilder, AuditLogEvent } = require('discord.js');
+const SafetyManager = require('../utils/SafetyManager');
 //const fs = require('fs');
 //const yaml = require('js-yaml');
 const moment = require('moment-timezone');
@@ -19,8 +20,8 @@ module.exports = async (client, oldMember, newMember) => {
     const untimeLogChannel = newMember.guild.channels.cache.get(config.UntimeLogs.LogsChannelID);
 
     try {
-        if (config.AntiHoist.EnableOnUserUpdate) {
-            handleAntiHoist(newMember);
+        if (oldMember.nickname !== newMember.nickname) {
+             await SafetyManager.checkAntiHoist(newMember);
         }
 
         if (config.UserUpdateLogs.Enabled && oldMember.nickname !== newMember.nickname) {
@@ -46,38 +47,7 @@ module.exports = async (client, oldMember, newMember) => {
     }
 };
 
-function handleAntiHoist(member) {
-    let displayName = member.displayName;
-    let originalDisplayName = displayName;
 
-    while (displayName.length > 0 && (config.AntiHoist.DisallowedCharacters.includes(displayName.charAt(0)) || displayName.charAt(0) === ' ')) {
-        displayName = displayName.substring(1);
-    }
-
-    if (displayName.length === 0) {
-        displayName = config.AntiHoist.DefaultDisplayName;
-    }
-
-    if (displayName !== originalDisplayName) {
-        try {
-            member.setNickname(displayName.trim());
-
-            const logChannel = member.guild.channels.cache.get(config.AntiHoist.LogsChannelID);
-            if (logChannel) {
-                let logEmbed = new EmbedBuilder()
-                    .setColor(parseInt(config.AntiHoist.LogEmbed.Color.replace("#", ""), 16))
-                    .setTitle(replaceAntiHoistPlaceholders(config.AntiHoist.LogEmbed.Title, member).replace("{oldDisplayName}", originalDisplayName))
-                    .setDescription(replaceAntiHoistPlaceholders(config.AntiHoist.LogEmbed.Description.join('\n'), member).replace("{oldDisplayName}", originalDisplayName).replace("{newDisplayName}", displayName))
-                    .setFooter({ text: replaceAntiHoistPlaceholders(config.AntiHoist.LogEmbed.Footer, member).replace("{oldDisplayName}", originalDisplayName).replace("{newDisplayName}", displayName) })
-                    .setTimestamp();
-
-                logChannel.send({ embeds: [logEmbed] });
-            }
-        } catch (error) {
-            console.error('Error updating nickname or sending log:', error);
-        }
-    }
-}
 
 function handleRoleChange(oldMember, newMember, addLogChannel, removeLogChannel, currentTime) {
     const oldRoles = new Set(oldMember.roles.cache.map(role => role.id));
@@ -329,19 +299,3 @@ function replacePlaceholders(text, member, oldNickname, newNickname, addedRoleNa
         .replace(/{longtime}/g, currentTime.format('MMMM Do YYYY'));
 }
 
-function replaceAntiHoistPlaceholders(text, member) {
-    const currentTime = moment().tz(config.Timezone);
-
-    return text
-        .replace(/{user}/g, `<@${member.id}>`)
-        .replace(/{newDisplayName}/g, member.displayName)
-        .replace(/{userName}/g, member.user.username)
-        .replace(/{userTag}/g, member.user.tag)
-        .replace(/{userId}/g, member.user.id)
-        .replace(/{user-createdAt}/g, moment(member.user.createdAt).tz(config.Timezone).format('MM/DD/YYYY'))
-        .replace(/{user-joinedAt}/g, moment(member.joinedAt).tz(config.Timezone).format('MM/DD/YYYY'))
-        .replace(/{memberCount}/g, member.guild.memberCount)
-        .replace(/{guildName}/g, member.guild.name)
-        .replace(/{shorttime}/g, currentTime.format("HH:mm"))
-        .replace(/{longtime}/g, currentTime.format('MMMM Do YYYY'));
-}

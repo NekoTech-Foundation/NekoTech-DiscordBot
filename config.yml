@@ -83,6 +83,12 @@ AI:
     Model: "gemini-2.5-flash"
     Enabled: false
 
+# API Keys (Added for Repost and Pixiv addons)
+API_Keys:
+  YouTube: ""
+  Pixiv:
+    RefreshToken: ""
+
 # Hệ thống Cấp độ (Leveling)
 LevelingSystem:
   Enabled: true

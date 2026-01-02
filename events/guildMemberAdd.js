@@ -8,6 +8,7 @@ const GuildData = require('../models/guildDataSchema');
 const UserData = require('../models/UserData');
 const { getConfig, getLang, getCommands } = require('../utils/configLoader.js');
 const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
+const SafetyManager = require('../utils/SafetyManager');
 
 const lang = getLang();
 const config = getConfig();
@@ -23,6 +24,10 @@ module.exports = async (client, member) => {
     if (member.id === client.user.id || member.user.bot) {
         return;
     }
+
+    try {
+        await SafetyManager.checkAntiHoist(member);
+    } catch (e) {}
 
     if (config.AltPrevention.Enabled) {
         const accountAge = Date.now() - member.user.createdAt;
