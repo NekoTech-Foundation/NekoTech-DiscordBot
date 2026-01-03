@@ -494,7 +494,12 @@ Giveaways: # Các biến giữ chỗ: {prize} {serverName} {hostedBy} {whitelist
   CalculationError: "Đã xảy ra lỗi khi tính toán cơ hội của bạn."
   GiveawayNotFound: "Không tìm thấy giveaway hoặc nó có thể đã bị xóa...."
   GiveawayAlreadyEnded: "Giveaway đã kết thúc."
-  GiveawayHasntEnded: "Giveaway chưa kết thúc."
+  # ===========================================================================
+# TIN NHẮN KENTA SCRATCH
+# ===========================================================================
+KentaScratch:
+  Errors:
+    ParsingOptions: "Lỗi khi phân tích các tùy chọn (Options)"
   WinMessage: "Chúc mừng những người chiến thắng trong giveaway **{prize}**! {winners}" # biến giữ chỗ {winners}
   WinRerollMessage: "Giveaway đã được quay lại! Chúc mừng những người chiến thắng mới của giveaway **{prize}**! {winners}" # biến giữ chỗ {winners}
   WinnerDirectMessage: "Chúc mừng, bạn đã thắng giveaway **{prize}**! Vui lòng mở một phiếu hỗ trợ trong máy chủ **{serverName}**. {channel}"

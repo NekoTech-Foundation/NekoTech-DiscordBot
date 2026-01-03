@@ -2,7 +2,12 @@ NoPermsMessage: "このコマンドを使用する権限がありません。"
 SuccessEmbedTitle: "成功"
 ErrorEmbedTitle: "エラーが発生しました"
 Errors:
-  Title: "エラーが発生しました"
+# ===========================================================================
+# KENTA SCRATCH MESSAGES
+# ===========================================================================
+KentaScratch:
+  Errors:
+    ParsingOptions: "オプションの解析中にエラーが発生しました"
   Generic: "コマンドの実行中にエラーが発生しました。後でもう一度お試しください！"
   ReportButton: "エラー報告 (サポートサーバー)"
   SupportServerButton: "メインサーバー"

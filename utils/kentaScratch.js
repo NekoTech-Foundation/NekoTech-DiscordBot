@@ -6,6 +6,7 @@ const {
     EmbedBuilder
 } = require('discord.js');
 const moment = require('moment-timezone');
+const { getLang } = require('./langLoader');
 const models = {
     Layout: require('../models/Layout'),
     Button: require('../models/Button'),
@@ -38,6 +39,26 @@ class KentaScratch {
         const embeds = [];
         const actions = []; // For things like {add_role}, {sleep}
 
+        // Get Language
+        let lang = context.lang;
+        if (!lang) {
+            lang = await getLang(context.guild?.id);
+            context.lang = lang; // Store for reused calls or passing down
+        }
+
+        // 0. Language Placeholder {lang:Key.SubKey}
+        // Must be done early so other placeholders can be used in the lang strings if needed? 
+        // Or late? Usually early allows "Welcome {user}" string in lang file to be parsed.
+        // But here we are replacing INTO the content.
+        parsedContent = parsedContent.replace(/{lang:([^}]+)}/g, (match, keyPath) => {
+            const keys = keyPath.split('.');
+            let val = lang;
+            for (const k of keys) {
+                val = val?.[k];
+            }
+            return (typeof val === 'string') ? val : match;
+        });
+
         // 1. Basic Placeholders
         parsedContent = await this.parsePlaceholders(parsedContent, context);
 
@@ -68,7 +89,7 @@ class KentaScratch {
              for (const selId of selectIds) {
                  const selData = await models.Select.findOne({ id: selId, guildId: context.guild?.id });
                  if (selData) {
-                    const row = new ActionRowBuilder().addComponents(await this.buildSelect(selData));
+                    const row = new ActionRowBuilder().addComponents(await this.buildSelect(selData, lang));
                     components.push(row);
                  }
              }
@@ -127,7 +148,7 @@ class KentaScratch {
                             const selId = comp.content.trim();
                             const selData = await models.Select.findOne({ id: selId, guildId: context.guild?.id });
                             if (selData) {
-                                const row = new ActionRowBuilder().addComponents(await this.buildSelect(selData));
+                                const row = new ActionRowBuilder().addComponents(await this.buildSelect(selData, lang));
                                 components.push(row);
                             }
                         }
@@ -243,7 +264,7 @@ class KentaScratch {
         return btn;
     }
 
-    async buildSelect(selData) {
+    async buildSelect(selData, lang) {
         const select = new StringSelectMenuBuilder()
             .setCustomId(`kenta_sel_${selData.id}`)
             .setPlaceholder(selData.placeholder)
@@ -263,7 +284,8 @@ class KentaScratch {
             }
         } catch (e) {
             console.error('Error parsing select options:', e);
-            select.addOptions([{ label: 'Error parsing options', value: 'error' }]);
+            const errorMsg = lang?.KentaScratch?.Errors?.ParsingOptions || 'Error parsing options';
+            select.addOptions([{ label: errorMsg, value: 'error' }]);
         }
 
         return select;

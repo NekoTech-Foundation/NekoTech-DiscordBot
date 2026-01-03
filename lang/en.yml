@@ -427,7 +427,12 @@ Giveaways:
   EntrySuccessMessage: "🎉 You successfully entered the giveaway for **{prize}** hosted by {hostedBy}!"
   LeaveSuccessMessage: "👋 You successfully left the giveaway."
   EntryErrorMessage: "An error occurred while trying to enter the giveaway. Please contact support."
-  CheckChance: "{user}, you have a {percent}% chance of winning this giveaway. ({entries} entries)"
+# ===========================================================================
+# KENTA SCRATCH MESSAGES
+# ===========================================================================
+KentaScratch:
+  Errors:
+    ParsingOptions: "Error parsing options"
   NotJoinedGiveaway: "You have not joined this giveaway!"
   CalculationError: "An error occurred whilst calculating your chance."
   GiveawayNotFound: "Giveaway not found or may have been deleted...."
