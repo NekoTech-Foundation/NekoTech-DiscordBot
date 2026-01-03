@@ -1,8 +1,9 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const axios = require('axios');
 const UI = require('./ui');
+const { translateText } = require('../Translator/translatorUtils');
 
-const api = axios.create({ baseURL: 'https://api.jikan.moe/v4', timeout: 10000 });
+const api = axios.create({ baseURL: 'https://api.jikan.moe/v4', timeout: 15000 });
 
 async function jikanGet(path, params = {}) {
   try {
@@ -10,7 +11,8 @@ async function jikanGet(path, params = {}) {
     return data;
   } catch (err) {
     if (err.response && err.response.status === 429) {
-      await new Promise(r => setTimeout(r, 1000));
+      // Simple exponential backoff or just a longer wait
+      await new Promise(r => setTimeout(r, 2000));
       const { data } = await api.get(path, { params });
       return data;
     }
@@ -71,8 +73,13 @@ module.exports = {
         }
     } catch (e) {
       console.error('[Jikan] command error:', e?.response?.data || e);
-      if (!interaction.deferred && !interaction.replied) return interaction.reply({ content: 'Đã xảy ra lỗi khi gọi Jikan API.', ephemeral: true });
-      return interaction.editReply({ content: 'Đã xảy ra lỗi khi gọi Jikan API.' });
+      // More specific error handling
+      let msg = 'Đã xảy ra lỗi khi gọi Jikan API.';
+      if (e?.response?.status === 404) msg = 'Không tìm thấy dữ liệu.';
+      if (e?.response?.status === 429) msg = 'API đang bị quá tải, vui lòng thử lại sau giây lát.';
+      
+      if (!interaction.deferred && !interaction.replied) return interaction.reply({ content: msg, ephemeral: true });
+      return interaction.editReply({ content: msg });
     }
   }
 };
@@ -122,34 +129,29 @@ async function handleAnimeRandom(interaction) {
   await interaction.deferReply();
   const data = await jikanGet('/random/anime');
   const anime = data.data;
-  try {
-    const { translateText } = require('../Translator/translatorUtils');
-    if (anime?.synopsis) {
-      const descVi = await translateText(anime.synopsis, 'vi', 'auto');
-      const description = (descVi || anime.synopsis);
-      const footerText = descVi ? 'Bản dịch được thực hiện bởi Google Translate' : undefined;
-      const embedTranslated = UI.animeEmbed(anime, { description, footerText });
-      let components = [];
-      if (anime?.mal_id) {
-        const row = new ActionRowBuilder().addComponents(
-          new ButtonBuilder().setCustomId(`jikan_lang_anime_vi_${anime.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
-          new ButtonBuilder().setCustomId(`jikan_lang_anime_en_${anime.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
-        );
-        components = [row];
-      }
-      return interaction.editReply({ embeds: [embedTranslated], components });
-    }
-  } catch { }
-  const embed = UI.animeEmbed(anime);
-  let components2 = [];
-  if (anime?.mal_id) {
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId(`jikan_lang_anime_vi_${anime.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId(`jikan_lang_anime_en_${anime.mal_id}`).setLabel('English').setStyle(ButtonStyle.Primary)
-    );
-    components2 = [row];
+
+  // Try translate
+  let description = anime.synopsis;
+  let footerText;
+  if (anime.synopsis) {
+    try {
+        const descVi = await translateText(anime.synopsis, 'vi', 'auto');
+        if (descVi) {
+            description = descVi;
+            footerText = 'Bản dịch được thực hiện bởi Google Translate';
+        }
+    } catch {}
   }
-  return interaction.editReply({ embeds: [embed], components: components2 });
+  
+  const embed = UI.animeEmbed(anime, { description, footerText });
+  const components = [];
+  if (anime?.mal_id) {
+    components.push(new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId(`jikan_lang_anime_vi_${anime.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId(`jikan_lang_anime_en_${anime.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
+    ));
+  }
+  return interaction.editReply({ embeds: [embed], components });
 }
 
 async function handleAnimeCharacter(interaction) {
@@ -168,38 +170,27 @@ async function handleAnimeCharacter(interaction) {
     try { const basic = await jikanGet(`/characters/${target.mal_id}`); if (basic?.data) ch = { ...ch, ...basic.data }; } catch { }
   }
 
-  try {
-    const about = (ch?.about || '').toString().trim();
-    if (about) {
-      let finalDesc = about;
+  let description = (ch?.about || '').toString().trim();
+  let footerText;
+  if (description) {
       try {
-        const { translateText } = require('../Translator/translatorUtils');
-        const aboutVi = await translateText(about, 'vi', 'auto');
-        finalDesc = aboutVi || about;
-      } catch { }
-      if (finalDesc.length > 3900) finalDesc = finalDesc.slice(0, 3890) + '…';
-      const embedVi = UI.characterEmbed(ch, { description: finalDesc, footerText: 'Bản dịch bởi Google Translate' });
-      let components = [];
-      if (ch?.mal_id) {
-        const row = new ActionRowBuilder().addComponents(
-          new ButtonBuilder().setCustomId(`jikan_lang_character_vi_${ch.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
-          new ButtonBuilder().setCustomId(`jikan_lang_character_en_${ch.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
-        );
-        components = [row];
-      }
-      return interaction.editReply({ embeds: [embedVi], components });
-    }
-  } catch { }
-  const embed = UI.characterEmbed(ch);
-  let components2 = [];
-  if (ch?.mal_id) {
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId(`jikan_lang_character_vi_${ch.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId(`jikan_lang_character_en_${ch.mal_id}`).setLabel('English').setStyle(ButtonStyle.Primary)
-    );
-    components2 = [row];
+          const aboutVi = await translateText(description, 'vi', 'auto');
+          if (aboutVi) {
+              description = aboutVi;
+              footerText = 'Bản dịch bởi Google Translate';
+          }
+      } catch {}
   }
-  return interaction.editReply({ embeds: [embed], components: components2 });
+  
+  const embed = UI.characterEmbed(ch, { description, footerText });
+  const components = [];
+  if (ch?.mal_id) {
+    components.push(new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId(`jikan_lang_character_vi_${ch.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId(`jikan_lang_character_en_${ch.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
+    ));
+  }
+  return interaction.editReply({ embeds: [embed], components });
 }
 
 async function handleAnimeSchedule(interaction) {
@@ -244,38 +235,33 @@ async function handleMangaRandom(interaction) {
   await interaction.deferReply();
   const data = await jikanGet('/random/manga');
   const manga = data.data;
-  try {
-    const { translateText } = require('../Translator/translatorUtils');
-    if (manga?.synopsis) {
-      const descVi = await translateText(manga.synopsis, 'vi', 'auto');
-      const description = (descVi || manga.synopsis);
-      const footerText = descVi ? 'Bản dịch được thực hiện bởi Google Translate' : undefined;
-      const embedT = UI.mangaEmbed(manga, { description, footerText });
-      let components = [];
-      if (manga?.mal_id) {
-        const row = new ActionRowBuilder().addComponents(
-          new ButtonBuilder().setCustomId(`jikan_lang_manga_vi_${manga.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
-          new ButtonBuilder().setCustomId(`jikan_lang_manga_en_${manga.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
-        );
-        components = [row];
-      }
-      return interaction.editReply({ embeds: [embedT], components });
-    }
-  } catch {}
-  const embed = UI.mangaEmbed(manga);
-  let components2 = [];
-  if (manga?.mal_id) {
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId(`jikan_lang_manga_vi_${manga.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId(`jikan_lang_manga_en_${manga.mal_id}`).setLabel('English').setStyle(ButtonStyle.Primary)
-    );
-    components2 = [row];
+
+  // Try translate
+  let description = manga.synopsis;
+  let footerText;
+  if (manga.synopsis) {
+      try {
+          const descVi = await translateText(manga.synopsis, 'vi', 'auto');
+          if (descVi) {
+              description = descVi;
+              footerText = 'Bản dịch được thực hiện bởi Google Translate';
+          }
+      } catch {}
   }
-  return interaction.editReply({ embeds: [embed], components: components2 });
+
+  const embed = UI.mangaEmbed(manga, { description, footerText });
+  const components = [];
+  if (manga?.mal_id) {
+    components.push(new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId(`jikan_lang_manga_vi_${manga.mal_id}`).setLabel('Tiếng Việt').setStyle(ButtonStyle.Primary),
+      new ButtonBuilder().setCustomId(`jikan_lang_manga_en_${manga.mal_id}`).setLabel('English').setStyle(ButtonStyle.Secondary)
+    ));
+  }
+  return interaction.editReply({ embeds: [embed], components });
 }
 
 
-// --- Chart Handler (Refactored from cmd_anime_chart & cmd_manga_chart) ---
+// --- Chart Handler ---
 async function buildAnimePeriodEmbed(metric, period, page) {
   const now = new Date();
   const start = new Date(now);
@@ -342,6 +328,5 @@ async function handleMangaChart(interaction) {
     return interaction.editReply({ embeds: [embed], components: [row] });
 }
 
-// Export builders for jikan_interactions to use if needed (buttons)
 module.exports._buildAnimePeriodEmbed = buildAnimePeriodEmbed;
 module.exports._buildMangaPeriodEmbed = buildMangaPeriodEmbed;

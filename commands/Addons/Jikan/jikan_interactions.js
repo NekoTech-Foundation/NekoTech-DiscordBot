@@ -4,11 +4,20 @@ const axios = require('axios');
 const UI = require('./ui');
 const { translateText } = require('../Translator/translatorUtils');
 
-const api = axios.create({ baseURL: 'https://api.jikan.moe/v4', timeout: 10000 });
+const api = axios.create({ baseURL: 'https://api.jikan.moe/v4', timeout: 15000 });
 
 async function jikanGet(path, params = {}) {
-  const { data } = await api.get(path, { params });
-  return data;
+  try {
+    const { data } = await api.get(path, { params });
+    return data;
+  } catch (err) {
+    if (err.response && err.response.status === 429) {
+       await new Promise(r => setTimeout(r, 2000));
+       const { data } = await api.get(path, { params });
+       return data;
+    }
+    throw err;
+  }
 }
 
 module.exports = {
@@ -25,6 +34,7 @@ module.exports = {
           const metric = parts[3];
           const period = parts[4];
           const page = parseInt(parts[5] || '1', 10) || 1;
+          
           if (kind === 'anime') {
             const { _buildAnimePeriodEmbed } = require('./cmd_jikan');
             const { embed, row } = await _buildAnimePeriodEmbed(metric, period, page);
@@ -50,16 +60,19 @@ module.exports = {
             const res = await jikanGet(`/anime/${id}`);
             const anime = res?.data;
             if (!anime) return;
+            
             let description = anime.synopsis || '-';
             let footerText;
-            if (lang === 'vi' && description) {
+            if (lang === 'vi' && anime.synopsis) {
               try {
-                const vi = await translateText(description, 'vi', 'auto');
-                if (vi) description = vi;
-                footerText = 'Bản dịch được thực hiện bởi Google Translate';
+                const vi = await translateText(anime.synopsis, 'vi', 'auto');
+                if (vi) {
+                    description = vi;
+                    footerText = 'Bản dịch được thực hiện bởi Google Translate';
+                }
               } catch {}
             }
-            if (description.length > 3900) description = description.slice(0, 3890) + '…';
+            
             const embed = UI.animeEmbed(anime, { description, footerText });
             const row = new ActionRowBuilder().addComponents(
               new ButtonBuilder().setCustomId(`jikan_lang_anime_vi_${id}`).setLabel('Tiếng Việt').setStyle(lang === 'vi' ? ButtonStyle.Primary : ButtonStyle.Secondary),
@@ -72,16 +85,19 @@ module.exports = {
             const res = await jikanGet(`/manga/${id}`);
             const manga = res?.data;
             if (!manga) return;
+            
             let description = manga.synopsis || '-';
             let footerText;
-            if (lang === 'vi' && description) {
+            if (lang === 'vi' && manga.synopsis) {
               try {
-                const vi = await translateText(description, 'vi', 'auto');
-                if (vi) description = vi;
-                footerText = 'Bản dịch được thực hiện bởi Google Translate';
+                const vi = await translateText(manga.synopsis, 'vi', 'auto');
+                if (vi) {
+                    description = vi;
+                    footerText = 'Bản dịch được thực hiện bởi Google Translate';
+                }
               } catch {}
             }
-            if (description.length > 3900) description = description.slice(0, 3890) + '…';
+            
             const embed = UI.mangaEmbed(manga, { description, footerText });
             const row = new ActionRowBuilder().addComponents(
               new ButtonBuilder().setCustomId(`jikan_lang_manga_vi_${id}`).setLabel('Tiếng Việt').setStyle(lang === 'vi' ? ButtonStyle.Primary : ButtonStyle.Secondary),
@@ -101,17 +117,20 @@ module.exports = {
               ch = basic?.data;
             }
             if (!ch) return;
+            
             let description = (ch.about || '').toString().trim();
             let footerText;
             if (lang === 'vi' && description) {
               try {
                 const vi = await translateText(description, 'vi', 'auto');
-                if (vi) description = vi;
-                footerText = 'Bản dịch được thực hiện bởi Google Translate';
+                if (vi) {
+                    description = vi;
+                    footerText = 'Bản dịch được thực hiện bởi Google Translate';
+                }
               } catch {}
             }
-            if (description && description.length > 3900) description = description.slice(0, 3890) + '…';
-            const embed = UI.characterEmbed(ch, description ? { description, footerText } : {});
+            
+            const embed = UI.characterEmbed(ch, { description, footerText });
             const row = new ActionRowBuilder().addComponents(
               new ButtonBuilder().setCustomId(`jikan_lang_character_vi_${id}`).setLabel('Tiếng Việt').setStyle(lang === 'vi' ? ButtonStyle.Primary : ButtonStyle.Secondary),
               new ButtonBuilder().setCustomId(`jikan_lang_character_en_${id}`).setLabel('English').setStyle(lang === 'en' ? ButtonStyle.Primary : ButtonStyle.Secondary)
@@ -122,8 +141,9 @@ module.exports = {
         }
       } catch (e) {
         console.error('[Jikan buttons] error:', e);
-        try { if (!interaction.replied && !interaction.deferred) await interaction.reply({ content: 'Lỗi chuyển kỳ.', ephemeral: true }); } catch {}
+        try { if (!interaction.replied && !interaction.deferred) await interaction.reply({ content: 'Lỗi xử lý yêu cầu.', ephemeral: true }); } catch {}
       }
     });
   }
 };
+
