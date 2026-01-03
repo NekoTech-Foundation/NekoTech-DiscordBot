@@ -1,0 +1,64 @@
+# Danh Sách Lệnh Kiểm Tra Hệ Thống (Testing Checklist)
+
+Vui lòng thực hiện lần lượt các bước sau để đảm bảo mọi chức năng hoạt động ổn định.
+
+### 1. Kiểm tra Button (Nút bấm)
+✅ **Mục tiêu**: Tạo được nút trả lời tin nhắn, nút link và nút mở form.
+
+- [ ] Gõ `/buttons` -> Chọn **Add Button**.
+  - Tạo nút 1: ID=`btn_hello`, Label=`Chào`, Style=`Primary`, Content=`Xin chào bạn!`
+  - Tạo nút 2: ID=`btn_google`, Label=`Google`, Style=`Link`, Content=`https://google.com`
+- [ ] Ghi nhớ ID `btn_hello` và `btn_google`.
+
+### 2. Kiểm tra Select (Menu lựa chọn)
+✅ **Mục tiêu**: Tạo menu và thêm được các lựa chọn, sửa placeholder.
+
+- [ ] Gõ `/selects` -> Chọn **➕ Tạo select**.
+  - ID=`menu_test`, Placeholder=`Chọn 1 số...`
+- [ ] Trong menu quản lý, chọn `menu_test`.
+- [ ] Nhấn **➕ Add Option**:
+  - Label=`Số 1`, Value=`one`, Emoji=`1️⃣`, Content=`Bạn chọn số 1`
+- [ ] Nhấn **➕ Add Option** lần nữa:
+  - Label=`Số 2`, Value=`two`, Emoji=`2️⃣`, Content=`Bạn chọn số 2`
+- [ ] Nhấn **📝 Edit Placeholder** -> Đổi thành `Vui lòng chọn số`.
+
+### 3. Kiểm tra Form (Biểu mẫu)
+✅ **Mục tiêu**: Tạo form, thêm câu hỏi và liên kết form vào nút bấm.
+
+- [ ] Gõ `/forms manage` -> Chọn **Add Form**.
+  - ID=`form_survey`, Title=`Khảo Sát`
+- [ ] Chọn form `Khảo Sát` -> Nhấn **Edit Questions**.
+- [ ] Nhấn **Add Question**: Label=`Tên bạn`, Style=`Short`, Required=`true`.
+- [ ] Nhấn **Add Question**: Label=`Ý kiến`, Style=`Paragraph`.
+- [ ] **Liên kết nút**:
+  - Gõ `/buttons` -> **Add Button**.
+  - ID=`btn_survey`, Label=`Làm Khảo Sát`, Emoji=`📝`, Type=`Form`, Content=`form:form_survey`.
+
+### 4. Kiểm tra Layout (Giao diện tổng hợp)
+✅ **Mục tiêu**: Gom tất cả (Button, Select) vào một tin nhắn đẹp.
+
+- [ ] Gõ `/layout create name:test_full`.
+- [ ] Gõ `/layout edit name:test_full`.
+- [ ] **Add Embed**:
+  - Title: `Bảng Điều Khiển Test`
+  - Description: `Chào {user}, đây là bảng test.\nServer: {server_name}`
+  - Color: `#00ff00`
+- [ ] **Add Button Row**: Nhập `{button:btn_hello} {button:btn_google} {button:btn_survey}`.
+- [ ] **Add Select Menu**: Nhập `{select:menu_test}`.
+- [ ] **Lưu**: Đóng editor.
+
+### 5. Kiểm tra Hiển thị & Hoạt động
+✅ **Mục tiêu**: Xem thành quả và test tương tác.
+
+- [ ] (Nếu có lệnh say/send) Gửi tin nhắn: `{layout:test_full}`.
+- [ ] **Thử bấm nút "Chào"**: Bot phải trả lời "Xin chào bạn!".
+- [ ] **Thử bấm nút "Google"**: Trình duyệt mở Google.
+- [ ] **Thử chọn menu**: Bot trả lời "Bạn chọn số 1/2".
+- [ ] **Thử bấm nút "Làm Khảo Sát"**:
+  - Form phải hiện ra.
+  - Điền thông tin -> Bấm Submit.
+  - Kiểm tra xem bot có báo thành công không (và log vào kênh nếu có config).
+
+### 6. Kiểm tra lệnh gửi nhanh
+- [ ] Gõ `/forms send form_id:form_survey channel:#general label:"Test Send Form"`.
+- [ ] Kiểm tra kênh #general xem nút có hiện ra không.

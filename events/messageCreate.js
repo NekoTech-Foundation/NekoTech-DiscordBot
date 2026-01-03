@@ -18,6 +18,7 @@ const AutoReact = require('../models/autoReact');
 const AutoResponse = require('../models/autoResponse');
 const suggestionActions = require('./Suggestions/suggestionActions');
 const SuggestionBlacklist = require('../models/SuggestionBlacklist');
+const KentaScratch = require('../utils/kentaScratch');
 
 // Levenshtein distance for fuzzy matching
 function levenshteinDistance(a, b) {
@@ -1196,9 +1197,14 @@ async function processAutoResponses(message) {
                 }
 
                 if (response.type === 'text' && response.content) {
-                    await message.reply(response.content).catch(error => {
-                        console.error('Failed to send text response:', error);
-                    });
+                    try {
+                        const parsed = await KentaScratch.parse(response.content, { user: message.author, guild: message.guild, channel: message.channel, member: message.member });
+                         if (parsed.content || parsed.components.length > 0 || parsed.embeds.length > 0) {
+                            await message.reply({ content: parsed.content || null, components: parsed.components, embeds: parsed.embeds });
+                        }
+                    } catch (error) {
+                         console.error('Failed to send text response (KentaScratch):', error);
+                    }
                 }
                 else if (response.type === 'embed' && response.embed) {
                     const embed = new EmbedBuilder()
@@ -1251,9 +1257,14 @@ async function processAutoResponses(message) {
                     });
                 }
                 else if (response.responseType === 'TEXT' && response.responseText) {
-                    await message.reply(response.responseText).catch(error => {
-                        console.error('Failed to send text response:', error);
-                    });
+                     try {
+                        const parsed = await KentaScratch.parse(response.responseText, { user: message.author, guild: message.guild, channel: message.channel, member: message.member });
+                         if (parsed.content || parsed.components.length > 0 || parsed.embeds.length > 0) {
+                            await message.reply({ content: parsed.content || null, components: parsed.components, embeds: parsed.embeds });
+                        }
+                    } catch (error) {
+                         console.error('Failed to send text response (KentaScratch):', error);
+                    }
                 }
                 else if (response.responseType === 'EMBED' && response.embedData) {
                     const embed = new EmbedBuilder()

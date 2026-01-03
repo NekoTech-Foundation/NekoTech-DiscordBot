@@ -1,0 +1,75 @@
+/buttons : Quản lý các nút bấm (Buttons)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+/buttons
+
+Cách sử dụng chi tiết:
+1. Chạy lệnh `/buttons` để mở bảng quản lý.
+2. Nhấn vào nút "Add Button".
+3. Điền các thông tin sau:
+   - **ID Button**: Tên định danh (chỉ chữ cái thường, số, dấu gạch _).
+   - **Tên hiển thị**: Chữ hiển thị trên button.
+   - **Emoji**: Emoji cho button (không bắt buộc).
+   - **Màu**: Chọn màu cho button (Primary, Secondary, Success, Danger).
+   - **Phản hồi/Form**: Nội dung phản hồi hoặc chọn form.
+
+/selects : Quản lý các menu lựa chọn (Select Menus)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+/selects
+
+Cách sử dụng chi tiết:
+1. **Thêm select mới**: Bấm nút ➕ Tạo select (trình chọn).
+2. **Nhập thông tin select**:
+   - ID Trình chọn: Tên định danh (chỉ chữ cái thường, số, dấu gạch _).
+   - Placeholder: Chữ hiển thị khi chưa chọn lựa chọn nào.
+3. **Thêm lựa chọn**: Sau khi tạo select, chọn select từ danh sách và bấm ➕ Thêm lựa chọn.
+4. **Chọn loại lựa chọn** (phản hồi bình thường hoặc biểu mẫu).
+5. **Nhập thông tin lựa chọn**:
+   - Tên hiển thị: Label của lựa chọn.
+   - Mô tả: Mô tả ngắn (không bắt buộc).
+   - Emoji: Emoji cho lựa chọn (bắt buộc).
+   - Phản hồi/Form: Nội dung phản hồi hoặc chọn form.
+
+**Admin server có thể:**
+- **Chỉnh sửa select**: Chọn select từ select chính và bấm 📝 Sửa Placeholder.
+- **Chỉnh sửa lựa chọn**: Chọn lựa chọn từ select “Chọn lựa chọn để sửa”.
+- **Xóa lựa chọn**: Chọn lựa chọn từ select “Chọn lựa chọn để xóa”.
+- **Xóa select**: Bấm nút 🗑️ Xóa Select và chọn select cần xóa.
+
+/forms manage : Quản lý các biểu mẫu (Forms/Modals)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+/forms manage
+
+Cách sử dụng chi tiết:
+1. Chạy lệnh `/forms manage`.
+2. Nhấn "Add Form" để tạo form mới (nhập ID, Tiêu đề).
+3. Sau khi tạo, chọn Form đó trong danh sách và nhấn "Edit Questions".
+4. Dùng "Add Question" để thêm từng câu hỏi (Label, Kiểu ngắn/dài).
+5. Để sử dụng Form:
+   - Tạo một nút bấm (trong `/buttons`) với Custom ID là `kb_open_form_ID_CUA_FORM` (ví dụ: `kb_open_form_tuyen_dung`).
+   - Khi người dùng bấm nút đó, Form sẽ hiện ra.
+
+/forms send : Gửi nút mở biểu mẫu vào kênh
+Tham số lệnh (Parameters)
+form_id: ID của form cần gửi
+channel: Kênh muốn gửi
+label: Tên nút (Mặc định: Open Form)
+content: Nội dung tin nhắn (Tùy chọn)
+Ví dụ sử dụng:
+/forms send form_id:tuyen_dung channel:#thong-bao label:"Ứng Tuyển Ngay"
+
+/layout create : Tạo layout mới
+Tham số: name (Tên layout)
+Ví dụ: /layout create name:welcome
+
+/layout edit : Chỉnh sửa giao diện layout
+Tham số: name
+Cách sử dụng:
+1. Chạy lệnh `/layout edit name:welcome`.
+2. Sử dụng các nút "Add Text", "Add Embed", "Add Button" trên giao diện để xây dựng tin nhắn.
+3. Sau khi hoàn tất, dùng `{layout:welcome}` để hiển thị layout này ở bất kỳ đâu.

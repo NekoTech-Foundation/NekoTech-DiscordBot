@@ -141,76 +141,7 @@ client.on('inviteDelete', async invite => {
     }
 });
 
-client.on('interactionCreate', async interaction => {
-
-
-
-    // Music Bot Handlers
-    if (interaction.isButton() || interaction.isStringSelectMenu()) {
-        if (interaction.customId.startsWith('music_') || 
-            interaction.customId.startsWith('search_') || 
-            interaction.customId.startsWith('language_') || 
-            interaction.customId.startsWith('autoplay_genre') ||
-            interaction.customId === 'help_refresh') {
-            await musicButtonHandler.execute(interaction);
-            return;
-        }
-    }
-
-    if (interaction.isModalSubmit() && interaction.customId === 'volume_modal') {
-             await musicModalHandler.execute(interaction);
-             return;
-    }
-
-    // Handle all Pixiv buttons (save, collection pagination, remove, ...)
-    if (interaction.isButton() && interaction.customId.startsWith('pixiv_')) {
-        try {
-            const handled = await pixivAddon.handleButtonInteraction(interaction);
-            if (handled) return;
-    } catch (error) {
-            const { handleError } = require('./utils/errorHandler.js');
-            await handleError(error, interaction);
-        }
-    }
-
-    // Pixiv Save Button Handler
-    if (interaction.isButton() && interaction.customId.startsWith('pixiv_save_')) {
-        const PixivApi = require('pixiv-api-client');
-        const pixiv = new PixivApi();
-        const illustId = interaction.customId.split('_')[2];
-
-        const refreshToken = async () => {
-            if (config.API_Keys.Pixiv && config.API_Keys.Pixiv.RefreshToken) {
-                await pixiv.refreshAccessToken(config.API_Keys.Pixiv.RefreshToken);
-            } else {
-                throw new Error('Pixiv Refresh Token not found in config.yml');
-            }
-        };
-
-        try {
-            await interaction.deferReply({ ephemeral: true });
-            await refreshToken();
-            await pixiv.bookmarkIllust(illustId);
-            return await interaction.editReply({ content: 'Đã lưu ảnh vào bộ sưu tập Pixiv của bạn!' });
-        } catch (error) {
-            const { handleError } = require('./utils/errorHandler.js');
-            await handleError(error, interaction);
-        }
-    }
-
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = client.commands.get(interaction.commandName);
-
-    if (!command) return;
-
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        const { handleError } = require('./utils/errorHandler.js');
-        await handleError(error, interaction);
-    }
-});
+// Interaction handler moved to events/interactionCreate.js
 
 process.on('uncaughtException', (error) => {
     console.error('Uncaught Exception:', error);

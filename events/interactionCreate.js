@@ -30,12 +30,21 @@ const client = require("../index");
 const tiktok = require('@tobyg74/tiktok-api-dl'); // Require the new library
 const musicButtonHandler = require('../utils/Music/buttonHandler.js');
 const musicModalHandler = require('../utils/Music/modalHandler.js');
+const pixivAddon = require('../commands/Addons/Pixiv/pixiv.js');
 
 
 
 module.exports = async (client, interaction) => {
-    // Load language for this interaction
-    const lang = await getLang(interaction.guildId);
+    // Parallelize DB calls to prevent timeout
+    const loadDataPromise = Promise.all([
+        getLang(interaction.guildId),
+        interaction.guild ? require('../models/guildDataSchema').findOne({ guildID: interaction.guild.id }).catch(e => {
+            console.error("Error fetching guild data:", e);
+            return null;
+        }) : Promise.resolve(null)
+    ]);
+
+    const [lang, guildData] = await loadDataPromise;
     interaction.lang = lang; // Attach to interaction for helpers
 
     if (interaction.isCommand()) {
@@ -43,20 +52,12 @@ module.exports = async (client, interaction) => {
         if (!command) return;
 
         // Anti-Grief check: Disabled Commands
-        if (interaction.guild) {
-            try {
-                const GuildData = require('../models/guildDataSchema');
-                const guildData = await GuildData.findOne({ guildID: interaction.guild.id });
-                if (guildData && guildData.safety && guildData.safety.disabledCommands) {
-                    if (guildData.safety.disabledCommands.includes(interaction.commandName)) {
-                        return interaction.reply({ 
-                            content: lang.Errors.CommandDisabled || "❌ This command is currently disabled in this server.", 
-                            flags: MessageFlags.Ephemeral 
-                        });
-                    }
-                }
-            } catch (err) {
-                console.error("Error checking disabled commands:", err);
+        if (guildData && guildData.safety && guildData.safety.disabledCommands) {
+            if (guildData.safety.disabledCommands.includes(interaction.commandName)) {
+                return interaction.reply({ 
+                    content: lang.Errors.CommandDisabled || "❌ This command is currently disabled in this server.", 
+                    flags: MessageFlags.Ephemeral 
+                });
             }
         }
 
@@ -89,14 +90,89 @@ module.exports = async (client, interaction) => {
     }
     try {
         if (interaction.isButton()) {
+            if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
+                const handler = require('../utils/kentaInteractionManager');
+                await handler.handleInteraction(interaction, client);
+                return;
+            }
             if (interaction.customId === 'check_percent' || interaction.customId === 'show_entrants') {
                 await giveawayActions.handleButtonInteraction(interaction);
                 return;
             }
+            // Music Handler
+            if (interaction.customId.startsWith('music_') || 
+                interaction.customId.startsWith('search_') || 
+                interaction.customId.startsWith('language_') || 
+                interaction.customId.startsWith('autoplay_genre') ||
+                interaction.customId === 'help_refresh') {
+                await musicButtonHandler.execute(interaction);
+                return;
+            }
+            // Pixiv Handler
+            if (interaction.customId.startsWith('pixiv_save_')) {
+                // ... (Pixiv save logic)
+                const PixivApi = require('pixiv-api-client');
+                const pixiv = new PixivApi();
+                const illustId = interaction.customId.split('_')[2];
+
+                const refreshToken = async () => {
+                    if (config.API_Keys.Pixiv && config.API_Keys.Pixiv.RefreshToken) {
+                        await pixiv.refreshAccessToken(config.API_Keys.Pixiv.RefreshToken);
+                    } else {
+                        throw new Error('Pixiv Refresh Token not found in config.yml');
+                    }
+                };
+
+                try {
+                    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                    await refreshToken();
+                    await pixiv.bookmarkIllust(illustId);
+                    return await interaction.editReply({ content: 'Đã lưu ảnh vào bộ sưu tập Pixiv của bạn!' });
+                } catch (error) {
+                    const { handleError } = require('../utils/errorHandler.js');
+                    await handleError(error, interaction);
+                }
+                return;
+            }
+            if (interaction.customId.startsWith('pixiv_')) {
+                try {
+                    const handled = await pixivAddon.handleButtonInteraction(interaction);
+                    if (handled) return;
+                } catch (error) {
+                    const { handleError } = require('../utils/errorHandler.js');
+                    await handleError(error, interaction);
+                }
+            }
+
             await handleButtonInteraction(client, interaction);
         } else if (interaction.isStringSelectMenu()) {
+            if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
+                 const handler = require('../utils/kentaInteractionManager');
+                 await handler.handleInteraction(interaction, client);
+                 return;
+            }
+            // Music Select Handler (if any - based on index.js logic which checked button OR select for music_)
+            if (interaction.customId.startsWith('music_') || 
+                interaction.customId.startsWith('search_') || 
+                interaction.customId.startsWith('language_') || 
+                interaction.customId.startsWith('autoplay_genre')) {
+                await musicButtonHandler.execute(interaction);
+                return;
+            }
+
             await handleSelectMenuInteraction(client, interaction);
         } else if (interaction.isModalSubmit()) {
+            if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
+                const handler = require('../utils/kentaInteractionManager');
+                await handler.handleInteraction(interaction, client);
+                return;
+            }
+            // Music Modal Handler
+            if (interaction.customId === 'volume_modal') {
+                 await musicModalHandler.execute(interaction);
+                 return;
+            }
+
             await handleModalSubmitInteraction(client, interaction);
         } else if (interaction.isAutocomplete()) {
             const command = client.slashCommands.get(interaction.commandName);
