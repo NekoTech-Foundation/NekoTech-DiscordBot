@@ -114,6 +114,9 @@ async function handleAnimeSeason(interaction) {
   const year = interaction.options.getInteger('year');
   const season = interaction.options.getString('season');
   const page = interaction.options.getInteger('page') || 1;
+  if (year && !season) {
+    return interaction.reply({ content: '⚠️ Bạn cần chọn thêm **Mùa (Season)** (Winter, Spring, Summer, Fall) khi tìm kiếm theo Năm.', ephemeral: true });
+  }
   await interaction.deferReply();
   let path = '/seasons/now';
   if (year && season) path = `/seasons/${year}/${season}`;

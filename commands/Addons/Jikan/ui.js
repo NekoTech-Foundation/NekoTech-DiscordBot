@@ -132,9 +132,10 @@ function characterEmbed(ch, opts = {}) {
 }
 
 function listEmbed({ title, items, page, totalPages }) {
+  const description = items && items.length > 0 ? items.join('\n') : 'Không có dữ liệu hiển thị.';
   return new EmbedBuilder()
     .setTitle(title)
-    .setDescription(items.join('\n'))
+    .setDescription(description)
     .setFooter({ text: `Trang ${page}/${totalPages}` })
     .setColor(0x3498DB)
     .setTimestamp();
