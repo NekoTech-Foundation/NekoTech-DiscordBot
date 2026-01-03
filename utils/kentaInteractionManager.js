@@ -45,6 +45,39 @@ class KentaInteractionManager {
         } else if (interaction.isModalSubmit()) {
             await this.handleModal(interaction, client);
         } else if (interaction.isStringSelectMenu()) {
+            if (interaction.customId === 'kb_sel_select_to_edit') {
+                 // Handle selection of "Which select to edit"
+                 // Shows the Detail Manager View
+                 await interaction.deferReply({ ephemeral: true });
+                 const selId = interaction.values[0];
+                 const sel = await Select.findOne({ guildId: interaction.guild.id, id: selId });
+                 if (!sel) return interaction.editReply('Select not found.');
+    
+                 let opts = [];
+                 try { opts = JSON.parse(sel.options); } catch(e) {}
+    
+                 const embed = new EmbedBuilder()
+                    .setTitle(`Managing: ${sel.id}`)
+                    .setDescription(`Placeholder: \`${sel.placeholder}\`\nOptions: ${opts.length}/25`)
+                    .setColor('#0099ff');
+                 
+                 if (opts.length > 0) {
+                     const optsList = opts.map((o, i) => `${i+1}. **${o.label}** (${o.value}) ${o.emoji ? o.emoji : ''}`).join('\n');
+                     embed.addFields({ name: 'Current Options', value: optsList.substring(0, 1024) });
+                 } else {
+                     embed.addFields({ name: 'Current Options', value: '(None)' });
+                 }
+    
+                 const row1 = new ActionRowBuilder().addComponents(
+                     new ButtonBuilder().setCustomId(`kb_sel_add_opt_${sel.id}`).setLabel('Add Option').setStyle(ButtonStyle.Success).setEmoji('➕'),
+                     new ButtonBuilder().setCustomId(`kb_sel_edit_ph_${sel.id}`).setLabel('Edit Placeholder').setStyle(ButtonStyle.Secondary).setEmoji('📝'),
+                     new ButtonBuilder().setCustomId(`kb_sel_del_opt_menu_${sel.id}`).setLabel('Delete Option').setStyle(ButtonStyle.Primary).setEmoji('🗑️'), // Opens menu to delete
+                     new ButtonBuilder().setCustomId(`kb_sel_delete_direct_${sel.id}`).setLabel('Delete Menu').setStyle(ButtonStyle.Danger).setEmoji('❌')
+                 );
+    
+                 await interaction.editReply({ embeds: [embed], components: [row1] });
+                 return;
+            }
             await this.handleSelect(interaction, client);
         }
     }
@@ -251,6 +284,17 @@ class KentaInteractionManager {
              await Select.deleteOne({ guildId: interaction.guild.id, id: selId });
              await interaction.editReply(`✅ Select \`${selId}\` deleted.`);
         }
+        else if (customId === 'kb_sel_edit_menu') {
+             await interaction.deferReply({ ephemeral: true });
+             const selects = await Select.find({ guildId: interaction.guild.id });
+             if (selects.length === 0) return interaction.editReply({ content: 'No select menus to edit.' });
+
+             const options = selects.slice(0, 25).map(s => ({ label: s.id, value: s.id, description: s.placeholder.substring(0, 50) }));
+             const row = new ActionRowBuilder().addComponents(
+                 new StringSelectMenuBuilder().setCustomId('kb_sel_select_to_edit').setPlaceholder('Select a menu to manage').addOptions(options)
+             );
+             await interaction.editReply({ content: 'Choose a Select Menu to manage:', components: [row] });
+        }
         else if (customId.startsWith('kb_open_form_')) {
              const formId = customId.replace('kb_open_form_', '');
              const form = await Form.findOne({ guildId: interaction.guild.id, id: formId });
@@ -405,7 +449,6 @@ class KentaInteractionManager {
                  
                  form.questions = jsonStr; // Trusting user input valid structure, should validate map in real prod
                  await form.save();
-                 await interaction.editReply({ content: `✅ Imported ${parsed.length} questions.` });
              await interaction.editReply({ content: `✅ Imported ${parsed.length} questions.` });
              } catch (e) {
                  return interaction.editReply({ content: 'Invalid JSON. Must be an array of question objects.' });
@@ -455,7 +498,8 @@ class KentaInteractionManager {
         }
         else if (customId.startsWith('kb_modal_submit_')) {
              // Handle Form Submission
-             await interaction.deferReply({ ephemeral: true });
+             // Handle Form Submission
+             // await interaction.deferReply({ ephemeral: true }); // ALREADY DEFERRED AT START OF handleModal
              const formId = customId.replace('kb_modal_submit_', '');
              const form = await Form.findOne({ guildId: interaction.guild.id, id: formId });
              

@@ -15,7 +15,9 @@ Vui lòng thực hiện lần lượt các bước sau để đảm bảo mọi 
 
 - [ ] Gõ `/selects` -> Chọn **➕ Tạo select**.
   - ID=`menu_test`, Placeholder=`Chọn 1 số...`
-- [ ] Trong menu quản lý, chọn `menu_test`.
+- [ ] Trong menu quản lý, nhấn nút **✏️ Edit / Add Options**.
+- [ ] Chọn `menu_test` từ danh sách thả xuống.
+- [ ] Bảng điều khiển chi tiết (Detail Manager) hiện ra.
 - [ ] Nhấn **➕ Add Option**:
   - Label=`Số 1`, Value=`one`, Emoji=`1️⃣`, Content=`Bạn chọn số 1`
 - [ ] Nhấn **➕ Add Option** lần nữa:

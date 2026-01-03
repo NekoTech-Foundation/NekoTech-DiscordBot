@@ -42,6 +42,24 @@ module.exports = {
                         .setRequired(false))
         ),
     
+    async autocomplete(interaction, client) {
+        const focusedValue = interaction.options.getFocused();
+        
+        // Optimisation: Select only 'id' to reduce payload and speed up query
+        const forms = await Form.find({ guildId: interaction.guild.id }).select('id').lean();
+        
+        const filtered = forms.filter(form => form.id.startsWith(focusedValue));
+        
+        // Handle race condition/timeout by catching error if interaction expired
+        try {
+            await interaction.respond(
+                filtered.slice(0, 25).map(form => ({ name: form.id, value: form.id }))
+            );
+        } catch (e) {
+            if (e.code !== 10062) console.error('Autocomplete Error:', e);
+        }
+    },
+
     async execute(interaction, client) {
         // Defer reply immediately for all subcommands
         await interaction.deferReply({ ephemeral: true });

@@ -38,9 +38,11 @@ Lệnh: `/selects`
    - **ID Trình chọn**: `menu_support` (Định danh unique).
    - **Placeholder**: `Chọn loại hỗ trợ bạn cần...` (Dòng chữ mờ).
 
+
 **Bước 2: Thêm các lựa chọn (Options)**
-1. Trong giao diện quản lý `/selects`, chọn menu `menu_support` vừa tạo.
-2. Nhấn **➕ Thêm lựa chọn**.
+1. Trong giao diện quản lý `/selects`, nhấn nút **✏️ Edit / Add Options**.
+2. Chọn menu `menu_support` từ danh sách.
+3. Bảng quản lý chi tiết sẽ hiện ra. Nhấn **➕ Thêm lựa chọn (Add Option)**.
 3. Điền thông tin cho từng lựa chọn:
    - **Tên hiển thị**: `Báo lỗi`.
    - **Mô tả**: `Gặp lỗi khi sử dụng bot`.

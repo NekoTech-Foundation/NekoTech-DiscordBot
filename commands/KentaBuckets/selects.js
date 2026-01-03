@@ -59,7 +59,12 @@ module.exports = {
                     .setCustomId('kb_sel_delete')
                     .setLabel('Delete')
                     .setStyle(ButtonStyle.Danger)
-                    .setEmoji('🗑️')
+                    .setEmoji('🗑️'),
+                 new ButtonBuilder()
+                    .setCustomId('kb_sel_edit_menu')
+                    .setLabel('Edit / Add Options')
+                    .setStyle(ButtonStyle.Primary)
+                    .setEmoji('✏️')
             );
         await interaction.editReply({ embeds: [embed], components: [row] });
     }
