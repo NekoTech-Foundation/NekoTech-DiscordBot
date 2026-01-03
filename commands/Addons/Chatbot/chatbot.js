@@ -5,10 +5,10 @@ const { getLang } = require('../../../utils/langLoader');
 
 function getApiKey() {
     const cfg = getConfig() || {};
-    // Prefer environment variable
+    // Priority: Env Var -> API_Keys.Gemini.ApiKey -> AI.Gemini.ApiKey (Old fallback)
     return process.env.GEMINI_API_KEY
         || cfg?.API_Keys?.Gemini?.ApiKey
-        || cfg?.API_Keys?.Google?.GeminiApiKey
+        || cfg?.AI?.Gemini?.ApiKey
         || null;
 }
 
@@ -19,18 +19,60 @@ function getModel() {
         || 'gemini-2.0-flash-exp';
 }
 
-function chunkText(text, size = 1900) {
+/**
+ * Smartly splits text into chunks, respecting code blocks and paragraphs.
+ * Prevents splitting inside a code block (```...```).
+ */
+function smartChunk(text, limit = 4000) {
+    if (text.length <= limit) return [text];
+
     const chunks = [];
-    let i = 0;
-    while (i < text.length) {
-        chunks.push(text.slice(i, i + size));
-        i += size;
+    let currentChunk = '';
+    let inCodeBlock = false;
+
+    // Split by newlines to preserve structure
+    const lines = text.split('\n');
+
+    for (const line of lines) {
+        // Toggle code block state
+        if (line.trim().startsWith('```')) {
+            inCodeBlock = !inCodeBlock;
+        }
+
+        // Potential length if we add this line
+        // +1 for newline character
+        const potentialLength = currentChunk.length + line.length + 1;
+
+        if (potentialLength <= limit) {
+            currentChunk += (currentChunk ? '\n' : '') + line;
+        } else {
+            // Needed to split
+            
+            // If we are inside a code block, we must close it in current chunk 
+            // and reopen it in next chunk to prevent broken formatting
+            if (inCodeBlock) {
+                // Find language of code block if possible (naive check for now)
+                // For valid markdown, the first line of code block usually has lang
+                // But tracking that is complex.
+                // Simple fix: Close with ``` and start next with ```
+                currentChunk += '\n```';
+                chunks.push(currentChunk);
+                currentChunk = '```\n' + line;
+            } else {
+                chunks.push(currentChunk);
+                currentChunk = line;
+            }
+        }
     }
+
+    if (currentChunk) {
+        chunks.push(currentChunk);
+    }
+
     return chunks;
 }
 
 async function callGemini(apiKey, model, prompt) {
-    // Gemini Responses API (generateContent)
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     const body = {
         contents: [
@@ -42,7 +84,7 @@ async function callGemini(apiKey, model, prompt) {
     };
     const res = await axios.post(url, body, {
         headers: { 'Content-Type': 'application/json' },
-        timeout: 30000,
+        timeout: 60000, // 60s timeout
         validateStatus: s => s >= 200 && s < 300
     });
     const candidates = res.data?.candidates || [];
@@ -52,25 +94,24 @@ async function callGemini(apiKey, model, prompt) {
 }
 
 function createLoadingEmbed(prompt, chatbotLang) {
-    const embed = new EmbedBuilder()
-        .setColor('#5865F2') // Discord blurple
+    return new EmbedBuilder()
+        .setColor('#5865F2')
         .setTitle(chatbotLang.UI.ThinkingTitle)
         .setDescription(chatbotLang.UI.ThinkingDesc.replace('{prompt}', prompt.length > 200 ? prompt.substring(0, 200) + '...' : prompt))
         .setFooter({ text: chatbotLang.UI.ThinkingFooter })
         .setTimestamp();
-    return embed;
 }
 
 function createSuccessEmbed(prompt, reply, model, responseTime, chatbotLang) {
     const charCount = reply.length;
-    const embed = new EmbedBuilder()
-        .setColor('#5865F2') // Discord blurple cho AI
+    return new EmbedBuilder()
+        .setColor('#5865F2')
         .setAuthor({
             name: 'Gemini AI Assistant',
             iconURL: 'https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'
         })
         .setTitle(chatbotLang.UI.ResponseTitle)
-        .setDescription(reply.length > 4000 ? reply.substring(0, 4000) + '...' : reply)
+        .setDescription(reply) // Reply is already chunked
         .setFooter({
             text: chatbotLang.UI.ResponseFooter
                 .replace('{model}', model)
@@ -78,27 +119,19 @@ function createSuccessEmbed(prompt, reply, model, responseTime, chatbotLang) {
                 .replace('{chars}', charCount)
         })
         .setTimestamp();
-
-    return embed;
 }
 
 function createErrorEmbed(errorType, message, chatbotLang) {
     const embed = new EmbedBuilder()
-        .setColor('#ED4245') // Discord red
-        .setTitle(chatbotLang.Errors.Unknown)
+        .setColor('#ED4245')
+        .setTitle(chatbotLang.Errors.Unknown || 'Error')
         .setDescription(message)
         .setTimestamp();
 
-    // Add specific emoji based on error type
-    if (errorType === 'config') {
-        embed.setAuthor({ name: 'Config Error' });
-    } else if (errorType === 'api') {
-        embed.setAuthor({ name: 'API Error' });
-    } else if (errorType === 'auth') {
-        embed.setAuthor({ name: 'Auth Error' });
-    } else {
-        embed.setAuthor({ name: 'Error' });
-    }
+    if (errorType === 'config') embed.setAuthor({ name: 'Configuration Error' });
+    else if (errorType === 'api') embed.setAuthor({ name: 'API Error' });
+    else if (errorType === 'auth') embed.setAuthor({ name: 'Authentication Error' });
+    else embed.setAuthor({ name: 'System Error' });
 
     return embed;
 }
@@ -108,75 +141,55 @@ async function handleChatbot(interaction, prompt, options = {}) {
     const lang = await getLang(interaction.guild.id);
     const chatbotLang = lang.Addons.Chatbot;
 
-    // Show loading embed
-    const loadingEmbed = createLoadingEmbed(prompt, chatbotLang);
+    // Initial Loading
     await interaction.deferReply({ ephemeral });
-    await interaction.editReply({ embeds: [loadingEmbed] });
+    await interaction.editReply({ embeds: [createLoadingEmbed(prompt, chatbotLang)] });
 
+    // Config Check
     const apiKey = getApiKey();
     if (!apiKey) {
-        const errorEmbed = createErrorEmbed('config',
-            chatbotLang.Errors.Config,
-            chatbotLang
-        );
-        return interaction.editReply({ embeds: [errorEmbed] });
+        return interaction.editReply({ 
+            embeds: [createErrorEmbed('config', chatbotLang.Errors.Config || 'API Key not configured in config.yml (API_Keys.Gemini.ApiKey)', chatbotLang)] 
+        });
     }
+
     const model = getModel();
 
     try {
         const startTime = Date.now();
-        const reply = await callGemini(apiKey, model, prompt);
+        const fullReply = await callGemini(apiKey, model, prompt);
         const endTime = Date.now();
         const responseTime = ((endTime - startTime) / 1000).toFixed(2);
 
-        // If very long, send in chunks
-        const chunks = chunkText(reply, 4000); // Use 4000 for embed description limit
+        // Smart Chunking
+        const chunks = smartChunk(fullReply, 4000);
 
-        if (chunks.length === 1) {
-            // Single response - use beautiful embed
-            const successEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime, chatbotLang);
-            await interaction.editReply({ embeds: [successEmbed] });
-        } else {
-            // Multiple chunks - first one in embed, rest as text
-            const successEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime, chatbotLang);
-            await interaction.editReply({ embeds: [successEmbed] });
+        // Send first chunk (Editing the loading message)
+        const firstEmbed = createSuccessEmbed(prompt, chunks[0], model, responseTime, chatbotLang);
+        await interaction.editReply({ embeds: [firstEmbed] });
 
-            for (let i = 1; i < chunks.length; i++) {
-                const continueEmbed = new EmbedBuilder()
-                    .setColor('#5865F2')
-                    .setDescription(chunks[i])
-                    .setFooter({ text: `Part ${i + 1}/${chunks.length}` });
-                await interaction.followUp({ embeds: [continueEmbed], ephemeral });
-            }
+        // Send remaining chunks as follow-ups
+        for (let i = 1; i < chunks.length; i++) {
+            const followUpEmbed = new EmbedBuilder()
+                .setColor('#5865F2')
+                .setDescription(chunks[i])
+                .setFooter({ text: `Part ${i + 1}/${chunks.length}` });
+            await interaction.followUp({ embeds: [followUpEmbed], ephemeral });
         }
+
     } catch (err) {
-        console.error('Gemini API error:', err?.response?.data || err.message || err);
-        const status = err?.response?.status;
-        let errorEmbed;
+        console.error('Gemini API Error:', err.response?.data || err.message);
+        
+        const status = err.response?.status;
+        let errorMsg = chatbotLang.Errors.Unknown;
+        let type = 'unknown';
 
-        if (status === 404 || status === 400) {
-            errorEmbed = createErrorEmbed('api',
-                chatbotLang.Errors.API,
-                chatbotLang
-            );
-        } else if (status === 401 || status === 403) {
-            errorEmbed = createErrorEmbed('auth',
-                chatbotLang.Errors.Auth,
-                chatbotLang
-            );
-        } else if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
-            errorEmbed = createErrorEmbed('api',
-                chatbotLang.Errors.Timeout,
-                chatbotLang
-            );
-        } else {
-            errorEmbed = createErrorEmbed('unknown',
-                chatbotLang.Errors.Unknown,
-                chatbotLang
-            );
-        }
-
-        await interaction.editReply({ embeds: [errorEmbed] });
+        if (status === 400) { errorMsg = 'Bad Request (Check your prompt)'; type = 'api'; }
+        else if (status === 401) { errorMsg = 'Invalid API Key'; type = 'auth'; }
+        else if (status === 429) { errorMsg = 'Rate Limit Exceeded'; type = 'api'; }
+        else if (status === 503) { errorMsg = 'Service Unavailable'; type = 'api'; }
+        
+        await interaction.editReply({ embeds: [createErrorEmbed(type, errorMsg, chatbotLang)] });
     }
 }
 

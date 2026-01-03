@@ -153,10 +153,11 @@ module.exports = {
             await sendIllustEmbed(interaction, randomIllust, searchInfo);
 
         } catch (error) {
-            console.error(error);
             if (error.message.includes('Pixiv Refresh Token')) {
-                return interaction.editReply('Lỗi: Không tìm thấy Pixiv Refresh Token trong `config.yml`. Vui lòng cấu hình trước khi sử dụng.');
+                console.warn('[Pixiv] Missing RefreshToken in config.yml');
+                return interaction.editReply('⚠️ **Chưa cấu hình Pixiv:** Vui lòng thêm `RefreshToken` vào `config.yml` để sử dụng tính năng này.');
             }
+            console.error(error);
             return interaction.editReply('Đã có lỗi xảy ra khi thực hiện lệnh.');
         }
     }

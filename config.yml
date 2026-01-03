@@ -85,9 +85,10 @@ AI:
 
 # API Keys (Added for Repost and Pixiv addons)
 API_Keys:
-  YouTube: ""
+  Gemini:
+    ApiKey: ""
   Pixiv:
-    RefreshToken: ""
+    RefreshToken: "exGZSBaGBdTFP1UdwRBsoP8NBydj8DKlguedgHvTtho"
 
 # Hệ thống Cấp độ (Leveling)
 LevelingSystem:
