@@ -72,6 +72,6 @@ module.exports = {
             embed.setTitle(replacePlaceholders(lang.Economy.Actions.Beg.Title, placeholders));
         }
 
-        return interaction.reply({ embeds: [embed] });
+        return interaction.editReply({ embeds: [embed] });
     },
 };
