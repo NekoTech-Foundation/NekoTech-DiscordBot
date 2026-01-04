@@ -35,7 +35,7 @@ const Poll = require('./models/poll');
 const GuildData = require('./models/guildDataSchema');
 const Invite = require('./models/inviteSchema');
 const Transaction = require('./models/Transction');
-const { createAutoBackup } = require('./commands/Utility/backup');
+
 
 
 client.slashCommands = new Collection();
@@ -674,9 +674,12 @@ module.exports = async (client) => {
                      const name = command.data.name;
                      // Prevent duplicates if already loaded
                      if (!client.slashCommands.has(name)) {
-                        const json = command.data.toJSON();
-                        global.slashCommands.push(json);
-                        client.slashCommands.set(name, command);
+                        // Check commandConfig if command is enabled
+                        if (!commandConfig || commandConfig[name] !== false) {
+                            const json = command.data.toJSON();
+                            global.slashCommands.push(json);
+                            client.slashCommands.set(name, command);
+                        }
                      }
                  }
                  
@@ -722,23 +725,7 @@ module.exports = async (client) => {
                 },
                 name: 'ChannelStats'
             },
-            {
-                condition: config.Backup?.Enabled,
-                fn: () => {
-                    async function runBackup() {
-                        const guild = client.guilds.cache.get(config.GuildID);
-                        if (guild) {
-                            await createAutoBackup(guild, client);
-                        }
-                    }
 
-                    runBackup();
-
-                    const scheduleTime = parseDuration(config.Backup.Schedule);
-                    setInterval(runBackup, scheduleTime);
-                },
-                name: 'AutoBackup'
-            },
             // {
             //     condition: commandConfig && commandConfig.cardrecharge,
             //     fn: () => {
@@ -795,6 +782,19 @@ module.exports = async (client) => {
             Routes.applicationCommands(client.user.id),
             { body: global.slashCommands }
         );
+
+        // Clear Guild Commands for the Main Guild to remove stale duplicates (like "Treo máy")
+        if (config.GuildID) {
+             try {
+                 await rest.put(
+                     Routes.applicationGuildCommands(client.user.id, config.GuildID),
+                     { body: [] }
+                 );
+                 console.log(`[STARTUP] Cleared guild commands for ${config.GuildID}`);
+             } catch (error) {
+                 console.error(`[STARTUP] Failed to clear guild commands: ${error}`);
+             }
+        }
 
         registeredCommands.forEach(registeredCommand => {
             const localCommand = client.slashCommands.get(registeredCommand.name);
@@ -1132,47 +1132,7 @@ module.exports = async (client) => {
         }
     }
 
-    function loadSlashCommands(directory, commandNames = new Set(), duplicateCommands = []) {
-        const items = fs.readdirSync(directory, { withFileTypes: true });
 
-        for (const item of items) {
-            if (item.name === 'tickets.js') continue;
-            const itemPath = path.join(directory, item.name);
-
-            if (item.isDirectory()) {
-                loadSlashCommands(itemPath, commandNames, duplicateCommands);
-            } else if (item.isFile() && item.name.endsWith('.js')) {
-                try {
-                    const command = require(itemPath);
-
-                    if (command.data instanceof SlashCommandBuilder || command.data instanceof ContextMenuCommandBuilder || Array.isArray(command.data)) {
-                        const commandData = Array.isArray(command.data) ? command.data : [command.data];
-
-                        commandData.forEach(data => {
-                            const commandName = data.name;
-                            if (commandNames.has(commandName)) {
-                                duplicateCommands.push(commandName);
-                            } else {
-                                commandNames.add(commandName);
-                                if (commandConfig && commandConfig[commandName]) {
-                                    global.slashCommands.push(data.toJSON());
-                                    client.slashCommands.set(commandName, command);
-                                }
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error(`${colors.red('[ERROR]')} Error loading ${item.name}:`, error);
-                }
-            }
-        }
-        return { commandNames, duplicateCommands };
-    }
-
-    const { duplicateCommands } = loadSlashCommands(path.join(__dirname, 'commands'));
-    if (duplicateCommands.length > 0) {
-        console.error(`${colors.red('[ERROR]')} Duplicate command names detected:`, duplicateCommands.join(', '));
-    }
 
     function getFilesRecursively(directory, extension = '.js') {
         let results = [];
