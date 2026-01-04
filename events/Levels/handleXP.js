@@ -227,7 +227,7 @@ async function handleXP(message) {
             if (channel) {
                 if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
                     // ... (Embed logic remains same, just inside if(channel))
-                    const embed = new EmbedBuilder().setColor(config.LevelingSystem.LevelUpMessageSettings.Embed.Color || '#34eb6b');
+                    const embed = new EmbedBuilder().setColor(config.LevelingSystem.LevelUpMessageSettings.Embed?.Color || '#34eb6b');
     
                     if (config.LevelingSystem.LevelUpMessageSettings.Embed.Title) {
                         embed.setTitle(replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Title, placeholders));
