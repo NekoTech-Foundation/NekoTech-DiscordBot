@@ -2334,30 +2334,45 @@ Không có tham số.
 
 ## /verification setup
 
-**Mô tả:** Configure the verification system
+**Mô tả:** 🛠️ Cấu hình hệ thống xác minh
+
+Thiết lập hệ thống xác minh (Verify) cho máy chủ. Bạn có thể chọn giữa xác minh bằng Nút bấm đơn giản hoặc Captcha hình ảnh để chống Bot.
+
+**Chế độ xác minh:**
+
+- **Nút bấm (Button):** Người dùng chỉ cần nhấn nút "Xác minh" để nhận Role. Đơn giản và nhanh chóng.
+- **Captcha:** Người dùng phải nhập đúng mã hiển thị trên hình ảnh. An toàn hơn trước các Bot tự động.
 
 ### Tham số
 
-| Tham số           | Mô tả                                                                  | Bắt buộc |
-| :---------------- | :--------------------------------------------------------------------- | :------- |
-| `role`            | The role to give after verification                                    | Có       |
-| `channel`         | The channel to send the verification panel (leave empty to create new) | Không    |
-| `mode`            | The verification mode (Button/Captcha)                                 | Không    |
-| `unverified_role` | Role to give on join (removed after verify)                            | Không    |
+| Tham số           | Mô tả                                                                   | Bắt buộc |
+| :---------------- | :---------------------------------------------------------------------- | :------- |
+| `role`            | Role sẽ được trao cho thành viên sau khi xác minh thành công            | Có       |
+| `channel`         | Kênh để gửi bảng xác minh (Panel)                                       | Có       |
+| `mode`            | Chế độ xác minh (Button / Captcha)                                      | Có       |
+| `unverified_role` | Role dành cho người chưa xác minh (sẽ bị thu hồi sau khi xác minh xong) | Không    |
 
 ### Ví dụ
 
-> Configure the verification system
+> Thiết lập xác minh bằng Captcha tại kênh #verify
 
 ```bash
-/verification setup role:@Verified
+/verification setup role:@Member channel:#verify mode:Captcha
+```
+
+> Thiết lập xác minh bằng Nút bấm, có dùng Role chưa xác minh
+
+```bash
+/verification setup role:@Member channel:#verify mode:Button unverified_role:@Guest
 ```
 
 ---
 
 ## /verification panel
 
-**Mô tả:** Send/Update the verification panel in the configured channel
+**Mô tả:** 📨 Gửi bảng xác minh
+
+Gửi hoặc cập nhật bảng xác minh (Embed + Nút) vào kênh đã được cấu hình. Bạn cần chạy lệnh `setup` trước. Nếu bảng đã tồn tại, lệnh này sẽ cập nhật lại giao diện mới nhất.
 
 ### Tham số
 
@@ -2365,7 +2380,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Send/Update the verification panel in the configured channel
+> Gửi bảng xác minh
 
 ```bash
 /verification panel
@@ -2375,7 +2390,9 @@ Không có tham số.
 
 ## /verification info
 
-**Mô tả:** View current verification settings
+**Mô tả:** ℹ️ Xem cấu hình xác minh
+
+Hiển thị các cài đặt hiện tại của hệ thống xác minh trên máy chủ (Kênh, Role, Chế độ...).
 
 ### Tham số
 
@@ -2383,7 +2400,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> View current verification settings
+> Xem cài đặt xác minh hiện tại
 
 ```bash
 /verification info

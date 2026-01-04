@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 // URL chứa danh sách từ tiếng Việt (khoảng 74k từ)
-const DICTIONARY_URL = 'https://raw.githubusercontent.com/soiqualang/vietnamese-wordlist/master/Viet74K.txt';
+const DICTIONARY_URL = 'https://raw.githubusercontent.com/duyet/vietnamese-wordlist/master/Viet74K.txt';
 
 // Cache - Sử dụng Set để tra cứu O(1)
 const memoryDictionary = new Set();
