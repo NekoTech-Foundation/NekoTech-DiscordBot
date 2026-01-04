@@ -129,13 +129,13 @@ async function handleXP(message) {
             userData.level++;
             const newLevel = userData.level;
 
-            const levelUpRoles = config.LevelingSystem.RoleSettings.LevelRoles || [];
+            const levelUpRoles = config.LevelingSystem.RoleSettings?.LevelRoles || [];
             for (const levelUpRole of levelUpRoles) {
                 if (userData.level >= levelUpRole.level && levelUpRole.roleID) {
                     const role = message.guild.roles.cache.get(levelUpRole.roleID);
                     if (role) {
                         await message.member.roles.add(role);
-                        if (!config.LevelingSystem.RoleSettings.StackRoles) {
+                        if (!config.LevelingSystem.RoleSettings?.StackRoles) {
                             for (const otherLevelUpRole of levelUpRoles) {
                                 if (userData.level > otherLevelUpRole.level && otherLevelUpRole.roleID && otherLevelUpRole.roleID !== levelUpRole.roleID) {
                                     const oldRole = message.guild.roles.cache.get(otherLevelUpRole.roleID);
@@ -149,7 +149,7 @@ async function handleXP(message) {
                 }
             }
 
-            const scaleRewards = config.LevelingSystem.RoleSettings.ScaleRewards || {};
+            const scaleRewards = config.LevelingSystem.RoleSettings?.ScaleRewards || {};
             const rewards = scaleRewards.Rewards || [];
 
             let highestReward = { level: 0, coins: 0 };
@@ -165,8 +165,8 @@ async function handleXP(message) {
 
             let channel = message.channel;
 
-            if (config.LevelingSystem.ChannelSettings.LevelUpChannelID && config.LevelingSystem.ChannelSettings.LevelUpChannelID !== 'CHANNEL_ID' && message.guild.channels.cache.has(config.LevelingSystem.ChannelSettings.LevelUpChannelID)) {
-                const configuredChannel = message.guild.channels.cache.get(config.LevelingSystem.ChannelSettings.LevelUpChannelID);
+            if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID' && message.guild.channels.cache.has(config.LevelingSystem.ChannelSettings?.LevelUpChannelID)) {
+                const configuredChannel = message.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
                 if (configuredChannel && configuredChannel.type === ChannelType.GuildText) {
                     channel = configuredChannel;
                 }
@@ -314,13 +314,13 @@ async function handleVoiceXP(client, member) {
             userData.level++;
             const newLevel = userData.level;
 
-            const levelUpRoles = config.LevelingSystem.RoleSettings.LevelRoles || [];
+            const levelUpRoles = config.LevelingSystem.RoleSettings?.LevelRoles || [];
             for (const levelUpRole of levelUpRoles) {
                 if (userData.level >= levelUpRole.level && levelUpRole.roleID) {
                     const role = member.guild.roles.cache.get(levelUpRole.roleID);
                     if (role) {
                         await member.roles.add(role);
-                        if (!config.LevelingSystem.RoleSettings.StackRoles) {
+                        if (!config.LevelingSystem.RoleSettings?.StackRoles) {
                             for (const otherLevelUpRole of levelUpRoles) {
                                 if (userData.level > otherLevelUpRole.level && otherLevelUpRole.roleID && otherLevelUpRole.roleID !== levelUpRole.roleID) {
                                     const oldRole = member.guild.roles.cache.get(otherLevelUpRole.roleID);
@@ -334,7 +334,7 @@ async function handleVoiceXP(client, member) {
                 }
             }
 
-            const scaleRewards = config.LevelingSystem.RoleSettings.ScaleRewards || {};
+            const scaleRewards = config.LevelingSystem.RoleSettings?.ScaleRewards || {};
             const rewards = scaleRewards.Rewards || [];
 
             let highestReward = { level: 0, coins: 0 };
@@ -350,9 +350,9 @@ async function handleVoiceXP(client, member) {
 
             let channel;
             
-            if (config.LevelingSystem.ChannelSettings.LevelUpChannelID && 
-                config.LevelingSystem.ChannelSettings.LevelUpChannelID !== 'CHANNEL_ID') {
-                channel = member.guild.channels.cache.get(config.LevelingSystem.ChannelSettings.LevelUpChannelID);
+            if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && 
+                config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID') {
+                channel = member.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
             }
 
             if (!channel || channel.type !== ChannelType.GuildText) {

@@ -234,7 +234,8 @@ let user = await EconomyUserData.findOne(
                 games: ['blackjack_win', 'blackjack_draw', 'blackjack_lose', 'coinflip', 'roll', 'roulette', 'slot'],
                 purchases: ['purchase'],
                 interest: ['interest'],
-                other: ['beg', 'crime', 'daily', 'deposit', 'admin-give-balance', 'admin-give-bank', 'admin-take-balance', 'admin-take-bank', 'admin-set-balance', 'admin-set-bank', 'rob', 'robbed', 'transfer_out', 'transfer_in', 'work']
+                transfers: ['transfer_in', 'transfer_out'],
+                other: ['beg', 'crime', 'daily', 'deposit', 'admin-give-balance', 'admin-give-bank', 'admin-take-balance', 'admin-take-bank', 'admin-set-balance', 'admin-set-bank', 'rob', 'robbed', 'work']
             };
 
             let selectedCategory = 'all';
@@ -325,6 +326,12 @@ let user = await EconomyUserData.findOne(
                             emoji: '💰',
                         },
                         {
+                            label: 'Chuyển Tiền',
+                            value: 'transfers',
+                            description: 'Xem lịch sử chuyển/nhận tiền',
+                            emoji: '💸',
+                        },
+                        {
                             label: 'Khác',
                             value: 'other',
                             description: 'Xem tất cả nhật ký giao dịch khác',
@@ -358,27 +365,32 @@ let user = await EconomyUserData.findOne(
             const collector = interaction.channel.createMessageComponentCollector({ time: 60000 });
 
             collector.on('collect', async i => {
-                if (i.user.id !== interaction.user.id) {
-                    return i.reply({ content: 'You cannot interact with this menu.', flags: MessageFlags.Ephemeral });
-                }
-                
-                if (i.customId === 'category_select') {
-                    selectedCategory = i.values[0];
-                    page = 1;
-                    await updateMessage();
-                    await i.deferUpdate();
-                }
+                try {
+                    if (i.user.id !== interaction.user.id) {
+                        return i.reply({ content: 'You cannot interact with this menu.', flags: MessageFlags.Ephemeral });
+                    }
+                    
+                    if (i.customId === 'category_select') {
+                        await i.deferUpdate();
+                        selectedCategory = i.values[0];
+                        page = 1;
+                        await updateMessage();
+                    }
 
-                if (i.customId === 'previous') {
-                    page--;
-                    await updateMessage();
-                    await i.deferUpdate();
-                }
+                    if (i.customId === 'previous') {
+                        await i.deferUpdate();
+                        page--;
+                        await updateMessage();
+                    }
 
-                if (i.customId === 'next') {
-                    page++;
-                    await updateMessage();
-                    await i.deferUpdate();
+                    if (i.customId === 'next') {
+                        await i.deferUpdate();
+                        page++;
+                        await updateMessage();
+                    }
+                } catch (error) {
+                    if (error.code === 10062 || error.code === 40060) return;
+                    console.error('Collector Error:', error);
                 }
             });
 
