@@ -2030,4 +2030,34 @@ Music:
   Queue:
     Completed: "Đã phát hết hàng đợi!"
     CompletedDesc: "Hãy thêm bài hát mới để tiếp tục nghe nhạc."
-    EmptyQueue: "Hàng đợi trống!"
+
+  Giveaways:
+    GiveawayNotFound: "❌ Không tìm thấy Giveaway!"
+    GiveawayHasntEnded: "❌ Giveaway chưa kết thúc!"
+    EndMessage: "❌ Giveaway đã kết thúc!"
+    IncorrectRoleMessage: "❌ Bạn không có vai trò cần thiết để tham gia hoặc bị chặn!"
+    IncorrectMinimumServerJoinDateMessage: "❌ Bạn chưa đủ thời gian tham gia server!"
+    IncorrectMinimumAccountAgeMessage: "❌ Tài khoản của bạn chưa đủ tuổi!"
+    IncorrectInviteCountMessage: "❌ Bạn chưa đủ số lượng lời mời!"
+    IncorrectMessageCountMessage: "❌ Bạn chưa đủ số lượng tin nhắn! (Cần: {required}, Có: {current})"
+    LeaveSuccessMessage: "✅ Bạn đã rời khỏi Giveaway."
+    EntrySuccessMessage: "✅ Bạn đã tham gia Giveaway thành công!"
+    ExtraEntriesMessage: "🎉 Bạn nhận được thêm **{extraEntries}** lượt tham gia!"
+    EntryErrorMessage: "❌ Đã xảy ra lỗi khi tham gia."
+    NoParticipationMessage: "Không có người tham gia hợp lệ."
+    WinnerDirectMessage: "🎉 Chúc mừng! Bạn đã thắng Giveaway **{prize}** tại **{serverName}**!"
+    WinMessage: "🎉 Chúc mừng {winners}! Bạn đã thắng **{prize}**!"
+    Embeds:
+      ActiveGiveaway:
+        Prize: "{prize}"
+        HostedByField: "Tổ chức bởi:"
+        EndsInField: "Kết thúc sau:"
+        EntriesField: "Lượt tham gia:"
+        WhitelistRoleField: "Vai trò được phép:"
+        BlacklistRoleField: "Vai trò bị chặn:"
+        MinimumSeverJoinDateField: "Ngày tham gia server tối thiểu:"
+        MinimumAccountAgeField: "Tuổi tài khoản tối thiểu:"
+      EndedGiveaway:
+        Title: "Giveaway Đã Kết Thúc"
+        WinnersField: "Người thắng cuộc:"
+        EntriesField: "Tổng lượt tham gia:"

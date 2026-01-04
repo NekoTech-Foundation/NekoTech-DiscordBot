@@ -308,7 +308,55 @@ SuggestionSettings:
 # GIVEAWAYS
 # ===========================================================================
 Giveaways:
+  Enabled: true
   GiveawayStatusCheck: 5000
+  AllowRoles: []
+  DirectMessageWinners: true
+  Embed:
+    ActiveGiveaway:
+      EmbedColor: "#2F3136"
+      ShowTitle: true
+      ShowHostedBy: true
+      ShowEndsIn: true
+      ShowEntries: true
+      ShowWhitelistRoles: true
+      ShowBlacklistRoles: true
+      ShowMinimumServerJoinDate: true
+      ShowMinimumAccountAge: true
+      ShowImage: true
+      ShowThumbnail: true
+      ShowFooter: true
+      EmbedImage: ""
+      EmbedThumbnail: ""
+      EmbedFooterIcon: ""
+      Button:
+        JoinButton:
+          ButtonText: "Enter"
+          ButtonStyle: "SUCCESS" # PRIMARY, SECONDARY, SUCCESS, DANGER
+          ButtonEmoji: "🎉"
+        CheckPercent:
+          ButtonText: "Odds"
+          ButtonStyle: "SECONDARY"
+          ButtonEmoji: "📊"
+        ShowEntrantsList:
+          ButtonText: "Show Entrants"
+          ButtonStyle: "SECONDARY"
+          ButtonEmoji: "👥"
+        ShowEntries:
+          ButtonText: "Entries"
+          ButtonStyle: "SECONDARY"
+          ButtonEmoji: "🔢"
+    EndedGiveaway:
+      EmbedColor: "#000000"
+      ShowTitle: true
+      ShowWinnersField: true
+      ShowEntriesField: true
+      ShowFooter: true
+      ShowThumbnail: false
+      ShowImage: false
+      EmbedImage: ""
+      EmbedThumbnail: ""
+      EmbedFooterIcon: ""
 
 # ===========================================================================
 # MUSIC BOT CONFIGURATION

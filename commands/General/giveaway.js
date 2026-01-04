@@ -213,11 +213,22 @@ module.exports = {
         try {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-            const allowedRoles = config.Giveaways.AllowRoles;
+            const isEnabled = config.Giveaways?.Enabled !== false; // Default true if undefined
+            const allowedRoles = config.Giveaways?.AllowRoles || [];
+            
+            const isAdministrator = interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
+            const isModerator = interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild);
+
+            if (!isEnabled && !isAdministrator) {
+                 return interaction.editReply({
+                    content: "Lệnh Giveaway hiện đang bị khóa.",
+                    flags: MessageFlags.Ephemeral,
+                });
+            }
+
             const userRoles = interaction.member.roles.cache.map((role) => role.id);
-            const hasPermission = userRoles.some((role) =>
-                allowedRoles.includes(role)
-            ) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
+            const hasRole = userRoles.some((role) => allowedRoles.includes(role));
+            const hasPermission = isAdministrator || isModerator || hasRole;
 
             if (!hasPermission) {
                 return interaction.editReply({

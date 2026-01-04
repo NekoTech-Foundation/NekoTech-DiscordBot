@@ -1,15 +1,15 @@
 {
   "legendary": {
-    "name": "Bạch tuộc Dumbo",
-    "emoji": "<:Fish_dumbo:1433393278161522771>",
-    "min_weight": 5,
-    "max_weight": 10
-  },
-  "epic": {
-    "name": "Cá chép đỏ",
-    "emoji": "<:Redcarp2:1433392938385281054>",
+    "name": "Cá hồi Đại Tây Dương",
+    "emoji": "<:Fish_atlanticsalmon:1433392861184917676>",
     "min_weight": 2,
     "max_weight": 10
   },
-  "updatedAt": "2026-01-04T08:15:06.570Z"
+  "epic": {
+    "name": "Tôm hùm đất",
+    "emoji": "<:Fish_crayfish:1433392888347365376>",
+    "min_weight": 0.1,
+    "max_weight": 0.5
+  },
+  "updatedAt": "2026-01-04T08:25:43.947Z"
 }
