@@ -29,7 +29,8 @@ const defaultData = (query) => ({
     transactionLogs: [],
     roles: [],
     equipment: { FishingRod: null, HuntingWeapon: null },
-    rankTheme: null
+    rankTheme: null,
+    allowSniping: true
 });
 
 module.exports = new SQLiteModel('users', ['userId', 'guildId'], defaultData);

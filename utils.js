@@ -120,8 +120,11 @@ module.exports = async (client) => {
 
 
 
-    function handleMessageDelete(message) {
+    async function handleMessageDelete(message) {
         if (!message.guild || message.author.bot) return;
+
+        const userData = await UserData.findOne({ userId: message.author.id, guildId: message.guild.id });
+        if (userData && userData.allowSniping === false) return;
 
         if (!client.snipes.has(message.guild.id)) {
             client.snipes.set(message.guild.id, new Collection());
@@ -541,10 +544,13 @@ module.exports = async (client) => {
         }
     }
 
-    function handleMessageUpdate(oldMessage, newMessage) {
+    async function handleMessageUpdate(oldMessage, newMessage) {
         if (!oldMessage?.guild || !oldMessage?.author || oldMessage?.author?.bot) return;
 
         if (oldMessage.content === newMessage.content) return;
+
+        const userData = await UserData.findOne({ userId: oldMessage.author.id, guildId: oldMessage.guild.id });
+        if (userData && userData.allowSniping === false) return;
 
         if (!client.snipes.has(oldMessage.guild.id)) {
             client.snipes.set(oldMessage.guild.id, new Collection());

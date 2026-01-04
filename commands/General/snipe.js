@@ -39,11 +39,47 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('clear')
-                .setDescription('Xóa tin nhắn đã snipe gần nhất')),
+                .setDescription('Xóa tin nhắn đã snipe gần nhất'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('on')
+                .setDescription('Bật tính năng cho phép snipe tin nhắn của bạn'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('off')
+                .setDescription('Tắt tính năng cho phép snipe tin nhắn của bạn')),
     category: 'Chung',
     async execute(interaction, lang) {
         const client = interaction.client;
         const subCommand = interaction.options.getSubcommand();
+        const UserData = require('../../models/UserData');
+
+        if (subCommand === 'on') {
+            let userData = await UserData.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+            if (!userData) {
+                userData = new UserData({ userId: interaction.user.id, guildId: interaction.guild.id });
+            }
+            userData.allowSniping = true;
+            await userData.save();
+            return interaction.reply({ content: "Đã BẬT tính năng snipe tin nhắn của bạn.", flags: MessageFlags.Ephemeral });
+        }
+
+        if (subCommand === 'off') {
+            let userData = await UserData.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+            if (!userData) {
+                userData = new UserData({ userId: interaction.user.id, guildId: interaction.guild.id });
+            }
+            userData.allowSniping = false;
+            await userData.save();
+            return interaction.reply({ content: "Đã TẮT tính năng snipe tin nhắn của bạn. Tin nhắn xóa sau này sẽ không thể bị snipe.", flags: MessageFlags.Ephemeral });
+        }
+
+        const userData = await UserData.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
+        if (userData && userData.allowSniping === false && !interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+           // Users who turned of sniping can still use the command, but only if they are admins? 
+           // Implementation plan didn't specify restriction on USING the command, only on having THEIR messages sniped.
+           // So no restriction here needed on usage unless desired. Keeping strictly to plan.
+        }
 
         if (subCommand === 'clear') {
             if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {

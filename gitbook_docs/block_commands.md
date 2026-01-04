@@ -2502,7 +2502,9 @@ Không có tham số.
 
 ## /tempvoice setup
 
-**Mô tả:** ⚙️ Thiết lập hệ thống voice channel tạm thời (chỉ owner server)
+**Mô tả:** ⚙️ Cài đặt hệ thống VoiceMaster (Dành cho Owner)
+
+Lệnh này sẽ khởi tạo hệ thống Voice Channel tạm thời cho máy chủ. Bot sẽ tạo một Category "Voice Channels" và một kênh "➕ Join to Create". Khi thành viên tham gia kênh này, họ sẽ được tự động chuyển sang một kênh riêng tư mới do họ làm chủ.
 
 ### Tham số
 
@@ -2510,7 +2512,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> ⚙️ Thiết lập hệ thống voice channel tạm thời (chỉ owner server)
+> Khởi tạo hệ thống
 
 ```bash
 /tempvoice setup
@@ -2518,9 +2520,56 @@ Không có tham số.
 
 ---
 
+## /tempvoice name
+
+**Mô tả:** ✏️ Đổi tên phòng
+
+Cho phép chủ phòng thay đổi tên kênh voice hiện tại của mình.
+_Lưu ý: Discord giới hạn tốc độ đổi tên kênh (2 lần mỗi 10 phút)._
+
+### Tham số
+
+| Tham số | Mô tả             | Bắt buộc |
+| :------ | :---------------- | :------- |
+| `name`  | Tên mới cho phòng | Có       |
+
+### Ví dụ
+
+> Đổi tên phòng thành "Phòng họp kín"
+
+```bash
+/tempvoice name name:Phòng họp kín
+```
+
+---
+
+## /tempvoice limit
+
+**Mô tả:** 👥 Giới hạn số lượng thành viên
+
+Đặt giới hạn số người tối đa có thể tham gia vào kênh của bạn. Đặt là 0 để không giới hạn.
+
+### Tham số
+
+| Tham số  | Mô tả                  | Bắt buộc |
+| :------- | :--------------------- | :------- |
+| `number` | Số người tối đa (0-99) | Có       |
+
+### Ví dụ
+
+> Giới hạn phòng chỉ cho 5 người
+
+```bash
+/tempvoice limit number:5
+```
+
+---
+
 ## /tempvoice lock
 
-**Mô tả:** 🔒 Khóa voice channel của bạn
+**Mô tả:** 🔒 Khóa phòng
+
+Khóa kênh voice của bạn lại, không cho phép ai khác tham gia (trừ những người đã được cấp quyền `permit`).
 
 ### Tham số
 
@@ -2528,7 +2577,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🔒 Khóa voice channel của bạn
+> Khóa phòng lại
 
 ```bash
 /tempvoice lock
@@ -2538,7 +2587,9 @@ Không có tham số.
 
 ## /tempvoice unlock
 
-**Mô tả:** 🔓 Mở khóa voice channel của bạn
+**Mô tả:** 🔓 Mở khóa phòng
+
+Mở khóa kênh voice, cho phép mọi người tham gia trở lại.
 
 ### Tham số
 
@@ -2546,10 +2597,96 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🔓 Mở khóa voice channel của bạn
+> Mở khóa phòng
 
 ```bash
 /tempvoice unlock
+```
+
+---
+
+## /tempvoice permit
+
+**Mô tả:** ✅ Cấp quyền tham gia
+
+Cho phép một thành viên cụ thể tham gia vào phòng của bạn ngay cả khi phòng đang bị khóa (`lock`).
+
+### Tham số
+
+| Tham số | Mô tả                | Bắt buộc |
+| :------ | :------------------- | :------- |
+| `user`  | Người được cấp quyền | Có       |
+
+### Ví dụ
+
+> Cho phép @Neko vào phòng
+
+```bash
+/tempvoice permit user:@Neko
+```
+
+---
+
+## /tempvoice reject
+
+**Mô tả:** ❌ Đuổi thành viên
+
+Đuổi một thành viên ra khỏi phòng và chặn họ tham gia lại.
+
+### Tham số
+
+| Tham số | Mô tả         | Bắt buộc |
+| :------ | :------------ | :------- |
+| `user`  | Người bị đuổi | Có       |
+
+### Ví dụ
+
+> Đuổi @Spammer ra khỏi phòng
+
+```bash
+/tempvoice reject user:@Spammer
+```
+
+---
+
+## /tempvoice claim
+
+**Mô tả:** 👑 Nhận quyền chủ phòng
+
+Nếu chủ phòng hiện tại rời đi, bạn có thể dùng lệnh này để nhận quyền quản lý kênh.
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Nhận quyền chủ phòng
+
+```bash
+/tempvoice claim
+```
+
+---
+
+## /tempvoice setlimit
+
+**Mô tả:** ⚙️ Cài đặt giới hạn mặc định (Dành cho Owner)
+
+Thiết lập giới hạn số người mặc định cho tất cả các phòng được tạo mới trên máy chủ.
+
+### Tham số
+
+| Tham số  | Mô tả                    | Bắt buộc |
+| :------- | :----------------------- | :------- |
+| `number` | Số người mặc định (0-99) | Có       |
+
+### Ví dụ
+
+> Đặt giới hạn mặc định là 10 người
+
+```bash
+/tempvoice setlimit number:10
 ```
 
 ---
@@ -2674,7 +2811,9 @@ Không có tham số.
 
 ## /minigames 2048
 
-**Mô tả:** Chơi game 2048
+**Mô tả:** 🔢 Game xếp số 2048
+
+Trò chơi trí tuệ kinh điển. Sử dụng các nút điều hướng để gộp các ô số giống nhau lại (2+2=4, 4+4=8...) nhằm tạo ra ô số 2048.
 
 ### Tham số
 
@@ -2682,7 +2821,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Chơi game 2048
+> Bắt đầu chơi 2048
 
 ```bash
 /minigames 2048
@@ -2692,7 +2831,9 @@ Không có tham số.
 
 ## /minigames connectfour
 
-**Mô tả:** Chơi Connect Four
+**Mô tả:** 🔴 Cờ Connect Four (Cờ 4 nước)
+
+Trò chơi đối kháng dành cho 2 người. Nhiệm vụ của bạn là thả các quân cờ vào bàn sao cho tạo thành một hàng 4 quân liên tiếp (ngang, dọc, hoặc chéo) trước đối thủ.
 
 ### Tham số
 
@@ -2702,17 +2843,19 @@ Không có tham số.
 
 ### Ví dụ
 
-> Chơi Connect Four
+> Thách đấu Connect Four với @Neko
 
 ```bash
-/minigames connectfour opponent:@User
+/minigames connectfour opponent:@Neko
 ```
 
 ---
 
 ## /minigames guess
 
-**Mô tả:** 🔢 Trò chơi đoán số (1-100)
+**Mô tả:** ❓ Đoán số bí ẩn
+
+Bot sẽ chọn ngẫu nhiên một con số từ 1 đến 100. Nhiệm vụ của bạn là đoán chính xác con số đó dựa trên các gợi ý "Cao quá" hoặc "Thấp quá" của Bot.
 
 ### Tham số
 
@@ -2720,7 +2863,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🔢 Trò chơi đoán số (1-100)
+> Bắt đầu trò chơi đoán số
 
 ```bash
 /minigames guess
@@ -2730,7 +2873,9 @@ Không có tham số.
 
 ## /minigames hangman
 
-**Mô tả:** 😵 Trò chơi Hangman cổ điển
+**Mô tả:** 😵 Người treo cổ (Hangman)
+
+Trò chơi đoán từ vựng tiếng Anh. Bạn phải đoán từng chữ cái để tìm ra từ bí ẩn trước khi hình người bị treo cổ hoàn thiện.
 
 ### Tham số
 
@@ -2738,7 +2883,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> 😵 Trò chơi Hangman cổ điển
+> Bắt đầu chơi Hangman
 
 ```bash
 /minigames hangman
@@ -2748,7 +2893,10 @@ Không có tham số.
 
 ## /minigames rps
 
-**Mô tả:** ✌️ Trò chơi Kéo Búa Bao
+**Mô tả:** ✌️ Kéo Búa Bao
+
+Trò chơi dân gian quen thuộc. Bạn sẽ đấu với Bot bằng cách chọn Kéo, Búa hoặc Bao.
+_Quy tắc: Búa thắng Kéo, Kéo thắng Bao, Bao thắng Búa._
 
 ### Tham số
 
@@ -2756,7 +2904,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> ✌️ Trò chơi Kéo Búa Bao
+> Chơi Kéo Búa Bao với Bot
 
 ```bash
 /minigames rps
@@ -2766,27 +2914,31 @@ Không có tham số.
 
 ## /minigames tictactoe
 
-**Mô tả:** ❌ Trò chơi Cờ Ca-rô (TicTacToe)
+**Mô tả:** ❌ Cờ Ca-rô (Tic Tac Toe)
+
+Trò chơi X/O kinh điển cho 2 người. Người chơi thay phiên nhau đánh dấu X hoặc O vào ô trống. Người đầu tiên tạo được hàng 3 ô liên tiếp (ngang, dọc, chéo) sẽ thắng.
 
 ### Tham số
 
-| Tham số    | Mô tả   | Bắt buộc |
-| :--------- | :------ | :------- |
-| `opponent` | Đối thủ | Có       |
+| Tham số    | Mô tả              | Bắt buộc |
+| :--------- | :----------------- | :------- |
+| `opponent` | Người chơi đối thủ | Có       |
 
 ### Ví dụ
 
-> ❌ Trò chơi Cờ Ca-rô (TicTacToe)
+> Thách đấu Cờ Ca-rô với @Neko
 
 ```bash
-/minigames tictactoe opponent:@User
+/minigames tictactoe opponent:@Neko
 ```
 
 ---
 
 ## /minigames wordle
 
-**Mô tả:** 🔤 Trò chơi đoán từ Wordle (5 chữ cái)
+**Mô tả:** 🔤 Đoán từ Wordle
+
+Trò chơi đoán từ vựng 5 chữ cái nổi tiếng. Bạn có 6 lượt thử. Sau mỗi lần đoán, màu sắc của các chữ cái sẽ thay đổi để gợi ý cho bạn (Xanh: đúng vị trí, Vàng: đúng chữ nhưng sai vị trí, Xám: không có trong từ).
 
 ### Tham số
 
@@ -2794,7 +2946,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🔤 Trò chơi đoán từ Wordle (5 chữ cái)
+> Bắt đầu chơi Wordle
 
 ```bash
 /minigames wordle
@@ -2906,7 +3058,9 @@ Không có tham số.
 
 ## /fun 8ball
 
-**Mô tả:** 🎱 Hỏi bot một câu hỏi bất kỳ
+**Mô tả:** 🎱 Cầu Băng Tiên Tri
+
+Hỏi Bot bất kỳ câu hỏi "Có/Không" nào và nhận câu trả lời ngẫu nhiên từ Cầu Băng huyền bí.
 
 ### Tham số
 
@@ -2916,17 +3070,19 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🎱 Hỏi bot một câu hỏi bất kỳ
+> Hỏi Bot xem hôm nay có nên đi chơi không
 
 ```bash
-/fun 8ball question:Có nên ăn không?
+/fun 8ball question:Hôm nay mình có nên đi chơi không?
 ```
 
 ---
 
 ## /fun advice
 
-**Mô tả:** 💡 Nhận một lời khuyên hữu ích
+**Mô tả:** 💡 Lời khuyên cuộc sống
+
+Nhận một lời khuyên ngẫu nhiên (và đôi khi cực kỳ hữu ích) từ Bot.
 
 ### Tham số
 
@@ -2934,7 +3090,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> 💡 Nhận một lời khuyên hữu ích
+> Xin một lời khuyên
 
 ```bash
 /fun advice
@@ -2944,251 +3100,9 @@ Không có tham số.
 
 ## /fun compliment
 
-**Mô tả:** 💖 Gửi lời khen ngợi đến ai đó
+**Mô tả:** 💖 Gửi lời khen
 
-### Tham số
-
-| Tham số | Mô tả      | Bắt buộc |
-| :------ | :--------- | :------- |
-| `user`  | Người dùng | Có       |
-
-### Ví dụ
-
-> 💖 Gửi lời khen ngợi đến ai đó
-
-```bash
-/fun compliment user:@User
-```
-
----
-
-## /fun darkjoke
-
-**Mô tả:** 🌑 Câu đùa hài hước... chắc vậy
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> 🌑 Câu đùa hài hước... chắc vậy
-
-```bash
-/fun darkjoke
-```
-
----
-
-## /fun fact cat
-
-**Mô tả:** Sự thật về mèo
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> Sự thật về mèo
-
-```bash
-/fun fact cat
-```
-
----
-
-## /fun fact dog
-
-**Mô tả:** Sự thật về chó
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> Sự thật về chó
-
-```bash
-/fun fact dog
-```
-
----
-
-## /fun fact general
-
-**Mô tả:** Sự thật chung
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> Sự thật chung
-
-```bash
-/fun fact general
-```
-
----
-
-## /fun fact useless
-
-**Mô tả:** Sự thật vô dụng
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> Sự thật vô dụng
-
-```bash
-/fun fact useless
-```
-
----
-
-## /fun fliptext
-
-**Mô tả:** 🙃 Lật ngược văn bản
-
-### Tham số
-
-| Tham số | Mô tả   | Bắt buộc |
-| :------ | :------ | :------- |
-| `text`  | Văn bản | Có       |
-
-### Ví dụ
-
-> 🙃 Lật ngược văn bản
-
-```bash
-/fun fliptext text:Hello
-```
-
----
-
-## /fun lennyface
-
-**Mô tả:** Lenny Face ( ͡° ͜ʖ ͡°)
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> Lenny Face ( ͡° ͜ʖ ͡°)
-
-```bash
-/fun lennyface
-```
-
----
-
-## /fun meme random
-
-**Mô tả:** Meme ngẫu nhiên
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> Meme ngẫu nhiên
-
-```bash
-/fun meme random
-```
-
----
-
-## /fun meme text
-
-**Mô tả:** Tạo meme chữ
-
-### Tham số
-
-| Tham số       | Mô tả        | Bắt buộc |
-| :------------ | :----------- | :------- |
-| `template`    | Mẫu          | Có       |
-| `top_text`    | Văn bản trên | Có       |
-| `bottom_text` | Văn bản dưới | Không    |
-
-### Ví dụ
-
-> Tạo meme chữ
-
-```bash
-/fun meme text template:aag top_text:Hello
-```
-
----
-
-## /fun meme sadcat
-
-**Mô tả:** Mèo buồn
-
-### Tham số
-
-| Tham số | Mô tả   | Bắt buộc |
-| :------ | :------ | :------- |
-| `text`  | Văn bản | Có       |
-
-### Ví dụ
-
-> Mèo buồn
-
-```bash
-/fun meme sadcat text:Sad
-```
-
----
-
-## /fun pickupline
-
-**Mô tả:** 💘 Nhận câu thả thính
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> 💘 Nhận câu thả thính
-
-```bash
-/fun pickupline
-```
-
----
-
-## /fun quote
-
-**Mô tả:** 📜 Xem danh ngôn
-
-### Tham số
-
-Không có tham số.
-
-### Ví dụ
-
-> 📜 Xem danh ngôn
-
-```bash
-/fun quote
-```
-
----
-
-## /fun rizz
-
-**Mô tả:** 😉 Gửi câu thả thính kèm GIF
+Gửi một lời khen ngẫu nhiên và ngọt ngào đến một người dùng khác để làm họ vui.
 
 ### Tham số
 
@@ -3198,17 +3112,238 @@ Không có tham số.
 
 ### Ví dụ
 
-> 😉 Gửi câu thả thính kèm GIF
+> Khen ngợi bạn @Neko
 
 ```bash
-/fun rizz user:@User
+/fun compliment user:@Neko
+```
+
+---
+
+## /fun darkjoke
+
+**Mô tả:** 🌑 Hài kịch đen
+
+Kể một câu chuyện cười "đen tối" (Dark Joke). Cân nhắc trước khi sử dụng nếu bạn là người nghiêm túc!
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Nghe chuyện cười đen tối
+
+```bash
+/fun darkjoke
+```
+
+---
+
+## /fun fact
+
+**Mô tả:** 🧠 Sự thật thú vị
+
+Khám phá những sự thật ngẫu nhiên về thế giới xung quanh.
+
+**Các chủ đề:**
+
+- `cat`: Sự thật về loài Mèo 🐱
+- `dog`: Sự thật về loài Chó 🐶
+- `general`: Kiến thức chung 🌏
+- `useless`: Những sự thật... vô dụng 🤪
+
+### Tham số
+
+| Tham số      | Mô tả          | Bắt buộc |
+| :----------- | :------------- | :------- |
+| `subcommand` | Chủ đề sự thật | Có       |
+
+### Ví dụ
+
+> Xem sự thật về mèo
+
+```bash
+/fun fact cat
+```
+
+---
+
+## /fun fliptext
+
+**Mô tả:** 🙃 Lật ngược văn bản
+
+Biến văn bản của bạn lộn ngược 180 độ.
+
+### Tham số
+
+| Tham số | Mô tả           | Bắt buộc |
+| :------ | :-------------- | :------- |
+| `text`  | Văn bản cần lật | Có       |
+
+### Ví dụ
+
+> Lật ngược chữ "Hello World"
+
+```bash
+/fun fliptext text:Hello World
+```
+
+---
+
+## /fun lennyface
+
+**Mô tả:** ( ͡° ͜ʖ ͡°)
+
+Gửi biểu tượng cảm xúc Lenny Face ngẫu nhiên vào kênh chat.
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Gửi Lenny Face
+
+```bash
+/fun lennyface
+```
+
+---
+
+## /fun meme random
+
+**Mô tả:** 🐸 Meme ngẫu nhiên
+
+Xem một chiếc Meme ngẫu nhiên được lấy từ Reddit.
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Xem Meme
+
+```bash
+/fun meme random
+```
+
+---
+
+## /fun meme text
+
+**Mô tả:** 📝 Chế Meme
+
+Tự tạo Meme của riêng bạn dựa trên các mẫu có sẵn.
+
+### Tham số
+
+| Tham số       | Mô tả         | Bắt buộc |
+| :------------ | :------------ | :------- |
+| `template`    | Chọn mẫu Meme | Có       |
+| `top_text`    | Chữ dòng trên | Có       |
+| `bottom_text` | Chữ dòng dưới | Không    |
+
+### Ví dụ
+
+> Chế Meme với mẫu "aag" (Aliens Guy)
+
+```bash
+/fun meme text template:aag top_text:Không phải Bot bottom_text:Là người ngoài hành tinh
+```
+
+---
+
+## /fun meme sadcat
+
+**Mô tả:** 😿 Mèo khóc (Sad Cat)
+
+Chế ảnh mèo khóc với văn bản tùy chỉnh.
+
+### Tham số
+
+| Tham số | Mô tả            | Bắt buộc |
+| :------ | :--------------- | :------- |
+| `text`  | Nội dung văn bản | Có       |
+
+### Ví dụ
+
+> Mèo khóc vì "Hết tiền"
+
+```bash
+/fun meme sadcat text:Hết tiền rồi sen ơi
+```
+
+---
+
+## /fun pickupline
+
+**Mô tả:** 💘 Bí kíp thả thính
+
+Nhận một câu "thả thính" (pick-up line) tiếng Anh sến súa (nhưng có thể hiệu quả).
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Xin một câu thả thính
+
+```bash
+/fun pickupline
+```
+
+---
+
+## /fun quote
+
+**Mô tả:** 📜 Danh ngôn
+
+Nhận một câu danh ngôn ngẫu nhiên từ những người nổi tiếng (hoặc từ dữ liệu Bot).
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Xem danh ngôn
+
+```bash
+/fun quote
+```
+
+---
+
+## /fun rizz
+
+**Mô tả:** 😉 Rizz (Thả thính siêu cấp)
+
+Gửi một câu thả thính kèm theo hình ảnh GIF ngẫu nhiên tới người dùng khác. 100% sát thương!
+
+### Tham số
+
+| Tham số | Mô tả               | Bắt buộc |
+| :------ | :------------------ | :------- |
+| `user`  | Người nhận tin nhắn | Có       |
+
+### Ví dụ
+
+> Thả thính @Crush
+
+```bash
+/fun rizz user:@Crush
 ```
 
 ---
 
 ## /fun roast
 
-**Mô tả:** 🔥 Chọc ghẹo ai đó
+**Mô tả:** 🔥 Cà khịa (Roast)
+
+Bot sẽ "phun châu nhả ngọc" (cà khịa/chửi yêu) người dùng được chỉ định.
 
 ### Tham số
 
@@ -3218,17 +3353,19 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🔥 Chọc ghẹo ai đó
+> Cà khịa @BạnThân
 
 ```bash
-/fun roast target:@User
+/fun roast target:@BạnThân
 ```
 
 ---
 
 ## /fun kill
 
-**Mô tả:** 🔪 Giả vờ tiêu diệt ai đó
+**Mô tả:** 🔪 Giả lập... ám sát
+
+Tạo một kịch bản hài hước về việc bạn "xử lý" người dùng khác kèm hình ảnh minh họa (Minecraft/GTA style).
 
 ### Tham số
 
@@ -3238,83 +3375,95 @@ Không có tham số.
 
 ### Ví dụ
 
-> 🔪 Giả vờ tiêu diệt ai đó
+> Xử lý @KẻThù
 
 ```bash
-/fun kill target:@User
+/fun kill target:@KẻThù
 ```
 
 ---
 
 ## /giveaway create
 
-**Mô tả:** Tạo một giveaway
+**Mô tả:** 🎉 Tổ chức Giveaway
+
+Bắt đầu một sự kiện Giveaway chuyên nghiệp với nhiều tùy chọn nâng cao. Bạn có thể thiết lập các điều kiện tham gia khắt khe như ngày tham gia server, tuổi tài khoản, vai trò được phép/bị cấm, số tin nhắn, số lượt mời, v.v.
 
 ### Tham số
 
-| Tham số                | Mô tả                      | Bắt buộc |
-| :--------------------- | :------------------------- | :------- |
-| `channel`              | Kênh bạn muốn tạo giveaway | Có       |
-| `time`                 | Thời gian (vd: 1h, 30m)    | Có       |
-| `winners`              | Số lượng người thắng       | Có       |
-| `prize`                | Giải thưởng                | Có       |
-| `hostedby`             | Người tổ chức (@User)      | Có       |
-| `min_server_join_date` | Ngày tham gia tối thiểu    | Không    |
-| `min_account_age`      | Tuổi tài khoản tối thiểu   | Không    |
-| `min_invites`          | Số lượt mời tối thiểu      | Không    |
-| `whitelist_roles`      | Vai trò được phép          | Không    |
-| `blacklist_roles`      | Vai trò bị cấm             | Không    |
-| `notify`               | Thông báo cho ai           | Không    |
-| `min_messages`         | Số tin nhắn tối thiểu      | Không    |
-| `extra_entries`        | Vai trò thêm lượt          | Không    |
+| Tham số                | Mô tả                                                                        | Bắt buộc |
+| :--------------------- | :--------------------------------------------------------------------------- | :------- |
+| `channel`              | Kênh tổ chức Giveaway                                                        | Có       |
+| `time`                 | Thời gian diễn ra (vd: `1h` = 1 giờ, `30m` = 30 phút, `1d` = 1 ngày)         | Có       |
+| `winners`              | Số lượng người thắng giải                                                    | Có       |
+| `prize`                | Tên phần thưởng                                                              | Có       |
+| `hostedby`             | Người tổ chức (tag @User)                                                    | Có       |
+| `min_server_join_date` | Yêu cầu ngày vào server tối thiểu (vd: "January 1 2023")                     | Không    |
+| `min_account_age`      | Yêu cầu ngày tạo tài khoản tối thiểu (vd: "January 1 2023")                  | Không    |
+| `min_invites`          | Số lượt mời thành viên tối thiểu cần có                                      | Không    |
+| `min_messages`         | Số tin nhắn tối thiểu cần có                                                 | Không    |
+| `whitelist_roles`      | Chỉ các vai trò này mới được tham gia (tag @Role)                            | Không    |
+| `blacklist_roles`      | Các vai trò này bị cấm tham gia (tag @Role)                                  | Không    |
+| `extra_entries`        | Thêm lượt quay cho vai trò nhất định (cú pháp: `@role:2` - role được 2 lượt) | Không    |
+| `notify`               | Tag ai khi bắt đầu? (`Everyone`, `Whitelist Roles`, `Nobody`)                | Không    |
 
 ### Ví dụ
 
-> Tạo một giveaway
+> Tạo Giveaway Nitro 1 tháng trong 24h cho 1 người thắng
 
 ```bash
-/giveaway create channel:#giveaway time:1h winners:1 prize:Nitro hostedby:@User
+/giveaway create channel:#giveaways time:24h winners:1 prize:Nitro Basic hostedby:@Neko
+```
+
+> Tạo Giveaway nâng cao yêu cầu role @Member và cấm role @Muted
+
+```bash
+/giveaway create channel:#sự-kiện time:1d winners:3 prize:100k Xu hostedby:@Admin whitelist_roles:@Member blacklist_roles:@Muted
 ```
 
 ---
 
 ## /giveaway reroll
 
-**Mô tả:** Quay lại một giveaway
+**Mô tả:** 🔄 Quay thưởng lại (Reroll)
+
+Chọn lại người chiến thắng mới cho một Giveaway đã kết thúc. Hữu ích khi người thắng cũ không hợp lệ hoặc không nhận giải.
 
 ### Tham số
 
-| Tham số       | Mô tả                  | Bắt buộc |
-| :------------ | :--------------------- | :------- |
-| `giveaway_id` | ID giveaway            | Có       |
-| `users`       | Người dùng để quay lại | Không    |
+| Tham số       | Mô tả                                                                      | Bắt buộc |
+| :------------ | :------------------------------------------------------------------------- | :------- |
+| `giveaway_id` | ID của Giveaway (Xem dưới chân tin nhắn Giveaway)                          | Có       |
+| `users`       | Chỉ định người thắng cụ thể (nếu muốn dàn xếp 😂 - đùa thôi, dùng để test) | Không    |
 
 ### Ví dụ
 
-> Quay lại một giveaway
+> Chọn người thắng mới cho Giveaway có ID `abc123yz`
 
 ```bash
-/giveaway reroll giveaway_id:abcdefg
+/giveaway reroll giveaway_id:abc123yz
 ```
 
 ---
 
 ## /giveaway end
 
-**Mô tả:** Kết thúc một giveaway
+**Mô tả:** ⏹️ Kết thúc Giveaway sớm
+
+Dừng Giveaway ngay lập tức và chọn người chiến thắng, không cần đợi hết thời gian đếm ngược.
 
 ### Tham số
 
-| Tham số       | Mô tả       | Bắt buộc |
-| :------------ | :---------- | :------- |
-| `giveaway_id` | ID giveaway | Có       |
+| Tham số       | Mô tả                                             | Bắt buộc |
+| :------------ | :------------------------------------------------ | :------- |
+| `giveaway_id` | ID của Giveaway (Xem dưới chân tin nhắn Giveaway) | Có       |
 
 ### Ví dụ
 
-> Kết thúc một giveaway
+> Kết thúc ngay Giveaway `abc123yz`
 
 ```bash
-/giveaway end giveaway_id:abcdefg
+/giveaway end giveaway_id:abc123yz
 ```
 
 ---
