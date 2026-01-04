@@ -84,7 +84,6 @@ module.exports = {
             interaction.reply({ content: lang.Economy.Messages.error, flags: MessageFlags.Ephemeral });
         }
     },
-    },
 };
 
 function parseDuration(str) {

@@ -270,7 +270,6 @@ async function handleFish(interaction, config, fishingLang) {
 
     // Check rod
     if (!equippedRodKey || !userFishing.rods.some(r => r.key === equippedRodKey)) {
-    if (!equippedRodKey || !userFishing.rods.some(r => r.key === equippedRodKey)) {
         return interaction.editReply({
             embeds: [new EmbedBuilder()
                 .setColor('#E74C3C')
@@ -279,6 +278,9 @@ async function handleFish(interaction, config, fishingLang) {
         });
     }
 
+    const equippedRod = userFishing.rods.find(r => r.key === equippedRodKey);
+
+    if (equippedRod.durability <= 0) {
         const brokenEmbed = new EmbedBuilder()
             .setColor('#E74C3C')
             .setTitle(fishingLang.Errors.RodBrokenTitle)
