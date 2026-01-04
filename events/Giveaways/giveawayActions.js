@@ -689,7 +689,11 @@ const giveawayActions = {
                 .setDescription(replacePlaceholders(lang.Giveaways.Embeds.EndedGiveaway.Title, placeholders));
 
             if (config.Giveaways.Embed.EndedGiveaway.ShowFooter) {
-                embed.setFooter({ text: "Giveaway ID: " + giveaway.giveawayId, iconURL: config.Giveaways.Embed.EndedGiveaway.EmbedFooterIcon });
+                const footerIcon = config.Giveaways.Embed.EndedGiveaway.EmbedFooterIcon;
+                embed.setFooter({ 
+                    text: "Giveaway ID: " + giveaway.giveawayId, 
+                    iconURL: footerIcon && footerIcon.length > 0 ? footerIcon : null 
+                });
             } else {
                 embed.setFooter(null);
             }
@@ -699,10 +703,10 @@ const giveawayActions = {
             if (config.Giveaways.Embed.EndedGiveaway.ShowTitle) {
                 embed.setDescription(replacePlaceholders(lang.Giveaways.Embeds.EndedGiveaway.Title, placeholders));
             }
-            if (config.Giveaways.Embed.EndedGiveaway.ShowThumbnail) {
+            if (config.Giveaways.Embed.EndedGiveaway.ShowThumbnail && config.Giveaways.Embed.EndedGiveaway.EmbedThumbnail) {
                 embed.setThumbnail(config.Giveaways.Embed.EndedGiveaway.EmbedThumbnail);
             }
-            if (config.Giveaways.Embed.EndedGiveaway.ShowImage) {
+            if (config.Giveaways.Embed.EndedGiveaway.ShowImage && config.Giveaways.Embed.EndedGiveaway.EmbedImage) {
                 embed.setImage(config.Giveaways.Embed.EndedGiveaway.EmbedImage);
             }
             if (config.Giveaways.Embed.EndedGiveaway.ShowWinnersField) {
