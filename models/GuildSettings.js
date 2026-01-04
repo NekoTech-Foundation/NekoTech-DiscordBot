@@ -18,6 +18,11 @@ const defaultData = (query) => ({
     tickets: {
         panels: [],
         categories: []
+    },
+    leveling: {
+        enabled: true,
+        levelUpChannelId: null, // Specific channel ID
+        notificationMode: 'current' // 'current', 'channel', 'none'
     }
 });
 

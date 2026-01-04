@@ -1,5 +1,6 @@
 const { EmbedBuilder, ChannelType } = require('discord.js');
 const UserData = require('../../models/UserData');
+const GuildSettings = require('../../models/GuildSettings');
 //const fs = require('fs');
 const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
 
@@ -164,16 +165,35 @@ async function handleXP(message) {
             }
 
             let channel = message.channel;
+            
+            // Per-Guild Config Override
+            const guildSettings = await GuildSettings.findOne({ guildId: message.guild.id });
+            const mode = guildSettings?.leveling?.notificationMode || 'current'; // Default to 'current'
 
-            if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID' && message.guild.channels.cache.has(config.LevelingSystem.ChannelSettings?.LevelUpChannelID)) {
-                const configuredChannel = message.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
-                if (configuredChannel && configuredChannel.type === ChannelType.GuildText) {
-                    channel = configuredChannel;
+            if (mode === 'none') {
+                channel = null; // Disable notification
+            } else if (mode === 'channel') {
+                const specificChannelId = guildSettings?.leveling?.levelUpChannelId;
+                if (specificChannelId && message.guild.channels.cache.has(specificChannelId)) {
+                   const specificChannel = message.guild.channels.cache.get(specificChannelId);
+                   if (specificChannel.type === ChannelType.GuildText) {
+                       channel = specificChannel;
+                   }
+                }
+            } else {
+                // mode === 'current' or fallback
+                // Fallback to config.yml if specific per-guild channel is not set but 'channel' mode is selected (edge case) OR if still using old config style
+                if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID' && message.guild.channels.cache.has(config.LevelingSystem.ChannelSettings?.LevelUpChannelID)) {
+                     // Only override if config.yml explicitly sets a channel AND per-guild mode is NOT 'current' (to respect 'current' default)
+                     // Actually, per-guild settings should take precedence. If mode is 'current', use message.channel. 
                 }
             }
 
-            if (!channel || channel.type !== ChannelType.GuildText) {
+            // Fallback for 'channel' mode if specific channel is invalid or generic fallback logic
+            if ((!channel || channel.type !== ChannelType.GuildText) && mode !== 'none') {
                 channel = message.channel;
+            } else if (mode === 'none') {
+                channel = null;
             }
 
             const placeholders = {
@@ -204,59 +224,62 @@ async function handleXP(message) {
             const userIconURL = placeholders.userIcon;
             const guildIconURL = placeholders.guildIcon;
 
-            if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
-                const embed = new EmbedBuilder().setColor(config.LevelingSystem.LevelUpMessageSettings.Embed.Color || '#34eb6b');
-
-                if (config.LevelingSystem.LevelUpMessageSettings.Embed.Title) {
-                    embed.setTitle(replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Title, placeholders));
-                }
-
-                if (config.LevelingSystem.LevelUpMessageSettings.Embed.Description && config.LevelingSystem.LevelUpMessageSettings.Embed.Description.length > 0) {
-                    embed.setDescription(config.LevelingSystem.LevelUpMessageSettings.Embed.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
-                }
-
-                if (config.LevelingSystem.LevelUpMessageSettings.Embed.Footer && config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text) {
-                    const footerText = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text, placeholders);
-                    const footerIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Icon || "", placeholders);
-                    if (footerText) {
-                        embed.setFooter({
-                            text: footerText,
-                            iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
+            if (channel) {
+                if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
+                    // ... (Embed logic remains same, just inside if(channel))
+                    const embed = new EmbedBuilder().setColor(config.LevelingSystem.LevelUpMessageSettings.Embed.Color || '#34eb6b');
+    
+                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Title) {
+                        embed.setTitle(replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Title, placeholders));
+                    }
+    
+                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Description && config.LevelingSystem.LevelUpMessageSettings.Embed.Description.length > 0) {
+                        embed.setDescription(config.LevelingSystem.LevelUpMessageSettings.Embed.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
+                    }
+    
+                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Footer && config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text) {
+                        const footerText = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text, placeholders);
+                        const footerIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Icon || "", placeholders);
+                        if (footerText) {
+                            embed.setFooter({
+                                text: footerText,
+                                iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
+                            });
+                        } else {
+                            embed.setFooter({
+                                text: footerText
+                            });
+                        }
+                    }
+    
+                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Author && config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text) {
+                        const authorIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Icon || "", placeholders);
+                        embed.setAuthor({
+                            name: replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text, placeholders),
+                            iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
                         });
-                    } else {
-                        embed.setFooter({
-                            text: footerText
-                        });
                     }
-                }
-
-                if (config.LevelingSystem.LevelUpMessageSettings.Embed.Author && config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text) {
-                    const authorIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Icon || "", placeholders);
-                    embed.setAuthor({
-                        name: replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text, placeholders),
-                        iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
-                    });
-                }
-
-                if (config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail) {
-                    const thumbnailURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail, placeholders);
-                    if (isValidUrl(thumbnailURL)) {
-                        embed.setThumbnail(thumbnailURL);
+    
+                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail) {
+                        const thumbnailURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail, placeholders);
+                        if (isValidUrl(thumbnailURL)) {
+                            embed.setThumbnail(thumbnailURL);
+                        }
                     }
-                }
-
-                if (config.LevelingSystem.LevelUpMessageSettings.Embed.Image) {
-                    const imageURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Image, placeholders);
-                    if (isValidUrl(imageURL)) {
-                        embed.setImage(imageURL);
+    
+                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Image) {
+                        const imageURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Image, placeholders);
+                        if (isValidUrl(imageURL)) {
+                            embed.setImage(imageURL);
+                        }
                     }
-                }
-
-                channel.send({ embeds: [embed] });
-            } else {
-                const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
-                if (levelUpMessage.trim() !== '') {
-                    channel.send(levelUpMessage);
+    
+                    channel.send({ embeds: [embed] });
+                } else {
+                    const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
+                    if (levelUpMessage.trim() !== '') {
+                        channel.send(levelUpMessage);
+                    }
                 }
             }
             levelUpMessageSent = true; 

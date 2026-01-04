@@ -9,6 +9,7 @@ const {
 } = require('discord.js');
 const UserData = require('../../../models/UserData');
 const { getConfig, getLang } = require('../../../utils/configLoader.js');
+const GuildSettings = require('../../../models/GuildSettings');
 
 const config = getConfig();
 const lang = getLang();
@@ -150,6 +151,28 @@ module.exports = {
             subcommand
                 .setName('prestige')
                 .setDescription('Reset cấp độ & XP để nâng hạng danh vọng')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('setup')
+                .setDescription('Cài đặt hệ thống cấp độ cho server')
+                .addStringOption(option =>
+                    option
+                        .setName('mode')
+                        .setDescription('Chế độ thông báo lên cấp')
+                        .setRequired(true)
+                        .addChoices(
+                            { name: 'Tại chỗ (Current Channel)', value: 'current' },
+                            { name: 'Kênh riêng (Specific Channel)', value: 'channel' },
+                            { name: 'Tắt (Disabled)', value: 'none' }
+                        )
+                )
+                .addChannelOption(option =>
+                    option
+                        .setName('channel')
+                        .setDescription('Kênh thông báo (Chỉ dùng cho chế độ Kênh riêng)')
+                        .setRequired(false)
+                )
         ),
     category: 'Chung',
     async execute(interaction) {
@@ -157,7 +180,7 @@ module.exports = {
         const guildId = interaction.guild.id;
 
         const isDev = LEVEL_DEV_IDS.includes(interaction.user.id);
-        const adminSubcommands = ['give', 'remove', 'set', 'reset'];
+        const adminSubcommands = ['give', 'remove', 'set', 'reset', 'setup'];
 
         if (adminSubcommands.includes(subcommand) && !isDev) {
             await interaction.reply({
@@ -427,6 +450,49 @@ module.exports = {
 
                 await interaction.reply({
                     content: `🎉 Bạn đã nâng **Hạng danh vọng** lên ${tier.emoji} **${tier.name}** (Prestige ${userData.prestige})! Cấp độ của bạn đã được đặt lại về **1**.`,
+                    flags: MessageFlags.Ephemeral
+                });
+                break;
+            }
+
+            case 'setup': {
+                const mode = interaction.options.getString('mode');
+                const channel = interaction.options.getChannel('channel');
+
+                if (mode === 'channel' && !channel) {
+                    return interaction.reply({
+                        content: '⚠️ Bạn phải chọn **Kênh** nếu sử dụng chế độ **Kênh riêng**.',
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+
+                let settings = await GuildSettings.findOne({ guildId: interaction.guild.id });
+                if (!settings) {
+                    settings = await GuildSettings.create({ guildId: interaction.guild.id });
+                }
+
+                if (!settings.leveling) {
+                    settings.leveling = {
+                        enabled: true,
+                        levelUpChannelId: null,
+                        notificationMode: 'current'
+                    };
+                }
+
+                settings.leveling.notificationMode = mode;
+                if (mode === 'channel') {
+                    settings.leveling.levelUpChannelId = channel.id;
+                }
+
+                await settings.save();
+
+                let response = `✅ Đã cập nhật cài đặt Leveling:\n- **Chế độ:** ${mode === 'current' ? 'Tại chỗ' : mode === 'channel' ? 'Kênh riêng' : 'Tắt'}`;
+                if (mode === 'channel') {
+                    response += `\n- **Kênh:** ${channel.toString()}`;
+                }
+
+                await interaction.reply({
+                    content: response,
                     flags: MessageFlags.Ephemeral
                 });
                 break;
