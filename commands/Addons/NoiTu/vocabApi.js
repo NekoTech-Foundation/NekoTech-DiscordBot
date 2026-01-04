@@ -1,32 +1,73 @@
 const axios = require('axios');
 
-// Cache với TTL
-const cache = new Map();
+// URL chứa danh sách từ tiếng Việt (khoảng 74k từ)
+const DICTIONARY_URL = 'https://raw.githubusercontent.com/soiqualang/vietnamese-wordlist/master/Viet74K.txt';
+
+// Cache - Sử dụng Set để tra cứu O(1)
+const memoryDictionary = new Set();
+const apiCache = new Map();
 const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 giờ
 
 // API Configuration
-const DEFAULT_URL = 'https://vi.wiktionary.org/w/api.php';
+const WIKI_API_URL = 'https://vi.wiktionary.org/w/api.php';
 const TIMEOUT_MS = Number(process.env.NOITU_API_TIMEOUT_MS || 5000);
-const MAX_RETRIES = 2;
 
-// Cleanup cache định kỳ
-setInterval(() => {
-    const now = Date.now();
-    for (const [key, value] of cache.entries()) {
-        if (now - value.timestamp > CACHE_TTL) {
-            cache.delete(key);
-        }
-    }
-}, 1000 * 60 * 60);
+let isReady = false;
 
-function normalizeWord(word) {
+// Hàm normalize cơ bản cho việc lưu trữ và so sánh từ
+function cleanInput(word) {
+    if (!word) return '';
+    return word.toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+// Hàm normalize cho logic game (lấy chữ cái đầu/cuối, bỏ dấu)
+function normalizeForGame(word) {
+    if (!word) return '';
     return word
         .toLowerCase()
         .trim()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd');
 }
 
+// Hàm khởi tạo: tải từ điển về RAM
+async function initDictionary() {
+    if (isReady) return;
+    
+    console.log('[NoiTu] ⏳ Downloading dictionary data...');
+    try {
+        const response = await axios.get(DICTIONARY_URL, { timeout: 15000 });
+        const words = response.data.split(/\r?\n/);
+        
+        let count = 0;
+        words.forEach(word => {
+            const w = cleanInput(word);
+            if (w) {
+                memoryDictionary.add(w);
+                count++;
+            }
+        });
+        
+        isReady = true;
+        console.log(`[NoiTu] ✅ Smart Dictionary loaded: ${count} words.`);
+    } catch (error) {
+        console.error('[NoiTu] ❌ Failed to download dictionary:', error.message);
+        console.log('[NoiTu] ⚠️ Switched to Hybrid/Online mode.');
+    }
+}
+
+// Cleanup cache định kỳ
+setInterval(() => {
+    const now = Date.now();
+    for (const [key, value] of apiCache.entries()) {
+        if (now - value.timestamp > CACHE_TTL) {
+            apiCache.delete(key);
+        }
+    }
+}, 1000 * 60 * 60);
+
+// Check Wiki API
 async function checkWiktionary(word) {
     try {
         const params = {
@@ -37,137 +78,56 @@ async function checkWiktionary(word) {
             formatversion: 2
         };
 
-        const response = await axios.get(DEFAULT_URL, {
+        const response = await axios.get(WIKI_API_URL, {
             params,
-            headers: {
-                'User-Agent': 'NekoBuckets-NoiTu/2.0 (Discord Bot)'
-            },
-            timeout: TIMEOUT_MS,
-            validateStatus: () => true
+            headers: { 'User-Agent': 'NekoBot/NoiTuAddress (Discord)' },
+            timeout: TIMEOUT_MS
         });
 
-        if (!response.data || !response.data.query) {
-            return false;
-        }
-
-        const pages = response.data.query.pages;
-        if (!pages || pages.length === 0) {
-            return false;
-        }
-
-        const page = pages[0];
-        return !page.hasOwnProperty('missing');
-
-    } catch (error) {
-        console.error(`[VocabAPI] Wiktionary error for "${word}":`, error.message);
+        if (!response.data?.query?.pages?.length) return false;
+        return !response.data.query.pages[0].missing;
+    } catch {
         return false;
     }
 }
 
-// Kiểm tra từ ghép: check cả cụm và từng từ riêng lẻ
-async function checkCompoundWord(word) {
-    const words = word.trim().split(/\s+/);
-    
-    // Nếu là từ đơn (1 từ)
-    if (words.length === 1) {
-        const result = await checkWiktionary(word);
-        if (result) return true;
-        
-        // Thử với chữ đầu viết hoa
-        const capitalized = word.charAt(0).toUpperCase() + word.slice(1);
-        return await checkWiktionary(capitalized);
-    }
-    
-    // Nếu là từ ghép (2+ từ): "con gà", "bông hoa"
-    // Bước 1: Check cả cụm trước
-    const wholePhrase = await checkWiktionary(word);
-    if (wholePhrase) return true;
-    
-    // Bước 2: Check từng từ riêng - TẤT CẢ phải hợp lệ
-    const validationPromises = words.map(async (w) => {
-        if (w.length === 0) return true;
-        
-        // Check từ thường
-        let valid = await checkWiktionary(w);
-        if (valid) return true;
-        
-        // Check với chữ đầu viết hoa
-        const capitalized = w.charAt(0).toUpperCase() + w.slice(1);
-        valid = await checkWiktionary(capitalized);
-        return valid;
-    });
-    
-    const results = await Promise.all(validationPromises);
-    
-    // Tất cả các từ phải hợp lệ
-    return results.every(r => r === true);
-}
-
-async function checkWordWithRetry(word, retries = MAX_RETRIES) {
-    for (let i = 0; i <= retries; i++) {
-        try {
-            const result = await checkCompoundWord(word);
-            if (result) return true;
-
-            // Nếu fail, thử lại
-            if (i < retries) {
-                await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)));
-                continue;
-            }
-
-            return false;
-        } catch (error) {
-            console.error(`[VocabAPI] Retry ${i + 1}/${retries + 1} failed:`, error.message);
-            if (i === retries) {
-                return false;
-            }
-            await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)));
-        }
-    }
-    return false;
-}
-
+// Kiểm tra thông minh
 async function checkWord(word) {
-    const key = normalizeWord(word);
-    if (!key) return false;
+    if (!word) return false;
+    const cleanW = cleanInput(word);
 
-    // Kiểm tra cache
-    const cached = cache.get(key);
-    if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
-        console.log(`[VocabAPI] Cache hit: "${word}" = ${cached.valid}`);
-        return cached.valid;
+    // 1. Check Memory Dictionary (Ưu tiên số 1 - Tốc độ cao)
+    if (memoryDictionary.has(cleanW)) {
+        return true;
     }
 
-    console.log(`[VocabAPI] Checking word: "${word}"...`);
-    
-    // Gọi API với retry
-    const valid = await checkWordWithRetry(word);
-    
-    console.log(`[VocabAPI] Result for "${word}": ${valid ? '✅ Valid' : '❌ Invalid'}`);
-    
-    // Lưu vào cache
-    cache.set(key, {
-        valid,
-        timestamp: Date.now()
-    });
+    // 2. Check Cache
+    if (apiCache.has(cleanW)) {
+        const cached = apiCache.get(cleanW);
+        if (Date.now() - cached.timestamp < CACHE_TTL) return cached.valid;
+    }
 
+    // 3. Fallback: Wiktionary API
+    console.log(`[NoiTu] 🔎 Converting/Checking online: "${cleanW}"`);
+    const valid = await checkWiktionary(cleanW);
+
+    // Lưu cache
+    apiCache.set(cleanW, { valid, timestamp: Date.now() });
+    
     return valid;
 }
 
-// Export stats cho debugging
-function getCacheStats() {
+function getStats() {
     return {
-        size: cache.size,
-        entries: Array.from(cache.entries()).slice(0, 20).map(([word, data]) => ({
-            word,
-            valid: data.valid,
-            age: Math.floor((Date.now() - data.timestamp) / 1000) + 's'
-        }))
+        dictionarySize: memoryDictionary.size,
+        cacheSize: apiCache.size,
+        isReady
     };
 }
 
 module.exports = { 
+    initDictionary,
     checkWord,
-    getCacheStats,
-    normalizeWord
+    normalizeForGame,
+    getStats
 };

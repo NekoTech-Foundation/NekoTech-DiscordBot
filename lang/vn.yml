@@ -564,6 +564,24 @@ Verify:
   CaptchaInputPlaceholder: "Nhấp vào các nút được đánh số có chứa hình dạng"
   IncorrectCaptcha: "Lựa chọn không chính xác. Vui lòng thử lại."
 
+  # Setup & Panel
+  SetupTitle: "Cài đặt xác minh thành công"
+  SetupDescription: "Hệ thống xác minh đã được cập nhật."
+  FieldChannel: "Kênh"
+  FieldRole: "Vai trò xác minh"
+  FieldMode: "Chế độ"
+  FieldUnverifiedRole: "Vai trò chưa xác minh"
+  None: "Không có"
+  SetupRequired: "Vui lòng chạy `/verification setup` trước!"
+  ChannelNotFound: "Không tìm thấy kênh cấu hình. Vui lòng chạy setup lại."
+  PanelTitle: "Xác minh máy chủ"
+  PanelDescription: "Nhấn vào nút bên dưới để xác minh và truy cập máy chủ."
+  ButtonLabel: "Xác minh"
+  PanelUpdated: "Đã cập nhật bảng xác minh."
+  PanelSent: "Đã gửi bảng xác minh."
+  PanelError: "Không thể gửi bảng xác minh. Vui lòng kiểm tra quyền bot."
+  SettingsTitle: "Cài đặt xác minh"
+
 # ===========================================================================
 # TIN NHẮN BẢNG XẾP HẠNG & CẤP ĐỘ
 # ===========================================================================

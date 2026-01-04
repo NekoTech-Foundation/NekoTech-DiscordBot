@@ -1779,118 +1779,130 @@ Không có tham số.
 
 ## /report message
 
-**Mô tả:** Báo cáo tin nhắn trong máy chủ.
+**Mô tả:** 🚨 Báo cáo tin nhắn vi phạm
+
+Sử dụng lệnh này để báo cáo một tin nhắn cụ thể cho ban quản trị. Hệ thống sẽ gửi một bản sao của tin nhắn vi phạm cùng lý do báo cáo tới kênh tiếp nhận.
 
 ### Tham số
 
-| Tham số      | Mô tả                       | Bắt buộc |
-| :----------- | :-------------------------- | :------- |
-| `channel`    | Kênh chứa tin nhắn.         | Có       |
-| `message_id` | ID của tin nhắn.            | Có       |
-| `reason`     | Lý do báo cáo.              | Có       |
-| `silent`     | Thực hiện ở chế độ im lặng. | Không    |
+| Tham số      | Mô tả                                               | Bắt buộc |
+| :----------- | :-------------------------------------------------- | :------- |
+| `channel`    | Kênh chứa tin nhắn vi phạm                          | Có       |
+| `message_id` | ID của tin nhắn cần báo cáo (Chuột phải -> Copy ID) | Có       |
+| `reason`     | Lý do báo cáo (VD: Spam, Quảng cáo...)              | Có       |
+| `silent`     | Chế độ ẩn danh (chỉ bạn nhìn thấy phản hồi của bot) | Không    |
 
 ### Ví dụ
 
-> Báo cáo tin nhắn trong máy chủ.
+> Báo cáo một tin nhắn spam trong kênh #general
 
 ```bash
-/report message channel:#general message_id:12345 reason:Spam
+/report message channel:#general message_id:123456789012345678 reason:Spam quảng cáo
 ```
 
 ---
 
 ## /report recent
 
-**Mô tả:** Hiển thị các báo cáo gần đây.
+**Mô tả:** 📋 Xem danh sách báo cáo gần đây
+
+Hiển thị danh sách các phiếu tố cáo đã được gửi trong máy chủ. Có thể lọc theo trạng thái, người báo cáo hoặc người bị báo cáo.
 
 ### Tham số
 
-| Tham số    | Mô tả                       | Bắt buộc |
-| :--------- | :-------------------------- | :------- |
-| `order`    | Sắp xếp kết quả.            | Có       |
-| `status`   | Trạng thái báo cáo.         | Không    |
-| `reporter` | Người báo cáo.              | Không    |
-| `reported` | Người bị báo cáo.           | Không    |
-| `silent`   | Thực hiện ở chế độ im lặng. | Không    |
+| Tham số    | Mô tả                                      | Bắt buộc |
+| :--------- | :----------------------------------------- | :------- |
+| `order`    | Sắp xếp (Mới nhất / Cũ nhất)               | Có       |
+| `status`   | Trạng thái (Đang chờ / Đã duyệt / Từ chối) | Không    |
+| `reporter` | Lọc theo người báo cáo                     | Không    |
+| `reported` | Lọc theo người bị báo cáo                  | Không    |
+| `silent`   | Chế độ ẩn danh                             | Không    |
 
 ### Ví dụ
 
-> Hiển thị các báo cáo gần đây.
+> Xem các báo cáo mới nhất đang chờ xử lý
 
 ```bash
-/report recent order:Mới nhất
+/report recent order:newest status:pending
 ```
 
 ---
 
 ## /report check
 
-**Mô tả:** Hiển thị báo cáo dựa trên ID.
+**Mô tả:** 🔍 Kiểm tra chi tiết báo cáo
+
+Xem thông tin chi tiết của một phiếu tố cáo cụ thể dựa trên ID của phiếu đó.
 
 ### Tham số
 
-| Tham số     | Mô tả                       | Bắt buộc |
-| :---------- | :-------------------------- | :------- |
-| `report_id` | ID của báo cáo.             | Có       |
-| `silent`    | Thực hiện ở chế độ im lặng. | Không    |
+| Tham số     | Mô tả               | Bắt buộc |
+| :---------- | :------------------ | :------- |
+| `report_id` | ID của phiếu tố cáo | Có       |
+| `silent`    | Chế độ ẩn danh      | Không    |
 
 ### Ví dụ
 
-> Hiển thị báo cáo dựa trên ID.
+> Kiểm tra phiếu tố cáo số #10
 
 ```bash
-/report check report_id:1
+/report check report_id:10
 ```
 
 ---
 
 ## /report update
 
-**Mô tả:** Phê duyệt/Từ chối báo cáo.
+**Mô tả:** ⚖️ Xử lý báo cáo (Dành cho Mod/Admin)
+
+Dùng để chấp thuận hoặc từ chối một phiếu tố cáo. Yêu cầu quyền quản lý báo cáo.
 
 ### Tham số
 
-| Tham số     | Mô tả                       | Bắt buộc |
-| :---------- | :-------------------------- | :------- |
-| `action`    | Hành động.                  | Có       |
-| `report_id` | ID của báo cáo.             | Có       |
-| `reason`    | Lý do cho hành động này.    | Có       |
-| `silent`    | Thực hiện ở chế độ im lặng. | Không    |
+| Tham số     | Mô tả                          | Bắt buộc |
+| :---------- | :----------------------------- | :------- |
+| `action`    | Hành động (Xác nhận / Từ chối) | Có       |
+| `report_id` | ID của phiếu tố cáo            | Có       |
+| `reason`    | Lý do xử lý                    | Có       |
+| `silent`    | Chế độ ẩn danh                 | Không    |
 
 ### Ví dụ
 
-> Phê duyệt/Từ chối báo cáo.
+> Xác nhận phiếu tố cáo số #5 và ghi lý do
 
 ```bash
-/report update action:Xác nhận report_id:1 reason:Confirmed
+/report update action:approve report_id:5 reason:Đã xử lý vi phạm
 ```
 
 ---
 
 ## /report settings enable
 
-**Mô tả:** Kích hoạt tính năng Quick Report.
+**Mô tả:** ✅ Kích hoạt hệ thống Quick Report
+
+Bật tính năng báo cáo và chọn kênh để nhận thông báo khi có báo cáo mới.
 
 ### Tham số
 
-| Tham số           | Mô tả                 | Bắt buộc |
-| :---------------- | :-------------------- | :------- |
-| `receive_channel` | Kênh để nhận báo cáo. | Có       |
+| Tham số           | Mô tả                  | Bắt buộc |
+| :---------------- | :--------------------- | :------- |
+| `receive_channel` | Kênh nhận phiếu tố cáo | Có       |
 
 ### Ví dụ
 
-> Kích hoạt tính năng Quick Report.
+> Bật tính năng và gửi báo cáo về kênh #report-log
 
 ```bash
-/report settings enable receive_channel:#reports
+/report settings enable receive_channel:#report-log
 ```
 
 ---
 
 ## /report settings disable
 
-**Mô tả:** Vô hiệu hóa tính năng Quick Report.
+**Mô tả:** ❌ Tắt hệ thống Quick Report
+
+Vô hiệu hóa hoàn toàn tính năng báo cáo trên máy chủ.
 
 ### Tham số
 
@@ -1898,7 +1910,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Vô hiệu hóa tính năng Quick Report.
+> Tắt hệ thống báo cáo
 
 ```bash
 /report settings disable
@@ -1908,17 +1920,19 @@ Không có tham số.
 
 ## /report settings muterole
 
-**Mô tả:** Đặt vai trò tắt tiếng (mute role).
+**Mô tả:** 🔇 Thiết lập Role Mute
+
+Cài đặt Role sẽ được dùng để xử phạt (nếu có tính năng tự động mute).
 
 ### Tham số
 
-| Tham số | Mô tả         | Bắt buộc |
-| :------ | :------------ | :------- |
-| `role`  | Chọn vai trò. | Có       |
+| Tham số | Mô tả             | Bắt buộc |
+| :------ | :---------------- | :------- |
+| `role`  | Role dùng để Mute | Có       |
 
 ### Ví dụ
 
-> Đặt vai trò tắt tiếng (mute role).
+> Thiết lập role Mute là @Muted
 
 ```bash
 /report settings muterole role:@Muted
@@ -1928,37 +1942,41 @@ Không có tham số.
 
 ## /report settings manager
 
-**Mô tả:** Đặt vai trò người quản lý báo cáo.
+**Mô tả:** 👮 Thiết lập Role Quản lý
+
+Cài đặt Role có quyền xem, quản lý và xử lý các phiếu tố cáo.
 
 ### Tham số
 
-| Tham số | Mô tả         | Bắt buộc |
-| :------ | :------------ | :------- |
-| `role`  | Chọn vai trò. | Có       |
+| Tham số | Mô tả        | Bắt buộc |
+| :------ | :----------- | :------- |
+| `role`  | Role quản lý | Có       |
 
 ### Ví dụ
 
-> Đặt vai trò người quản lý báo cáo.
+> Thiết lập role quản lý là @Moderator
 
 ```bash
-/report settings manager role:@Mod
+/report settings manager role:@Moderator
 ```
 
 ---
 
 ## /report settings bypass
 
-**Mô tả:** Đặt role bảo vệ người dùng khỏi các báo cáo.
+**Mô tả:** 🛡️ Thiết lập Role Bypass
+
+Những người có Role này sẽ không thể bị báo cáo (miễn nhiễm).
 
 ### Tham số
 
-| Tham số | Mô tả         | Bắt buộc |
-| :------ | :------------ | :------- |
-| `role`  | Chọn vai trò. | Có       |
+| Tham số | Mô tả           | Bắt buộc |
+| :------ | :-------------- | :------- |
+| `role`  | Role miễn nhiễm | Có       |
 
 ### Ví dụ
 
-> Đặt role bảo vệ người dùng khỏi các báo cáo.
+> Thiết lập role Admin không bị báo cáo
 
 ```bash
 /report settings bypass role:@Admin
@@ -1968,17 +1986,19 @@ Không có tham số.
 
 ## /report settings blacklist
 
-**Mô tả:** Đặt vai trò khiến người dùng không thể báo cáo.
+**Mô tả:** ⛔ Thiết lập Role Blacklist
+
+Những người có Role này sẽ bị cấm sử dụng lệnh báo cáo.
 
 ### Tham số
 
-| Tham số | Mô tả         | Bắt buộc |
-| :------ | :------------ | :------- |
-| `role`  | Chọn vai trò. | Có       |
+| Tham số | Mô tả       | Bắt buộc |
+| :------ | :---------- | :------- |
+| `role`  | Role bị cấm | Có       |
 
 ### Ví dụ
 
-> Đặt vai trò khiến người dùng không thể báo cáo.
+> Cấm role @BadUser sử dụng lệnh report
 
 ```bash
 /report settings blacklist role:@BadUser
@@ -1988,17 +2008,19 @@ Không có tham số.
 
 ## /report settings autoexpire
 
-**Mô tả:** Đặt thời gian tự động hết hạn cho các báo cáo.
+**Mô tả:** ⏳ Tự động hết hạn báo cáo
+
+Cấu hình thời gian để một phiếu tố cáo tự động hết hiệu lực nếu không được xử lý.
 
 ### Tham số
 
-| Tham số | Mô tả                             | Bắt buộc |
-| :------ | :-------------------------------- | :------- |
-| `after` | Số giờ sau đó báo cáo sẽ hết hạn. | Có       |
+| Tham số | Mô tả                          | Bắt buộc |
+| :------ | :----------------------------- | :------- |
+| `after` | Số giờ để hết hạn (VD: 24, 48) | Có       |
 
 ### Ví dụ
 
-> Đặt thời gian tự động hết hạn cho các báo cáo.
+> Tự động hết hạn báo cáo sau 24 giờ
 
 ```bash
 /report settings autoexpire after:24
@@ -2008,76 +2030,84 @@ Không có tham số.
 
 ## /report settings concurrent
 
-**Mô tả:** Đặt số lượng báo cáo đồng thời tối đa cho mỗi người dùng.
+**Mô tả:** 🔢 Giới hạn báo cáo đồng thời
+
+Đặt giới hạn số lượng báo cáo tối đa mà một người dùng có thể gửi cùng lúc.
 
 ### Tham số
 
-| Tham số   | Mô tả            | Bắt buộc |
-| :-------- | :--------------- | :------- |
-| `maximum` | Số lượng tối đa. | Có       |
+| Tham số   | Mô tả           | Bắt buộc |
+| :-------- | :-------------- | :------- |
+| `maximum` | Số lượng tối đa | Có       |
 
 ### Ví dụ
 
-> Đặt số lượng báo cáo đồng thời tối đa cho mỗi người dùng.
+> Mỗi người chỉ được gửi tối đa 3 báo cáo chưa xử lý
 
 ```bash
-/report settings concurrent maximum:5
+/report settings concurrent maximum:3
 ```
 
 ---
 
 ## /report settings successful_message
 
-**Mô tả:** Đặt tin nhắn được gửi khi báo cáo thành công.
+**Mô tả:** 📨 Tùy chỉnh tin nhắn cảm ơn
+
+Thay đổi nội dung tin nhắn mà Bot sẽ gửi cho người báo cáo sau khi họ gửi thành công.
 
 ### Tham số
 
-| Tham số   | Mô tả              | Bắt buộc |
-| :-------- | :----------------- | :------- |
-| `message` | Nội dung tin nhắn. | Có       |
+| Tham số   | Mô tả             | Bắt buộc |
+| :-------- | :---------------- | :------- |
+| `message` | Nội dung tin nhắn | Có       |
 
 ### Ví dụ
 
-> Đặt tin nhắn được gửi khi báo cáo thành công.
+> Đặt tin nhắn cảm ơn
 
 ```bash
-/report settings successful_message message:Report sent!
+/report settings successful_message message:Cảm ơn bạn đã báo cáo vi phạm! Chúng tôi sẽ xem xét sớm nhất.
 ```
 
 ---
 
 ## /report settings auto_delete
 
-**Mô tả:** Tự động xóa báo cáo trong một số sự kiện.
+**Mô tả:** 🗑️ Tự động xóa báo cáo
+
+Cấu hình để Bot tự động đóng/xóa phiếu tố cáo khi người bị báo cáo đã nhận án phạt (mute, timeout, ban) hoặc rời server.
 
 ### Tham số
 
-| Tham số           | Mô tả                              | Bắt buộc |
-| :---------------- | :--------------------------------- | :------- |
-| `on_user_timeout` | Khi người dùng bị timeout.         | Không    |
-| `on_user_muted`   | Khi người dùng bị mute.            | Không    |
-| `on_user_leave`   | Khi người dùng bị cấm/rời máy chủ. | Không    |
+| Tham số           | Mô tả                         | Bắt buộc |
+| :---------------- | :---------------------------- | :------- |
+| `on_user_timeout` | Xóa khi người dùng bị Timeout | Không    |
+| `on_user_muted`   | Xóa khi người dùng bị Mute    | Không    |
+| `on_user_leave`   | Xóa khi người dùng rời Server | Không    |
 
 ### Ví dụ
 
-> Tự động xóa báo cáo trong một số sự kiện.
+> Tự động xóa báo cáo nếu người dùng bị Timeout hoặc rời server
 
 ```bash
-/report settings auto_delete on_user_timeout:True
+/report settings auto_delete on_user_timeout:True on_user_leave:True
 ```
 
 ---
 
 ## /report settings channels
 
-**Mô tả:** Thêm/xóa kênh vào danh sách blacklist/whitelist.
+**Mô tả:** 📺 Quản lý kênh cho phép báo cáo
+
+Thêm hoặc loại bỏ các kênh khỏi danh sách được phép/bị cấm báo cáo (tùy thuộc vào chế độ Whitelist/Blacklist).
 
 ### Tham số
 
-| Tham số   | Mô tả      | Bắt buộc |
-| :-------- | :--------- | :------- |
-| `action`  | Hành động. | Có       |
-| `channel` | Chọn kênh. | Có       |
+| Tham số   | Mô tả                | Bắt buộc |
+| :-------- | :------------------- | :------- |
+| `action`  | Hành động (Thêm/Xóa) | Có       |
+| `channel` | Chọn kênh            | Có       |
 
 ### Ví dụ
 

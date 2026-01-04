@@ -2,84 +2,44 @@ const { EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
-const { checkWord } = require('./vocabApi');
+const { checkWord, initDictionary, normalizeForGame, getStats } = require('./vocabApi');
 
 module.exports.run = async (client) => {
     const configPath = path.join(__dirname, 'config.yml');
-    const dictionaryPath = path.join(__dirname, 'dictionary.txt');
-
+    
     let config;
-    let localDictionary = new Set();
-
     try {
         config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-
-        // Load local dictionary as fallback
-        if (fs.existsSync(dictionaryPath)) {
-            const content = fs.readFileSync(dictionaryPath, 'utf8');
-            content.split('\n').forEach(word => {
-                const trimmed = word.trim().toLowerCase();
-                if (trimmed && trimmed.length > 0) {
-                    localDictionary.add(trimmed);
-                }
-            });
-            console.log(`[NoiTu] Local dictionary loaded: ${localDictionary.size} words`);
-        }
     } catch (error) {
         console.error('[NoiTu] Failed to load config:', error);
         return;
     }
+
+    // Khởi tạo Smart Dictionary
+    // Promise này chạy background, không block boot của bot
+    initDictionary().catch(err => console.error('[NoiTu] Init dictionary failed:', err));
 
     // Initialize game sessions
     if (!client.noiTuGames) client.noiTuGames = new Map();
     if (!client.noiTuSetups) client.noiTuSetups = new Map();
     if (!client.noiTuStats) client.noiTuStats = new Map();
 
-    // Normalize Vietnamese text
-    function normalizeVietnamese(str) {
-        return str
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .trim();
-    }
-
     function getFirstLetter(word) {
-        const normalized = normalizeVietnamese(word);
+        const normalized = normalizeForGame(word);
         const words = normalized.split(/\s+/);
         return words[0].charAt(0);
     }
 
     function getLastLetter(word) {
-        const normalized = normalizeVietnamese(word);
+        const normalized = normalizeForGame(word);
         const words = normalized.split(/\s+/).filter(w => w.length > 0);
         const lastWord = words[words.length - 1];
         return lastWord.charAt(lastWord.length - 1);
     }
 
-    // Validate word với cả API và local dictionary
-    async function isValidWord(word) {
-        // Kiểm tra local dictionary trước (nhanh hơn)
-        if (localDictionary.size > 0) {
-            const normalized = word.toLowerCase().trim();
-            if (localDictionary.has(normalized)) return true;
-        }
-
-        // Gọi API
-        try {
-            const valid = await checkWord(word);
-            return valid;
-        } catch (error) {
-            console.error('[NoiTu] API check error:', error.message);
-            // Fallback về local dictionary
-            return localDictionary.has(word.toLowerCase().trim());
-        }
-    }
-
     function createEmbed(template, data) {
         const embed = new EmbedBuilder()
-            .setColor(template.color || config.settings.default_color)
+            .setColor(template.color || config?.settings?.default_color || '#0099ff')
             .setTitle(template.title);
 
         let description = template.description;
@@ -92,16 +52,19 @@ module.exports.run = async (client) => {
         if (template.footer) {
             embed.setFooter({ text: template.footer.text });
         }
+        
+        // Debug info (optional)
+        // const stats = getStats();
+        // embed.setFooter({ text: `${template.footer?.text || ''} | Dict: ${stats.dictionarySize} words` });
 
         return embed;
     }
 
-    // Update player stats
+    // Stats Utils
     function updateStats(channelId, userId, username, word) {
         if (!client.noiTuStats.has(channelId)) {
             client.noiTuStats.set(channelId, new Map());
         }
-
         const channelStats = client.noiTuStats.get(channelId);
         if (!channelStats.has(userId)) {
             channelStats.set(userId, {
@@ -111,18 +74,16 @@ module.exports.run = async (client) => {
                 lastWord: null
             });
         }
-
         const userStats = channelStats.get(userId);
         userStats.correctWords++;
         userStats.lastWord = word;
-        userStats.username = username; // Update username
+        userStats.username = username;
     }
 
     function incrementWrongStats(channelId, userId, username) {
         if (!client.noiTuStats.has(channelId)) {
             client.noiTuStats.set(channelId, new Map());
         }
-
         const channelStats = client.noiTuStats.get(channelId);
         if (!channelStats.has(userId)) {
             channelStats.set(userId, {
@@ -132,7 +93,6 @@ module.exports.run = async (client) => {
                 lastWord: null
             });
         }
-
         channelStats.get(userId).wrongWords++;
     }
 
@@ -145,14 +105,12 @@ module.exports.run = async (client) => {
 
         const word = message.content.trim();
         
-        // Ignore empty messages
+        // Ignore empty or commands
         if (!word || word.length === 0) return;
-
-        // Ignore commands
         if (word.startsWith('/') || word.startsWith('!')) return;
 
         try {
-            // Check same user
+            // 1. Check Previous User
             if (game.lastUserId === message.author.id && game.currentWord) {
                 const embed = createEmbed(config.messages.wrong_word, {
                     username: message.author.username,
@@ -165,7 +123,7 @@ module.exports.run = async (client) => {
                 return;
             }
 
-            // Check starting letter
+            // 2. Check Starting Letter
             if (game.lastLetter) {
                 const firstLetter = getFirstLetter(word);
                 if (firstLetter !== game.lastLetter) {
@@ -176,12 +134,14 @@ module.exports.run = async (client) => {
                     });
                     await message.reply({ embeds: [embed] });
                     await message.react('❌');
+                    
+                    // Reset game if enabled strictly? No, just warn.
                     incrementWrongStats(message.channel.id, message.author.id, message.author.username);
                     return;
                 }
             }
 
-            // Check reused word
+            // 3. Check Used Words
             if (game.usedWords.has(word.toLowerCase())) {
                 const embed = createEmbed(config.messages.wrong_word, {
                     username: message.author.username,
@@ -194,9 +154,9 @@ module.exports.run = async (client) => {
                 return;
             }
 
-            // Validate word (with loading reaction)
+            // 4. Validate Vocabulary (Smart Check)
             await message.react('⏳');
-            const isValid = await isValidWord(word);
+            const isValid = await checkWord(word);
             await message.reactions.removeAll().catch(() => {});
 
             if (!isValid) {
@@ -211,7 +171,7 @@ module.exports.run = async (client) => {
                 return;
             }
 
-            // Valid word - update game state
+            // 5. Valid Word -> Process Success
             const lastLetter = getLastLetter(word);
             game.currentWord = word;
             game.lastLetter = lastLetter;
@@ -220,7 +180,6 @@ module.exports.run = async (client) => {
             game.usedWords.add(word.toLowerCase());
             game.totalWords = (game.totalWords || 0) + 1;
 
-            // Update stats
             updateStats(message.channel.id, message.author.id, message.author.username, word);
 
             const embed = createEmbed(config.messages.correct_word, {
@@ -238,5 +197,5 @@ module.exports.run = async (client) => {
         }
     });
 
-    console.log('[NoiTu] ✅ Core game system loaded');
+    console.log('[NoiTu] ✅ Helper loaded (Smart Dictionary Integrations)');
 };

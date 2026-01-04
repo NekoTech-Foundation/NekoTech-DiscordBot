@@ -144,6 +144,12 @@ module.exports = async (client, interaction) => {
                 }
             }
 
+            // Verification Captcha Handler
+            if (interaction.customId.startsWith('cell_') || interaction.customId === 'submit_captcha') {
+                await handleVerificationInteraction(client, interaction);
+                return;
+            }
+
             await handleButtonInteraction(client, interaction);
         } else if (interaction.isStringSelectMenu()) {
             if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {

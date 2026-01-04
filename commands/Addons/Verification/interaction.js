@@ -40,7 +40,7 @@ async function handleVerificationInteraction(client, interaction) {
                  return interaction.editReply({ content: lang.Verify.AlreadyVerified });
             }
 
-            const type = verificationData.mode || 'BUTTON';
+            const type = verificationData.mode || 'CAPTCHA';
 
             if (type === 'BUTTON') {
                 await handleSuccess(member, verificationData);

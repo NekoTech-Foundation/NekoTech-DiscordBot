@@ -87,6 +87,24 @@ Verify:
   QuestionFormat: "What is {num1} {operator} {num2}?"
   Incorrect: "Incorrect answer."
 
+  # Setup & Panel
+  SetupTitle: "Verification Setup Complete"
+  SetupDescription: "The verification system has been updated."
+  FieldChannel: "Channel"
+  FieldRole: "Verified Role"
+  FieldMode: "Mode"
+  FieldUnverifiedRole: "Unverified Role"
+  None: "None"
+  SetupRequired: "Please run `/verification setup` first!"
+  ChannelNotFound: "Configured channel not found. Please run setup again."
+  PanelTitle: "Server Verification"
+  PanelDescription: "Click the button below to verify yourself and gain access to the server."
+  ButtonLabel: "Verify"
+  PanelUpdated: "Updated verification panel."
+  PanelSent: "Sent verification panel."
+  PanelError: "Failed to send panel. Check bot permissions."
+  SettingsTitle: "Verification Settings"
+
 # ===========================================================================
 # BACKUP COMMAND
 # ===========================================================================

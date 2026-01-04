@@ -3,6 +3,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelec
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
+const { checkWord } = require('./vocabApi');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -454,4 +455,31 @@ async function handleHistory(interaction, client) {
         .setFooter({ text: `Tổng: ${game.usedWords.size} từ` });
 
     await interaction.reply({ embeds: [embed], ephemeral: true });
+}
+
+// Test command
+async function handleTest(interaction, client) {
+    const word = interaction.options.getString('word');
+    await interaction.deferReply({ ephemeral: true });
+
+    try {
+        const startTime = Date.now();
+        const isValid = await checkWord(word);
+        const duration = Date.now() - startTime;
+
+        const embed = new EmbedBuilder()
+            .setColor(isValid ? '#2ecc71' : '#e74c3c')
+            .setTitle(isValid ? '✅ Từ Hợp Lệ' : '❌ Từ Không Hợp Lệ')
+            .setDescription(
+                `**Từ:** ${word}\n` +
+                `**Trạng thái:** ${isValid ? 'Hợp lệ' : 'Không hợp lệ'}\n` +
+                `**Thời gian check:** ${duration}ms`
+            )
+            .setFooter({ text: 'Smart Dictionary Powered' });
+
+        await interaction.editReply({ embeds: [embed] });
+    } catch (error) {
+        console.error(error);
+        await interaction.editReply({ content: '❌ Lỗi khi kiểm tra từ!' });
+    }
 }
