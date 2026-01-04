@@ -17,7 +17,7 @@ function getRandomXP(range) {
 }
 
 function getRandomLevelMessage(placeholders) {
-    const messages = lang.Levels.LevelMessages;
+    const messages = lang?.Levels?.LevelMessages || ["Ting! {user} đã lên cấp {newLevel}!"];
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
     return replacePlaceholders(randomMessage, placeholders);
 }
