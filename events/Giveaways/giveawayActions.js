@@ -113,10 +113,21 @@ const giveawayActions = {
             }
         } catch (error) {
             console.error('Error handling button interaction:', error);
-            await interaction.reply({
-                content: "An error occurred while processing your request.",
-                flags: MessageFlags.Ephemeral
-            });
+            try {
+                if (!interaction.replied && !interaction.deferred) {
+                    await interaction.reply({
+                        content: "An error occurred while processing your request.",
+                        flags: MessageFlags.Ephemeral
+                    });
+                } else {
+                     await interaction.followUp({
+                        content: "An error occurred while processing your request.",
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+            } catch (replyError) {
+                console.error('Failed to send error message:', replyError);
+            }
         }
     },
 
@@ -900,10 +911,11 @@ const giveawayActions = {
         }
     },
     showEntrants: async (interaction, lang) => {
-        // Ensure lang is available (fallback)
-        if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
         try {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+            
+            // Ensure lang is available (fallback)
+            if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
 
             const giveaway = await Giveaway.findOne({ 
                 messageId: interaction.message.id,

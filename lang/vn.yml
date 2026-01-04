@@ -539,6 +539,9 @@ KentaScratch:
   chanceMessage: "{user}, bạn có **{winChance}%** cơ hội thắng giveaway này. ({userEntries} lượt tham gia: 1 cơ bản + {extraEntries} thưởng)"
   ExtraEntriesMessage: "Bạn có **{extraEntries}** lượt tham gia thêm từ vai trò của mình! Sử dụng nút `Cơ hội` để xem tỷ lệ thắng của bạn."
 
+  NotJoinedGiveaway: "Bạn chưa tham gia giveaway này!"
+  CalculationError: "Có lỗi xảy ra khi tính toán tỷ lệ."
+
   Embeds:
     ActiveGiveaway:
       Title: "🎉 QUÀ TẶNG 🎉"

@@ -342,6 +342,15 @@ Giveaways:
           ButtonText: "Show Entrants"
           ButtonStyle: "SECONDARY"
           ButtonEmoji: "👥"
+          Embed:
+            Title: "Danh sách tham gia: {prize}"
+            Description:
+              - "{entrantsList}"
+            Color: "#2F3136"
+            Thumbnail: ""
+            Footer:
+              Text: "Trang {currentPage}/{totalPages} • Tổng {totalEntrants} người tham gia"
+              Icon: "{footerIcon}"
         ShowEntries:
           ButtonText: "Entries"
           ButtonStyle: "SECONDARY"
