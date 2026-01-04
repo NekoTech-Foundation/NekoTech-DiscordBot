@@ -32,8 +32,10 @@ const TempRole = require('./models/TempRole');
 const Reminder = require('./models/reminder');
 const Poll = require('./models/poll');
 
+
 const GuildData = require('./models/guildDataSchema');
 const Invite = require('./models/inviteSchema');
+const AutoReact = require('./models/autoReact.js');
 
 
 
