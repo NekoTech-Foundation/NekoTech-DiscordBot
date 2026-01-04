@@ -34,7 +34,7 @@ const Poll = require('./models/poll');
 
 const GuildData = require('./models/guildDataSchema');
 const Invite = require('./models/inviteSchema');
-const Transaction = require('./models/Transction');
+
 
 
 

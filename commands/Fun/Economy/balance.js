@@ -163,7 +163,7 @@ module.exports = {
 let user = await EconomyUserData.findOne(
             { userId: targetUser.id }, 
             projection
-        ).lean();
+        );
         
         if (!user) {
             user = {
@@ -181,7 +181,7 @@ let user = await EconomyUserData.findOne(
                 const logData = await EconomyUserData.findOne(
                     { userId: targetUser.id },
                     { transactionLogs: { $slice: -MAX_LOGS_DISPLAY } }
-                ).lean();
+                );
                 
                 if (logData && logData.transactionLogs) {
                     transactionLogs = logData.transactionLogs;
