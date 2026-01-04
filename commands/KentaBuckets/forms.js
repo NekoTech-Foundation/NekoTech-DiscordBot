@@ -46,7 +46,7 @@ module.exports = {
         const focusedValue = interaction.options.getFocused();
         
         // Optimisation: Select only 'id' to reduce payload and speed up query
-        const forms = await Form.find({ guildId: interaction.guild.id }).select('id').lean();
+        const forms = await Form.find({ guildId: interaction.guild.id });
         
         const filtered = forms.filter(form => form.id.startsWith(focusedValue));
         

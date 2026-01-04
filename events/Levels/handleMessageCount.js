@@ -8,7 +8,7 @@ async function handleMessageCount(message) {
         let userData = await UserData.findOne({ userId: message.author.id, guildId: message.guild.id });
 
         if (!userData) {
-            userData = new UserData({
+            userData = await UserData.create({
                 userId: message.author.id,
                 guildId: message.guild.id,
                 xp: 0,
