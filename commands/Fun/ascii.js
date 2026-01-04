@@ -57,6 +57,7 @@ function convertSimplePatternToRegex(simplePattern) {
 }
 
 async function checkBlacklistWords(content) {
+    if (!config.BlacklistWords || !config.BlacklistWords.Patterns) return false;
     const blacklistRegex = config.BlacklistWords.Patterns.map(pattern => convertSimplePatternToRegex(pattern));
     return blacklistRegex.some(regex => regex.test(content));
 }

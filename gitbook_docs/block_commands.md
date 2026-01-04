@@ -3510,7 +3510,10 @@ Không có tham số.
 
 ## /snipe message
 
-**Mô tả:** Lấy tin nhắn đã xóa gần nhất
+**Mô tả:** 🕵️ Soi tin nhắn đã xóa
+
+Xem lại nội dung tin nhắn gần nhất vừa bị xóa trong kênh hiện tại.
+_Lưu ý: Chỉ xem được tin nhắn bị xóa trong lúc bot đang hoạt động và người gửi chưa tắt tính năng snipe._
 
 ### Tham số
 
@@ -3518,7 +3521,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Lấy tin nhắn đã xóa gần nhất
+> Xem tin nhắn vừa bị xóa
 
 ```bash
 /snipe message
@@ -3528,7 +3531,9 @@ Không có tham số.
 
 ## /snipe edited
 
-**Mô tả:** Lấy tin nhắn đã chỉnh sửa gần nhất
+**Mô tả:** 📝 Soi tin nhắn đã sửa
+
+Xem lại nội dung gốc của tin nhắn gần nhất vừa được chỉnh sửa trong kênh.
 
 ### Tham số
 
@@ -3536,7 +3541,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Lấy tin nhắn đã chỉnh sửa gần nhất
+> Xem nội dung trước khi sửa
 
 ```bash
 /snipe edited
@@ -3546,7 +3551,9 @@ Không có tham số.
 
 ## /snipe clear
 
-**Mô tả:** Xóa tin nhắn đã snipe gần nhất
+**Mô tả:** 🧹 Xóa lịch sử Snipe (Admin)
+
+Xóa toàn bộ dữ liệu tin nhắn đã lưu (xóa và sửa) trong kênh hiện tại. Dùng để bảo mật thông tin nếu cần.
 
 ### Tham số
 
@@ -3554,10 +3561,50 @@ Không có tham số.
 
 ### Ví dụ
 
-> Xóa tin nhắn đã snipe gần nhất
+> Xóa bộ nhớ đệm snipe của kênh này
 
 ```bash
 /snipe clear
+```
+
+---
+
+## /snipe on
+
+**Mô tả:** ✅ Bật cho phép Snipe
+
+Cho phép bot ghi lại tin nhắn đã xóa/sửa của BẠN. Khi bạn xóa hoặc sửa tin nhắn, người khác có thể dùng lệnh `/snipe` để xem lại.
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Bật tính năng cho phép snipe
+
+```bash
+/snipe on
+```
+
+---
+
+## /snipe off
+
+**Mô tả:** ❌ Tắt cho phép Snipe
+
+Không cho phép bot ghi lại tin nhắn của BẠN. Khi bạn bật chế độ này, tin nhắn bạn xóa hoặc sửa sẽ KHÔNG THỂ bị người khác soi được bằng lệnh `/snipe`.
+
+### Tham số
+
+Không có tham số.
+
+### Ví dụ
+
+> Tắt tính năng cho phép snipe (Bảo mật riêng tư)
+
+```bash
+/snipe off
 ```
 
 ---
@@ -3766,104 +3813,119 @@ Không có tham số.
 
 ## /level give
 
-**Mô tả:** Tăng XP hoặc Cấp độ cho người dùng
+**Mô tả:** ➕ Tăng Cấp độ/XP (Admin)
+
+Cộng thêm một lượng XP hoặc cấp độ cho người dùng.
 
 ### Tham số
 
-| Tham số  | Mô tả                          | Bắt buộc |
-| :------- | :----------------------------- | :------- |
-| `user`   | Người dùng                     | Có       |
-| `type`   | Chọn XP hoặc Cấp độ (xp/level) | Có       |
-| `amount` | Số lượng                       | Có       |
+| Tham số  | Mô tả                             | Bắt buộc |
+| :------- | :-------------------------------- | :------- |
+| `user`   | Người được nhận                   | Có       |
+| `type`   | Loại cần tăng (`xp` hoặc `level`) | Có       |
+| `amount` | Số lượng cần tăng                 | Có       |
 
 ### Ví dụ
 
-> Tăng XP cho người dùng
+> Tặng 1000 XP cho @Member
 
 ```bash
-/level give user:@User type:xp amount:100
+/level give user:@Member type:xp amount:1000
 ```
 
 ---
 
 ## /level remove
 
-**Mô tả:** Giảm XP hoặc Cấp độ của người dùng
+**Mô tả:** ➖ Trừ Cấp độ/XP (Admin)
+
+Trừ bớt một lượng XP hoặc cấp độ của người dùng (dùng để phạt hoặc sửa lỗi).
 
 ### Tham số
 
-| Tham số  | Mô tả               | Bắt buộc |
-| :------- | :------------------ | :------- |
-| `user`   | Người dùng          | Có       |
-| `type`   | Chọn XP hoặc Cấp độ | Có       |
-| `amount` | Số lượng            | Có       |
+| Tham số  | Mô tả                            | Bắt buộc |
+| :------- | :------------------------------- | :------- |
+| `user`   | Người bị trừ                     | Có       |
+| `type`   | Loại cần trừ (`xp` hoặc `level`) | Có       |
+| `amount` | Số lượng cần trừ                 | Có       |
 
 ### Ví dụ
 
-> Giảm Cấp độ của người dùng
+> Trừ 5 cấp độ của @Spammer
 
 ```bash
-/level remove user:@User type:level amount:1
+/level remove user:@Spammer type:level amount:5
 ```
 
 ---
 
 ## /level set
 
-**Mô tả:** Thiết lập XP hoặc Cấp độ của người dùng
+**Mô tả:** ✏️ Thiết lập Cấp độ/XP (Admin)
+
+Đặt trực tiếp cấp độ hoặc XP của người dùng thành một số cụ thể.
 
 ### Tham số
 
-| Tham số  | Mô tả                 | Bắt buộc |
-| :------- | :-------------------- | :------- |
-| `user`   | Người dùng            | Có       |
-| `type`   | Chọn XP hoặc Cấp độ   | Có       |
-| `amount` | Giá trị cần thiết lập | Có       |
+| Tham số  | Mô tả                            | Bắt buộc |
+| :------- | :------------------------------- | :------- |
+| `user`   | Người dùng                       | Có       |
+| `type`   | Loại cần đặt (`xp` hoặc `level`) | Có       |
+| `amount` | Giá trị mới                      | Có       |
 
 ### Ví dụ
 
-> Thiết lập cấp độ cho người dùng
+> Đặt @Vip thành Level 100 ngay lập tức
 
 ```bash
-/level set user:@User type:level amount:10
+/level set user:@Vip type:level amount:100
 ```
 
 ---
 
 ## /level check
 
-**Mô tả:** Kiểm tra XP và cấp độ của người dùng
+**Mô tả:** 📊 Kiểm tra Cấp độ
+
+Xem thông tin chi tiết về cấp độ, XP hiện tại, và hạng danh vọng (Prestige) của bản thân hoặc người khác.
 
 ### Tham số
 
-| Tham số | Mô tả                   | Bắt buộc |
-| :------ | :---------------------- | :------- |
-| `user`  | Người dùng cần kiểm tra | Không    |
+| Tham số | Mô tả                                            | Bắt buộc |
+| :------ | :----------------------------------------------- | :------- |
+| `user`  | Người dùng cần xem (để trống nếu xem chính mình) | Không    |
 
 ### Ví dụ
 
-> Kiểm tra XP và cấp độ của người dùng
+> Xem cấp độ của chính mình
 
 ```bash
 /level check
-/level check user:@User
+```
+
+> Soi cấp độ của @Neko
+
+```bash
+/level check user:@Neko
 ```
 
 ---
 
 ## /level reset
 
-**Mô tả:** Đặt lại cấp độ và XP của toàn bộ người dùng
+**Mô tả:** 🔄 Reset toàn bộ hệ thống (Admin)
+
+Đặt lại cấp độ hoặc XP của **TẤT CẢ** người dùng trong server về 0. Hãy cẩn thận!
 
 ### Tham số
 
-| Tham số | Mô tả                                     | Bắt buộc |
-| :------ | :---------------------------------------- | :------- |
-| `type`  | Chọn nội dung cần đặt lại (xp/level/both) | Có       |
+| Tham số | Mô tả                                                | Bắt buộc |
+| :------ | :--------------------------------------------------- | :------- |
+| `type`  | Loại cần reset (`xp`, `level`, hoặc `both` - cả hai) | Có       |
 
 ### Ví dụ
 
-> Đặt lại XP
+> Reset toàn bộ XP của server (giữ nguyên level)
 
 ```bash
 /level reset type:xp
@@ -3873,7 +3935,9 @@ Không có tham số.
 
 ## /level prestige
 
-**Mô tả:** Reset cấp độ & XP để nâng hạng danh vọng
+**Mô tả:** 👑 Nâng hạng Danh Vọng (Prestige)
+
+Khi đạt cấp độ tối đa (Level 50), bạn có thể "Prestige" để reset cấp độ về 1 nhưng nhận được huy hiệu danh vọng mới cực ngầu.
 
 ### Tham số
 
@@ -3881,7 +3945,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Reset cấp độ & XP để nâng hạng danh vọng
+> Reset cấp độ để nâng hạng danh vọng
 
 ```bash
 /level prestige
@@ -4135,48 +4199,66 @@ Không có tham số.
 
 ## /autoreact add
 
-**Mô tả:** Add a new AutoReact
+**Mô tả:** ➕ Thêm tự động thả cảm xúc
+
+Cấu hình bot tự động thả biểu tượng cảm xúc (reaction) vào tin nhắn của người dùng khi tin nhắn đó chứa từ khóa nhất định.
 
 ### Tham số
 
-| Tham số   | Mô tả                   | Bắt buộc |
-| :-------- | :---------------------- | :------- |
-| `keyword` | The keyword to react to | Có       |
-| `emoji`   | The emoji to react with | Có       |
+| Tham số   | Mô tả                                                  | Bắt buộc |
+| :-------- | :----------------------------------------------------- | :------- |
+| `keyword` | Từ khóa cần bắt (vd: `hello`)                          | Có       |
+| `emoji`   | Biểu tượng cảm xúc sẽ thả (vd: `👋` hoặc Custom Emoji) | Có       |
 
 ### Ví dụ
 
-> Add a new AutoReact
+> Tự động thả 👋 khi ai đó nhắn "xin chào"
 
 ```bash
-/autoreact add keyword:hello emoji:👋
+/autoreact add keyword:xin chào emoji:👋
+```
+
+> Tự động thả tim khi nhắc đến "crush"
+
+```bash
+/autoreact add keyword:crush emoji:❤️
 ```
 
 ---
 
 ## /autoreact remove
 
-**Mô tả:** Remove an existing AutoReact
+**Mô tả:** ➖ Xóa tự động thả cảm xúc
+
+Xóa một cấu hình AutoReact đã tạo.
 
 ### Tham số
 
-| Tham số      | Mô tả                                        | Bắt buộc |
-| :----------- | :------------------------------------------- | :------- |
-| `identifier` | The keyword or ID of the AutoReact to remove | Có       |
+| Tham số      | Mô tả                                 | Bắt buộc |
+| :----------- | :------------------------------------ | :------- |
+| `identifier` | Từ khóa hoặc ID của AutoReact cần xóa | Có       |
 
 ### Ví dụ
 
-> Remove an existing AutoReact
+> Xóa AutoReact cho từ khóa "xin chào"
 
 ```bash
-/autoreact remove identifier:hello
+/autoreact remove identifier:xin chào
+```
+
+> Xóa AutoReact có ID là 5
+
+```bash
+/autoreact remove identifier:5
 ```
 
 ---
 
 ## /autoreact list
 
-**Mô tả:** List all current AutoReacts
+**Mô tả:** 📋 Danh sách AutoReact
+
+Xem tất cả các từ khóa và biểu tượng cảm xúc đang được cấu hình tự động thả cảm xúc trong server.
 
 ### Tham số
 
@@ -4184,7 +4266,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> List all current AutoReacts
+> Xem danh sách các AutoReact đang hoạt động
 
 ```bash
 /autoreact list
@@ -4290,50 +4372,85 @@ Không có tham số.
 
 ## /channelstats add
 
-**Mô tả:** Add a channel stat
+**Mô tả:** 📈 Tạo kênh thống kê
+
+Tạo một kênh thoại (Voice Channel) đặc biệt dùng để hiển thị các số liệu thống kê của server (như số thành viên, số role, ngày tạo server, v.v.). Kênh này sẽ tự động cập nhật tên theo thời gian thực.
 
 ### Tham số
 
-| Tham số       | Mô tả                                                                 | Bắt buộc |
-| :------------ | :-------------------------------------------------------------------- | :------- |
-| `channelname` | The name of the channel with {stats} placeholder                      | Có       |
-| `type`        | Type of the stat (MemberCount/NitroBoosterCount/TotalRolesCount/etc.) | Có       |
-| `channel`     | The voice channel to update                                           | Có       |
-| `role`        | The role to count (required for role-based stats)                     | Không    |
+| Tham số       | Mô tả                                                                                                       | Bắt buộc |
+| :------------ | :---------------------------------------------------------------------------------------------------------- | :------- |
+| `channelname` | Tên kênh hiển thị. BẮT BUỘC phải chứa `{stats}` để bot thay thế số liệu vào đó. (vd: `Thành viên: {stats}`) | Có       |
+| `type`        | Loại số liệu muốn hiển thị                                                                                  | Có       |
+| `channel`     | Chọn kênh Voice muốn biến thành kênh thống kê                                                               | Có       |
+| `role`        | Role cần đếm (chỉ bắt buộc nếu chọn loại thống kê theo role)                                                | Không    |
+
+**Các loại thống kê hỗ trợ (`type`):**
+
+- `MemberCount`: Tổng số thành viên
+- `NitroBoosterCount`: Số lượng Booster
+- `OnlineMembersCount`: Số thành viên đang Online
+- `TotalRolesCount`: Tổng số Role
+- `TotalChannelsCount`: Tổng số kênh
+- `TotalEmojisCount`: Tổng số Emoji
+- `ServerCreationDate`: Ngày tạo server
+- `ServerRegion`: Khu vực máy chủ (Region)
+- `TotalBannedMembers`: Số thành viên bị ban
+- `TotalMembersWithRole`: Số người có role cụ thể (cần nhập thêm `role`)
+- `OnlineMembersWithRole`: Số người có role cụ thể đang Online (cần nhập thêm `role`)
 
 ### Ví dụ
 
-> Add a channel stat
+> Tạo kênh đếm tổng thành viên
 
 ```bash
-/channelstats add channelname:Members: {stats} type:MemberCount channel:#Stats
+/channelstats add channelname:Thành viên: {stats} type:MemberCount channel:#VoiceChannel
+```
+
+> Tạo kênh đếm số người có role @VIP
+
+```bash
+/channelstats add channelname:VIP: {stats} type:TotalMembersWithRole channel:#VoiceChannel role:@VIP
 ```
 
 ---
 
 ## /channelstats remove
 
-**Mô tả:** Remove a channel stat
+**Mô tả:** ➖ Xóa kênh thống kê
+
+Tắt tính năng thống kê trên một kênh đã cài đặt trước đó.
 
 ### Tham số
 
-| Tham số   | Mô tả                            | Bắt buộc |
-| :-------- | :------------------------------- | :------- |
-| `channel` | The voice channel stat to remove | Có       |
+| Tham số   | Mô tả                       | Bắt buộc |
+| :-------- | :-------------------------- | :------- |
+| `channel` | Kênh Voice cần xóa thống kê | Có       |
 
 ### Ví dụ
 
-> Remove a channel stat
+> Xóa thống kê khỏi kênh
 
 ```bash
-/channelstats remove channel:#Stats
+/channelstats remove channel:#VoiceChannel
 ```
 
 ---
 
 ## /embed create
 
-**Mô tả:** Tạo embed mới
+**Mô tả:** 🎨 Trình tạo Embed chuyên nghiệp
+
+Mở một bảng điều khiển (GUI) tương tác cho phép bạn tạo ra các bài viết Embed đẹp mắt mà không cần gõ lệnh phức tạp.
+
+**Tính năng nổi bật:**
+
+- **Chỉnh sửa trực quan:** Dùng nút bấm để sửa Title, Description, Color, Footer, Image, Thumbnail...
+- **Link Buttons:** Thêm các nút bấm chứa liên kết.
+- **Fields:** Thêm các trường nội dung (Add Field).
+- **Templates:** Lưu và tải lại các mẫu embed đã tạo để dùng lại sau này.
+- **Mention/Pings:** Tùy chọn bật/tắt thông báo (ping) khi gửi.
+- **Above Text:** Thêm dòng chữ hoặc hình ảnh nằm **bên trên** Embed (ngoài khung).
 
 ### Tham số
 
@@ -4341,7 +4458,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> Tạo embed mới
+> Mở trình tạo embed
 
 ```bash
 /embed create
@@ -4351,20 +4468,22 @@ Không có tham số.
 
 ## /embed edit
 
-**Mô tả:** Chỉnh sửa embed
+**Mô tả:** 📝 Chỉnh sửa Embed đã gửi
+
+Mở lại trình tạo Embed để chỉnh sửa một bài viết Embed mà bot đã gửi trước đó.
 
 ### Tham số
 
-| Tham số     | Mô tả                        | Bắt buộc |
-| :---------- | :--------------------------- | :------- |
-| `messageid` | ID của message cần chỉnh sửa | Có       |
+| Tham số     | Mô tả                                                                   | Bắt buộc |
+| :---------- | :---------------------------------------------------------------------- | :------- |
+| `messageid` | ID của tin nhắn chứa Embed cần sửa (Chuột phải vào tin nhắn -> Copy ID) | Có       |
 
 ### Ví dụ
 
-> Chỉnh sửa embed
+> Sửa lại tin nhắn embed cũ
 
 ```bash
-/embed edit messageid:123456789
+/embed edit messageid:123456789012345678
 ```
 
 ---
@@ -4751,152 +4870,166 @@ Không có tham số.
 
 ## /moderation timeout
 
-**Mô tả:** Tạm thời chặn một thành viên
+**Mô tả:** ⏱️ Tạm thời chặn (Timeout)
+
+Cấm một thành viên chat hoặc tham gia voice trong một khoảng thời gian nhất định (Mute).
 
 ### Tham số
 
-| Tham số    | Mô tả                                          | Bắt buộc |
-| :--------- | :--------------------------------------------- | :------- |
-| `member`   | Chọn một thành viên trong server               | Có       |
-| `duration` | Chỉ định thời gian dạng ngắn (vd: 10m, 2h, 1d) | Có       |
-| `reason`   | Nhập lý do cho hành động này                   | Có       |
+| Tham số    | Mô tả                                                                               | Bắt buộc |
+| :--------- | :---------------------------------------------------------------------------------- | :------- |
+| `member`   | Thành viên cần chặn (User hoặc ID)                                                  | Có       |
+| `duration` | Thời gian chặn. Hỗ trợ: `m` (phút), `h` (giờ), `d` (ngày). Ví dụ: `10m`, `2h`, `1d` | Có       |
+| `reason`   | Lý do chặn (sẽ hiển thị trong Audit Log và gửi DM cho user)                         | Có       |
 
 ### Ví dụ
 
-> Timeout thành viên
+> Cấm chat 1 giờ vì Spam
 
 ```bash
-/moderation timeout member:@User duration:1h reason:Spam
+/moderation timeout member:@User duration:1h reason:Spam tin nhắn
 ```
 
 ---
 
 ## /moderation untimeout
 
-**Mô tả:** Gỡ chặn tạm thời một thành viên
+**Mô tả:** 🔓 Gỡ bỏ chặn (Un-Timeout)
+
+Xóa bỏ án phạt Timeout trước thời hạn cho một thành viên.
 
 ### Tham số
 
-| Tham số  | Mô tả                            | Bắt buộc |
-| :------- | :------------------------------- | :------- |
-| `member` | Chọn một thành viên trong server | Có       |
-| `reason` | Nhập lý do cho hành động này     | Có       |
+| Tham số  | Mô tả                  | Bắt buộc |
+| :------- | :--------------------- | :------- |
+| `member` | Thành viên cần gỡ chặn | Có       |
+| `reason` | Lý do gỡ chặn          | Có       |
 
 ### Ví dụ
 
-> Gỡ timeout
+> Gỡ mute cho thành viên
 
 ```bash
-/moderation untimeout member:@User reason:Appeal approved
+/moderation untimeout member:@User reason:Đã hối lỗi
 ```
 
 ---
 
 ## /moderation ban
 
-**Mô tả:** Cấm một thành viên khỏi máy chủ
+**Mô tả:** 🔨 Cấm vĩnh viễn (Ban)
+
+Cấm hoàn toàn một thành viên khỏi server. Họ sẽ không thể tham gia lại trừ khi được gỡ ban.
 
 ### Tham số
 
-| Tham số          | Mô tả                                | Bắt buộc |
-| :--------------- | :----------------------------------- | :------- |
-| `user`           | Chọn một người dùng                  | Có       |
-| `reason`         | Nhập lý do cho hành động này         | Có       |
-| `delete_message` | Số ngày tin nhắn cũ cần xóa          | Không    |
-| `dm_user`        | Gửi DM thông báo ban cho người dùng? | Không    |
+| Tham số          | Mô tả                                                                   | Bắt buộc |
+| :--------------- | :---------------------------------------------------------------------- | :------- |
+| `user`           | Người dùng cần ban (Có thể ban cả người chưa vào server bằng ID)        | Có       |
+| `reason`         | Lý do ban                                                               | Có       |
+| `delete_message` | Xóa tin nhắn của người đó trong bao nhiêu ngày qua? (0-7 ngày)          | Không    |
+| `dm_user`        | Có gửi tin nhắn riêng (DM) thông báo cho người đó không? (Mặc định: Có) | Không    |
 
 ### Ví dụ
 
-> Ban thành viên
+> Ban thẳng tay và xóa tin nhắn trong 7 ngày
 
 ```bash
-/moderation ban user:@User reason:Rule violation
+/moderation ban user:@User reason:Phá hoại server delete_message:7
 ```
 
 ---
 
 ## /moderation unban
 
-**Mô tả:** Gỡ cấm một người dùng
+**Mô tả:** 🤝 Gỡ cấm (Unban)
+
+Cho phép một người dùng bị ban trước đó có thể tham gia lại server.
 
 ### Tham số
 
-| Tham số  | Mô tả                        | Bắt buộc |
-| :------- | :--------------------------- | :------- |
-| `user`   | Nhập ID người dùng           | Có       |
-| `reason` | Nhập lý do cho hành động này | Có       |
+| Tham số  | Mô tả                                                                        | Bắt buộc |
+| :------- | :--------------------------------------------------------------------------- | :------- |
+| `user`   | ID của người dùng cần gỡ ban (Vì họ không còn trong server nên phải dùng ID) | Có       |
+| `reason` | Lý do gỡ ban                                                                 | Có       |
 
 ### Ví dụ
 
-> Unban thành viên
+> Ân xá cho thành viên
 
 ```bash
-/moderation unban user:123456789 reason:Appeal approved
+/moderation unban user:123456789012345678 reason:Ân xá nhân dịp lễ
 ```
 
 ---
 
 ## /moderation warn
 
-**Mô tả:** Cảnh cáo một thành viên
+**Mô tả:** ⚠️ Cảnh cáo (Warn)
+
+Gửi một cảnh cáo chính thức cho thành viên. Hệ thống sẽ lưu lại số lần cảnh cáo để xử lý sau này.
 
 ### Tham số
 
-| Tham số  | Mô tả                            | Bắt buộc |
-| :------- | :------------------------------- | :------- |
-| `member` | Chọn một thành viên trong server | Có       |
-| `reason` | Nhập lý do cho cảnh cáo          | Có       |
+| Tham số  | Mô tả                  | Bắt buộc |
+| :------- | :--------------------- | :------- |
+| `member` | Thành viên bị cảnh cáo | Có       |
+| `reason` | Nội dung cảnh cáo      | Có       |
 
 ### Ví dụ
 
-> Cảnh cáo thành viên
+> Cảnh cáo vì ngôn từ không phù hợp
 
 ```bash
-/moderation warn member:@User reason:Language
+/moderation warn member:@User reason:Sử dụng từ ngữ thô tục
 ```
 
 ---
 
 ## /moderation unwarn
 
-**Mô tả:** Xóa cảnh cáo của một thành viên
+**Mô tả:** ❎ Xóa cảnh cáo (Unwarn)
+
+Xóa bớt một hoặc tất cả cảnh cáo của thành viên.
 
 ### Tham số
 
-| Tham số  | Mô tả                        | Bắt buộc |
-| :------- | :--------------------------- | :------- |
-| `user`   | Chọn một người dùng          | Có       |
-| `reason` | Nhập lý do cho hành động này | Có       |
-| `case`   | ID của cảnh cáo cần xóa      | Không    |
+| Tham số  | Mô tả                                                                  | Bắt buộc |
+| :------- | :--------------------------------------------------------------------- | :------- |
+| `user`   | Người dùng cần xóa cảnh cáo                                            | Có       |
+| `reason` | Lý do xóa                                                              | Có       |
+| `case`   | ID của cảnh cáo cụ thể cần xóa (Nếu để trống sẽ xóa cảnh cáo gần nhất) | Không    |
 
 ### Ví dụ
 
-> Xóa cảnh cáo
+> Xóa cảnh cáo gần nhất
 
 ```bash
-/moderation unwarn user:@User reason:Expired
+/moderation unwarn user:@User reason:Nhầm lẫn
 ```
 
 ---
 
 ## /moderation kick
 
-**Mô tả:** Đuổi một thành viên khỏi server
+**Mô tả:** 👢 Đuổi khỏi server (Kick)
+
+Đuổi thành viên ra khỏi server nhưng họ vẫn có thể tham gia lại (nếu có link invite).
 
 ### Tham số
 
-| Tham số   | Mô tả                                 | Bắt buộc |
-| :-------- | :------------------------------------ | :------- |
-| `member`  | Chọn một thành viên trong server      | Có       |
-| `reason`  | Nhập lý do cho hành động này          | Có       |
-| `dm_user` | Gửi DM thông báo kick cho người dùng? | Không    |
+| Tham số   | Mô tả                                  | Bắt buộc |
+| :-------- | :------------------------------------- | :------- |
+| `member`  | Thành viên cần đuổi                    | Có       |
+| `reason`  | Lý do đuổi                             | Có       |
+| `dm_user` | Gửi DM thông báo lý do? (Mặc định: Có) | Không    |
 
 ### Ví dụ
 
-> Kick thành viên
+> Kick thành viên treo máy quá lâu
 
 ```bash
-/moderation kick member:@User reason:Inactivity
+/moderation kick member:@User reason:AFK quá lâu
 ```
 
 ---
@@ -4971,17 +5104,19 @@ Thêm vai trò cho tất cả
 
 ## /safety antinuke toggle
 
-**Mô tả:** Enable or disable AntiNuke
+**Mô tả:** 🛡️ Bật/Tắt AntiNuke
+
+Hệ thống AntiNuke giúp bảo vệ server khỏi các hành động phá hoại hàng loạt (như ban hàng loạt, xóa kênh hàng loạt).
 
 ### Tham số
 
-| Tham số   | Mô tả   | Bắt buộc |
-| :-------- | :------ | :------- |
-| `enabled` | Enable? | Có       |
+| Tham số   | Mô tả                              | Bắt buộc |
+| :-------- | :--------------------------------- | :------- |
+| `enabled` | Chọn `True` để bật, `False` để tắt | Có       |
 
 ### Ví dụ
 
-> Enable AntiNuke
+> Bật bảo vệ AntiNuke
 
 ```bash
 /safety antinuke toggle enabled:true
@@ -4991,39 +5126,45 @@ Thêm vai trò cho tất cả
 
 ## /safety antinuke limit
 
-**Mô tả:** Set limits for AntiNuke actions
+**Mô tả:** 📉 Giới hạn AntiNuke
+
+Thiết lập giới hạn số lần hành động được phép trong một khoảng thời gian trước khi bị coi là phá hoại.
 
 ### Tham số
 
-| Tham số     | Mô tả                  | Bắt buộc |
-| :---------- | :--------------------- | :------- |
-| `type`      | Action type            | Có       |
-| `threshold` | Max actions allowed    | Có       |
-| `period`    | Time period in seconds | Không    |
+| Tham số     | Mô tả                                                           | Bắt buộc |
+| :---------- | :-------------------------------------------------------------- | :------- |
+| `type`      | Loại hành động (`Ban`, `Kick`, `Channel Delete`, `Role Delete`) | Có       |
+| `threshold` | Số lượng tối đa cho phép                                        | Có       |
+| `period`    | Thời gian tính (giây). Mặc định 60s                             | Không    |
+
+**Giải thích:** Nếu ai đó thực hiện hành động quá số lần (`threshold`) trong thời gian (`period`), bot sẽ tự động trừng phạt người đó.
 
 ### Ví dụ
 
-> Set limit for ban
+> Giới hạn tối đa 5 lần Ban trong 60 giây
 
 ```bash
-/safety antinuke limit type:Ban threshold:5
+/safety antinuke limit type:Ban threshold:5 period:60
 ```
 
 ---
 
 ## /safety antihoist toggle
 
-**Mô tả:** Enable or disable AntiHoist
+**Mô tả:** 🚫 Chống tên hiển thị gây khó chịu (AntiHoist)
+
+Tự động phát hiện và xử lý các thành viên đặt tên bắt đầu bằng ký tự đặc biệt (ví dụ: `!`, `.`) để được lên đầu danh sách thành viên.
 
 ### Tham số
 
-| Tham số   | Mô tả   | Bắt buộc |
-| :-------- | :------ | :------- |
-| `enabled` | Enable? | Có       |
+| Tham số   | Mô tả                              | Bắt buộc |
+| :-------- | :--------------------------------- | :------- |
+| `enabled` | Chọn `True` để bật, `False` để tắt | Có       |
 
 ### Ví dụ
 
-> Enable AntiHoist
+> Bật AntiHoist
 
 ```bash
 /safety antihoist toggle enabled:true
@@ -5033,17 +5174,19 @@ Thêm vai trò cho tất cả
 
 ## /safety antihoist action
 
-**Mô tả:** Set AntiHoist action
+**Mô tả:** ⚙️ Cấu hình xử lý AntiHoist
+
+Chọn hành động sẽ làm khi phát hiện thành viên vi phạm AntiHoist.
 
 ### Tham số
 
-| Tham số | Mô tả                                      | Bắt buộc |
-| :------ | :----------------------------------------- | :------- |
-| `type`  | Action to take (Change Nickname/Kick User) | Có       |
+| Tham số | Mô tả                                                                                            | Bắt buộc |
+| :------ | :----------------------------------------------------------------------------------------------- | :------- |
+| `type`  | Hành động: `Change Nickname` (Đổi tên họ thành Z-Hoister...) hoặc `Kick User` (Đuổi khỏi server) | Có       |
 
 ### Ví dụ
 
-> Set AntiHoist action
+> Tự động đổi tên người vi phạm
 
 ```bash
 /safety antihoist action type:Change Nickname
@@ -5053,18 +5196,20 @@ Thêm vai trò cho tất cả
 
 ## /safety whitelist add
 
-**Mô tả:** Add user or role to whitelist
+**Mô tả:** ✅ Thêm vào Whitelist (Danh sách trắng)
+
+Những người hoặc Role trong danh sách này sẽ **KHÔNG** bị hệ thống Safety (AntiNuke, AntiHoist) kiểm tra/trừng phạt.
 
 ### Tham số
 
-| Tham số | Mô tả             | Bắt buộc |
-| :------ | :---------------- | :------- |
-| `user`  | User to whitelist | Không    |
-| `role`  | Role to whitelist | Không    |
+| Tham số | Mô tả                             | Bắt buộc |
+| :------ | :-------------------------------- | :------- |
+| `user`  | Người dùng cần thêm vào Whitelist | Không    |
+| `role`  | Role cần thêm vào Whitelist       | Không    |
 
 ### Ví dụ
 
-> Add user to whitelist
+> Thêm Admin vào Whitelist để không bị AntiNuke chặn
 
 ```bash
 /safety whitelist add user:@Admin
@@ -5074,18 +5219,20 @@ Thêm vai trò cho tất cả
 
 ## /safety whitelist remove
 
-**Mô tả:** Remove user or role from whitelist
+**Mô tả:** ❎ Xóa khỏi Whitelist
+
+Loại bỏ người dùng hoặc Role khỏi danh sách trắng. Họ sẽ bị kiểm tra lại như bình thường.
 
 ### Tham số
 
-| Tham số | Mô tả          | Bắt buộc |
-| :------ | :------------- | :------- |
-| `user`  | User to remove | Không    |
-| `role`  | Role to remove | Không    |
+| Tham số | Mô tả              | Bắt buộc |
+| :------ | :----------------- | :------- |
+| `user`  | Người dùng cần xóa | Không    |
+| `role`  | Role cần xóa       | Không    |
 
 ### Ví dụ
 
-> Remove role from whitelist
+> Xóa Role Mod khỏi Whitelist
 
 ```bash
 /safety whitelist remove role:@Mod
@@ -5095,17 +5242,19 @@ Thêm vai trò cho tất cả
 
 ## /safety commands disable
 
-**Mô tả:** Disable a command in this server
+**Mô tả:** ⛔ Vô hiệu hóa lệnh
+
+Tắt hoàn toàn một lệnh (Slash Command) nào đó trong server này. Không ai (kể cả Admin) dùng được lệnh đó nữa cho đến khi bật lại.
 
 ### Tham số
 
-| Tham số   | Mô tả                          | Bắt buộc |
-| :-------- | :----------------------------- | :------- |
-| `command` | Name of the command to disable | Có       |
+| Tham số   | Mô tả                                | Bắt buộc |
+| :-------- | :----------------------------------- | :------- |
+| `command` | Tên lệnh cần tắt (không cần dấu `/`) | Có       |
 
 ### Ví dụ
 
-> Disable a command
+> Tắt lệnh ping để đỡ spam
 
 ```bash
 /safety commands disable command:ping
@@ -5115,17 +5264,19 @@ Thêm vai trò cho tất cả
 
 ## /safety commands enable
 
-**Mô tả:** Enable a disabled command
+**Mô tả:** 🟢 Bật lại lệnh
+
+Mở lại một lệnh đã bị tắt trước đó.
 
 ### Tham số
 
-| Tham số   | Mô tả                         | Bắt buộc |
-| :-------- | :---------------------------- | :------- |
-| `command` | Name of the command to enable | Có       |
+| Tham số   | Mô tả                | Bắt buộc |
+| :-------- | :------------------- | :------- |
+| `command` | Tên lệnh cần bật lại | Có       |
 
 ### Ví dụ
 
-> Enable a command
+> Bật lại lệnh ping
 
 ```bash
 /safety commands enable command:ping
@@ -5135,7 +5286,9 @@ Thêm vai trò cho tất cả
 
 ## /safety commands list
 
-**Mô tả:** List all disabled commands
+**Mô tả:** 📋 Danh sách lệnh đang tắt
+
+Xem danh sách tất cả các lệnh hiện đang bị vô hiệu hóa trong server.
 
 ### Tham số
 
@@ -5143,7 +5296,7 @@ Không có tham số.
 
 ### Ví dụ
 
-> List disabled commands
+> Xem các lệnh đang bị tắt
 
 ```bash
 /safety commands list

@@ -55,7 +55,10 @@ module.exports = {
             });
         }
 
-        const reason = interaction.options.getString('reason') || afkLang.UI.ReasonField;
+        let reason = interaction.options.getString('reason') || afkLang.UI.ReasonField;
+        if (reason.length > 1000) {
+            reason = reason.substring(0, 1000) + '...';
+        }
         const duration = interaction.options.getString('duration');
 
         let returnTime = null;
