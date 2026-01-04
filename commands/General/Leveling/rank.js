@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, AttachmentBuilder, MessageFlags } = require('discord.js');
 const Canvas = require('canvas');
 const UserData = require('../../../models/UserData');
+const db = require('../../../utils/database');
 const fs = require('fs');
 const path = require('path');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
@@ -63,38 +64,33 @@ async function getRank(userId, guildId) {
         return cachedRank.rank;
     }
 
-    const rankData = await UserData.aggregate([
-        { $match: { guildId: guildId } },
-        {
-            $addFields: {
-                sortValue: {
-                    $add: [{ $multiply: ['$level', 1000000] }, '$xp']
-                }
-            }
-        },
-        {
-            $setWindowFields: {
-                partitionBy: null,
-                sortBy: { sortValue: -1 },
-                output: {
-                    rank: {
-                        $rank: {}
-                    }
-                }
-            }
-        },
-        { $match: { userId: userId } },
-        { $project: { rank: 1 } }
-    ]);
+    try {
+        const query = `
+            SELECT rank FROM (
+                SELECT userId,
+                       RANK() OVER (
+                           ORDER BY 
+                               CAST(json_extract(data, '$.level') AS INTEGER) DESC, 
+                               CAST(json_extract(data, '$.xp') AS INTEGER) DESC
+                       ) as rank
+                FROM users
+                WHERE guildId = ?
+            ) WHERE userId = ?
+        `;
 
-    const rank = rankData[0]?.rank || 0;
+        const row = db.prepare(query).get(guildId, userId);
+        const rank = row ? row.rank : 0;
 
-    rankCache.set(cacheKey, {
-        rank,
-        timestamp: Date.now()
-    });
+        rankCache.set(cacheKey, {
+            rank,
+            timestamp: Date.now()
+        });
 
-    return rank;
+        return rank;
+    } catch (error) {
+        console.error('Error calculating rank:', error);
+        return 0; // Fallback
+    }
 }
 
 const PRESTIGE_TIERS = [
@@ -388,9 +384,7 @@ module.exports = {
             const userData = await UserData.findOne({
                 userId: targetUser.id,
                 guildId: 'global'
-            })
-                .select('userId level xp prestige')
-                .lean();
+            });
 
             if (!userData) {
                 return interaction.followUp({

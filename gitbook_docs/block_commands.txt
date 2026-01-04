@@ -1,0 +1,2097 @@
+/autoresponder placeholders : 📋 Xem danh sách biến và hàm hỗ trợ
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+📋 Xem danh sách biến và hàm hỗ trợ
+/autoresponder placeholders
+
+/autoresponder add : ➕ Thêm phản hồi tự động mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+trigger : Từ khóa để kích hoạt.
+response : Chuỗi để trả lời.
+mode : Chế độ khớp.
+[tùy chọn]:
+ignorecase : Bỏ qua trường hợp (chữ hoa/thường).
+attachment : Tệp đính kèm (ảnh/video) để gửi cùng.
+Ví dụ sử dụng:
+➕ Thêm phản hồi tự động mới
+/autoresponder add trigger:hello response:Hi there! mode:exact
+
+/autoresponder view : 👀 Xem chi tiết phản hồi tự động
+Tham số lệnh (Parameters)
+[bắt buộc]:
+trigger : Từ khóa của auto-responder.
+Ví dụ sử dụng:
+👀 Xem chi tiết phản hồi tự động
+/autoresponder view trigger:hello
+
+/autoresponder edit : ✏️ Chỉnh sửa phản hồi tự động
+Tham số lệnh (Parameters)
+[bắt buộc]:
+trigger : Từ khóa của auto-responder.
+[tùy chọn]:
+response : Chuỗi trả lời mới.
+attachment : Tệp đính kèm mới (ảnh/video).
+remove_attachment : Chọn true để xóa tệp đính kèm hiện tại.
+Ví dụ sử dụng:
+✏️ Chỉnh sửa phản hồi tự động
+/autoresponder edit trigger:hello response:Chào bạn!
+
+/autoresponder matchmode : 🎯 Cài đặt chế độ so khớp từ khóa
+Tham số lệnh (Parameters)
+[bắt buộc]:
+trigger : Từ khóa của auto-responder.
+mode : Chế độ khớp mới.
+Ví dụ sử dụng:
+🎯 Cài đặt chế độ so khớp từ khóa
+/autoresponder matchmode trigger:hello mode:contains
+
+/autoresponder delete : 🗑️ Xóa phản hồi tự động
+Tham số lệnh (Parameters)
+[bắt buộc]:
+trigger : Từ khóa của auto-responder.
+Ví dụ sử dụng:
+🗑️ Xóa phản hồi tự động
+/autoresponder delete trigger:hello
+
+/autoresponder list : 📜 Danh sách phản hồi tự động hiện có
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+📜 Danh sách phản hồi tự động hiện có
+/autoresponder list
+
+/customrole search : 🔍 Tìm kiếm Role tùy chỉnh
+Tham số lệnh (Parameters)
+[tùy chọn]:
+role : Chọn role để tìm kiếm.
+Ví dụ sử dụng:
+🔍 Tìm kiếm Role tùy chỉnh
+/customrole search role:@RoleName
+
+/customrole user add : ➕ Thêm thành viên vào Role
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Chọn một thành viên.
+Ví dụ sử dụng:
+➕ Thêm thành viên vào Role
+/customrole user add user:@User
+
+/customrole user remove : ➖ Xóa thành viên khỏi Role
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Chọn một thành viên.
+Ví dụ sử dụng:
+➖ Xóa thành viên khỏi Role
+/customrole user remove user:@User
+
+/customrole user color : 🎨 Đổi màu sắc Role
+Tham số lệnh (Parameters)
+[bắt buộc]:
+color : Mã màu hex (ví dụ: #c0cdff)
+Ví dụ sử dụng:
+🎨 Đổi màu sắc Role
+/customrole user color color:#ff0000
+
+/customrole user icon : 🖼️ Đổi biểu tượng (Icon) Role
+Tham số lệnh (Parameters)
+[bắt buộc]:
+icon : Tải lên icon của bạn.
+Ví dụ sử dụng:
+🖼️ Đổi biểu tượng (Icon) Role
+/customrole user icon icon:[Image]
+
+/customrole user removeicon : 🗑️ Xóa biểu tượng Role
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🗑️ Xóa biểu tượng Role
+/customrole user removeicon
+
+/customrole user mentionable : 🔔 Bật/Tắt thông báo (Mention)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Bật hoặc tắt.
+Ví dụ sử dụng:
+🔔 Bật/Tắt thông báo (Mention)
+/customrole user mentionable action:True
+
+/customrole user info : ℹ️ Xem thông tin Role
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+ℹ️ Xem thông tin Role
+/customrole user info
+
+/customrole user name : ✏️ Đổi tên Role
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : Tên role mới.
+Ví dụ sử dụng:
+✏️ Đổi tên Role
+/customrole user name name:NewRoleName
+
+/customrole admin create : ✨ Tạo Role tùy chỉnh mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+above_role : Role mới sẽ nằm trên role này.
+author : Chỉ định chủ của role tùy chỉnh.
+name : Chỉ định tên role.
+max_users : Số người dùng tối đa có thể được gán vào role này.
+expire_after : Hỗ trợ ngày ở dạng ngắn (ví dụ: 2mon1d2h), nhập ‘0’ để đặt là vĩnh viễn.
+[tùy chọn]:
+color : Chỉ định màu của role.
+edit_name_permission : Cho phép chủ của role thay đổi tên role của họ.
+edit_icon_permission : Cho phép chủ của role thay đổi icon của họ.
+edit_color_permission : Cho phép chủ của role thay đổi màu của họ.
+manage_role_members_permission : Cho phép chủ của role thêm/xóa thành viên của role.
+make_role_mentionable_permission : Cho phép chủ của role làm cho role của họ có thể được nhắc đến.
+Ví dụ sử dụng:
+✨ Tạo Role tùy chỉnh mới
+/customrole admin create above_role:@Role author:@User name:MyRole max_users:10 expire_after:30d
+
+/customrole admin terminate : 🚫 Chấm dứt Role tùy chỉnh
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Chọn người dùng.
+[tùy chọn]:
+delete_role : Xóa role hay không, mặc định: không.
+Ví dụ sử dụng:
+🚫 Chấm dứt Role tùy chỉnh
+/customrole admin terminate user:@User
+
+/customrole admin migrate : 🔄 Chuyển đổi Role thường thành Custom
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chỉ định một role.
+author : Chỉ định chủ của role tùy chỉnh.
+max_users : Số người dùng tối đa có thể được gán vào role này.
+expire_after : Hỗ trợ ngày ở dạng ngắn (ví dụ: 2mon1d2h), nhập ‘0’ để đặt là vĩnh viễn.
+Ví dụ sử dụng:
+🔄 Chuyển đổi Role thường thành Custom
+/customrole admin migrate role:@Role author:@User max_users:5 expire_after:0
+
+/customrole admin edit_permission : ⚙️ Chỉnh sửa quyền hạn Role
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chỉ định một role.
+[tùy chọn]:
+edit_name : Cho phép chủ của role thay đổi tên role của họ.
+edit_icon : Cho phép chủ của role thay đổi icon của họ.
+edit_color : Cho phép chủ của role thay đổi màu của họ.
+manage_role_members : Cho phép chủ của role thêm/xóa thành viên của role.
+make_role_mentionable : Cho phép chủ của role làm cho role của họ có thể được nhắc đến.
+Ví dụ sử dụng:
+⚙️ Chỉnh sửa quyền hạn Role
+/customrole admin edit_permission role:@Role edit_name:True
+
+/customrole admin max_users : 👥 Giới hạn số lượng thành viên
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chỉ định một role.
+users : Chỉ định số lượng, từ 1 đến tối đa 100.
+Ví dụ sử dụng:
+👥 Giới hạn số lượng thành viên
+/customrole admin max_users role:@Role users:20
+
+/customrole admin default_author_permission : 🔒 Cài đặt quyền mặc định
+Tham số lệnh (Parameters)
+[tùy chọn]:
+edit_name : Cho phép chủ của role thay đổi tên role của họ.
+edit_icon : Cho phép chủ của role thay đổi icon của họ.
+edit_color : Cho phép chủ của role thay đổi màu của họ.
+manage_role_members : Cho phép chủ của role thêm/xóa thành viên của role.
+make_role_mentionable : Cho phép chủ của role làm cho role của họ có thể được nhắc đến.
+Ví dụ sử dụng:
+🔒 Cài đặt quyền mặc định
+/customrole admin default_author_permission edit_name:True
+
+/customrole admin extend : ⏳ Gia hạn thời gian sử dụng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chọn role.
+time_range : Chỉ định khoảng thời gian. Nhập ‘0’ để làm vĩnh viễn.
+Ví dụ sử dụng:
+⏳ Gia hạn thời gian sử dụng
+/customrole admin extend role:@Role time_range:30d
+
+/customrole admin reduce : 📉 Giảm thời gian sử dụng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chọn role.
+time_range : Chỉ định khoảng thời gian để giảm.
+Ví dụ sử dụng:
+📉 Giảm thời gian sử dụng
+/customrole admin reduce role:@Role time_range:7d
+
+/customrole admin on_expire : ⚠️ Cài đặt hành động khi hết hạn
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Ghi hành động.
+Ví dụ sử dụng:
+⚠️ Cài đặt hành động khi hết hạn
+/customrole admin on_expire action:deleteRole
+
+/farm plant : 🌱 Trồng hạt giống
+Tham số lệnh (Parameters)
+[bắt buộc]:
+seed : 🌰 Loại hạt giống bạn muốn trồng
+[tùy chọn]:
+quantity : 🔢 Số lượng hạt giống (mặc định: 1)
+Ví dụ sử dụng:
+🌱 Trồng hạt giống
+/farm plant seed:úa
+
+/farm harvest : 🚜 Thu hoạch cây trồng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+plant : 🌿 Loại cây bạn muốn thu hoạch
+Ví dụ sử dụng:
+🚜 Thu hoạch cây trồng
+/farm harvest plant:Lúa
+
+/farm field : 👀 Xem cánh đồng của bạn
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+👀 Xem cánh đồng của bạn
+/farm field
+
+/farm event : 🌤️ Xem sự kiện thời tiết hiện tại
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🌤️ Xem sự kiện thời tiết hiện tại
+/farm event
+
+/farm seeds : 🎒 Xem kho hạt giống
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🎒 Xem kho hạt giống
+/farm seeds
+
+/farm inventory : 📦 Xem kho nông sản & phân bón
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+📦 Xem kho nông sản & phân bón
+/farm inventory
+
+/farm phanbon : ✨ Sử dụng phân bón cho cây
+Tham số lệnh (Parameters)
+[bắt buộc]:
+ten_phan_bon : 🧪 Loại phân bón muốn dùng
+[tùy chọn]:
+ten_cay : 🌿 Loại cây muốn bón (để trống để bón tất cả)
+Ví dụ sử dụng:
+✨ Sử dụng phân bón cho cây
+/farm phanbon ten_phan_bon:SuperGrow
+
+/farm savings deposit : 📥 Gửi tiền vào tài khoản tiết kiệm
+Tham số lệnh (Parameters)
+[bắt buộc]:
+amount : 💵 Số tiền muốn gửi
+Ví dụ sử dụng:
+📥 Gửi tiền vào tài khoản tiết kiệm
+/farm savings deposit amount:1000
+
+/farm savings balance : 💳 Xem số dư tiết kiệm
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+💳 Xem số dư tiết kiệm
+/farm savings balance
+
+/farm sell : 💸 Bán nông sản kiếm lời
+Tham số lệnh (Parameters)
+[bắt buộc]:
+produce : 🍎 Loại nông sản muốn bán
+quantity : 🔢 Số lượng muốn bán (hoặc "all")
+Ví dụ sử dụng:
+💸 Bán nông sản kiếm lời
+/farm sell produce:Lúa quantity:all
+
+/cauca fish : Câu cá tại một địa điểm.
+Tham số lệnh (Parameters)
+[tùy chọn]:
+location : Địa điểm câu cá.
+Ví dụ sử dụng:
+Câu cá tại một địa điểm.
+/cauca fish location:Hồ
+
+/cauca inventory : Hiển thị kho đồ câu cá của bạn.
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Hiển thị kho đồ câu cá của bạn.
+/cauca inventory
+
+/cauca sell : Bán cá trong kho.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+fish : Loại cá muốn bán (hoặc gõ "all").
+[tùy chọn]:
+quantity : Số lượng (để trống nếu bán tất cả cá đó)
+Ví dụ sử dụng:
+Bán cá trong kho.
+/cauca sell fish:all
+
+/cauca select : Chọn cần câu hoặc mồi câu để sử dụng.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+type : Loại vật phẩm muốn chọn.
+Ví dụ sử dụng:
+Chọn cần câu hoặc mồi câu để sử dụng.
+/cauca select type:Cần câu
+
+/cauca help : Hiển thị trợ giúp về câu cá.
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Hiển thị trợ giúp về câu cá.
+/cauca help
+
+/letme kiss : 💋 Gửi nụ hôn nồng thắm
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn hôn
+Ví dụ sử dụng:
+💋 Gửi nụ hôn nồng thắm
+/letme kiss target:@User
+
+/letme hug : 🤗 Gửi cái ôm ấm áp
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn ôm
+Ví dụ sử dụng:
+🤗 Gửi cái ôm ấm áp
+/letme hug target:@User
+
+/letme punch : 👊 Đấm yêu (hoặc không yêu lắm)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn đấm
+Ví dụ sử dụng:
+👊 Đấm yêu (hoặc không yêu lắm)
+/letme punch target:@User
+
+/letme handhold : 🤝 Nắm tay thân thiết
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn nắm tay
+Ví dụ sử dụng:
+🤝 Nắm tay thân thiết
+/letme handhold target:@User
+
+/letme bite : 😬 Cắn yêu một cái
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn cắn
+Ví dụ sử dụng:
+😬 Cắn yêu một cái
+/letme bite target:@User
+
+/letme pat : 👋 Vỗ đầu cưng nựng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn vỗ đầu
+Ví dụ sử dụng:
+👋 Vỗ đầu cưng nựng
+/letme pat target:@User
+
+/letme slap : 👋 Tát một cái thật kêu
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn tát
+Ví dụ sử dụng:
+👋 Tát một cái thật kêu
+/letme slap target:@User
+
+/letme fack : 🖕 Gửi lời chào thân ái (Fack)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : 👤 Người bạn muốn gửi lời chào
+Ví dụ sử dụng:
+🖕 Gửi lời chào thân ái (Fack)
+/letme fack target:@User
+
+/greetings welcome : 📥 Cài đặt tin nhắn Chào mừng (Welcome)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : 📢 Kênh gửi tin nhắn
+Ví dụ sử dụng:
+📥 Cài đặt tin nhắn Chào mừng (Welcome)
+/greetings welcome channel:#welcome
+
+/greetings goodbye : 📤 Cài đặt tin nhắn Tạm biệt (Goodbye)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : 📢 Kênh gửi tin nhắn
+Ví dụ sử dụng:
+📤 Cài đặt tin nhắn Tạm biệt (Goodbye)
+/greetings goodbye channel:#goodbye
+
+/greetings welcome-clear : 🗑️ Xóa cấu hình Chào mừng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🗑️ Xóa cấu hình Chào mừng
+/greetings welcome-clear
+
+/greetings goodbye-clear : 🗑️ Xóa cấu hình Tạm biệt
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🗑️ Xóa cấu hình Tạm biệt
+/greetings goodbye-clear
+
+/greetings welcome-test : 🧪 Gửi thử tin nhắn Chào mừng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🧪 Gửi thử tin nhắn Chào mừng
+/greetings welcome-test
+
+/greetings goodbye-test : 🧪 Gửi thử tin nhắn Tạm biệt
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🧪 Gửi thử tin nhắn Tạm biệt
+/greetings goodbye-test
+
+/greetings help : ❓ Xem hướng dẫn sử dụng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+❓ Xem hướng dẫn sử dụng
+/greetings help
+
+/jikan anime search : Tìm kiếm anime
+Tham số lệnh (Parameters)
+[bắt buộc]:
+q : Từ khóa
+[tùy chọn]:
+page : Trang
+Ví dụ sử dụng:
+Tìm kiếm anime
+/jikan anime search q:Naruto
+
+/jikan anime top : Top anime
+Tham số lệnh (Parameters)
+[tùy chọn]:
+type : Thể loại
+page : Trang
+Ví dụ sử dụng:
+Top anime
+/jikan anime top
+
+/jikan anime season : Anime theo mùa
+Tham số lệnh (Parameters)
+[tùy chọn]:
+year : Năm
+season : Mùa
+page : Trang
+Ví dụ sử dụng:
+Anime theo mùa
+/jikan anime season
+
+/jikan anime random : Anime ngẫu nhiên
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Anime ngẫu nhiên
+/jikan anime random
+
+/jikan anime character : Tìm nhân vật
+Tham số lệnh (Parameters)
+[bắt buộc]:
+q : Tên nhân vật
+[tùy chọn]:
+page : Trang
+Ví dụ sử dụng:
+Tìm nhân vật
+/jikan anime character q:Luffy
+
+/jikan anime schedule : Lịch phát sóng
+Tham số lệnh (Parameters)
+[tùy chọn]:
+day : Ngày
+page : Trang
+Ví dụ sử dụng:
+Lịch phát sóng
+/jikan anime schedule
+
+/jikan manga search : Tìm kiếm manga
+Tham số lệnh (Parameters)
+[bắt buộc]:
+q : Từ khóa
+[tùy chọn]:
+page : Trang
+Ví dụ sử dụng:
+Tìm kiếm manga
+/jikan manga search q:Berserk
+
+/jikan manga top : Top manga
+Tham số lệnh (Parameters)
+[tùy chọn]:
+type : Loại
+page : Trang
+Ví dụ sử dụng:
+Top manga
+/jikan manga top
+
+/jikan manga random : Manga ngẫu nhiên
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Manga ngẫu nhiên
+/jikan manga random
+
+/jikan chart : Biểu đồ Top Anime
+Tham số lệnh (Parameters)
+[tùy chọn]:
+metric : Chỉ số
+Ví dụ sử dụng:
+Biểu đồ Top Anime
+/jikan chart
+
+/jikan manga_chart : Biểu đồ Top Manga
+Tham số lệnh (Parameters)
+[tùy chọn]:
+metric : Chỉ số
+Ví dụ sử dụng:
+Biểu đồ Top Manga
+/jikan manga_chart
+
+/relationship marry : Cầu hôn người ấy (Bên nhau trọn đời...)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người bạn muốn cưới
+Ví dụ sử dụng:
+Cầu hôn người ấy (Bên nhau trọn đời...)
+/relationship marry user:@User
+
+/relationship divorce : Ly hôn (Đường Ai Nấy Đi...)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Ly hôn (Đường Ai Nấy Đi...)
+/relationship divorce
+
+/relationship promise : Thề non hẹn biển... (Thay đổi lời hứa)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+loi_hua : Lời hứa của bạn
+Ví dụ sử dụng:
+Thề non hẹn biển... (Thay đổi lời hứa)
+/relationship promise loi_hua:Mãi yêu
+
+/relationship together : Tương tác tình cảm (Tình cảm nồng đậm...)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Tương tác tình cảm (Tình cảm nồng đậm...)
+/relationship together
+
+/network paping : Pap một địa chỉ mạng.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+address : Chỉ định tên miền hoặc địa chỉ IPv4.
+[tùy chọn]:
+port : Chỉ định cổng, mặc định là 80.
+count : Tổng số lần pap, mặc định là 4.
+Ví dụ sử dụng:
+Pap một địa chỉ mạng.
+/network paping address:google.com
+
+/network address : Xem thông tin của một địa chỉ mạng.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+address : Chỉ định tên miền hoặc địa chỉ IPv4.
+Ví dụ sử dụng:
+Xem thông tin của một địa chỉ mạng.
+/network address address:8.8.8.8
+
+/network check-host : Kiểm tra xem một máy chủ có đang hoạt động không. (ex: https://music.youtube.com).
+Tham số lệnh (Parameters)
+[bắt buộc]:
+address : Chỉ định một địa chỉ IPv4 hoặc tên miền với giao thức.
+Ví dụ sử dụng:
+Kiểm tra xem một máy chủ có đang hoạt động không.
+/network check-host address:https://google.com
+
+/noitu setup : Thiết lập trò chơi nối từ cho kênh (Admin)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Thiết lập trò chơi nối từ cho kênh (Admin)
+/noitu setup
+
+/noitu stop : Dừng trò chơi trong kênh này (Admin)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Dừng trò chơi trong kênh này (Admin)
+/noitu stop
+
+/noitu reset : Reset trò chơi - xóa tất cả từ đã dùng (Admin)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Reset trò chơi - xóa tất cả từ đã dùng (Admin)
+/noitu reset
+
+/noitu stats : Xem thống kê người chơi
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xem thống kê người chơi
+/noitu stats
+
+/noitu leaderboard : Xem bảng xếp hạng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xem bảng xếp hạng
+/noitu leaderboard
+
+/noitu hint : Gợi ý từ bắt đầu bằng chữ cái hiện tại
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Gợi ý từ bắt đầu bằng chữ cái hiện tại
+/noitu hint
+
+/noitu info : Thông tin về trò chơi hiện tại
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Thông tin về trò chơi hiện tại
+/noitu info
+
+/noitu history : Xem 10 từ gần nhất
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xem 10 từ gần nhất
+/noitu history
+
+/noitu test : Test API với một từ
+Tham số lệnh (Parameters)
+[bắt buộc]:
+word : Từ cần test
+Ví dụ sử dụng:
+Test API với một từ
+/noitu test word:test
+
+/pixiv illustration : Tìm kiếm illustration theo tag
+Tham số lệnh (Parameters)
+[bắt buộc]:
+tag : Tag để tìm kiếm
+[tùy chọn]:
+search_mode : Chế độ tìm kiếm (mặc định: theo tag)
+sort_mode : Chế độ sắp xếp (mặc định: không)
+nsfw : Tìm kiếm ảnh NSFW (mặc định: không)
+Ví dụ sử dụng:
+Tìm kiếm illustration theo tag
+/pixiv illustration tag:miku
+
+/pixiv artwork : Tìm kiếm artwork từ bảng xếp hạng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+leaderboard : Phạm vi ngày cho bảng xếp hạng
+Ví dụ sử dụng:
+Tìm kiếm artwork từ bảng xếp hạng
+/pixiv artwork leaderboard:Daily
+
+/pixiv bosuutap : Xem các ảnh bạn đã yêu thích
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xem các ảnh bạn đã yêu thích
+/pixiv bosuutap
+
+/report message : Báo cáo tin nhắn trong máy chủ.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : Kênh chứa tin nhắn.
+message_id : ID của tin nhắn.
+reason : Lý do báo cáo.
+[tùy chọn]:
+silent : Thực hiện ở chế độ im lặng.
+Ví dụ sử dụng:
+Báo cáo tin nhắn trong máy chủ.
+/report message channel:#general message_id:12345 reason:Spam
+
+/report recent : Hiển thị các báo cáo gần đây.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+order : Sắp xếp kết quả.
+[tùy chọn]:
+status : Trạng thái báo cáo.
+reporter : Người báo cáo.
+reported : Người bị báo cáo.
+silent : Thực hiện ở chế độ im lặng.
+Ví dụ sử dụng:
+Hiển thị các báo cáo gần đây.
+/report recent order:Mới nhất
+
+/report check : Hiển thị báo cáo dựa trên ID.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+report_id : ID của báo cáo.
+[tùy chọn]:
+silent : Thực hiện ở chế độ im lặng.
+Ví dụ sử dụng:
+Hiển thị báo cáo dựa trên ID.
+/report check report_id:1
+
+/report update : Phê duyệt/Từ chối báo cáo.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Hành động.
+report_id : ID của báo cáo.
+reason : Lý do cho hành động này.
+[tùy chọn]:
+silent : Thực hiện ở chế độ im lặng.
+Ví dụ sử dụng:
+Phê duyệt/Từ chối báo cáo.
+/report update action:Xác nhận report_id:1 reason:Confirmed
+
+/report settings enable : Kích hoạt tính năng Quick Report.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+receive_channel : Kênh để nhận báo cáo.
+Ví dụ sử dụng:
+Kích hoạt tính năng Quick Report.
+/report settings enable receive_channel:#reports
+
+/report settings disable : Vô hiệu hóa tính năng Quick Report.
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Vô hiệu hóa tính năng Quick Report.
+/report settings disable
+
+/report settings muterole : Đặt vai trò tắt tiếng (mute role).
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chọn vai trò.
+Ví dụ sử dụng:
+Đặt vai trò tắt tiếng (mute role).
+/report settings muterole role:@Muted
+
+/report settings manager : Đặt vai trò người quản lý báo cáo.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chọn vai trò.
+Ví dụ sử dụng:
+Đặt vai trò người quản lý báo cáo.
+/report settings manager role:@Mod
+
+/report settings bypass : Đặt role bảo vệ người dùng khỏi các báo cáo.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chọn vai trò.
+Ví dụ sử dụng:
+Đặt role bảo vệ người dùng khỏi các báo cáo.
+/report settings bypass role:@Admin
+
+/report settings blacklist : Đặt vai trò khiến người dùng không thể báo cáo.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : Chọn vai trò.
+Ví dụ sử dụng:
+Đặt vai trò khiến người dùng không thể báo cáo.
+/report settings blacklist role:@BadUser
+
+/report settings autoexpire : Đặt thời gian tự động hết hạn cho các báo cáo.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+after : Số giờ sau đó báo cáo sẽ hết hạn.
+Ví dụ sử dụng:
+Đặt thời gian tự động hết hạn cho các báo cáo.
+/report settings autoexpire after:24
+
+/report settings concurrent : Đặt số lượng báo cáo đồng thời tối đa cho mỗi người dùng.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+maximum : Số lượng tối đa.
+Ví dụ sử dụng:
+Đặt số lượng báo cáo đồng thời tối đa cho mỗi người dùng.
+/report settings concurrent maximum:5
+
+/report settings successful_message : Đặt tin nhắn được gửi khi báo cáo thành công.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+message : Nội dung tin nhắn.
+Ví dụ sử dụng:
+Đặt tin nhắn được gửi khi báo cáo thành công.
+/report settings successful_message message:Report sent!
+
+/report settings auto_delete : Tự động xóa báo cáo trong một số sự kiện.
+Tham số lệnh (Parameters)
+[tùy chọn]:
+on_user_timeout : Khi người dùng bị timeout.
+on_user_muted : Khi người dùng bị mute.
+on_user_leave : Khi người dùng bị cấm/rời máy chủ.
+Ví dụ sử dụng:
+Tự động xóa báo cáo trong một số sự kiện.
+/report settings auto_delete on_user_timeout:True
+
+/report settings channels : Thêm/xóa kênh vào danh sách blacklist/whitelist.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Hành động.
+channel : Chọn kênh.
+Ví dụ sử dụng:
+Thêm/xóa kênh vào danh sách blacklist/whitelist.
+/report settings channels action:Add channel:#general
+
+/report settings categories : Thêm/xóa danh mục vào danh sách blacklist/whitelist.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Hành động.
+category : Chọn danh mục.
+Ví dụ sử dụng:
+Thêm/xóa danh mục vào danh sách blacklist/whitelist.
+/report settings categories action:Add category:General
+
+/report settings mode : Chuyển đổi chế độ Quick Report.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Chế độ.
+Ví dụ sử dụng:
+Chuyển đổi chế độ Quick Report.
+/report settings mode action:Whitelist
+
+/report settings configuration : Hiển thị cấu hình Quick Report hiện tại.
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Hiển thị cấu hình Quick Report hiện tại.
+/report settings configuration
+
+/repost tiktok : Repost một video từ TikTok.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+url : Link video TikTok.
+Ví dụ sử dụng:
+Repost một video từ TikTok.
+/repost tiktok url:https://tiktok.com/...
+
+/repost youtube : Repost một video từ YouTube.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+url : Link video YouTube.
+Ví dụ sử dụng:
+Repost một video từ YouTube.
+/repost youtube url:https://youtube.com/...
+
+/server statics_setup : Cài đặt kênh thống kê server.
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Cài đặt kênh thống kê server.
+/server statics_setup
+
+/prefix set : Set a custom prefix for this server
+Tham số lệnh (Parameters)
+[bắt buộc]:
+new_prefix : The new prefix to set
+Ví dụ sử dụng:
+Set a custom prefix for this server
+/prefix set new_prefix:!
+
+/prefix reset : Reset the prefix to default (k)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Reset the prefix to default (k)
+/prefix reset
+
+/prefix view : View the current prefix
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+View the current prefix
+/prefix view
+
+/trackers genshin_impact : Theo dõi hồ sơ người chơi Genshin Impact.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+uid : UID của người chơi Genshin Impact.
+Ví dụ sử dụng:
+Theo dõi hồ sơ người chơi Genshin Impact.
+/trackers genshin_impact uid:800000000
+
+/trackers honkai_star_rail : Theo dõi hồ sơ người chơi Honkai: Star Rail.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+uid : UID của người chơi Honkai: Star Rail.
+Ví dụ sử dụng:
+Theo dõi hồ sơ người chơi Honkai: Star Rail.
+/trackers honkai_star_rail uid:800000000
+
+/verification setup : Configure the verification system
+Tham số lệnh (Parameters)
+[bắt buộc]:
+role : The role to give after verification
+[tùy chọn]:
+channel : The channel to send the verification panel (leave empty to create new)
+mode : The verification mode (Button/Captcha)
+unverified_role : Role to give on join (removed after verify)
+Ví dụ sử dụng:
+Configure the verification system
+/verification setup role:@Verified
+
+/verification panel : Send/Update the verification panel in the configured channel
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Send/Update the verification panel in the configured channel
+/verification panel
+
+/verification info : View current verification settings
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+View current verification settings
+/verification info
+
+/veso bat : Bật chức năng vé số (Admin)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Bật chức năng vé số (Admin)
+/veso bat
+
+/veso tat : Tắt chức năng vé số (Admin)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Tắt chức năng vé số (Admin)
+/veso tat
+
+/veso check : Kiểm tra vé số đã mua
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Kiểm tra vé số đã mua
+/veso check
+
+/veso thongbao : Xem thông báo người thắng cuộc hôm nay
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xem thông báo người thắng cuộc hôm nay
+/veso thongbao
+
+/veso setup : Setup kênh thông báo (Admin)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : Kênh để thông báo kết quả vé số
+Ví dụ sử dụng:
+Setup kênh thông báo (Admin)
+/veso setup channel:#veso
+
+/tempvoice setup : ⚙️ Thiết lập hệ thống voice channel tạm thời (chỉ owner server)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+⚙️ Thiết lập hệ thống voice channel tạm thời (chỉ owner server)
+/tempvoice setup
+
+/tempvoice lock : 🔒 Khóa voice channel của bạn
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🔒 Khóa voice channel của bạn
+/tempvoice lock
+
+/tempvoice unlock : 🔓 Mở khóa voice channel của bạn
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🔓 Mở khóa voice channel của bạn
+/tempvoice unlock
+
+/tempvoice name : ✏️ Đổi tên voice channel của bạn
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : Tên mới cho voice channel
+Ví dụ sử dụng:
+✏️ Đổi tên voice channel của bạn
+/tempvoice name name:MyChannel
+
+/tempvoice limit : 👥 Đặt giới hạn số người trong voice channel
+Tham số lệnh (Parameters)
+[bắt buộc]:
+number : Số người tối đa (0 = không giới hạn)
+Ví dụ sử dụng:
+👥 Đặt giới hạn số người trong voice channel
+/tempvoice limit number:5
+
+/tempvoice permit : ✅ Cho phép người dùng vào voice channel của bạn
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng được phép vào
+Ví dụ sử dụng:
+✅ Cho phép người dùng vào voice channel của bạn
+/tempvoice permit user:@User
+
+/tempvoice reject : ❌ Từ chối và kick người dùng khỏi voice channel
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng bị từ chối
+Ví dụ sử dụng:
+❌ Từ chối và kick người dùng khỏi voice channel
+/tempvoice reject user:@User
+
+/tempvoice claim : 👑 Nhận quyền sở hữu channel khi owner rời đi
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+👑 Nhận quyền sở hữu channel khi owner rời đi
+/tempvoice claim
+
+/tempvoice setlimit : ⚙️ Đặt giới hạn mặc định cho server (chỉ owner)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+number : Số người tối đa mặc định (0 = không giới hạn)
+Ví dụ sử dụng:
+⚙️ Đặt giới hạn mặc định cho server (chỉ owner)
+/tempvoice setlimit number:0
+
+/minigames 2048 : Chơi game 2048
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Chơi game 2048
+/minigames 2048
+
+/minigames connectfour : Chơi Connect Four
+Tham số lệnh (Parameters)
+[bắt buộc]:
+opponent : Người chơi đối thủ
+Ví dụ sử dụng:
+Chơi Connect Four
+/minigames connectfour opponent:@User
+
+/minigames guess : 🔢 Trò chơi đoán số (1-100)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🔢 Trò chơi đoán số (1-100)
+/minigames guess
+
+/minigames hangman : 😵 Trò chơi Hangman cổ điển
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+😵 Trò chơi Hangman cổ điển
+/minigames hangman
+
+/minigames rps : ✌️ Trò chơi Kéo Búa Bao
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+✌️ Trò chơi Kéo Búa Bao
+/minigames rps
+
+/minigames tictactoe : ❌ Trò chơi Cờ Ca-rô (TicTacToe)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+opponent : Đối thủ
+Ví dụ sử dụng:
+❌ Trò chơi Cờ Ca-rô (TicTacToe)
+/minigames tictactoe opponent:@User
+
+/minigames wordle : 🔤 Trò chơi đoán từ Wordle (5 chữ cái)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🔤 Trò chơi đoán từ Wordle (5 chữ cái)
+/minigames wordle
+
+/say send : Gửi một tin nhắn mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+message : Tin nhắn để gửi
+[tùy chọn]:
+attachment : Thêm một tệp đính kèm vào tin nhắn
+Ví dụ sử dụng:
+Gửi một tin nhắn mới
+/say send message:Hello
+
+/say edit : Chỉnh sửa một tin nhắn trước đó của bot
+Tham số lệnh (Parameters)
+[bắt buộc]:
+message_id : ID của tin nhắn để chỉnh sửa
+Ví dụ sử dụng:
+Chỉnh sửa một tin nhắn trước đó của bot
+/say edit message_id:12345
+
+/bank deposit : Gửi Xu vào ngân hàng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+amount : Số lượng
+Ví dụ sử dụng:
+Gửi Xu vào ngân hàng
+/bank deposit amount:100
+
+/bank withdraw : Rút Xu khỏi ngân hàng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+amount : Số lượng
+Ví dụ sử dụng:
+Rút Xu khỏi ngân hàng
+/bank withdraw amount:100
+
+/bank transfer : Chuyển khoản cho người khác
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người nhận
+amount : Số lượng
+Ví dụ sử dụng:
+Chuyển khoản cho người khác
+/bank transfer user:@User amount:100
+
+/fun 8ball : 🎱 Hỏi bot một câu hỏi bất kỳ
+Tham số lệnh (Parameters)
+[bắt buộc]:
+question : Câu hỏi
+Ví dụ sử dụng:
+🎱 Hỏi bot một câu hỏi bất kỳ
+/fun 8ball question:Có nên ăn không?
+
+/fun advice : 💡 Nhận một lời khuyên hữu ích
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+💡 Nhận một lời khuyên hữu ích
+/fun advice
+
+/fun compliment : 💖 Gửi lời khen ngợi đến ai đó
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng
+Ví dụ sử dụng:
+💖 Gửi lời khen ngợi đến ai đó
+/fun compliment user:@User
+
+/fun darkjoke : 🌑 Câu đùa hài hước... chắc vậy
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🌑 Câu đùa hài hước... chắc vậy
+/fun darkjoke
+
+/fun fact cat : Sự thật về mèo
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Sự thật về mèo
+/fun fact cat
+
+/fun fact dog : Sự thật về chó
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Sự thật về chó
+/fun fact dog
+
+/fun fact general : Sự thật chung
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Sự thật chung
+/fun fact general
+
+/fun fact useless : Sự thật vô dụng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Sự thật vô dụng
+/fun fact useless
+
+/fun fliptext : 🙃 Lật ngược văn bản
+Tham số lệnh (Parameters)
+[bắt buộc]:
+text : Văn bản
+Ví dụ sử dụng:
+🙃 Lật ngược văn bản
+/fun fliptext text:Hello
+
+/fun lennyface : Lenny Face ( ͡° ͜ʖ ͡°)
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Lenny Face ( ͡° ͜ʖ ͡°)
+/fun lennyface
+
+/fun meme random : Meme ngẫu nhiên
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Meme ngẫu nhiên
+/fun meme random
+
+/fun meme text : Tạo meme chữ
+Tham số lệnh (Parameters)
+[bắt buộc]:
+template : Mẫu
+top_text : Văn bản trên
+[tùy chọn]:
+bottom_text : Văn bản dưới
+Ví dụ sử dụng:
+Tạo meme chữ
+/fun meme text template:aag top_text:Hello
+
+/fun meme sadcat : Mèo buồn
+Tham số lệnh (Parameters)
+[bắt buộc]:
+text : Văn bản
+Ví dụ sử dụng:
+Mèo buồn
+/fun meme sadcat text:Sad
+
+/fun pickupline : 💘 Nhận câu thả thính
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+💘 Nhận câu thả thính
+/fun pickupline
+
+/fun quote : 📜 Xem danh ngôn
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+📜 Xem danh ngôn
+/fun quote
+
+/fun rizz : 😉 Gửi câu thả thính kèm GIF
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người nhận
+Ví dụ sử dụng:
+😉 Gửi câu thả thính kèm GIF
+/fun rizz user:@User
+
+/fun roast : 🔥 Chọc ghẹo ai đó
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : Nạn nhân
+Ví dụ sử dụng:
+🔥 Chọc ghẹo ai đó
+/fun roast target:@User
+
+/fun kill : 🔪 Giả vờ tiêu diệt ai đó
+Tham số lệnh (Parameters)
+[bắt buộc]:
+target : Nạn nhân
+Ví dụ sử dụng:
+🔪 Giả vờ tiêu diệt ai đó
+/fun kill target:@User
+
+/giveaway create : Tạo một giveaway
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : Kênh bạn muốn tạo giveaway
+time : Thời gian (vd: 1h, 30m)
+winners : Số lượng người thắng
+prize : Giải thưởng
+hostedby : Người tổ chức (@User)
+[tùy chọn]:
+min_server_join_date : Ngày tham gia tối thiểu
+min_account_age : Tuổi tài khoản tối thiểu
+min_invites : Số lượt mời tối thiểu
+whitelist_roles : Vai trò được phép
+blacklist_roles : Vai trò bị cấm
+notify : Thông báo cho ai
+min_messages : Số tin nhắn tối thiểu
+extra_entries : Vai trò thêm lượt
+Ví dụ sử dụng:
+Tạo một giveaway
+/giveaway create channel:#giveaway time:1h winners:1 prize:Nitro hostedby:@User
+
+/giveaway reroll : Quay lại một giveaway
+Tham số lệnh (Parameters)
+[bắt buộc]:
+giveaway_id : ID giveaway
+[tùy chọn]:
+users : Người dùng để quay lại
+Ví dụ sử dụng:
+Quay lại một giveaway
+/giveaway reroll giveaway_id:abcdefg
+
+/giveaway end : Kết thúc một giveaway
+Tham số lệnh (Parameters)
+[bắt buộc]:
+giveaway_id : ID giveaway
+Ví dụ sử dụng:
+Kết thúc một giveaway
+/giveaway end giveaway_id:abcdefg
+
+/reminder create : Đặt một lời nhắc mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+message : Nội dung cần nhắc nhở
+time : Thời gian (vd: 10m, 1h)
+[tùy chọn]:
+user : Người dùng cần được nhắc
+Ví dụ sử dụng:
+Đặt một lời nhắc mới
+/reminder create message:Uống nước time:1h
+
+/reminder list : Liệt kê các lời nhắc đang hoạt động của bạn
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Liệt kê các lời nhắc đang hoạt động của bạn
+/reminder list
+
+/snipe message : Lấy tin nhắn đã xóa gần nhất
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Lấy tin nhắn đã xóa gần nhất
+/snipe message
+
+/snipe edited : Lấy tin nhắn đã chỉnh sửa gần nhất
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Lấy tin nhắn đã chỉnh sửa gần nhất
+/snipe edited
+
+/snipe clear : Xóa tin nhắn đã snipe gần nhất
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xóa tin nhắn đã snipe gần nhất
+/snipe clear
+
+/suggestion create : Tạo một đề xuất mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+text : Nội dung đề xuất (nếu không dùng modal)
+Ví dụ sử dụng:
+Tạo một đề xuất mới
+/suggestion create text:Thêm emoji mới
+
+/suggestion accept : Chấp nhận một đề xuất
+Tham số lệnh (Parameters)
+[bắt buộc]:
+id : ID của đề xuất
+[tùy chọn]:
+reason : Lý do chấp nhận
+Ví dụ sử dụng:
+Chấp nhận một đề xuất
+/suggestion accept id:123 reason:Hay
+
+/suggestion deny : Từ chối một đề xuất
+Tham số lệnh (Parameters)
+[bắt buộc]:
+id : ID của đề xuất
+[tùy chọn]:
+reason : Lý do từ chối
+Ví dụ sử dụng:
+Từ chối một đề xuất
+/suggestion deny id:123 reason:Spam
+
+/suggestion blacklist add : Thêm người dùng vào danh sách đen
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng cần đưa vào danh sách đen
+Ví dụ sử dụng:
+Thêm người dùng vào danh sách đen
+/suggestion blacklist add user:@User
+
+/suggestion blacklist remove : Xóa người dùng khỏi danh sách đen
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng cần xóa khỏi danh sách đen
+Ví dụ sử dụng:
+Xóa người dùng khỏi danh sách đen
+/suggestion blacklist remove user:@User
+
+/leaderboard balance : Xem những người dùng có số dư cao nhất
+Tham số lệnh (Parameters)
+[tùy chọn]:
+page : Số trang cần xem
+Ví dụ sử dụng:
+Xem những người dùng có số dư cao nhất
+/leaderboard balance
+
+/leaderboard levels : Xem bảng xếp hạng cấp độ
+Tham số lệnh (Parameters)
+[tùy chọn]:
+page : Số trang cần xem
+Ví dụ sử dụng:
+Xem bảng xếp hạng cấp độ
+/leaderboard levels
+
+/leaderboard messages : Xem người dùng nhắn tin nhiều nhất
+Tham số lệnh (Parameters)
+[tùy chọn]:
+page : Số trang cần xem
+Ví dụ sử dụng:
+Xem người dùng nhắn tin nhiều nhất
+/leaderboard messages
+
+/leaderboard invites : Xem những người dùng mời nhiều nhất
+Tham số lệnh (Parameters)
+[tùy chọn]:
+page : Số trang cần xem
+Ví dụ sử dụng:
+Xem những người dùng mời nhiều nhất
+/leaderboard invites
+
+/leaderboard cauca : Xem bảng xếp hạng những người câu cá hàng đầu
+Tham số lệnh (Parameters)
+[tùy chọn]:
+page : Số trang cần xem
+Ví dụ sử dụng:
+Xem bảng xếp hạng những người câu cá hàng đầu
+/leaderboard cauca
+
+/level give : Tăng XP hoặc Cấp độ cho người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng
+type : Chọn XP hoặc Cấp độ (xp/level)
+amount : Số lượng
+Ví dụ sử dụng:
+Tăng XP cho người dùng
+/level give user:@User type:xp amount:100
+
+/level remove : Giảm XP hoặc Cấp độ của người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng
+type : Chọn XP hoặc Cấp độ
+amount : Số lượng
+Ví dụ sử dụng:
+Giảm Cấp độ của người dùng
+/level remove user:@User type:level amount:1
+
+/level set : Thiết lập XP hoặc Cấp độ của người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng
+type : Chọn XP hoặc Cấp độ
+amount : Giá trị cần thiết lập
+Ví dụ sử dụng:
+Thiết lập cấp độ cho người dùng
+/level set user:@User type:level amount:10
+
+/level check : Kiểm tra XP và cấp độ của người dùng
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : Người dùng cần kiểm tra
+Ví dụ sử dụng:
+Kiểm tra XP và cấp độ của người dùng
+/level check
+/level check user:@User
+
+/level reset : Đặt lại cấp độ và XP của toàn bộ người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+type : Chọn nội dung cần đặt lại (xp/level/both)
+Ví dụ sử dụng:
+Đặt lại XP
+/level reset type:xp
+
+/level prestige : Reset cấp độ & XP để nâng hạng danh vọng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Reset cấp độ & XP để nâng hạng danh vọng
+/level prestige
+
+/music play : Play music from YouTube/Spotify/SoundCloud
+Tham số lệnh (Parameters)
+[bắt buộc]:
+query : Song name, Artist, or URL
+Ví dụ sử dụng:
+Play music
+/music play query:Never Gonna Give You Up
+
+/music search : Search and select music
+Tham số lệnh (Parameters)
+[bắt buộc]:
+query : Search query
+Ví dụ sử dụng:
+Search music
+/music search query:Faded
+
+/music skip : Skip current song
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Skip current song
+/music skip
+
+/music stop : Stop playing and clear queue
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Stop playing
+/music stop
+
+/music pause : Pause playback
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Pause playback
+/music pause
+
+/music resume : Resume playback
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Resume playback
+/music resume
+
+/music queue : Show current queue
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Show current queue
+/music queue
+
+/music volume : Change volume
+Tham số lệnh (Parameters)
+[bắt buộc]:
+amount : Volume % (1-100)
+Ví dụ sử dụng:
+Change volume to 50%
+/music volume amount:50
+
+/music loop : Set loop mode
+Tham số lệnh (Parameters)
+[bắt buộc]:
+mode : Loop mode (off/track/queue)
+Ví dụ sử dụng:
+Loop queue
+/music loop mode:queue
+
+/music shuffle : Shuffle the queue
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Shuffle queue
+/music shuffle
+
+/music nowplaying : Show current song info
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Show current song info
+/music nowplaying
+
+/music autoplay : Toggle autoplay
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Toggle autoplay
+/music autoplay
+
+/music lyrics : Get song lyrics
+Tham số lệnh (Parameters)
+[tùy chọn]:
+query : Song name
+Ví dụ sử dụng:
+Get lyrics
+/music lyrics query:Faded
+
+
+/autoreact add : Add a new AutoReact
+Tham số lệnh (Parameters)
+[bắt buộc]:
+keyword : The keyword to react to
+emoji : The emoji to react with
+Ví dụ sử dụng:
+Add a new AutoReact
+/autoreact add keyword:hello emoji:👋
+
+/autoreact remove : Remove an existing AutoReact
+Tham số lệnh (Parameters)
+[bắt buộc]:
+identifier : The keyword or ID of the AutoReact to remove
+Ví dụ sử dụng:
+Remove an existing AutoReact
+/autoreact remove identifier:hello
+
+/autoreact list : List all current AutoReacts
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+List all current AutoReacts
+/autoreact list
+
+/backup create : Create a backup of the server
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Create a backup of the server
+/backup create
+
+/backup delete : Delete a backup
+Tham số lệnh (Parameters)
+[bắt buộc]:
+id : The backup ID
+Ví dụ sử dụng:
+Delete a backup
+/backup delete id:123456789
+
+/backup load : Load a backup
+Tham số lệnh (Parameters)
+[bắt buộc]:
+id : The backup ID
+Ví dụ sử dụng:
+Load a backup
+/backup load id:123456789
+
+/backup list : List all server backups
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+List all server backups
+/backup list
+
+/backup info : Get information about a backup
+Tham số lệnh (Parameters)
+[bắt buộc]:
+id : The backup ID
+Ví dụ sử dụng:
+Get information about a backup
+/backup info id:123456789
+
+/channelstats add : Add a channel stat
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channelname : The name of the channel with {stats} placeholder
+type : Type of the stat (MemberCount/NitroBoosterCount/TotalRolesCount/etc.)
+channel : The voice channel to update
+[tùy chọn]:
+role : The role to count (required for role-based stats)
+Ví dụ sử dụng:
+Add a channel stat
+/channelstats add channelname:Members: {stats} type:MemberCount channel:#Stats
+
+/channelstats remove : Remove a channel stat
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : The voice channel stat to remove
+Ví dụ sử dụng:
+Remove a channel stat
+/channelstats remove channel:#Stats
+
+/embed create : Tạo embed mới
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Tạo embed mới
+/embed create
+
+/embed edit : Chỉnh sửa embed
+Tham số lệnh (Parameters)
+[bắt buộc]:
+messageid : ID của message cần chỉnh sửa
+Ví dụ sử dụng:
+Chỉnh sửa embed
+/embed edit messageid:123456789
+
+/settings log set : Đặt một kênh log cho một loại log cụ thể
+Tham số lệnh (Parameters)
+[bắt buộc]:
+log-type : Loại log để đặt kênh (Ban/Unban)
+channel : Kênh để gửi log
+Ví dụ sử dụng:
+Đặt kênh log ban
+/settings log set log-type:Ban channel:#mod-logs
+
+/settings welcome set-channel : Đặt kênh cho tin nhắn chào mừng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : Kênh để gửi tin nhắn chào mừng
+Ví dụ sử dụng:
+Đặt kênh chào mừng
+/settings welcome set-channel channel:#welcome
+
+/settings welcome set-message : Đặt tin nhắn chào mừng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+message : Nội dung tin nhắn chào mừng ({user}, {guildName})
+Ví dụ sử dụng:
+Đặt tin nhắn chào mừng
+/settings welcome set-message message:Chào mừng {user} đến với {guildName}!
+
+/settings welcome enable : Bật tin nhắn chào mừng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Bật tin nhắn chào mừng
+/settings welcome enable
+
+/settings welcome disable : Tắt tin nhắn chào mừng
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Tắt tin nhắn chào mừng
+/settings welcome disable
+
+/settings leave set-channel : Đặt kênh cho tin nhắn tạm biệt
+Tham số lệnh (Parameters)
+[bắt buộc]:
+channel : Kênh để gửi tin nhắn tạm biệt
+Ví dụ sử dụng:
+Đặt kênh tạm biệt
+/settings leave set-channel channel:#goodbye
+
+/settings leave set-message : Đặt tin nhắn tạm biệt
+Tham số lệnh (Parameters)
+[bắt buộc]:
+message : Nội dung tin nhắn tạm biệt ({user}, {guildName})
+Ví dụ sử dụng:
+Đặt tin nhắn tạm biệt
+/settings leave set-message message:Tạm biệt {user}, hẹn gặp lại!
+
+/settings leave enable : Bật tin nhắn tạm biệt
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Bật tin nhắn tạm biệt
+/settings leave enable
+
+/settings leave disable : Tắt tin nhắn tạm biệt
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Tắt tin nhắn tạm biệt
+/settings leave disable
+
+/settings ticket create-panel : Tạo một bảng điều khiển ticket mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : Tên của bảng điều khiển
+channel : Kênh để gửi bảng điều khiển
+Ví dụ sử dụng:
+Tạo bảng điều khiển ticket
+/settings ticket create-panel name:Support channel:#tickets
+
+/settings ticket create-category : Tạo một danh mục ticket mới
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : Tên của danh mục
+category : Kênh danh mục để tạo ticket
+Ví dụ sử dụng:
+Tạo danh mục ticket
+/settings ticket create-category name:Help category:Support-Category
+
+/settings ticket add-category-to-panel : Thêm một danh mục vào bảng điều khiển ticket
+Tham số lệnh (Parameters)
+[bắt buộc]:
+panel-name : Tên của bảng điều khiển
+category-name : Tên của danh mục
+Ví dụ sử dụng:
+Thêm danh mục vào panel
+/settings ticket add-category-to-panel panel-name:Support category-name:Help
+
+/steal emoji : Lấy một hoặc nhiều emoji
+Tham số lệnh (Parameters)
+[bắt buộc]:
+emojis : Emoji bạn muốn mượn
+[tùy chọn]:
+addtoserver : Tùy chọn thêm emoji vào máy chủ của bạn
+Ví dụ sử dụng:
+Lấy emoji
+/steal emoji emojis:👋 addtoserver:true
+
+/steal sticker : Lấy sticker từ một tin nhắn cụ thể
+Tham số lệnh (Parameters)
+[bắt buộc]:
+messageid : ID của tin nhắn chứa sticker
+[tùy chọn]:
+addtoserver : Tùy chọn thêm sticker vào máy chủ của bạn
+Ví dụ sử dụng:
+Lấy sticker
+/steal sticker messageid:123456789 addtoserver:true
+
+/invites user : Kiểm tra xem người dùng có bao nhiêu lời mời
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : Người dùng để kiểm tra lời mời
+Ví dụ sử dụng:
+Kiểm tra lời mời
+/invites user:@User
+
+/invites add : Thêm lời mời cho người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng để thêm lời mời
+amount : Số lượng lời mời để thêm
+Ví dụ sử dụng:
+Thêm lời mời
+/invites add user:@User amount:5
+
+/invites remove : Xóa lời mời của người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng để xóa lời mời
+amount : Số lượng lời mời để xóa
+Ví dụ sử dụng:
+Xóa lời mời
+/invites remove user:@User amount:5
+
+/invites reset : Đặt lại lời mời của người dùng về 0
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng để đặt lại lời mời
+Ví dụ sử dụng:
+Đặt lại lời mời
+/invites reset user:@User
+
+/invites reset-all : Đặt lại tất cả lời mời trong máy chủ về 0
+Tham số lệnh (Parameters)
+[bắt buộc]:
+confirm : Nhập 'confirm' để đặt lại tất cả lời mời
+Ví dụ sử dụng:
+Đặt lại tất cả lời mời
+/invites reset-all confirm:confirm
+
+/moderation timeout : Tạm thời chặn một thành viên
+Tham số lệnh (Parameters)
+[bắt buộc]:
+member : Chọn một thành viên trong server
+duration : Chỉ định thời gian dạng ngắn (vd: 10m, 2h, 1d)
+reason : Nhập lý do cho hành động này
+Ví dụ sử dụng:
+Timeout thành viên
+/moderation timeout member:@User duration:1h reason:Spam
+
+/moderation untimeout : Gỡ chặn tạm thời một thành viên
+Tham số lệnh (Parameters)
+[bắt buộc]:
+member : Chọn một thành viên trong server
+reason : Nhập lý do cho hành động này
+Ví dụ sử dụng:
+Gỡ timeout
+/moderation untimeout member:@User reason:Appeal approved
+
+/moderation ban : Cấm một thành viên khỏi máy chủ
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Chọn một người dùng
+reason : Nhập lý do cho hành động này
+[tùy chọn]:
+delete_message : Số ngày tin nhắn cũ cần xóa
+dm_user : Gửi DM thông báo ban cho người dùng?
+Ví dụ sử dụng:
+Ban thành viên
+/moderation ban user:@User reason:Rule violation
+
+/moderation unban : Gỡ cấm một người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Nhập ID người dùng
+reason : Nhập lý do cho hành động này
+Ví dụ sử dụng:
+Unban thành viên
+/moderation unban user:123456789 reason:Appeal approved
+
+/moderation warn : Cảnh cáo một thành viên
+Tham số lệnh (Parameters)
+[bắt buộc]:
+member : Chọn một thành viên trong server
+reason : Nhập lý do cho cảnh cáo
+Ví dụ sử dụng:
+Cảnh cáo thành viên
+/moderation warn member:@User reason:Language
+
+/moderation unwarn : Xóa cảnh cáo của một thành viên
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Chọn một người dùng
+reason : Nhập lý do cho hành động này
+[tùy chọn]:
+case : ID của cảnh cáo cần xóa
+Ví dụ sử dụng:
+Xóa cảnh cáo
+/moderation unwarn user:@User reason:Expired
+
+/moderation kick : Đuổi một thành viên khỏi server
+Tham số lệnh (Parameters)
+[bắt buộc]:
+member : Chọn một thành viên trong server
+reason : Nhập lý do cho hành động này
+[tùy chọn]:
+dm_user : Gửi DM thông báo kick cho người dùng?
+Ví dụ sử dụng:
+Kick thành viên
+/moderation kick member:@User reason:Inactivity
+
+/poll : 📊 Tạo cuộc bình chọn
+Tham số lệnh (Parameters)
+[bắt buộc]:
+question : Câu hỏi của cuộc thăm dò
+choices : Các lựa chọn của cuộc thăm dò (phân tách bằng dấu phẩy)
+[tùy chọn]:
+multivote : Cho phép người dùng bỏ phiếu cho nhiều lựa chọn
+Ví dụ sử dụng:
+Tạo cuộc bình chọn
+/poll question:Bạn thích màu gì? choices:Đỏ, Xanh, Vàng
+
+/removerole : Xóa vai trò khỏi người dùng
+Tham số lệnh (Parameters)
+[bắt buộc]:
+user : Người dùng để xóa vai trò
+role : Vai trò để xóa
+Ví dụ sử dụng:
+Xóa vai trò
+/removerole user:@User role:@Role
+
+/role : 🎭 Quản lý vai trò
+Tham số lệnh (Parameters)
+[bắt buộc]:
+action : Hành động để thực hiện (thêm/xóa)
+role : Vai trò để quản lý
+[tùy chọn]:
+user : Người dùng để thêm/xóa vai trò
+all : Áp dụng cho tất cả người dùng?
+Ví dụ sử dụng:
+Thêm vai trò cho user
+/role action:thêm role:@Role user:@User
+Thêm vai trò cho tất cả
+/role action:thêm role:@Role all:true
+
+/safety antinuke toggle : Enable or disable AntiNuke
+Tham số lệnh (Parameters)
+[bắt buộc]:
+enabled : Enable?
+Ví dụ sử dụng:
+Enable AntiNuke
+/safety antinuke toggle enabled:true
+
+/safety antinuke limit : Set limits for AntiNuke actions
+Tham số lệnh (Parameters)
+[bắt buộc]:
+type : Action type
+threshold : Max actions allowed
+[tùy chọn]:
+period : Time period in seconds
+Ví dụ sử dụng:
+Set limit for ban
+/safety antinuke limit type:Ban threshold:5
+
+/safety antihoist toggle : Enable or disable AntiHoist
+Tham số lệnh (Parameters)
+[bắt buộc]:
+enabled : Enable?
+Ví dụ sử dụng:
+Enable AntiHoist
+/safety antihoist toggle enabled:true
+
+/safety antihoist action : Set AntiHoist action
+Tham số lệnh (Parameters)
+[bắt buộc]:
+type : Action to take (Change Nickname/Kick User)
+Ví dụ sử dụng:
+Set AntiHoist action
+/safety antihoist action type:Change Nickname
+
+/safety whitelist add : Add user or role to whitelist
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : User to whitelist
+role : Role to whitelist
+Ví dụ sử dụng:
+Add user to whitelist
+/safety whitelist add user:@Admin
+
+/safety whitelist remove : Remove user or role from whitelist
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : User to remove
+role : Role to remove
+Ví dụ sử dụng:
+Remove role from whitelist
+/safety whitelist remove role:@Mod
+
+/safety commands disable : Disable a command in this server
+Tham số lệnh (Parameters)
+[bắt buộc]:
+command : Name of the command to disable
+Ví dụ sử dụng:
+Disable a command
+/safety commands disable command:ping
+
+/safety commands enable : Enable a disabled command
+Tham số lệnh (Parameters)
+[bắt buộc]:
+command : Name of the command to enable
+Ví dụ sử dụng:
+Enable a command
+/safety commands enable command:ping
+
+/safety commands list : List all disabled commands
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+List disabled commands
+/safety commands list
+
+/forms manage : Open the Form Manager UI
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Open Form Manager
+/forms manage
+
+/forms send : Send a 'Open Form' button to a channel
+Tham số lệnh (Parameters)
+[bắt buộc]:
+form_id : The ID of the form to send
+channel : Channel to send the button to
+[tùy chọn]:
+label : Label for the button
+content : Message content above the button
+Ví dụ sử dụng:
+Send form button
+/forms send form_id:myform channel:#general
+
+/layout create : Create a new layout
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : The name of the layout
+Ví dụ sử dụng:
+Create layout
+/layout create name:mylayout
+
+/layout delete : Delete a layout
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : The name of the layout
+Ví dụ sử dụng:
+Delete layout
+/layout delete name:mylayout
+
+/layout edit : Edit a layout (Open Editor)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+name : The name of the layout
+Ví dụ sử dụng:
+Edit layout
+/layout edit name:mylayout
+
+/layout list : List all layouts
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+List all layouts
+/layout list
+

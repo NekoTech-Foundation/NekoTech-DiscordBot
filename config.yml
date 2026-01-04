@@ -86,7 +86,7 @@ AI:
 # API Keys (Added for Repost and Pixiv addons)
 API_Keys:
   Gemini:
-    ApiKey: ""
+    ApiKey: "AIzaSyBY1qkjokksQ8cIOd4fW6tg_n9IU7IQ2zo"
   Pixiv:
     RefreshToken: "exGZSBaGBdTFP1UdwRBsoP8NBydj8DKlguedgHvTtho"
 

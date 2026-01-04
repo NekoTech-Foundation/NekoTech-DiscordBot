@@ -1,0 +1,169 @@
+/afk : 💤 Đặt trạng thái AFK (Away From Keyboard)
+Tham số lệnh (Parameters)
+[tùy chọn]:
+reason : 📝 Lý do rời máy
+duration : ⏱️ Thời gian dự kiến trở lại (vd: 1h, 30m)
+Ví dụ sử dụng:
+💤 Đặt trạng thái AFK (Away From Keyboard)
+/afk reason:Đi ngủ duration:1h
+
+/bypass : 🚀 Bỏ qua link rút gọn (Bypass)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+url : 🔗 Link cần bypass
+Ví dụ sử dụng:
+🚀 Bỏ qua link rút gọn (Bypass)
+/bypass url:https://link1s.com/example
+
+/chatbot : 🤖 Trò chuyện thông minh cùng AI (Gemini)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+prompt : 💬 Nội dung bạn muốn hỏi
+[tùy chọn]:
+private : 🔒 Chỉ mình bạn thấy phản hồi (ephemeral)
+Ví dụ sử dụng:
+🤖 Trò chuyện thông minh cùng AI (Gemini)
+/chatbot prompt:Giới thiệu về bạn đi
+
+/fixcancau : Sửa cần câu đã trang bị của bạn.
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Sửa cần câu đã trang bị của bạn.
+/fixcancau
+
+/background : Sửa Ảnh Cưới! (aliases: anhcuoi, hinhcuoi)
+Tham số lệnh (Parameters)
+[bắt buộc]:
+link : Link ảnh cưới của bạn
+Ví dụ sử dụng:
+Sửa Ảnh Cưới! (aliases: anhcuoi, hinhcuoi)
+/background link:https://i.imgur.com/example.png
+
+/r34 : Tìm hình ảnh trên Rule34 (Yêu cầu kênh NSFW).
+Tham số lệnh (Parameters)
+[bắt buộc]:
+tags : Tìm kiếm bằng tag, thay dấu cách bằng _ (v.d., "khoa_so_ma").
+Ví dụ sử dụng:
+Tìm hình ảnh trên Rule34 (Yêu cầu kênh NSFW).
+/r34 tags:genshin_impact
+
+/profile : Xem thông tin profile của người dùng
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : Chọn người dùng để xem profile
+Ví dụ sử dụng:
+Xem thông tin profile của người dùng
+/profile
+/profile user:@User
+
+/translate : Dịch văn bản tới một văn bản đã chọn.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+text : Đoạn văn bản để dịch
+to : Ngôn ngữ đích (ví dụ: Tiếng Nhật, en, vi, jp)
+[tùy chọn]:
+from : Ngôn ngữ nguồn (mặc định: tự động phát hiện)
+Ví dụ sử dụng:
+Dịch văn bản tới một văn bản đã chọn.
+/translate text:Hello to:vi
+
+/ascii : 🎨 Chuyển đổi văn bản thành dạng ASCII
+Tham số lệnh (Parameters)
+[bắt buộc]:
+text : Văn bản bạn muốn chuyển đổi
+[tùy chọn]:
+size : Kích thước phông chữ (Nhỏ, Trung bình, Lớn)
+Ví dụ sử dụng:
+🎨 Chuyển đổi văn bản thành dạng ASCII
+/ascii text:Hello size:Trung bình
+
+/weather : Kiểm tra thời tiết tại một địa điểm đã chỉ định.
+Tham số lệnh (Parameters)
+[bắt buộc]:
+location : Tên thành phố, mã zip (VD: Hà Nội, 70000, Tokyo)
+Ví dụ sử dụng:
+Kiểm tra thời tiết tại một địa điểm đã chỉ định.
+/weather location:Hà Nội
+
+/balance : Kiểm tra số dư của người chơi khác
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : Người dùng kiểm tra số dư của
+type : Kiểm tra loại số dư (Log)
+Ví dụ sử dụng:
+Kiểm tra số dư của người chơi khác
+/balance
+/balance user:@User type:Log
+
+/botinfo : 🤖 Xem thông tin chi tiết về bot
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🤖 Xem thông tin chi tiết về bot
+/botinfo
+
+/help : Xem danh sách lệnh hoặc hướng dẫn chi tiết
+Tham số lệnh (Parameters)
+[tùy chọn]:
+command : Tên lệnh cần xem chi tiết
+Ví dụ sử dụng:
+Xem danh sách lệnh hoặc hướng dẫn chi tiết
+/help
+/help command:botinfo
+
+/ping : 🏓 Kiểm tra độ trễ và trạng thái của bot
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+🏓 Kiểm tra độ trễ và trạng thái của bot
+/ping
+
+/serverinfo : Xem thông tin chi tiết về máy chủ hiện tại
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Xem thông tin chi tiết về máy chủ hiện tại
+/serverinfo
+
+/rank : 🏆 Xem bảng xếp hạng
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : Chọn người dùng (để trống để xem bản thân)
+Ví dụ sử dụng:
+🏆 Xem bảng xếp hạng
+/rank
+/rank user:@User
+
+/setlang : Change the bot language for this server / Thay đổi ngôn ngữ bot
+Tham số lệnh (Parameters)
+[bắt buộc]:
+language : Select language / Chọn ngôn ngữ (vn, en, jp)
+Ví dụ sử dụng:
+Change the bot language for this server / Thay đổi ngôn ngữ bot
+/setlang language:vn
+
+
+/inviter : Hiển thị người đã mời một người dùng cụ thể
+Tham số lệnh (Parameters)
+[tùy chọn]:
+user : Người dùng để kiểm tra người mời
+Ví dụ sử dụng:
+Hiển thị người đã mời một người dùng cụ thể
+/inviter
+/inviter user:@User
+
+/buttons : Manage custom buttons for KentaBuckets
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Manage custom buttons
+/buttons
+
+/selects : Manage custom select menus for KentaBuckets
+Tham số lệnh (Parameters)
+Không có tham số
+Ví dụ sử dụng:
+Manage custom select menus
+/selects
+
