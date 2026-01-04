@@ -91,6 +91,7 @@ async function getUserInviteCount(guildId, userId) {
 const giveawayActions = {
     handleButtonInteraction: async (interaction) => {
         try {
+            const lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
             if (interaction.customId === 'check_percent') {
                 const giveaway = await Giveaway.findOne({ 
                     messageId: interaction.message.id,
@@ -106,9 +107,9 @@ const giveawayActions = {
                     return;
                 }
 
-                await giveawayActions.calculateChance(interaction, giveaway);
+                await giveawayActions.calculateChance(interaction, giveaway, lang);
             } else if (interaction.customId === 'show_entrants') {
-                await giveawayActions.showEntrants(interaction);
+                await giveawayActions.showEntrants(interaction, lang);
             }
         } catch (error) {
             console.error('Error handling button interaction:', error);
@@ -119,9 +120,13 @@ const giveawayActions = {
         }
     },
 
-    startGiveaway: async (interaction, giveawayDetails) => {
+    startGiveaway: async (interaction, giveawayDetails, lang) => {
         const { giveawayId, time, prize, channel, winnerCount, whitelistRoles, blacklistRoles, minServerJoinDate, minAccountAge, minInvites, minMessages, hostedBy, notifyUsers } = giveawayDetails;
         
+        // Ensure lang is available if not passed (fallback)
+        // Ensure lang is available if not passed (fallback)
+        if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
+
         const duration = typeof time === 'string' ? parseDuration(time) : time;
         if (duration === null) {
             throw new Error("Invalid time format");
@@ -133,6 +138,7 @@ const giveawayActions = {
         const endAt = Date.now() + duration;
         const whitelistRoleMentions = whitelistRoles.map(roleId => `<@&${roleId}>`).join(', ');
         const blacklistRoleMentions = blacklistRoles.map(roleId => `<@&${roleId}>`).join(', ');
+
         const placeholders = {
             prize: prize,
             serverName: serverName,
@@ -147,6 +153,9 @@ const giveawayActions = {
 
         const embed = new EmbedBuilder();
         const prizeDescription = replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.Prize, placeholders);
+        
+        embed.setTitle(lang.Giveaways.Embeds.ActiveGiveaway.Title || "🎉 GIVEAWAY 🎉");
+        
         if (config.Giveaways.Embed.ActiveGiveaway.ShowTitle) {
             embed.setDescription(prizeDescription);
         }
@@ -308,7 +317,7 @@ const giveawayActions = {
                 name: `${lang.SuccessEmbedTitle}`,
                 iconURL: `https://i.imgur.com/7SlmRRa.png`,
             })
-            .setColor(config.SuccessEmbedColor);
+            .setColor(config.SuccessEmbedColor || "#00FF00");
 
         const newGiveaway = await Giveaway.create({
             giveawayId: giveawayId,
@@ -357,28 +366,37 @@ const giveawayActions = {
         await interaction.editReply({ embeds: [successEmbed], flags: MessageFlags.Ephemeral });
     },
 
-    joinGiveaway: async (client, userId, username, member, interaction, channelId, messageId) => {
+    joinGiveaway: async (client, userId, username, member, interaction, channelId, messageId, lang) => {
+        // Ensure lang is available (fallback) // Add lang to args
+        if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
         try {
-            const giveaway = await Giveaway.findOne({ channelId: channelId, messageId: messageId });
+            const giveaway = await Giveaway.findOne({ 
+                messageId: messageId,
+                channelId: channelId,
+                ended: false
+            });
+
+            let placeholders = {
+                user: interaction.user,
+                prize: giveaway ? giveaway.prize : "Unknown Prize",
+                serverName: interaction.guild.name,
+                hostedBy: giveaway ? giveaway.hostedBy : "Unknown Host",
+                channel: `<#${channelId}>`
+            };
+
             if (!giveaway) {
-                const messageContent = replacePlaceholders(lang.Giveaways.GiveawayNotFound, {});
-                if (interaction.replied || interaction.deferred) {
-                    await interaction.followUp({ content: messageContent, flags: MessageFlags.Ephemeral });
-                } else {
-                    await interaction.reply({ content: messageContent, flags: MessageFlags.Ephemeral });
-                }
+                const messageContent = replacePlaceholders(lang.Giveaways.GiveawayNotFound, placeholders);
+                await interaction.editReply({ content: messageContent, flags: MessageFlags.Ephemeral });
                 return;
             }
 
-            const serverName = interaction.guild.name;
             const requirements = giveaway.requirements;
-
             const whitelistRoleMentions = requirements.whitelistRoles.map(roleId => `<@&${roleId}>`).join(', ');
             const blacklistRoleMentions = requirements.blacklistRoles.map(roleId => `<@&${roleId}>`).join(', ');
-            const placeholders = {
-                prize: giveaway.prize,
-                serverName: serverName,
-                hostedBy: giveaway.hostedBy,
+            
+            // Update placeholders with specific details
+            placeholders = {
+                ...placeholders,
                 whitelistRoles: whitelistRoleMentions,
                 blacklistRoles: blacklistRoleMentions,
                 channel: `<#${giveaway.channelId}>`,
@@ -554,11 +572,14 @@ const giveawayActions = {
 
     endGiveaway: async (giveawayId) => {
         try {
-            const giveaway = await Giveaway.findOne({ giveawayId: giveawayId });
+            const giveaways = await Giveaway.find({ giveawayId: giveawayId });
+            const giveaway = giveaways[0];
             if (!giveaway) {
                 console.error('Giveaway not found:', giveawayId);
                 return;
             }
+
+            const lang = await require('../../utils/langLoader').getLang(giveaway.guildId);
 
             const guild = client.guilds.cache.get(giveaway.guildId);
             if (!guild) {
@@ -630,16 +651,11 @@ const giveawayActions = {
                 winners.push({ winnerId: winner.entrantId });
             }
 
-            const updatedGiveaway = await Giveaway.findOneAndUpdate(
-                { giveawayId: giveawayId },
-                { $set: { winners: winners, ended: true } },
-                { new: true, runValidators: true }
-            );
-
-            if (!updatedGiveaway) {
-                console.error('Failed to update giveaway:', giveawayId);
-                return;
-            }
+            // Direct update on the object since SQLiteModel.findOneAndUpdate is not reliable with non-PK
+            giveaway.winners = winners;
+            giveaway.ended = true;
+            await giveaway.save();
+            const updatedGiveaway = giveaway;
 
             const message = await channel.messages.fetch(giveaway.messageId);
             let winnerList = winners.map(w => `<@${w.winnerId}>`).join('\n');
@@ -722,7 +738,9 @@ const giveawayActions = {
     },
     rerollGiveaway: async (interaction, giveawayId, userIdsToReroll = []) => {
         try {
-            const giveaway = await Giveaway.findOne({ giveawayId: giveawayId });
+            const lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
+            const giveaways = await Giveaway.find({ giveawayId: giveawayId });
+            const giveaway = giveaways[0];
             if (!giveaway) {
                 return await interaction.reply({ content: lang.Giveaways.GiveawayNotFound, flags: MessageFlags.Ephemeral });
             }
@@ -831,7 +849,9 @@ const giveawayActions = {
             }
         }
     },
-    calculateChance: async (interaction, giveaway) => {
+    calculateChance: async (interaction, giveaway, lang) => {
+        // Ensure lang is available (fallback)
+        if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
         try {
             const userId = interaction.user.id;
             const entrant = giveaway.entrants.find(e => e.entrantId === userId);
@@ -875,7 +895,9 @@ const giveawayActions = {
             });
         }
     },
-    showEntrants: async (interaction) => {
+    showEntrants: async (interaction, lang) => {
+        // Ensure lang is available (fallback)
+        if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
         try {
             await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 

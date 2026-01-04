@@ -445,6 +445,36 @@ Giveaways:
   EntrySuccessMessage: "🎉 You successfully entered the giveaway for **{prize}** hosted by {hostedBy}!"
   LeaveSuccessMessage: "👋 You successfully left the giveaway."
   EntryErrorMessage: "An error occurred while trying to enter the giveaway. Please contact support."
+  CheckChance: "{user} you have a {percent}% chance of winning. ({entries} entries)"
+  NotJoinedGiveaway: "You haven't entered this giveaway!"
+  CalculationError: "Error calculating your odds."
+  GiveawayNotFound: "❌ Giveaway not found!"
+  GiveawayHasntEnded: "❌ Giveaway hasn't ended!"
+  EndMessage: "❌ Giveaway ended!"
+  GiveawayAlreadyEnded: "❌ Giveaway ended!"
+  IncorrectRoleMessage: "❌ You do not have the required role!"
+  IncorrectMinimumServerJoinDateMessage: "❌ You haven't been in the server long enough!"
+  IncorrectMinimumAccountAgeMessage: "❌ Your account is too new!"
+  IncorrectInviteCountMessage: "❌ You don't have enough invites!"
+  IncorrectMessageCountMessage: "❌ You don't have enough messages! (Needed: {required}, Have: {current})"
+  ExtraEntriesMessage: "🎉 You received **{extraEntries}** bonus entries!"
+  NoParticipationMessage: "No valid entrants."
+  WinnerDirectMessage: "🎉 Congratulations! You won **{prize}** in **{serverName}**!"
+  WinMessage: "🎉 Congratulations {winners}! You won **{prize}**!"
+  Embeds:
+    ActiveGiveaway:
+      Prize: "{prize}"
+      HostedByField: "Hosted by:"
+      EndsInField: "Ends in:"
+      EntriesField: "Entries:"
+      WhitelistRoleField: "Allowed Roles:"
+      BlacklistRoleField: "Blocked Roles:"
+      MinimumSeverJoinDateField: "Min Server Join Date:"
+      MinimumAccountAgeField: "Min Account Age:"
+    EndedGiveaway:
+      Title: "Giveaway Ended"
+      WinnersField: "Winners:"
+      EntriesField: "Total Entries:"
 # ===========================================================================
 # KENTA SCRATCH MESSAGES
 # ===========================================================================
@@ -471,6 +501,7 @@ KentaScratch:
 
   Embeds:
     ActiveGiveaway:
+      Title: "🎉 GIVEAWAY 🎉"
       Prize: "## Giveaway {prize} x{winnerCount}!"
       HostedByField: "Hosted by:"
       EndsInField: "Ends in:"

@@ -485,15 +485,41 @@ ErrorGeneric: "Xin lỗi, đã có lỗi với lệnh này."
 # ===========================================================================
 # TIN NHẮN LỆNH GIVEAWAY
 # ===========================================================================
-Giveaways: # Các biến giữ chỗ: {prize} {serverName} {hostedBy} {whitelistRoles} {blacklistRoles} {channel} {winnerCount}
-  EntrySuccessMessage: "🎉 Bạn đã tham gia giveaway do {hostedBy} tổ chức thành công!"
-  LeaveSuccessMessage: "👋 Bạn đã rời khỏi giveaway thành công."
-  EntryErrorMessage: "Đã xảy ra lỗi khi cố gắng tham gia giveaway. Vui lòng liên hệ KentaBuckets Development."
+Giveaways:
+  # Existing & New Keys merged
   CheckChance: "{user} bạn có {percent}% cơ hội thắng giveaway này. ({entries} lượt tham gia)"
   NotJoinedGiveaway: "Bạn chưa tham gia giveaway này!"
   CalculationError: "Đã xảy ra lỗi khi tính toán cơ hội của bạn."
-  GiveawayNotFound: "Không tìm thấy giveaway hoặc nó có thể đã bị xóa...."
-  GiveawayAlreadyEnded: "Giveaway đã kết thúc."
+  GiveawayNotFound: "❌ Không tìm thấy Giveaway!"
+  GiveawayHasntEnded: "❌ Giveaway chưa kết thúc!"
+  EndMessage: "❌ Giveaway đã kết thúc!"
+  GiveawayAlreadyEnded: "❌ Giveaway đã kết thúc!"
+  IncorrectRoleMessage: "❌ Bạn không có vai trò cần thiết để tham gia hoặc bị chặn!"
+  IncorrectMinimumServerJoinDateMessage: "❌ Bạn chưa đủ thời gian tham gia server!"
+  IncorrectMinimumAccountAgeMessage: "❌ Tài khoản của bạn chưa đủ tuổi!"
+  IncorrectInviteCountMessage: "❌ Bạn chưa đủ số lượng lời mời!"
+  IncorrectMessageCountMessage: "❌ Bạn chưa đủ số lượng tin nhắn! (Cần: {required}, Có: {current})"
+  LeaveSuccessMessage: "✅ Bạn đã rời khỏi Giveaway."
+  EntrySuccessMessage: "✅ Bạn đã tham gia Giveaway thành công!"
+  ExtraEntriesMessage: "🎉 Bạn nhận được thêm **{extraEntries}** lượt tham gia!"
+  EntryErrorMessage: "❌ Đã xảy ra lỗi khi tham gia."
+  NoParticipationMessage: "Không có người tham gia hợp lệ."
+  WinnerDirectMessage: "🎉 Chúc mừng! Bạn đã thắng Giveaway **{prize}** tại **{serverName}**!"
+  WinMessage: "🎉 Chúc mừng {winners}! Bạn đã thắng **{prize}**!"
+  Embeds:
+    ActiveGiveaway:
+      Prize: "{prize}"
+      HostedByField: "Tổ chức bởi:"
+      EndsInField: "Kết thúc sau:"
+      EntriesField: "Lượt tham gia:"
+      WhitelistRoleField: "Vai trò được phép:"
+      BlacklistRoleField: "Vai trò bị chặn:"
+      MinimumSeverJoinDateField: "Ngày tham gia server tối thiểu:"
+      MinimumAccountAgeField: "Tuổi tài khoản tối thiểu:"
+    EndedGiveaway:
+      Title: "Giveaway Đã Kết Thúc"
+      WinnersField: "Người thắng cuộc:"
+      EntriesField: "Tổng lượt tham gia:"
   # ===========================================================================
 # TIN NHẮN KENTA SCRATCH
 # ===========================================================================
@@ -515,6 +541,7 @@ KentaScratch:
 
   Embeds:
     ActiveGiveaway:
+      Title: "🎉 QUÀ TẶNG 🎉"
       Prize: "## Giveaway {prize} x{winnerCount}!"
       HostedByField: "Tổ chức bởi:"
       EndsInField: "Kết thúc sau:"

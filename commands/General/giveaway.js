@@ -342,7 +342,7 @@ module.exports = {
                         extraEntries: extraEntries
                     };
 
-                    await giveawayActions.startGiveaway(interaction, giveawayDetails);
+                    await giveawayActions.startGiveaway(interaction, giveawayDetails, lang);
                     break;
                 case "reroll":
                     let rerollGiveawayId = interaction.options.getString("giveaway_id");
