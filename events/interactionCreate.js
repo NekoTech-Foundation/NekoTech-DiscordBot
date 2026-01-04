@@ -64,6 +64,9 @@ module.exports = async (client, interaction) => {
         try {
             await command.execute(interaction, lang);
         } catch (error) {
+            // Ignore Unknown Interaction errors (timeout/expiry)
+            if (error.code === 10062 || (error.rawError && error.rawError.code === 10062)) return;
+
             console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
             
             // Try to send error message, but handle expired interactions gracefully
