@@ -251,11 +251,13 @@ async function handleFish(interaction, config, fishingLang) {
     const cooldownData = fishingCooldowns.get(userId);
     if (cooldownData && Date.now() < cooldownData) {
         const remaining = Math.ceil((cooldownData - Date.now()) / 1000);
-        return interaction.reply({
-            content: fishingLang.Errors.Cooldown.replace('{time}', remaining.toFixed(1)),
-            ephemeral: true
+        await interaction.deferReply({ ephemeral: true });
+        return interaction.editReply({
+            content: fishingLang.Errors.Cooldown.replace('{time}', remaining.toFixed(1))
         });
     }
+
+    await interaction.deferReply();
 
     let locationKey = interaction.options.getString('location');
     if (!locationKey) {
@@ -268,29 +270,25 @@ async function handleFish(interaction, config, fishingLang) {
 
     // Check rod
     if (!equippedRodKey || !userFishing.rods.some(r => r.key === equippedRodKey)) {
-        return interaction.reply({
+    if (!equippedRodKey || !userFishing.rods.some(r => r.key === equippedRodKey)) {
+        return interaction.editReply({
             embeds: [new EmbedBuilder()
                 .setColor('#E74C3C')
                 .setDescription(fishingLang.Errors.NoRod)
-            ],
-            ephemeral: true
+            ]
         });
     }
 
-    const equippedRod = userFishing.rods.find(r => r.key === equippedRodKey);
-    if (equippedRod.durability <= 0) {
         const brokenEmbed = new EmbedBuilder()
             .setColor('#E74C3C')
             .setTitle(fishingLang.Errors.RodBrokenTitle)
             .setDescription(fishingLang.Errors.RodBrokenDesc.replace('{rod}', equippedRod.name));
 
-        return interaction.reply({ embeds: [brokenEmbed], ephemeral: true });
+        return interaction.editReply({ embeds: [brokenEmbed] });
     }
 
     // Set cooldown
     fishingCooldowns.set(userId, Date.now() + (COOLDOWN_SECONDS * 1000));
-
-    await interaction.deferReply();
 
     // Bait selection
     let usedBaitKey = userFishing.equippedBait;
@@ -441,6 +439,7 @@ async function handleFish(interaction, config, fishingLang) {
 }
 
 async function handleInventory(interaction, config) {
+    await interaction.deferReply();
     const userFishing = await getUserFishing(interaction.user.id);
     const { getLang } = require('../../../utils/langLoader');
     const lang = await getLang(interaction.guild.id);
@@ -497,7 +496,7 @@ async function handleInventory(interaction, config) {
     }
     embed.addFields({ name: fishingLang.UI.FishHeader, value: fishInfo });
 
-    await interaction.reply({ embeds: [embed] });
+    await interaction.editReply({ embeds: [embed] });
 }
 
 async function handleSell(interaction, config) {

@@ -91,6 +91,9 @@ async function getUserInviteCount(guildId, userId) {
 const giveawayActions = {
     handleButtonInteraction: async (interaction) => {
         try {
+            if (!interaction.deferred && !interaction.replied) {
+                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+            }
             const lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
             if (interaction.customId === 'check_percent') {
                 const giveaway = await Giveaway.findOne({ 
@@ -100,9 +103,8 @@ const giveawayActions = {
                 });
 
                 if (!giveaway) {
-                    await interaction.reply({
-                        content: "This giveaway has ended or doesn't exist.",
-                        flags: MessageFlags.Ephemeral
+                    await interaction.editReply({
+                        content: "This giveaway has ended or doesn't exist."
                     });
                     return;
                 }
@@ -912,8 +914,6 @@ const giveawayActions = {
     },
     showEntrants: async (interaction, lang) => {
         try {
-            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-            
             // Ensure lang is available (fallback)
             if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
 

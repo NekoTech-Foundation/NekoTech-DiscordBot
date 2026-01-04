@@ -84,4 +84,21 @@ module.exports = {
             interaction.reply({ content: lang.Economy.Messages.error, flags: MessageFlags.Ephemeral });
         }
     },
+    },
 };
+
+function parseDuration(str) {
+    if (!str) return 0;
+    const match = str.match(/(\d+)(s|m|h|d|w)/);
+    if (!match) return 0;
+    const value = parseInt(match[1]);
+    const unit = match[2];
+    switch (unit) {
+        case 's': return value * 1000;
+        case 'm': return value * 60 * 1000;
+        case 'h': return value * 60 * 60 * 1000;
+        case 'd': return value * 24 * 60 * 60 * 1000;
+        case 'w': return value * 7 * 24 * 60 * 60 * 1000;
+        default: return 0;
+    }
+}

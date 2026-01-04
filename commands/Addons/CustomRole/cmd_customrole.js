@@ -165,14 +165,15 @@ module.exports = {
             }
 
             const author = await interaction.guild.members.fetch(customRole.authorId);
-            const expiresAt = customRole.expiresAt ? `<t:${Math.floor(customRole.expiresAt.getTime() / 1000)}:R>` : 'Vĩnh viễn';
+            const expiresAt = customRole.expiresAt ? new Date(customRole.expiresAt) : null;
+            const expiresAtDisplay = expiresAt ? `<t:${Math.floor(expiresAt.getTime() / 1000)}:R>` : 'Vĩnh viễn';
 
             const embed = new EmbedBuilder()
                 .setTitle(`Thông tin role tùy chỉnh: ${role.name}`)
                 .setColor(role.color)
                 .addFields(
                     { name: 'Chủ sở hữu', value: author.toString(), inline: true },
-                    { name: 'Hết hạn', value: expiresAt, inline: true },
+                    { name: 'Hết hạn', value: expiresAtDisplay, inline: true },
                     { name: 'Số người dùng tối đa', value: customRole.maxUsers.toString(), inline: true }
                 );
 
@@ -190,14 +191,15 @@ module.exports = {
             }
 
             if (subcommand === 'info') {
-                const expiresAt = customRole.expiresAt ? `<t:${Math.floor(customRole.expiresAt.getTime() / 1000)}:R>` : 'Vĩnh viễn';
+                const expiresAt = customRole.expiresAt ? new Date(customRole.expiresAt) : null;
+                const expiresAtDisplay = expiresAt ? `<t:${Math.floor(expiresAt.getTime() / 1000)}:R>` : 'Vĩnh viễn';
 
                 const embed = new EmbedBuilder()
                     .setTitle(`Thông tin role tùy chỉnh của bạn: ${role.name}`)
                     .setColor(role.color)
                     .addFields(
                         { name: 'Chủ sở hữu', value: interaction.user.toString(), inline: true },
-                        { name: 'Hết hạn', value: expiresAt, inline: true },
+                        { name: 'Hết hạn', value: expiresAtDisplay, inline: true },
                         { name: 'Số người dùng tối đa', value: customRole.maxUsers.toString(), inline: true }
                     );
 
@@ -287,7 +289,13 @@ module.exports = {
                     position: aboveRole.position - 1,
                 };
                 if (color) {
-                    roleOptions.color = color;
+                    try {
+                        roleOptions.color = color;
+                        // Validate color by attempting resolve, fallback to handling common names if needed is handled by D.js usually, 
+                        // but if strict validation fails, we might want to catch it.
+                    } catch (e) {
+                         roleOptions.color = 'Default';
+                    }
                 }
                 const newRole = await interaction.guild.roles.create(roleOptions);
 
@@ -416,7 +424,8 @@ module.exports = {
                 } else {
                     const extendMilliseconds = parseDuration(timeRange);
                     if (extendMilliseconds > 0) {
-                        customRole.expiresAt = new Date(customRole.expiresAt.getTime() + extendMilliseconds);
+                        const currentExpiry = customRole.expiresAt ? new Date(customRole.expiresAt) : new Date();
+                        customRole.expiresAt = new Date(currentExpiry.getTime() + extendMilliseconds);
                     }
                 }
 
@@ -432,8 +441,9 @@ module.exports = {
                 }
 
                 const reduceMilliseconds = parseDuration(timeRange);
-                if (reduceMilliseconds > 0) {
-                    customRole.expiresAt = new Date(customRole.expiresAt.getTime() - reduceMilliseconds);
+                if (reduceMilliseconds > 0 && customRole.expiresAt) {
+                    const currentExpiry = new Date(customRole.expiresAt);
+                    customRole.expiresAt = new Date(currentExpiry.getTime() - reduceMilliseconds);
                 }
 
                 await customRole.save();

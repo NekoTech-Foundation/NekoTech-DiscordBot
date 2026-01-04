@@ -226,18 +226,18 @@ async function handleXP(message) {
 
             if (channel) {
                 if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
-                    // ... (Embed logic remains same, just inside if(channel))
-                    const embed = new EmbedBuilder().setColor(config.LevelingSystem.LevelUpMessageSettings.Embed?.Color || '#34eb6b');
+                    const embedSettings = config.LevelingSystem.LevelUpMessageSettings.Embed || {};
+                    const embed = new EmbedBuilder().setColor(embedSettings.Color || '#34eb6b');
     
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Title) {
-                        embed.setTitle(replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Title, placeholders));
+                    if (embedSettings.Title) {
+                        embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
                     }
     
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Description && config.LevelingSystem.LevelUpMessageSettings.Embed.Description.length > 0) {
-                        embed.setDescription(config.LevelingSystem.LevelUpMessageSettings.Embed.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
+                    if (embedSettings.Description && embedSettings.Description.length > 0) {
+                        embed.setDescription(embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
                     }
     
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Footer && config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text) {
+                    if (embedSettings.Footer && embedSettings.Footer.Text) {
                         const footerText = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text, placeholders);
                         const footerIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Icon || "", placeholders);
                         if (footerText) {
