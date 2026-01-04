@@ -33,7 +33,7 @@ module.exports = {
     category: 'Moderation',
     async execute(interaction, lang) {
         const client = interaction.client;
-        const requiredRoles = config.ModerationRoles.poll;
+        const requiredRoles = config.ModerationRoles?.poll || [];
         const hasPermission = requiredRoles.some(roleId => interaction.member.roles.cache.has(roleId));
         const isAdministrator = interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
 
@@ -87,13 +87,16 @@ module.exports = {
                 await message.react(pollData.choices[i].emoji);
             }
 
-            const poll = new Poll(pollData);
-            await poll.save();
+            await Poll.create(pollData);
 
             client.polls.set(message.id, pollData);
         } catch (error) {
             console.error('Không thể gửi tin nhắn cuộc thăm dò:', error);
-            await interaction.reply({ content: 'Đã xảy ra lỗi khi tạo cuộc thăm dò.', flags: MessageFlags.Ephemeral });
+            if (interaction.replied || interaction.deferred) {
+                await interaction.followUp({ content: 'Đã xảy ra lỗi khi tạo cuộc thăm dò.', flags: MessageFlags.Ephemeral });
+            } else {
+                await interaction.reply({ content: 'Đã xảy ra lỗi khi tạo cuộc thăm dò.', flags: MessageFlags.Ephemeral });
+            }
         }
     }
 };

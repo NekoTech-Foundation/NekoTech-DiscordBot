@@ -142,7 +142,7 @@ module.exports = {
                 }
                 quantity = seedItem.quantity;
             } else {
-                const quantity = parseInt(quantityInput);
+                quantity = parseInt(quantityInput);
                 if (isNaN(quantity) || quantity <= 0) {
                     return interaction.editReply({ content: farmingLang.Errors.InvalidQuantity });
                 }
