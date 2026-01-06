@@ -196,12 +196,22 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
 
     switch (subCmd) {
 
-        case 'balance':
-            data = await EconomyUserData.find({ guildId: guild.id });
-            // Cleanup debug log if needed or keep it minimal
-            // console.log('[DEBUG] Econ Data Sample:', data[0]);
+        case 'balance': {
+            const allEconData = await EconomyUserData.find({});
+            // Fetch all members to filter with fallback
+            // Note: For very large servers this might be slow, but it's necessary without guild-specific economy
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 }); // 10s timeout
+            } catch (err) {
+                console.warn('[Leaderboard] Member fetch timed out, falling back to cache:', err.message);
+                members = guild.members.cache;
+            }
+            
+            data = allEconData.filter(doc => members.has(doc.userId));
             data.sort((a, b) => (b.balance || 0) - (a.balance || 0));
             break;
+        }
         case 'levels':
             data = await UserData.find({ guildId: guild.id });
             data.sort((a, b) => {
@@ -271,9 +281,17 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
 
 async function getTotalCount(guild, subCmd) {
     switch (subCmd) {
-        case 'balance':
-             // Use EconomyUserData for balance count
-             return await EconomyUserData.countDocuments({ guildId: guild.id });
+        case 'balance': {
+             // Use EconomyUserData for balance count, filtered by guild
+             const allEconData = await EconomyUserData.find({});
+             let members;
+             try {
+                members = await guild.members.fetch({ time: 10000 });
+             } catch (err) {
+                 members = guild.members.cache;
+             }
+             return allEconData.filter(doc => members.has(doc.userId)).length;
+        }
         case 'levels':
         case 'messages': {
              // SQLiteModel countDocuments impl behaves like find().length
