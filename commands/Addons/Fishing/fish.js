@@ -374,6 +374,19 @@ async function handleFish(interaction, config, fishingLang) {
     const caughtFishInfo = getCatch(location, config, usedBaitKey, rodLuck, rodEffects);
 
     if (!caughtFishInfo) {
+        // Fishing animation for failure
+        const baseFrames = ["! . . .", "! . . . !", "! . . . ! .", "! . . . ! . ."];
+         // Simple animation for failure or common-like wait
+        const frames = [...baseFrames, "! . . . ! ! . . ."]; 
+
+        let msg = await interaction.editReply({ content: frames[0], embeds: [], components: [] });
+        for (let i = 1; i < frames.length; i++) {
+             await new Promise(r => setTimeout(r, 1000));
+             await interaction.editReply({ content: frames[i] });
+        }
+        await new Promise(r => setTimeout(r, 1000));
+
+
         await userFishing.save();
 
         const failEmbed = new EmbedBuilder()
@@ -382,8 +395,34 @@ async function handleFish(interaction, config, fishingLang) {
             .setDescription(fishingLang.UI.NoCatchDesc)
             .setFooter({ text: fishingLang.UI.NoCatchFooter.replace('{rod}', equippedRod.name).replace('{durability}', equippedRod.durability) });
 
-        return interaction.editReply({ embeds: [failEmbed] });
+        return interaction.editReply({ content: null, embeds: [failEmbed] });
     }
+
+    // Determine animation based on rarity
+    let frames = [];
+    const base = "! . . . ! !";
+    if (caughtFishInfo.rarity === 'common') {
+        frames = ["! . . .", "! . . . !", "! . . . ! !"];
+    } else if (caughtFishInfo.rarity === 'uncommon') {
+        frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! ."];
+    } else if (caughtFishInfo.rarity === 'rare') {
+         frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! .", "! . . . ! ! . !"]; 
+    } else if (caughtFishInfo.rarity === 'epic') {
+         frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! .", "! . . . ! ! . !", "! . . . ! ! . ! !"];
+    } else if (caughtFishInfo.rarity === 'legendary') {
+         frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! .", "! . . . ! ! . !", "! . . . ! ! . ! !", "! . . . ! ! . ! ! !"];
+    }
+
+    // Play animation
+    // Initial edit to clear bait menu happens here essentially
+    await interaction.editReply({ content: frames[0], embeds: [], components: [] });
+    
+    for (let i = 1; i < frames.length; i++) {
+        await new Promise(r => setTimeout(r, 1000)); // 1 second delay per frame
+        await interaction.editReply({ content: frames[i] });
+    }
+    await new Promise(r => setTimeout(r, 1000)); // Wait a bit after final frame
+
 
     // Add fish to inventory
     const weight = Math.random() * (caughtFishInfo.max_weight - caughtFishInfo.min_weight) +
@@ -437,8 +476,11 @@ async function handleFish(interaction, config, fishingLang) {
         });
     }
 
-    await interaction.editReply({ embeds: [successEmbed] });
+    await interaction.editReply({ content: null, embeds: [successEmbed] });
 }
+
+// Rename function in exports below to match logic if needed, but the handler logic is inside
+// We need to update the export definition to match the new command structure.
 
 async function handleInventory(interaction, config) {
     await interaction.deferReply();
@@ -810,11 +852,11 @@ async function handleHelp(interaction) {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('cauca')
+        .setName('fish')
         .setDescription('Các lệnh liên quan đến câu cá.')
         .addSubcommand(subcommand =>
             subcommand
-                .setName('fish')
+                .setName('cauca')
                 .setDescription('Câu cá tại một địa điểm.')
                 .addStringOption(option => {
                     const config = loadFishingConfig();
@@ -904,7 +946,7 @@ module.exports = {
 
         try {
             switch (subcommand) {
-                case 'fish':
+                case 'cauca':
                     await handleFish(interaction, config, fishingLang);
                     break;
                 case 'inventory':
