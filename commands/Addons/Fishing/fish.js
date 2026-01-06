@@ -371,57 +371,130 @@ async function handleFish(interaction, config, fishingLang) {
     const rodConfig = config.rods[equippedRodKey];
     const rodLuck = rodConfig ? rodConfig.luck : 0;
     const rodEffects = rodConfig ? rodConfig.effects : {};
+    
+    // ROD SNAP MECHANIC
+    // 0.5% chance to snap
+    const snapChance = 0.005;
+    const isSnapped = Math.random() < snapChance;
+    
     const caughtFishInfo = getCatch(location, config, usedBaitKey, rodLuck, rodEffects);
 
-    if (!caughtFishInfo) {
-        // Fishing animation for failure
-        const baseFrames = ["! . . .", "! . . . !", "! . . . ! .", "! . . . ! . ."];
-         // Simple animation for failure or common-like wait
-        const frames = [...baseFrames, "! . . . ! ! . . ."]; 
+    // Animation frames generator
+    const createFishingEmbed = (title, desc, color) => new EmbedBuilder()
+        .setTitle(title)
+        .setColor(color)
+        .setDescription(desc)
+        .setFooter({ text: 'Đang câu...' });
 
-        let msg = await interaction.editReply({ content: frames[0], embeds: [], components: [] });
-        for (let i = 1; i < frames.length; i++) {
-             await new Promise(r => setTimeout(r, 1000));
-             await interaction.editReply({ content: frames[i] });
+    // Handle Rod Snap
+    if (isSnapped) {
+        // ... (Snap logic remains same, maybe enhance color/title)
+        const snapFrames = [
+            { title: 'Quăng dây...', color: '#3498DB', desc: "🎣 🌊 🌊 🌊" },
+            { title: 'Đang chờ...', color: '#3498DB', desc: "🎣 🌊 🐟 🌊" },
+            { title: 'CÓ BIẾN!', color: '#F1C40F', desc: "🎣 🌊 🐟 ❗" },
+            { title: 'GÃY CẦN RỒI!', color: '#E74C3C', desc: "🎣 🌊 💥 😱" },
+            { title: 'Xong phim...', color: '#2C3E50', desc: "🎣 🧵 🌊" }
+        ];
+
+        await interaction.editReply({ content: null, embeds: [createFishingEmbed(snapFrames[0].title, snapFrames[0].desc, snapFrames[0].color)], components: [] });
+        for (let i = 1; i < snapFrames.length; i++) {
+             await new Promise(r => setTimeout(r, 1500));
+             await interaction.editReply({ content: null, embeds: [createFishingEmbed(snapFrames[i].title, snapFrames[i].desc, snapFrames[i].color)] });
         }
         await new Promise(r => setTimeout(r, 1000));
 
-
+        equippedRod.durability = 1; 
         await userFishing.save();
 
+        const snapEmbed = new EmbedBuilder()
+            .setColor('#E74C3C')
+            .setTitle('💥 Cần câu bị gãy!')
+            .setDescription(`Ôi không! Con cá quá mạnh đã làm gãy cần câu của bạn!\nĐộ bền cần câu **${equippedRod.name}** đã giảm xuống còn **1**.\nHãy sửa nó trước khi câu tiếp!`)
+            .setFooter({ text: 'Thật không may mắn...' })
+            .setTimestamp();
+
+        return interaction.editReply({ content: null, embeds: [snapEmbed] });
+    }
+
+    if (!caughtFishInfo) {
+        // Animation for failure
+        const frames = [
+            { title: 'Quăng dây...', color: '#3498DB', desc: "🎣 💨 〰️ 🌊" },
+            { title: 'Đang chờ...', color: '#3498DB', desc: "🌊 🌊 🏖️ 🌊 🌊" },
+            { title: 'Đang chờ...', color: '#3498DB', desc: "🌊 🐟 🦴 🌊 🌊" },
+            { title: 'Hụt rồi!', color: '#95A5A6', desc: "🎣 🌊 🐟 💨" }
+        ];
+
+        await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[0].title, frames[0].desc, frames[0].color)], components: [] });
+        for (let i = 1; i < frames.length; i++) {
+             await new Promise(r => setTimeout(r, 1500));
+             await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[i].title, frames[i].desc, frames[i].color)] });
+        }
+        await new Promise(r => setTimeout(r, 1000));
+
+        await userFishing.save();
         const failEmbed = new EmbedBuilder()
             .setColor('#95A5A6')
             .setTitle(fishingLang.UI.NoCatchTitle)
             .setDescription(fishingLang.UI.NoCatchDesc)
             .setFooter({ text: fishingLang.UI.NoCatchFooter.replace('{rod}', equippedRod.name).replace('{durability}', equippedRod.durability) });
-
         return interaction.editReply({ content: null, embeds: [failEmbed] });
     }
 
     // Determine animation based on rarity
     let frames = [];
-    const base = "! . . . ! !";
+    const baseCast = { title: 'Quăng dây...', color: '#3498DB', desc: "🎣 💨 〰️ 🌊" };
+    const baseWait = [
+        { title: 'Đang chờ...', color: '#3498DB', desc: "🌊 🌊 🏖️ 🌊 🌊" },
+        { title: 'Đang chờ...', color: '#3498DB', desc: "🌊 🐟 🦴 🌊 🌊" }
+    ];
+    const biteFrame = { title: 'CÓ BIẾN!', color: '#F1C40F', desc: "🌊 🐟 👀 🪱 🌊" };
+    
+    let hookSequence = [];
+    
     if (caughtFishInfo.rarity === 'common') {
-        frames = ["! . . .", "! . . . !", "! . . . ! !"];
+        hookSequence = [
+             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" }
+        ];
     } else if (caughtFishInfo.rarity === 'uncommon') {
-        frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! ."];
+        hookSequence = [
+             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" }
+        ];
     } else if (caughtFishInfo.rarity === 'rare') {
-         frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! .", "! . . . ! ! . !"]; 
+         hookSequence = [
+             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
+             { title: 'CỐ LÊN!', color: '#E74C3C', desc: "🎣 🎣 🐟 💦 💦" }
+         ]; 
     } else if (caughtFishInfo.rarity === 'epic') {
-         frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! .", "! . . . ! ! . !", "! . . . ! ! . ! !"];
+         hookSequence = [
+             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
+             { title: 'CỐ LÊN!', color: '#E74C3C', desc: "🎣 🎣 🐟 💦 💦" },
+             { title: 'SẮP ĐƯỢC RỒI!', color: '#C0392B', desc: "🎣 ✨ 🐟 ✨ 💦" }
+         ];
     } else if (caughtFishInfo.rarity === 'legendary') {
-         frames = ["! . . .", "! . . . !", "! . . . ! !", "! . . . ! ! .", "! . . . ! ! . !", "! . . . ! ! . ! !", "! . . . ! ! . ! ! !"];
+         hookSequence = [
+             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
+             { title: 'RẤT MẠNH!', color: '#E74C3C', desc: "🎣 🔥 🐟 🔥 💦" },
+             { title: 'KHÔNG ĐƯỢC THOÁT!', color: '#C0392B', desc: "🎣 ⚡ 🐟 ⚡ 💦" },
+             { title: 'LÊN NÀO!', color: '#F1C40F', desc: "🎣 🌟 🐟 🌟 💦" }
+         ];
     }
+    
+    frames = [baseCast, ...baseWait, biteFrame, ...hookSequence];
 
     // Play animation
-    // Initial edit to clear bait menu happens here essentially
-    await interaction.editReply({ content: frames[0], embeds: [], components: [] });
+    await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[0].title, frames[0].desc, frames[0].color)], components: [] });
     
     for (let i = 1; i < frames.length; i++) {
-        await new Promise(r => setTimeout(r, 1000)); // 1 second delay per frame
-        await interaction.editReply({ content: frames[i] });
+        await new Promise(r => setTimeout(r, 1500));
+        await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[i].title, frames[i].desc, frames[i].color)] });
     }
-    await new Promise(r => setTimeout(r, 1000)); // Wait a bit after final frame
+    await new Promise(r => setTimeout(r, 1000)); 
 
 
     // Add fish to inventory
