@@ -190,38 +190,60 @@ async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageS
 
 async function getLeaderboardData(guild, subCmd, page, pageSize) {
     const skip = page * pageSize;
+    let data = [];
+
     switch (subCmd) {
         case 'balance':
-            return await UserData.find({ guildId: guild.id })
-                .sort({ balance: -1 })
-                .skip(skip)
-                .limit(pageSize)
-                .lean();
+            data = await UserData.find({ guildId: guild.id });
+            data.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+            break;
         case 'levels':
-            return await UserData.find({ guildId: guild.id })
-                .sort({ level: -1, xp: -1 })
-                .skip(skip)
-                .limit(pageSize)
-                .lean();
+            data = await UserData.find({ guildId: guild.id });
+            data.sort((a, b) => {
+                if ((b.level || 0) !== (a.level || 0)) {
+                    return (b.level || 0) - (a.level || 0);
+                }
+                return (b.xp || 0) - (a.xp || 0);
+            });
+            break;
         case 'messages':
-            return await UserData.find({ guildId: guild.id })
-                .sort({ totalMessages: -1 })
-                .skip(skip)
-                .limit(pageSize)
-                .lean();
-        case 'invites':
-            return await Invite.aggregate([
-                { $match: { guildId: guild.id } },
-                { $group: { _id: '$inviterId', invites: { $sum: '$uses' } } },
-                { $sort: { invites: -1 } },
-                { $skip: skip },
-                { $limit: pageSize }
-            ]);
-        case 'cauca': {
-            const docs = await fishingSchema
-                .find({ 'inventory.0': { $exists: true } });
+            data = await UserData.find({ guildId: guild.id });
+            data.sort((a, b) => (b.totalMessages || 0) - (a.totalMessages || 0));
+            break;
+        case 'invites': {
+            const allInvites = await Invite.find({ guildId: guild.id });
+            const inviterMap = {};
+            
+            for (const inv of allInvites) {
+                if (!inv.inviterId) continue;
+                if (!inviterMap[inv.inviterId]) {
+                    inviterMap[inv.inviterId] = 0;
+                }
+                inviterMap[inv.inviterId] += (inv.uses || 0);
+            }
 
-            const scored = docs
+            data = Object.entries(inviterMap).map(([inviterId, count]) => ({
+                _id: inviterId, // compatible with previous structure awaiting fetch(user._id)
+                userId: inviterId, 
+                invites: count
+            }));
+            
+            data.sort((a, b) => b.invites - a.invites);
+            break;
+        }
+        case 'cauca': {
+            // fishingSchema logic was mostly fine but let's ensure consistency
+            const docs = await fishingSchema.find({}); // Fetch key is 'userId' usually, but inventory check needs all 
+            // The original logic was: .find({ 'inventory.0': { $exists: true } });
+            // SQLiteModel's find supports basic matching but $exists operator support in findAll/find is limited/not guaranteed by the simple implementation we saw.
+            // Safe bet: fetch all matching users who have data, then filter in JS.
+            // Assuming fishingSchema uses userId as PK.
+            
+            // Actually, let's look at fishingSchema implementation again. It wraps a single SQLite table.
+            // We just fetch all valid fishing users.
+            const allFishers = await fishingSchema.find({});
+            
+            data = allFishers
                 .map(doc => ({
                     ...doc,
                     catchCount: (doc.inventory || []).reduce(
@@ -231,33 +253,48 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
                 }))
                 .filter(doc => doc.catchCount > 0)
                 .sort((a, b) => b.catchCount - a.catchCount);
-
-            return scored.slice(skip, skip + pageSize);
+            
+            // data is already sorted and ready
+            return data.slice(skip, skip + pageSize);
         }
         default:
             return [];
     }
+
+    return data.slice(skip, skip + pageSize);
 }
 
 async function getTotalCount(guild, subCmd) {
     switch (subCmd) {
         case 'balance':
         case 'levels':
-        case 'messages':
-            return await UserData.countDocuments({ guildId: guild.id });
-        case 'invites': {
-            const inviteCount = await Invite.aggregate([
-                { $match: { guildId: guild.id } },
-                { $group: { _id: '$inviterId', invites: { $sum: '$uses' } } },
-                { $match: { invites: { $gt: 0 } } },
-                { $count: 'total' }
-            ]);
-            return inviteCount[0]?.total || 0;
+        case 'messages': {
+             // SQLiteModel countDocuments impl behaves like find().length
+             return await UserData.countDocuments({ guildId: guild.id });
         }
-        case 'cauca':
-            return await fishingSchema.countDocuments({
-                'inventory.0': { $exists: true }
-            });
+        case 'invites': {
+            const allInvites = await Invite.find({ guildId: guild.id });
+            const extractInviters = new Set(allInvites.map(i => i.inviterId).filter(id => id));
+            // We only want inviters with > 0 invites ideally, but the previous aggregate did:
+            // match invites > 0.
+            // Let's replicate logic:
+            
+            const inviterMap = {};
+             for (const inv of allInvites) {
+                if (!inv.inviterId) continue;
+                if (!inviterMap[inv.inviterId]) inviterMap[inv.inviterId] = 0;
+                inviterMap[inv.inviterId] += (inv.uses || 0);
+            }
+            
+            return Object.values(inviterMap).filter(count => count > 0).length;
+        }
+        case 'cauca': {
+            // Replicate the 'inventory.0 exists' logic by checking inventory length in memory if needed, 
+            // or trust the previous countDocuments if it works (it calls find).
+            // But fishingSchema.find() is cleaner.
+            const allFishers = await fishingSchema.find({});
+            return allFishers.filter(f => f.inventory && f.inventory.length > 0).length;
+        }
         default:
             return 0;
     }
@@ -461,10 +498,21 @@ module.exports = {
             });
         } catch (error) {
             console.error(error);
-            await interaction.editReply({
-                content: lang.Leaderboard.Error.replace(/{guild}/g, interaction.guild.name),
-                flags: MessageFlags.Ephemeral
-            });
+            const errorMessage = lang?.Leaderboard?.Error 
+                ? lang.Leaderboard.Error.replace(/{guild}/g, interaction.guild.name)
+                : 'Đã xảy ra lỗi khi lấy bảng xếp hạng.';
+                
+            if (interaction.deferred || interaction.replied) {
+                 await interaction.editReply({
+                    content: errorMessage,
+                    flags: MessageFlags.Ephemeral
+                });
+            } else {
+                 await interaction.reply({
+                    content: errorMessage,
+                    flags: MessageFlags.Ephemeral
+                });
+            }
         }
     }
 };
