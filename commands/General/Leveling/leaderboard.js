@@ -14,11 +14,13 @@ const { getConfig, getLang } = require('../../../utils/configLoader.js');
 const config = getConfig();
 const lang = getLang();
 const UserData = require('../../../models/UserData.js');
+const EconomyUserData = require('../../../models/EconomyUserData.js');
 const Invite = require('../../../models/inviteSchema.js');
 const fishingSchema = require('../../Addons/Fishing/schemas/fishingSchema.js');
 
 function formatNumber(num) {
     if (num === undefined || num === null) num = 0;
+    if (num === 0 || Number(num) === 0) return '0';
     const suffixes = ['', 'k', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
     const magnitude = Math.floor(Math.log10(Math.abs(num)) / 3);
 
@@ -193,8 +195,11 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
     let data = [];
 
     switch (subCmd) {
+
         case 'balance':
-            data = await UserData.find({ guildId: guild.id });
+            data = await EconomyUserData.find({ guildId: guild.id });
+            // Cleanup debug log if needed or keep it minimal
+            // console.log('[DEBUG] Econ Data Sample:', data[0]);
             data.sort((a, b) => (b.balance || 0) - (a.balance || 0));
             break;
         case 'levels':
@@ -267,6 +272,8 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
 async function getTotalCount(guild, subCmd) {
     switch (subCmd) {
         case 'balance':
+             // Use EconomyUserData for balance count
+             return await EconomyUserData.countDocuments({ guildId: guild.id });
         case 'levels':
         case 'messages': {
              // SQLiteModel countDocuments impl behaves like find().length

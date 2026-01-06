@@ -104,7 +104,9 @@ class SQLiteModel {
              const rows = db.prepare(`SELECT data FROM ${this.tableName}`).all();
              return rows.map(row => {
                  const data = JSON.parse(row.data);
-                 return this._wrap(data);
+                 const defaultObj = this.defaultDataFn ? this.defaultDataFn(data) : {};
+                 const merged = { ...defaultObj, ...data };
+                 return this._wrap(merged);
              });
         }
         
@@ -139,7 +141,11 @@ class SQLiteModel {
                 }
                 if (!match) break;
             }
-            if (match) results.push(this._wrap(data));
+            if (match) {
+                const defaultObj = this.defaultDataFn ? this.defaultDataFn(data) : {};
+                const merged = { ...defaultObj, ...data };
+                results.push(this._wrap(merged));
+            }
         }
         return results;
     }

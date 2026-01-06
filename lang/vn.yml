@@ -1594,7 +1594,38 @@ Economy:
       ResultDesc: "Bóng rơi vào: **{result}**\nBạn chọn: **{color}**"
       Red: "ĐỎ"
       Black: "ĐEN"
-      Green: "XANHL"
+      Green: "XANH LÁ"
+
+    Blackjack:
+      WinTitle: "Xì Dách Thắng! 🎉"
+      WinDesc: "{user} đã thắng nhà cái!"
+      Draw: "Hòa!"
+      Win: "Bạn Thắng!"
+      Lose: "Bạn Thua!"
+      ResultTitle: "Kết quả Xì Dách"
+      ResultDesc: "Bạn có {pVal}, Nhà cái có {dVal}."
+      BustTitle: "Quắc! 💥"
+      BustDesc: "Bạn đã vượt quá 21 điểm!"
+      Fields:
+        Player: "Người chơi"
+        Bet: "Cược"
+        Win: "Thắng"
+        Lose: "Thua"
+        Result: "Kết quả"
+        Balance: "Số dư"
+
+    Coinflip:
+      Heads: "Mặt Sấp"
+      Tails: "Mặt Ngửa"
+      WinTitle: "Tung Xu Thắng! 🪙"
+      LoseTitle: "Tung Xu Thua! 🪙"
+      ResultDesc: "Kết quả: **{result}**\nBạn chọn: **{guess}**"
+
+    Slot:
+      SpinningTitle: "Đang quay... 🎰"
+      WinTitle: "Jackpot! 🎉"
+      LoseTitle: "Thua rồi... 🎰"
+      WinDesc: "**{r}**"
 
   Games:
     Crime:
