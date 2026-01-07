@@ -68,9 +68,11 @@ class KentaScratch {
         // 3. Components (Buttons, Selects)
         // Regex for {button:id,id2} and {select:id}
         const buttonRegex = /{button:([^}]+)}/g;
-        let buttonMatch;
-        while ((buttonMatch = buttonRegex.exec(parsedContent)) !== null) {
-            const buttonIds = buttonMatch[1].split(',').map(s => s.trim());
+        // Collect matches first to avoid regex index issues when modifying string
+        const buttonMatches = [...parsedContent.matchAll(buttonRegex)];
+
+        for (const match of buttonMatches) {
+            const buttonIds = match[1].split(',').map(s => s.trim());
             const row = new ActionRowBuilder();
             for (const btnId of buttonIds) {
                 const btnData = await models.Button.findOne({ id: btnId, guildId: context.guild?.id });
@@ -79,13 +81,14 @@ class KentaScratch {
                 }
             }
             if (row.components.length > 0) components.push(row);
-            parsedContent = parsedContent.replace(buttonMatch[0], ''); // Remove tag
+            parsedContent = parsedContent.replace(match[0], '');
         }
 
         const selectRegex = /{select:([^}]+)}/g;
-        let selectMatch;
-        while ((selectMatch = selectRegex.exec(parsedContent)) !== null) {
-             const selectIds = selectMatch[1].split(',').map(s => s.trim());
+        const selectMatches = [...parsedContent.matchAll(selectRegex)];
+
+        for (const match of selectMatches) {
+             const selectIds = match[1].split(',').map(s => s.trim());
              for (const selId of selectIds) {
                  const selData = await models.Select.findOne({ id: selId, guildId: context.guild?.id });
                  if (selData) {
@@ -93,47 +96,26 @@ class KentaScratch {
                     components.push(row);
                  }
              }
-             parsedContent = parsedContent.replace(selectMatch[0], ''); // Remove tag
+             parsedContent = parsedContent.replace(match[0], '');
         }
         
         // 4. Layouts
         const layoutRegex = /{layout:([^}]+)}/g;
-        let layoutMatch;
-        while ((layoutMatch = layoutRegex.exec(parsedContent)) !== null) {
-            const layoutName = layoutMatch[1].trim();
+        const layoutMatches = [...parsedContent.matchAll(layoutRegex)];
+
+        for (const match of layoutMatches) {
+            const layoutName = match[1].trim();
             const layoutData = await models.Layout.findOne({ name: layoutName, guildId: context.guild?.id });
+            
+            let accumulatedText = '';
+
             if (layoutData) {
-                // Layouts replace the entire content structure essentially, but if used in a string, they might append?
-                // For KentaBuckets, {layout:name} usually completely controls the output.
-                // We will parse the layout definition and merge it.
                 try {
                     const layoutJson = JSON.parse(layoutData.json_data || '[]');
                     
                     for (const comp of layoutJson) {
                         if (comp.type === 'text') {
-                             // Append to content. If parsedContent was just the tag, it replaces it.
-                             // But since we are replacing the tag with empty string later, we should append to a 'layoutContent' var or modify parsedContent directly?
-                             // Using a separate buffer for layout content is safer.
-                             // But here we are processing the string. 
-                             // Let's treat layout content as supplementary or Primary if it's the only thing.
-                             // For now, let's append to embeds or content. 
-                             // If it's pure text, we can't easily "insert" it where the tag was if we have multiple components.
-                             // Simplification: Layouts append to the END of the message structure usually.
-                             // Or we can add it as a Description in an Embed if it's rich text.
-                             
-                             // Let's assume 'text' means adding text to the message body.
-                             // We'll append it to a temporary string to replace the tag with?
-                             parsedContent = parsedContent.replace(layoutMatch[0], comp.content + '\n');
-                             // Wait, we are in a regex loop. replacing layoutMatch[0] affects the string we are iterating?
-                             // Using replace implies we won't see this tag again.
-                             
-                             // Actually, simpler approach: Build a "Layout Result" and merge.
-                             // But since we need to support mix, let's just push to embeds/components.
-                             if (comp.content) {
-                                 // Add as simple embed description if possible to separate? Or just raw content.
-                                 // Let's append to raw content via a special marker or just concat.
-                                 // But wait, the loop at the end removes the tag.
-                             }
+                             accumulatedText += comp.content + '\n';
                         }
                         else if (comp.type === 'button') {
                             const btnIds = comp.content.split(',').map(s => s.trim());
@@ -159,7 +141,7 @@ class KentaScratch {
                             }
                         }
                         else if (comp.type === 'separator') {
-                             embeds.push(new EmbedBuilder().setDescription('***')); // Visual separator using embed? or just text
+                             accumulatedText += '***\n';
                         }
                         else if (comp.type === 'section') {
                              embeds.push(new EmbedBuilder().setTitle('Section').setDescription(comp.content || ' '));
@@ -167,16 +149,17 @@ class KentaScratch {
                     }
                     
                     // Special case for text: if we found text components, we might want to return them.
-                    // But parsedContent is the main string.
-                    // Let's assume Layouts are mostly for components/embeds.
-                    // Any text in layout is treated as Embed Description for now to ensure visibility?
-                    // Or we just let it be.
                     
                 } catch (e) {
                     console.error('Failed to parse layout JSON:', e);
                 }
             }
-            parsedContent = parsedContent.replace(layoutMatch[0], '');
+            
+            if (accumulatedText) {
+                parsedContent = parsedContent.replace(match[0], accumulatedText);
+            } else {
+                parsedContent = parsedContent.replace(match[0], '');
+            }
         }
 
         // 5. Random

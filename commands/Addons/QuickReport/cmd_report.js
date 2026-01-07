@@ -154,7 +154,7 @@ module.exports = {
         if (!group) {
             if (subcommand === 'message') {
                 const channel = interaction.options.getChannel('channel');
-                const messageId = interaction.options.getString('message_id');
+                const messageId = interaction.options.getString('message_id').trim();
                 const reason = interaction.options.getString('reason');
                 const silent = interaction.options.getBoolean('silent') ?? false;
 
@@ -163,14 +163,39 @@ module.exports = {
                     return interaction.reply({ content: 'Tính năng báo cáo chưa được bật trên máy chủ này.', ephemeral: true });
                 }
 
-                const message = await channel.messages.fetch(messageId);
+                if (!channel.messages) {
+                     return interaction.reply({ content: 'Không thể tìm nạp tin nhắn từ loại kênh này.', ephemeral: true });
+                }
+
+                let message;
+                try {
+                    message = await channel.messages.fetch(messageId);
+                } catch (e) {
+                    message = null;
+                }
+
+                // If not found in main channel, try searching in active threads
+                if (!message && channel.threads) {
+                    try {
+                        const fetchedThreads = await channel.threads.fetchActive();
+                        for (const [threadId, thread] of fetchedThreads.threads) {
+                            try {
+                                message = await thread.messages.fetch(messageId);
+                                if (message) break;
+                            } catch (e) { /* Ignore thread fetch errors */ }
+                        }
+                    } catch (err) {
+                        console.error('Failed to fetch/search threads:', err);
+                    }
+                }
+
                 if (!message) {
-                    return interaction.reply({ content: 'Không tìm thấy tin nhắn.', ephemeral: true });
+                    return interaction.reply({ content: 'Không tìm thấy tin nhắn (hoặc tin nhắn đã bị xóa). \n*Lưu ý: Nếu tin nhắn ở trong Thread, hãy đảm bảo bot có quyền xem Thread đó.*', ephemeral: true });
                 }
 
                 const reportId = await getNextReportId(guildId);
 
-                const report = new Report({
+                const report = await Report.create({
                     reportId,
                     guildId,
                     reporterId: interaction.user.id,
@@ -180,9 +205,13 @@ module.exports = {
                     reason,
                 });
 
-                await report.save();
-
-                const receiveChannel = await interaction.client.channels.fetch(settings.receiveChannelId);
+                let receiveChannel;
+                try {
+                     receiveChannel = await interaction.client.channels.fetch(settings.receiveChannelId);
+                } catch (error) {
+                    console.error('Failed to fetch receive channel:', error);
+                }
+                
                 if (receiveChannel) {
                     const embed = new EmbedBuilder()
                         .setTitle(`Báo cáo mới #${reportId}`)
@@ -218,8 +247,9 @@ module.exports = {
                     .setColor('Blue');
 
                 for (const report of reports) {
-                    const reporterUser = await interaction.client.users.fetch(report.reporterId);
-                    const reportedUser = await interaction.client.users.fetch(report.reportedUserId);
+                    let reporterUser, reportedUser;
+                    try { reporterUser = await interaction.client.users.fetch(report.reporterId); } catch { reporterUser = { tag: 'Unknown User' }; }
+                    try { reportedUser = await interaction.client.users.fetch(report.reportedUserId); } catch { reportedUser = { tag: 'Unknown User' }; }
                     embed.addFields({
                         name: `Báo cáo #${report.reportId}`,
                         value: `**Người báo cáo:** ${reporterUser.tag}\n**Người bị báo cáo:** ${reportedUser.tag}\n**Trạng thái:** ${report.status}`
@@ -237,15 +267,29 @@ module.exports = {
                     return interaction.reply({ content: 'Không tìm thấy báo cáo.', ephemeral: true });
                 }
 
-                const reporterUser = await interaction.client.users.fetch(report.reporterId);
-                const reportedUser = await interaction.client.users.fetch(report.reportedUserId);
-                const channel = await interaction.client.channels.fetch(report.channelId);
-                const message = await channel.messages.fetch(report.messageId);
+                let reporterUser, reportedUser, channel, message;
+                try { reporterUser = await interaction.client.users.fetch(report.reporterId); } catch { reporterUser = { toString: () => 'Unknown User' }; }
+                try { reportedUser = await interaction.client.users.fetch(report.reportedUserId); } catch { reportedUser = { toString: () => 'Unknown User' }; }
+                
+                try { channel = await interaction.client.channels.fetch(report.channelId); } catch { channel = null; }
+                
+                let messageContent = 'Không thể tải nội dung (Tin nhắn đã bị xóa hoặc kênh không tồn tại)';
+                let messageUrl = '#';
+
+                if (channel) {
+                    try {
+                        message = await channel.messages.fetch(report.messageId);
+                        messageContent = message.content;
+                        messageUrl = message.url;
+                    } catch {
+                         // Message deleted
+                    }
+                }
 
                 const embed = new EmbedBuilder()
                     .setTitle(`Báo cáo #${report.reportId}`)
-                    .setDescription(`**Người báo cáo:** ${reporterUser}\n**Người bị báo cáo:** ${reportedUser}\n**Lý do:** ${report.reason}\n**Trạng thái:** ${report.status}\n\n**Nội dung tin nhắn:**\n${message.content}`)
-                    .addFields({ name: 'Tin nhắn gốc', value: `[Bấm vào đây](${message.url})` })
+                    .setDescription(`**Người báo cáo:** ${reporterUser}\n**Người bị báo cáo:** ${reportedUser}\n**Lý do:** ${report.reason}\n**Trạng thái:** ${report.status}\n\n**Nội dung tin nhắn:**\n${messageContent}`)
+                    .addFields({ name: 'Tin nhắn gốc', value: `[Bấm vào đây](${messageUrl})` })
                     .setColor('Blue')
                     .setTimestamp(report.createdAt);
 
@@ -373,6 +417,11 @@ module.exports = {
 };
 
 async function getNextReportId(guildId) {
-    const lastReport = await Report.findOne({ guildId }).sort({ reportId: -1 });
-    return (lastReport ? lastReport.reportId : 0) + 1;
+    const reports = await Report.find({ guildId });
+    if (!reports || reports.length === 0) {
+        return 1;
+    }
+    // Sort manually since SQLiteModel doesn't support .sort()
+    reports.sort((a, b) => b.reportId - a.reportId);
+    return reports[0].reportId + 1;
 }
