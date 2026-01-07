@@ -16,10 +16,11 @@ const { getUserFarm } = require('../../Addons/Farming/farmUtils.js');
 let vesoAddon = null;
 let vesoConfig = null;
 try {
-    vesoAddon = require('../../Addons/VeSo/veso.js');
+    vesoAddon = require('../../Addons/VeSo/veso.js'); // Ensure this path is correct relative to store.js
     vesoConfig = yaml.load(fs.readFileSync(path.join(__dirname, '../../Addons/VeSo/config.yml'), 'utf8'));
 } catch (error) {
     // Vé số addon không có hoặc chưa cài
+    console.log('[Store] VeSo addon load warning:', error.message);
 }
 
 module.exports = {

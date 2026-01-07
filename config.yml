@@ -292,6 +292,43 @@ Store:
       Price: 400
       Description: "Speeds up growth and increases yield"
 
+  "Vé Số":
+    Ticket50:
+      Name: "Vé Số (50 xu)"
+      Price: 50
+      Description: "Vé số may mắn mệnh giá 50 xu."
+      Type: "VeSo"
+    Ticket100:
+      Name: "Vé Số (100 xu)"
+      Price: 100
+      Description: "Vé số may mắn mệnh giá 100 xu."
+      Type: "VeSo"
+    Ticket300:
+      Name: "Vé Số (300 xu)"
+      Price: 300
+      Description: "Vé số may mắn mệnh giá 300 xu."
+      Type: "VeSo"
+    Ticket500:
+      Name: "Vé Số (500 xu)"
+      Price: 500
+      Description: "Vé số may mắn mệnh giá 500 xu."
+      Type: "VeSo"
+    Ticket1000:
+      Name: "Vé Số (1000 xu)"
+      Price: 1000
+      Description: "Vé số may mắn mệnh giá 1000 xu."
+      Type: "VeSo"
+    Ticket2000:
+      Name: "Vé Số (2000 xu)"
+      Price: 2000
+      Description: "Vé số may mắn mệnh giá 2000 xu."
+      Type: "VeSo"
+    Ticket4000:
+      Name: "Vé Số (4000 xu)"
+      Price: 4000
+      Description: "Vé số may mắn mệnh giá 4000 xu."
+      Type: "VeSo"
+
 # ===========================================================================
 # SUGGESTIONS
 # ===========================================================================

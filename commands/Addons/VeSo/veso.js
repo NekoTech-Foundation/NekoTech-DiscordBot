@@ -5,7 +5,7 @@ const yaml = require('js-yaml');
 const path = require('path');
 const moment = require('moment-timezone');
 const VeSo = require('./VesoSchema');
-const UserData = require('../../../models/UserData');
+const EconomyUserData = require('../../../models/EconomyUserData');
 const { getConfig } = require('../../../utils/configLoader');
 
 module.exports.run = async (client) => {
@@ -58,15 +58,14 @@ module.exports.run = async (client) => {
             await interaction.deferReply({ ephemeral: true });
             
             // Get user data
-            let user = await UserData.findOne(
-                { userId: interaction.user.id, guildId: interaction.guild.id },
+            let user = await EconomyUserData.findOne(
+                { userId: interaction.user.id },
                 { balance: 1, transactionLogs: 1 }
             );
 
             if (!user) {
-                user = await UserData.create({ 
+                user = await EconomyUserData.create({ 
                     userId: interaction.user.id, 
-                    guildId: interaction.guild.id, 
                     balance: 0,
                     transactionLogs: []
                 });
@@ -83,7 +82,8 @@ module.exports.run = async (client) => {
                 });
             }
             
-            // Check if ticket already purchased
+            // Check if ticket already purchased (Check removed to allow multiple winners)
+            /* 
             const vesoData = await VeSo.findOne({ guildId: interaction.guild.id });
             if (vesoData) {
                 const existingTicket = vesoData.tickets.find(t => 
@@ -98,6 +98,7 @@ module.exports.run = async (client) => {
                     });
                 }
             }
+            */
             
             // Buy ticket with chosen numbers
             const ticketData = await module.exports.buyTicket(interaction.user.id, interaction.guild.id, price, numbers);
@@ -182,63 +183,90 @@ async function drawLottery(client, config, mainConfig, guildId = null) {
                 winningNumbers.push({ price, numbers: winningNumber });
                 
                 // Tìm người thắng
+                // Logic updated: All users with the winning number win
                 const winningTickets = ticketsByPrice[price].filter(t => t.numbers === winningNumber);
                 
-                for (const ticket of winningTickets) {
-                    const prize = Math.floor(ticket.price * config.settings.win_multiplier);
-                    
-                    // Cập nhật vé
-                    const ticketIndex = guildData.tickets.findIndex(t => 
-                        t.userId === ticket.userId && 
-                        t.numbers === ticket.numbers && 
-                        t.price === ticket.price && 
-                        !t.drawn
-                    );
-                    
-                    if (ticketIndex !== -1) {
-                        guildData.tickets[ticketIndex].drawn = true;
-                        guildData.tickets[ticketIndex].won = true;
-                        guildData.tickets[ticketIndex].prize = prize;
-                    }
-                    
-                    // Thêm tiền cho người thắng
-                    try {
-                        let userData = await UserData.findOne({ 
-                            userId: ticket.userId, 
-                            guildId: guildData.guildId 
+                if (winningTickets.length > 0) {
+                     for (const ticket of winningTickets) {
+                        const prize = Math.floor(ticket.price * config.settings.win_multiplier);
+                        
+                        // Cập nhật vé
+                        // We need to find the specific ticket instance in the main array
+                        // Since we filtered `ticketsByPrice` from `undrawnTickets` which refers to `guildData.tickets` objects? 
+                        // Actually `ticketsByPrice` are references if `undrawnTickets` are references.
+                        // Let's use direct lookup to be safe and avoid reference issues if filter created shallow copies.
+                        
+                        // Find this specific ticket in the main array. 
+                        // Note: `ticket` here is an object from the database array.
+                        
+                        const ticketIndex = guildData.tickets.findIndex(t => 
+                            t._id && ticket._id && t._id.toString() === ticket._id.toString()
+                        );
+                        
+                        if (ticketIndex !== -1) {
+                            guildData.tickets[ticketIndex].drawn = true;
+                            guildData.tickets[ticketIndex].won = true;
+                            guildData.tickets[ticketIndex].prize = prize;
+                        } else {
+                             // Fallback match if _id not reliable (though it should be for subdocs)
+                             console.warn(`[VeSo] Warning: Could not find ticket by ID, falling back to props.`);
+                             const fallbackIndex = guildData.tickets.findIndex(t => 
+                                t.userId === ticket.userId && 
+                                t.numbers === ticket.numbers && 
+                                t.price === ticket.price && 
+                                !t.drawn
+                            );
+                            if (fallbackIndex !== -1) {
+                                guildData.tickets[fallbackIndex].drawn = true;
+                                guildData.tickets[fallbackIndex].won = true;
+                                guildData.tickets[fallbackIndex].prize = prize;
+                            }
+                        }
+                        
+                        // Thêm tiền cho người thắng
+                        try {
+                            let userData = await EconomyUserData.findOne({ 
+                                userId: ticket.userId
+                            });
+                            
+                            if (userData) {
+                                userData.balance += prize;
+                                await userData.save();
+                            } else {
+                                // Nếu chưa có data thì tạo mới (hiếm khi xảy ra vì đã mua vé)
+                                 userData = await EconomyUserData.create({
+                                    userId: ticket.userId,
+                                    balance: prize
+                                });
+                            }
+                        } catch (error) {
+                            console.error(`[VeSo] Lỗi khi cập nhật tiền cho user ${ticket.userId}:`, error);
+                        }
+                        
+                        winners.push({
+                            userId: ticket.userId,
+                            price: ticket.price,
+                            numbers: ticket.numbers,
+                            prize: prize
                         });
                         
-                        if (userData) {
-                            userData.balance += prize;
-                            await userData.save();
+                        // Gửi thông báo cho người thắng
+                        try {
+                            const user = await client.users.fetch(ticket.userId);
+                            const winEmbed = new EmbedBuilder()
+                                .setColor(config.settings.colors.winner)
+                                .setTitle('🎉 Chúc Mừng! Bạn Đã Trúng Số!')
+                                .setDescription(
+                                    `**Mệnh giá:** ${ticket.price} ${mainConfig.Currency}\n` +
+                                    `**Số trúng:** \`${ticket.numbers}\`\n` +
+                                    `**Tiền thắng:** ${prize} ${mainConfig.Currency}`
+                                )
+                                .setTimestamp();
+                            
+                            await user.send({ embeds: [winEmbed] }).catch(() => {});
+                        } catch (error) {
+                            console.error(`[VeSo] Không thể gửi DM cho user ${ticket.userId}`);
                         }
-                    } catch (error) {
-                        console.error(`[VeSo] Lỗi khi cập nhật tiền cho user ${ticket.userId}:`, error);
-                    }
-                    
-                    winners.push({
-                        userId: ticket.userId,
-                        price: ticket.price,
-                        numbers: ticket.numbers,
-                        prize: prize
-                    });
-                    
-                    // Gửi thông báo cho người thắng
-                    try {
-                        const user = await client.users.fetch(ticket.userId);
-                        const winEmbed = new EmbedBuilder()
-                            .setColor(config.settings.colors.winner)
-                            .setTitle('🎉 Chúc Mừng! Bạn Đã Trúng Số!')
-                            .setDescription(
-                                `**Mệnh giá:** ${ticket.price} ${mainConfig.Currency}\n` +
-                                `**Số trúng:** \`${ticket.numbers}\`\n` +
-                                `**Tiền thắng:** ${prize} ${mainConfig.Currency}`
-                            )
-                            .setTimestamp();
-                        
-                        await user.send({ embeds: [winEmbed] }).catch(() => {});
-                    } catch (error) {
-                        console.error(`[VeSo] Không thể gửi DM cho user ${ticket.userId}`);
                     }
                 }
             }
@@ -359,7 +387,8 @@ module.exports.buyTicket = async function(userId, guildId, price, customNumbers 
     if (customNumbers && /^\d{4}$/.test(customNumbers)) {
         numbers = customNumbers;
         
-        // Kiểm tra số đã được mua chưa
+        // Create explicit block to check duplicates if needed, but we are disabling it now
+        /*
         const existingTicket = vesoData.tickets.find(t => 
             !t.drawn && 
             t.price === price && 
@@ -369,6 +398,7 @@ module.exports.buyTicket = async function(userId, guildId, price, customNumbers 
         if (existingTicket) {
             throw new Error('NUMBER_TAKEN');
         }
+        */
     } else {
         // Tạo số ngẫu nhiên
         numbers = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
