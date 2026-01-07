@@ -121,7 +121,7 @@ module.exports = {
                 }).join('\n\n');
             };
 
-            const createEmbed = (currentPage) => {
+            const createEmbed = async (currentPage) => {
                 const embedConfig = lang.Economy?.Other?.Store?.Embed || {};
                 const embed = new EmbedBuilder().setColor(embedConfig.Color || '#0099ff');
                 
@@ -131,10 +131,41 @@ module.exports = {
                     embed.setTitle(replacePlaceholders(embedConfig.Title, { shopName: localizedCategoryName }));
                 }
 
-                const itemList = getItemList(currentPage);
-                if (itemList) {
-                    embed.setDescription(itemList);
-                }
+                // Fetch user data for balance display
+                let userData = await EconomyUserData.findOne({ userId: interaction.user.id });
+                const userBalance = userData ? userData.balance : 0;
+                
+                embed.setDescription(`💳 **Số dư của bạn:** ${userBalance.toLocaleString()} xu\n\n${lang.Economy?.Other?.Store?.Embed?.Description || 'Chào mừng đến với cửa hàng! Hãy chọn vật phẩm bạn muốn mua.'}`);
+
+                const start = currentPage * itemsPerPage;
+                const end = start + itemsPerPage;
+                const currentItems = items.slice(start, end);
+
+                currentItems.forEach((item, index) => {
+                     const globalIndex = start + index + 1;
+                     const localizedItemName = lang.Economy?.Other?.Store?.Items?.[item.Key] || item.Name || 'Unknown Item';
+                     let descriptionText = item.Description || 'No description';
+                     
+                     if (item.Type === 'Seed' && item.GrowthTime) {
+                         const template = lang.Economy?.Other?.Store?.SeedDescription;
+                         if (template) {
+                              descriptionText = replacePlaceholders(template, { time: item.GrowthTime / 60000 });
+                         }
+                     }
+
+                     let stockInfo = "";
+                     if (item.Stock !== undefined) {
+                         stockInfo = item.Stock > 0 ? `| 📦 Kho: ${item.Stock}` : `| 🚫 **HẾT HÀNG**`;
+                     }
+
+                     const priceDisplay = item.Price ? `${item.Price.toLocaleString()} xu` : 'Miễn phí';
+
+                    embed.addFields({
+                        name: `#${globalIndex} ${localizedItemName}`,
+                        value: `💰 Giá: **${priceDisplay}** ${stockInfo}\n📝 ${descriptionText}`,
+                        inline: false
+                    });
+                });
 
                 if (embedConfig.Footer?.Text) {
                     embed.setFooter({
@@ -201,7 +232,7 @@ module.exports = {
             const updateMessage = async (i) => {
                 try {
                     await i.update({
-                        embeds: [createEmbed(page)],
+                        embeds: [await createEmbed(page)],
                         components: createComponents(page)
                     });
                 } catch (error) {
@@ -564,7 +595,7 @@ module.exports = {
 
             // Send initial message
             await interaction.reply({
-                embeds: [createEmbed(page)],
+                embeds: [await createEmbed(page)],
                 components: createComponents(page)
             });
 

@@ -215,7 +215,7 @@ module.exports = {
                 if (receiveChannel) {
                     const embed = new EmbedBuilder()
                         .setTitle(`Báo cáo mới #${reportId}`)
-                        .setDescription(`**Người báo cáo:** ${interaction.user}\n**Người bị báo cáo:** ${message.author}\n**Lý do:** ${reason}\n\n**Nội dung tin nhắn:**\n${message.content}`)
+                        .setDescription(`**ID Báo cáo:** ${reportId}\n**Người báo cáo:** ${interaction.user}\n**Người bị báo cáo:** ${message.author}\n**Lý do:** ${reason}\n\n**Nội dung tin nhắn:**\n${message.content}`)
                         .addFields({ name: 'Tin nhắn gốc', value: `[Bấm vào đây](${message.url})` })
                         .setColor('Red')
                         .setTimestamp();
@@ -236,7 +236,14 @@ module.exports = {
                 if (reported) query.reportedUserId = reported.id;
 
                 const sortOrder = order === 'newest' ? -1 : 1;
-                const reports = await Report.find(query).sort({ createdAt: sortOrder }).limit(10);
+                // Manual sort because SQLiteModel doesn't support .sort()
+                const allReports = await Report.find(query);
+                allReports.sort((a, b) => {
+                    const timeA = new Date(a.createdAt).getTime();
+                    const timeB = new Date(b.createdAt).getTime();
+                    return sortOrder === -1 ? timeB - timeA : timeA - timeB;
+                });
+                const reports = allReports.slice(0, 10);
 
                 if (reports.length === 0) {
                     return interaction.reply({ content: 'Không tìm thấy báo cáo nào.', ephemeral: true });
@@ -251,7 +258,7 @@ module.exports = {
                     try { reporterUser = await interaction.client.users.fetch(report.reporterId); } catch { reporterUser = { tag: 'Unknown User' }; }
                     try { reportedUser = await interaction.client.users.fetch(report.reportedUserId); } catch { reportedUser = { tag: 'Unknown User' }; }
                     embed.addFields({
-                        name: `Báo cáo #${report.reportId}`,
+                        name: `ID: ${report.reportId}`,
                         value: `**Người báo cáo:** ${reporterUser.tag}\n**Người bị báo cáo:** ${reportedUser.tag}\n**Trạng thái:** ${report.status}`
                     });
                 }
@@ -288,7 +295,7 @@ module.exports = {
 
                 const embed = new EmbedBuilder()
                     .setTitle(`Báo cáo #${report.reportId}`)
-                    .setDescription(`**Người báo cáo:** ${reporterUser}\n**Người bị báo cáo:** ${reportedUser}\n**Lý do:** ${report.reason}\n**Trạng thái:** ${report.status}\n\n**Nội dung tin nhắn:**\n${messageContent}`)
+                    .setDescription(`**ID Báo cáo:** ${report.reportId}\n**Người báo cáo:** ${reporterUser}\n**Người bị báo cáo:** ${reportedUser}\n**Lý do:** ${report.reason}\n**Trạng thái:** ${report.status}\n\n**Nội dung tin nhắn:**\n${messageContent}`)
                     .addFields({ name: 'Tin nhắn gốc', value: `[Bấm vào đây](${messageUrl})` })
                     .setColor('Blue')
                     .setTimestamp(report.createdAt);
@@ -301,7 +308,10 @@ module.exports = {
                 const silent = interaction.options.getBoolean('silent') ?? false;
 
                 const settings = await QuickReportSettings.findOne({ guildId });
-                if (!settings.managerRoleId || !interaction.member.roles.cache.has(settings.managerRoleId)) {
+                const hasManagerRole = settings.managerRoleId && interaction.member.roles.cache.has(settings.managerRoleId);
+                const isAdmin = interaction.member.permissions.has('Administrator');
+                
+                if (!hasManagerRole && !isAdmin) {
                     return interaction.reply({ content: 'Bạn không có quyền thực hiện hành động này.', ephemeral: true });
                 }
 
