@@ -5,6 +5,7 @@ const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
 const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
+const parseDuration = require('./Utility/parseDuration');
 
 module.exports = {
     data: new SlashCommandBuilder()
