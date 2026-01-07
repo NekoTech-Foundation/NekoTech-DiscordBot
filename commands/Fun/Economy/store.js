@@ -135,7 +135,7 @@ module.exports = {
                 let userData = await EconomyUserData.findOne({ userId: interaction.user.id });
                 const userBalance = userData ? userData.balance : 0;
                 
-                embed.setDescription(`💳 **Số dư của bạn:** ${userBalance.toLocaleString()} xu\n\n${lang.Economy?.Other?.Store?.Embed?.Description || 'Chào mừng đến với cửa hàng! Hãy chọn vật phẩm bạn muốn mua.'}`);
+                embed.setDescription(`💳 **Số dư của bạn:** ${userBalance.toLocaleString()} xu\n\nChào mừng đến với cửa hàng! Hãy chọn vật phẩm bạn muốn mua.`);
 
                 const start = currentPage * itemsPerPage;
                 const end = start + itemsPerPage;
