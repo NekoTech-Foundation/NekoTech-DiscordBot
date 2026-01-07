@@ -813,6 +813,7 @@ module.exports = async (client) => {
         const nodeVersion = process.version;
         const appVersion = packageJson.version;
         const formattedDate = moment().format('HH:mm (DD-MM-YYYY)');
+        const startupTime = ((Date.now() - global.startTime) / 1000).toFixed(3);
 
         const logMessage = `${formattedDate} - Bot started up - Node.js ${nodeVersion} - App Version ${appVersion}\n`;
 
@@ -821,6 +822,16 @@ module.exports = async (client) => {
                 console.error('Failed to write to log file:', err);
             }
         });
+
+        console.log(`\n${colors.cyan('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')}`);
+        console.log(`${colors.green('[STARTUP]')} ${colors.white(`Done in ${startupTime}s`)}`);
+        console.log(`${colors.cyan('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')}`);
+        console.log(`${colors.magenta('User:')} ${colors.white(`${client.user.tag}`)}`);
+        console.log(`${colors.magenta('ID:')} ${colors.white(`${client.user.id}`)}`);
+        console.log(`${colors.magenta('Commands:')} ${colors.white(`${client.slashCommands.size} Slash | ${client.messageCommands.size} Message`)}`);
+        console.log(`${colors.magenta('Node.js:')} ${colors.white(`${nodeVersion}`)}`);
+        console.log(`${colors.magenta('Bot Version:')} ${colors.white(`v${appVersion}`)}`);
+        console.log(`${colors.cyan('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')}\n`);
     }
 
     function handleSlashCommandError(error) {

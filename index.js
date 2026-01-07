@@ -1,3 +1,5 @@
+global.startTime = Date.now();
+const path = require('path');
 const { MemoryChecker } = require('./utils/memoryChecker.js');
 
 const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
@@ -5,7 +7,7 @@ const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
 if (process.platform !== "win32") require("child_process").exec("npm install");
 
 const colors = require('ansi-colors');
-console.log(`${colors.yellow(`[Đang tải, chờ xíu...]`)}`);
+console.log(`${colors.cyan('[STARTUP]')} ${colors.yellow('Initializing system...')}`);
 
 const fs = require('fs');
 const packageFile = require('./package.json');
