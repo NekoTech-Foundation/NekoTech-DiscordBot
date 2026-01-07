@@ -201,7 +201,7 @@ module.exports = {
                 const allPlants = await plantSchema.find({ userId });
                 for (const planted of allPlants) {
                     const plant = seeds[planted.plant];
-                    const timeSincePlanted = Date.now() - planted.plantedAt.getTime();
+                    const timeSincePlanted = Date.now() - new Date(planted.plantedAt).getTime();
                     const timeRemaining = plant.growthTime - timeSincePlanted;
                     if (timeRemaining <= 1000) {
                         plantsToHarvest.push({ planted, plant });
@@ -216,7 +216,7 @@ module.exports = {
                 if (!planted) {
                     return interaction.editReply({ content: farmingLang.Errors.NotPlanted.replace('{plant}', plant.name) });
                 }
-                const timeSincePlanted = Date.now() - planted.plantedAt.getTime();
+                const timeSincePlanted = Date.now() - new Date(planted.plantedAt).getTime();
                 const timeRemaining = plant.growthTime - timeSincePlanted;
                 if (timeRemaining > 1000) {
                     const hours = Math.floor(timeRemaining / 3600000);
@@ -322,7 +322,7 @@ module.exports = {
                         plant = Object.values(seeds).find(s => s.name === p.plant);
                     }
                     if (plant) {
-                        const timeSincePlanted = Date.now() - p.plantedAt.getTime();
+                        const timeSincePlanted = Date.now() - new Date(p.plantedAt).getTime();
                         const timeRemaining = Math.max(0, plant.growthTime - timeSincePlanted);
                         const hours = Math.floor(timeRemaining / 3600000);
                         const minutes = Math.floor((timeRemaining % 3600000) / 60000);
@@ -477,17 +477,17 @@ module.exports = {
 
                 switch (fertilizer.Key) {
                     case 'growth_fertilizer':
-                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seedData.growthTime * 0.25));
+                        plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - (seedData.growthTime * 0.25));
                         break;
                     case 'super_speed_fertilizer':
-                        plant.plantedAt = new Date(plant.plantedAt.getTime() - seedData.growthTime);
+                        plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - seedData.growthTime);
                         plant.fertilizer = { key: fertilizer.Key, effect: 'yield_reduce', qualityReduced: true };
                         break;
                     case 'bumper_harvest_fertilizer':
                         plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' };
                         break;
                     case 'all_purpose_fertilizer':
-                        plant.plantedAt = new Date(plant.plantedAt.getTime() - (seedData.growthTime * 0.5));
+                        plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - (seedData.growthTime * 0.5));
                         plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' };
                         break;
                 }

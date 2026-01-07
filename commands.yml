@@ -45,7 +45,7 @@ economy: true
 roulette: true
 fishing: true
 play: false
-music: false
+music: true
 help: true
 user: true
 serverinfo: true
@@ -121,7 +121,6 @@ r34: true
 greeting: true
 bypass: true
 profile: true
-Music: true
 chatbot: true
 noitu: true
 cardswap: true
