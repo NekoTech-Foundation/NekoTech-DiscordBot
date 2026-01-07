@@ -2,27 +2,60 @@ const colors = require('ansi-colors');
 const fs = require('fs');
 
 class Logger {
+    static logs = [];
+    static maxLogs = 100;
+
+    static init() {
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+
+        console.log = (...args) => {
+            this.addLog('INFO', args.join(' '));
+            originalLog.apply(console, args);
+        };
+
+        console.warn = (...args) => {
+            this.addLog('WARN', args.join(' '));
+            originalWarn.apply(console, args);
+        };
+
+        console.error = (...args) => {
+            this.addLog('ERROR', args.join(' '));
+            originalError.apply(console, args);
+        };
+    }
+
+    static addLog(level, message) {
+        const timestamp = new Date().toLocaleTimeString();
+        this.logs.push({ timestamp, level, message });
+        if (this.logs.length > this.maxLogs) {
+            this.logs.shift();
+        }
+        
+        // Also write to file (using original logic adapted)
+        this.writeToLogFile(level, message);
+    }
+
+    static getLogs() {
+        return this.logs;
+    }
+
     static log(message) {
-   //     console.log(`${colors.green('[INFO]')} ${message}`);
-        this.writeToLogFile('INFO', message);
+        console.log(message); // Redirects to intercepted console.log
     }
 
     static debug(message) {
-        this.writeToLogFile('DEBUG', message);
+        console.log(`[DEBUG] ${message}`);
     }
 
     static warn(message) {
-    //    console.log(`${colors.yellow('[WARN]')} ${message}`);
-        this.writeToLogFile('WARN', message);
+        console.warn(message);
     }
 
     static error(message, error = null) {
-    //    console.error(`${colors.red('[ERROR]')} ${message}`);
-        if (error) {
-            console.error(error);
-        }
-        
-        this.writeToLogFile('ERROR', message, error);
+        const msg = error ? `${message}\n${error.stack || error}` : message;
+        console.error(msg);
     }
 
     static writeToLogFile(level, message, error = null) {
@@ -40,11 +73,15 @@ class Logger {
         logMessage += '\n';
         
         fs.appendFile('logs.txt', logMessage, (err) => {
-            if (err) {
-                console.error(`Failed to write to log file: ${err.message}`);
-            }
+            // Avoid loop if console.error is used here, use process.stderr.write
+             if (err) {
+                // failures to write to log file should not be infinitely logged
+             }
         });
     }
 }
+
+// Auto-init on require
+Logger.init();
 
 module.exports = { Logger }; 
