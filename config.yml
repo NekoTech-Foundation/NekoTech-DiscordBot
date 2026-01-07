@@ -161,7 +161,12 @@ Economy:
   Beg:
     cooldown: "30s"
     min: 10
-    max: 50
+    max: 5000
+
+  Crime:
+    cooldown: "45s"
+    min: 20
+    max: 5000
 
   Blackjack:
     cooldown: "15s"
