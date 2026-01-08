@@ -175,6 +175,10 @@ client.commands = new Map();
 // Economy command removed as part of consolidation
 
 require("./utils.js")(client);
+// Start SePay Webhook Server
+const { startWebhookServer } = require('./utils/sepayWebhook');
+startWebhookServer(client, 3000); // Default port 3000
+
 require('./events/antiNuke')(client);
 
 const filePath = './logs.txt';
