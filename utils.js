@@ -191,7 +191,9 @@ module.exports = async (client) => {
             try {
                 await command.execute(interaction, client);
             } catch (error) {
-                console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
+                console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`);
+                console.error(error.stack || error); // Ensure stack trace is printed
+
 
                 // Try to send error message, but handle expired interactions gracefully
                 try {

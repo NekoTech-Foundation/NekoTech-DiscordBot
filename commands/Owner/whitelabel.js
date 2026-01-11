@@ -75,19 +75,15 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        console.log('[Whitelabel] Command Executed');
         const config = getConfig();
         if (!config.OwnerIDs.includes(interaction.user.id)) {
             return interaction.reply({ content: '❌ Chỉ Owner mới được dùng lệnh này.', ephemeral: true });
         }
 
         // Increase timeout for updates
-        console.log('[Whitelabel] Calling deferReply...');
         await interaction.deferReply();
-        console.log('[Whitelabel] deferReply returned.');
 
         const sub = interaction.options.getSubcommand();
-        console.log(`[Whitelabel] Subcommand: ${sub}`);
 
         if (sub === 'create') {
             const user = interaction.options.getUser('user');
@@ -98,19 +94,15 @@ module.exports = {
             const minutes = interaction.options.getInteger('minutes') || 0;
 
             // Check if exists
-            console.log(`[Whitelabel] Checking DB for existing instance (User: ${user.id})...`);
+            // Check if exists
             const existing = await WhitelabelModel.findOne({ userId: user.id });
-            console.log(`[Whitelabel] DB Check Result:`, existing ? 'Found' : 'Null');
             if (existing) {
                 return interaction.editReply(`❌ User ${user.tag} đã có một instance rồi.`);
             }
 
-            console.log('[Whitelabel] Sending initial editReply...');
             await interaction.editReply(`⏳ Đang tạo instance cho **${user.tag}**... (Copy source, setup config, start PM2)`);
 
-            console.log(`[Whitelabel] Manager.createInstance calling for ${user.id} with ${days} days, ${minutes} minutes...`);
             const result = await WhitelabelManager.createInstance(user.id, token, clientId, botName, days, minutes);
-            console.log(`[Whitelabel] Manager.createInstance returned:`, result);
 
             if (result.success) {
                 const embed = new EmbedBuilder()
@@ -184,18 +176,14 @@ Ngoài ra, bạn có thể dùng \`/${managerCmdName} avatar\` và \`/${managerC
             const botName = interaction.options.getString('bot_name') || `${user.username}'s Bot`;
 
             // Check if exists
-            console.log(`[Whitelabel] Checking DB for existing instance (User: ${user.id})...`);
             const existing = await WhitelabelModel.findOne({ userId: user.id });
-            console.log(`[Whitelabel] DB Check Result:`, existing ? 'Found' : 'Null');
             if (existing) {
                 return interaction.editReply(`❌ User ${user.tag} đã có một instance rồi.`);
             }
 
             interaction.editReply(`⏳ Đang tạo instance cho **${user.tag}**... (Copy source, setup config, start PM2)`);
 
-            console.log(`[Whitelabel] Manager.createInstance calling for ${user.id}...`);
             const result = await WhitelabelManager.createInstance(user.id, token, clientId, botName);
-            console.log(`[Whitelabel] Manager.createInstance returned:`, result);
 
             if (result.success) {
                 const embed = new EmbedBuilder()

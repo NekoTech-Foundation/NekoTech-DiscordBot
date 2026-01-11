@@ -6,7 +6,7 @@ const moment = require('moment');
 module.exports = (client) => {
     // Run every minute (For testing)
     cron.schedule('* * * * *', async () => {
-        console.log('[Whitelabel Cron] Checking expired instances...');
+        // console.log('[Whitelabel Cron] Checking expired instances...');
         const instances = await WhitelabelModel.getAllInstances();
 
         for (const data of instances) {
