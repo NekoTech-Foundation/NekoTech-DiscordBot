@@ -150,7 +150,7 @@ module.exports = {
                     }
                 )
                 .setFooter({
-                    text: `Yêu cầu bởi ${interaction.user.tag}`,
+                    text: `Yêu cầu bởi ${interaction.user.tag}${config.IsWhitelabel ? ' | Whitelabel từ KentaBuckets' : ''}`,
                     iconURL: interaction.user.displayAvatarURL()
                 })
                 .setTimestamp();
@@ -277,7 +277,7 @@ module.exports = {
                             }
                         )
                         .setFooter({
-                            text: `Làm mới bởi ${i.user.tag} • Cập nhật lúc`,
+                            text: `Làm mới bởi ${i.user.tag} • Cập nhật lúc${config.IsWhitelabel ? ' | Whitelabel từ KentaBuckets' : ''}`,
                             iconURL: i.user.displayAvatarURL()
                         })
                         .setTimestamp();

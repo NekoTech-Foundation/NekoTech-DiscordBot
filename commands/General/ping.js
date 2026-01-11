@@ -1,17 +1,18 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const os = require('os');
+const { getConfig } = require('../../utils/configLoader.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('🏓 Kiểm tra độ trễ và trạng thái của bot'),
     category: 'General',
-    
+
     async execute(interaction) {
         // Đo thời gian phản hồi
         const sent = await interaction.deferReply({ fetchReply: true });
         const roundTrip = sent.createdTimestamp - interaction.createdTimestamp;
-        
+
         // Lấy API latency, nếu -1 thì dùng roundTrip làm giá trị ước tính
         let apiLatency = Math.round(interaction.client.ws.ping);
         if (apiLatency < 0) {
@@ -116,8 +117,8 @@ v${require('discord.js').version}\`\`\``,
                     inline: true
                 }
             )
-            .setFooter({ 
-                text: `Yêu cầu bởi ${interaction.user.tag}`, 
+            .setFooter({
+                text: `Yêu cầu bởi ${interaction.user.tag}${getConfig().IsWhitelabel ? ' | Whitelabel từ KentaBuckets' : ''}`,
                 iconURL: interaction.user.displayAvatarURL({ dynamic: true })
             })
             .setTimestamp();
@@ -142,9 +143,9 @@ v${require('discord.js').version}\`\`\``,
         });
 
         // Gửi embed
-        await interaction.editReply({ 
+        await interaction.editReply({
             content: null,
-            embeds: [embed] 
+            embeds: [embed]
         });
     }
 };

@@ -84,25 +84,25 @@ global.client = client;
 
 
 
- const memoryChecker = new MemoryChecker('NekoBuckets Bot');
- const fetch = require('node-fetch');
+const memoryChecker = new MemoryChecker('NekoBuckets Bot');
+const fetch = require('node-fetch');
 //const { getConfig, getLang, getCommands } = require('./utils/configLoader.js');
- 
- memoryChecker.logMemoryUsage = async function() {
-     const memUsage = process.memoryUsage();
-     const totalMemory = Math.round(
-         (memUsage.heapUsed + memUsage.external + memUsage.arrayBuffers) / 1024 / 1024 * 100
-     ) / 100;
-     
-     if (global.updateBotMemory) {
-         global.updateBotMemory(totalMemory);
-         return;
-     }
- 
 
- }
- 
- memoryChecker.start();
+memoryChecker.logMemoryUsage = async function () {
+    const memUsage = process.memoryUsage();
+    const totalMemory = Math.round(
+        (memUsage.heapUsed + memUsage.external + memUsage.arrayBuffers) / 1024 / 1024 * 100
+    ) / 100;
+
+    if (global.updateBotMemory) {
+        global.updateBotMemory(totalMemory);
+        return;
+    }
+
+
+}
+
+memoryChecker.start();
 
 client.invites = new Map();
 
@@ -180,6 +180,7 @@ const { startWebhookServer } = require('./utils/sepayWebhook');
 startWebhookServer(client, 3000); // Default port 3000
 
 require('./events/antiNuke')(client);
+require('./cron/whitelabelExpiry')(client);
 
 const filePath = './logs.txt';
 const maxLength = 300;
