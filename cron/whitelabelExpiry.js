@@ -32,5 +32,7 @@ module.exports = (client) => {
                 }
             }
         }
+    }, {
+        timezone: "Asia/Ho_Chi_Minh"
     });
 };
