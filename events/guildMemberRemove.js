@@ -52,7 +52,6 @@ module.exports = async (client, member) => {
     }
     await updateMemberCount(member);
     await processKickEvent(member);
-    await handleUserTickets(client, member);
 
     if (config.LevelingSystem.Enabled && config.LevelingSystem.ResetDataOnLeave) {
         await resetUserDataOnLeave(member);
@@ -221,17 +220,26 @@ function logKick(member, reason, moderator, caseNumber) {
         caseNumber: caseNumber
     };
 
-    const description = replacePlaceholders(config.KickLogs.Embed.Description.join('\n') || '', member, reason, moderator, caseNumber, "", 0, "", "", true);
+    // Safe access to KickLogs config or defaults
+    const kickLogsConfig = config.KickLogs || {};
+    const embedConfig = kickLogsConfig.Embed || {};
+
+    const descriptionTemplate = Array.isArray(embedConfig.Description) 
+        ? embedConfig.Description.join('\n') 
+        : (embedConfig.Description || '**Reason:** {reason}\n**Moderator:** {moderatorTag}\n**Case:** #{caseNumber}');
+
+    const description = replacePlaceholders(descriptionTemplate, member, reason, moderator, caseNumber, "", 0, "", "", true);
+    
     const kickEmbed = new EmbedBuilder()
-        .setColor(config.KickLogs.Embed.Color || "#FF5555")
-        .setTitle(replacePlaceholders(config.KickLogs.Embed.Title || '', member, reason, moderator, caseNumber, "", 0, "", "", true))
+        .setColor(embedConfig.Color || "#FF5555")
+        .setTitle(replacePlaceholders(embedConfig.Title || 'Member Kicked', member, reason, moderator, caseNumber, "", 0, "", "", true))
         .setDescription(description);
 
-    const footerText = replacePlaceholders(config.KickLogs.Embed.Footer.Text || '', member, reason, moderator, caseNumber, "", 0, "", "", true);
+    const footerText = replacePlaceholders((embedConfig.Footer && embedConfig.Footer.Text) || '', member, reason, moderator, caseNumber, "", 0, "", "", true);
     if (footerText && footerText.trim() !== "") {
         kickEmbed.setFooter({
             text: footerText,
-            iconURL: config.KickLogs.Embed.Footer.Icon || undefined
+            iconURL: (embedConfig.Footer && embedConfig.Footer.Icon) || undefined
         });
     }
 
@@ -240,10 +248,16 @@ function logKick(member, reason, moderator, caseNumber) {
         kickEmbed.setThumbnail(thumbnailURL);
     }
 
-    const logsChannel = member.guild.channels.cache.get(config.KickLogs.LogsChannelID);
-    if (logsChannel) {
-        logsChannel.send({ embeds: [kickEmbed] });
+    // Fallback to ModerationLogs.Kick if KickLogs.LogsChannelID is not present
+    const logsChannelId = kickLogsConfig.LogsChannelID || (config.ModerationLogs && config.ModerationLogs.Kick);
+    
+    if (logsChannelId) {
+        const logsChannel = member.guild.channels.cache.get(logsChannelId);
+        if (logsChannel) {
+            logsChannel.send({ embeds: [kickEmbed] });
+        }
     } else {
+        // console.log("Kick log channel not found");
     }
 }
 
@@ -283,84 +297,4 @@ function replacePlaceholders(text, member, reason = '', moderator = {}, caseNumb
         .replace(/{joinDate}/g, joinDate)
         .replace(/{joinTime}/g, joinTime)
         .replace(/{UserCreation}/g, userCreationDate);
-}
-
-async function handleUserTickets(client, member) {
-    try {
-        const tickets = await Ticket.find({ userId: member.id, status: { $in: ['open', 'closed'] } });
-        const userLeftDesign = config.UserLeftDesign.Embed;
-        const buttonConfig = config.UserLeftDesign.Button;
-
-        for (const ticket of tickets) {
-            const channel = await client.channels.fetch(ticket.channelId);
-            if (channel) {
-                const embed = new EmbedBuilder()
-                    .setColor(userLeftDesign.Color)
-                    .setDescription(userLeftDesign.Description.join('\n')
-                        .replace('{userId}', member.id)
-                        .replace('{user}', `<@${member.id}>`)
-                        .replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })));
-
-                if (userLeftDesign.Title && userLeftDesign.Title !== "") {
-                    embed.setTitle(userLeftDesign.Title
-                        .replace('{userId}', member.id)
-                        .replace('{user}', `<@${member.id}>`)
-                        .replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })));
-                }
-
-                if (userLeftDesign.Footer && userLeftDesign.Footer.Text && userLeftDesign.Footer.Text !== "") {
-                    embed.setFooter({
-                        text: userLeftDesign.Footer.Text
-                            .replace('{userId}', member.id)
-                            .replace('{user}', member.user.username)
-                            .replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })),
-                        iconURL: userLeftDesign.Footer.Icon && userLeftDesign.Footer.Icon !== "" ? userLeftDesign.Footer.Icon.replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })) : null
-                    });
-                }
-
-                if (userLeftDesign.Author && userLeftDesign.Author.Text && userLeftDesign.Author.Text !== "") {
-                    embed.setAuthor({
-                        name: userLeftDesign.Author.Text
-                            .replace('{userId}', member.id)
-                            .replace('{user}', member.user.username)
-                            .replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })),
-                        iconURL: userLeftDesign.Author.Icon && userLeftDesign.Author.Icon !== "" ? userLeftDesign.Author.Icon.replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })) : null
-                    });
-                }
-
-                if (userLeftDesign.Image && userLeftDesign.Image !== "") {
-                    embed.setImage(userLeftDesign.Image);
-                }
-
-                if (userLeftDesign.Thumbnail && userLeftDesign.Thumbnail !== "") {
-                    embed.setThumbnail(userLeftDesign.Thumbnail.replace('{userIcon}', member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 })));
-                }
-
-                if (buttonConfig && buttonConfig.Name && buttonConfig.Emoji && buttonConfig.Style) {
-                    const styleMap = {
-                        "PRIMARY": ButtonStyle.Primary,
-                        "SECONDARY": ButtonStyle.Secondary,
-                        "SUCCESS": ButtonStyle.Success,
-                        "DANGER": ButtonStyle.Danger,
-                        "LINK": ButtonStyle.Link
-                    };
-
-                    const deleteButton = new ButtonBuilder()
-                        .setCustomId(`ticketdelete-${ticket.ticketId}`)
-                        .setLabel(buttonConfig.Name)
-                        .setEmoji(buttonConfig.Emoji)
-                        .setStyle(styleMap[buttonConfig.Style.toUpperCase()] || ButtonStyle.Secondary);
-
-                    const row = new ActionRowBuilder().addComponents(deleteButton);
-
-                    await channel.send({ embeds: [embed], components: [row] });
-                } else {
-                    await channel.send({ embeds: [embed] });
-                }
-
-            }
-        }
-    } catch (error) {
-        console.error('Error handling user tickets:', error);
-    }
 }

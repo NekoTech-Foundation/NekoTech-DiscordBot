@@ -54,9 +54,9 @@ module.exports = async (client, interaction) => {
         // Anti-Grief check: Disabled Commands
         if (guildData && guildData.safety && guildData.safety.disabledCommands) {
             if (guildData.safety.disabledCommands.includes(interaction.commandName)) {
-                return interaction.reply({ 
-                    content: lang.Errors.CommandDisabled || "❌ This command is currently disabled in this server.", 
-                    flags: MessageFlags.Ephemeral 
+                return interaction.reply({
+                    content: lang.Errors.CommandDisabled || "❌ This command is currently disabled in this server.",
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }
@@ -68,16 +68,16 @@ module.exports = async (client, interaction) => {
             if (error.code === 10062 || (error.rawError && error.rawError.code === 10062)) return;
 
             console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
-            
+
             // Try to send error message, but handle expired interactions gracefully
             try {
                 if (!interaction.replied && !interaction.deferred) {
-                    await interaction.reply({ 
-                        content: 'There was an error while executing this command!', 
-                        flags: MessageFlags.Ephemeral 
+                    await interaction.reply({
+                        content: 'There was an error while executing this command!',
+                        flags: MessageFlags.Ephemeral
                     });
                 } else if (interaction.deferred) {
-                    await interaction.editReply({ 
+                    await interaction.editReply({
                         content: 'There was an error while executing this command!'
                     });
                 }
@@ -103,9 +103,9 @@ module.exports = async (client, interaction) => {
                 return;
             }
             // Music Handler
-            if (interaction.customId.startsWith('music_') || 
-                interaction.customId.startsWith('search_') || 
-                interaction.customId.startsWith('language_') || 
+            if (interaction.customId.startsWith('music_') ||
+                interaction.customId.startsWith('search_') ||
+                interaction.customId.startsWith('language_') ||
                 interaction.customId.startsWith('autoplay_genre') ||
                 interaction.customId === 'help_refresh') {
                 await musicButtonHandler.execute(interaction);
@@ -156,14 +156,20 @@ module.exports = async (client, interaction) => {
             await handleButtonInteraction(client, interaction);
         } else if (interaction.isStringSelectMenu()) {
             if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
-                 const handler = require('../utils/kentaInteractionManager');
-                 await handler.handleInteraction(interaction, client);
-                 return;
+                const handler = require('../utils/kentaInteractionManager');
+                await handler.handleInteraction(interaction, client);
+                return;
+            }
+            // Vote Config Roles
+            if (interaction.customId.startsWith('vote_config_roles_')) {
+                const handler = require('../utils/Vote/configHandler');
+                await handler.handleInteraction(interaction, client);
+                return;
             }
             // Music Select Handler (if any - based on index.js logic which checked button OR select for music_)
-            if (interaction.customId.startsWith('music_') || 
-                interaction.customId.startsWith('search_') || 
-                interaction.customId.startsWith('language_') || 
+            if (interaction.customId.startsWith('music_') ||
+                interaction.customId.startsWith('search_') ||
+                interaction.customId.startsWith('language_') ||
                 interaction.customId.startsWith('autoplay_genre')) {
                 await musicButtonHandler.execute(interaction);
                 return;
@@ -178,24 +184,24 @@ module.exports = async (client, interaction) => {
             }
             // Music Modal Handler
             if (interaction.customId === 'volume_modal') {
-                 await musicModalHandler.execute(interaction);
-                 return;
+                await musicModalHandler.execute(interaction);
+                return;
             }
 
             await handleModalSubmitInteraction(client, interaction);
         } else if (interaction.isAutocomplete()) {
             const command = client.slashCommands.get(interaction.commandName);
-            
+
             if (!command) {
                 console.error(`No command matching ${interaction.commandName} was found.`);
                 return;
             }
-            
+
             if (!command.autocomplete) {
                 console.error(`Command ${interaction.commandName} doesn't have an autocomplete handler.`);
                 return;
             }
-            
+
             try {
                 await command.autocomplete(interaction, client);
             } catch (error) {
@@ -251,18 +257,18 @@ async function handleButtonInteraction(client, interaction) {
 
                     const videoData = downloaderResponse.result;
 
-                                const embed = new EmbedBuilder()
-                                    .setColor('#0099ff')
-                                    .setTitle('Thông tin video')
-                                    .setURL(originalUrl)
-                                    .setDescription(videoData.desc || 'Không có chú thích') // Use desc instead of description
-                                    .addFields(
-                                        { name: 'Người đăng', value: videoData.author.nickname || 'Không rõ', inline: true },
-                                        { name: 'Lượt thích', value: videoData.statistics.likeCount ? videoData.statistics.likeCount.toString() : 'N/A', inline: true },
-                                        { name: 'Lượt xem', value: videoData.statistics.playCount ? videoData.statistics.playCount.toString() : 'N/A', inline: true }
-                                    )
-                                    .setImage(videoData.video.cover[0]) // Use video.cover[0]
-                                    .setTimestamp();
+                    const embed = new EmbedBuilder()
+                        .setColor('#0099ff')
+                        .setTitle('Thông tin video')
+                        .setURL(originalUrl)
+                        .setDescription(videoData.desc || 'Không có chú thích') // Use desc instead of description
+                        .addFields(
+                            { name: 'Người đăng', value: videoData.author.nickname || 'Không rõ', inline: true },
+                            { name: 'Lượt thích', value: videoData.statistics.likeCount ? videoData.statistics.likeCount.toString() : 'N/A', inline: true },
+                            { name: 'Lượt xem', value: videoData.statistics.playCount ? videoData.statistics.playCount.toString() : 'N/A', inline: true }
+                        )
+                        .setImage(videoData.video.cover[0]) // Use video.cover[0]
+                        .setTimestamp();
                     await interaction.editReply({ embeds: [embed] });
                 } catch (error) {
                     console.error('Lỗi khi lấy thông tin TikTok cho repost (từ tiktok-api-dl):', error);

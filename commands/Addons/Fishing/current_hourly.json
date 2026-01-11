@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Mực ma cà rồng",
-    "emoji": "<:Fish_vampiresquid:1433393330166693928>",
-    "min_weight": 0.5,
-    "max_weight": 1.5
+    "name": "Cá cần câu",
+    "emoji": "<:Fish_angler:1433393238953296033>",
+    "min_weight": 20,
+    "max_weight": 50
   },
   "epic": {
     "name": "Cá ngọt",
@@ -11,5 +11,5 @@
     "min_weight": 0.2,
     "max_weight": 1
   },
-  "updatedAt": "2026-01-08T11:00:00.031Z"
+  "updatedAt": "2026-01-11T03:17:33.184Z"
 }
