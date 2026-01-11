@@ -160,12 +160,6 @@ module.exports = async (client, interaction) => {
                 await handler.handleInteraction(interaction, client);
                 return;
             }
-            // Vote Config Roles
-            if (interaction.customId.startsWith('vote_config_roles_')) {
-                const handler = require('../utils/Vote/configHandler');
-                await handler.handleInteraction(interaction, client);
-                return;
-            }
             // Music Select Handler (if any - based on index.js logic which checked button OR select for music_)
             if (interaction.customId.startsWith('music_') ||
                 interaction.customId.startsWith('search_') ||
