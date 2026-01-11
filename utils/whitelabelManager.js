@@ -43,17 +43,6 @@ const WhitelabelManager = {
                 expiryTime += days * 24 * 60 * 60 * 1000;
             }
 
-            // 9. Update Database
-            await WhitelabelModel.setSubscription(userId, {
-                status: 'ACTIVE',
-                botToken,
-                clientId,
-                instancePath,
-                startDate: new Date().toISOString(),
-                expiryDate: new Date(expiryTime).toISOString()
-            });
-
-            return { success: true, path: instancePath, pm2Name };
             // 1. Copy Files (Iterate top-level to avoid recursion error)
             console.log(`[Whitelabel] Creating instance for ${userId} at ${instancePath}`);
 

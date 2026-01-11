@@ -25,6 +25,12 @@ module.exports = {
                 .addUserOption(opt => opt.setName('user').setDescription('Khách hàng').setRequired(true))
         )
         .addSubcommand(sub =>
+            sub.setName('terminate')
+                .setDescription('Chấm dứt dịch vụ instance (Gửi thông báo & Xóa)')
+                .addUserOption(opt => opt.setName('user').setDescription('Khách hàng').setRequired(true))
+                .addStringOption(opt => opt.setName('reason').setDescription('Lý do chấm dứt').setRequired(true))
+        )
+        .addSubcommand(sub =>
             sub.setName('info')
                 .setDescription('Xem thông tin instance')
                 .addUserOption(opt => opt.setName('user').setDescription('Khách hàng').setRequired(true))
@@ -33,7 +39,9 @@ module.exports = {
             sub.setName('extend')
                 .setDescription('Gia hạn thời gian')
                 .addUserOption(opt => opt.setName('user').setDescription('Khách hàng').setRequired(true))
-                .addIntegerOption(opt => opt.setName('days').setDescription('Số ngày cộng thêm (có thể nhập số âm)').setRequired(true))
+                .addIntegerOption(opt => opt.setName('days').setDescription('Số ngày cộng thêm (có thể nhập số âm)').setRequired(false))
+                .addIntegerOption(opt => opt.setName('hours').setDescription('Số giờ cộng thêm').setRequired(false))
+                .addIntegerOption(opt => opt.setName('minutes').setDescription('Số phút cộng thêm').setRequired(false))
         )
         .addSubcommand(sub =>
             sub.setName('config')
@@ -296,13 +304,19 @@ Dữ liệu của bạn sẽ bị xóa khỏi hệ thống.`
 
         } else if (sub === 'extend') {
             const user = interaction.options.getUser('user');
-            const days = interaction.options.getInteger('days');
+            const days = interaction.options.getInteger('days') || 0;
+            const hours = interaction.options.getInteger('hours') || 0;
+            const minutes = interaction.options.getInteger('minutes') || 0;
+
+            if (days === 0 && hours === 0 && minutes === 0) {
+                return interaction.editReply('❌ Vui lòng nhập ít nhất một đơn vị thời gian (days, hours, hoặc minutes).');
+            }
 
             const data = await WhitelabelModel.findOne({ userId: user.id });
             if (!data) return interaction.editReply('❌ User này chưa đăng ký Whitelabel.');
 
             const currentExpiry = moment(data.expiryDate);
-            const newExpiry = currentExpiry.add(days, 'days');
+            const newExpiry = currentExpiry.add(days, 'days').add(hours, 'hours').add(minutes, 'minutes');
 
             data.expiryDate = newExpiry.toISOString();
             if (data.status === 'EXPIRED' && newExpiry.isAfter(moment())) {
