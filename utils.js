@@ -30,7 +30,8 @@ const { handleVoiceXP } = require('./events/Levels/handleXP');
 const ChannelStat = require('./models/channelStatSchema');
 const TempRole = require('./models/TempRole');
 const Reminder = require('./models/reminder');
-const Poll = require('./models/poll');
+
+
 
 
 const GuildData = require('./models/guildDataSchema');
@@ -315,7 +316,7 @@ module.exports = async (client) => {
                 getSubcommand: () => selectedSubcommand,
                 getString: (name) => {
                     // Start defaults for optional args if needed, or null
-                    return null; 
+                    return null;
                 },
                 getInteger: () => null,
                 getNumber: () => null,
@@ -327,7 +328,7 @@ module.exports = async (client) => {
                 getMentionable: () => null,
                 getAttachment: () => null,
                 // Helper to pass through other things if needed
-                _parsed: {} 
+                _parsed: {}
             },
             reply: async (options) => {
                 if (interaction.replied || interaction.deferred) {
@@ -641,52 +642,54 @@ module.exports = async (client) => {
         if (config.ReactionRoles && config.ReactionRoles.Enabled) {
             await setupReactionRoles();
         }
-        await loadPolls(client);
+        if (config.ReactionRoles && config.ReactionRoles.Enabled) {
+            await setupReactionRoles();
+        }
 
         // Scan 'commands' directory for all types of modules (Slash, Message, Events, etc.)
         const commandFiles = getFilesRecursively('./commands');
         commandFiles.forEach(file => {
-             const absolutePath = path.resolve(file);
-             const folderNameMatch = file.match(/[\\\/]commands[\\\/]([^\\\/]+)/i);
-             const folderName = folderNameMatch ? folderNameMatch[1] : 'unknown';
+            const absolutePath = path.resolve(file);
+            const folderNameMatch = file.match(/[\\\/]commands[\\\/]([^\\\/]+)/i);
+            const folderName = folderNameMatch ? folderNameMatch[1] : 'unknown';
 
-             try {
-                 const command = require(absolutePath);
-                 command.filePath = absolutePath;
+            try {
+                const command = require(absolutePath);
+                command.filePath = absolutePath;
 
-                 // Determine category
-                 let category = folderName;
-                 if (folderName === 'Addons') {
-                     const addonMatch = file.match(/[\\\/]commands[\\\/]Addons[\\\/]([^\\\/]+)/i);
-                     if (addonMatch) {
-                         category = addonMatch[1];
-                     }
-                 }
-                 if (!command.category) {
+                // Determine category
+                let category = folderName;
+                if (folderName === 'Addons') {
+                    const addonMatch = file.match(/[\\\/]commands[\\\/]Addons[\\\/]([^\\\/]+)/i);
+                    if (addonMatch) {
+                        category = addonMatch[1];
+                    }
+                }
+                if (!command.category) {
                     command.category = category;
-                 }
+                }
 
-                 // Execute onLoad if present
-                 if (typeof command.onLoad === 'function') {
-                     command.onLoad(client);
-                 }
+                // Execute onLoad if present
+                if (typeof command.onLoad === 'function') {
+                    command.onLoad(client);
+                }
 
-                 // Handle Slash Commands
-                 if (command.data && typeof command.data.toJSON === 'function') {
-                     const name = command.data.name;
-                     // Prevent duplicates if already loaded
-                     if (!client.slashCommands.has(name)) {
+                // Handle Slash Commands
+                if (command.data && typeof command.data.toJSON === 'function') {
+                    const name = command.data.name;
+                    // Prevent duplicates if already loaded
+                    if (!client.slashCommands.has(name)) {
                         // Check commandConfig if command is enabled
                         if (!commandConfig || commandConfig[name] !== false) {
                             const json = command.data.toJSON();
                             global.slashCommands.push(json);
                             client.slashCommands.set(name, command);
                         }
-                     }
-                 }
-                 
-                 // Handle Message Commands
-                 if (command.name && command.run && typeof command.run === 'function') {
+                    }
+                }
+
+                // Handle Message Commands
+                if (command.name && command.run && typeof command.run === 'function') {
                     // Avoid overwriting if possible, or allow overwrite if intentional. 
                     // Using set() usually overwrites which is standard behavior.
                     client.messageCommands.set(command.name, command);
@@ -695,15 +698,15 @@ module.exports = async (client) => {
                             client.messageCommands.set(alias, command);
                         });
                     }
-                 } 
-                 // Handle Plain Events
-                 else if (command.run && typeof command.run === 'function' && !command.data) {
-                     command.run(client);
-                 }
+                }
+                // Handle Plain Events
+                else if (command.run && typeof command.run === 'function' && !command.data) {
+                    command.run(client);
+                }
 
-             } catch (err) {
-                 console.error(`[ERROR] Failed to load module ${file}:`, err);
-             }
+            } catch (err) {
+                console.error(`[ERROR] Failed to load module ${file}:`, err);
+            }
         });
     }
 
@@ -787,15 +790,15 @@ module.exports = async (client) => {
 
         // Clear Guild Commands for the Main Guild to remove stale duplicates (like "Treo máy")
         if (config.GuildID) {
-             try {
-                 await rest.put(
-                     Routes.applicationGuildCommands(client.user.id, config.GuildID),
-                     { body: [] }
-                 );
-                 console.log(`[STARTUP] Cleared guild commands for ${config.GuildID}`);
-             } catch (error) {
-                 console.error(`[STARTUP] Failed to clear guild commands: ${error}`);
-             }
+            try {
+                await rest.put(
+                    Routes.applicationGuildCommands(client.user.id, config.GuildID),
+                    { body: [] }
+                );
+                console.log(`[STARTUP] Cleared guild commands for ${config.GuildID}`);
+            } catch (error) {
+                console.error(`[STARTUP] Failed to clear guild commands: ${error}`);
+            }
         }
 
         registeredCommands.forEach(registeredCommand => {
@@ -1491,144 +1494,14 @@ module.exports = async (client) => {
         }
     }
 
-    client.polls = new Map();
+
 
     // function getNumberEmoji(number) {
     //     const numberEmojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
     //     return numberEmojis[number - 1];
     // }
 
-    client.on('messageReactionAdd', async (reaction, user) => {
-        if (user.bot) return;
-        await handlePollReaction(reaction, user, true);
-    });
 
-    client.on('messageReactionRemove', async (reaction, user) => {
-        if (user.bot) return;
-        await handlePollReaction(reaction, user, false);
-    });
-
-    async function handlePollReaction(reaction, user, isAdd) {
-        if (reaction.partial) {
-            try {
-                await reaction.fetch();
-            } catch (error) {
-                console.error('Failed to fetch reaction:', error);
-                return;
-            }
-        }
-
-        const poll = client.polls.get(reaction.message.id);
-        if (!poll) return;
-
-        if (isAdd && !poll.multiVote) {
-            const userReactions = reaction.message.reactions.cache.filter(r => r.users.cache.has(user.id));
-            for (const [, r] of userReactions) {
-                if (r.emoji.name !== reaction.emoji.name) {
-                    await r.users.remove(user.id);
-                }
-            }
-        }
-
-        await updatePollVotes(reaction.message, poll);
-    }
-
-    async function updatePollVotes(message, poll) {
-        const reactions = message.reactions.cache;
-
-        poll.choices.forEach(choice => {
-            const reactionCount = reactions.get(choice.emoji)?.count || 0;
-            choice.votes = Math.max(reactionCount - 1, 0);
-        });
-
-        await updatePollInDatabase(message.id, poll);
-        await updatePollEmbed(message, poll);
-    }
-
-    async function updatePollInDatabase(messageId, poll) {
-        try {
-            const pollData = {
-                choices: poll.choices,
-            };
-            await Poll.findOneAndUpdate({ messageId }, pollData);
-        } catch (error) {
-            console.error('Failed to update poll in database:', error);
-        }
-    }
-
-    async function updatePollEmbed(message, poll) {
-        const originalEmbed = message.embeds[0];
-        const updatedEmbed = new EmbedBuilder()
-            .setAuthor(originalEmbed.author)
-            .setTitle(originalEmbed.title)
-            .setColor(originalEmbed.color)
-            .setFooter(originalEmbed.footer)
-            .setTimestamp(originalEmbed.timestamp);
-
-        let description = '';
-        poll.choices.forEach((choice) => {
-            description += `${choice.emoji} ${choice.name} (${choice.votes} Votes)\n`;
-        });
-        updatedEmbed.setDescription(description);
-
-        try {
-            await message.edit({ embeds: [updatedEmbed] });
-        } catch (error) {
-            console.error('Failed to update poll message:', error);
-        }
-    }
-
-    async function loadPolls(client) {
-        if (!client.polls) {
-            client.polls = new Map();
-        }
-
-        try {
-            const polls = await Poll.find({});
-
-            for (const pollData of polls) {
-                try {
-                    if (!pollData.messageId || !pollData.choices || !Array.isArray(pollData.choices)) {
-                        continue;
-                    }
-
-                    let channel;
-                    try {
-                        channel = await client.channels.fetch(pollData.channelId);
-                    } catch (error) {
-                        continue;
-                    }
-
-                    if (!channel) {
-                        await Poll.deleteOne({ messageId: pollData.messageId });
-                        continue;
-                    }
-
-                    try {
-                        const message = await channel.messages.fetch(pollData.messageId);
-                        if (!message) {
-                            await Poll.deleteOne({ messageId: pollData.messageId });
-                            continue;
-                        }
-
-                        client.polls.set(pollData.messageId, pollData);
-                    } catch (error) {
-                        if (error.message === 'Unknown Message') {
-                            await Poll.deleteOne({ messageId: pollData.messageId });
-                        } else {
-                            console.log(`Error fetching message for poll ${pollData.messageId}: ${error.message}. Skipping...`);
-                        }
-                        continue;
-                    }
-                } catch (error) {
-                    console.error(`Error processing poll ${pollData.messageId}:`, error);
-                }
-            }
-
-        } catch (error) {
-            console.error('Failed to load polls from database:', error);
-        }
-    }
 
     function parseTimeToMs(timeStr) {
         const timeRegex = /(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/;
@@ -1810,20 +1683,7 @@ module.exports = async (client) => {
         }
     }
 
-    const POLL_CLEANUP_INTERVAL = 24 * 60 * 60 * 1000;
 
-    async function cleanupOldPolls() {
-        const oldPolls = await Poll.find({
-            createdAt: { $lt: new Date(Date.now() - POLL_CLEANUP_INTERVAL) }
-        });
-
-        for (const poll of oldPolls) {
-            client.polls.delete(poll.messageId);
-            await Poll.deleteOne({ _id: poll._id });
-        }
-    }
-
-    setInterval(cleanupOldPolls, POLL_CLEANUP_INTERVAL);
 
     function cleanupInteractionDebounce() {
         const now = Date.now();

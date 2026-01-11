@@ -487,11 +487,17 @@ Giveaways:
       BlacklistRoleField: "参加在不可"
       MinimumSeverJoinDateField: "最小サーバー参加日数"
       MinimumAccountAgeField: "最小アカウント年齢"
-
+      RequirementsTitle: "📋 必要条件"
+      FooterID: "Giveaway ID: {id}"
     EndedGiveaway:
       Title: "## ギブアウェイ {prize} 終了！"
       WinnersField: "当選者:"
       EntriesField: "エントリー数:"
+  Buttons:
+    Join: "参加"
+    CheckChance: "確率を確認"
+    ShowEntrants: "参加者を表示"
+    Entries: "エントリー数"
 
 # ===========================================================================
 # AFK COMMAND

@@ -516,10 +516,17 @@ Giveaways:
       BlacklistRoleField: "Vai trò bị chặn:"
       MinimumSeverJoinDateField: "Ngày tham gia server tối thiểu:"
       MinimumAccountAgeField: "Tuổi tài khoản tối thiểu:"
+      RequirementsTitle: "📋 Yêu cầu"
+      FooterID: "Giveaway ID: {id}"
     EndedGiveaway:
       Title: "Giveaway Đã Kết Thúc"
       WinnersField: "Người thắng cuộc:"
       EntriesField: "Tổng lượt tham gia:"
+  Buttons:
+    Join: "Tham gia"
+    CheckChance: "Xem tỷ lệ"
+    ShowEntrants: "Danh sách tham gia"
+    Entries: "Lượt tham gia"
   # ===========================================================================
 # TIN NHẮN KENTA SCRATCH
 # ===========================================================================

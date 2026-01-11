@@ -471,10 +471,17 @@ Giveaways:
       BlacklistRoleField: "Blocked Roles:"
       MinimumSeverJoinDateField: "Min Server Join Date:"
       MinimumAccountAgeField: "Min Account Age:"
+      RequirementsTitle: "📋 Requirements"
+      FooterID: "Giveaway ID: {id}"
     EndedGiveaway:
       Title: "Giveaway Ended"
       WinnersField: "Winners:"
       EntriesField: "Total Entries:"
+  Buttons:
+    Join: "Enter"
+    CheckChance: "Odds"
+    ShowEntrants: "Entrants"
+    Entries: "Entries"
   chanceMessage: "{user}, you have a **{winChance}%** chance of winning. ({userEntries} entries: 1 base + {extraEntries} bonus)"
   NotJoinedGiveaway: "You have not joined this giveaway!"
   CalculationError: "An error occurred whilst calculating your chance."

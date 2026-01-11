@@ -128,7 +128,7 @@ module.exports = {
                     option
                         .setName("min_server_join_date")
                         .setDescription(
-                            'Ngày tham gia máy chủ tối thiểu để tham gia (định dạng: "Tháng 1 2000") [Tùy chọn]'
+                            'Ngày tham gia máy chủ tối thiểu để tham gia (định dạng: "DD/MM/YYYY") [Tùy chọn]'
                         )
                         .setRequired(false)
                 )
@@ -136,7 +136,7 @@ module.exports = {
                     option
                         .setName("min_account_age")
                         .setDescription(
-                            'Tuổi tài khoản tối thiểu để tham gia (định dạng: "Tháng 1 2000") [Tùy chọn]'
+                            'Tuổi tài khoản tối thiểu để tham gia (định dạng: "DD/MM/YYYY") [Tùy chọn]'
                         )
                         .setRequired(false)
                 )
@@ -178,6 +178,12 @@ module.exports = {
                         .setDescription("Vai trò được cộng thêm lượt tham gia (Định dạng: @vai_tro:lượt @vai_tro2:lượt) [Tùy chọn]")
                         .setRequired(false)
                 )
+                .addStringOption((option) =>
+                    option
+                        .setName("custom_embed")
+                        .setDescription("JSON tùy chỉnh cho Embed (hỗ trợ {prize}, {endsIn}, {hostedBy}...) [Tùy chọn]")
+                        .setRequired(false)
+                )
         )
         .addSubcommand((subcommand) =>
             subcommand
@@ -215,12 +221,12 @@ module.exports = {
 
             const isEnabled = config.Giveaways?.Enabled !== false; // Default true if undefined
             const allowedRoles = config.Giveaways?.AllowRoles || [];
-            
+
             const isAdministrator = interaction.member.permissions.has(PermissionsBitField.Flags.Administrator);
             const isModerator = interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild);
 
             if (!isEnabled && !isAdministrator) {
-                 return interaction.editReply({
+                return interaction.editReply({
                     content: "Lệnh Giveaway hiện đang bị khóa.",
                     flags: MessageFlags.Ephemeral,
                 });
@@ -280,15 +286,33 @@ module.exports = {
                         });
                     }
 
+                    function isValidDateFormat(dateString) {
+                        // DD/MM/YYYY
+                        const regex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+                        return regex.test(dateString);
+                    }
+
                     let minServerJoinDateInput = interaction.options.getString("min_server_join_date");
-                    let minServerJoinDate = isValidDateFormat(minServerJoinDateInput) ? new Date(minServerJoinDateInput) : null;
+                    let minServerJoinDate = null;
+                    if (minServerJoinDateInput) {
+                        if (isValidDateFormat(minServerJoinDateInput)) {
+                            const [day, month, year] = minServerJoinDateInput.split('/').map(Number);
+                            minServerJoinDate = new Date(year, month - 1, day);
+                        }
+                    }
 
                     let minAccountAgeInput = interaction.options.getString("min_account_age");
-                    let minAccountAge = isValidDateFormat(minAccountAgeInput) ? new Date(minAccountAgeInput) : null;
+                    let minAccountAge = null;
+                    if (minAccountAgeInput) {
+                        if (isValidDateFormat(minAccountAgeInput)) {
+                            const [day, month, year] = minAccountAgeInput.split('/').map(Number);
+                            minAccountAge = new Date(year, month - 1, day);
+                        }
+                    }
 
                     if ((minServerJoinDateInput && !minServerJoinDate) || (minAccountAgeInput && !minAccountAge)) {
                         return interaction.editReply({
-                            content: "Một hoặc nhiều ngày có định dạng không chính xác. Vui lòng sử dụng 'Tháng Ngày Năm' (ví dụ: Tháng 1 2000).",
+                            content: "Một hoặc nhiều ngày có định dạng không chính xác. Vui lòng sử dụng 'DD/MM/YYYY' (ví dụ: 01/01/2023).",
                             flags: MessageFlags.Ephemeral,
                         });
                     }
@@ -325,6 +349,8 @@ module.exports = {
                         }
                     }
 
+                    let customEmbed = interaction.options.getString("custom_embed");
+
                     const giveawayDetails = {
                         giveawayId: generateMixedId(8),
                         time: gTime,
@@ -339,8 +365,10 @@ module.exports = {
                         minMessages: minMessages,
                         hostedBy: hostedBy,
                         notifyUsers: notifyFollowing,
-                        extraEntries: extraEntries
+                        extraEntries: extraEntries,
+                        customEmbed: customEmbed
                     };
+
 
                     await giveawayActions.startGiveaway(interaction, giveawayDetails, lang);
                     break;

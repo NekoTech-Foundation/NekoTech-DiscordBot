@@ -8,15 +8,7 @@ const client = require("../../index.js")
 const Giveaway = require("../../models/Giveaway.js");
 const UserData = require('../../models/UserData.js');
 
-function viLabel(label) {
-    const map = {
-        'Enter': 'Tham gia',
-        'Odds': 'Tỷ lệ',
-        'Entries': 'Lượt tham gia',
-        'Show Entrants': 'Danh sách tham gia'
-    };
-    return map[label] || label;
-}
+
 
 function getButtonStyle(styleString) {
     switch (styleString.toLowerCase()) {
@@ -96,7 +88,7 @@ const giveawayActions = {
             }
             const lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
             if (interaction.customId === 'check_percent') {
-                const giveaway = await Giveaway.findOne({ 
+                const giveaway = await Giveaway.findOne({
                     messageId: interaction.message.id,
                     channelId: interaction.channelId,
                     ended: false
@@ -122,7 +114,7 @@ const giveawayActions = {
                         flags: MessageFlags.Ephemeral
                     });
                 } else {
-                     await interaction.followUp({
+                    await interaction.followUp({
                         content: "An error occurred while processing your request.",
                         flags: MessageFlags.Ephemeral
                     });
@@ -135,7 +127,7 @@ const giveawayActions = {
 
     startGiveaway: async (interaction, giveawayDetails, lang) => {
         const { giveawayId, time, prize, channel, winnerCount, whitelistRoles, blacklistRoles, minServerJoinDate, minAccountAge, minInvites, minMessages, hostedBy, notifyUsers } = giveawayDetails;
-        
+
         // Ensure lang is available if not passed (fallback)
         // Ensure lang is available if not passed (fallback)
         if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
@@ -161,126 +153,119 @@ const giveawayActions = {
             channel: `${channel}`,
             winnerCount: winnerCount,
             endsIn: giveawayEndsIn,
-            minInvites: minInvites
+            minInvites: minInvites,
+            entries: 0
         };
 
         const embed = new EmbedBuilder();
-        const prizeDescription = replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.Prize, placeholders);
-        
-        embed.setTitle(lang.Giveaways.Embeds.ActiveGiveaway.Title || "🎉 GIVEAWAY 🎉");
-        
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowTitle) {
-            embed.setDescription(prizeDescription);
-        }
 
-        embed.setColor(config.Giveaways.Embed.ActiveGiveaway.EmbedColor);
+        let useDefaultDesign = true;
+        if (giveawayDetails.customEmbed) {
+            try {
+                let jsonString = giveawayDetails.customEmbed;
+                // Simple variable replacement in the raw JSON string first
+                Object.keys(placeholders).forEach(key => {
+                    const regex = new RegExp(`{${key}}`, 'gi');
+                    jsonString = jsonString.replace(regex, placeholders[key] || '');
+                });
 
-        const additionalFields = [];
-        let requirementsCount = 0;
-        var entryCount = 0;
+                const customData = JSON.parse(jsonString);
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowHostedBy) {
-            additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.HostedByField, placeholders), value: `${hostedBy}`, inline: true });
-        }
+                if (customData.title) embed.setTitle(customData.title);
+                if (customData.description) embed.setDescription(customData.description);
+                if (customData.color) embed.setColor(customData.color);
+                if (customData.image) embed.setImage(customData.image);
+                if (customData.thumbnail) embed.setThumbnail(customData.thumbnail);
+                if (customData.fields && Array.isArray(customData.fields)) {
+                    embed.addFields(customData.fields);
+                }
+                if (customData.footer) {
+                    // Ensure ID is present if not already
+                    let footerText = customData.footer.text || "";
+                    if (!footerText.includes(giveawayId)) {
+                        footerText += ` | ID: ${giveawayId}`;
+                    }
+                    embed.setFooter({ text: footerText, iconURL: customData.footer.icon_url || customData.footer.iconURL });
+                } else {
+                    embed.setFooter({ text: `Giveaway ID: ${giveawayId}`, iconURL: config.Giveaways.Embed.ActiveGiveaway.EmbedFooterIcon });
+                }
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowEndsIn) {
-            additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.EndsInField, placeholders), value: `<t:${Math.floor((Date.now() + duration) / 1000)}:R>`, inline: true });
-        }
-
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowEntries) {
-            additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.EntriesField, placeholders), value: `**${entryCount}**`, inline: true });
-        }
-
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowWhitelistRoles) {
-            if (whitelistRoles && whitelistRoles.length > 0) {
-                const whitelistMentions = whitelistRoles.map(roleId => `<@&${roleId}>`).join('\n');
-                additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.WhitelistRoleField, placeholders), value: whitelistMentions, inline: true });
-                requirementsCount++;
+                useDefaultDesign = false;
+            } catch (e) {
+                console.error("Invalid Custom Embed JSON:", e);
+                // Fallback to default but warn? Or just proceed with default.
+                // Notifying user about error via ephemeral would be good, but we are inside logic.
+                // We'll proceed with default but maybe log it.
             }
         }
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowBlacklistRoles) {
-            if (blacklistRoles && blacklistRoles.length > 0) {
-                const blacklistMentions = blacklistRoles.map(roleId => `<@&${roleId}>`).join('\n');
-                additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.BlacklistRoleField, placeholders), value: blacklistMentions, inline: true });
-                requirementsCount++;
+        if (useDefaultDesign) {
+            const prizeDescription = replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.Prize, placeholders);
+
+            embed.setTitle(lang.Giveaways.Embeds.ActiveGiveaway.Title || "🎉 GIVEAWAY 🎉");
+
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowTitle) {
+                embed.setDescription(`**${prizeDescription}**\n\n${lang.Giveaways.Embeds.ActiveGiveaway.Description || "React with the button below to enter!"}`);
             }
-        }
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowMinimumServerJoinDate) {
-            if (minServerJoinDate) {
-                const serverJoinDate = new Date(minServerJoinDate);
-                const discordTimestamp = `<t:${Math.floor(serverJoinDate.getTime() / 1000)}:D>`;
-                additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.MinimumSeverJoinDateField, placeholders), value: `${discordTimestamp}`, inline: true });
-                requirementsCount++;
+            embed.setColor(config.Giveaways.Embed.ActiveGiveaway.EmbedColor);
+
+            // Row 1: Hosted By, Ends In, Entries
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowHostedBy) {
+                embed.addFields({ name: lang.Giveaways.Embeds.ActiveGiveaway.HostedByField || "👑 Hosted By", value: `${hostedBy}`, inline: true });
             }
-        }
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowMinimumAccountAge) {
-            if (minAccountAge) {
-                const accountAgeDate = new Date(minAccountAge);
-                const discordTimestamp = `<t:${Math.floor(accountAgeDate.getTime() / 1000)}:D>`;
-                additionalFields.push({ name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.MinimumAccountAgeField, placeholders), value: `${discordTimestamp}`, inline: true });
-                requirementsCount++;
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowEndsIn) {
+                embed.addFields({ name: lang.Giveaways.Embeds.ActiveGiveaway.EndsInField || "⏳ Ends In", value: `<t:${Math.floor((Date.now() + duration) / 1000)}:R>`, inline: true });
             }
-        }
 
-        if (minInvites > 0) {
-            additionalFields.push({ name: "Minimum Invites", value: `${minInvites}`, inline: true });
-            requirementsCount++;
-        }
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowEntries) {
+                embed.addFields({ name: lang.Giveaways.Embeds.ActiveGiveaway.EntriesField || "🎟 Entries", value: `**${0}**`, inline: true });
+            }
 
-        if (minMessages > 0) {
-            additionalFields.push({ name: "Minimum Messages", value: `${minMessages}`, inline: true });
-            requirementsCount++;
-        }
+            // Requirements
+            let reqs = [];
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowWhitelistRoles && whitelistRoles && whitelistRoles.length > 0) {
+                reqs.push(`**${lang.Giveaways.Embeds.ActiveGiveaway.WhitelistRoleField || "Allowed Roles:"}** ${whitelistRoles.map(r => `<@&${r}>`).join(', ')}`);
+            }
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowBlacklistRoles && blacklistRoles && blacklistRoles.length > 0) {
+                reqs.push(`**${lang.Giveaways.Embeds.ActiveGiveaway.BlacklistRoleField || "Forbidden Roles:"}** ${blacklistRoles.map(r => `<@&${r}>`).join(', ')}`);
+            }
+            if (minInvites > 0) reqs.push(`**Min Invites:** ${minInvites}`); // Need generic key or just keep simple for now? The user didn't specify these but let's try to match existing pattern if possible, though keys might be missing for "Min Invites". I'll leave "Min Invites" hardcoded if no key exists, but wait, vn.yml didn't have MinInvites in list. I'll stick to what I have in YAML.
+            if (minMessages > 0) reqs.push(`**Min Messages:** ${minMessages}`);
+            if (minServerJoinDate) reqs.push(`**${lang.Giveaways.Embeds.ActiveGiveaway.MinimumSeverJoinDateField || "Joined After:"}** <t:${Math.floor(new Date(minServerJoinDate).getTime() / 1000)}:d>`);
+            if (minAccountAge) reqs.push(`**${lang.Giveaways.Embeds.ActiveGiveaway.MinimumAccountAgeField || "Account Created After:"}** <t:${Math.floor(new Date(minAccountAge).getTime() / 1000)}:d>`);
 
-        if (requirementsCount === 2) {
-            additionalFields.push({ name: '\u200b', value: '\u200b', inline: true });
-        }
+            if (reqs.length > 0) {
+                embed.addFields({ name: lang.Giveaways.Embeds.ActiveGiveaway.RequirementsTitle || '📋 Requirements', value: reqs.join('\n'), inline: false });
+            }
 
-        embed.addFields(additionalFields);
-
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowImage) {
-            if (config.Giveaways.Embed.ActiveGiveaway.EmbedImage) {
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowImage && config.Giveaways.Embed.ActiveGiveaway.EmbedImage) {
                 embed.setImage(config.Giveaways.Embed.ActiveGiveaway.EmbedImage);
             }
-        }
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowThumbnail) {
-            if (config.Giveaways.Embed.ActiveGiveaway.EmbedThumbnail) {
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowThumbnail && config.Giveaways.Embed.ActiveGiveaway.EmbedThumbnail) {
                 embed.setThumbnail(config.Giveaways.Embed.ActiveGiveaway.EmbedThumbnail);
             }
-        }
 
-        if (config.Giveaways.Embed.ActiveGiveaway.ShowFooter) {
-            if (config.Giveaways.Embed.ActiveGiveaway.EmbedFooterIcon) {
-                embed.setFooter({ text: `Giveaway ID: ${giveawayId}`, iconURL: config.Giveaways.Embed.ActiveGiveaway.EmbedFooterIcon });
+            if (config.Giveaways.Embed.ActiveGiveaway.ShowFooter) {
+                // Ensure ID is visible
+                let footerText = (lang.Giveaways.Embeds.ActiveGiveaway.FooterID || "Giveaway ID: {id}").replace('{id}', giveawayId);
+                if (config.Giveaways.Embed.ActiveGiveaway.EmbedFooterText) {
+                    footerText = `${config.Giveaways.Embed.ActiveGiveaway.EmbedFooterText} | ${footerText}`;
+                }
+                embed.setFooter({ text: footerText, iconURL: config.Giveaways.Embed.ActiveGiveaway.EmbedFooterIcon || null });
             }
-        }
-
-        if (!config.Giveaways.Embed.ActiveGiveaway.ShowTitle &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowThumbnail &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowHostedBy &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowEndsIn &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowEntries &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowWhitelistRoles &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowBlacklistRoles &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowMinimumServerJoinDate &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowMinimumAccountAge &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowImage &&
-            !config.Giveaways.Embed.ActiveGiveaway.ShowFooter) {
-            embed.addFields({ name: '\u200b', value: '\u200b' });
         }
 
         const joinButton = new ButtonBuilder()
-            .setLabel(viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonText))
+            .setLabel(lang.Giveaways.Buttons?.Join || config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonText)
             .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonStyle))
             .setCustomId("join_giveaway")
             .setEmoji(config.Giveaways.Embed.ActiveGiveaway.Button.JoinButton.ButtonEmoji);
 
         const checkPercentButton = new ButtonBuilder()
-            .setLabel(viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonText))
+            .setLabel(lang.Giveaways.Buttons?.CheckChance || config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonText)
             .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonStyle))
             .setCustomId("check_percent")
             .setEmoji(config.Giveaways.Embed.ActiveGiveaway.Button.CheckPercent.ButtonEmoji);
@@ -289,7 +274,7 @@ const giveawayActions = {
 
         if (config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList) {
             const showEntrantsButton = new ButtonBuilder()
-                .setLabel(viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList.ButtonText || "Show Entrants"))
+                .setLabel(lang.Giveaways.Buttons?.ShowEntrants || config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList.ButtonText || "Show Entrants")
                 .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntrantsList.ButtonStyle || "SECONDARY"))
                 .setCustomId("show_entrants");
 
@@ -302,7 +287,7 @@ const giveawayActions = {
 
         if (config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries) {
             const entriesButton = new ButtonBuilder()
-                .setLabel(`${viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText)}: 0`)
+                .setLabel(`${lang.Giveaways.Buttons?.Entries || config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText}: 0`)
                 .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonStyle))
                 .setCustomId("entries_count")
                 .setDisabled(true);
@@ -383,7 +368,7 @@ const giveawayActions = {
         // Ensure lang is available (fallback) // Add lang to args
         if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
         try {
-            const giveaway = await Giveaway.findOne({ 
+            const giveaway = await Giveaway.findOne({
                 messageId: messageId,
                 channelId: channelId,
                 ended: false
@@ -406,7 +391,7 @@ const giveawayActions = {
             const requirements = giveaway.requirements;
             const whitelistRoleMentions = requirements.whitelistRoles.map(roleId => `<@&${roleId}>`).join(', ');
             const blacklistRoleMentions = requirements.blacklistRoles.map(roleId => `<@&${roleId}>`).join(', ');
-            
+
             // Update placeholders with specific details
             placeholders = {
                 ...placeholders,
@@ -455,11 +440,11 @@ const giveawayActions = {
             }
 
             if (requirements.minMessages > 0) {
-                const userData = await UserData.findOne({ 
+                const userData = await UserData.findOne({
                     userId: userId,
-                    guildId: interaction.guildId 
+                    guildId: interaction.guildId
                 });
-                
+
                 const currentMessages = userData ? userData.totalMessages : 0;
                 if (currentMessages < requirements.minMessages) {
                     const messageContent = replacePlaceholders(lang.Giveaways.IncorrectMessageCountMessage, {
@@ -489,7 +474,7 @@ const giveawayActions = {
                     const entriesButtonIndex = components.findIndex(c => c.customId === 'entries_count');
                     if (entriesButtonIndex !== -1) {
                         const updatedButton = new ButtonBuilder()
-                            .setLabel(`${viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText)}: ${giveaway.entrants.length}`)
+                            .setLabel(`${lang.Giveaways.Buttons?.Entries || config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText}: ${giveaway.entrants.length}`)
                             .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonStyle))
                             .setCustomId("entries_count")
                             .setDisabled(true);
@@ -518,7 +503,7 @@ const giveawayActions = {
 
             let extraEntriesCount = 0;
             const memberRoles = member.roles.cache;
-            
+
             for (const extraEntry of giveaway.extraEntries) {
                 if (memberRoles.has(extraEntry.roleId)) {
                     extraEntriesCount += extraEntry.entries;
@@ -526,8 +511,8 @@ const giveawayActions = {
             }
 
             giveaway.entries++;
-            giveaway.entrants.push({ 
-                entrantId: userId, 
+            giveaway.entrants.push({
+                entrantId: userId,
                 entrantUsername: username,
                 extraEntries: extraEntriesCount
             });
@@ -538,10 +523,10 @@ const giveawayActions = {
             const embed = message.embeds[0];
 
             const newEmbed = EmbedBuilder.from(embed)
-                .spliceFields(2, 1, { 
-                    name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.EntriesField, placeholders), 
-                    value: `**${giveaway.entrants.length}**`, 
-                    inline: true 
+                .spliceFields(2, 1, {
+                    name: replacePlaceholders(lang.Giveaways.Embeds.ActiveGiveaway.EntriesField, placeholders),
+                    value: `**${giveaway.entrants.length}**`,
+                    inline: true
                 });
 
             if (config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries) {
@@ -549,7 +534,7 @@ const giveawayActions = {
                 const entriesButtonIndex = components.findIndex(c => c.customId === 'entries_count');
                 if (entriesButtonIndex !== -1) {
                     const updatedButton = new ButtonBuilder()
-                        .setLabel(`${viLabel(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText)}: ${giveaway.entrants.length}`)
+                        .setLabel(`${lang.Giveaways.Buttons?.Entries || config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonText}: ${giveaway.entrants.length}`)
                         .setStyle(getButtonStyle(config.Giveaways.Embed.ActiveGiveaway.Button.ShowEntries.ButtonStyle))
                         .setCustomId("entries_count")
                         .setDisabled(true);
@@ -658,9 +643,9 @@ const giveawayActions = {
             for (let i = 0; i < winnerCount && weightedPool.length > 0; i++) {
                 let randomIndex = Math.floor(Math.random() * weightedPool.length);
                 let winner = weightedPool[randomIndex];
-                
+
                 weightedPool = weightedPool.filter(entry => entry.entrantId !== winner.entrantId);
-                
+
                 winners.push({ winnerId: winner.entrantId });
             }
 
@@ -703,9 +688,9 @@ const giveawayActions = {
 
             if (config.Giveaways.Embed.EndedGiveaway.ShowFooter) {
                 const footerIcon = config.Giveaways.Embed.EndedGiveaway.EmbedFooterIcon;
-                embed.setFooter({ 
-                    text: "Giveaway ID: " + giveaway.giveawayId, 
-                    iconURL: footerIcon && footerIcon.length > 0 ? footerIcon : null 
+                embed.setFooter({
+                    text: "Giveaway ID: " + giveaway.giveawayId,
+                    iconURL: footerIcon && footerIcon.length > 0 ? footerIcon : null
                 });
             } else {
                 embed.setFooter(null);
@@ -872,9 +857,9 @@ const giveawayActions = {
         try {
             const userId = interaction.user.id;
             const entrant = giveaway.entrants.find(e => e.entrantId === userId);
-            
+
             if (!entrant) {
-                await interaction.reply({
+                await interaction.editReply({
                     content: lang.Giveaways.NotJoinedGiveaway,
                     flags: MessageFlags.Ephemeral
                 });
@@ -886,9 +871,9 @@ const giveawayActions = {
                 const entrantEntries = 1 + (e.extraEntries || 0);
                 totalEntries += entrantEntries;
             }
-            
+
             const userEntries = 1 + (entrant.extraEntries || 0);
-            
+
             const winChance = (userEntries / totalEntries) * 100;
 
             const placeholders = {
@@ -900,13 +885,13 @@ const giveawayActions = {
 
             const chanceMessage = replacePlaceholders(lang.Giveaways.chanceMessage, placeholders);
 
-            await interaction.reply({
+            await interaction.editReply({
                 content: chanceMessage,
                 flags: MessageFlags.Ephemeral
             });
         } catch (error) {
             console.error('Error calculating chance:', error);
-            await interaction.reply({
+            await interaction.editReply({
                 content: lang.Giveaways.CalculationError,
                 flags: MessageFlags.Ephemeral
             });
@@ -917,7 +902,7 @@ const giveawayActions = {
             // Ensure lang is available (fallback)
             if (!lang) lang = await require('../../utils/langLoader').getLang(interaction.guild?.id);
 
-            const giveaway = await Giveaway.findOne({ 
+            const giveaway = await Giveaway.findOne({
                 messageId: interaction.message.id,
                 channelId: interaction.channelId
             });
@@ -989,9 +974,10 @@ const giveawayActions = {
                         .replace('{totalEntrants}', userEntries.size)
                         .replace('{currentPage}', page)
                         .replace('{totalPages}', totalPages);
+                    const iconUrl = embedConfig.Footer.Icon.replace('{footerIcon}', config.Giveaways.Embed.ActiveGiveaway.EmbedFooterIcon);
                     embed.setFooter({
                         text: footerText,
-                        iconURL: embedConfig.Footer.Icon.replace('{footerIcon}', config.Giveaways.Embed.ActiveGiveaway.EmbedFooterIcon)
+                        iconURL: iconUrl || null
                     });
                 }
 
@@ -1080,11 +1066,11 @@ const giveawayActions = {
 
                 collector.on('end', async () => {
                     const disabledRow = new ActionRowBuilder().addComponents(
-                        row.components.map(component => 
+                        row.components.map(component =>
                             ButtonBuilder.from(component).setDisabled(true)
                         )
                     );
-                    await message.edit({ components: [disabledRow] }).catch(() => {});
+                    await message.edit({ components: [disabledRow] }).catch(() => { });
                 });
             }
         } catch (error) {
