@@ -302,34 +302,63 @@ const WhitelabelManager = {
                 }
             }
 
-            // 3. Copy Files (Overwrite code, SKIP config/db/logs)
-            const files = await fs.readdir(ROOT_DIR);
-            const ignored = ['node_modules', 'whitelabel_instances', '.git', 'logs.txt', 'database.sqlite', '.env', 'config.yml'];
-            // ^ Added config.yml to ignored list for UPDATE only
+            // 3. Sync Files using rsync (Robust & Fast)
+            // Using spawn to avoid buffer overflows and provide real-time logs
+            console.log(`[Whitelabel] Syncing files via rsync...`);
 
-            for (const file of files) {
-                if (ignored.includes(file)) continue;
+            await new Promise((resolve, reject) => {
+                const { spawn } = require('child_process');
+                // Construct arguments array for spawn
+                const args = [
+                    '-av',
+                    '--no-perms',
+                    '--exclude', 'node_modules',
+                    '--exclude', 'whitelabel_instances',
+                    '--exclude', '.git',
+                    '--exclude', 'logs.txt',
+                    '--exclude', 'database.sqlite',
+                    '--exclude', '.env',
+                    '--exclude', 'commands/Owner/whitelabel.js',
+                    '--exclude', 'utils/whitelabelManager.js',
+                    '--exclude', 'templates/whitelabel/',
+                    `${ROOT_DIR}/`,
+                    `${instancePath}/`
+                ];
 
-                const srcPath = path.join(ROOT_DIR, file);
-                const destPath = path.join(instancePath, file);
+                const rsyncHelper = spawn('rsync', args);
 
-                await fs.copy(srcPath, destPath);
-            }
+                rsyncHelper.stdout.on('data', (data) => {
+                    // Log output infrequently to avoid spam, or filtered
+                    // const line = data.toString().trim();
+                    // if (line && !line.startsWith('skipping')) console.log(`[Rsync] ${line}`);
+                });
 
-            // 4. Re-Apply Patches (Help, Manager, Webhook disable)
+                rsyncHelper.stderr.on('data', (data) => {
+                    console.error(`[Rsync Error] ${data.toString().trim()}`);
+                });
 
-            // Disable SePay
-            const indexPath = path.join(instancePath, 'index.js');
-            if (fs.existsSync(indexPath)) {
-                let indexContent = fs.readFileSync(indexPath, 'utf8');
-                indexContent = indexContent.replace(
-                    /startWebhookServer\(client, 3000\);/g,
-                    '// startWebhookServer(client, 3000); // Disabled for Whitelabel'
-                );
-                fs.writeFileSync(indexPath, indexContent);
-            }
+                rsyncHelper.on('close', (code) => {
+                    if (code === 0) {
+                        console.log('[Whitelabel] Rsync completed successfully.');
+                        resolve();
+                    } else {
+                        console.error(`[Whitelabel] Rsync exited with code ${code}`);
+                        reject(new Error(`Rsync exited with code ${code}`));
+                    }
+                });
+
+                rsyncHelper.on('error', (err) => {
+                    console.error('[Whitelabel] Rsync failed to start:', err);
+                    reject(err);
+                });
+            });
+
+            console.log(`[Whitelabel] Re-applying patches...`);
+
+            // 4. Re-Apply Patches (Help, Manager)
 
             // Overwrite Help
+            console.log(`[Whitelabel] Overwriting Help command...`);
             const targetHelp = path.join(instancePath, 'commands', 'General', 'help.js');
             if (fs.existsSync(TEMPLATE_HELP)) {
                 fs.ensureDirSync(path.dirname(targetHelp));
@@ -337,6 +366,7 @@ const WhitelabelManager = {
             }
 
             // Inject Manager
+            console.log(`[Whitelabel] Injecting Manager command...`);
             const TEMPLATE_MANAGER = path.join(ROOT_DIR, 'templates', 'whitelabel', 'manager.js');
             const targetManager = path.join(instancePath, 'commands', 'Owner', 'manager.js');
             if (fs.existsSync(TEMPLATE_MANAGER)) {
@@ -344,13 +374,42 @@ const WhitelabelManager = {
             }
 
             // Remove Restricted
+            console.log(`[Whitelabel] Removing restricted files...`);
             const forbidden = [
                 path.join(instancePath, 'commands', 'Owner', 'whitelabel.js'),
             ];
             forbidden.forEach(file => { if (fs.existsSync(file)) fs.removeSync(file); });
 
-            // 5. Start Instance
-            await this.startInstance(userId);
+            // 5. Install Dependencies (In case of package.json updates)
+            console.log(`[Whitelabel] Installing dependencies...`);
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('NPM Install Timed Out (>60s)'));
+                }, 60000);
+
+                exec('npm install --production', { cwd: instancePath }, (err, stdout, stderr) => {
+                    clearTimeout(timeout);
+                    if (err) {
+                        console.error(`[Whitelabel] NPM Install Failed: ${stderr}`);
+                        // We continue even if npm install fails, as it might just be a warning
+                        // But strictly speaking we should maybe warn. For now, log and resolve.
+                        resolve();
+                    } else {
+                        // console.log(`[Whitelabel] NPM Output: ${stdout}`);
+                        resolve();
+                    }
+                });
+            });
+
+            // 6. Start Instance
+            console.log(`[Whitelabel] Starting instance ${userId}...`);
+            const startResult = await this.startInstance(userId);
+            if (startResult) {
+                console.log(`[Whitelabel] Instance started successfully.`);
+            } else {
+                console.error(`[Whitelabel] Instance FAILED to start.`);
+                throw new Error("Failed to start instance via PM2");
+            }
 
             return { success: true };
 
@@ -358,6 +417,53 @@ const WhitelabelManager = {
             console.error(`[Whitelabel] Update failed for ${userId}:`, e);
             return { success: false, error: e.message };
         }
+    },
+
+    /**
+     * Stop a whitelabel instance
+     */
+    stopInstance(userId) {
+        return new Promise((resolve) => {
+            console.log(`[Whitelabel] Executing stop command for WL_${userId}...`);
+            const cmd = `${getPM2Command()} stop WL_${userId}`;
+
+            // Force resolve after 10 seconds to prevent hanging
+            const timeout = setTimeout(() => {
+                console.log(`[Whitelabel] Stop command TIMED OUT for WL_${userId} (PM2 likely unresponsive or process missing)`);
+                resolve(false);
+            }, 10000);
+
+            exec(cmd, (err, stdout, stderr) => {
+                clearTimeout(timeout);
+                if (err) {
+                    // console.log(`[Whitelabel] Stop failed (Process might not exist): ${err.message}`);
+                    resolve(false);
+                } else {
+                    console.log(`[Whitelabel] Stop success.`);
+                    WhitelabelModel.setSubscription(userId, { status: 'STOPPED' });
+                    resolve(true);
+                }
+            });
+        });
+    },
+
+    /**
+     * Start a stopped instance
+     */
+    startInstance(userId) {
+        return new Promise((resolve) => {
+            const cmd = `${getPM2Command()} start WL_${userId}`;
+            exec(cmd, (err, stdout, stderr) => {
+                if (err) {
+                    console.error(`[Whitelabel] Start Failed for WL_${userId}:`, stderr);
+                    resolve(false);
+                } else {
+                    console.log(`[Whitelabel] Start Success for WL_${userId}:`, stdout.trim());
+                    WhitelabelModel.setSubscription(userId, { status: 'ACTIVE' });
+                    resolve(true);
+                }
+            });
+        });
     },
 
     async updateAllInstances() {

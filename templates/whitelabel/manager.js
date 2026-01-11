@@ -18,16 +18,29 @@ module.exports = {
                 .setDescription('Đổi Avatar Bot')
                 .addAttachmentOption(opt => opt.setName('image').setDescription('Ảnh mới').setRequired(true))
         )
-        .addSubcommand(sub =>
-            sub.setName('status')
-                .setDescription('Đổi trạng thái Bot')
-                .addStringOption(opt => opt.setName('text').setDescription('Nội dung').setRequired(true))
-                .addStringOption(opt => opt.setName('type').setDescription('Loại').addChoices(
-                    { name: 'Playing', value: 'Playing' },
-                    { name: 'Watching', value: 'Watching' },
-                    { name: 'Listening', value: 'Listening' },
-                    { name: 'Competing', value: 'Competing' }
-                ))
+        .addSubcommandGroup(group =>
+            group.setName('activity')
+                .setDescription('Quản lý trạng thái hoạt động (Activity Status)')
+                .addSubcommand(sub =>
+                    sub.setName('list')
+                        .setDescription('Xem danh sách hoạt động hiện tại')
+                )
+                .addSubcommand(sub =>
+                    sub.setName('add')
+                        .setDescription('Thêm hoạt động mới')
+                        .addStringOption(opt => opt.setName('text').setDescription('Nội dung (Hỗ trợ {total-users}, {uptime}...)').setRequired(true))
+                        .addStringOption(opt => opt.setName('type').setDescription('Loại').addChoices(
+                            { name: 'Playing', value: 'PLAYING' },
+                            { name: 'Watching', value: 'WATCHING' },
+                            { name: 'Listening', value: 'LISTENING' },
+                            { name: 'Competing', value: 'COMPETING' }
+                        ))
+                )
+                .addSubcommand(sub =>
+                    sub.setName('remove')
+                        .setDescription('Xóa hoạt động')
+                        .addIntegerOption(opt => opt.setName('index').setDescription('Số thứ tự (Xem từ lệnh /admin activity list)').setRequired(true))
+                )
         )
         .addSubcommand(sub =>
             sub.setName('restart')
@@ -82,21 +95,52 @@ module.exports = {
                 return interaction.editReply(`❌ Lỗi: ${error.message}. (Lưu ý: Bạn không thể đổi avatar quá nhanh).`);
             }
 
-        } else if (sub === 'status') {
-            const text = interaction.options.getString('text');
-            const typeStr = interaction.options.getString('type') || 'Playing';
+        } else if (sub === 'activity') { // Handle Subcommand Group? No, check group logic
+            // In djs v14, we check subGroup first? No, interaction.options.getSubcommand() works if unique?
+            // Wait, for groups, we usually check getSubcommandGroup()
+        }
 
-            let type = ActivityType.Playing;
-            if (typeStr === 'Watching') type = ActivityType.Watching;
-            if (typeStr === 'Listening') type = ActivityType.Listening;
-            if (typeStr === 'Competing') type = ActivityType.Competing;
+        // Proper handling for djs v14 nested commands
+        const group = interaction.options.getSubcommandGroup(false);
+        const subCmd = interaction.options.getSubcommand();
 
-            interaction.client.user.setActivity(text, { type });
+        if (group === 'activity') {
+            const configPath = path.join(process.cwd(), 'config.yml');
+            let config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
-            // Should verify save to config? 
-            // Ideally yes, but for now simple runtime change.
-            return interaction.reply(`✅ Đã đổi trạng thái thành: **${typeStr} ${text}**`);
+            if (!config.ActivitySettings) {
+                config.ActivitySettings = { Enabled: true, Interval: 10000, Activities: [] };
+            }
 
+            if (subCmd === 'list') {
+                const activities = config.ActivitySettings.Activities || [];
+                if (activities.length === 0) return interaction.reply('Hiện không có activity nào.');
+
+                const list = activities.map((a, i) => `**${i + 1}.** [${a.Type}] ${a.Text}`).join('\n');
+                return interaction.reply({ content: `📋 **Danh sách Activity:**\n${list}`, ephemeral: true });
+
+            } else if (subCmd === 'add') {
+                const text = interaction.options.getString('text');
+                const type = interaction.options.getString('type') || 'PLAYING';
+
+                config.ActivitySettings.Activities.push({ Type: type, Status: 'online', Text: text });
+                fs.writeFileSync(configPath, yaml.dump(config));
+
+                return interaction.reply(`✅ Đã thêm activity: [${type}] \`${text}\`\n(Bot sẽ cập nhật sau vài giây)`);
+
+            } else if (subCmd === 'remove') {
+                const index = interaction.options.getInteger('index');
+                const activities = config.ActivitySettings.Activities || [];
+
+                if (index < 1 || index > activities.length) {
+                    return interaction.reply({ content: '❌ Số thứ tự không hợp lệ.', ephemeral: true });
+                }
+
+                const removed = activities.splice(index - 1, 1);
+                fs.writeFileSync(configPath, yaml.dump(config));
+
+                return interaction.reply(`✅ Đã xóa activity: [${removed[0].Type}] \`${removed[0].Text}\``);
+            }
         } else if (sub === 'restart') {
             await interaction.reply('🔄 Đang khởi động lại...');
             process.exit(0);

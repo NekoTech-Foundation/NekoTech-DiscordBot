@@ -175,12 +175,13 @@ client.commands = new Map();
 // Economy command removed as part of consolidation
 
 require("./utils.js")(client);
-// Start SePay Webhook Server
-const { startWebhookServer } = require('./utils/sepayWebhook');
-startWebhookServer(client, 3000); // Default port 3000
+// Start SePay Webhook Server (Only for Main Bot)
+if (!global.config.IsWhitelabel) {
+    const { startWebhookServer } = require('./utils/sepayWebhook');
+    startWebhookServer(client, 3000); // Default port 3000
 
-require('./events/antiNuke')(client);
-require('./cron/whitelabelExpiry')(client);
+    require('./cron/whitelabelExpiry')(client);
+}
 
 const filePath = './logs.txt';
 const maxLength = 300;

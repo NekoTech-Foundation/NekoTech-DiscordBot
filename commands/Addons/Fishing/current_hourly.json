@@ -6,10 +6,10 @@
     "max_weight": 10
   },
   "epic": {
-    "name": "San hô",
-    "emoji": "<:Fish_coral:1433392886421913600>",
+    "name": "Khủng long sáu sừng",
+    "emoji": "<:Fish_axolotl:1433392927614173304>",
     "min_weight": 0.1,
-    "max_weight": 1
+    "max_weight": 0.3
   },
-  "updatedAt": "2026-01-11T11:30:56.863Z"
+  "updatedAt": "2026-01-11T12:44:28.659Z"
 }
