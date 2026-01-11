@@ -175,11 +175,15 @@ client.commands = new Map();
 // Economy command removed as part of consolidation
 
 require("./utils.js")(client);
-// Start SePay Webhook Server (Only for Main Bot)
-if (!global.config.IsWhitelabel) {
-    const { startWebhookServer } = require('./utils/sepayWebhook');
-    startWebhookServer(client, 3000); // Default port 3000
+// Start SePay Webhook Server
+const { startWebhookServer } = require('./utils/sepayWebhook');
+// Use configured port or default to 3000
+// Whitelabel instances will have their own port set in config
+const webhookPort = global.config.SePay && global.config.SePay.Port ? global.config.SePay.Port : 3000;
+startWebhookServer(client, webhookPort);
 
+// Whitelabel Expiry Check (Only Main Bot needs to run this)
+if (!global.config.IsWhitelabel) {
     require('./cron/whitelabelExpiry')(client);
 }
 

@@ -47,7 +47,8 @@ const WhitelabelManager = {
             console.log(`[Whitelabel] Creating instance for ${userId} at ${instancePath}`);
 
             const files = await fs.readdir(ROOT_DIR);
-            const ignored = ['node_modules', 'whitelabel_instances', '.git', 'logs.txt', 'database.sqlite', '.env'];
+            // Exclude database and its WAL/SHM files to ensure fresh DB creation
+            const ignored = ['node_modules', 'whitelabel_instances', '.git', 'logs.txt', 'database.sqlite', 'database.sqlite-wal', 'database.sqlite-shm', '.env'];
 
             for (const file of files) {
                 if (ignored.includes(file)) continue;
@@ -90,22 +91,18 @@ const WhitelabelManager = {
                 config.GiveawayLogs.Enabled = false; // Disable logs by default to avoid errors
                 config.IsWhitelabel = true; // Mark as whitelabel instance
 
+                // Assign a random port for SePay Webhook to avoid conflicts
+                // Port range: 3001 - 4000
+                const randomPort = Math.floor(Math.random() * (4000 - 3001 + 1)) + 3001;
+                if (!config.SePay) config.SePay = {};
+                config.SePay.Port = randomPort;
+                console.log(`[Whitelabel] Assigned Port ${randomPort} to instance ${userId}`);
+
                 // Save Config
                 fs.writeFileSync(configPath, yaml.dump(config));
             }
 
-            // 4. Disable SePay Webhook in index.js to prevent Port Conflict (EADDRINUSE)
-            // Whitelabel instances don't use the main bot's SePay server
-            const indexPath = path.join(instancePath, 'index.js');
-            if (fs.existsSync(indexPath)) {
-                let indexContent = fs.readFileSync(indexPath, 'utf8');
-                // Comment out the startWebhookServer call
-                indexContent = indexContent.replace(
-                    /startWebhookServer\(client, 3000\);/g,
-                    '// startWebhookServer(client, 3000); // Disabled for Whitelabel'
-                );
-                fs.writeFileSync(indexPath, indexContent);
-            }
+            // 4. (Removed) Index patching is no longer needed as index.js supports dynamic ports.
 
             // 5. Overwrite Help Command (Recode)
             const targetHelp = path.join(instancePath, 'commands', 'General', 'help.js');
@@ -316,8 +313,9 @@ const WhitelabelManager = {
                     '--exclude', 'whitelabel_instances',
                     '--exclude', '.git',
                     '--exclude', 'logs.txt',
-                    '--exclude', 'database.sqlite',
+                    '--exclude', 'database.sqlite*',
                     '--exclude', '.env',
+                    '--exclude', 'config.yml',
                     '--exclude', 'commands/Owner/whitelabel.js',
                     '--exclude', 'utils/whitelabelManager.js',
                     '--exclude', 'templates/whitelabel/',
