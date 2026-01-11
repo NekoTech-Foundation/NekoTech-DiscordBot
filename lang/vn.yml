@@ -487,9 +487,9 @@ ErrorGeneric: "Xin lỗi, đã có lỗi với lệnh này."
 # ===========================================================================
 Giveaways:
   # Existing & New Keys merged
-  CheckChance: "{user} bạn có {percent}% cơ hội thắng giveaway này. ({entries} lượt tham gia)"
+  chanceMessage: "{user}, bạn có **{winChance}%** cơ hội thắng giveaway này. ({userEntries} lượt tham gia: 1 cơ bản + {extraEntries} thưởng)"
   NotJoinedGiveaway: "Bạn chưa tham gia giveaway này!"
-  CalculationError: "Đã xảy ra lỗi khi tính toán cơ hội của bạn."
+  CalculationError: "Có lỗi xảy ra khi tính toán tỷ lệ."
   GiveawayNotFound: "❌ Không tìm thấy Giveaway!"
   GiveawayHasntEnded: "❌ Giveaway chưa kết thúc!"
   EndMessage: "❌ Giveaway đã kết thúc!"
@@ -527,6 +527,7 @@ Giveaways:
     CheckChance: "Xem tỷ lệ"
     ShowEntrants: "Danh sách tham gia"
     Entries: "Lượt tham gia"
+
   # ===========================================================================
 # TIN NHẮN KENTA SCRATCH
 # ===========================================================================
