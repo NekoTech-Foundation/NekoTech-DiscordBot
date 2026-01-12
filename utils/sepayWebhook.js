@@ -2,8 +2,54 @@ const http = require('http');
 const { EmbedBuilder } = require('discord.js');
 const SePayConfig = require('../models/SePayConfig');
 
+const WhitelabelModel = require('../models/Whitelabel');
+const packageFile = require('../package.json');
+
 const startWebhookServer = (client, port = 3000) => {
     const server = http.createServer(async (req, res) => {
+        // CORS Headers
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+        if (req.method === 'OPTIONS') {
+            res.writeHead(204);
+            res.end();
+            return;
+        }
+
+        if (req.method === 'GET') {
+            if (req.url === '/api/public/status') {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                    online: true,
+                    latency: client.ws.ping,
+                    uptime: client.uptime,
+                    version: packageFile.version
+                }));
+                return;
+            }
+
+            if (req.url === '/api/public/whitelabel-count') {
+                try {
+                    const all = await WhitelabelModel.getAllInstances();
+                    const activeCount = all.filter(i => i.status === 'ACTIVE').length;
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ count: activeCount }));
+                } catch (err) {
+                    console.error('Error fetching whitelabel count:', err);
+                    res.writeHead(500);
+                    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+                }
+                return;
+            }
+
+            // 404 for other GETs
+            res.writeHead(404);
+            res.end('Not Found');
+            return;
+        }
+
         if (req.method === 'POST') {
             let body = '';
             req.on('data', chunk => {
@@ -32,16 +78,16 @@ const startWebhookServer = (client, port = 3000) => {
 
                     const accNum = data.accountNumber;
                     if (!accNum) {
-                         res.writeHead(400);
-                         res.end('Missing accountNumber');
-                         return;
+                        res.writeHead(400);
+                        res.end('Missing accountNumber');
+                        return;
                     }
 
                     // Find Guild Config by Account Number
                     // Since SePayConfig is by guildId (PK), we need to search.
                     // SQLiteModel's find returns an array.
                     const configs = await SePayConfig.find({ accountNumber: accNum });
-                    
+
                     if (configs.length === 0) {
                         console.log(`[SePay Webhook] No guild config found for account: ${accNum}`);
                         res.writeHead(404);
@@ -51,11 +97,11 @@ const startWebhookServer = (client, port = 3000) => {
 
                     // Notify all guilds with this account number (usually just one)
                     for (const config of configs) {
-                         if (!config.channelId) continue;
+                        if (!config.channelId) continue;
 
-                         const channel = await client.channels.fetch(config.channelId).catch(() => null);
-                         if (channel) {
-                             const embed = new EmbedBuilder()
+                        const channel = await client.channels.fetch(config.channelId).catch(() => null);
+                        if (channel) {
+                            const embed = new EmbedBuilder()
                                 .setTitle('💸 Donation Received!')
                                 .setColor('Green')
                                 .addFields(
@@ -67,8 +113,8 @@ const startWebhookServer = (client, port = 3000) => {
                                 .setFooter({ text: `Trans ID: ${data.id}` })
                                 .setTimestamp();
 
-                             await channel.send({ embeds: [embed] });
-                         }
+                            await channel.send({ embeds: [embed] });
+                        }
                     }
 
                     res.writeHead(200);
