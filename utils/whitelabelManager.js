@@ -47,8 +47,8 @@ const WhitelabelManager = {
             console.log(`[Whitelabel] Creating instance for ${userId} at ${instancePath}`);
 
             const files = await fs.readdir(ROOT_DIR);
-            // Exclude database and its WAL/SHM files to ensure fresh DB creation
-            const ignored = ['node_modules', 'whitelabel_instances', '.git', 'logs.txt', 'database.sqlite', 'database.sqlite-wal', 'database.sqlite-shm', '.env'];
+            // Exclude database, system folders (pm2, npm), and logs
+            const ignored = ['node_modules', 'whitelabel_instances', '.git', 'logs.txt', 'database.sqlite', 'database.sqlite-wal', 'database.sqlite-shm', '.env', '.pm2', '.npm', '.cache', '.config', '.local'];
 
             for (const file of files) {
                 if (ignored.includes(file)) continue;

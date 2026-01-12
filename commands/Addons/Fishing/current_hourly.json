@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Cá cần câu",
-    "emoji": "<:Fish_angler:1433393238953296033>",
-    "min_weight": 20,
-    "max_weight": 50
+    "name": "Cá nhà táng",
+    "emoji": "<:Fish_spermwhale:1433392975416791040>",
+    "min_weight": 35000,
+    "max_weight": 45000
   },
   "epic": {
     "name": "Cá heo",
@@ -11,5 +11,5 @@
     "min_weight": 150,
     "max_weight": 400
   },
-  "updatedAt": "2026-01-12T06:01:39.597Z"
+  "updatedAt": "2026-01-12T09:00:00.012Z"
 }
