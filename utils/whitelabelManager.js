@@ -448,20 +448,69 @@ const WhitelabelManager = {
     /**
      * Start a stopped instance
      */
-    startInstance(userId) {
+    async startInstance(userId) {
+        const instancePath = path.join(ROOT_DIR, 'whitelabel_instances', userId);
+        const pm2Name = `WL_${userId}`;
+        const cmd = `${getPM2Command()} start index.js --name "${pm2Name}" --cwd "${instancePath}"`;
+
         return new Promise((resolve) => {
-            const cmd = `${getPM2Command()} start WL_${userId}`;
-            exec(cmd, (err, stdout, stderr) => {
+            // First check if already running? No, PM2 handles "already running" gracefully or we can just try start
+            // Actually 'pm2 start index.js --name ...' will fail if name exists.
+            // So we should try 'pm2 restart name' OR 'pm2 start ...'
+            // Safer: 'pm2 start ...' implies create. If exists, it might error.
+            // Strategy: Check list. If exists, restart. If not, start.
+
+            exec(`${getPM2Command()} describe ${pm2Name}`, (err) => {
                 if (err) {
-                    console.error(`[Whitelabel] Start Failed for WL_${userId}:`, stderr);
-                    resolve(false);
+                    // Process not found, create it
+                    console.log(`[Whitelabel] Process ${pm2Name} not found, starting new...`);
+                    exec(cmd, (startErr, stdout, stderr) => {
+                        if (startErr) {
+                            console.error(`[Whitelabel] Start Failed for WL_${userId}:`, stderr);
+                            resolve(false);
+                        } else {
+                            console.log(`[Whitelabel] Start Success for WL_${userId}`);
+                            WhitelabelModel.setSubscription(userId, { status: 'ACTIVE' });
+                            resolve(true);
+                        }
+                    });
                 } else {
-                    console.log(`[Whitelabel] Start Success for WL_${userId}:`, stdout.trim());
-                    WhitelabelModel.setSubscription(userId, { status: 'ACTIVE' });
-                    resolve(true);
+                    // Process exists, restart implementation or just start
+                    console.log(`[Whitelabel] Process ${pm2Name} exists, ensuring online...`);
+                    exec(`${getPM2Command()} restart ${pm2Name}`, (restartErr) => {
+                        if (!restartErr) {
+                            console.log(`[Whitelabel] Restart Success for WL_${userId}`);
+                            WhitelabelModel.setSubscription(userId, { status: 'ACTIVE' });
+                            resolve(true);
+                        } else {
+                            // Fallback to start if restart somehow fails weirdly? No, usually valid.
+                            resolve(false);
+                        }
+                    });
                 }
             });
         });
+    },
+
+    async startAllInstances() {
+        console.log('[Whitelabel] Checking for instances to auto-start...');
+        const instances = await WhitelabelModel.getAllInstances();
+        let count = 0;
+
+        for (const data of instances) {
+            if (data.status === 'EXPIRED') continue;
+            // Additional check: Does the folder exist?
+            const instancePath = path.join(ROOT_DIR, 'whitelabel_instances', data.userId);
+            if (!require('fs').existsSync(instancePath)) {
+                console.log(`[Whitelabel] Folder missing for ${data.userId}, skipping auto-start.`);
+                continue;
+            }
+
+            const success = await this.startInstance(data.userId);
+            if (success) count++;
+        }
+        console.log(`[Whitelabel] Auto-start complete. Started ${count} instances.`);
+        return count;
     },
 
     async updateAllInstances() {
