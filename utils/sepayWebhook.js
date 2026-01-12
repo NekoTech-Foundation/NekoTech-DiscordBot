@@ -134,6 +134,14 @@ const startWebhookServer = (client, port = 3000) => {
     server.listen(port, () => {
         console.log(`[SePay Webhook] Server listening on port ${port}`);
     });
+
+    server.on('error', (e) => {
+        if (e.code === 'EADDRINUSE') {
+            console.error(`[SePay Webhook] Port ${port} is already in use! Webhook server failed to start.`);
+        } else {
+            console.error('[SePay Webhook] Server error:', e);
+        }
+    });
 };
 
 module.exports = { startWebhookServer };

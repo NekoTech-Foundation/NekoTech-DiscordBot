@@ -47,17 +47,40 @@ const WhitelabelManager = {
             console.log(`[Whitelabel] Creating instance for ${userId} at ${instancePath}`);
 
             const files = await fs.readdir(ROOT_DIR);
-            // Exclude database, system folders (pm2, npm), and logs
-            const ignored = ['node_modules', 'whitelabel_instances', '.git', 'logs.txt', 'database.sqlite', 'database.sqlite-wal', 'database.sqlite-shm', '.env', '.pm2', '.npm', '.cache', '.config', '.local'];
+            // Exclude database, system folders, and specific files
+            const ignored = ['node_modules', 'whitelabel_instances', 'logs.txt', 'database.sqlite', 'database.sqlite-wal', 'database.sqlite-shm', '.env'];
+
+            const filterFunc = (src, dest) => {
+                const basename = path.basename(src);
+                // Skip ignored top-level files/folders
+                if (src === ROOT_DIR) return true; // Always copy root
+
+                // Check against ignored list (only if it's a direct child of ROOT_DIR, but simplest to check basename)
+                if (ignored.includes(basename)) return false;
+
+                // Skip ALL hidden files/folders (starting with .) EXCEPT if we really need them (e.g. .gitignore? maybe not needed for instance)
+                if (basename.startsWith('.')) return false;
+
+                // Check for Sockets or broken links
+                try {
+                    const stats = fs.lstatSync(src);
+                    if (stats.isSocket() || stats.isBlockDevice() || stats.isCharacterDevice() || stats.isFIFO()) return false;
+                } catch (e) {
+                    return false; // Skip if cant stat
+                }
+
+                return true;
+            };
 
             for (const file of files) {
-                if (ignored.includes(file)) continue;
+                // Initial check for top-level before recursive filter
+                if (ignored.includes(file) || file.startsWith('.')) continue;
 
                 const srcPath = path.join(ROOT_DIR, file);
                 const destPath = path.join(instancePath, file);
 
-                // Copy everything else
-                await fs.copy(srcPath, destPath);
+                // Use the filter for recursive copying
+                await fs.copy(srcPath, destPath, { filter: filterFunc, dereference: true });
             }
 
             // 2. Install Dependencies (Fresh install to avoid symlink issues)
