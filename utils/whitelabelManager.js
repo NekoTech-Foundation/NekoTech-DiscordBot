@@ -322,8 +322,8 @@ const WhitelabelManager = {
                 }
             }
 
-            // 3. Sync Files using fs.copy (Native Node.js, no rsync dependency)
-            console.log(`[Whitelabel] Syncing files via fs.copy (replacing rsync)...`);
+            // 3. Sync Files using fs.copy (Iterative to avoid "subdirectory of itself" error)
+            console.log(`[Whitelabel] Syncing files via iterative fs.copy...`);
 
             const ignored = [
                 'node_modules',
@@ -338,45 +338,44 @@ const WhitelabelManager = {
                 'config.yml',
                 'commands/Owner/whitelabel.js',
                 'utils/whitelabelManager.js',
-                'templates/whitelabel', // Folder name check usually works on basename
+                'templates/whitelabel',
             ];
 
             const filterFunc = (src, dest) => {
                 const basename = path.basename(src);
+                // We don't need ROOT_DIR check here as we copy children directly
 
-                // 1. Root Directory Check
-                if (src === ROOT_DIR) return true;
-
-                // 2. Exact Path Match for nested exclusions (like commands/Owner/whitelabel.js)
-                // path.relative returns regular path, we need to handle cross-platform separators if needed, but relative usually strictly relative
+                // Check relative path for nested exclusions
                 const relative = path.relative(ROOT_DIR, src);
-                if (ignored.includes(relative)) return false; // Exact relative path match
+                if (ignored.includes(relative)) return false;
 
-                // 3. Basename check for folders/files like node_modules, logs, .git
                 if (ignored.includes(basename)) return false;
+                if (basename.startsWith('database.sqlite')) return false;
+                if (basename.startsWith('.')) return false;
 
-                // 4. Wildcard/Pattern checks
-                if (basename.startsWith('database.sqlite')) return false; // Catch wal/shm if not in list
-                if (basename.startsWith('.')) return false; // Hidden files (except .env which is already explicitly excluded often)
-
-                // 5. Special check for templates/whitelabel if purely basename isn't enough (it is in list above)
-
-                // 6. System file checks
                 try {
                     const stats = fs.lstatSync(src);
                     if (stats.isSocket() || stats.isBlockDevice() || stats.isCharacterDevice() || stats.isFIFO()) return false;
                 } catch (e) {
                     return false;
                 }
-
                 return true;
             };
 
-            await fs.copy(ROOT_DIR, instancePath, {
-                filter: filterFunc,
-                dereference: true,
-                overwrite: true
-            });
+            const files = await fs.readdir(ROOT_DIR);
+            for (const file of files) {
+                // Top-level exclusion check
+                if (ignored.includes(file) || file.startsWith('.')) continue;
+
+                const srcPath = path.join(ROOT_DIR, file);
+                const destPath = path.join(instancePath, file);
+
+                await fs.copy(srcPath, destPath, {
+                    filter: filterFunc,
+                    dereference: true,
+                    overwrite: true
+                });
+            }
 
             console.log('[Whitelabel] File sync completed successfully.');
 
