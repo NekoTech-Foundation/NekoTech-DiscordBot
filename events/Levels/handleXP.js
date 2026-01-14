@@ -39,10 +39,10 @@ function parseTime(timeString) {
     const regex = /^(\d+)([smhd])$/;
     const match = timeString.match(regex);
     if (!match) return 0;
-    
+
     const value = parseInt(match[1]);
     const unit = match[2];
-    
+
     switch (unit) {
         case 's': return value * 1000;
         case 'm': return value * 60 * 1000;
@@ -165,7 +165,7 @@ async function handleXP(message) {
             }
 
             let channel = message.channel;
-            
+
             // Per-Guild Config Override
             const guildSettings = await GuildSettings.findOne({ guildId: message.guild.id });
             const mode = guildSettings?.leveling?.notificationMode || 'current'; // Default to 'current'
@@ -175,17 +175,17 @@ async function handleXP(message) {
             } else if (mode === 'channel') {
                 const specificChannelId = guildSettings?.leveling?.levelUpChannelId;
                 if (specificChannelId && message.guild.channels.cache.has(specificChannelId)) {
-                   const specificChannel = message.guild.channels.cache.get(specificChannelId);
-                   if (specificChannel.type === ChannelType.GuildText) {
-                       channel = specificChannel;
-                   }
+                    const specificChannel = message.guild.channels.cache.get(specificChannelId);
+                    if (specificChannel.type === ChannelType.GuildText) {
+                        channel = specificChannel;
+                    }
                 }
             } else {
                 // mode === 'current' or fallback
                 // Fallback to config.yml if specific per-guild channel is not set but 'channel' mode is selected (edge case) OR if still using old config style
                 if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID' && message.guild.channels.cache.has(config.LevelingSystem.ChannelSettings?.LevelUpChannelID)) {
-                     // Only override if config.yml explicitly sets a channel AND per-guild mode is NOT 'current' (to respect 'current' default)
-                     // Actually, per-guild settings should take precedence. If mode is 'current', use message.channel. 
+                    // Only override if config.yml explicitly sets a channel AND per-guild mode is NOT 'current' (to respect 'current' default)
+                    // Actually, per-guild settings should take precedence. If mode is 'current', use message.channel. 
                 }
             }
 
@@ -228,18 +228,18 @@ async function handleXP(message) {
                 if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
                     const embedSettings = config.LevelingSystem.LevelUpMessageSettings.Embed || {};
                     const embed = new EmbedBuilder().setColor(embedSettings.Color || '#34eb6b');
-    
+
                     if (embedSettings.Title) {
                         embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
                     }
-    
+
                     if (embedSettings.Description && embedSettings.Description.length > 0) {
                         embed.setDescription(embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
                     }
-    
+
                     if (embedSettings.Footer && embedSettings.Footer.Text) {
-                        const footerText = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text, placeholders);
-                        const footerIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Icon || "", placeholders);
+                        const footerText = replacePlaceholders(embedSettings.Footer.Text, placeholders);
+                        const footerIconURL = replacePlaceholders(embedSettings.Footer.Icon || "", placeholders);
                         if (footerText) {
                             embed.setFooter({
                                 text: footerText,
@@ -251,29 +251,29 @@ async function handleXP(message) {
                             });
                         }
                     }
-    
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Author && config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text) {
-                        const authorIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Icon || "", placeholders);
+
+                    if (embedSettings.Author && embedSettings.Author.Text) {
+                        const authorIconURL = replacePlaceholders(embedSettings.Author.Icon || "", placeholders);
                         embed.setAuthor({
-                            name: replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text, placeholders),
+                            name: replacePlaceholders(embedSettings.Author.Text, placeholders),
                             iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
                         });
                     }
-    
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail) {
-                        const thumbnailURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail, placeholders);
+
+                    if (embedSettings.Thumbnail) {
+                        const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
                         if (isValidUrl(thumbnailURL)) {
                             embed.setThumbnail(thumbnailURL);
                         }
                     }
-    
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Image) {
-                        const imageURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Image, placeholders);
+
+                    if (embedSettings.Image) {
+                        const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
                         if (isValidUrl(imageURL)) {
                             embed.setImage(imageURL);
                         }
                     }
-    
+
                     channel.send({ embeds: [embed] });
                 } else {
                     const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
@@ -282,7 +282,7 @@ async function handleXP(message) {
                     }
                 }
             }
-            levelUpMessageSent = true; 
+            levelUpMessageSent = true;
         }
 
         await userData.save();
@@ -372,8 +372,8 @@ async function handleVoiceXP(client, member) {
             }
 
             let channel;
-            
-            if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && 
+
+            if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID &&
                 config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID') {
                 channel = member.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
             }
@@ -418,7 +418,7 @@ async function handleVoiceXP(client, member) {
             try {
                 if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
                     const embed = new EmbedBuilder()
-                    .setColor(config.LevelingSystem.LevelUpMessageSettings.Embed.Color || '#34eb6b');
+                        .setColor(config.LevelingSystem.LevelUpMessageSettings.Embed.Color || '#34eb6b');
 
                     if (config.LevelingSystem.LevelUpMessageSettings.Embed.Title) {
                         embed.setTitle(replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Title, placeholders));
@@ -489,7 +489,7 @@ async function handleVoiceXP(client, member) {
     voiceXpTimers.set(timerKey, intervalId);
 
     const handleVoiceStateUpdate = (oldState, newState) => {
-        if (oldState.member.id === member.id && 
+        if (oldState.member.id === member.id &&
             (!newState.channelId || oldState.channelId !== newState.channelId)) {
             const existingTimer = voiceXpTimers.get(timerKey);
             if (existingTimer) {
