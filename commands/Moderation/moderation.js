@@ -222,6 +222,45 @@ module.exports = {
             subcommand
                 .setName('unlock')
                 .setDescription('Mở khóa kênh hiện tại')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('purge')
+                .setDescription('Xóa một số lượng tin nhắn nhất định')
+                .addIntegerOption(option =>
+                    option
+                        .setName('amount')
+                        .setDescription('Số lượng tin nhắn cần xóa (tối đa 999)')
+                        .setMinValue(1)
+                        .setMaxValue(999)
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('autopurge')
+                .setDescription('Xóa tin nhắn theo thời gian (trong vòng 2 tuần)')
+                .addIntegerOption(option =>
+                    option
+                        .setName('amount')
+                        .setDescription('Số lượng tin nhắn cần kiểm tra (tối đa 999)')
+                        .setMinValue(1)
+                        .setMaxValue(999)
+                        .setRequired(true)
+                )
+                .addIntegerOption(option =>
+                    option
+                        .setName('days')
+                        .setDescription('Số ngày trở lại đây để xóa tin nhắn (tối đa 14 ngày)')
+                        .setMinValue(1)
+                        .setMaxValue(14)
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('allpurge')
+                .setDescription('Xóa toàn bộ kênh và tạo lại (Nuke)')
         ),
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
@@ -552,6 +591,123 @@ module.exports = {
                     content: '❌ Không thể mở khóa kênh. Vui lòng kiểm tra quyền của bot.',
                     flags: MessageFlags.Ephemeral
                 });
+            }
+        } else if (subcommand === 'purge') {
+            const amount = interaction.options.getInteger('amount');
+            const channel = interaction.channel;
+
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+            let deletedCount = 0;
+            let remaining = amount;
+
+            try {
+                // Determine loops needed (bulkDelete max 100)
+                while (remaining > 0) {
+                    const toDelete = Math.min(remaining, 100);
+                    // Fetch messsages implicitly via bulkDelete count, or bulkDelete directly
+                    // bulkDelete(number) fetches automatically.
+                    const deleted = await channel.bulkDelete(toDelete, true);
+
+                    if (deleted.size === 0) break; // Stop if no messages found/deleted
+
+                    deletedCount += deleted.size;
+                    remaining -= deleted.size;
+
+                    if (deleted.size < toDelete) break; // Less messages than requested were deleted (end of channel/limit)
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Rate limit safety
+                }
+
+                await interaction.editReply({
+                    content: `✅ Đã xóa ${deletedCount} tin nhắn.`
+                });
+            } catch (error) {
+                console.error(error);
+                await interaction.editReply({
+                    content: '❌ Đã xảy ra lỗi khi xóa tin nhắn. Hãy đảm bảo tin nhắn không quá 14 ngày.'
+                });
+            }
+        } else if (subcommand === 'autopurge') {
+            const amount = interaction.options.getInteger('amount');
+            const days = interaction.options.getInteger('days');
+            const channel = interaction.channel;
+
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+            // Calculate cutoff timestamp
+            const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+
+            try {
+                // We need to fetch messages first to filter by date
+                // Since we can only fetch 100 at a time, we might need loops if amount > 100
+                // But discord collection filtering is easier.
+
+                let remaining = amount;
+                let deletedCount = 0;
+                let lastMsgId = null;
+
+                while (remaining > 0) {
+                    const fetchSize = Math.min(remaining, 100);
+                    const options = { limit: fetchSize };
+                    if (lastMsgId) options.before = lastMsgId;
+
+                    const messages = await channel.messages.fetch(options);
+                    if (messages.size === 0) break;
+
+                    // Filter messages that are NEWER than the cutoff (within the last X days)
+                    // AND older than 14 days (discord limit, managed by bulkDelete automatically usually, but we should check)
+                    const msgsToDelete = messages.filter(msg => msg.createdTimestamp > cutoff && (Date.now() - msg.createdTimestamp) < (14 * 24 * 60 * 60 * 1000));
+
+                    if (msgsToDelete.size > 0) {
+                        await channel.bulkDelete(msgsToDelete, true);
+                        deletedCount += msgsToDelete.size;
+                    }
+
+                    lastMsgId = messages.last().id;
+                    remaining -= messages.size; // We processed this many messages
+
+                    if (messages.size < fetchSize) break; // End of channel
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                await interaction.editReply({
+                    content: `✅ Đã xóa ${deletedCount} tin nhắn được gửi trong ${days} ngày qua (trong phạm vi kiểm tra ${amount} tin nhắn).`
+                });
+
+            } catch (error) {
+                console.error(error);
+                await interaction.editReply({
+                    content: '❌ Đã xảy ra lỗi khi xóa tin nhắn.'
+                });
+            }
+        } else if (subcommand === 'allpurge') {
+            const channel = interaction.channel;
+
+            // Confirmation via ephemeral reply? Or strict action?
+            // User requested command, usually we just do it or ask button.
+            // For simplicity and speed requested by user "copy name, delete old, create new", we'll do it.
+            // But we can't reply to interaction easily if channel is gone.
+
+            try {
+                await interaction.reply({ content: '💣 Đang tái tạo kênh...', flags: MessageFlags.Ephemeral });
+
+                const position = channel.position;
+                const newChannel = await channel.clone();
+                await channel.delete();
+                await newChannel.setPosition(position);
+
+                const embed = new EmbedBuilder()
+                    .setColor('#ef4444')
+                    .setTitle('💣 Kênh đã được tái tạo (Nuke)')
+                    .setDescription(`Kênh này đã được làm mới bởi ${interaction.user}.`)
+                    .setImage('https://media.tenor.com/gi1Y8j1I-QIAAAAC/explosion-explode.gif') // Fun gif
+                    .setTimestamp();
+
+                await newChannel.send({ embeds: [embed] });
+
+            } catch (error) {
+                console.error(error);
+                // Can't reply if channel is dead, but try logging
             }
         }
     }
