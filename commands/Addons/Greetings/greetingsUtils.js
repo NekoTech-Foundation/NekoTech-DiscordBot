@@ -1,6 +1,7 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 function replacePlaceholders(text, member, guild, memberPosition, userCreated) {
+    if (!text) return '';
     return text
         .replace(/{user_mention}/g, member.toString())
         .replace(/{user_name}/g, member.user.username)
@@ -18,6 +19,7 @@ function replacePlaceholders(text, member, guild, memberPosition, userCreated) {
 }
 
 function replacePlaceholdersGoodbye(text, member, guild, memberPosition, userCreated) {
+    if (!text) return '';
     return text
         .replace(/{user_mention}/g, member.toString())
         .replace(/{user}/g, member.user.username)
@@ -91,7 +93,23 @@ async function buildWelcomeMessage(messageTemplate, member, guild) {
             });
         }
 
-        return { embeds: [embed] };
+        const components = [];
+        if (parsed.buttons && Array.isArray(parsed.buttons) && parsed.buttons.length > 0) {
+            const row = new ActionRowBuilder();
+            parsed.buttons.forEach(btn => {
+                if (btn.label && btn.url) {
+                    row.addComponents(
+                        new ButtonBuilder()
+                            .setLabel(replacePlaceholders(btn.label, member, guild, memberPosition, userCreated))
+                            .setURL(replacePlaceholders(btn.url, member, guild, memberPosition, userCreated))
+                            .setStyle(ButtonStyle.Link)
+                    );
+                }
+            });
+            if (row.components.length > 0) components.push(row);
+        }
+
+        return { embeds: [embed], components };
     } catch (e) {
         // Case 4: Not JSON and not [text] -> Plain Text Message (Fallback)
         const content = replacePlaceholders(messageTemplate, member, guild, memberPosition, userCreated);

@@ -18,6 +18,48 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('welcome-embed')
+                .setDescription('✨ Nhập tin nhắn chào mừng (Embed Builder) - Có upload ảnh')
+                .addChannelOption(option =>
+                    option.setName('channel')
+                        .setDescription('📢 Kênh gửi tin nhắn')
+                        .addChannelTypes(ChannelType.GuildText)
+                        .setRequired(true))
+                .addStringOption(option =>
+                    option.setName('title')
+                        .setDescription('Tiêu đề Embed')
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('description')
+                        .setDescription('Nội dung embed (dùng {newline} để xuống dòng, {user_mention}...)')
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('color')
+                        .setDescription('Màu Embed (Hex code, vd: #FF0000)')
+                        .setRequired(false))
+                .addAttachmentOption(option =>
+                    option.setName('image')
+                        .setDescription('Upload ảnh cho Embed')
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('thumbnail')
+                        .setDescription('Link Thumbnail (hoặc để {user_avatar})')
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('footer')
+                        .setDescription('Footer text')
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('button_label')
+                        .setDescription('Tên hiển thị của nút (Button)')
+                        .setRequired(false))
+                .addStringOption(option =>
+                    option.setName('button_url')
+                        .setDescription('Đường dẫn link của nút (URL)')
+                        .setRequired(false))
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('goodbye')
                 .setDescription('📤 Cài đặt tin nhắn Tạm biệt (Goodbye)')
                 .addChannelOption(option =>
@@ -135,6 +177,58 @@ module.exports = {
             modal.addComponents(actionRow);
 
             await interaction.showModal(modal);
+        } else if (subcommand === 'welcome-embed') {
+            const channel = interaction.options.getChannel('channel');
+            const title = interaction.options.getString('title');
+            const description = interaction.options.getString('description');
+            const color = interaction.options.getString('color') || '#00ff00';
+            const image = interaction.options.getAttachment('image');
+            const thumbnail = interaction.options.getString('thumbnail');
+            const footer = interaction.options.getString('footer');
+            const btnLabel = interaction.options.getString('button_label');
+            const btnUrl = interaction.options.getString('button_url');
+
+            const embedData = {};
+            if (title) embedData.title = title;
+            if (description) embedData.description = description;
+            if (color) embedData.color = color;
+            if (image) embedData.image = image.url; // Use attachment URL
+            if (thumbnail) embedData.thumbnail = thumbnail;
+            if (footer) embedData.footer = footer;
+
+            // Auto add User Avatar as thumbnail if not specified? 
+            // User requested "custom", so let's stick to what they provided.
+            // But maybe default to {user_avatar} if they explicitly say "default"? 
+            // Better to let them use {user_avatar} in the string.
+
+            if (btnLabel && btnUrl) {
+                // Basic URL validation
+                if (!btnUrl.startsWith('http')) {
+                    return interaction.reply({ content: '❌ URL nút phải bắt đầu bằng http:// hoặc https://', ephemeral: true });
+                }
+                embedData.buttons = [
+                    { label: btnLabel, url: btnUrl }
+                ];
+            }
+
+            // Fallback if empty
+            if (Object.keys(embedData).length === 0) {
+                return interaction.reply({ content: '❌ Bạn phải cung cấp ít nhất một nội dung (tiêu đề, mô tả, ảnh...)', ephemeral: true });
+            }
+
+            const jsonString = JSON.stringify(embedData);
+
+            await Greetings.findOneAndUpdate(
+                { guildId },
+                { welcomeChannel: channel.id, welcomeMessage: jsonString },
+                { upsert: true, new: true }
+            );
+
+            await interaction.reply({
+                content: `✅ Đã cập nhật tin nhắn chào mừng (Embed Build) cho kênh ${channel}.\nDùng \`/greetings welcome-test\` để xem trước.`,
+                ephemeral: true
+            });
+
         } else if (subcommand === 'goodbye') {
             const channel = interaction.options.getChannel('channel');
 
