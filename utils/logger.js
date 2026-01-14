@@ -73,10 +73,9 @@ class Logger {
 
         logMessage += '\n';
 
-        const MAX_LOG_SIZE = 5 * 1024 * 1024; // 5MB
+        const MAX_LOG_SIZE = 1 * 1024 * 1024; // 1MB
         const LOG_DIR = 'logs';
         const LOG_FILE = path.join(LOG_DIR, 'logs.txt');
-        const BAK_FILE = path.join(LOG_DIR, 'logs.bak');
 
         try {
             // Ensure log directory exists
@@ -88,13 +87,12 @@ class Logger {
             if (fs.existsSync(LOG_FILE)) {
                 const stats = fs.statSync(LOG_FILE);
                 if (stats.size > MAX_LOG_SIZE) {
-                    // Rotate
+                    // Delete immediately (No backup)
                     try {
-                        if (fs.existsSync(BAK_FILE)) fs.unlinkSync(BAK_FILE);
-                        fs.renameSync(LOG_FILE, BAK_FILE);
-                        // console.log("Rotated logs"); // Avoid loop, use caching or ignore
+                        fs.unlinkSync(LOG_FILE);
+                        // console.log("Cleared logs"); 
                     } catch (err) {
-                        // Ignore rotation errors (permissions?)
+                        // Ignore errors
                     }
                 }
             }

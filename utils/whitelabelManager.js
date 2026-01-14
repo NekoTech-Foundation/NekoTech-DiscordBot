@@ -335,6 +335,7 @@ const WhitelabelManager = {
                     '--exclude', 'node_modules',
                     '--exclude', 'whitelabel_instances',
                     '--exclude', '.git',
+                    '--exclude', 'logs',
                     '--exclude', 'logs.txt',
                     '--exclude', 'database.sqlite*',
                     '--exclude', '.env',
