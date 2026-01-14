@@ -79,7 +79,7 @@ module.exports = {
             }
 
             // For all other buttons, check permissions
-            const isAuthorized = await PermissionManager.check(interaction, player);
+            const isAuthorized = await PermissionManager.check(interaction, player, requesterId);
             if (!isAuthorized) {
                 return; // PermissionManager already replied
             }
@@ -87,8 +87,8 @@ module.exports = {
             // Defer update immediately for known music buttons to prevent 10062 timeout
             // BUT NOT for volume modal (needs showModal) or lyrics (needs deferReply)
             if (['music_pause', 'music_skip', 'music_stop', 'music_shuffle', 'music_loop', 'music_autoplay', 'music_queue', 'music_previous'].includes(buttonType)) {
-                 if (!interaction.deferred && !interaction.replied) {
-                    await interaction.deferUpdate().catch(() => {});
+                if (!interaction.deferred && !interaction.replied) {
+                    await interaction.deferUpdate().catch(() => { });
                 }
             }
 
@@ -170,7 +170,7 @@ module.exports = {
 
 
         if (!player.currentTrack) {
-             const lang = await getLang(interaction.guild?.id);
+            const lang = await getLang(interaction.guild?.id);
             return await interaction.followUp({
                 content: lang.Music.Errors.NoMusic || "❌ No song playing",
                 ephemeral: true
@@ -414,9 +414,9 @@ module.exports = {
     },
 
     async handleShuffle(interaction, player) {
-         // Defer handled in execute
+        // Defer handled in execute
 
-        
+
         const lang = await getLang(interaction.guild?.id);
 
         if (player.queue.length < 2) {
@@ -483,12 +483,12 @@ module.exports = {
         modal.addComponents(actionRow);
 
         if (interaction.replied || interaction.deferred) {
-            return await interaction.followUp({ 
-                content: "❌ Cannot open volume modal because the interaction was already processed.", 
-                ephemeral: true 
+            return await interaction.followUp({
+                content: "❌ Cannot open volume modal because the interaction was already processed.",
+                ephemeral: true
             });
         }
-        
+
         try {
             await interaction.showModal(modal);
         } catch (error) {
@@ -499,7 +499,7 @@ module.exports = {
     },
 
     async handleLoop(interaction, player) {
-         // Defer handled in execute
+        // Defer handled in execute
 
 
         const lang = await getLang(interaction.guild?.id);
@@ -557,7 +557,7 @@ module.exports = {
     },
 
     async handleAutoplay(interaction, player) {
-         // Defer handled in execute
+        // Defer handled in execute
 
 
         const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
@@ -566,7 +566,7 @@ module.exports = {
         // If autoplay is already enabled, turn it off
         if (player.autoplay) {
             player.autoplay = false;
-            
+
             const embed = new EmbedBuilder()
                 .setTitle(lang.Music.Autoplay.DisabledTitle || '🎲 Autoplay Disabled')
                 .setDescription("Autoplay has been turned off.")
@@ -574,7 +574,7 @@ module.exports = {
                 .setTimestamp();
 
             await interaction.followUp({ embeds: [embed], ephemeral: true });
-            
+
             // Update the main embed
             if (interaction.client.musicEmbedManager) {
                 await interaction.client.musicEmbedManager.updateNowPlayingEmbed(player);
@@ -653,7 +653,7 @@ module.exports = {
             // Get help command and recreate the embed with fresh data
             const guildId = interaction.guild.id;
             const client = interaction.client;
-            
+
             const lang = await getLang(guildId);
             const t = lang.Help; // Using System Help keys
 
@@ -673,7 +673,7 @@ module.exports = {
                     const guildCounts = await client.shard.fetchClientValues('guilds.cache.size');
                     guilds = guildCounts.reduce((acc, count) => acc + count, 0);
 
-                    const memberCounts = await client.shard.broadcastEval(c => 
+                    const memberCounts = await client.shard.broadcastEval(c =>
                         c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)
                     );
                     users = memberCounts.reduce((acc, count) => acc + count, 0);
@@ -694,15 +694,15 @@ module.exports = {
 
             const helpCommand = require('../commands/System/help.js'); // Updated path
             // Note: If keys are missing, we skip adding stats or use basic formatting
-            
+
             // Add other fields if needed, simplifying for now to use main help structure if possible, 
             // but buttonHandler help refresh seems custom. 
             // We'll trust that the main help command handles the initial structure and this just refreshes stats/content?
             // Actually, if we just want to refresh the stats, we can just update the description/fields properly.
-            
+
             // Re-using help command createEmbed logic would be better but for now let's just send a generic "Refreshed" or similar if complete logic is too complex to migrate inline.
             // But let's try to match the output.
-            
+
             embed.addFields({
                 name: "Statistics",
                 value: `Servers: ${guilds}\nUsers: ${users}\nActive Players: ${activeServers}`,
@@ -878,7 +878,7 @@ module.exports = {
                 await interaction.deferReply({ ephemeral: true });
             }
 
-             if (!player.currentTrack) {
+            if (!player.currentTrack) {
                 return await interaction.editReply({
                     content: lang.Music.Errors.NoMusic || "❌ No song playing"
                 });
@@ -903,7 +903,7 @@ module.exports = {
             }
 
             const lyricsTitle = "Song Lyrics";
-            
+
             // If only one page, send directly
             if (pages.length === 1) {
                 const embed = new EmbedBuilder()
@@ -960,8 +960,8 @@ module.exports = {
             // ... (rest of collector logic unchanged as it doesn't use LanguageManager)
             // Wait, the collector logic IS inside this function and I'm replacing the whole function block
             // So I need to include the collector logic in the ReplacementContent
-            
-             collector.on('collect', async i => {
+
+            collector.on('collect', async i => {
                 try {
                     // Log to see what's happening
                     console.log('🔍 Button clicked:', i.customId, 'by', i.user.tag);
@@ -992,7 +992,7 @@ module.exports = {
                         deferred: i.deferred,
                         replied: i.replied
                     });
-                    
+
                     // Ignore interaction timeout/unknown interaction errors
                     if (error.code === 10062 || error.code === 10008 || error.code === 40060) {
                         console.log('ℹ️ Interaction expired or unknown, ignoring...');
@@ -1001,7 +1001,7 @@ module.exports = {
             });
 
             collector.on('end', () => {
-                interaction.editReply({ components: [] }).catch(() => {});
+                interaction.editReply({ components: [] }).catch(() => { });
             });
 
         } catch (error) {

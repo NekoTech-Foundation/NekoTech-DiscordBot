@@ -1,5 +1,6 @@
 const colors = require('ansi-colors');
 const fs = require('fs');
+const path = require('path');
 
 class Logger {
     static logs = [];
@@ -32,7 +33,7 @@ class Logger {
         if (this.logs.length > this.maxLogs) {
             this.logs.shift();
         }
-        
+
         // Also write to file (using original logic adapted)
         this.writeToLogFile(level, message);
     }
@@ -61,7 +62,7 @@ class Logger {
     static writeToLogFile(level, message, error = null) {
         const timestamp = new Date().toISOString();
         let logMessage = `[${timestamp}] [${level}] ${message}`;
-        
+
         if (error) {
             if (error instanceof Error) {
                 logMessage += `\n${error.stack || error.message}`;
@@ -69,14 +70,42 @@ class Logger {
                 logMessage += `\n${error}`;
             }
         }
-        
+
         logMessage += '\n';
-        
-        fs.appendFile('logs.txt', logMessage, (err) => {
-            // Avoid loop if console.error is used here, use process.stderr.write
-             if (err) {
+
+        const MAX_LOG_SIZE = 5 * 1024 * 1024; // 5MB
+        const LOG_DIR = 'logs';
+        const LOG_FILE = path.join(LOG_DIR, 'logs.txt');
+        const BAK_FILE = path.join(LOG_DIR, 'logs.bak');
+
+        try {
+            // Ensure log directory exists
+            if (!fs.existsSync(LOG_DIR)) {
+                fs.mkdirSync(LOG_DIR, { recursive: true });
+            }
+
+            // Check file size
+            if (fs.existsSync(LOG_FILE)) {
+                const stats = fs.statSync(LOG_FILE);
+                if (stats.size > MAX_LOG_SIZE) {
+                    // Rotate
+                    try {
+                        if (fs.existsSync(BAK_FILE)) fs.unlinkSync(BAK_FILE);
+                        fs.renameSync(LOG_FILE, BAK_FILE);
+                        // console.log("Rotated logs"); // Avoid loop, use caching or ignore
+                    } catch (err) {
+                        // Ignore rotation errors (permissions?)
+                    }
+                }
+            }
+        } catch (e) {
+            // Ignore stats errors
+        }
+
+        fs.appendFile(LOG_FILE, logMessage, (err) => {
+            if (err) {
                 // failures to write to log file should not be infinitely logged
-             }
+            }
         });
     }
 }

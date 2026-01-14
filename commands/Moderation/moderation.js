@@ -212,6 +212,16 @@ module.exports = {
                         .setDescription('Gửi DM thông báo kick cho người dùng?')
                         .setRequired(false)
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('lock')
+                .setDescription('Khóa kênh hiện tại (ngăn everyone chat)')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('unlock')
+                .setDescription('Mở khóa kênh hiện tại')
         ),
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();
@@ -497,6 +507,52 @@ module.exports = {
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [embed] });
+        } else if (subcommand === 'lock') {
+            const channel = interaction.channel;
+            const everyoneRole = interaction.guild.roles.everyone;
+
+            try {
+                await channel.permissionOverwrites.edit(everyoneRole, {
+                    SendMessages: false
+                });
+
+                const embed = new EmbedBuilder()
+                    .setColor('#ef4444')
+                    .setTitle('🔒 Kênh đã bị khóa')
+                    .setDescription(`Kênh này đã bị khóa bởi ${interaction.user}.\nTin nhắn từ @everyone đã bị tắt.`)
+                    .setTimestamp();
+
+                await interaction.reply({ embeds: [embed] });
+            } catch (error) {
+                console.error(error);
+                await interaction.reply({
+                    content: '❌ Không thể khóa kênh. Vui lòng kiểm tra quyền của bot.',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+        } else if (subcommand === 'unlock') {
+            const channel = interaction.channel;
+            const everyoneRole = interaction.guild.roles.everyone;
+
+            try {
+                await channel.permissionOverwrites.edit(everyoneRole, {
+                    SendMessages: null
+                });
+
+                const embed = new EmbedBuilder()
+                    .setColor('#22c55e')
+                    .setTitle('🔓 Kênh đã được mở khóa')
+                    .setDescription(`Kênh này đã được mở khóa bởi ${interaction.user}.`)
+                    .setTimestamp();
+
+                await interaction.reply({ embeds: [embed] });
+            } catch (error) {
+                console.error(error);
+                await interaction.reply({
+                    content: '❌ Không thể mở khóa kênh. Vui lòng kiểm tra quyền của bot.',
+                    flags: MessageFlags.Ephemeral
+                });
+            }
         }
     }
 };

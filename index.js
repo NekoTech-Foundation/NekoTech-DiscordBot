@@ -1,4 +1,5 @@
 global.startTime = Date.now();
+require('./utils/logger'); // Activate Logger & Rotation
 const path = require('path');
 const { MemoryChecker } = require('./utils/memoryChecker.js');
 
@@ -24,10 +25,29 @@ global.lang = lang;
 
 if (packageFile.version !== config.Version) {
     console.log(`${colors.red(`[ERROR] Version mismatch: package.json version (${packageFile.version}) does not match config.yml version (${config.Version}). Please update the bot...`)}`);
-    let logMsg = `\n\n[${new Date().toLocaleString()}] [ERROR] Version mismatch detected. Bot stopped.\nPackage version: ${packageFile.version}\nConfig version: ${config.Version}`;
-    fs.appendFileSync("./logs.txt", logMsg, (e) => {
-        if (e) console.log(e);
-    });
+    [
+        {
+            "TargetContent": "    let logMsg = `\\n\\n[${new Date().toLocaleString()}] [ERROR] Version mismatch detected. Bot stopped.\\nPackage version: ${packageFile.version}\\nConfig version: ${config.Version}`;\n    fs.appendFileSync(\"./logs.txt\", logMsg, (e) => {\n        if (e) console.log(e);\n    });",
+            "ReplacementContent": "    console.error(`[ERROR] Version mismatch detected. Bot stopped.\\nPackage version: ${packageFile.version}\\nConfig version: ${config.Version}`);",
+            "StartLine": 27,
+            "EndLine": 30,
+            "AllowMultiple": true
+        },
+        {
+            "TargetContent": "let logMsg = `\\n\\n[${new Date().toLocaleString()}] [STARTING] Attempting to start the bot..\\nNodeJS Version: ${process.version}\\nBot Version: ${packageFile.version}`;\nfs.appendFile(\"./logs.txt\", logMsg, (e) => {\n    if (e) console.log(e);\n});",
+            "ReplacementContent": "console.log(`[STARTING] Attempting to start the bot..\\nNodeJS Version: ${process.version}\\nBot Version: ${packageFile.version}`);",
+            "StartLine": 34,
+            "EndLine": 37,
+            "AllowMultiple": true
+        },
+        {
+            "TargetContent": "    let logMsg = `\\n\\n[${new Date().toLocaleString()}] [ERROR] NekoBuckets Bot requires a NodeJS version of 18 or higher!`;\n    fs.appendFile(\"./logs.txt\", logMsg, (e) => {\n        if (e) console.log(e);\n    });",
+            "ReplacementContent": "    console.error(`[ERROR] NekoBuckets Bot requires a NodeJS version of 18 or higher!`);",
+            "StartLine": 43,
+            "EndLine": 46,
+            "AllowMultiple": true
+        }
+    ]
     process.exit(1);
 }
 
