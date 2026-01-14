@@ -322,58 +322,63 @@ const WhitelabelManager = {
                 }
             }
 
-            // 3. Sync Files using rsync (Robust & Fast)
-            // Using spawn to avoid buffer overflows and provide real-time logs
-            console.log(`[Whitelabel] Syncing files via rsync...`);
+            // 3. Sync Files using fs.copy (Native Node.js, no rsync dependency)
+            console.log(`[Whitelabel] Syncing files via fs.copy (replacing rsync)...`);
 
-            await new Promise((resolve, reject) => {
-                const { spawn } = require('child_process');
-                // Construct arguments array for spawn
-                const args = [
-                    '-av',
-                    '--no-perms',
-                    '--exclude', 'node_modules',
-                    '--exclude', 'whitelabel_instances',
-                    '--exclude', '.git',
-                    '--exclude', 'logs',
-                    '--exclude', 'logs.txt',
-                    '--exclude', 'database.sqlite*',
-                    '--exclude', '.env',
-                    '--exclude', 'config.yml',
-                    '--exclude', 'commands/Owner/whitelabel.js',
-                    '--exclude', 'utils/whitelabelManager.js',
-                    '--exclude', 'templates/whitelabel/',
-                    `${ROOT_DIR}/`,
-                    `${instancePath}/`
-                ];
+            const ignored = [
+                'node_modules',
+                'whitelabel_instances',
+                '.git',
+                'logs',
+                'logs.txt',
+                'database.sqlite',
+                'database.sqlite-wal',
+                'database.sqlite-shm',
+                '.env',
+                'config.yml',
+                'commands/Owner/whitelabel.js',
+                'utils/whitelabelManager.js',
+                'templates/whitelabel', // Folder name check usually works on basename
+            ];
 
-                const rsyncHelper = spawn('rsync', args);
+            const filterFunc = (src, dest) => {
+                const basename = path.basename(src);
 
-                rsyncHelper.stdout.on('data', (data) => {
-                    // Log output infrequently to avoid spam, or filtered
-                    // const line = data.toString().trim();
-                    // if (line && !line.startsWith('skipping')) console.log(`[Rsync] ${line}`);
-                });
+                // 1. Root Directory Check
+                if (src === ROOT_DIR) return true;
 
-                rsyncHelper.stderr.on('data', (data) => {
-                    console.error(`[Rsync Error] ${data.toString().trim()}`);
-                });
+                // 2. Exact Path Match for nested exclusions (like commands/Owner/whitelabel.js)
+                // path.relative returns regular path, we need to handle cross-platform separators if needed, but relative usually strictly relative
+                const relative = path.relative(ROOT_DIR, src);
+                if (ignored.includes(relative)) return false; // Exact relative path match
 
-                rsyncHelper.on('close', (code) => {
-                    if (code === 0) {
-                        console.log('[Whitelabel] Rsync completed successfully.');
-                        resolve();
-                    } else {
-                        console.error(`[Whitelabel] Rsync exited with code ${code}`);
-                        reject(new Error(`Rsync exited with code ${code}`));
-                    }
-                });
+                // 3. Basename check for folders/files like node_modules, logs, .git
+                if (ignored.includes(basename)) return false;
 
-                rsyncHelper.on('error', (err) => {
-                    console.error('[Whitelabel] Rsync failed to start:', err);
-                    reject(err);
-                });
+                // 4. Wildcard/Pattern checks
+                if (basename.startsWith('database.sqlite')) return false; // Catch wal/shm if not in list
+                if (basename.startsWith('.')) return false; // Hidden files (except .env which is already explicitly excluded often)
+
+                // 5. Special check for templates/whitelabel if purely basename isn't enough (it is in list above)
+
+                // 6. System file checks
+                try {
+                    const stats = fs.lstatSync(src);
+                    if (stats.isSocket() || stats.isBlockDevice() || stats.isCharacterDevice() || stats.isFIFO()) return false;
+                } catch (e) {
+                    return false;
+                }
+
+                return true;
+            };
+
+            await fs.copy(ROOT_DIR, instancePath, {
+                filter: filterFunc,
+                dereference: true,
+                overwrite: true
             });
+
+            console.log('[Whitelabel] File sync completed successfully.');
 
             console.log(`[Whitelabel] Re-applying patches...`);
 
