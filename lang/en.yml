@@ -1286,3 +1286,26 @@ Music:
     Completed: "Queue completed!"
     CompletedDesc: "Add more tracks to keep the music playing."
     EmptyQueue: "Queue is empty!"
+
+# ===========================================================================
+# VALORANT COMMANDS
+# ===========================================================================
+Valorant:
+  Errors:
+    InvalidTag: "You have entered an invalid Valorant username and tag!"
+    FailedLink: "Failed to link Valorant account to your Discord ID"
+    NoAccount: "Please connect your VALORANT account to your Discord ID using `/link` to view player statistics.\n\nExample: `/link username#tag`"
+    Maintenance: "Valorant Tracker currently has issues in retrieving stats. Please try again later."
+    Generic: "Please ensure the account you are trying to view has logged into tracker.gg/valorant and linked their account!\n\nExample:\n1. Click 'Sign in with Riot ID' on tracker.gg\n2. `/link USERNAME#TAG`\n3. Use the command again.\n\nNote: Linked Discord accounts do not need to provide a USERNAME#TAG."
+    NoStats: "This user does not have statistics to retrieve for this gamemode."
+    NoLink: "You do not have an account linked!\nUse `/link USERNAME#TAG` to link a VALORANT account to your Discord ID"
+    UnlinkFailed: "No VALORANT account linked to your Discord ID was found."
+  Success:
+    Linked: "Successfully linked the VALORANT account `{account}` to your Discord ID."
+    Unlinked: "Successfully unlinked any VALORANT accounts connected to your Discord ID."
+  Status:
+    Title: "Status"
+    Description: "Your linked account is `{account}`"
+  Embeds:
+    HelpTitle: "Valorant Tracker Commands"
+    HelpSetupValue: "1. 'Sign in with Riot ID' on https://tracker.gg/valorant\n2. Connect your VALORANT account to your Discord ID by typing `/link YOUR_USERNAME#TAG`"

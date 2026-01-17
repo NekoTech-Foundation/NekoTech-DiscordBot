@@ -465,3 +465,15 @@ ActivitySettings:
 # {uptime}: Thời gian bot đã hoạt động (ví dụ: "2 days").
 # {total-boosts}: Tổng số lượt Boost server.
 
+
+# ===========================================================================
+# VALORANT TRACKER CONFIGURATION
+# ===========================================================================
+Valorant:
+  TrackerProfile: "https://api.tracker.gg/api/v2/valorant/standard/profile/riot/"
+  TrackerMatch: "https://api.tracker.gg/api/v2/valorant/standard/matches/"
+  RankHeader: "/segments/playlist?all_season_stats=true"
+  OverviewHeader: "/segments/playlist?season=all&playlist="
+  WeaponHeader: "/segments/weapon?season=all"
+  SeasonReport: "/segments/season-report?season=all"
+  SourceHeader: "&source=web"

@@ -1220,3 +1220,26 @@ Music:
     Completed: "再生キューが終了しました！"
     CompletedDesc: "音楽を続けるにはトラックを追加してください。"
     EmptyQueue: "キューは空です！"
+
+# ===========================================================================
+# VALORANT COMMANDS
+# ===========================================================================
+Valorant:
+  Errors:
+    InvalidTag: "無効なValorantユーザー名とタグを入力しました！"
+    FailedLink: "ValorantアカウントをDiscord IDにリンクできませんでした"
+    NoAccount: "統計を表示するには、`/link`を使用してValorantアカウントをDiscord IDに接続してください。\n\n例: `/link username#tag`"
+    Maintenance: "Valorant Trackerは現在、統計の取得に問題があります。後でもう一度お試しください。"
+    Generic: "表示しようとしているアカウントがtracker.gg/valorantにログインし、アカウントをリンクしていることを確認してください！\n\n例:\n1. tracker.ggで'Sign in with Riot ID'をクリック\n2. `/link USERNAME#TAG`\n3. コマンドを再度使用。\n\n注: リンクされたDiscordアカウントはUSERNAME#TAGを提供する必要はありません。"
+    NoStats: "このユーザーには、このゲームモードの統計情報がありません。"
+    NoLink: "アカウントがリンクされていません！\n`/link USERNAME#TAG`を使用して、ValorantアカウントをDiscord IDにリンクしてください。"
+    UnlinkFailed: "Discord IDにリンクされたValorantアカウントが見つかりませんでした。"
+  Success:
+    Linked: "Valorantアカウント `{account}` をDiscord IDに正常にリンクしました。"
+    Unlinked: "Discord IDに接続されているすべてのValorantアカウントのリンクを解除しました。"
+  Status:
+    Title: "ステータス"
+    Description: "リンクされたアカウントは `{account}` です"
+  Embeds:
+    HelpTitle: "Valorant Tracker コマンド"
+    HelpSetupValue: "1. https://tracker.gg/valorant で 'Sign in with Riot ID' をクリック\n2. `/link YOUR_USERNAME#TAG` と入力してValorantアカウントを接続"

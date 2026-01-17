@@ -2099,3 +2099,26 @@ Music:
   Queue:
     Completed: "Đã phát hết hàng đợi!"
     CompletedDesc: "Hãy thêm bài hát mới để tiếp tục nghe nhạc."
+
+# ===========================================================================
+# VALORANT COMMANDS
+# ===========================================================================
+Valorant:
+  Errors:
+    InvalidTag: "Bạn đã nhập tên người dùng và tag Valorant không hợp lệ!"
+    FailedLink: "Không thể liên kết tài khoản Valorant với ID Discord của bạn"
+    NoAccount: "Vui lòng liên kết tài khoản VALORANT với ID Discord của bạn bằng lệnh `/link` để xem thống kê.\n\nVí dụ: `/link username#tag`"
+    Maintenance: "Valorant Tracker hiện đang gặp sự cố khi lấy dữ liệu. Vui lòng thử lại sau."
+    Generic: "Vui lòng đảm bảo tài khoản bạn đang xem đã đăng nhập vào tracker.gg/valorant và liên kết tài khoản!\n\nVí dụ:\n1. Nhấn 'Sign in with Riot ID' trên tracker.gg\n2. `/link USERNAME#TAG`\n3. Thử lại lệnh.\n\nLưu ý: Tài khoản Discord đã liên kết không cần nhập USERNAME#TAG."
+    NoStats: "Người dùng này không có thống kê cho chế độ chơi này."
+    NoLink: "Bạn chưa liên kết tài khoản!\nDùng lệnh `/link USERNAME#TAG` để liên kết tài khoản VALORANT."
+    UnlinkFailed: "Không tìm thấy tài khoản VALORANT nào liên kết với ID Discord của bạn."
+  Success:
+    Linked: "Đã liên kết thành công tài khoản VALORANT `{account}` với ID Discord của bạn."
+    Unlinked: "Đã hủy liên kết tất cả tài khoản VALORANT khỏi ID Discord của bạn."
+  Status:
+    Title: "Trạng thái"
+    Description: "Tài khoản đã liên kết của bạn là `{account}`"
+  Embeds:
+    HelpTitle: "Lệnh Valorant Tracker"
+    HelpSetupValue: "1. 'Sign in with Riot ID' trên https://tracker.gg/valorant\n2. Kết nối tài khoản VALORANT bằng cách gõ `/link YOUR_USERNAME#TAG`"
