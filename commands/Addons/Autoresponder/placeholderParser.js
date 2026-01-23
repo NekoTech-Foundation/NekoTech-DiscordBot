@@ -6,63 +6,55 @@ function getOrdinal(n) {
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
+function resolveProperty(obj, path) {
+    return path.split('.').reduce((prev, curr) => {
+        return prev ? prev[curr] : undefined;
+    }, obj);
+}
+
 async function parsePlaceholders(text, message) {
     const user = message.member;
     const server = message.guild;
     const channel = message.channel;
 
-    const placeholders = {
-        // User placeholders
-        '{user}': user.toString(),
-        '{user_id}': user.id,
-        '{user_name}': user.user.tag,
-        '{user_mention}': user.toString(),
-        '{user_displayname}': user.displayName,
-        '{user_avatar}': user.user.displayAvatarURL(),
-        '{user_nick}': user.nickname || user.displayName,
-        '{user_joindate}': Math.floor(user.joinedTimestamp / 1000),
-        '{user_joindate_formatted}': moment(user.joinedTimestamp).format('HH:mm:ss DD/MM/YYYY'),
-        '{user_createdate}': Math.floor(user.user.createdTimestamp / 1000),
-        '{user_createdate_formatted}': moment(user.user.createdTimestamp).format('HH:mm:ss DD/MM/YYYY'),
-        '{user_displaycolor}': user.displayHexColor,
-        '{user_boostsince}': user.premiumSinceTimestamp ? Math.floor(user.premiumSinceTimestamp / 1000) : 'Not boosting',
-        '{user_boostsince_formatted}': user.premiumSinceTimestamp ? moment(user.premiumSinceTimestamp).format('HH:mm:ss DD/MM/YYYY') : 'Not boosting',
-
-        // Server placeholders
-        '{server_id}': server.id,
-        '{server_name}': server.name,
-        '{server_membercount}': server.memberCount,
-        '{server_membercount_ordinal}': getOrdinal(server.memberCount),
-        '{server_membercount_nobots}': server.members.cache.filter(m => !m.user.bot).size,
-        '{server_membercount_nobots_ordinal}': getOrdinal(server.members.cache.filter(m => !m.user.bot).size),
-        '{server_botcount}': server.members.cache.filter(m => m.user.bot).size,
-        '{server_botcount_ordinal}': getOrdinal(server.members.cache.filter(m => m.user.bot).size),
-        '{server_icon}': server.iconURL(),
-        '{server_rolecount}': server.roles.cache.size,
-        '{server_channelcount}': server.channels.cache.size,
-        '{server_owner}': (await server.fetchOwner()).user.tag,
-        '{server_owner_id}': server.ownerId,
-        '{server_createdate}': Math.floor(server.createdTimestamp / 1000),
-        '{server_createdate_formatted}': moment(server.createdTimestamp).format('HH:mm:ss DD/MM/YYYY'),
-        '{server_boostlevel}': server.premiumTier,
-        '{server_boostcount}': server.premiumSubscriptionCount,
-
-        // Channel & Message placeholders
-        '{channel_name}': channel.name,
-        '{channel_id}': channel.id,
-        '{channel_mention}': channel.toString(),
-        '{channel_createdate}': Math.floor(channel.createdTimestamp / 1000),
-        '{channel_createdate_formatted}': moment(channel.createdTimestamp).format('HH:mm:ss DD/MM/YYYY'),
-        '{message_link}': message.url,
-        '{message_id}': message.id,
-        '{message_content}': message.content,
+    // Helper to get nested properties safely
+    const getValue = (path) => {
+        // Base objects mapping
+        if (path.startsWith('user.')) return resolveProperty(user, path.substring(5));
+        if (path.startsWith('server.')) return resolveProperty(server, path.substring(7));
+        if (path.startsWith('channel.')) return resolveProperty(channel, path.substring(8));
+        if (path.startsWith('message.')) return resolveProperty(message, path.substring(8));
+        return undefined;
     };
 
-    let parsedText = text;
-    for (const placeholder in placeholders) {
-        const regex = new RegExp(placeholder.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g');
-        parsedText = parsedText.replace(regex, await placeholders[placeholder]);
-    }
+    // Regex to match {path.to.property}
+    const placeholderRegex = /{([a-zA-Z0-9_.]+)}/g;
+
+    let parsedText = text.replace(placeholderRegex, (match, key) => {
+        // 1. Try dynamic nested resolution first
+        let value = getValue(key);
+
+        // 2. Map explicit complex values if needed (backward compatibility or shortcuts)
+        if (value === undefined) {
+            const lowerKey = key.toLowerCase();
+            if (lowerKey === 'user') return user.toString();
+            if (lowerKey === 'user_id') return user.id;
+            if (lowerKey === 'user_name') return user.user.username; // Updated to username
+            if (lowerKey === 'user_tag') return user.user.tag;
+            if (lowerKey === 'server_name') return server.name;
+            if (lowerKey === 'server_membercount') return server.memberCount;
+            // ... Add specific formatting helpers that aren't direct properties
+            if (lowerKey === 'server_icon') return server.iconURL();
+            if (lowerKey === 'user_avatar') return user.user.displayAvatarURL();
+            if (lowerKey === 'channel_mention') return channel.toString();
+        }
+
+        // 3. Handle specific formatted dates or calculated values
+        if (key === 'user.joinedAtFormatted') return moment(user.joinedTimestamp).format('HH:mm:ss DD/MM/YYYY');
+        if (key === 'server.createdAtFormatted') return moment(server.createdTimestamp).format('HH:mm:ss DD/MM/YYYY');
+
+        return value !== undefined ? value : match;
+    });
 
     return parsedText;
 }
