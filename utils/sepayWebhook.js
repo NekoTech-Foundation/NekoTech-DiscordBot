@@ -1,145 +1,116 @@
-const http = require('http');
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const { EmbedBuilder } = require('discord.js');
 const SePayConfig = require('../models/SePayConfig');
-
 const WhitelabelModel = require('../models/Whitelabel');
 const packageFile = require('../package.json');
+const dashboardApi = require('./dashboardApi');
+const path = require('path');
 
 const startWebhookServer = (client, port = 3000) => {
-    const server = http.createServer(async (req, res) => {
-        // CORS Headers
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    const app = express();
 
-        if (req.method === 'OPTIONS') {
-            res.writeHead(204);
-            res.end();
-            return;
-        }
+    // Middleware
+    app.use(cors());
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
 
-        if (req.method === 'GET') {
-            if (req.url === '/api/public/status') {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({
-                    online: true,
-                    latency: client.ws.ping,
-                    uptime: client.uptime,
-                    version: packageFile.version
-                }));
-                return;
-            }
+    // Mount Dashboard API
+    app.use('/api/dashboard', dashboardApi);
 
-            if (req.url === '/api/public/whitelabel-count') {
-                try {
-                    const all = await WhitelabelModel.getAllInstances();
-                    const activeCount = all.filter(i => i.status === 'ACTIVE').length;
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ count: activeCount }));
-                } catch (err) {
-                    console.error('Error fetching whitelabel count:', err);
-                    res.writeHead(500);
-                    res.end(JSON.stringify({ error: 'Internal Server Error' }));
-                }
-                return;
-            }
+    // Serve Dashboard Frontend (DISABLED: User running dev server)
+    // app.use('/dashboard', express.static(path.join(__dirname, '../dashboard/dist')));
 
-            // 404 for other GETs
-            res.writeHead(404);
-            res.end('Not Found');
-            return;
-        }
+    // Explicitly handle root dashboard route to serve index.html
+    // const dashboardIndex = path.join(__dirname, '../dashboard/dist/index.html');
+    // app.get(['/dashboard', '/dashboard/'], (req, res) => {
+    //     res.sendFile(dashboardIndex);
+    // });
 
-        if (req.method === 'POST') {
-            let body = '';
-            req.on('data', chunk => {
-                body += chunk.toString();
-            });
+    // SPA Fallback for Dashboard paths
+    // app.get(/^\/dashboard\/.*$/, (req, res) => {
+    //     res.sendFile(dashboardIndex);
+    // });
 
-            req.on('end', async () => {
-                try {
-                    const data = JSON.parse(body);
-                    console.log('[SePay Webhook] Received data:', data);
+    // Public Status API
+    app.get('/api/public/status', (req, res) => {
+        res.json({
+            online: true,
+            latency: client.ws.ping,
+            uptime: client.uptime,
+            version: packageFile.version
+        });
+    });
 
-                    // Required fields from SePay
-                    // {
-                    //   "gateway": "MBBank",
-                    //   "transactionDate": "2023-10-25 10:00:00",
-                    //   "accountNumber": "0123456789",
-                    //   "subAccount": null,
-                    //   "code": null,
-                    //   "content": "Test CK",
-                    //   "transferType": "in",
-                    //   "transferAmount": 50000,
-                    //   "accumulated": 50000,
-                    //   "id": 12345,
-                    //   "referenceCode": "FT23298..."
-                    // }
-
-                    const accNum = data.accountNumber;
-                    if (!accNum) {
-                        res.writeHead(400);
-                        res.end('Missing accountNumber');
-                        return;
-                    }
-
-                    // Find Guild Config by Account Number
-                    // Since SePayConfig is by guildId (PK), we need to search.
-                    // SQLiteModel's find returns an array.
-                    const configs = await SePayConfig.find({ accountNumber: accNum });
-
-                    if (configs.length === 0) {
-                        console.log(`[SePay Webhook] No guild config found for account: ${accNum}`);
-                        res.writeHead(404);
-                        res.end('Config not found');
-                        return;
-                    }
-
-                    // Notify all guilds with this account number (usually just one)
-                    for (const config of configs) {
-                        if (!config.channelId) continue;
-
-                        const channel = await client.channels.fetch(config.channelId).catch(() => null);
-                        if (channel) {
-                            const embed = new EmbedBuilder()
-                                .setTitle('💸 Donation Received!')
-                                .setColor('Green')
-                                .addFields(
-                                    { name: 'Số tiền', value: `${data.transferAmount.toLocaleString()} VNĐ`, inline: true },
-                                    { name: 'Nội dung', value: data.content || 'Không có nội dung', inline: true },
-                                    { name: 'Ngân hàng', value: data.gateway || 'Unknown', inline: true },
-                                    { name: 'Thời gian', value: data.transactionDate || new Date().toLocaleString(), inline: false }
-                                )
-                                .setFooter({ text: `Trans ID: ${data.id}` })
-                                .setTimestamp();
-
-                            await channel.send({ embeds: [embed] });
-                        }
-                    }
-
-                    res.writeHead(200);
-                    res.end('OK');
-                } catch (e) {
-                    console.error('[SePay Webhook] Error processing request:', e);
-                    res.writeHead(500);
-                    res.end('Internal Server Error');
-                }
-            });
-        } else {
-            res.writeHead(405);
-            res.end('Method Not Allowed');
+    // Whitelabel Count API
+    app.get('/api/public/whitelabel-count', async (req, res) => {
+        try {
+            const all = await WhitelabelModel.getAllInstances();
+            const activeCount = all.filter(i => i.status === 'ACTIVE').length;
+            res.json({ count: activeCount });
+        } catch (err) {
+            console.error('Error fetching whitelabel count:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
         }
     });
 
-    server.listen(port, () => {
-        console.log(`[SePay Webhook] Server listening on port ${port}`);
+    // SePay Webhook Handling
+    app.post('/', async (req, res) => {
+        const data = req.body;
+        console.log('[SePay Webhook] Received data:', data);
+
+        const accNum = data.accountNumber;
+        if (!accNum) {
+            return res.status(400).send('Missing accountNumber');
+        }
+
+        try {
+            const configs = await SePayConfig.find({ accountNumber: accNum });
+
+            if (configs.length === 0) {
+                console.log(`[SePay Webhook] No guild config found for account: ${accNum}`);
+                return res.status(404).send('Config not found');
+            }
+
+            for (const config of configs) {
+                if (!config.channelId) continue;
+
+                const channel = await client.channels.fetch(config.channelId).catch(() => null);
+                if (channel) {
+                    const embed = new EmbedBuilder()
+                        .setTitle('💸 Donation Received!')
+                        .setColor('Green')
+                        .addFields(
+                            { name: 'Số tiền', value: `${data.transferAmount.toLocaleString()} VNĐ`, inline: true },
+                            { name: 'Nội dung', value: data.content || 'Không có nội dung', inline: true },
+                            { name: 'Ngân hàng', value: data.gateway || 'Unknown', inline: true },
+                            { name: 'Thời gian', value: data.transactionDate || new Date().toLocaleString(), inline: false }
+                        )
+                        .setFooter({ text: `Trans ID: ${data.id}` })
+                        .setTimestamp();
+
+                    await channel.send({ embeds: [embed] });
+                }
+            }
+
+            res.send('OK');
+        } catch (e) {
+            console.error('[SePay Webhook] Error processing request:', e);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+
+    // Start Server
+    const server = app.listen(port, () => {
+        console.log(`[Express API] Server listening on port ${port}`);
     });
 
     server.on('error', (e) => {
         if (e.code === 'EADDRINUSE') {
-            console.error(`[SePay Webhook] Port ${port} is already in use! Webhook server failed to start.`);
+            console.error(`[Express API] Port ${port} is already in use!`);
         } else {
-            console.error('[SePay Webhook] Server error:', e);
+            console.error('[Express API] Server error:', e);
         }
     });
 };

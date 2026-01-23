@@ -27,7 +27,7 @@ module.exports = async (client, member) => {
 
     try {
         await SafetyManager.checkAntiHoist(member);
-    } catch (e) {}
+    } catch (e) { }
 
     if (config.AltPrevention.Enabled) {
         const accountAge = Date.now() - member.user.createdAt;
@@ -55,14 +55,14 @@ module.exports = async (client, member) => {
     try {
         let verificationData = await Verification.findOne({ guildID: member.guild.id });
         if (verificationData && verificationData.unverifiedRoleID) {
-             const unverifiedRole = member.guild.roles.cache.get(verificationData.unverifiedRoleID);
-             if (unverifiedRole) {
-                 await member.roles.add(unverifiedRole).catch(console.error);
-             }
+            const unverifiedRole = member.guild.roles.cache.get(verificationData.unverifiedRoleID);
+            if (unverifiedRole) {
+                await member.roles.add(unverifiedRole).catch(console.error);
+            }
         } else if (config.VerificationSettings.Enabled && config.VerificationSettings.EnableUnverifiedRole) {
-             // Fallback to old config or create if needed (Legacy Support)
-             // ... (Keep existing logic or simplify)
-             // Simplified to just log or skip since we want to move to new system
+            // Fallback to old config or create if needed (Legacy Support)
+            // ... (Keep existing logic or simplify)
+            // Simplified to just log or skip since we want to move to new system
         }
     } catch (error) {
         console.error('Error assigning unverified role to new member:', error);
@@ -103,29 +103,29 @@ module.exports = async (client, member) => {
 
             const allInvitesByInviter = await Invite.find({ guildID: member.guild.id, inviterID: inviteData.inviterID });
             inviterCount = allInvitesByInviter.reduce((acc, invite) => acc + invite.joinedUsers.length, 0);
-            
+
             // Log the invite join
             const inviteJoinEvent = require('./inviteJoin.js');
             await inviteJoinEvent(client, member, usedInvite, inviter, inviterCount);
         }
     } catch (error) {
-      //  console.error(`[ERROR] Failed to fetch invites: ${error}`);
+        //  console.error(`[ERROR] Failed to fetch invites: ${error}`);
     }
 
     const GuildSettings = require('../models/GuildSettings');
 
-// ... (rest of the requires)
+    // ... (rest of the requires)
 
-module.exports = async (client, member) => {
-    // ... (rest of the function until the welcome message part)
+    module.exports = async (client, member) => {
+        // ... (rest of the function until the welcome message part)
 
-    const guildSettings = await GuildSettings.findOne({ guildId: member.guild.id });
-    if (guildSettings && guildSettings.welcome.enabled) {
-        sendWelcomeMessage(client, member, inviterName, inviterCount, guildSettings.welcome);
-    }
+        const guildSettings = await GuildSettings.findOne({ guildId: member.guild.id });
+        if (guildSettings && guildSettings.welcome.enabled) {
+            sendWelcomeMessage(client, member, inviterName, inviterCount, guildSettings.welcome);
+        }
 
-    // ... (rest of the function)
-};
+        // ... (rest of the function)
+    };
 
     await updateStoredMembers(client, member.guild.id);
 
@@ -143,7 +143,7 @@ module.exports = async (client, member) => {
     } catch (error) {
         console.error(`Error checking user data on join: ${error}`);
     }
-    
+
     // const { handleJoinRoles } = require('./Verification/VerificationEvent');
 
     if (!config.VerificationSettings?.Enabled && config.JoinRoleSettings?.RestoreRoles?.Enabled) {
@@ -220,12 +220,68 @@ async function sendWelcomeMessage(client, member, inviterName, inviterCount, wel
         const userAvatarURL = member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
         const userBannerURL = await getUserBannerURL(member);
 
-        let welcomeText = replacePlaceholders(welcomeSettings.message, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
+        // Pre-calculate placeholders for fields
+        const joinDate = moment(member.joinedAt).tz(config.Timezone).format('HH:mm dddd, D MMMM, YYYY');
+        const accountCreated = moment(member.user.createdAt).tz(config.Timezone).format('HH:mm dddd, D MMMM, YYYY');
+        const memberCount = member.guild.memberCount;
 
-        try {
-            await welcomeChannel.send({ content: welcomeText });
-        } catch (error) {
-            console.error(`[ERROR] Failed to send welcome message: ${error}`);
+        if (welcomeSettings.useEmbed) {
+            const embedConfig = welcomeSettings.embed || {};
+            const embed = new EmbedBuilder();
+
+            // Default Color: Green
+            embed.setColor(embedConfig.color || '#2ecc71');
+
+            // Default Title
+            const title = embedConfig.title || `Welcome to {guildName}, {userTag}!`;
+            embed.setTitle(replacePlaceholders(title, member, inviterName, inviterCount, userAvatarURL, userBannerURL, true));
+
+            // Default Description
+            const description = embedConfig.description || `Welcome {user} to **{guildName}**!\nWe are glad to have you here.`;
+            embed.setDescription(replacePlaceholders(description, member, inviterName, inviterCount, userAvatarURL, userBannerURL, true));
+
+            // Default Thumbnail (User Avatar) - Only if not explicitly disabled/overridden (assuming empty string means default)
+            const thumbnail = embedConfig.thumbnail || userAvatarURL;
+            if (thumbnail) embed.setThumbnail(thumbnail);
+
+            // Default Image
+            if (embedConfig.image) embed.setImage(embedConfig.image);
+
+            // Default Footer
+            const footerText = embedConfig.footer || `{guildName} • {shortTime}`;
+            embed.setFooter({
+                text: replacePlaceholders(footerText, member, inviterName, inviterCount, userAvatarURL, userBannerURL, true),
+                iconURL: member.guild.iconURL()
+            });
+
+            // Timestamps
+            embed.setTimestamp();
+
+            // Add Default Fields if "Default Config" is active (i.e. minimal attributes)
+            // Or just ALWAYS add them if it's the default embed? 
+            // The user said "use config embed in code". I'll add them if description/title were default.
+            if (!embedConfig.description && !embedConfig.title) {
+                embed.addFields(
+                    { name: '👤 Join Date', value: joinDate, inline: false },
+                    { name: '📅 Account Created', value: accountCreated, inline: false },
+                    { name: '🎯 Member Count', value: `${memberCount}`, inline: false }
+                );
+            }
+
+            try {
+                await welcomeChannel.send({ content: `<@${member.id}>`, embeds: [embed] });
+            } catch (error) {
+                console.error(`[ERROR] Failed to send welcome embed: ${error}`);
+            }
+
+        } else {
+            // Legacy Text Mode
+            let welcomeText = replacePlaceholders(welcomeSettings.message, member, inviterName, inviterCount, userAvatarURL, userBannerURL, false);
+            try {
+                await welcomeChannel.send({ content: welcomeText });
+            } catch (error) {
+                console.error(`[ERROR] Failed to send welcome message: ${error}`);
+            }
         }
 
         sentWelcomeEmbeds.add(member.id);
@@ -329,9 +385,9 @@ async function updateStoredMembers(client, guildId) {
         } catch (error) {
             if (error.name === 'VersionError' && retries < maxRetries - 1) {
                 retries++;
-           //     console.log(`Retrying update for guild ${guildId} (Attempt ${retries})`);
+                //     console.log(`Retrying update for guild ${guildId} (Attempt ${retries})`);
             } else {
-           //     console.error(`Failed to update stored members for guild ${guildId}:`, error);
+                //     console.error(`Failed to update stored members for guild ${guildId}:`, error);
                 return;
             }
         }
@@ -342,10 +398,10 @@ function parseTime(timeString) {
     const regex = /^(\d+)([smhd])$/;
     const match = timeString.match(regex);
     if (!match) return 0;
-    
+
     const value = parseInt(match[1]);
     const unit = match[2];
-    
+
     switch (unit) {
         case 's': return value * 1000;
         case 'm': return value * 60 * 1000;

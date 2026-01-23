@@ -3,6 +3,8 @@
 # ===========================================================================
 Version: "1.8.5"
 BotToken: "MTQ1OTcwNTY3MTk1OTQ0OTcxNA.GUxMca.BQvcoqdX2lt5HJZ4Qel7HIJmVIbF4Q1KE39ZNQ"
+BotClientSecret: "IGDeMPlXlfBjhXB7RwH4LR3_QZ3hxxv7"
+BotClientId: "1459705671959449714"
 
 # Cài đặt Cơ bản
 GuildID: "1388889326309605488"
@@ -10,6 +12,7 @@ BotName: "NekoBuckets"
 LogCommands: false
 Statistics: true
 Timezone: "Asia/Ho_Chi_Minh"
+DashboardUrl: "http://localhost:5173"
 
 # Quyền hạn Admin/Owner
 OwnerIDs:

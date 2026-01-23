@@ -18,10 +18,10 @@ function parseTime(timeString) {
     const regex = /^(\d+)([smhd])$/;
     const match = timeString.match(regex);
     if (!match) return 0;
-    
+
     const value = parseInt(match[1]);
     const unit = match[2];
-    
+
     switch (unit) {
         case 's': return value * 1000;
         case 'm': return value * 60 * 1000;
@@ -108,12 +108,51 @@ async function sendLeaveMessage(member, leaveSettings) {
     const userAvatarURL = member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 4096 });
     const userBannerURL = await getUserBannerURL(member);
 
-    let leaveText = replacePlaceholders(leaveSettings.message || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
+    if (leaveSettings.useEmbed) {
+        const embedConfig = leaveSettings.embed || {};
+        const embed = new EmbedBuilder();
 
-    try {
-        await leaveChannel.send(leaveText);
-    } catch (error) {
-        console.error('[ERROR] Failed to send leave message:', error);
+        // Default Color: Red
+        embed.setColor(embedConfig.color || '#e74c3c');
+
+        // Default Title
+        const title = embedConfig.title || `Goodbye, {userTag}!`;
+        embed.setTitle(replacePlaceholders(title, member, "", null, "", "", false));
+
+        // Default Description
+        const description = embedConfig.description || `{user} has left **{guildName}**.\nWe hope to see you again soon!`;
+        embed.setDescription(replacePlaceholders(description, member, "", null, "", "", true));
+
+        // Default Thumbnail
+        const thumbnail = embedConfig.thumbnail || userAvatarURL;
+        if (thumbnail) embed.setThumbnail(thumbnail);
+
+        // Default Image
+        if (embedConfig.image) embed.setImage(embedConfig.image);
+
+        // Default Footer
+        const footerText = embedConfig.footer || `{guildName} • {shortTime}`;
+        embed.setFooter({
+            text: replacePlaceholders(footerText, member, "", null, "", "", true),
+            iconURL: member.guild.iconURL()
+        });
+
+        embed.setTimestamp();
+
+        try {
+            await leaveChannel.send({ embeds: [embed] });
+        } catch (error) {
+            console.error('[ERROR] Failed to send leave embed:', error);
+        }
+
+    } else {
+        // Legacy Text Mode
+        let leaveText = replacePlaceholders(leaveSettings.message || '', member, "", null, "", "", false, userAvatarURL, userBannerURL);
+        try {
+            await leaveChannel.send(leaveText);
+        } catch (error) {
+            console.error('[ERROR] Failed to send leave message:', error);
+        }
     }
 
     sentLeaveEmbeds.add(member.id);
@@ -224,12 +263,12 @@ function logKick(member, reason, moderator, caseNumber) {
     const kickLogsConfig = config.KickLogs || {};
     const embedConfig = kickLogsConfig.Embed || {};
 
-    const descriptionTemplate = Array.isArray(embedConfig.Description) 
-        ? embedConfig.Description.join('\n') 
+    const descriptionTemplate = Array.isArray(embedConfig.Description)
+        ? embedConfig.Description.join('\n')
         : (embedConfig.Description || '**Reason:** {reason}\n**Moderator:** {moderatorTag}\n**Case:** #{caseNumber}');
 
     const description = replacePlaceholders(descriptionTemplate, member, reason, moderator, caseNumber, "", 0, "", "", true);
-    
+
     const kickEmbed = new EmbedBuilder()
         .setColor(embedConfig.Color || "#FF5555")
         .setTitle(replacePlaceholders(embedConfig.Title || 'Member Kicked', member, reason, moderator, caseNumber, "", 0, "", "", true))
@@ -250,7 +289,7 @@ function logKick(member, reason, moderator, caseNumber) {
 
     // Fallback to ModerationLogs.Kick if KickLogs.LogsChannelID is not present
     const logsChannelId = kickLogsConfig.LogsChannelID || (config.ModerationLogs && config.ModerationLogs.Kick);
-    
+
     if (logsChannelId) {
         const logsChannel = member.guild.channels.cache.get(logsChannelId);
         if (logsChannel) {

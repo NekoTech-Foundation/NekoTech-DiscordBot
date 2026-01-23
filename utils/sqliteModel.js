@@ -1,17 +1,18 @@
-const db = require('./database');
+const defaultDb = require('./database');
 
 class SQLiteModel {
-    constructor(tableName, primaryKeys, defaultDataFn) {
+    constructor(tableName, primaryKeys, defaultDataFn, customDb = null) {
         this.tableName = tableName;
         this.primaryKeys = Array.isArray(primaryKeys) ? primaryKeys : [primaryKeys];
         this.defaultDataFn = defaultDataFn;
+        this.db = customDb || defaultDb;
 
         // Ensure primary keys are strings for SQL construction
         const pkDef = this.primaryKeys.join(', ');
         const pkClause = `PRIMARY KEY (${pkDef})`;
 
         // Create table
-        db.prepare(`
+        this.db.prepare(`
             CREATE TABLE IF NOT EXISTS ${this.tableName} (
                 ${this.primaryKeys.map(k => `${k} TEXT`).join(',\n')},
                 data TEXT,
@@ -21,25 +22,25 @@ class SQLiteModel {
 
         // Pre-prepare statements for performance
         const whereClause = this.primaryKeys.map(k => `${k} = ?`).join(' AND ');
-        this.selectStmt = db.prepare(`SELECT data FROM ${this.tableName} WHERE ${whereClause}`);
-        this.insertStmt = db.prepare(`INSERT OR REPLACE INTO ${this.tableName} (${this.primaryKeys.join(', ')}, data) VALUES (${this.primaryKeys.map(() => '?').join(', ')}, ?)`);
-        this.deleteStmt = db.prepare(`DELETE FROM ${this.tableName} WHERE ${whereClause}`);
+        this.selectStmt = this.db.prepare(`SELECT data FROM ${this.tableName} WHERE ${whereClause}`);
+        this.insertStmt = this.db.prepare(`INSERT OR REPLACE INTO ${this.tableName} (${this.primaryKeys.join(', ')}, data) VALUES (${this.primaryKeys.map(() => '?').join(', ')}, ?)`);
+        this.deleteStmt = this.db.prepare(`DELETE FROM ${this.tableName} WHERE ${whereClause}`);
     }
 
     _wrap(data) {
         if (!data) return null;
         const self = this;
-        
+
         // Define save method
         Object.defineProperty(data, 'save', {
-            value: function() {
+            value: function () {
                 const pkValues = self.primaryKeys.map(k => this[k]);
                 // Check if PKs exist in data
                 if (pkValues.some(v => v === undefined || v === null)) {
                     console.error(`[SQLiteModel] Missing primary keys for table ${self.tableName}:`, self.primaryKeys, data);
                     throw new Error(`Missing primary keys for table ${self.tableName}`);
                 }
-                
+
                 self.insertStmt.run(...pkValues, JSON.stringify(this));
                 return Promise.resolve(this);
             },
@@ -50,14 +51,14 @@ class SQLiteModel {
 
         // Define delete method
         Object.defineProperty(data, 'delete', {
-             value: function() {
-                 const pkValues = self.primaryKeys.map(k => this[k]);
-                 self.deleteStmt.run(...pkValues);
-                 return Promise.resolve(true);
-             },
-             enumerable: false,
-             writable: true,
-             configurable: true
+            value: function () {
+                const pkValues = self.primaryKeys.map(k => this[k]);
+                self.deleteStmt.run(...pkValues);
+                return Promise.resolve(true);
+            },
+            enumerable: false,
+            writable: true,
+            configurable: true
         });
 
         return data;
@@ -69,7 +70,7 @@ class SQLiteModel {
             // If query doesn't restrict by PK, we might need a scan (not implemented efficiently here)
             // For now, assume findOne is ALWAYS used with PKs as per this codebase's common pattern.
             // If purely simulating mongoose, we might return null.
-            return null; 
+            return null;
         }
 
         const row = this.selectStmt.get(...pkValues);
@@ -98,20 +99,21 @@ class SQLiteModel {
     }
 
     // Add find method for partial matches/scans if needed
+    // Add find method for partial matches/scans if needed
     async find(query = {}) {
         // If empty query, return all
         if (Object.keys(query).length === 0) {
-             const rows = db.prepare(`SELECT data FROM ${this.tableName}`).all();
-             return rows.map(row => {
-                 const data = JSON.parse(row.data);
-                 const defaultObj = this.defaultDataFn ? this.defaultDataFn(data) : {};
-                 const merged = { ...defaultObj, ...data };
-                 return this._wrap(merged);
-             });
+            const rows = this.db.prepare(`SELECT data FROM ${this.tableName}`).all();
+            return rows.map(row => {
+                const data = JSON.parse(row.data);
+                const defaultObj = this.defaultDataFn ? this.defaultDataFn(data) : {};
+                const merged = { ...defaultObj, ...data };
+                return this._wrap(merged);
+            });
         }
-        
+
         // Client-side filtering with operator support
-        const rows = db.prepare(`SELECT data FROM ${this.tableName}`).all();
+        const rows = this.db.prepare(`SELECT data FROM ${this.tableName}`).all();
         const results = [];
         for (const row of rows) {
             const data = JSON.parse(row.data);
@@ -130,7 +132,7 @@ class SQLiteModel {
                         else if (op === '$lte' && !(itemValue <= opValue)) match = false;
                         else if (op === '$in' && !opValue.includes(itemValue)) match = false;
                         else if (op === '$nin' && opValue.includes(itemValue)) match = false;
-                        
+
                         if (!match) break;
                     }
                 } else {
@@ -179,62 +181,62 @@ class SQLiteModel {
             // Very basic update support: { key: value } or { $set: { key: value } }
             // Does not support complex operators like $inc, $push effectively here without implementing them
             // Implementation assumes simplified updates: properties to merge
-            
+
             let changes = update;
             if (update.$set) {
                 changes = { ...changes, ...update.$set };
                 delete changes.$set;
             }
             // Add other mock operators if needed or assume simple objects
-            
+
             Object.assign(doc, changes);
             await doc.save();
             modifiedCount++;
         }
         return { modifiedCount };
     }
-    
+
     async findOneAndUpdate(query, update, options = { upsert: false, new: true, setDefaultsOnInsert: true }) {
-         let doc = await this.findOne(query);
-         if (!doc) {
-             if (options.upsert) {
+        let doc = await this.findOne(query);
+        if (!doc) {
+            if (options.upsert) {
                 // If upsert, we need PKs from query
                 const insertData = { ...query };
                 // Also apply updates if they are simple $set or direct fields
                 if (update.$setOnInsert) {
-                     Object.assign(insertData, update.$setOnInsert);
+                    Object.assign(insertData, update.$setOnInsert);
                 }
                 const changes = update.$set ? update.$set : update;
                 // strip operators from changes if present at top level (simple check)
-                 const cleanChanges = {};
-                 for(const k of Object.keys(changes)) {
-                     if(!k.startsWith('$')) cleanChanges[k] = changes[k];
-                 }
-                 
+                const cleanChanges = {};
+                for (const k of Object.keys(changes)) {
+                    if (!k.startsWith('$')) cleanChanges[k] = changes[k];
+                }
+
                 Object.assign(insertData, cleanChanges);
                 return await this.create(insertData);
-             }
-             return null;
-         }
+            }
+            return null;
+        }
 
-         // Update existing
-         let changes = update.$set ? update.$set : update;
-         // Handle very basic operators
-         if (update.$inc) {
-             for (const [k, v] of Object.entries(update.$inc)) {
-                 if (typeof doc[k] === 'number') doc[k] += v;
-                 else doc[k] = v;
-             }
-         }
-         
-         const cleanChanges = {};
-         for(const k of Object.keys(changes)) {
-             if(!k.startsWith('$')) cleanChanges[k] = changes[k];
-         }
-         
-         Object.assign(doc, cleanChanges);
-         await doc.save();
-         return doc;
+        // Update existing
+        let changes = update.$set ? update.$set : update;
+        // Handle very basic operators
+        if (update.$inc) {
+            for (const [k, v] of Object.entries(update.$inc)) {
+                if (typeof doc[k] === 'number') doc[k] += v;
+                else doc[k] = v;
+            }
+        }
+
+        const cleanChanges = {};
+        for (const k of Object.keys(changes)) {
+            if (!k.startsWith('$')) cleanChanges[k] = changes[k];
+        }
+
+        Object.assign(doc, cleanChanges);
+        await doc.save();
+        return doc;
     }
 }
 

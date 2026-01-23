@@ -55,7 +55,7 @@ class PermissionManager {
 
         // If none of the above, deny permission
         const lang = await getLang(guild.id);
-        const notAuthorizedMsg = lang.Music.Fields.PermissionInfo || "❌ Not authorized";
+        const notAuthorizedMsg = lang.Music.Errors.PermissionDenied || "❌ Not authorized";
 
         if (!interaction.replied && !interaction.deferred) {
             await interaction.reply({ content: notAuthorizedMsg, ephemeral: true });

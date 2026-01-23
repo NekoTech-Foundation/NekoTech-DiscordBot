@@ -368,6 +368,7 @@
   },
   "permissions": {
     "music_control_title": "🎛️ Quyền điều khiển",
-    "music_control_requirement": "Để quản lý nhạc, bạn phải là người đã bắt đầu nó, hoặc có quyền Quản lý Máy chủ, hoặc có vai trò tên là DJ."
+    "music_control_requirement": "Để quản lý nhạc, bạn phải là người đã bắt đầu nó, hoặc có quyền Quản lý Máy chủ, hoặc có vai trò tên là DJ.",
+    "permission_denied": "❌ Bạn không có quyền điều khiển nhạc!"
   }
 }

@@ -36,6 +36,14 @@ class WhitelabelModel extends SQLiteModel {
     }
 
     /**
+     * Get a subscription by userId
+     * @param {string} userId
+     */
+    async getSubscription(userId) {
+        return await this.findOne({ userId });
+    }
+
+    /**
      * Get all active instances that might need checking
      */
     async getAllInstances() {
