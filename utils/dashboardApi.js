@@ -135,6 +135,34 @@ router.get('/status', requireAuth, async (req, res) => {
     });
 });
 
+// Console Logs
+router.get('/console', requireAuth, async (req, res) => {
+    const sub = req.user.subscription;
+    const logPath = path.join(sub.instancePath, 'logs.txt');
+
+    if (!fs.existsSync(logPath)) {
+        return res.json({ logs: 'No logs available yet. Start the instance to generate logs.' });
+    }
+
+    try {
+        // Read last 2 KB of logs
+        const stats = fs.statSync(logPath);
+        const fileSize = stats.size;
+        const bufferSize = Math.min(2048, fileSize);
+        const buffer = Buffer.alloc(bufferSize);
+
+        const fd = fs.openSync(logPath, 'r');
+        fs.readSync(fd, buffer, 0, bufferSize, fileSize - bufferSize);
+        fs.closeSync(fd);
+
+        const logs = buffer.toString('utf8');
+        res.json({ logs });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Failed to read logs' });
+    }
+});
+
 // Control Actions
 router.post('/action', requireAuth, async (req, res) => {
     const { action } = req.body; // start, stop, restart
@@ -188,12 +216,12 @@ router.post('/config', requireAuth, (req, res) => {
 
         fs.writeFileSync(configPath, content, 'utf8');
 
-        // Restart to apply?
-        // WhitelabelManager.restartInstance(sub.userId);
+        // Optional: Automatic Restart?
+        // WhitelabelManager.restartInstance(sub.userId); // Better to let user manually restart to avoid loops
 
-        res.json({ success: true, message: 'Config updated. Restart to apply.' });
+        res.json({ success: true, message: 'Config updated. Restart the instance to apply changes.' });
     } catch (e) {
-        res.status(400).json({ error: 'Invalid YAML content' });
+        res.status(400).json({ error: 'Invalid YAML: ' + e.message });
     }
 });
 

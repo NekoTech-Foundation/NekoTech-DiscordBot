@@ -152,7 +152,8 @@ const WhitelabelManager = {
 
             // 8. Start Process with PM2
             const pm2Name = `WL_${userId}`;
-            const command = `${PM2_CMD} start index.js --name "${pm2Name}" --cwd "${instancePath}"`;
+            // Added logging flags
+            const command = `${PM2_CMD} start index.js --name "${pm2Name}" --cwd "${instancePath}" --output ./logs.txt --error ./logs.txt --merge-logs`;
 
             console.log(`[Whitelabel] Starting PM2 process: ${command}`);
             await new Promise((resolve, reject) => {
@@ -479,7 +480,8 @@ const WhitelabelManager = {
     async startInstance(userId) {
         const instancePath = path.join(ROOT_DIR, 'whitelabel_instances', userId);
         const pm2Name = `WL_${userId}`;
-        const cmd = `${getPM2Command()} start index.js --name "${pm2Name}" --cwd "${instancePath}"`;
+        // Added logging flags
+        const cmd = `${getPM2Command()} start index.js --name "${pm2Name}" --cwd "${instancePath}" --output ./logs.txt --error ./logs.txt --merge-logs`;
 
         return new Promise((resolve) => {
             // First check if already running? No, PM2 handles "already running" gracefully or we can just try start
