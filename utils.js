@@ -1597,7 +1597,7 @@ module.exports = async (client) => {
                 }
 
                 const updatedUser = await EconomyUserData.findOneAndUpdate(
-                    { _id: user._id },
+                    { userId: user.userId },
                     {
                         $inc: { bank: interest },
                         $push: {

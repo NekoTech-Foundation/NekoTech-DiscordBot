@@ -21,7 +21,7 @@ module.exports = {
 
         const cooldown = parseDuration(config.Economy.Rob.cooldown);
         if (user && user.commandData.lastRob) {
-            const nextRob = new Date(user.commandData.lastRob.getTime() + cooldown);
+            const nextRob = new Date(new Date(user.commandData.lastRob).getTime() + cooldown);
             if (now < nextRob) {
                 const embed = new EmbedBuilder()
                     .setDescription(replacePlaceholders(lang.Economy.Messages.cooldown, { nextUse: Math.floor(nextRob.getTime() / 1000) }))

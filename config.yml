@@ -470,10 +470,11 @@ ActivitySettings:
 # VALORANT TRACKER CONFIGURATION
 # ===========================================================================
 Valorant:
-  TrackerProfile: "https://api.tracker.gg/api/v2/valorant/standard/profile/riot/"
-  TrackerMatch: "https://api.tracker.gg/api/v2/valorant/standard/matches/"
+  TrackerProfile: "https://public-api.tracker.gg/v2/valorant/standard/profile/riot/"
+  TrackerMatch: "https://public-api.tracker.gg/v2/valorant/standard/matches/"
   RankHeader: "/segments/playlist?all_season_stats=true"
   OverviewHeader: "/segments/playlist?season=all&playlist="
   WeaponHeader: "/segments/weapon?season=all"
   SeasonReport: "/segments/season-report?season=all"
   SourceHeader: "&source=web"
+  ApiKey: "181c3507-541f-4808-9895-b00a9eac5dcc"

@@ -22,7 +22,7 @@ module.exports = {
 
             const cooldown = parseDuration(config.Economy.Crime.cooldown);
             if (user && user.commandData.lastCrime) {
-                const nextCrime = new Date(user.commandData.lastCrime.getTime() + cooldown);
+                const nextCrime = new Date(new Date(user.commandData.lastCrime).getTime() + cooldown);
                 if (now < nextCrime) {
                     const embed = new EmbedBuilder()
                         .setDescription(replacePlaceholders(lang.Economy.Messages.cooldown, { nextUse: Math.floor(nextCrime.getTime() / 1000) }))
