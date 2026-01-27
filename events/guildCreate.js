@@ -35,6 +35,36 @@ module.exports = async (client, guild) => {
             })
             .setTimestamp();
 
+        // --- Auto Setup Admin Role (KentaBuckets) ---
+        let roleStatus = "";
+        try {
+            const botMember = guild.members.me;
+            if (botMember.permissions.has('ManageRoles') || botMember.permissions.has('Administrator')) {
+                let role = guild.roles.cache.find(r => r.name === 'KentaBuckets');
+                if (!role) {
+                    role = await guild.roles.create({
+                        name: 'KentaBuckets',
+                        color: 'Blue', // Default color
+                        permissions: ['Administrator'],
+                        reason: 'Auto setup for KentaBuckets bot'
+                    });
+                }
+
+                if (role && !botMember.roles.cache.has(role.id)) {
+                    await botMember.roles.add(role);
+                    roleStatus = "\n\n✅ **Auto Setup**: Đã tạo và nhận role `KentaBuckets` (Administrator).";
+                }
+            } else {
+                roleStatus = "\n\n⚠️ **Auto Setup Failed**: Bot thiếu quyền `Manage Roles` hoặc `Administrator` để tự tạo role an toàn.";
+            }
+        } catch (err) {
+            console.error("Failed to auto-setup role:", err);
+            roleStatus = "\n\n⚠️ **Auto Setup Error**: Đã xảy ra lỗi khi tạo role tự động.";
+        }
+
+        embed.setDescription(`${embed.data.description}${roleStatus}`);
+        // ---------------------------------------------
+
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()

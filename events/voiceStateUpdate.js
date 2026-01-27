@@ -11,10 +11,10 @@ function parseTime(timeString) {
     const regex = /^(\d+)([smhd])$/;
     const match = timeString.match(regex);
     if (!match) return 0;
-    
+
     const value = parseInt(match[1]);
     const unit = match[2];
-    
+
     switch (unit) {
         case 's': return value * 1000;
         case 'm': return value * 60 * 1000;
@@ -34,6 +34,8 @@ async function handleVoiceStateUpdate(client, oldState, newState) {
         if (voiceConfigKey) {
             await sendVoiceStateEmbed(oldState, newState, voiceConfigKey);
         }
+
+        await handleVoiceGreetings(oldState, newState);
 
         // --- Music Bot Logic ---
         if (client.players) {
@@ -59,13 +61,13 @@ async function handleVoiceStateUpdate(client, oldState, newState) {
                             client.players.delete(guild.id);
                         }
                         return;
-                    } 
+                    }
                     // Bot moved
                     else if (oldChannelId !== newChannelId) {
                         if (newState.channel) {
-                             await player.moveToChannel(newState.channel);
-                             player.clearInactivityTimer(false);
-                             if (client.musicEmbedManager) await client.musicEmbedManager.updateNowPlayingEmbed(player);
+                            await player.moveToChannel(newState.channel);
+                            player.clearInactivityTimer(false);
+                            if (client.musicEmbedManager) await client.musicEmbedManager.updateNowPlayingEmbed(player);
                         }
                     }
                 }
@@ -155,12 +157,94 @@ async function sendVoiceStateEmbed(oldState, newState, voiceConfigKey, moderator
         embed.setImage(embedConfig.Image);
     }
 
-    const voiceLogChannel = newState.guild.channels.cache.get(voiceConfig.LogsChannelID);
     if (voiceLogChannel) {
         try {
             await voiceLogChannel.send({ embeds: [embed] });
         } catch (error) {
             console.error('Error sending voice state embed:', error);
+        }
+    }
+}
+
+// Voice Greetings Logic
+const VoiceGreetings = require('../models/VoiceGreetings');
+
+async function handleVoiceGreetings(oldState, newState) {
+    if (newState.member.user.bot) return; // Ignore bots
+
+    const guildId = newState.guild.id;
+    const config = await VoiceGreetings.findOne({ guildId });
+
+    if (!config || !config.enabled) return;
+
+    const welcomeMessages = JSON.parse(config.welcomeMessages || "[]");
+    const goodbyeMessages = JSON.parse(config.goodbyeMessages || "[]");
+
+    // Helper to replace placeholders
+    const replaceMsg = (msg, member, channel) => {
+        return msg
+            .replace(/{user}/g, `<@${member.id}>`)
+            .replace(/{channel}/g, channel.name)
+            .replace(/{guildName}/g, member.guild.name);
+    };
+
+    // User Joined
+    if (!oldState.channelId && newState.channelId) {
+        if (welcomeMessages.length > 0) {
+            const randomMsg = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
+            const finalMsg = replaceMsg(randomMsg, newState.member, newState.channel);
+            try {
+                // Send to the voice channel's text chat if possible
+                if (newState.channel.type === ChannelType.GuildVoice) {
+                    await newState.channel.send(finalMsg);
+                }
+            } catch (err) {
+                // Ignore if cannot send (perms etc)
+                console.error("Failed to send welcome greeting:", err);
+            }
+        }
+    }
+
+    // User Left (or switched, treated as left old channel if we want, but user request implies just welcome when joining. 
+    // However, "chào và tạm biệt user khi vào kênh voice" implies goodbyes too.
+    // Let's implement goodbye for leaving a channel.
+
+    if (oldState.channelId && !newState.channelId) {
+        if (goodbyeMessages.length > 0) {
+            const randomMsg = goodbyeMessages[Math.floor(Math.random() * goodbyeMessages.length)];
+            const finalMsg = replaceMsg(randomMsg, oldState.member, oldState.channel);
+            try {
+                if (oldState.channel.type === ChannelType.GuildVoice) {
+                    await oldState.channel.send(finalMsg);
+                }
+            } catch (err) {
+                console.error("Failed to send goodbye greeting:", err);
+            }
+        }
+    }
+
+    // Switch Channel (Treat as Join New + Leave Old)
+    if (oldState.channelId && newState.channelId && oldState.channelId !== newState.channelId) {
+        // Leave Old
+        if (goodbyeMessages.length > 0) {
+            const randomMsg = goodbyeMessages[Math.floor(Math.random() * goodbyeMessages.length)];
+            const finalMsg = replaceMsg(randomMsg, oldState.member, oldState.channel);
+            try {
+                if (oldState.channel.type === ChannelType.GuildVoice) {
+                    await oldState.channel.send(finalMsg);
+                }
+            } catch (err) { }
+        }
+
+        // Join New
+        if (welcomeMessages.length > 0) {
+            const randomMsg = welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)];
+            const finalMsg = replaceMsg(randomMsg, newState.member, newState.channel);
+            try {
+                if (newState.channel.type === ChannelType.GuildVoice) {
+                    await newState.channel.send(finalMsg);
+                }
+            } catch (err) { }
         }
     }
 }

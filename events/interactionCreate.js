@@ -67,6 +67,24 @@ module.exports = async (client, interaction) => {
             // Ignore Unknown Interaction errors (timeout/expiry)
             if (error.code === 10062 || (error.rawError && error.rawError.code === 10062)) return;
 
+            // Handle Missing Permissions (50013)
+            if (error.code === 50013 || (error.rawError && error.rawError.code === 50013)) {
+                const errEmbed = new EmbedBuilder()
+                    .setColor('Red')
+                    .setTitle('❌ Thiếu Quyền Hạn!')
+                    .setDescription('Bot không thể thực hiện lệnh này do thiếu quyền hạn (Missing Permissions).\n\n**Giải pháp:**\n1. Cấp quyền `Administrator` cho bot.\n2. Hoặc tạo role `KentaBuckets` với quyền Admin và gán cho bot.')
+                    .setFooter({ text: 'Re-invite bot với quyền Admin để tự động cấu hình.' });
+
+                try {
+                    if (!interaction.replied && !interaction.deferred) {
+                        return await interaction.reply({ embeds: [errEmbed], flags: MessageFlags.Ephemeral });
+                    } else {
+                        return await interaction.followUp({ embeds: [errEmbed], flags: MessageFlags.Ephemeral });
+                    }
+                } catch (e) { } // Ignore if cannot reply
+                return;
+            }
+
             console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
 
             // Try to send error message, but handle expired interactions gracefully

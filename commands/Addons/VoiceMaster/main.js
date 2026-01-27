@@ -12,39 +12,63 @@ const interactionHandler = require('./interaction_kentavoice');
 const configPath = path.join(__dirname, 'config.yml');
 const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 
+// Map to track deletion timers: channelId -> timeout
+const deletionTimers = new Map();
+
 // Helper function to check and delete empty channels
 async function checkAndDeleteEmptyChannel(client, channel, category, channelData) {
     if (!channel || channel.members.size > 0) return;
 
+    const channelId = channel.id;
+
+    // Check if timer already exists
+    if (deletionTimers.has(channelId)) return;
+
     try {
-        const channelId = channel.id;
-        const channelName = channel.name;
+        console.log(`[KentaVoice] Channel ${channel.name} is empty. Scheduling deletion in 2 minutes...`);
 
-        await channel.delete();
-        await VoiceMasterChannel.deleteOne({ voiceId: channelId });
+        // Start 2-minute timer
+        const timer = setTimeout(async () => {
+            deletionTimers.delete(channelId);
 
-        // Try delete linked text channel
-        const guild = channel.guild;
-        let textChannel = null;
+            // Re-check if channel is still empty and exists
+            const fetchedChannel = channel.guild.channels.cache.get(channelId);
+            if (!fetchedChannel || fetchedChannel.members.size > 0) return;
 
-        // Priority 1: Use ID from DB
-        if (channelData && channelData.textChannelId) {
-            textChannel = guild.channels.cache.get(channelData.textChannelId);
-        }
+            try {
+                const channelName = fetchedChannel.name;
+                await fetchedChannel.delete();
+                await VoiceMasterChannel.deleteOne({ voiceId: channelId });
 
-        // Priority 2: Fallback to name guessing (for old channels)
-        if (!textChannel && category) {
-            const textChannelName = `chat-${channelName.toLowerCase().replace(/\s+/g, '-')}`;
-            textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
-        }
+                // Try delete linked text channel
+                const guild = fetchedChannel.guild;
+                let textChannel = null;
 
-        if (textChannel) {
-            await textChannel.delete().catch(() => { });
-        }
+                // Priority 1: Use ID from DB
+                if (channelData && channelData.textChannelId) {
+                    textChannel = guild.channels.cache.get(channelData.textChannelId);
+                }
 
-        console.log(`[KentaVoice] Deleted empty channel: ${channelName}`);
+                // Priority 2: Fallback to name guessing
+                if (!textChannel && category) {
+                    const textChannelName = `chat-${channelName.toLowerCase().replace(/\s+/g, '-')}`;
+                    textChannel = guild.channels.cache.find(c => c.parentId === category.id && c.name === textChannelName && c.type === 0);
+                }
+
+                if (textChannel) {
+                    await textChannel.delete().catch(() => { });
+                }
+
+                console.log(`[KentaVoice] Deleted empty channel: ${channelName}`);
+            } catch (err) {
+                console.error('Error executing deletion:', err);
+            }
+        }, 2 * 60 * 1000); // 2 minutes
+
+        deletionTimers.set(channelId, timer);
+
     } catch (error) {
-        console.error('Error deleting empty channel:', error);
+        console.error('Error scheduling empty channel deletion:', error);
     }
 }
 
@@ -106,6 +130,13 @@ module.exports = {
 
                 // Check if user joined a voice channel
                 if (!oldState.channel && newState.channel) {
+                    // CANCEL DELETION IF USER JOINS A PENDING DELETE CHANNEL
+                    if (deletionTimers.has(newState.channelId)) {
+                        clearTimeout(deletionTimers.get(newState.channelId));
+                        deletionTimers.delete(newState.channelId);
+                        console.log(`[KentaVoice] Cancelled deletion for channel: ${newState.channel.name}`);
+                    }
+
                     // Get VoiceMaster settings for this guild
                     const voiceMaster = await VoiceMaster.findOne({ guildId });
 
@@ -137,7 +168,7 @@ module.exports = {
                         // Determine channel name
                         let channelName = `${member.user.username}'s channel`;
 
-                        // Determine channel limit (DEFAULT 0, NOT LOADED FROM USER SETTINGS AS PER REQUEST)
+                        // Determine channel limit
                         let channelLimit = 0;
 
                         if (userSettings && userSettings.channelName) {
@@ -219,7 +250,17 @@ module.exports = {
                     }
                 }
 
-                // Check if someone left a voice channel
+                // Check if user switched channels
+                // (Need to cancel delete timer if they switch back to a pending-delete channel)
+                if (oldState.channelId && newState.channelId && oldState.channelId !== newState.channelId) {
+                    if (deletionTimers.has(newState.channelId)) {
+                        clearTimeout(deletionTimers.get(newState.channelId));
+                        deletionTimers.delete(newState.channelId);
+                        console.log(`[KentaVoice] Cancelled deletion for channel (switch): ${newState.channel.name}`);
+                    }
+                }
+
+                // Check if someone left a voice channel (or switched away from it)
                 if (oldState.channel && oldState.channel.id !== newState.channel?.id) {
                     const leftChannel = oldState.channel;
 
