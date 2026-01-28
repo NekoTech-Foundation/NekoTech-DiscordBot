@@ -18,18 +18,18 @@ function convertPatternToRegex(pattern) {
     if (pattern.includes('*')) {
         return new RegExp(regexPattern, 'i');
     }
-    
+
     return new RegExp(`^${regexPattern}$`, 'i');
 }
 
 async function checkBlacklistWords(message, dmSent) {
     if (!config.BlacklistWords.Enabled) return dmSent;
-    
+
     if (message.member.permissions.has(config.BlacklistWords.BypassPerms)) {
         return dmSent;
     }
 
-    const hasBypassRole = message.member.roles.cache.some(role => 
+    const hasBypassRole = message.member.roles.cache.some(role =>
         config.BlacklistWords.BypassRoles.includes(role.id)
     );
     if (hasBypassRole) {
@@ -42,7 +42,7 @@ async function checkBlacklistWords(message, dmSent) {
     }
 
     const content = message.content;
-    
+
     const whitelistMatched = config.BlacklistWords.WhitelistWords.some(word => {
         const regex = convertPatternToRegex(word);
         return regex.test(content);
@@ -64,7 +64,7 @@ async function checkBlacklistWords(message, dmSent) {
     if (triggeredPattern) {
         try {
             await message.delete();
-            
+
             const filterWordsMsg = config.BlacklistWords.Message
                 .replace(/{user}/g, `<@${message.author.id}>`);
             const notificationMsg = await message.channel.send(filterWordsMsg);
@@ -91,15 +91,15 @@ async function checkBlacklistWords(message, dmSent) {
                         const embed = new EmbedBuilder()
                             .setColor(embedConfig.Color)
                             .setTitle(embedConfig.Title)
-                            .setDescription(embedConfig.Description.map(line => 
-                                Object.entries(replacements).reduce((str, [key, value]) => 
+                            .setDescription(embedConfig.Description.map(line =>
+                                Object.entries(replacements).reduce((str, [key, value]) =>
                                     str.replace(new RegExp(`{${key}}`, 'g'), value)
-                                , line)
+                                    , line)
                             ).join('\n'));
 
                         if (embedConfig.Footer) {
-                            embed.setFooter({ 
-                                text: embedConfig.Footer.replace(/{shorttime}/g, replacements.shorttime) 
+                            embed.setFooter({
+                                text: embedConfig.Footer.replace(/{shorttime}/g, replacements.shorttime)
                             });
                         }
 
@@ -123,7 +123,7 @@ async function checkBlacklistWords(message, dmSent) {
                     const embed = new EmbedBuilder()
                         .setColor(embedConfig.Color)
                         .setTitle(embedConfig.Title)
-                        .setDescription(embedConfig.Description.map(line => 
+                        .setDescription(embedConfig.Description.map(line =>
                             line.replace(/{user}/g, `<@${message.author.id}>`)
                                 .replace(/{blacklistedword}/g, triggeredPattern)
                                 .replace(/{shorttime}/g, currentTime.format("HH:mm"))
@@ -132,7 +132,7 @@ async function checkBlacklistWords(message, dmSent) {
                         ).join('\n'));
 
                     if (embedConfig.Footer.Text) {
-                        embed.setFooter({ 
+                        embed.setFooter({
                             text: embedConfig.Footer.Text.replace(/{guildName}/g, message.guild.name),
                             iconURL: message.guild.iconURL()
                         });
@@ -151,11 +151,19 @@ async function checkBlacklistWords(message, dmSent) {
             console.error('Error handling blacklisted word:', error);
         }
     }
-    
+
     return dmSent;
 }
 
 module.exports = async (client, oldMessage, newMessage) => {
+    // Donation Logic (runs for bots too)
+    if (newMessage.guild && newMessage.author && newMessage.author.id === '408785106942164992') {
+        const processDonation = require('./Donation/processDonation');
+        await processDonation(newMessage);
+        // Don't return here, might want to log edits? 
+        // But the existing code below ignores bots anyway.
+    }
+
     if (!newMessage.guild || !newMessage.author || newMessage.author.bot || !newMessage.content) {
         return;
     }
@@ -165,7 +173,7 @@ module.exports = async (client, oldMessage, newMessage) => {
 
     let dmSent = false;
     dmSent = await checkBlacklistWords(newMessage, dmSent);
-    
+
     if (!dmSent && config.MessageUpdateLogs.Enabled) {
         const currentTime = moment().tz(config.Timezone);
         const editLogChannel = newMessage.guild.channels.cache.get(config.MessageUpdateLogs.LogsChannelID);

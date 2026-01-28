@@ -574,7 +574,7 @@ module.exports = async (client) => {
 
     function handleGuildMemberAdd(member) {
         const autoKickConfig = config.AutoKick;
-        if (!autoKickConfig.Enabled || member.user.bot) return;
+        if (!autoKickConfig || !autoKickConfig.Enabled || member.user.bot) return;
 
         const roleIDs = autoKickConfig.Role;
         const timeLimit = parseTimeToMs(autoKickConfig.Time);

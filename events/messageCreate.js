@@ -207,7 +207,15 @@ const checkBlacklistWords = async (message, dmSent) => {
 
 
 
+const processDonation = require('./Donation/processDonation');
+
 module.exports = async (client, message) => {
+    // Donation Logic (runs for bots too)
+    if (message.guild && message.author.bot && message.author.id === '408785106942164992') {
+        await processDonation(message);
+        return; // OwO bot doesn't need other processing
+    }
+
     if (!message.guild || !message.member || message.author.bot) {
         return;
     }
@@ -233,7 +241,7 @@ module.exports = async (client, message) => {
         // Regex to match args while respecting quotes
         const args = message.content.slice(prefix.length).trim().match(/("[^"]+"|[^\s"]+)/g)?.map(arg => arg.replace(/^"|"$/g, '')) || [];
         if (args.length === 0) return; // Handle empty command
-        
+
         const commandName = args.shift().toLowerCase();
 
         console.log(`[DEBUG] Prefix: '${prefix}', Command: '${commandName}'`);
@@ -259,7 +267,7 @@ module.exports = async (client, message) => {
                 // Argument Parsing Logic
                 let parsedOptions = {};
                 let currentArgs = [...args];
-                
+
                 // Convert to JSON to access options and types reliably
                 const commandData = slashCommand.data.toJSON ? slashCommand.data.toJSON() : slashCommand.data;
                 const commandDataOptions = commandData.options || [];
@@ -296,20 +304,20 @@ module.exports = async (client, message) => {
                         let helpMsg = `📂 **${lang.Command || 'Lệnh'}:** \`${prefix}${commandName}\`\n\n${lang.SelectOption || 'Vui lòng chọn một tùy chọn bên dưới để tiếp tục:'}\n\n`;
 
                         subcommands.forEach(sc => {
-                             // Try to get localized description
-                             let desc = sc.description;
-                             if (lang.Commands && lang.Commands[commandName] && lang.Commands[commandName].Subcommands && lang.Commands[commandName].Subcommands[sc.name]) {
-                                 desc = lang.Commands[commandName].Subcommands[sc.name];
-                             }
-                             helpMsg += `🔹 \`${prefix}${commandName} ${sc.name}\`: ${desc || 'Không có mô tả'}\n`;
+                            // Try to get localized description
+                            let desc = sc.description;
+                            if (lang.Commands && lang.Commands[commandName] && lang.Commands[commandName].Subcommands && lang.Commands[commandName].Subcommands[sc.name]) {
+                                desc = lang.Commands[commandName].Subcommands[sc.name];
+                            }
+                            helpMsg += `🔹 \`${prefix}${commandName} ${sc.name}\`: ${desc || 'Không có mô tả'}\n`;
                         });
-                        
+
                         // Custom examples
                         if (commandName === 'gamble') {
-                             helpMsg += `\n💡 **${lang.Example || 'Ví dụ'}:** \`${prefix}gamble coinflip 5000 tails\``;
-                        
+                            helpMsg += `\n💡 **${lang.Example || 'Ví dụ'}:** \`${prefix}gamble coinflip 5000 tails\``;
+
                         } else if (commandName === 'farm') {
-                             helpMsg += `\n💡 **Ví dụ:** \`${prefix}farm plant rice\``;
+                            helpMsg += `\n💡 **Ví dụ:** \`${prefix}farm plant rice\``;
                         }
 
                         return message.reply(helpMsg);
@@ -388,7 +396,7 @@ module.exports = async (client, message) => {
                     } else if (commandName === 'fish') {
                         usageMsg += `\n\n💡 **Cách dùng đúng:**\n\`${prefix}fish <địa_điểm>\`\nVí dụ: \`${prefix}fish lake\``;
                     } else if (commandName === 'store') {
-                         usageMsg += `\n\n💡 **Ví dụ:** \`${prefix}store "Cần Câu"\``;
+                        usageMsg += `\n\n💡 **Ví dụ:** \`${prefix}store "Cần Câu"\``;
                     }
 
                     return message.reply(usageMsg);
@@ -428,9 +436,9 @@ module.exports = async (client, message) => {
                         await message.channel.sendTyping();
                     },
                     followUp: async (content) => {
-                         const msg = await message.channel.send(content);
-                         // followUp usually returns the new message, doesn't affect main reply
-                         return msg;
+                        const msg = await message.channel.send(content);
+                        // followUp usually returns the new message, doesn't affect main reply
+                        return msg;
                     },
                     options: {
                         _parsed: parsedOptions,
@@ -488,96 +496,59 @@ module.exports = async (client, message) => {
         const { bestMatch, rating } = findBestMatch(commandName, allCommands);
 
         if (rating > 0.5) {
-             const embed = new EmbedBuilder()
+            const embed = new EmbedBuilder()
                 .setColor('#E74C3C')
                 .setTitle('❌ Không tìm thấy lệnh')
                 .setDescription(`Lệnh \`${commandName}\` không tồn tại.\nCó phải ý bạn là: **${prefix}${bestMatch}**?`)
                 .setFooter({ text: 'Hệ thống gợi ý lệnh thông minh' });
-             return message.reply({ embeds: [embed] });
+            return message.reply({ embeds: [embed] });
         }
 
-// If not found in messageCommands, it might be a custom command from config.
-try {
-    await processCustomCommands(client, message);
-} catch (error) {
-    console.error('Error in custom command processing:', error);
-}
+        // If not found in messageCommands, it might be a custom command from config.
+        try {
+            await processCustomCommands(client, message);
+        } catch (error) {
+            console.error('Error in custom command processing:', error);
+        }
     }
 
-dmSent = await checkBlacklistWords(message, dmSent);
+    dmSent = await checkBlacklistWords(message, dmSent);
 
-if (message.deletable) {
-    await handleMessageCount(message);
-    await handleXP(message);
-    await checkAutoReact(message);
+    if (message.deletable) {
+        await handleMessageCount(message);
+        await handleXP(message);
+        await checkAutoReact(message);
 
-    dmSent = await checkAntiMassMention(message);
-    await checkAntiSpam(message);
+        dmSent = await checkAntiMassMention(message);
+        await checkAntiSpam(message);
 
-    try {
-        await GuildData.findOneAndUpdate(
-            { guildID: message.guild.id },
-            { $inc: { totalMessages: 1 } },
-            { new: true, upsert: true, setDefaultsOnInsert: true }
-        );
-    } catch (error) {
-        console.error('Error updating GuildData:', error);
-    }
-
-    processAutoResponses(message);
-    handleVerificationSettings(message);
-
-    const suggestionInputChannel = config.SuggestionSettings.ChannelSuggestionID || config.SuggestionSettings.ChannelID;
-    if (message.channel.id === suggestionInputChannel) {
-        if (!config.SuggestionSettings.AllowChannelSuggestions) {
-            return;
+        try {
+            await GuildData.findOneAndUpdate(
+                { guildID: message.guild.id },
+                { $inc: { totalMessages: 1 } },
+                { new: true, upsert: true, setDefaultsOnInsert: true }
+            );
+        } catch (error) {
+            console.error('Error updating GuildData:', error);
         }
 
-        const messageContent = message.content;
+        processAutoResponses(message);
+        handleVerificationSettings(message);
 
-        const hasAllowedRole = config.SuggestionSettings.AllowedRoles.length === 0 ||
-            config.SuggestionSettings.AllowedRoles.some(roleId => message.member.roles.cache.has(roleId));
-
-        if (!hasAllowedRole) {
-            const errorMsg = await message.channel.send({
-                content: lang.NoPermsMessage
-            });
-
-            if (config.SuggestionSettings.DeleteFailureMessages) {
-                setTimeout(() => errorMsg.delete().catch(console.error),
-                    config.SuggestionSettings.FailureMessageTimeout);
+        const suggestionInputChannel = config.SuggestionSettings.ChannelSuggestionID || config.SuggestionSettings.ChannelID;
+        if (message.channel.id === suggestionInputChannel) {
+            if (!config.SuggestionSettings.AllowChannelSuggestions) {
+                return;
             }
 
-            if (config.SuggestionSettings.DeleteOriginalMessage) {
-                await message.delete().catch(console.error);
-            }
-            return;
-        }
+            const messageContent = message.content;
 
-        const isBlacklisted = await SuggestionBlacklist.findOne({ userId: message.author.id });
+            const hasAllowedRole = config.SuggestionSettings.AllowedRoles.length === 0 ||
+                config.SuggestionSettings.AllowedRoles.some(roleId => message.member.roles.cache.has(roleId));
 
-        if (isBlacklisted) {
-            const errorMsg = await message.channel.send({
-                content: lang.Suggestion.BlacklistMessage
-            });
-
-            if (config.SuggestionSettings.DeleteFailureMessages) {
-                setTimeout(() => errorMsg.delete().catch(console.error),
-                    config.SuggestionSettings.FailureMessageTimeout);
-            }
-
-            if (config.SuggestionSettings.DeleteOriginalMessage) {
-                await message.delete().catch(console.error);
-            }
-            return;
-        }
-
-        if (config.SuggestionSettings.blockBlacklistWords) {
-            const messageObj = { content: messageContent, member: message.member, channel: message.channel, author: message.author, deletable: true };
-            const hasBlacklistedWords = await checkBlacklistWords(messageObj, false);
-            if (hasBlacklistedWords) {
+            if (!hasAllowedRole) {
                 const errorMsg = await message.channel.send({
-                    content: lang.BlacklistWords.Message.replace(/{user}/g, message.author.toString())
+                    content: lang.NoPermsMessage
                 });
 
                 if (config.SuggestionSettings.DeleteFailureMessages) {
@@ -590,38 +561,75 @@ if (message.deletable) {
                 }
                 return;
             }
-        }
 
-        try {
-            await suggestionActions.createSuggestion(client, message, messageContent);
+            const isBlacklisted = await SuggestionBlacklist.findOne({ userId: message.author.id });
 
-            if (config.SuggestionSettings.DeleteOriginalMessage) {
-                try {
-                    await message.delete().catch(error => {
+            if (isBlacklisted) {
+                const errorMsg = await message.channel.send({
+                    content: lang.Suggestion.BlacklistMessage
+                });
+
+                if (config.SuggestionSettings.DeleteFailureMessages) {
+                    setTimeout(() => errorMsg.delete().catch(console.error),
+                        config.SuggestionSettings.FailureMessageTimeout);
+                }
+
+                if (config.SuggestionSettings.DeleteOriginalMessage) {
+                    await message.delete().catch(console.error);
+                }
+                return;
+            }
+
+            if (config.SuggestionSettings.blockBlacklistWords) {
+                const messageObj = { content: messageContent, member: message.member, channel: message.channel, author: message.author, deletable: true };
+                const hasBlacklistedWords = await checkBlacklistWords(messageObj, false);
+                if (hasBlacklistedWords) {
+                    const errorMsg = await message.channel.send({
+                        content: lang.BlacklistWords.Message.replace(/{user}/g, message.author.toString())
+                    });
+
+                    if (config.SuggestionSettings.DeleteFailureMessages) {
+                        setTimeout(() => errorMsg.delete().catch(console.error),
+                            config.SuggestionSettings.FailureMessageTimeout);
+                    }
+
+                    if (config.SuggestionSettings.DeleteOriginalMessage) {
+                        await message.delete().catch(console.error);
+                    }
+                    return;
+                }
+            }
+
+            try {
+                await suggestionActions.createSuggestion(client, message, messageContent);
+
+                if (config.SuggestionSettings.DeleteOriginalMessage) {
+                    try {
+                        await message.delete().catch(error => {
+                            if (error.code !== 10008) {
+                                console.error('Error deleting message:', error);
+                            }
+                        });
+                    } catch (error) {
                         if (error.code !== 10008) {
                             console.error('Error deleting message:', error);
                         }
-                    });
-                } catch (error) {
-                    if (error.code !== 10008) {
-                        console.error('Error deleting message:', error);
                     }
                 }
-            }
-        } catch (error) {
-            console.error('Error creating suggestion:', error);
-            const errorMsg = await message.channel.send({
-                content: `${message.author}, ${lang.Suggestion.Error}`
-            });
+            } catch (error) {
+                console.error('Error creating suggestion:', error);
+                const errorMsg = await message.channel.send({
+                    content: `${message.author}, ${lang.Suggestion.Error}`
+                });
 
-            setTimeout(() => errorMsg.delete().catch(error => {
-                if (error.code !== 10008) {
-                    console.error('Error deleting error message:', error);
-                }
-            }), 5000);
+                setTimeout(() => errorMsg.delete().catch(error => {
+                    if (error.code !== 10008) {
+                        console.error('Error deleting error message:', error);
+                    }
+                }), 5000);
+            }
         }
     }
-}
 };
 
 async function handleButtonInteraction(interaction) {
@@ -1199,11 +1207,11 @@ async function processAutoResponses(message) {
                 if (response.type === 'text' && response.content) {
                     try {
                         const parsed = await KentaScratch.parse(response.content, { user: message.author, guild: message.guild, channel: message.channel, member: message.member });
-                         if (parsed.content || parsed.components.length > 0 || parsed.embeds.length > 0) {
+                        if (parsed.content || parsed.components.length > 0 || parsed.embeds.length > 0) {
                             await message.reply({ content: parsed.content || null, components: parsed.components, embeds: parsed.embeds });
                         }
                     } catch (error) {
-                         console.error('Failed to send text response (KentaScratch):', error);
+                        console.error('Failed to send text response (KentaScratch):', error);
                     }
                 }
                 else if (response.type === 'embed' && response.embed) {
@@ -1257,13 +1265,13 @@ async function processAutoResponses(message) {
                     });
                 }
                 else if (response.responseType === 'TEXT' && response.responseText) {
-                     try {
+                    try {
                         const parsed = await KentaScratch.parse(response.responseText, { user: message.author, guild: message.guild, channel: message.channel, member: message.member });
-                         if (parsed.content || parsed.components.length > 0 || parsed.embeds.length > 0) {
+                        if (parsed.content || parsed.components.length > 0 || parsed.embeds.length > 0) {
                             await message.reply({ content: parsed.content || null, components: parsed.components, embeds: parsed.embeds });
                         }
                     } catch (error) {
-                         console.error('Failed to send text response (KentaScratch):', error);
+                        console.error('Failed to send text response (KentaScratch):', error);
                     }
                 }
                 else if (response.responseType === 'EMBED' && response.embedData) {

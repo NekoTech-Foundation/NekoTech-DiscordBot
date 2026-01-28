@@ -1464,6 +1464,23 @@ InviteJoinLogs:
     Image: ""
     Thumbnail: true
 
+VoiceChannelStreamStart:
+  Embed:
+    Title: ":red_circle: Bắt đầu livestream"
+    Description:
+      - "**👤 Người dùng:** {user}"
+      - "**📺 Kênh:** {channel}"
+      - "**📅 Ngày:** {longtime}, {shorttime}"
+    Footer:
+      Text: "🔒 Nhật ký quản lý | KentaBucketsBot"
+      Icon: ""
+    Author:
+      Text: ""
+      Icon: ""
+    Color: "#9C27B0"
+    Image: ""
+    Thumbnail: true
+
 VoiceChannelStreamStop:
   Embed:
     Title: ":stop_button: Luồng đã kết thúc"
@@ -2098,6 +2115,8 @@ Music:
     EmbedFormat: "Định dạng"
     EmbedDuration: "Thời lượng"
   Queue:
+    Title: "Danh sách phát"
+    Empty: "Hàng đợi trống!"
     Completed: "Đã phát hết hàng đợi!"
     CompletedDesc: "Hãy thêm bài hát mới để tiếp tục nghe nhạc."
 
@@ -2123,3 +2142,5 @@ Valorant:
   Embeds:
     HelpTitle: "Lệnh Valorant Tracker"
     HelpSetupValue: "1. 'Sign in with Riot ID' trên https://tracker.gg/valorant\n2. Kết nối tài khoản VALORANT bằng cách gõ `/link YOUR_USERNAME#TAG`"
+
+

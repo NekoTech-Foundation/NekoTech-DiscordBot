@@ -481,3 +481,19 @@ Valorant:
   SeasonReport: "/segments/season-report?season=all"
   SourceHeader: "&source=web"
   ApiKey: "181c3507-541f-4808-9895-b00a9eac5dcc"
+
+# ===========================================================================
+# AUTO KICK
+# ===========================================================================
+AutoKick:
+  Enabled: false
+  Role: []
+  Time: "30m"
+  DM:
+    Enabled: false
+    Embed:
+      Title: "Auto Kick"
+      Description: 
+        - "You have been kicked for not verifying in time."
+      Color: "#FF0000"
+      Footer: "System"
