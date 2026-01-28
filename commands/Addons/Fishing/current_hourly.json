@@ -1,15 +1,15 @@
 {
   "legendary": {
-    "name": "Mực ma cà rồng",
-    "emoji": "<:Fish_vampiresquid:1433393330166693928>",
+    "name": "Cá dao ma đen",
+    "emoji": "<:Fish_blackghostknifefish:1433393245467054130>",
     "min_weight": 0.5,
     "max_weight": 1.5
   },
   "epic": {
-    "name": "Mực zombie",
-    "emoji": "<:Fish_zombiesquid:1433392936246050938>",
-    "min_weight": 1,
-    "max_weight": 5
+    "name": "Cá da trơn Goonch",
+    "emoji": "<:Fish_goonchcatfish:1433392954164252746>",
+    "min_weight": 50,
+    "max_weight": 150
   },
-  "updatedAt": "2026-01-23T08:50:53.558Z"
+  "updatedAt": "2026-01-28T10:10:11.986Z"
 }
