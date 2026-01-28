@@ -686,6 +686,16 @@ Levels:
     - "🚀 {user}, đã đạt cấp {newLevel}! Nhiệm vụ tiếp theo của bạn: Tìm một cuộc sống bên ngoài Discord! 🌍"
     - "🎊 {user}, chúc mừng đã lên cấp {newLevel}! Chúng tôi biết bạn có khả năng đó, phần nào. 😅"
     - "🔥 {user} bây giờ là cấp {newLevel}! Ghế chơi game của bạn chắc đang bốc cháy! 🔥"
+    - "Chúc mừng {user}! Bạn vừa đạt cấp độ {newLevel}. Tiếp tục phát huy nhé!"
+    - "Wow! {user} đã thăng cấp lên {newLevel}! Quá đẳng cấp!"
+    - "Level Up! {user} hiện đang ở cấp {newLevel}. Kẻ mạnh thực sự!"
+    - "Cố gắng không ngừng nghỉ! {user} đã chạm mốc cấp {newLevel}!"
+    - "{user} leveled up! New level: {newLevel}. Pogchamp!"
+    - "Bùm! {user} đã nổ tung cấp độ cũ và đạt cấp {newLevel}!"
+    - "Một huyền thoại mới nổi? {user} vừa lên cấp {newLevel}!"
+    - "Thông báo: {user} đã chính thức cán mốc cấp {newLevel}!"
+    - "Tuyệt vời! {user} đã leo lên cấp {newLevel}. Đỉnh của chóp!"
+    - "Không thể tin được! {user} đã đạt cấp {newLevel} nhanh như gió!"
 
 # ===========================================================================
 # TIN NHẮN LỆNH ADDROLE/REMOVEROLE
@@ -2145,20 +2155,3 @@ Valorant:
 
 
 
-# ===========================================================================
-# LEVELING MESSAGES
-# ===========================================================================
-Levels:
-  LevelMessages:
-    - "Ting! {user} đã lên cấp {newLevel}!"
-    - "Chúc mừng {user}! Bạn vừa đạt cấp độ {newLevel}. Tiếp tục phát huy nhé!"
-    - "Wow! {user} đã thăng cấp lên {newLevel}! Quá đẳng cấp!"
-    - "Level Up! {user} hiện đang ở cấp {newLevel}. Kẻ mạnh thực sự!"
-    - "Đừng đùa với {user}, họ vừa lên cấp {newLevel} đấy!"
-    - "Cố gắng không ngừng nghỉ! {user} đã chạm mốc cấp {newLevel}!"
-    - "{user} leveled up! New level: {newLevel}. Pogchamp!"
-    - "Bùm! {user} đã nổ tung cấp độ cũ và đạt cấp {newLevel}!"
-    - "Một huyền thoại mới nổi? {user} vừa lên cấp {newLevel}!"
-    - "Thông báo: {user} đã chính thức cán mốc cấp {newLevel}!"
-    - "Tuyệt vời! {user} đã leo lên cấp {newLevel}. Đỉnh của chóp!"
-    - "Không thể tin được! {user} đã đạt cấp {newLevel} nhanh như gió!"

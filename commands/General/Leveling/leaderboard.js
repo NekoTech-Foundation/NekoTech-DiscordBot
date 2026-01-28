@@ -198,22 +198,30 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
 
         case 'balance': {
             const allEconData = await EconomyUserData.find({});
-            // Fetch all members to filter with fallback
-            // Note: For very large servers this might be slow, but it's necessary without guild-specific economy
             let members;
             try {
-                members = await guild.members.fetch({ time: 10000 }); // 10s timeout
+                members = await guild.members.fetch({ time: 10000 });
             } catch (err) {
                 console.warn('[Leaderboard] Member fetch timed out, falling back to cache:', err.message);
                 members = guild.members.cache;
             }
-            
+
             data = allEconData.filter(doc => members.has(doc.userId));
             data.sort((a, b) => (b.balance || 0) - (a.balance || 0));
             break;
         }
-        case 'levels':
-            data = await UserData.find({ guildId: guild.id });
+        case 'levels': {
+            // Using global data as per handleXP.js
+            const allLevelData = await UserData.find({ guildId: 'global' });
+
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) {
+                members = guild.members.cache;
+            }
+
+            data = allLevelData.filter(doc => members.has(doc.userId));
             data.sort((a, b) => {
                 if ((b.level || 0) !== (a.level || 0)) {
                     return (b.level || 0) - (a.level || 0);
@@ -221,14 +229,26 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
                 return (b.xp || 0) - (a.xp || 0);
             });
             break;
-        case 'messages':
-            data = await UserData.find({ guildId: guild.id });
+        }
+        case 'messages': {
+            // Using global data as per handleXP.js
+            const allMsgData = await UserData.find({ guildId: 'global' });
+
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) {
+                members = guild.members.cache;
+            }
+
+            data = allMsgData.filter(doc => members.has(doc.userId));
             data.sort((a, b) => (b.totalMessages || 0) - (a.totalMessages || 0));
             break;
+        }
         case 'invites': {
             const allInvites = await Invite.find({ guildId: guild.id });
             const inviterMap = {};
-            
+
             for (const inv of allInvites) {
                 if (!inv.inviterId) continue;
                 if (!inviterMap[inv.inviterId]) {
@@ -238,27 +258,25 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             }
 
             data = Object.entries(inviterMap).map(([inviterId, count]) => ({
-                _id: inviterId, // compatible with previous structure awaiting fetch(user._id)
-                userId: inviterId, 
+                _id: inviterId,
+                userId: inviterId,
                 invites: count
             }));
-            
+
             data.sort((a, b) => b.invites - a.invites);
             break;
         }
         case 'cauca': {
-            // fishingSchema logic was mostly fine but let's ensure consistency
-            const docs = await fishingSchema.find({}); // Fetch key is 'userId' usually, but inventory check needs all 
-            // The original logic was: .find({ 'inventory.0': { $exists: true } });
-            // SQLiteModel's find supports basic matching but $exists operator support in findAll/find is limited/not guaranteed by the simple implementation we saw.
-            // Safe bet: fetch all matching users who have data, then filter in JS.
-            // Assuming fishingSchema uses userId as PK.
-            
-            // Actually, let's look at fishingSchema implementation again. It wraps a single SQLite table.
-            // We just fetch all valid fishing users.
             const allFishers = await fishingSchema.find({});
-            
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) {
+                members = guild.members.cache;
+            }
+
             data = allFishers
+                .filter(doc => members.has(doc.userId))
                 .map(doc => ({
                     ...doc,
                     catchCount: (doc.inventory || []).reduce(
@@ -268,7 +286,7 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
                 }))
                 .filter(doc => doc.catchCount > 0)
                 .sort((a, b) => b.catchCount - a.catchCount);
-            
+
             // data is already sorted and ready
             return data.slice(skip, skip + pageSize);
         }
@@ -282,20 +300,20 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
 async function getTotalCount(guild, subCmd) {
     switch (subCmd) {
         case 'balance': {
-             // Use EconomyUserData for balance count, filtered by guild
-             const allEconData = await EconomyUserData.find({});
-             let members;
-             try {
+            // Use EconomyUserData for balance count, filtered by guild
+            const allEconData = await EconomyUserData.find({});
+            let members;
+            try {
                 members = await guild.members.fetch({ time: 10000 });
-             } catch (err) {
-                 members = guild.members.cache;
-             }
-             return allEconData.filter(doc => members.has(doc.userId)).length;
+            } catch (err) {
+                members = guild.members.cache;
+            }
+            return allEconData.filter(doc => members.has(doc.userId)).length;
         }
         case 'levels':
         case 'messages': {
-             // SQLiteModel countDocuments impl behaves like find().length
-             return await UserData.countDocuments({ guildId: guild.id });
+            // SQLiteModel countDocuments impl behaves like find().length
+            return await UserData.countDocuments({ guildId: guild.id });
         }
         case 'invites': {
             const allInvites = await Invite.find({ guildId: guild.id });
@@ -303,14 +321,14 @@ async function getTotalCount(guild, subCmd) {
             // We only want inviters with > 0 invites ideally, but the previous aggregate did:
             // match invites > 0.
             // Let's replicate logic:
-            
+
             const inviterMap = {};
-             for (const inv of allInvites) {
+            for (const inv of allInvites) {
                 if (!inv.inviterId) continue;
                 if (!inviterMap[inv.inviterId]) inviterMap[inv.inviterId] = 0;
                 inviterMap[inv.inviterId] += (inv.uses || 0);
             }
-            
+
             return Object.values(inviterMap).filter(count => count > 0).length;
         }
         case 'cauca': {
@@ -519,21 +537,21 @@ module.exports = {
 
                 await message
                     .edit({ components: [disabledButtons] })
-                    .catch(() => {});
+                    .catch(() => { });
             });
         } catch (error) {
             console.error(error);
-            const errorMessage = lang?.Leaderboard?.Error 
+            const errorMessage = lang?.Leaderboard?.Error
                 ? lang.Leaderboard.Error.replace(/{guild}/g, interaction.guild.name)
                 : 'Đã xảy ra lỗi khi lấy bảng xếp hạng.';
-                
+
             if (interaction.deferred || interaction.replied) {
-                 await interaction.editReply({
+                await interaction.editReply({
                     content: errorMessage,
                     flags: MessageFlags.Ephemeral
                 });
             } else {
-                 await interaction.reply({
+                await interaction.reply({
                     content: errorMessage,
                     flags: MessageFlags.Ephemeral
                 });
