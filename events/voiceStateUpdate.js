@@ -150,9 +150,11 @@ async function sendVoiceStateEmbed(oldState, newState, voiceConfigKey, moderator
         .setTitle(replacePlaceholders(embedConfig.Title, oldState, newState, moderator));
 
     if (embedConfig.Description && Array.isArray(embedConfig.Description)) {
-        embed.setDescription(embedConfig.Description.map(line => replacePlaceholders(line, oldState, newState, moderator)).join("\n"));
+        const desc = embedConfig.Description.map(line => replacePlaceholders(line, oldState, newState, moderator)).join("\n");
+        if (desc && desc.trim().length > 0) embed.setDescription(desc);
     } else if (typeof embedConfig.Description === 'string') {
-        embed.setDescription(replacePlaceholders(embedConfig.Description, oldState, newState, moderator));
+        const desc = replacePlaceholders(embedConfig.Description, oldState, newState, moderator);
+        if (desc && desc.trim().length > 0) embed.setDescription(desc);
     }
 
     if (embedConfig.Footer && embedConfig.Footer.Text) {

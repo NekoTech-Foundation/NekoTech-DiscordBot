@@ -1,0 +1,61 @@
+[
+    {
+        "id": "slime_green",
+        "name": "Green Slime",
+        "rarity": "Common",
+        "stats": {
+            "hp": 20,
+            "str": 3,
+            "def": 1,
+            "spd": 2
+        },
+        "skills": [
+            "tackle"
+        ]
+    },
+    {
+        "id": "wolf_alpha",
+        "name": "Alpha Wolf",
+        "rarity": "Uncommon",
+        "stats": {
+            "hp": 50,
+            "str": 10,
+            "def": 3,
+            "spd": 12
+        },
+        "skills": [
+            "bite",
+            "howl"
+        ]
+    },
+    {
+        "id": "goblin_chief",
+        "name": "Goblin Chief",
+        "rarity": "Rare",
+        "stats": {
+            "hp": 120,
+            "str": 15,
+            "def": 8,
+            "spd": 8
+        },
+        "skills": [
+            "smash",
+            "rally"
+        ]
+    },
+    {
+        "id": "dragon_red",
+        "name": "Red Dragon",
+        "rarity": "Mythical",
+        "stats": {
+            "hp": 500,
+            "str": 50,
+            "def": 30,
+            "spd": 15
+        },
+        "skills": [
+            "firebreath",
+            "tailwhip"
+        ]
+    }
+]

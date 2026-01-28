@@ -1,0 +1,53 @@
+[
+    {
+        "id": "health_potion_s",
+        "name": "Small Health Potion",
+        "type": "CONSUMABLE",
+        "description": "Restores 50 HP",
+        "effect": {
+            "type": "HEAL",
+            "value": 50
+        },
+        "price": 50
+    },
+    {
+        "id": "wooden_sword",
+        "name": "Wooden Sword",
+        "type": "WEAPON",
+        "description": "A basic training sword.",
+        "stats": {
+            "str": 5
+        },
+        "price": 100
+    },
+    {
+        "id": "iron_sword",
+        "name": "Iron Sword",
+        "type": "WEAPON",
+        "description": "A standard reliable sword.",
+        "stats": {
+            "str": 15
+        },
+        "price": 500
+    },
+    {
+        "id": "leather_armor",
+        "name": "Leather Armor",
+        "type": "ARMOR",
+        "description": "Basic protection.",
+        "stats": {
+            "def": 5
+        },
+        "price": 200
+    },
+    {
+        "id": "iron_armor",
+        "name": "Iron Armor",
+        "type": "ARMOR",
+        "description": "Sturdy protection.",
+        "stats": {
+            "def": 15
+        },
+        "price": 800
+    }
+]

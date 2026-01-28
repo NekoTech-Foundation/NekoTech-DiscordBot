@@ -191,7 +191,7 @@ module.exports = {
         }
 
         if (subcommand !== 'check' && subcommand !== 'prestige') {
-            const requiredRoles = config.LevelingSystem.Permission;
+            const requiredRoles = config.LevelingSystem.Permission || [];
             const hasPermission =
                 interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
                 requiredRoles.some(roleId => interaction.member.roles.cache.has(roleId));

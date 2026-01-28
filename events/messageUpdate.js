@@ -201,7 +201,7 @@ module.exports = async (client, oldMessage, newMessage) => {
             embed.setImage(embedData.Image);
         }
 
-        editLogChannel.send({ embeds: [embed] });
+        editLogChannel.send({ embeds: [embed] }).catch(err => console.error('Failed to send message update log:', err));
     }
 };
 

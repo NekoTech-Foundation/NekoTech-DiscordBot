@@ -58,12 +58,12 @@ module.exports = async (client, message) => {
             logsChannel.send({ embeds: [baseEmbed] }).then(() => {
                 imageAttachments.forEach((attachment, index) => {
                     if (index > 0) {
-                        logsChannel.send({ files: [attachment.url] });
+                        logsChannel.send({ files: [attachment.url] }).catch(e => console.error('Failed to send attachment log:', e));
                     }
                 });
-            });
+            }).catch(e => console.error('Failed to send delete log:', e));
         } else {
-            logsChannel.send({ embeds: [baseEmbed] });
+            logsChannel.send({ embeds: [baseEmbed] }).catch(e => console.error('Failed to send delete log:', e));
         }
     }
 };

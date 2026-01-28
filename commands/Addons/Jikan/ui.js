@@ -67,7 +67,7 @@ function animeEmbed(anime, opts = {}) {
     { name: '🎭 Thể loại', value: getSafeList(anime.genres), inline: true },
     { name: '🔞 Rating', value: anime.rating || 'N/A', inline: true }
   );
-  
+
   // Extra stats if space permits
   if (anime.members) e.addFields({ name: '👥 Thành viên', value: formatNumber(anime.members), inline: true });
   if (anime.favorites) e.addFields({ name: '❤️ Yêu thích', value: formatNumber(anime.favorites), inline: true });
@@ -141,10 +141,68 @@ function listEmbed({ title, items, page, totalPages }) {
     .setTimestamp();
 }
 
+/**
+ * Creates a Rich List Embed with formatting and thumbnail
+ * @param {Object} params
+ * @param {string} params.title
+ * @param {Array} params.items - Array of Jikan Objects (not strings)
+ * @param {number} params.page
+ * @param {number} params.totalPages
+ * @param {string} params.type - 'anime' | 'manga' | 'character'
+ */
+function richListEmbed({ title, items, page, totalPages, type = 'anime' }) {
+  const e = new EmbedBuilder()
+    .setTitle(title)
+    .setColor(0x3498DB)
+    .setFooter({ text: `Trang ${page}/${totalPages} • Dùng menu bên dưới để xem chi tiết` })
+    .setTimestamp();
+
+  if (!items || items.length === 0) {
+    e.setDescription('❌ Không tìm thấy kết quả nào.');
+    return e;
+  }
+
+  // Use the image of the first item as the main thumbnail to make it "pop"
+  const firstItem = items[0];
+  const thumb = firstItem?.images?.jpg?.image_url || firstItem?.images?.webp?.image_url;
+  if (thumb) e.setThumbnail(thumb);
+
+  const lines = items.map((item, idx) => {
+    const i = (page - 1) * 10 + idx + 1;
+    let line = `**${i}. [${item.title}](${item.url})**`;
+
+    // Add stats based on type
+    if (type === 'anime') {
+      const typeStr = item.type || '?';
+      const score = item.score ? `⭐ ${item.score}` : '';
+      const eps = item.episodes ? `📺 ${item.episodes} ep` : typeStr;
+      const year = item.year ? `🗓️ ${item.year}` : (item.aired?.string ? `🗓️ ${item.aired.string.split(',')[1] || ''}` : '');
+      const details = [score, eps, year].filter(x => x).join(' • ');
+      if (details) line += `\n> ${details}`;
+    } else if (type === 'manga') {
+      const typeStr = item.type || '?';
+      const score = item.score ? `⭐ ${item.score}` : '';
+      const vols = item.volumes ? `📚 ${item.volumes} vol` : typeStr;
+      const status = item.status ? `Unknown Status` : ''; // simplified
+      const details = [score, vols].filter(x => x).join(' • ');
+      if (details) line += `\n> ${details}`;
+    } else if (type === 'character') {
+      const favorites = item.favorites ? `❤️ ${formatNumber(item.favorites)}` : '';
+      if (favorites) line += `\n> ${favorites}`;
+    }
+
+    return line;
+  });
+
+  e.setDescription(lines.join('\n\n')); // Double newline for spacing
+  return e;
+}
+
 module.exports = {
   truncate,
   animeEmbed,
   mangaEmbed,
   characterEmbed,
   listEmbed,
+  richListEmbed,
 };

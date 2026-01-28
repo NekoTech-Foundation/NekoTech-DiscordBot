@@ -233,8 +233,23 @@ async function handleXP(message) {
                         embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
                     }
 
-                    if (embedSettings.Description && embedSettings.Description.length > 0) {
-                        embed.setDescription(embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
+                    let desc = '';
+                    if (embedSettings.Description && Array.isArray(embedSettings.Description)) {
+                        desc = embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n');
+                    } else if (typeof embedSettings.Description === 'string') {
+                        desc = replacePlaceholders(embedSettings.Description, placeholders);
+                    } else {
+                        // Fallback to the plain text message if no embed description is provided
+                        desc = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
+                    }
+
+                    if (desc && desc.trim().length > 0) {
+                        embed.setDescription(desc);
+                    }
+
+                    if (!embed.data.description && !embed.data.title && !embed.data.image && !embed.data.thumbnail) {
+                        // Absolute fallback to ensure embed is not empty
+                        embed.setDescription(`Chúc mừng ${placeholders.user} đã lên cấp ${placeholders.newLevel}!`);
                     }
 
                     if (embedSettings.Footer && embedSettings.Footer.Text) {
@@ -305,8 +320,6 @@ async function handleVoiceXP(client, member) {
         return;
     }
 
-    const voiceInterval = parseTime(config.LevelingSystem.CooldownSettings.VoiceInterval || '10s');
-    const timerKey = `${member.guild.id}-${member.id}`;
     // Dùng bản ghi toàn cục cho level/xp (guildId = 'global')
     let userData = await UserData.findOne({ userId: member.id, guildId: 'global' });
     if (!userData) {
@@ -316,191 +329,167 @@ async function handleVoiceXP(client, member) {
         });
     }
 
-    if (voiceXpTimers.has(timerKey)) {
-        clearInterval(voiceXpTimers.get(timerKey));
-        voiceXpTimers.delete(timerKey);
+    const xpToAdd = getRandomXP(config.LevelingSystem.VoiceXP);
+    if (isNaN(xpToAdd) || xpToAdd <= 0) {
+        // console.error('Invalid XP configuration');
+        return;
     }
 
-    const intervalId = setInterval(async () => {
-        const xpToAdd = getRandomXP(config.LevelingSystem.VoiceXP);
-        if (isNaN(xpToAdd) || xpToAdd <= 0) {
-            console.error('Invalid XP configuration');
-            return;
-        }
+    userData.xp += xpToAdd;
+    const xpNeeded = userData.level === 0 ? 70 : userData.level * config.LevelingSystem.XPNeeded;
 
-        userData.xp += xpToAdd;
-        const xpNeeded = userData.level === 0 ? 70 : userData.level * config.LevelingSystem.XPNeeded;
+    while (userData.xp >= xpNeeded) {
+        const oldLevel = userData.level;
+        userData.xp -= xpNeeded;
+        userData.level++;
+        const newLevel = userData.level;
 
-        while (userData.xp >= xpNeeded) {
-            const oldLevel = userData.level;
-            userData.xp -= xpNeeded;
-            userData.level++;
-            const newLevel = userData.level;
-
-            const levelUpRoles = config.LevelingSystem.RoleSettings?.LevelRoles || [];
-            for (const levelUpRole of levelUpRoles) {
-                if (userData.level >= levelUpRole.level && levelUpRole.roleID) {
-                    const role = member.guild.roles.cache.get(levelUpRole.roleID);
-                    if (role) {
-                        await member.roles.add(role);
-                        if (!config.LevelingSystem.RoleSettings?.StackRoles) {
-                            for (const otherLevelUpRole of levelUpRoles) {
-                                if (userData.level > otherLevelUpRole.level && otherLevelUpRole.roleID && otherLevelUpRole.roleID !== levelUpRole.roleID) {
-                                    const oldRole = member.guild.roles.cache.get(otherLevelUpRole.roleID);
-                                    if (oldRole) {
-                                        await member.roles.remove(oldRole);
-                                    }
+        const levelUpRoles = config.LevelingSystem.RoleSettings?.LevelRoles || [];
+        for (const levelUpRole of levelUpRoles) {
+            if (userData.level >= levelUpRole.level && levelUpRole.roleID) {
+                const role = member.guild.roles.cache.get(levelUpRole.roleID);
+                if (role) {
+                    await member.roles.add(role).catch(() => { });
+                    if (!config.LevelingSystem.RoleSettings?.StackRoles) {
+                        for (const otherLevelUpRole of levelUpRoles) {
+                            if (userData.level > otherLevelUpRole.level && otherLevelUpRole.roleID && otherLevelUpRole.roleID !== levelUpRole.roleID) {
+                                const oldRole = member.guild.roles.cache.get(otherLevelUpRole.roleID);
+                                if (oldRole) {
+                                    await member.roles.remove(oldRole).catch(() => { });
                                 }
                             }
                         }
                     }
                 }
             }
+        }
 
-            const scaleRewards = config.LevelingSystem.RoleSettings?.ScaleRewards || {};
-            const rewards = scaleRewards.Rewards || [];
+        const scaleRewards = config.LevelingSystem.RoleSettings?.ScaleRewards || {};
+        const rewards = scaleRewards.Rewards || [];
 
-            let highestReward = { level: 0, coins: 0 };
-            for (const scaleReward of rewards) {
-                if (newLevel % scaleReward.level === 0 && scaleReward.coins > highestReward.coins) {
-                    highestReward = scaleReward;
+        let highestReward = { level: 0, coins: 0 };
+        for (const scaleReward of rewards) {
+            if (newLevel % scaleReward.level === 0 && scaleReward.coins > highestReward.coins) {
+                highestReward = scaleReward;
+            }
+        }
+
+        if (highestReward.coins > 0) {
+            userData.balance += highestReward.coins;
+        }
+
+        let channel;
+
+        if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID &&
+            config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID') {
+            channel = member.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
+        }
+
+        if (!channel || channel.type !== ChannelType.GuildText) {
+            channel = member.guild.channels.cache.find(ch => ch.type === ChannelType.GuildText);
+        }
+
+        if (!channel) {
+            // console.warn(`Could not find a valid text channel to send level up message for user ${member.id}`);
+            continue;
+        }
+
+        const placeholders = {
+            userName: member.user.username,
+            user: member.user.toString(),
+            userId: member.user.id,
+            guildName: member.guild.name,
+            guildIcon: member.guild.iconURL(),
+            userIcon: member.user.displayAvatarURL(),
+            oldLevel: oldLevel,
+            newLevel: newLevel,
+            oldXP: xpToAdd,
+            newXP: xpNeeded
+        };
+        // Generate random message only if used
+        placeholders.randomLevelMessage = getRandomLevelMessage(placeholders);
+
+        try {
+            if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
+                const embedSettings = config.LevelingSystem.LevelUpMessageSettings.Embed || {};
+                const embed = new EmbedBuilder()
+                    .setColor(embedSettings.Color || '#34eb6b');
+
+                if (embedSettings.Title) {
+                    embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
                 }
-            }
 
-            if (highestReward.coins > 0) {
-                userData.balance += highestReward.coins;
-            }
-
-            let channel;
-
-            if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID &&
-                config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID') {
-                channel = member.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
-            }
-
-            if (!channel || channel.type !== ChannelType.GuildText) {
-                channel = member.guild.channels.cache.find(ch => ch.type === ChannelType.GuildText);
-            }
-
-            if (!channel) {
-                console.warn(`Could not find a valid text channel to send level up message for user ${member.id}`);
-                continue;
-            }
-
-            const placeholders = {
-                userName: member.user.username,
-                user: member.user.toString(),
-                userId: member.user.id,
-                guildName: member.guild.name,
-                guildIcon: member.guild.iconURL(),
-                userIcon: member.user.displayAvatarURL(),
-                oldLevel: oldLevel,
-                newLevel: newLevel,
-                oldXP: xpToAdd,
-                newXP: xpNeeded,
-                randomLevelMessage: getRandomLevelMessage({
-                    userName: member.user.username,
-                    user: member.user.toString(),
-                    userId: member.user.id,
-                    guildName: member.guild.name,
-                    guildIcon: member.guild.iconURL(),
-                    userIcon: member.user.displayAvatarURL(),
-                    oldLevel: oldLevel,
-                    newLevel: newLevel,
-                    oldXP: xpToAdd,
-                    newXP: xpNeeded
-                })
-            };
-
-            const userIconURL = placeholders.userIcon;
-            const guildIconURL = placeholders.guildIcon;
-
-            try {
-                if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
-                    const embed = new EmbedBuilder()
-                        .setColor(config.LevelingSystem.LevelUpMessageSettings.Embed.Color || '#34eb6b');
-
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Title) {
-                        embed.setTitle(replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Title, placeholders));
-                    }
-
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Description && config.LevelingSystem.LevelUpMessageSettings.Embed.Description.length > 0) {
-                        embed.setDescription(config.LevelingSystem.LevelUpMessageSettings.Embed.Description.map(line => replacePlaceholders(line, placeholders)).join('\n'));
-                    }
-
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Footer && config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text) {
-                        const footerText = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Text, placeholders);
-                        const footerIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Footer.Icon || "", placeholders);
-                        if (footerText) {
-                            embed.setFooter({
-                                text: footerText,
-                                iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
-                            });
-                        } else {
-                            embed.setFooter({
-                                text: footerText
-                            });
-                        }
-                    }
-
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Author && config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text) {
-                        const authorIconURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Icon || "", placeholders);
-                        embed.setAuthor({
-                            name: replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Author.Text, placeholders),
-                            iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
-                        });
-                    }
-
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail) {
-                        const thumbnailURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Thumbnail, placeholders);
-                        if (isValidUrl(thumbnailURL)) {
-                            embed.setThumbnail(thumbnailURL);
-                        }
-                    }
-
-                    if (config.LevelingSystem.LevelUpMessageSettings.Embed.Image) {
-                        const imageURL = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.Embed.Image, placeholders);
-                        if (isValidUrl(imageURL)) {
-                            embed.setImage(imageURL);
-                        }
-                    }
-
-                    await channel.send({ embeds: [embed] }).catch(err => {
-                        console.error('Failed to send level up embed:', err);
-                    });
+                let desc = '';
+                if (embedSettings.Description && Array.isArray(embedSettings.Description)) {
+                    desc = embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n');
+                } else if (typeof embedSettings.Description === 'string') {
+                    desc = replacePlaceholders(embedSettings.Description, placeholders);
                 } else {
-                    const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
-                    if (levelUpMessage.trim() !== '') {
-                        await channel.send(levelUpMessage).catch(err => {
-                            console.error('Failed to send level up message:', err);
+                    // Fallback to the plain text message if no embed description is provided
+                    desc = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
+                }
+
+                if (desc && desc.trim().length > 0) {
+                    embed.setDescription(desc);
+                }
+
+                if (!embed.data.description && !embed.data.title && !embed.data.image && !embed.data.thumbnail) {
+                    // Absolute fallback to ensure embed is not empty
+                    embed.setDescription(`Chúc mừng ${placeholders.user} đã lên cấp ${placeholders.newLevel}!`);
+                }
+
+                if (embedSettings.Footer && embedSettings.Footer.Text) {
+                    const footerText = replacePlaceholders(embedSettings.Footer.Text, placeholders);
+                    const footerIconURL = replacePlaceholders(embedSettings.Footer.Icon || "", placeholders);
+                    if (footerText) {
+                        embed.setFooter({
+                            text: footerText,
+                            iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
                         });
                     }
                 }
-            } catch (error) {
-                console.error('Error sending level up message:', error);
+
+                if (embedSettings.Author && embedSettings.Author.Text) {
+                    const authorIconURL = replacePlaceholders(embedSettings.Author.Icon || "", placeholders);
+                    embed.setAuthor({
+                        name: replacePlaceholders(embedSettings.Author.Text, placeholders),
+                        iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
+                    });
+                }
+
+                if (embedSettings.Thumbnail) {
+                    const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
+                    if (isValidUrl(thumbnailURL)) {
+                        embed.setThumbnail(thumbnailURL);
+                    }
+                }
+
+                if (embedSettings.Image) {
+                    const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
+                    if (isValidUrl(imageURL)) {
+                        embed.setImage(imageURL);
+                    }
+                }
+
+                await channel.send({ embeds: [embed] }).catch(err => {
+                    console.error('Failed to send level up embed:', err);
+                });
+            } else {
+                const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
+                if (levelUpMessage.trim() !== '') {
+                    await channel.send(levelUpMessage).catch(err => {
+                        console.error('Failed to send level up message:', err);
+                    });
+                }
             }
+        } catch (error) {
+            console.error('Error sending level up message:', error);
         }
+    }
 
-        await userData.save().catch(err => {
-            console.error('Failed to save user data:', err);
-        });
-    }, voiceInterval);
-
-    voiceXpTimers.set(timerKey, intervalId);
-
-    const handleVoiceStateUpdate = (oldState, newState) => {
-        if (oldState.member.id === member.id &&
-            (!newState.channelId || oldState.channelId !== newState.channelId)) {
-            const existingTimer = voiceXpTimers.get(timerKey);
-            if (existingTimer) {
-                clearInterval(existingTimer);
-                voiceXpTimers.delete(timerKey);
-            }
-            client.off('voiceStateUpdate', handleVoiceStateUpdate);
-        }
-    };
-
-    client.on('voiceStateUpdate', handleVoiceStateUpdate);
+    await userData.save().catch(err => {
+        console.error('Failed to save user data:', err);
+    });
 }
 
 module.exports = {

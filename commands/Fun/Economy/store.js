@@ -83,15 +83,15 @@ module.exports = {
                 return items.slice(start, end).map((item, index) => {
                     // Safely handle missing description array
                     let descriptionTemplate = lang.Economy?.Other?.Store?.Embed?.Description;
-                    
+
                     if (!descriptionTemplate) {
                         console.log('[DEBUG Store] Missing description template, using fallback.');
                         descriptionTemplate = ['{itemCount}. {item} - {price}'];
                     }
 
                     if (!Array.isArray(descriptionTemplate)) {
-                         console.log('[DEBUG Store] descriptionTemplate is not array, wrapping.');
-                         descriptionTemplate = [descriptionTemplate];
+                        console.log('[DEBUG Store] descriptionTemplate is not array, wrapping.');
+                        descriptionTemplate = [descriptionTemplate];
                     }
 
                     let stockDisplay = '';
@@ -109,7 +109,7 @@ module.exports = {
                     if (item.Type === 'Seed' && item.GrowthTime) {
                         const template = lang.Economy?.Other?.Store?.SeedDescription;
                         if (template) {
-                             descriptionText = replacePlaceholders(template, { time: item.GrowthTime / 60000 });
+                            descriptionText = replacePlaceholders(template, { time: item.GrowthTime / 60000 });
                         }
                     }
 
@@ -125,7 +125,7 @@ module.exports = {
             const createEmbed = async (currentPage) => {
                 const embedConfig = lang.Economy?.Other?.Store?.Embed || {};
                 const embed = new EmbedBuilder().setColor(embedConfig.Color || '#0099ff');
-                
+
                 const localizedCategoryName = lang.Economy?.Other?.Store?.Categories?.[category] || category;
 
                 if (embedConfig.Title) {
@@ -135,7 +135,7 @@ module.exports = {
                 // Fetch user data for balance display
                 let userData = await EconomyUserData.findOne({ userId: interaction.user.id });
                 const userBalance = userData ? userData.balance : 0;
-                
+
                 embed.setDescription(`💳 **Số dư của bạn:** ${userBalance.toLocaleString()} xu\n\nChào mừng đến với cửa hàng! Hãy chọn vật phẩm bạn muốn mua.`);
 
                 const start = currentPage * itemsPerPage;
@@ -143,23 +143,23 @@ module.exports = {
                 const currentItems = items.slice(start, end);
 
                 currentItems.forEach((item, index) => {
-                     const globalIndex = start + index + 1;
-                     const localizedItemName = lang.Economy?.Other?.Store?.Items?.[item.Key] || item.Name || 'Unknown Item';
-                     let descriptionText = item.Description || 'No description';
-                     
-                     if (item.Type === 'Seed' && item.GrowthTime) {
-                         const template = lang.Economy?.Other?.Store?.SeedDescription;
-                         if (template) {
-                              descriptionText = replacePlaceholders(template, { time: item.GrowthTime / 60000 });
-                         }
-                     }
+                    const globalIndex = start + index + 1;
+                    const localizedItemName = lang.Economy?.Other?.Store?.Items?.[item.Key] || item.Name || 'Unknown Item';
+                    let descriptionText = item.Description || 'No description';
 
-                     let stockInfo = "";
-                     if (item.Stock !== undefined) {
-                         stockInfo = item.Stock > 0 ? `| 📦 Kho: ${item.Stock}` : `| 🚫 **HẾT HÀNG**`;
-                     }
+                    if (item.Type === 'Seed' && item.GrowthTime) {
+                        const template = lang.Economy?.Other?.Store?.SeedDescription;
+                        if (template) {
+                            descriptionText = replacePlaceholders(template, { time: item.GrowthTime / 60000 });
+                        }
+                    }
 
-                     const priceDisplay = item.Price ? `${item.Price.toLocaleString()} xu` : 'Miễn phí';
+                    let stockInfo = "";
+                    if (item.Stock !== undefined) {
+                        stockInfo = item.Stock > 0 ? `| 📦 Kho: ${item.Stock}` : `| 🚫 **HẾT HÀNG**`;
+                    }
+
+                    const priceDisplay = item.Price ? `${item.Price.toLocaleString()} xu` : 'Miễn phí';
 
                     embed.addFields({
                         name: `#${globalIndex} ${localizedItemName}`,
@@ -678,14 +678,14 @@ module.exports = {
                                 console.error('Bait purchase failed:', err);
                             }
                         } else if (item.Type === 'Seed') {
-                             if (item.Stock !== undefined && item.Stock <= 0) {
+                            if (item.Stock !== undefined && item.Stock <= 0) {
                                 await i.reply({
                                     content: '🚫 Vật phẩm này đã hết hàng! Vui lòng chờ đợt hàng sau.',
                                     flags: MessageFlags.Ephemeral
                                 });
                                 return;
                             }
-                            
+
                             const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
 
                             const modal = new ModalBuilder()
@@ -727,7 +727,9 @@ module.exports = {
                 try {
                     await interaction.editReply({ components: [] });
                 } catch (error) {
-                    console.error('Error removing components:', error);
+                    if (error.code !== 10008) { // Ignore Unknown Message error
+                        console.error('Error removing components:', error);
+                    }
                 }
             });
 
