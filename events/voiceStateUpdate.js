@@ -96,16 +96,19 @@ async function handleVoiceStateUpdate(client, oldState, newState) {
 }
 
 function getVoiceStateConfig(oldState, newState) {
-    if (oldState.channelId === null && newState.channelId !== null && config.VoiceChannelJoin && config.VoiceChannelJoin.Enabled) {
+    const voiceLogs = config.VoiceLogs;
+    if (!voiceLogs) return null;
+
+    if (oldState.channelId === null && newState.channelId !== null && voiceLogs.Join) {
         return 'VoiceChannelJoin';
-    } else if (oldState.channelId !== null && newState.channelId === null && config.VoiceChannelLeave && config.VoiceChannelLeave.Enabled) {
+    } else if (oldState.channelId !== null && newState.channelId === null && voiceLogs.Leave) {
         return 'VoiceChannelLeave';
-    } else if (oldState.channelId !== newState.channelId && oldState.channelId !== null && newState.channelId !== null && oldState.member.id === newState.member.id && config.VoiceChannelSwitch && config.VoiceChannelSwitch.Enabled) {
+    } else if (oldState.channelId !== newState.channelId && oldState.channelId !== null && newState.channelId !== null && oldState.member.id === newState.member.id && voiceLogs.Switch) {
         return 'VoiceChannelSwitch';
     } else if (oldState.streaming !== newState.streaming) {
-        if (newState.streaming && config.VoiceChannelStreamStart && config.VoiceChannelStreamStart.Enabled) {
+        if (newState.streaming && voiceLogs.StreamStart) {
             return 'VoiceChannelStreamStart';
-        } else if (!newState.streaming && config.VoiceChannelStreamStop && config.VoiceChannelStreamStop.Enabled) {
+        } else if (!newState.streaming && voiceLogs.StreamStop) {
             return 'VoiceChannelStreamStop';
         }
     }
@@ -133,19 +136,30 @@ function replacePlaceholders(text, oldState, newState, moderator = null) {
 async function sendVoiceStateEmbed(oldState, newState, voiceConfigKey, moderator = null) {
     if (!voiceConfigKey) return;
 
-    const voiceConfig = config[voiceConfigKey];
+    // Map config key to VoiceLogs key (e.g. VoiceChannelJoin -> Join)
+    const logType = voiceConfigKey.replace('VoiceChannel', '');
+    const channelId = config.VoiceLogs[logType];
+
+    if (!channelId || channelId === 'CHANNEL_ID') return;
+
     const embedConfig = lang[voiceConfigKey].Embed;
+    if (!embedConfig) return;
 
     const embed = new EmbedBuilder()
         .setColor(embedConfig.Color)
-        .setTitle(replacePlaceholders(embedConfig.Title, oldState, newState, moderator))
-        .setDescription(embedConfig.Description.map(line => replacePlaceholders(line, oldState, newState, moderator)).join("\n"));
+        .setTitle(replacePlaceholders(embedConfig.Title, oldState, newState, moderator));
 
-    if (embedConfig.Footer.Text) {
+    if (embedConfig.Description && Array.isArray(embedConfig.Description)) {
+        embed.setDescription(embedConfig.Description.map(line => replacePlaceholders(line, oldState, newState, moderator)).join("\n"));
+    } else if (typeof embedConfig.Description === 'string') {
+        embed.setDescription(replacePlaceholders(embedConfig.Description, oldState, newState, moderator));
+    }
+
+    if (embedConfig.Footer && embedConfig.Footer.Text) {
         embed.setFooter({ text: embedConfig.Footer.Text, iconURL: embedConfig.Footer.Icon || undefined });
     }
 
-    if (embedConfig.Author.Text) {
+    if (embedConfig.Author && embedConfig.Author.Text) {
         embed.setAuthor({ name: embedConfig.Author.Text, iconURL: embedConfig.Author.Icon || undefined });
     }
 
@@ -156,6 +170,9 @@ async function sendVoiceStateEmbed(oldState, newState, voiceConfigKey, moderator
     if (embedConfig.Image) {
         embed.setImage(embedConfig.Image);
     }
+
+    const guild = oldState.guild || newState.guild;
+    const voiceLogChannel = guild.channels.cache.get(channelId);
 
     if (voiceLogChannel) {
         try {

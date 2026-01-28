@@ -6,6 +6,7 @@ module.exports = {
         .setName('voicegreet')
         .setDescription('Cấu hình tin nhắn chào/tạm biệt voice chat.')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDMPermission(false)
         .addSubcommand(subcommand =>
             subcommand
                 .setName('enable')
@@ -61,6 +62,8 @@ module.exports = {
         ),
     category: 'Addons',
     async execute(interaction) {
+        if (!interaction.guild) return interaction.reply({ content: '❌ Lệnh này chỉ khả dụng trong server.', ephemeral: true });
+
         const subcommand = interaction.options.getSubcommand();
         const group = interaction.options.getSubcommandGroup();
         const guildId = interaction.guild.id;

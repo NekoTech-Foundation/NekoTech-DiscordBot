@@ -29,7 +29,7 @@ module.exports = async (client, member) => {
         await SafetyManager.checkAntiHoist(member);
     } catch (e) { }
 
-    if (config.AltPrevention.Enabled) {
+    if (config.AltPrevention?.Enabled) {
         const accountAge = Date.now() - member.user.createdAt;
         const requiredAge = parseTime(config.AltPrevention.TimeLimit);
 
