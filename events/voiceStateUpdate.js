@@ -95,7 +95,6 @@ async function handleVoiceTracking(oldState, newState) {
 }
 
 async function handleVoiceStateUpdate(client, oldState, newState) {
-    console.log(`[VOICE-DEBUG] Event Triggered: ${newState.member?.user?.tag} (${oldState.channelId} -> ${newState.channelId})`);
     try {
         await handleVoiceTracking(oldState, newState); // Add tracking call
 
