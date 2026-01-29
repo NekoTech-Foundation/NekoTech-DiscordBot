@@ -34,27 +34,7 @@ function getRandomLevelMessage(placeholders) {
     return replacePlaceholders(randomMessage, placeholders);
 }
 
-// ... (skipping to embed logic)
 
-// Thumbnail (User Avatar default)
-if (embedSettings.Thumbnail) {
-    const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
-    if (isValidUrl(thumbnailURL)) {
-        embed.setThumbnail(thumbnailURL);
-    } else {
-        embed.setThumbnail(placeholders.userIcon);
-    }
-} else {
-    embed.setThumbnail(placeholders.userIcon);
-}
-
-// Image (Only if explicitly set)
-if (embedSettings.Image) {
-    const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
-    if (isValidUrl(imageURL)) {
-        embed.setImage(imageURL);
-    }
-}
 
 function replacePlaceholders(text, placeholders) {
     return text.replace(/{(\w+)}/g, (_, key) => placeholders[key] || `{${key}}`);
