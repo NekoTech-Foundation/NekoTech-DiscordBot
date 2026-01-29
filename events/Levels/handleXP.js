@@ -502,6 +502,7 @@ async function handleVoiceXP(client, member) {
                     embed.setFooter({ text: `Level Up • ${placeholders.guildName}`, iconURL: placeholders.guildIcon });
                 }
 
+
                 // Author
                 if (embedSettings.Author && embedSettings.Author.Text) {
                     const authorIconURL = replacePlaceholders(embedSettings.Author.Icon || "", placeholders);
