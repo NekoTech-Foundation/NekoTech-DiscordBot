@@ -97,24 +97,27 @@ module.exports = {
 
             if (subcommand === 'reset') {
                 config.welcomeMessages = JSON.stringify([
-                    "Chào mừng {user} đã tham gia voice chat!",
-                    "Hé lô {user}, quẩy lên nào!",
-                    "Á đù, {user} đã xuất hiện tại {channel}!",
+                    "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Chào mừng {user} đã nhảy vào {channel}!",
+                    "( ˘ ³˘)♥ {user} xuất hiện xinh đẹp tại {channel} nè!",
+                    "OwO {user} đã lẻn vào {channel}, bắt được rồi nha!",
+                    "(╯°□°）╯︵ ┻━┻ {user} tới phá {channel} hả?",
+                    "＼(＾O＾)／ {user} đã đến, vui quá là vui!",
+                    "✧･ﾟ: *✧･ﾟ:* {user} đã hạ cánh xuống {channel} *:･ﾟ✧*:･ﾟ✧",
+                    "(づ｡◕‿‿◕｡)づ Ôm cái nào, chào mừng {user}!",
                     "Chào mừng {user} quay vào ô mất lượt... à nhầm, ô voice chat!",
-                    "{user} đã xuất hiện, mọi người trật tự!",
                     "Helu {user}, hôm nay bạn thế nào?",
-                    "Ui là trời, {user} tới rồi kìa!",
                     "Rồng bay phượng múa, {user} đã hiện hình!"
                 ]);
                 config.goodbyeMessages = JSON.stringify([
-                    "Tạm biệt {user}, hẹn gặp lại!",
-                    "{user} đã rời khỏi cuộc chơi.",
-                    "Bye bye {user}!",
+                    "(╥_╥) {user} bỏ rơi chúng ta rồi...",
                     "{user} đã cao chạy xa bay.",
-                    "Tạm biệt {user}, nhớ mang quà về nhé.",
+                    "(ToT)/~~~ Tạm biệt {user}, nhớ quay lại nha!",
+                    "(¬_¬) {user} đã tẩu thoát thành công.",
+                    "ʕ •́؈•̀ ₎ Bye bye {user}!",
                     "{user} đã bị bắt cóc khỏi server.",
                     "Không tiễn {user} nhé!",
-                    "{user} đã đi tìm đường cứu nước."
+                    "(｡•́︿•̀｡) {user} đi rồi buồn quá đi...",
+                    "Tạm biệt {user}, nhớ mang quà về nhé."
                 ]);
                 await config.save();
                 return interaction.reply({ content: '🔄 Đã khôi phục cài đặt mặc định với danh sách tin nhắn mới.', ephemeral: true });
