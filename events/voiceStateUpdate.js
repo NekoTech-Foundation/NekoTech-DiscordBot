@@ -57,9 +57,9 @@ async function handleVoiceTracking(oldState, newState) {
                     });
 
                     // Update Total Voice Time in UserData
-                    let userData = await UserData.findOne({ userId, guildId: 'global' });
+                    let userData = await UserData.findOne({ userId, guildId });
                     if (!userData) {
-                        userData = await UserData.create({ userId, guildId: 'global' });
+                        userData = await UserData.create({ userId, guildId });
                     }
                     userData.voiceTime = (userData.voiceTime || 0) + Math.floor(duration / 1000);
                     await userData.save();

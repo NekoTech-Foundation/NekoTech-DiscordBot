@@ -102,7 +102,7 @@ async function handleXP(message) {
     }
 
     try {
-        // Dùng bản ghi toàn cục cho level/xp (dùng guildId = 'global')
+        // Global Data for XP/Level
         let userData = await UserData.findOne({ userId: message.author.id, guildId: 'global' });
         if (!userData) {
             userData = await UserData.create({
@@ -110,6 +110,17 @@ async function handleXP(message) {
                 guildId: 'global'
             });
         }
+
+        // Guild Data for Message Count
+        let guildData = await UserData.findOne({ userId: message.author.id, guildId: message.guild.id });
+        if (!guildData) {
+            guildData = await UserData.create({
+                userId: message.author.id,
+                guildId: message.guild.id
+            });
+        }
+        guildData.totalMessages = (guildData.totalMessages || 0) + 1;
+        await guildData.save();
 
         const xpToAdd = getRandomXP(config.LevelingSystem.MessageXP);
         if (isNaN(xpToAdd) || xpToAdd <= 0) {

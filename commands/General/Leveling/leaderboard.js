@@ -245,8 +245,8 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             break;
         }
         case 'messages': {
-            // Using global data as per handleXP.js
-            const allMsgData = await UserData.find({ guildId: 'global' });
+            // Per-Guild Data
+            const allMsgData = await UserData.find({ guildId: guild.id });
 
             let members;
             try {
@@ -260,7 +260,8 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             break;
         }
         case 'voice': {
-            const allVoiceData = await UserData.find({ guildId: 'global' });
+            // Per-Guild Data
+            const allVoiceData = await UserData.find({ guildId: guild.id });
 
             let members;
             try {
