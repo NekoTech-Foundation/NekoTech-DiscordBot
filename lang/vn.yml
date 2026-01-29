@@ -2155,3 +2155,20 @@ Valorant:
 
 
 
+
+# ===========================================================================
+# TIN NHẮN LEVELING
+# ===========================================================================
+Levels:
+  NoPermission: "Bạn không có quyền sử dụng lệnh này."
+  UpdatedXP: "Đã cập nhật XP cho **{user}** thành **{xp}**."
+  UpdatedLevel: "Đã cập nhật Cấp độ cho **{user}** thành **{level}**."
+  UpdatedXPAndLevel: "Đã cập nhật cho **{user}**: **{xp} XP** & **Cấp độ {level}**."
+  DataNotFound: "Không tìm thấy dữ liệu cho **{user}**."
+  CurrentLevelAndXP: "> **Cấp độ:** {level}\n> **XP:** {xp}"
+  LevelMessages:
+    - "Ting! {user} đã lên cấp {newLevel}!"
+    - "Chúc mừng {user}! Bạn đã đạt cấp {newLevel}!"
+    - "Wow! {user} đã thăng cấp {newLevel}. Quá dữ!"
+    - "Pằng chíu! {user} level up -> {newLevel}!"
+    - "Đỉnh của chóp! {user} cán mốc level {newLevel}!"

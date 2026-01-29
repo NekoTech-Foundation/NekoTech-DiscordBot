@@ -17,9 +17,43 @@ function getRandomXP(range) {
 }
 
 function getRandomLevelMessage(placeholders) {
-    const messages = lang?.Levels?.LevelMessages || ["Ting! {user} đã lên cấp {newLevel}!"];
+    const defaultMessages = [
+        "Ting! {user} đã lên cấp {newLevel}!",
+        "Chúc mừng {user}! Bạn đã đạt cấp {newLevel}!",
+        "Wow! {user} đã thăng cấp {newLevel}. Quá dữ!",
+        "Pằng chíu! {user} level up -> {newLevel}!",
+        "Đỉnh của chóp! {user} cán mốc level {newLevel}!",
+        "{user} đang cày cuốc rất chăm chỉ! Cấp {newLevel} rồi nè!",
+        "Level up! {user} đã mạnh hơn một chút (Cấp {newLevel})!",
+        "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ {user} đã lên cấp {newLevel}!",
+        "Gắt quá! {user} đã leo lên cấp {newLevel}!",
+        "{user} has leveled up to {newLevel}!"
+    ];
+    const messages = lang?.Levels?.LevelMessages || defaultMessages;
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
     return replacePlaceholders(randomMessage, placeholders);
+}
+
+// ... (skipping to embed logic)
+
+// Thumbnail (User Avatar default)
+if (embedSettings.Thumbnail) {
+    const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
+    if (isValidUrl(thumbnailURL)) {
+        embed.setThumbnail(thumbnailURL);
+    } else {
+        embed.setThumbnail(placeholders.userIcon);
+    }
+} else {
+    embed.setThumbnail(placeholders.userIcon);
+}
+
+// Image (Only if explicitly set)
+if (embedSettings.Image) {
+    const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
+    if (isValidUrl(imageURL)) {
+        embed.setImage(imageURL);
+    }
 }
 
 function replacePlaceholders(text, placeholders) {
@@ -482,20 +516,19 @@ async function handleVoiceXP(client, member) {
                     const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
                     if (isValidUrl(thumbnailURL)) {
                         embed.setThumbnail(thumbnailURL);
+                    } else {
+                        embed.setThumbnail(placeholders.userIcon);
                     }
                 } else {
                     embed.setThumbnail(placeholders.userIcon);
                 }
 
-                // Image (User Avatar default)
+                // Image (Only if explicitly set in config)
                 if (embedSettings.Image) {
                     const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
                     if (isValidUrl(imageURL)) {
                         embed.setImage(imageURL);
                     }
-                } else {
-                    // Default to User Avatar as requested
-                    embed.setImage(placeholders.userIcon);
                 }
 
                 await channel.send({ embeds: [embed] }).catch(err => {
