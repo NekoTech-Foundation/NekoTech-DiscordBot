@@ -84,45 +84,14 @@ async function handleVoiceTracking(oldState, newState) {
         // For Leaderboard/Stats, usually "Voice Time" implies "Active Voice Time".
         // Let's Apply the same rule: If muted/deaf, don't track time.
 
-        const isIgnored = newState.selfMute || newState.selfDeaf || newState.serverMute || newState.serverDeaf;
+        const isIgnored = newState.selfDeaf || newState.serverDeaf;
         if (!isIgnored) {
             activeVoiceSessions.set(userId, now);
         }
     }
 
     // Handle Mute/Deaf Toggle (State Change within same channel)
-    if (oldState.channelId === newState.channelId && oldState.channelId) {
-        const wasIgnored = oldState.selfMute || oldState.selfDeaf || oldState.serverMute || oldState.serverDeaf;
-        const isIgnored = newState.selfMute || newState.selfDeaf || newState.serverMute || newState.serverDeaf;
-
-        if (!wasIgnored && isIgnored) {
-            // User just muted/deafened -> End Session
-            if (activeVoiceSessions.has(userId)) {
-                const startTime = activeVoiceSessions.get(userId);
-                const duration = now - startTime;
-                if (duration > 1000) {
-                    await VoiceSession.create({
-                        userId,
-                        guildId,
-                        channelId: oldState.channelId,
-                        startTime,
-                        endTime: now,
-                        duration: Math.floor(duration / 1000),
-                        date: new Date(startTime).toISOString().split('T')[0]
-                    });
-
-                    let userData = await UserData.findOne({ userId, guildId: 'global' });
-                    if (!userData) userData = await UserData.create({ userId, guildId: 'global' });
-                    userData.voiceTime = (userData.voiceTime || 0) + Math.floor(duration / 1000);
-                    await userData.save();
-                }
-                activeVoiceSessions.delete(userId);
-            }
-        } else if (wasIgnored && !isIgnored) {
-            // User just unmuted/undeafened -> Start Session
-            activeVoiceSessions.set(userId, now);
-        }
-    }
+    // removed as we track all states now
 }
 
 async function handleVoiceStateUpdate(client, oldState, newState) {
@@ -132,6 +101,7 @@ async function handleVoiceStateUpdate(client, oldState, newState) {
         handleVoiceXPEvents(client, oldState, newState);
         // ... rest of existing code
 
+        // Ensure we don't crash if config is missing (basic check)
         const voiceConfigKey = getVoiceStateConfig(oldState, newState);
         if (voiceConfigKey) {
             await sendVoiceStateEmbed(oldState, newState, voiceConfigKey);
@@ -147,6 +117,10 @@ async function handleVoiceStateUpdate(client, oldState, newState) {
             if (player) {
                 const oldChannelId = oldState.channelId;
                 const newChannelId = newState.channelId;
+
+                // ... (rest of music logic if any, assuming it was cut off in view, I should probably not delete hidden lines if I can avoid it)
+                // Actually, I'll use REPLACE BLOCK on specific lines to be safe.
+
 
                 // 1. Check if bot was disconnected
                 if (oldState.member.id === client.user.id) {
@@ -340,7 +314,11 @@ async function handleVoiceGreetings(oldState, newState) {
                     await oldState.channel.send(finalMsg);
                 }
             } catch (err) {
-                console.error("Failed to send goodbye greeting:", err);
+                // Ignore Unknown Channel (10003) - happens if channel deleted
+                // Ignore Missing Permissions (50013)
+                if (err.code !== 10003 && err.code !== 50013) {
+                    console.error("Failed to send goodbye greeting:", err);
+                }
             }
         }
     }
@@ -397,4 +375,24 @@ function handleVoiceXPEvents(client, oldState, newState) {
     }
 }
 
+async function restoreVoiceSessions(client) {
+    console.log('Restoring active voice sessions...');
+    const now = Date.now();
+    for (const [guildId, guild] of client.guilds.cache) {
+        for (const [channelId, channel] of guild.channels.cache) {
+            if (channel.type === ChannelType.GuildVoice) {
+                for (const [memberId, member] of channel.members) {
+                    if (!member.user.bot) {
+                        if (!activeVoiceSessions.has(memberId)) {
+                            activeVoiceSessions.set(memberId, now);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    console.log(`Restored ${activeVoiceSessions.size} active voice sessions.`);
+}
+
+handleVoiceStateUpdate.restoreVoiceSessions = restoreVoiceSessions;
 module.exports = handleVoiceStateUpdate;

@@ -153,7 +153,7 @@ module.exports = {
                 const totalTime = userSessions.reduce((acc, s) => acc + s.duration, 0);
 
                 // Get cached total from UserData (fallback/check)
-                const userData = await UserData.findOne({ userId: targetUser.id, guildId: 'global' });
+                const userData = await UserData.findOne({ userId: targetUser.id, guildId });
                 const cachedTime = userData?.voiceTime || 0;
 
                 const embed = new EmbedBuilder()
@@ -211,7 +211,7 @@ module.exports = {
             if (sub === 'voice') {
                 // User Ranking (Use UserData for speed or VoiceSession Aggregation)
                 // Use UserData.voiceTime which we cache
-                const allData = await UserData.find({ guildId: 'global' });
+                const allData = await UserData.find({ guildId: interaction.guild.id });
                 // Need to filter members in guild? Yes.
                 const members = await interaction.guild.members.fetch();
                 const filtered = allData.filter(d => members.has(d.userId) && d.voiceTime > 0)
@@ -280,7 +280,7 @@ module.exports = {
                 const user = interaction.options.getUser('user');
                 await VoiceSession.deleteMany({ guildId, userId: user.id }); // Assuming db adapter supports deleteMany or loop
                 // Also reset cache in UserData
-                let userData = await UserData.findOne({ userId: user.id, guildId: 'global' });
+                let userData = await UserData.findOne({ userId: user.id, guildId });
                 if (userData) { userData.voiceTime = 0; await userData.save(); }
                 return interaction.editReply(`✅ Đã reset dữ liệu voice của ${user.tag}.`);
             } else if (sub === 'server') {
