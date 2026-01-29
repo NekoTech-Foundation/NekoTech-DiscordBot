@@ -12,7 +12,7 @@ const { getConfig, getLang } = require('../../../utils/configLoader.js');
 const GuildSettings = require('../../../models/GuildSettings');
 
 const config = getConfig();
-const lang = getLang();
+
 
 const LEVEL_DEV_IDS = ['1316287191634149377', '727497287777124414'];
 
@@ -176,6 +176,7 @@ module.exports = {
         ),
     category: 'Chung',
     async execute(interaction) {
+        const lang = getLang();
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
 
