@@ -25,10 +25,112 @@ function parseTime(timeString) {
 }
 
 const voiceXpTimers = new Map();
+const activeVoiceSessions = new Map(); // Map<userId, startTime>
+const VoiceSession = require('../models/VoiceSession');
+const UserData = require('../models/UserData');
+
+async function handleVoiceTracking(oldState, newState) {
+    if (newState.member.user.bot) return;
+
+    const userId = newState.member.id;
+    const guildId = newState.guild.id;
+    const now = Date.now();
+
+    // User Left Voice or Switched Channel (End previous session)
+    if (oldState.channelId && (!newState.channelId || oldState.channelId !== newState.channelId)) {
+        if (activeVoiceSessions.has(userId)) {
+            const startTime = activeVoiceSessions.get(userId);
+            const duration = now - startTime;
+
+            // Only save valid sessions (> 1 second)
+            if (duration > 1000) {
+                try {
+                    // Save Session Log
+                    await VoiceSession.create({
+                        userId,
+                        guildId,
+                        channelId: oldState.channelId,
+                        startTime,
+                        endTime: now,
+                        duration: Math.floor(duration / 1000), // seconds
+                        date: new Date(startTime).toISOString().split('T')[0]
+                    });
+
+                    // Update Total Voice Time in UserData
+                    let userData = await UserData.findOne({ userId, guildId: 'global' });
+                    if (!userData) {
+                        userData = await UserData.create({ userId, guildId: 'global' });
+                    }
+                    userData.voiceTime = (userData.voiceTime || 0) + Math.floor(duration / 1000);
+                    await userData.save();
+
+                } catch (err) {
+                    console.error('Error saving voice session:', err);
+                }
+            }
+            activeVoiceSessions.delete(userId);
+        }
+    }
+
+    // User Joined Voice or Switched Channel (Start new session)
+    if (newState.channelId && (!oldState.channelId || oldState.channelId !== newState.channelId)) {
+        // Check for mute/deaf if we want to ignore them (User request: "tránh việc treo máy... không tính tiếp")
+        // Implementation: If user joins muted/deaf, maybe we don't start tracking? 
+        // Or we track but mark it? The request said "nếu treo trong voice và không hoạt động quá lâu".
+        // For now, let's track pure time but maybe pause if muted/deaf?
+        // Let's keep it simple: Start tracking on join. 
+        // Refinement: If they are selfMute or selfDeaf, maybe we *don't* start the timer, or we track it as "afk"?
+        // The implementation plan said: "Add checks: if (member.voice.selfMute...) return;" for XP.
+        // For Leaderboard/Stats, usually "Voice Time" implies "Active Voice Time".
+        // Let's Apply the same rule: If muted/deaf, don't track time.
+
+        const isIgnored = newState.selfMute || newState.selfDeaf || newState.serverMute || newState.serverDeaf;
+        if (!isIgnored) {
+            activeVoiceSessions.set(userId, now);
+        }
+    }
+
+    // Handle Mute/Deaf Toggle (State Change within same channel)
+    if (oldState.channelId === newState.channelId && oldState.channelId) {
+        const wasIgnored = oldState.selfMute || oldState.selfDeaf || oldState.serverMute || oldState.serverDeaf;
+        const isIgnored = newState.selfMute || newState.selfDeaf || newState.serverMute || newState.serverDeaf;
+
+        if (!wasIgnored && isIgnored) {
+            // User just muted/deafened -> End Session
+            if (activeVoiceSessions.has(userId)) {
+                const startTime = activeVoiceSessions.get(userId);
+                const duration = now - startTime;
+                if (duration > 1000) {
+                    await VoiceSession.create({
+                        userId,
+                        guildId,
+                        channelId: oldState.channelId,
+                        startTime,
+                        endTime: now,
+                        duration: Math.floor(duration / 1000),
+                        date: new Date(startTime).toISOString().split('T')[0]
+                    });
+
+                    let userData = await UserData.findOne({ userId, guildId: 'global' });
+                    if (!userData) userData = await UserData.create({ userId, guildId: 'global' });
+                    userData.voiceTime = (userData.voiceTime || 0) + Math.floor(duration / 1000);
+                    await userData.save();
+                }
+                activeVoiceSessions.delete(userId);
+            }
+        } else if (wasIgnored && !isIgnored) {
+            // User just unmuted/undeafened -> Start Session
+            activeVoiceSessions.set(userId, now);
+        }
+    }
+}
 
 async function handleVoiceStateUpdate(client, oldState, newState) {
     try {
+        await handleVoiceTracking(oldState, newState); // Add tracking call
+
         handleVoiceXPEvents(client, oldState, newState);
+        // ... rest of existing code
 
         const voiceConfigKey = getVoiceStateConfig(oldState, newState);
         if (voiceConfigKey) {

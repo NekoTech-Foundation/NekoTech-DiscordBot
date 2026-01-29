@@ -415,29 +415,35 @@ async function handleVoiceXP(client, member) {
                 const embed = new EmbedBuilder()
                     .setColor(embedSettings.Color || '#34eb6b');
 
+                // Title
                 if (embedSettings.Title) {
                     embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
+                } else {
+                    embed.setTitle("🎉 Tăng Cấp!!!");
                 }
 
+                // Description
                 let desc = '';
                 if (embedSettings.Description && Array.isArray(embedSettings.Description)) {
                     desc = embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n');
                 } else if (typeof embedSettings.Description === 'string') {
                     desc = replacePlaceholders(embedSettings.Description, placeholders);
                 } else {
-                    // Fallback to the plain text message if no embed description is provided
-                    desc = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
+                    // Richer Default Description
+                    desc = `${placeholders.user} bây giờ là cấp **${placeholders.newLevel}**!\n\n_${placeholders.randomLevelMessage}_`;
                 }
 
                 if (desc && desc.trim().length > 0) {
                     embed.setDescription(desc);
                 }
 
+                // Fallback if description is somehow empty
                 if (!embed.data.description && !embed.data.title && !embed.data.image && !embed.data.thumbnail) {
                     // Absolute fallback to ensure embed is not empty
                     embed.setDescription(`Chúc mừng ${placeholders.user} đã lên cấp ${placeholders.newLevel}!`);
                 }
 
+                // Footer
                 if (embedSettings.Footer && embedSettings.Footer.Text) {
                     const footerText = replacePlaceholders(embedSettings.Footer.Text, placeholders);
                     const footerIconURL = replacePlaceholders(embedSettings.Footer.Icon || "", placeholders);
@@ -447,8 +453,11 @@ async function handleVoiceXP(client, member) {
                             iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
                         });
                     }
+                } else {
+                    embed.setFooter({ text: `Level Up • ${placeholders.guildName}`, iconURL: placeholders.guildIcon });
                 }
 
+                // Author
                 if (embedSettings.Author && embedSettings.Author.Text) {
                     const authorIconURL = replacePlaceholders(embedSettings.Author.Icon || "", placeholders);
                     embed.setAuthor({
@@ -457,18 +466,25 @@ async function handleVoiceXP(client, member) {
                     });
                 }
 
+                // Thumbnail (User Avatar default)
                 if (embedSettings.Thumbnail) {
                     const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
                     if (isValidUrl(thumbnailURL)) {
                         embed.setThumbnail(thumbnailURL);
                     }
+                } else {
+                    embed.setThumbnail(placeholders.userIcon);
                 }
 
+                // Image (User Avatar default)
                 if (embedSettings.Image) {
                     const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
                     if (isValidUrl(imageURL)) {
                         embed.setImage(imageURL);
                     }
+                } else {
+                    // Default to User Avatar as requested
+                    embed.setImage(placeholders.userIcon);
                 }
 
                 await channel.send({ embeds: [embed] }).catch(err => {

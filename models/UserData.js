@@ -4,6 +4,7 @@ const defaultData = (query) => ({
     userId: query.userId,
     guildId: query.guildId,
     xp: 0,
+    voiceTime: 0,
     level: 0,
     prestige: 0,
     warns: 0,

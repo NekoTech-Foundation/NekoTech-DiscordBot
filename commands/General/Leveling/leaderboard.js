@@ -33,6 +33,17 @@ function formatNumber(num) {
         : num.toString();
 }
 
+function formatTime(seconds) {
+    if (!seconds) return '0s';
+    const d = Math.floor(seconds / (3600 * 24));
+    const h = Math.floor((seconds % (3600 * 24)) / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+
+    if (d > 0) return `${d}d ${h}h`;
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m ${Math.floor(seconds % 60)}s`;
+}
+
 async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageSize) {
     const canvas = Canvas.createCanvas(1000, 800);
     const ctx = canvas.getContext('2d');
@@ -170,6 +181,9 @@ async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageS
                 case 'messages':
                     valueText = `💬 Tin nhắn: ${formatNumber(user.totalMessages || 0)}`;
                     break;
+                case 'voice':
+                    valueText = `🎙️ Voice: ${formatTime(user.voiceTime || 0)}`;
+                    break;
                 case 'invites':
                     valueText = `📨 Lượt mời: ${formatNumber(user.invites || 0)}`;
                     break;
@@ -243,6 +257,20 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
 
             data = allMsgData.filter(doc => members.has(doc.userId));
             data.sort((a, b) => (b.totalMessages || 0) - (a.totalMessages || 0));
+            break;
+        }
+        case 'voice': {
+            const allVoiceData = await UserData.find({ guildId: 'global' });
+
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) {
+                members = guild.members.cache;
+            }
+
+            data = allVoiceData.filter(doc => members.has(doc.userId) && (doc.voiceTime || 0) > 0);
+            data.sort((a, b) => (b.voiceTime || 0) - (a.voiceTime || 0));
             break;
         }
         case 'invites': {
@@ -323,6 +351,14 @@ async function getTotalCount(guild, subCmd) {
             }
             return allData.filter(doc => members.has(doc.userId)).length;
         }
+        case 'voice': {
+            const allData = await UserData.find({ guildId: 'global' });
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) { members = guild.members.cache; }
+            return allData.filter(doc => members.has(doc.userId) && (doc.voiceTime || 0) > 0).length;
+        }
         case 'invites': {
             const allInvites = await Invite.find({ guildId: guild.id });
             const inviterMap = {};
@@ -384,6 +420,12 @@ module.exports = {
                         .setDescription('Số trang cần xem')
                         .setMinValue(1)
                 )
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('voice')
+                .setDescription('Xem bảng xếp hạng thời gian voice')
+                .addIntegerOption(option => option.setName('page').setDescription('Số trang cần xem').setMinValue(1))
         )
         .addSubcommand(subcommand =>
             subcommand
