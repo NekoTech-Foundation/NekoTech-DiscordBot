@@ -201,8 +201,9 @@ async function handleVoiceGreetings(oldState, newState) {
 
     // Helper to replace placeholders
     const replaceMsg = (msg, member, channel) => {
+        const userName = config.pingUser !== false ? `<@${member.id}>` : `**${member.user.displayName}**`;
         return msg
-            .replace(/{user}/g, `<@${member.id}>`)
+            .replace(/{user}/g, userName)
             .replace(/{channel}/g, channel.name)
             .replace(/{guildName}/g, member.guild.name);
     };

@@ -23,6 +23,14 @@ module.exports = {
             subcommand
                 .setName('reset')
                 .setDescription('Khôi phục tin nhắn mặc định.'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('ping')
+                .setDescription('Bật/tắt việc tag tên user khi chào.')
+                .addBooleanOption(option =>
+                    option.setName('enable')
+                        .setDescription('Bật (True) hoặc Tắt (False)')
+                        .setRequired(true)))
         .addSubcommandGroup(group =>
             group
                 .setName('config')
@@ -110,6 +118,13 @@ module.exports = {
                 ]);
                 await config.save();
                 return interaction.reply({ content: '🔄 Đã khôi phục cài đặt mặc định với danh sách tin nhắn mới.', ephemeral: true });
+            }
+
+            if (subcommand === 'ping') {
+                const enable = interaction.options.getBoolean('enable');
+                config.pingUser = enable;
+                await config.save();
+                return interaction.reply({ content: enable ? '✅ Đã BẬT tính năng tag tên user.' : '❌ Đã TẮT tính năng tag tên user (chỉ hiển thị tên).', ephemeral: true });
             }
 
             if (subcommand === 'list') {

@@ -3,6 +3,7 @@ const SQLiteModel = require('../utils/sqliteModel');
 const defaultData = (query) => ({
     guildId: query.guildId,
     enabled: true,
+    pingUser: true,
     welcomeMessages: JSON.stringify([
         "Chào mừng {user} đã tham gia voice chat!",
         "Hé lô {user}, quẩy lên nào!",
