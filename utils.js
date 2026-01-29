@@ -101,7 +101,7 @@ module.exports = async (client) => {
     client.on('guildMemberAdd', handleGuildMemberAdd);
     client.on('messageReactionAdd', handleReactionAdd);
     client.on('messageReactionRemove', handleReactionRemove);
-    client.on('ready', handleReady);
+    client.once('ready', handleReady);
     client.on('error', handleError);
     client.on('warn', handleWarn);
 
@@ -1581,11 +1581,15 @@ module.exports = async (client) => {
         return interestTimes[0].add(1, 'day');
     }
 
+    let interestTimeout = null;
+
     function startInterestScheduler() {
+        if (interestTimeout) clearTimeout(interestTimeout);
+
         const interval = process.env.TEST_MODE ? 60 * 1000 : 24 * 60 * 60 * 1000;
         const nextInterestTime = getNextInterestTime();
 
-        setTimeout(async () => {
+        interestTimeout = setTimeout(async () => {
             const dailyInterestRate = Math.random() * (0.045 - 0.025) + 0.025;
             const users = await EconomyUserData.find({ bank: { $gt: 0 } });
 
@@ -1625,7 +1629,7 @@ module.exports = async (client) => {
                         .setTimestamp();
                     await discordUser.send({ embeds: [interestEmbed] });
                 } catch (error) {
-                    console.error(`Could not send interest DM to ${user.userId}.`, error);
+                    // console.error(`Could not send interest DM to ${user.userId}.`, error);
                 }
             }
 

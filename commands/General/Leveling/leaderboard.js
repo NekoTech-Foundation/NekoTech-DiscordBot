@@ -258,7 +258,7 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             }
 
             data = Object.entries(inviterMap).map(([inviterId, count]) => ({
-                _id: inviterId,
+                _id: inviterId, // compatible with previous structure awaiting fetch(user._id)
                 userId: inviterId,
                 invites: count
             }));
@@ -267,6 +267,7 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             break;
         }
         case 'cauca': {
+            // fishingSchema logic was mostly fine but let's ensure consistency
             const allFishers = await fishingSchema.find({});
             let members;
             try {
@@ -312,31 +313,35 @@ async function getTotalCount(guild, subCmd) {
         }
         case 'levels':
         case 'messages': {
-            // SQLiteModel countDocuments impl behaves like find().length
-            return await UserData.countDocuments({ guildId: guild.id });
+            // Fetch global data and filter by guild members
+            const allData = await UserData.find({ guildId: 'global' });
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) {
+                members = guild.members.cache;
+            }
+            return allData.filter(doc => members.has(doc.userId)).length;
         }
         case 'invites': {
             const allInvites = await Invite.find({ guildId: guild.id });
-            const extractInviters = new Set(allInvites.map(i => i.inviterId).filter(id => id));
-            // We only want inviters with > 0 invites ideally, but the previous aggregate did:
-            // match invites > 0.
-            // Let's replicate logic:
-
             const inviterMap = {};
             for (const inv of allInvites) {
                 if (!inv.inviterId) continue;
                 if (!inviterMap[inv.inviterId]) inviterMap[inv.inviterId] = 0;
                 inviterMap[inv.inviterId] += (inv.uses || 0);
             }
-
             return Object.values(inviterMap).filter(count => count > 0).length;
         }
         case 'cauca': {
-            // Replicate the 'inventory.0 exists' logic by checking inventory length in memory if needed, 
-            // or trust the previous countDocuments if it works (it calls find).
-            // But fishingSchema.find() is cleaner.
             const allFishers = await fishingSchema.find({});
-            return allFishers.filter(f => f.inventory && f.inventory.length > 0).length;
+            let members;
+            try {
+                members = await guild.members.fetch({ time: 10000 });
+            } catch (err) {
+                members = guild.members.cache;
+            }
+            return allFishers.filter(f => members.has(f.userId) && f.inventory && f.inventory.length > 0).length;
         }
         default:
             return 0;

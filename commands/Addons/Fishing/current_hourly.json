@@ -6,10 +6,10 @@
     "max_weight": 50
   },
   "epic": {
-    "name": "Rùa biển",
-    "emoji": "<:Fish_seaturtle:1433392971310567474>",
-    "min_weight": 100,
-    "max_weight": 300
+    "name": "Mực",
+    "emoji": "<:Fish_squid:1433392920450437150>",
+    "min_weight": 1,
+    "max_weight": 10
   },
-  "updatedAt": "2026-01-28T14:37:08.391Z"
+  "updatedAt": "2026-01-28T23:00:00.132Z"
 }
