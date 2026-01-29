@@ -1564,78 +1564,7 @@ module.exports = async (client) => {
         }
     });
 
-    function getNextInterestTime() {
-        const currentTime = moment().tz(config.Timezone);
-        const interestTimes = config.Economy.interestInterval.map(time =>
-            moment.tz(time, "HH:mm", config.Timezone)
-        );
 
-        interestTimes.sort((a, b) => a.diff(b));
-
-        for (const interestTime of interestTimes) {
-            if (currentTime.isBefore(interestTime)) {
-                return interestTime;
-            }
-        }
-
-        return interestTimes[0].add(1, 'day');
-    }
-
-    let interestTimeout = null;
-
-    function startInterestScheduler() {
-        if (interestTimeout) clearTimeout(interestTimeout);
-
-        const interval = process.env.TEST_MODE ? 60 * 1000 : 24 * 60 * 60 * 1000;
-        const nextInterestTime = getNextInterestTime();
-
-        interestTimeout = setTimeout(async () => {
-            const dailyInterestRate = Math.random() * (0.045 - 0.025) + 0.025;
-            const users = await EconomyUserData.find({ bank: { $gt: 0 } });
-
-            for (const user of users) {
-                let interest = Math.floor(user.bank * dailyInterestRate);
-
-                if (config.Economy.maxInterestEarning && config.Economy.maxInterestEarning > 0) {
-                    interest = Math.min(interest, config.Economy.maxInterestEarning);
-                }
-
-                const updatedUser = await EconomyUserData.findOneAndUpdate(
-                    { userId: user.userId },
-                    {
-                        $inc: { bank: interest },
-                        $push: {
-                            transactionLogs: {
-                                type: 'interest',
-                                amount: interest,
-                                timestamp: new Date()
-                            }
-                        }
-                    },
-                    { new: true }
-                );
-
-                try {
-                    const discordUser = await client.users.fetch(user.userId);
-                    const interestEmbed = new EmbedBuilder()
-                        .setColor('#00FF00')
-                        .setTitle('Lãi Tiết Kiệm Hàng Ngày')
-                        .setDescription(`💰 Bạn đã nhận được lãi suất hàng ngày!`)
-                        .addFields(
-                            { name: 'Tiền Lãi', value: `**${interest.toLocaleString('en-US')}** 🪙` },
-                            { name: 'Tỉ Lệ Lãi Suất', value: `${(dailyInterestRate * 100).toFixed(2)}%` },
-                            { name: 'Số Dư Ngân Hàng Mới', value: `**${updatedUser.bank.toLocaleString('en-US')}** 🪙` }
-                        )
-                        .setTimestamp();
-                    await discordUser.send({ embeds: [interestEmbed] });
-                } catch (error) {
-                    // console.error(`Could not send interest DM to ${user.userId}.`, error);
-                }
-            }
-
-            startInterestScheduler();
-        }, nextInterestTime.diff(moment().tz(config.Timezone)));
-    }
 
     async function cleanup() {
         client.removeAllListeners('messageCreate');
