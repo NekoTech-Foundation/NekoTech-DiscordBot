@@ -21,10 +21,28 @@ function formatTime(seconds) {
 async function generateChart(labels, data, title, type = 'line') {
     const width = 800;
     const height = 400;
+    const backgroundColour = '#2F3136'; // Discord Dark Mode Background
+
     const chartCallback = (ChartJS) => {
         ChartJS.defaults.responsive = true;
         ChartJS.defaults.maintainAspectRatio = false;
+        ChartJS.defaults.font.family = 'sans-serif';
+        ChartJS.defaults.color = '#ffffff';
     };
+
+    // Plugin to fill background
+    const plugin = {
+        id: 'customCanvasBackgroundColor',
+        beforeDraw: (chart) => {
+            const ctx = chart.canvas.getContext('2d');
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = backgroundColour;
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+        }
+    };
+
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback });
 
     const config = {
@@ -34,23 +52,56 @@ async function generateChart(labels, data, title, type = 'line') {
             datasets: [{
                 label: title,
                 data: data,
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
-                tension: 0.3,
+                backgroundColor: 'rgba(88, 101, 242, 0.2)', // Discord Blurple transparent
+                borderColor: '#5865F2', // Discord Blurple Solid
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#5865F2',
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                borderWidth: 3,
+                tension: 0.4, // Smooth curves
                 fill: true
             }]
         },
         options: {
+            layout: {
+                padding: { left: 20, right: 30, top: 20, bottom: 20 }
+            },
             plugins: {
-                title: { display: true, text: title, color: '#white', font: { size: 20 } },
-                legend: { labels: { color: 'white' } }
+                title: {
+                    display: true,
+                    text: title,
+                    color: '#ffffff',
+                    font: { size: 24, weight: 'bold' },
+                    padding: { bottom: 20 }
+                },
+                legend: {
+                    labels: { color: '#dddddd', font: { size: 14 } }
+                },
+                customCanvasBackgroundColor: {
+                    color: backgroundColour
+                }
             },
             scales: {
-                y: { ticks: { color: 'white', callback: (val) => formatTime(val) }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                y: {
+                    ticks: {
+                        color: '#cccccc',
+                        font: { size: 12 },
+                        callback: (val) => formatTime(val)
+                    },
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        color: '#cccccc',
+                        font: { size: 12 }
+                    },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                }
             }
-        }
+        },
+        plugins: [plugin]
     };
     return await chartJSNodeCanvas.renderToBuffer(config);
 }
