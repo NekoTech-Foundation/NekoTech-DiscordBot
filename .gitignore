@@ -8,3 +8,5 @@ logs.txt
 whitelabel_instances/
 *.sqlite-shm
 database.sqlite
+database.sqlite-shm
+database.sqlite-wal
