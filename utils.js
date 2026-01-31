@@ -719,7 +719,7 @@ module.exports = async (client) => {
             { condition: commandConfig && commandConfig.giveaway, fn: startGiveawayScheduler, name: 'Giveaway' },
             // new giveaway addon includes its own scheduler via addons/Giveaway/giveaway.js
 
-            { condition: true, fn: startInterestScheduler, name: 'Interest' },
+            // { condition: true, fn: startInterestScheduler, name: 'Interest' },
 
             {
                 condition: true,

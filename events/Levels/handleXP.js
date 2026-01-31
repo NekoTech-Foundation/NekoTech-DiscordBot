@@ -2,10 +2,10 @@ const { EmbedBuilder, ChannelType, PermissionsBitField } = require('discord.js')
 const UserData = require('../../models/UserData');
 const GuildSettings = require('../../models/GuildSettings');
 //const fs = require('fs');
-const { getConfig, getLang, getCommands } = require('../../utils/configLoader.js');
+const { getConfig, getLangSync, getCommands } = require('../../utils/configLoader.js');
 
 const config = getConfig();
-const lang = getLang();
+const lang = getLangSync();
 
 const xpCooldown = new Map();
 const voiceXpTimers = new Map();

@@ -176,7 +176,7 @@ module.exports = {
         ),
     category: 'Chung',
     async execute(interaction) {
-        const lang = getLang();
+        const lang = await getLang(interaction.guild.id);
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
 
