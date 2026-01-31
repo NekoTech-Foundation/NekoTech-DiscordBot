@@ -4,8 +4,8 @@ const { getLang } = require('../../../utils/langLoader');
 
 // Helper to check/update tournament on catch (Called from fish.js)
 async function checkTournamentCatch(guildId, userId, fish) {
-    const tournament = await FishingTournament.findOne({ guildId, active: true });
-    if (!tournament) return;
+    const tournament = await FishingTournament.findOne({ guildId });
+    if (!tournament || !tournament.active) return;
 
     if (tournament.targetFish && tournament.targetFish !== fish.name) return;
 
@@ -58,9 +58,9 @@ module.exports = {
 
     async execute(interaction) {
         const sub = interaction.options.getSubcommand();
-        const tournament = await FishingTournament.findOne({ guildId: interaction.guild.id, active: true });
+        const tournament = await FishingTournament.findOne({ guildId: interaction.guild.id });
 
-        if (!tournament) {
+        if (!tournament || !tournament.active) {
             return interaction.reply({ content: 'Hiện không có giải đấu nào đang diễn ra! Hãy quay lại sau.', ephemeral: true });
         }
 

@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const { getWeather } = require('./WeatherService');
 const { checkTournamentCatch } = require('./tournament');
+const { loadConfig: loadFishingConfig, getUserFishing } = require('./fishingUtils');
 
 
 const EconomyUserData = require('../../../models/EconomyUserData');
