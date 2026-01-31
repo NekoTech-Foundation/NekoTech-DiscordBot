@@ -40,9 +40,13 @@ module.exports = async (client, ban) => {
 
 async function logBan(ban, reason, moderator, caseNumber, currentTime) {
     const guildSettings = await GuildSettings.findOne({ guildId: ban.guild.id });
-    if (!guildSettings || !guildSettings.logChannels.has('ban')) return;
+    if (!guildSettings) return;
 
-    const logChannelId = guildSettings.logChannels.get('ban');
+    // Check for log channel (Supports new moderation.logChannels and legacy logChannels object)
+    const logChannelId = guildSettings.moderation?.logChannels?.ban ||
+        (guildSettings.logChannels && guildSettings.logChannels['ban']);
+
+    if (!logChannelId) return;
     const logChannel = ban.guild.channels.cache.get(logChannelId);
     if (!logChannel) return;
 

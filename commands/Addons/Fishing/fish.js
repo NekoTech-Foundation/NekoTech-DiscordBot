@@ -82,9 +82,14 @@ async function handleLevelUp(interaction, user, xpGained) {
         }
 
         userData.xp += xpGained;
-        const scalingBase = mainConfig.LevelingSystem.XPScaling?.Base || 250;
-        const scalingIncrement = mainConfig.LevelingSystem.XPScaling?.Increment || 250;
-        const xpNeeded = scalingBase + (userData.level * scalingIncrement);
+        const scalingBase = mainConfig.LevelingSystem.XPScaling?.Base || 2500;
+        const scalingIncrement = mainConfig.LevelingSystem.XPScaling?.Increment || 2500;
+        const prestigeMult = mainConfig.LevelingSystem.XPScaling?.PrestigeMultiplier || 1.5;
+
+        let xpNeeded = scalingBase + (userData.level * scalingIncrement);
+        if (userData.prestige && userData.prestige > 0) {
+            xpNeeded = Math.floor(xpNeeded * Math.pow(prestigeMult, userData.prestige));
+        }
 
         if (userData.xp >= xpNeeded) {
             userData.xp -= xpNeeded;
