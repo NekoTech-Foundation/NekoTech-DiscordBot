@@ -82,7 +82,9 @@ async function handleLevelUp(interaction, user, xpGained) {
         }
 
         userData.xp += xpGained;
-        const xpNeeded = userData.level === 0 ? 70 : userData.level * mainConfig.LevelingSystem.XPNeeded;
+        const scalingBase = mainConfig.LevelingSystem.XPScaling?.Base || 250;
+        const scalingIncrement = mainConfig.LevelingSystem.XPScaling?.Increment || 250;
+        const xpNeeded = scalingBase + (userData.level * scalingIncrement);
 
         if (userData.xp >= xpNeeded) {
             userData.xp -= xpNeeded;
