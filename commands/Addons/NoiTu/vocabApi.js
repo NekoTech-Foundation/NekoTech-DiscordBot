@@ -2,7 +2,7 @@ const path = require('path');
 const Database = require('better-sqlite3');
 
 // Database configuration
-const DB_PATH = path.join(__dirname, 'dictionary.db');
+const DB_PATH = path.join(__dirname, 'dictionary_new.db');
 let db = null;
 
 // Cache - Use a small cache for frequent words to reduce disk I/O

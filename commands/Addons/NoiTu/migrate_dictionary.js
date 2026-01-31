@@ -3,7 +3,7 @@ const path = require('path');
 const Database = require('better-sqlite3');
 
 const DICTIONARY_FILE = path.join(__dirname, 'Viet74K.txt');
-const DB_FILE = path.join(__dirname, 'dictionary.db');
+const DB_FILE = path.join(__dirname, 'dictionary_new.db');
 
 async function migrate() {
     console.log('🚀 Starting dictionary migration...');
