@@ -149,10 +149,15 @@ async function handleXP(message) {
         userData.xp += xpToAdd;
 
         // SCALING XP FORMULA
-        const scalingBase = config.LevelingSystem.XPScaling?.Base || 100;
-        const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 35;
-        // Formula: Base + (CurrentLevel * Increment)
-        const xpNeeded = scalingBase + (userData.level * scalingIncrement);
+        const scalingBase = config.LevelingSystem.XPScaling?.Base || 2500;
+        const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 2500;
+        const prestigeMult = config.LevelingSystem.XPScaling?.PrestigeMultiplier || 1.5;
+
+        // Formula: (Base + (CurrentLevel * Increment)) * (Multiplier ^ Prestige)
+        let xpNeeded = scalingBase + (userData.level * scalingIncrement);
+        if (userData.prestige && userData.prestige > 0) {
+            xpNeeded = Math.floor(xpNeeded * Math.pow(prestigeMult, userData.prestige));
+        }
 
         while (userData.xp >= xpNeeded) {
             if (levelUpMessageSent) break;
@@ -287,9 +292,14 @@ async function handleVoiceXP(client, member) {
     }
 
     userData.xp += xpToAdd;
-    const scalingBase = config.LevelingSystem.XPScaling?.Base || 100;
-    const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 35;
-    const xpNeeded = scalingBase + (userData.level * scalingIncrement);
+    const scalingBase = config.LevelingSystem.XPScaling?.Base || 2500;
+    const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 2500;
+    const prestigeMult = config.LevelingSystem.XPScaling?.PrestigeMultiplier || 1.5;
+
+    let xpNeeded = scalingBase + (userData.level * scalingIncrement);
+    if (userData.prestige && userData.prestige > 0) {
+        xpNeeded = Math.floor(xpNeeded * Math.pow(prestigeMult, userData.prestige));
+    }
 
     while (userData.xp >= xpNeeded) {
         const oldLevel = userData.level;
