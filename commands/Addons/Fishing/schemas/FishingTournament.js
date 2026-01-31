@@ -1,22 +1,16 @@
-const mongoose = require('mongoose');
+const SQLiteModel = require('../../../../utils/sqliteModel');
 
-const fishingTournamentSchema = new mongoose.Schema({
-    guildId: { type: String, required: true },
-    channelId: { type: String },
-    startTime: { type: Date, default: Date.now },
-    endTime: { type: Date, required: true },
-    type: { type: String, enum: ['heaviest', 'most_caught', 'rarest'], default: 'heaviest' },
-    targetFish: { type: String, default: null }, // If null, any fish
-    participants: [
-        {
-            userId: String,
-            score: { type: Number, default: 0 }, // Weight or Count or Rarity Score
-            bestFish: String, // Name of best fish caught
-            bestFishWeight: Number
-        }
-    ],
-    active: { type: Boolean, default: true },
-    rewardsDistributed: { type: Boolean, default: false }
+const defaultData = (query) => ({
+    guildId: query.guildId,
+    channelId: null,
+    startTime: Date.now(),
+    endTime: 0,
+    type: 'heaviest', // heaviest, most_caught, rarest
+    targetFish: null,
+    participants: [], // Array of objects { userId, score, bestFish, bestFishWeight }
+    active: false,
+    rewardsDistributed: false
 });
 
-module.exports = mongoose.model('FishingTournament', fishingTournamentSchema);
+// Table Name: 'fishing_tournaments', Key: 'guildId'
+module.exports = new SQLiteModel('fishing_tournaments', 'guildId', defaultData);
