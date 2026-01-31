@@ -96,7 +96,10 @@ API_Keys:
 # Hệ thống Cấp độ (Leveling)
 LevelingSystem:
   Enabled: true
-  XPNeeded: 150
+  XPNeeded: 150 # Legacy (Used if Scaling is disabled)
+  XPScaling:
+    Base: 100
+    Increment: 35
   MessageXP: "10-20"
   VoiceXP: "1-3"
   CooldownSettings:

@@ -1,4 +1,4 @@
-const { EmbedBuilder, ChannelType } = require('discord.js');
+const { EmbedBuilder, ChannelType, PermissionsBitField } = require('discord.js');
 const UserData = require('../../models/UserData');
 const GuildSettings = require('../../models/GuildSettings');
 //const fs = require('fs');
@@ -35,7 +35,6 @@ function getRandomLevelMessage(placeholders) {
 }
 
 
-
 function replacePlaceholders(text, placeholders) {
     return text.replace(/{(\w+)}/g, (_, key) => placeholders[key] || `{${key}}`);
 }
@@ -68,16 +67,19 @@ function parseTime(timeString) {
 
 async function handleXP(message) {
     if (!message || !message.guild) {
-        console.warn('Received an invalid message or missing guild');
+        // console.warn('Received an invalid message or missing guild');
         return;
     }
+
+    // BLOCK BOTS & WEBHOOKS
+    if (message.author.bot || message.webhookId) return;
 
     if (!config.LevelingSystem || !config.CommandsPrefix) {
         console.error('Missing necessary configuration for Leveling System or Commands Prefix');
         return;
     }
 
-    if (!config.LevelingSystem.Enabled || message.author.bot || message.content.startsWith(config.CommandsPrefix) ||
+    if (!config.LevelingSystem.Enabled || message.content.startsWith(config.CommandsPrefix) ||
         config.LevelingSystem.ChannelSettings?.DisabledChannels?.includes(message.channel.id) ||
         (message.channel.parentId && config.LevelingSystem.ChannelSettings?.DisabledCategories?.includes(message.channel.parentId))) {
         return;
@@ -145,7 +147,12 @@ async function handleXP(message) {
         let levelUpMessageSent = false;
 
         userData.xp += xpToAdd;
-        const xpNeeded = userData.level === 0 ? 70 : userData.level * config.LevelingSystem.XPNeeded;
+
+        // SCALING XP FORMULA
+        const scalingBase = config.LevelingSystem.XPScaling?.Base || 100;
+        const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 35;
+        // Formula: Base + (CurrentLevel * Increment)
+        const xpNeeded = scalingBase + (userData.level * scalingIncrement);
 
         while (userData.xp >= xpNeeded) {
             if (levelUpMessageSent) break;
@@ -193,33 +200,22 @@ async function handleXP(message) {
 
             // Per-Guild Config Override
             const guildSettings = await GuildSettings.findOne({ guildId: message.guild.id });
-            const mode = guildSettings?.leveling?.notificationMode || 'current'; // Default to 'current'
+            const mode = guildSettings?.leveling?.notificationMode || 'current';
 
             if (mode === 'none') {
-                channel = null; // Disable notification
+                channel = null;
             } else if (mode === 'channel') {
                 const specificChannelId = guildSettings?.leveling?.levelUpChannelId;
-                if (specificChannelId && message.guild.channels.cache.has(specificChannelId)) {
+                if (specificChannelId) {
                     const specificChannel = message.guild.channels.cache.get(specificChannelId);
-                    if (specificChannel.type === ChannelType.GuildText) {
+                    if (specificChannel && specificChannel.isTextBased()) {
                         channel = specificChannel;
                     }
                 }
-            } else {
-                // mode === 'current' or fallback
-                // Fallback to config.yml if specific per-guild channel is not set but 'channel' mode is selected (edge case) OR if still using old config style
-                if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID' && message.guild.channels.cache.has(config.LevelingSystem.ChannelSettings?.LevelUpChannelID)) {
-                    // Only override if config.yml explicitly sets a channel AND per-guild mode is NOT 'current' (to respect 'current' default)
-                    // Actually, per-guild settings should take precedence. If mode is 'current', use message.channel. 
-                }
             }
 
-            // Fallback for 'channel' mode if specific channel is invalid or generic fallback logic
-            if ((!channel || channel.type !== ChannelType.GuildText) && mode !== 'none') {
-                channel = message.channel;
-            } else if (mode === 'none') {
-                channel = null;
-            }
+            // Fallback: If no channel found or current, use message.channel. 
+            // If permissions are missing, we will check below.
 
             const placeholders = {
                 userName: message.author.username,
@@ -230,96 +226,26 @@ async function handleXP(message) {
                 userIcon: message.author.displayAvatarURL(),
                 oldLevel: oldLevel,
                 newLevel: newLevel,
-                oldXP: xpToAdd,
-                newXP: xpNeeded,
                 randomLevelMessage: getRandomLevelMessage({
-                    userName: message.author.username,
                     user: message.author.toString(),
-                    userId: message.author.id,
-                    guildName: message.guild.name,
-                    guildIcon: message.guild.iconURL(),
-                    userIcon: message.author.displayAvatarURL(),
-                    oldLevel: oldLevel,
-                    newLevel: newLevel,
-                    oldXP: xpToAdd,
-                    newXP: xpNeeded
+                    newLevel: newLevel
                 })
             };
 
-            const userIconURL = placeholders.userIcon;
-            const guildIconURL = placeholders.guildIcon;
-
+            // STRICT MESSAGING & UI
             if (channel) {
-                if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
-                    const embedSettings = config.LevelingSystem.LevelUpMessageSettings.Embed || {};
-                    const embed = new EmbedBuilder().setColor(embedSettings.Color || '#34eb6b');
+                // permission check
+                const botPerms = channel.permissionsFor(message.guild.members.me);
+                if (botPerms && botPerms.has(PermissionsBitField.Flags.SendMessages) && botPerms.has(PermissionsBitField.Flags.EmbedLinks)) {
 
-                    if (embedSettings.Title) {
-                        embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
-                    }
+                    const embed = new EmbedBuilder()
+                        .setColor('#34eb6b') // Fixed Green Color
+                        .setTitle("🎉 Tăng Cấp!!!")
+                        .setDescription(`${placeholders.user} bây giờ là cấp **${placeholders.newLevel}**!\n\n_${placeholders.randomLevelMessage}_`)
+                        .setThumbnail(placeholders.userIcon)
+                        .setFooter({ text: `Level Up • ${placeholders.guildName}`, iconURL: placeholders.guildIcon });
 
-                    let desc = '';
-                    if (embedSettings.Description && Array.isArray(embedSettings.Description)) {
-                        desc = embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n');
-                    } else if (typeof embedSettings.Description === 'string') {
-                        desc = replacePlaceholders(embedSettings.Description, placeholders);
-                    } else {
-                        // Fallback to the plain text message if no embed description is provided
-                        desc = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
-                    }
-
-                    if (desc && desc.trim().length > 0) {
-                        embed.setDescription(desc);
-                    }
-
-                    if (!embed.data.description && !embed.data.title && !embed.data.image && !embed.data.thumbnail) {
-                        // Absolute fallback to ensure embed is not empty
-                        embed.setDescription(`Chúc mừng ${placeholders.user} đã lên cấp ${placeholders.newLevel}!`);
-                    }
-
-                    if (embedSettings.Footer && embedSettings.Footer.Text) {
-                        const footerText = replacePlaceholders(embedSettings.Footer.Text, placeholders);
-                        const footerIconURL = replacePlaceholders(embedSettings.Footer.Icon || "", placeholders);
-                        if (footerText) {
-                            embed.setFooter({
-                                text: footerText,
-                                iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
-                            });
-                        } else {
-                            embed.setFooter({
-                                text: footerText
-                            });
-                        }
-                    }
-
-                    if (embedSettings.Author && embedSettings.Author.Text) {
-                        const authorIconURL = replacePlaceholders(embedSettings.Author.Icon || "", placeholders);
-                        embed.setAuthor({
-                            name: replacePlaceholders(embedSettings.Author.Text, placeholders),
-                            iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
-                        });
-                    }
-
-                    if (embedSettings.Thumbnail) {
-                        const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
-                        if (isValidUrl(thumbnailURL)) {
-                            embed.setThumbnail(thumbnailURL);
-                        }
-                    }
-
-                    if (embedSettings.Image) {
-                        const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
-                        if (isValidUrl(imageURL)) {
-                            embed.setImage(imageURL);
-                        }
-                    }
-
-                    channel.send({ embeds: [embed] });
-                } else {
-                    const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
-                    if (levelUpMessage.trim() !== '') {
-                        channel.send(levelUpMessage);
-                    }
+                    await channel.send({ embeds: [embed] }).catch(console.error);
                 }
             }
             levelUpMessageSent = true;
@@ -361,7 +287,9 @@ async function handleVoiceXP(client, member) {
     }
 
     userData.xp += xpToAdd;
-    const xpNeeded = userData.level === 0 ? 70 : userData.level * config.LevelingSystem.XPNeeded;
+    const scalingBase = config.LevelingSystem.XPScaling?.Base || 100;
+    const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 35;
+    const xpNeeded = scalingBase + (userData.level * scalingIncrement);
 
     while (userData.xp >= xpNeeded) {
         const oldLevel = userData.level;
@@ -369,6 +297,7 @@ async function handleVoiceXP(client, member) {
         userData.level++;
         const newLevel = userData.level;
 
+        // Roles & Rewards (Keep Existing Logic)
         const levelUpRoles = config.LevelingSystem.RoleSettings?.LevelRoles || [];
         for (const levelUpRole of levelUpRoles) {
             if (userData.level >= levelUpRole.level && levelUpRole.roleID) {
@@ -379,9 +308,7 @@ async function handleVoiceXP(client, member) {
                         for (const otherLevelUpRole of levelUpRoles) {
                             if (userData.level > otherLevelUpRole.level && otherLevelUpRole.roleID && otherLevelUpRole.roleID !== levelUpRole.roleID) {
                                 const oldRole = member.guild.roles.cache.get(otherLevelUpRole.roleID);
-                                if (oldRole) {
-                                    await member.roles.remove(oldRole).catch(() => { });
-                                }
+                                if (oldRole) await member.roles.remove(oldRole).catch(() => { });
                             }
                         }
                     }
@@ -391,140 +318,58 @@ async function handleVoiceXP(client, member) {
 
         const scaleRewards = config.LevelingSystem.RoleSettings?.ScaleRewards || {};
         const rewards = scaleRewards.Rewards || [];
-
         let highestReward = { level: 0, coins: 0 };
         for (const scaleReward of rewards) {
             if (newLevel % scaleReward.level === 0 && scaleReward.coins > highestReward.coins) {
                 highestReward = scaleReward;
             }
         }
-
         if (highestReward.coins > 0) {
             userData.balance += highestReward.coins;
         }
 
-        let channel;
+        // --- Notification Logic ---
+        let channel = null;
 
-        if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID &&
-            config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID') {
+        // 1. Configured Channel
+        if (config.LevelingSystem.ChannelSettings?.LevelUpChannelID && config.LevelingSystem.ChannelSettings?.LevelUpChannelID !== 'CHANNEL_ID') {
             channel = member.guild.channels.cache.get(config.LevelingSystem.ChannelSettings?.LevelUpChannelID);
         }
 
-        if (!channel || channel.type !== ChannelType.GuildText) {
-            channel = member.guild.channels.cache.find(ch => ch.type === ChannelType.GuildText);
+        // 2. Context Channel (Voice Text Channel) if no configured channel
+        if (!channel && member.voice.channel && member.voice.channel.isTextBased()) {
+            channel = member.voice.channel;
         }
 
+        // 3. Fallback: System Channel or First Text Channel
         if (!channel) {
-            // console.warn(`Could not find a valid text channel to send level up message for user ${member.id}`);
-            continue;
+            channel = member.guild.systemChannel || member.guild.channels.cache.find(ch => ch.type === ChannelType.GuildText && ch.permissionsFor(member.guild.members.me).has(PermissionsBitField.Flags.SendMessages));
         }
 
-        const placeholders = {
-            userName: member.user.username,
-            user: member.user.toString(),
-            userId: member.user.id,
-            guildName: member.guild.name,
-            guildIcon: member.guild.iconURL(),
-            userIcon: member.user.displayAvatarURL(),
-            oldLevel: oldLevel,
-            newLevel: newLevel,
-            oldXP: xpToAdd,
-            newXP: xpNeeded
-        };
-        // Generate random message only if used
-        placeholders.randomLevelMessage = getRandomLevelMessage(placeholders);
+        if (channel) {
+            const botPerms = channel.permissionsFor(member.guild.members.me);
+            if (botPerms && botPerms.has(PermissionsBitField.Flags.SendMessages) && botPerms.has(PermissionsBitField.Flags.EmbedLinks)) {
+                const placeholders = {
+                    user: member.user.toString(),
+                    guildName: member.guild.name,
+                    guildIcon: member.guild.iconURL(),
+                    userIcon: member.user.displayAvatarURL(),
+                    newLevel: newLevel,
+                    randomLevelMessage: getRandomLevelMessage({
+                        user: member.user.toString(),
+                        newLevel: newLevel
+                    })
+                };
 
-        try {
-            if (config.LevelingSystem.LevelUpMessageSettings.UseEmbed) {
-                const embedSettings = config.LevelingSystem.LevelUpMessageSettings.Embed || {};
                 const embed = new EmbedBuilder()
-                    .setColor(embedSettings.Color || '#34eb6b');
+                    .setColor('#34eb6b')
+                    .setTitle("🎉 Tăng Cấp!!!")
+                    .setDescription(`${placeholders.user} bây giờ là cấp **${placeholders.newLevel}**!\n\n_${placeholders.randomLevelMessage}_`)
+                    .setThumbnail(placeholders.userIcon)
+                    .setFooter({ text: `Level Up • ${placeholders.guildName}`, iconURL: placeholders.guildIcon });
 
-                // Title
-                if (embedSettings.Title) {
-                    embed.setTitle(replacePlaceholders(embedSettings.Title, placeholders));
-                } else {
-                    embed.setTitle("🎉 Tăng Cấp!!!");
-                }
-
-                // Description
-                let desc = '';
-                if (embedSettings.Description && Array.isArray(embedSettings.Description)) {
-                    desc = embedSettings.Description.map(line => replacePlaceholders(line, placeholders)).join('\n');
-                } else if (typeof embedSettings.Description === 'string') {
-                    desc = replacePlaceholders(embedSettings.Description, placeholders);
-                } else {
-                    // Richer Default Description
-                    desc = `${placeholders.user} bây giờ là cấp **${placeholders.newLevel}**!\n\n_${placeholders.randomLevelMessage}_`;
-                }
-
-                if (desc && desc.trim().length > 0) {
-                    embed.setDescription(desc);
-                }
-
-                // Fallback if description is somehow empty
-                if (!embed.data.description && !embed.data.title && !embed.data.image && !embed.data.thumbnail) {
-                    // Absolute fallback to ensure embed is not empty
-                    embed.setDescription(`Chúc mừng ${placeholders.user} đã lên cấp ${placeholders.newLevel}!`);
-                }
-
-                // Footer
-                if (embedSettings.Footer && embedSettings.Footer.Text) {
-                    const footerText = replacePlaceholders(embedSettings.Footer.Text, placeholders);
-                    const footerIconURL = replacePlaceholders(embedSettings.Footer.Icon || "", placeholders);
-                    if (footerText) {
-                        embed.setFooter({
-                            text: footerText,
-                            iconURL: isValidUrl(footerIconURL) ? footerIconURL : null
-                        });
-                    }
-                } else {
-                    embed.setFooter({ text: `Level Up • ${placeholders.guildName}`, iconURL: placeholders.guildIcon });
-                }
-
-
-                // Author
-                if (embedSettings.Author && embedSettings.Author.Text) {
-                    const authorIconURL = replacePlaceholders(embedSettings.Author.Icon || "", placeholders);
-                    embed.setAuthor({
-                        name: replacePlaceholders(embedSettings.Author.Text, placeholders),
-                        iconURL: isValidUrl(authorIconURL) ? authorIconURL : null
-                    });
-                }
-
-                // Thumbnail (User Avatar default)
-                if (embedSettings.Thumbnail) {
-                    const thumbnailURL = replacePlaceholders(embedSettings.Thumbnail, placeholders);
-                    if (isValidUrl(thumbnailURL)) {
-                        embed.setThumbnail(thumbnailURL);
-                    } else {
-                        embed.setThumbnail(placeholders.userIcon);
-                    }
-                } else {
-                    embed.setThumbnail(placeholders.userIcon);
-                }
-
-                // Image (Only if explicitly set in config)
-                if (embedSettings.Image) {
-                    const imageURL = replacePlaceholders(embedSettings.Image, placeholders);
-                    if (isValidUrl(imageURL)) {
-                        embed.setImage(imageURL);
-                    }
-                }
-
-                await channel.send({ embeds: [embed] }).catch(err => {
-                    console.error('Failed to send level up embed:', err);
-                });
-            } else {
-                const levelUpMessage = replacePlaceholders(config.LevelingSystem.LevelUpMessageSettings.LevelUpMessage, placeholders);
-                if (levelUpMessage.trim() !== '') {
-                    await channel.send(levelUpMessage).catch(err => {
-                        console.error('Failed to send level up message:', err);
-                    });
-                }
+                await channel.send({ embeds: [embed] }).catch(() => { });
             }
-        } catch (error) {
-            console.error('Error sending level up message:', error);
         }
     }
 
