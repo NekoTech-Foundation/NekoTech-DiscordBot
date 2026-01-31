@@ -9,7 +9,10 @@ const {
 } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
-const { loadConfig: loadFishingConfig, getUserFishing } = require('./fishingUtils');
+const { getWeather } = require('./WeatherService');
+const { checkTournamentCatch } = require('./tournament');
+
+
 const EconomyUserData = require('../../../models/EconomyUserData');
 const UserData = require('../../../models/UserData');
 const { getConfig } = require('../../../utils/configLoader');
@@ -140,7 +143,7 @@ function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
     // Calculate total luck
     const totalLuck = rodLuck + baitLuck;
 
-    // Apply rod effects
+    // 1. Apply Rod Effects (Specific Rarity Multipliers)
     if (rodEffects) {
         for (const rarity in rodEffects) {
             if (chances[rarity]) {
@@ -149,21 +152,39 @@ function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
         }
     }
 
-    // Apply total luck
+    // 2. Apply Direct Luck Boost (Flat % for Rare+)
+    // User requested 1-10% boost for Rare/Epic/Legendary based on gear
     if (totalLuck > 0) {
-        chances['uncommon'] *= (1 + totalLuck * 0.5);
-        chances['rare'] *= (1 + totalLuck * 1.5);
-        chances['epic'] *= (1 + totalLuck * 2);
-        chances['legendary'] *= (1 + totalLuck * 3);
+        // Example: Luck 2.0 -> 0.06 (6%) boost per tier
+        const boostPerTier = Math.min(totalLuck * 0.03, 0.12);
+
+        chances.legendary += boostPerTier;
+        chances.epic += boostPerTier;
+        chances.rare += boostPerTier;
+
+        // Reduce Common/Uncommon to maintain probability sum
+        const lowerTiers = chances.common + chances.uncommon;
+        const totalBoost = boostPerTier * 3;
+
+        if (lowerTiers > totalBoost) {
+            chances.common -= (chances.common / lowerTiers) * totalBoost;
+            chances.uncommon -= (chances.uncommon / lowerTiers) * totalBoost;
+        } else {
+            // Edge case: if boost is huge, crush common/uncommon
+            chances.common = 0;
+            chances.uncommon = 0;
+        }
     }
 
-    // Normalize chances
+    // Normalize
     let totalChance = Object.values(chances).reduce((a, b) => a + b, 0);
-    for (const rarity in chances) {
-        chances[rarity] /= totalChance;
+    if (totalChance > 0) {
+        for (const rarity in chances) {
+            chances[rarity] /= totalChance;
+        }
     }
 
-    // Apply bait effects (Attracts)
+    // 3. Apply Bait Attracts (Targeted Rarity Shift)
     if (usedBaitKey && config.baits[usedBaitKey]) {
         const baitInfo = config.baits[usedBaitKey];
 
@@ -175,12 +196,16 @@ function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
             });
 
             if (totalAttractedChance > 0) {
+                // Boost attracted rarities
                 baitInfo.attracts.forEach(r => {
                     if (chances[r]) chances[r] += (chances[r] / totalAttractedChance) * bonus;
                 });
+
+                // Reduce others
                 const nonAttractedRarities = Object.keys(chances).filter(r => !baitInfo.attracts.includes(r));
                 let totalNonAttractedChance = 0;
                 nonAttractedRarities.forEach(r => totalNonAttractedChance += chances[r]);
+
                 if (totalNonAttractedChance > 0) {
                     nonAttractedRarities.forEach(r => {
                         const decrease = (chances[r] / totalNonAttractedChance) * bonus;
@@ -371,12 +396,12 @@ async function handleFish(interaction, config, fishingLang) {
     const rodConfig = config.rods[equippedRodKey];
     const rodLuck = rodConfig ? rodConfig.luck : 0;
     const rodEffects = rodConfig ? rodConfig.effects : {};
-    
+
     // ROD SNAP MECHANIC
     // 0.5% chance to snap
     const snapChance = 0.005;
     const isSnapped = Math.random() < snapChance;
-    
+
     const caughtFishInfo = getCatch(location, config, usedBaitKey, rodLuck, rodEffects);
 
     // Animation frames generator
@@ -399,12 +424,12 @@ async function handleFish(interaction, config, fishingLang) {
 
         await interaction.editReply({ content: null, embeds: [createFishingEmbed(snapFrames[0].title, snapFrames[0].desc, snapFrames[0].color)], components: [] });
         for (let i = 1; i < snapFrames.length; i++) {
-             await new Promise(r => setTimeout(r, 1500));
-             await interaction.editReply({ content: null, embeds: [createFishingEmbed(snapFrames[i].title, snapFrames[i].desc, snapFrames[i].color)] });
+            await new Promise(r => setTimeout(r, 1500));
+            await interaction.editReply({ content: null, embeds: [createFishingEmbed(snapFrames[i].title, snapFrames[i].desc, snapFrames[i].color)] });
         }
         await new Promise(r => setTimeout(r, 1000));
 
-        equippedRod.durability = 1; 
+        equippedRod.durability = 1;
         await userFishing.save();
 
         const snapEmbed = new EmbedBuilder()
@@ -428,8 +453,8 @@ async function handleFish(interaction, config, fishingLang) {
 
         await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[0].title, frames[0].desc, frames[0].color)], components: [] });
         for (let i = 1; i < frames.length; i++) {
-             await new Promise(r => setTimeout(r, 1500));
-             await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[i].title, frames[i].desc, frames[i].color)] });
+            await new Promise(r => setTimeout(r, 1500));
+            await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[i].title, frames[i].desc, frames[i].color)] });
         }
         await new Promise(r => setTimeout(r, 1000));
 
@@ -450,51 +475,51 @@ async function handleFish(interaction, config, fishingLang) {
         { title: 'Đang chờ...', color: '#3498DB', desc: "🌊 🐟 🦴 🌊 🌊" }
     ];
     const biteFrame = { title: 'CÓ BIẾN!', color: '#F1C40F', desc: "🌊 🐟 👀 🪱 🌊" };
-    
+
     let hookSequence = [];
-    
+
     if (caughtFishInfo.rarity === 'common') {
         hookSequence = [
-             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" }
+            { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" }
         ];
     } else if (caughtFishInfo.rarity === 'uncommon') {
         hookSequence = [
-             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
-             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" }
+            { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+            { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" }
         ];
     } else if (caughtFishInfo.rarity === 'rare') {
-         hookSequence = [
-             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
-             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
-             { title: 'CỐ LÊN!', color: '#E74C3C', desc: "🎣 🎣 🐟 💦 💦" }
-         ]; 
+        hookSequence = [
+            { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+            { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
+            { title: 'CỐ LÊN!', color: '#E74C3C', desc: "🎣 🎣 🐟 💦 💦" }
+        ];
     } else if (caughtFishInfo.rarity === 'epic') {
-         hookSequence = [
-             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
-             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
-             { title: 'CỐ LÊN!', color: '#E74C3C', desc: "🎣 🎣 🐟 💦 💦" },
-             { title: 'SẮP ĐƯỢC RỒI!', color: '#C0392B', desc: "🎣 ✨ 🐟 ✨ 💦" }
-         ];
+        hookSequence = [
+            { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+            { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
+            { title: 'CỐ LÊN!', color: '#E74C3C', desc: "🎣 🎣 🐟 💦 💦" },
+            { title: 'SẮP ĐƯỢC RỒI!', color: '#C0392B', desc: "🎣 ✨ 🐟 ✨ 💦" }
+        ];
     } else if (caughtFishInfo.rarity === 'legendary') {
-         hookSequence = [
-             { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
-             { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
-             { title: 'RẤT MẠNH!', color: '#E74C3C', desc: "🎣 🔥 🐟 🔥 💦" },
-             { title: 'KHÔNG ĐƯỢC THOÁT!', color: '#C0392B', desc: "🎣 ⚡ 🐟 ⚡ 💦" },
-             { title: 'LÊN NÀO!', color: '#F1C40F', desc: "🎣 🌟 🐟 🌟 💦" }
-         ];
+        hookSequence = [
+            { title: 'DÍNH CÂU!', color: '#E74C3C', desc: "🎣 💥 🐟 💦" },
+            { title: 'KÉO MẠNH!', color: '#C0392B', desc: "🎣 〰️ 🐟 💦 💦" },
+            { title: 'RẤT MẠNH!', color: '#E74C3C', desc: "🎣 🔥 🐟 🔥 💦" },
+            { title: 'KHÔNG ĐƯỢC THOÁT!', color: '#C0392B', desc: "🎣 ⚡ 🐟 ⚡ 💦" },
+            { title: 'LÊN NÀO!', color: '#F1C40F', desc: "🎣 🌟 🐟 🌟 💦" }
+        ];
     }
-    
+
     frames = [baseCast, ...baseWait, biteFrame, ...hookSequence];
 
     // Play animation
     await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[0].title, frames[0].desc, frames[0].color)], components: [] });
-    
+
     for (let i = 1; i < frames.length; i++) {
         await new Promise(r => setTimeout(r, 1500));
         await interaction.editReply({ content: null, embeds: [createFishingEmbed(frames[i].title, frames[i].desc, frames[i].color)] });
     }
-    await new Promise(r => setTimeout(r, 1000)); 
+    await new Promise(r => setTimeout(r, 1000));
 
 
     // Add fish to inventory
@@ -978,7 +1003,17 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('help')
-                .setDescription('Hiển thị trợ giúp về câu cá.')),
+                .setDescription('Hiển thị trợ giúp về câu cá.'))
+        .addSubcommand(sub =>
+            sub.setName('aquarium')
+                .setDescription('Xem bể cá của bạn')
+                .addUserOption(o => o.setName('user').setDescription('Người dùng')))
+        .addSubcommandGroup(group =>
+            group.setName('tournament')
+                .setDescription('Hệ thống giải đấu')
+                .addSubcommand(sub => sub.setName('view').setDescription('Xem giải đấu đang diễn ra'))
+                .addSubcommand(sub => sub.setName('leaderboard').setDescription('Xem bảng xếp hạng'))
+        ),
 
     async autocomplete(interaction) {
         const focusedOption = interaction.options.getFocused(true);
@@ -1012,8 +1047,15 @@ module.exports = {
     async execute(interaction, lang) {
         const client = interaction.client;
         const { getConfig } = require('../../../utils/configLoader');
-        const { getLang } = require('../../../utils/langLoader');        
+        const { getLang } = require('../../../utils/langLoader');
         const subcommand = interaction.options.getSubcommand();
+        const group = interaction.options.getSubcommandGroup(false);
+
+        if (group === 'tournament') {
+            await require('./tournament').execute(interaction);
+            return;
+        }
+
         const config = loadFishingConfig();
         const fishingLang = lang.Addons.Fishing;
 
@@ -1033,6 +1075,9 @@ module.exports = {
                     break;
                 case 'help':
                     await handleHelp(interaction);
+                    break;
+                case 'aquarium':
+                    await require('./aquarium').execute(interaction);
                     break;
                 default:
                     await interaction.reply({
