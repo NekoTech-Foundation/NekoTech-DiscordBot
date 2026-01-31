@@ -170,9 +170,9 @@ module.exports = {
 
         } else if (subcommand === 'delete') {
             const trigger = interaction.options.getString('trigger');
-            const deleted = await AutoResponse.findOneAndDelete({ guildId, trigger });
+            const result = await AutoResponse.deleteOne({ guildId, trigger });
 
-            if (!deleted) {
+            if (result.deletedCount === 0) {
                 return interaction.reply({ content: autoLang.Errors.NotFound, ephemeral: true });
             }
             await interaction.reply({ content: autoLang.UI.DeleteSuccess.replace('{trigger}', trigger), ephemeral: true });
