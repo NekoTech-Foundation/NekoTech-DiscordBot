@@ -149,9 +149,9 @@ async function handleXP(message) {
         userData.xp += xpToAdd;
 
         // SCALING XP FORMULA
-        const scalingBase = config.LevelingSystem.XPScaling?.Base || 2500;
+        const scalingBase = config.LevelingSystem.XPScaling?.Base || 2800;
         const scalingIncrement = config.LevelingSystem.XPScaling?.Increment || 2500;
-        const prestigeMult = config.LevelingSystem.XPScaling?.PrestigeMultiplier || 1.5;
+        const prestigeMult = config.LevelingSystem.XPScaling?.PrestigeMultiplier || 2.2;
 
         // Formula: (Base + (CurrentLevel * Increment)) * (Multiplier ^ Prestige)
         let xpNeeded = scalingBase + (userData.level * scalingIncrement);

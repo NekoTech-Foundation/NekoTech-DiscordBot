@@ -378,20 +378,29 @@ function handleVoiceXPEvents(client, oldState, newState) {
 async function restoreVoiceSessions(client) {
     console.log('Restoring active voice sessions...');
     const now = Date.now();
+    const interval = parseTime(config.LevelingSystem.CooldownSettings.VoiceInterval || '1m');
+
     for (const [guildId, guild] of client.guilds.cache) {
         for (const [channelId, channel] of guild.channels.cache) {
             if (channel.type === ChannelType.GuildVoice) {
                 for (const [memberId, member] of channel.members) {
                     if (!member.user.bot) {
+                        // Restore Active Session
                         if (!activeVoiceSessions.has(memberId)) {
                             activeVoiceSessions.set(memberId, now);
+                        }
+                        
+                        // Restore XP Timer
+                        if (!voiceXpTimers.has(memberId)) {
+                            const timer = setInterval(() => handleVoiceXP(client, member), interval);
+                            voiceXpTimers.set(memberId, timer);
                         }
                     }
                 }
             }
         }
     }
-    console.log(`Restored ${activeVoiceSessions.size} active voice sessions.`);
+    console.log(`Restored ${activeVoiceSessions.size} active voice sessions and ${voiceXpTimers.size} XP timers.`);
 }
 
 handleVoiceStateUpdate.restoreVoiceSessions = restoreVoiceSessions;

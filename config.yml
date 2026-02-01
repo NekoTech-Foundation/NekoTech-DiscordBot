@@ -106,7 +106,7 @@ LevelingSystem:
   CooldownSettings:
     EnableXPCooldown: true
     XPCooldown: "1s"
-    VoiceInterval: "10s"
+    VoiceInterval: "1m"
   LevelUpMessageSettings:
     UseEmbed: true
     LevelUpMessage: "Ting! {user} đã lên cấp {newLevel}!"
@@ -472,7 +472,6 @@ ActivitySettings:
 # {uptime}: Thời gian bot đã hoạt động (ví dụ: "2 days").
 # {total-boosts}: Tổng số lượt Boost server.
 
-
 # ===========================================================================
 # VALORANT TRACKER CONFIGURATION
 # ===========================================================================
@@ -497,7 +496,7 @@ AutoKick:
     Enabled: false
     Embed:
       Title: "Auto Kick"
-      Description: 
+      Description:
         - "You have been kicked for not verifying in time."
       Color: "#FF0000"
       Footer: "System"
