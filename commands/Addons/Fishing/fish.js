@@ -531,8 +531,11 @@ async function handleFish(interaction, config, fishingLang) {
 
 
     // Add fish to inventory
-    const weight = Math.random() * (caughtFishInfo.max_weight - caughtFishInfo.min_weight) +
-        caughtFishInfo.min_weight;
+    // Enforce minimum weight of 0.7kg
+    let minWeight = Math.max(0.7, caughtFishInfo.min_weight);
+    let maxWeight = Math.max(minWeight, caughtFishInfo.max_weight); // Ensure max >= min
+
+    const weight = Math.random() * (maxWeight - minWeight) + minWeight;
 
     const existingFish = userFishing.inventory.find(f => f.name === caughtFishInfo.name);
     if (existingFish) {
@@ -549,10 +552,10 @@ async function handleFish(interaction, config, fishingLang) {
 
     // Calculate XP
     const xpGained = config.xp_per_rarity[caughtFishInfo.rarity] || 0;
-    const userData = await UserData.findOne({
+    const userData = interaction.guild ? await UserData.findOne({
         userId: interaction.user.id,
         guildId: interaction.guild.id
-    });
+    }) : null;
     const xpMultiplier = userData ? checkActiveBooster(userData, 'XPRate') : 1;
     const finalXp = Math.floor(xpGained * xpMultiplier);
 

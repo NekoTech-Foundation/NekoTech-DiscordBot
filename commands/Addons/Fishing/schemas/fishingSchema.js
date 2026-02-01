@@ -4,6 +4,7 @@ const defaultData = (query) => ({
     userId: query.userId,
     equippedRod: null,
     equippedBait: null,
+    equippedFish: null,
     rods: [],
     inventory: [],
     baits: []

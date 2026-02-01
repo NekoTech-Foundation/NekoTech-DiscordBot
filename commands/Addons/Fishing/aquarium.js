@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ComponentType } = require('discord.js');
 const { getUserFishing } = require('./fishingUtils');
 
 function getFishEmoji(fishName, config) {
@@ -45,9 +45,15 @@ module.exports = {
         const row2 = grid.slice(3, 6).join('   ');
         const row3 = grid.slice(6, 9).join('   ');
 
+        // Equipped Fish
+        const equippedFishName = userFishing.equippedFish;
+        const equippedFishEmoji = equippedFishName ? getFishEmoji(equippedFishName, config) : 'Không có';
+
         const embed = new EmbedBuilder()
             .setTitle(`🐠 Bể Cá Của ${targetUser.username}`)
             .setDescription(`
+            **Cá Đại Diện:** ${equippedFishEmoji} ${equippedFishName || ''}
+
             🌊🌊🌊🌊🌊🌊🌊
             🌊  ${row1}  🌊
             🌊  ${row2}  🌊
@@ -57,9 +63,56 @@ module.exports = {
             .setColor('Aqua')
             .addFields(
                 { name: 'Cá Hiếm Nhất', value: getFishEmoji(sortedFish[0].name, config) + ' ' + sortedFish[0].name, inline: true },
-                { name: 'Tổng Số Cá', value: `${userFishing.inventory.length}`, inline: true }
+                { name: 'Tổng Số Cá', value: `${userFishing.inventory.reduce((a, b) => a + b.quantity, 0)}`, inline: true }
             );
 
-        interaction.reply({ embeds: [embed] });
+        // Only allow owner to equip
+        if (targetUser.id === interaction.user.id) {
+            const options = sortedFish.slice(0, 25).map(f => ({
+                label: f.name,
+                description: `Sở hữu: ${f.quantity} | ${f.rarity.toUpperCase()}`,
+                value: f.name,
+                emoji: getFishEmoji(f.name, config)
+            }));
+
+            const selectMenu = new StringSelectMenuBuilder()
+                .setCustomId('aquarium_equip')
+                .setPlaceholder('Chọn cá đại diện (Equip)')
+                .addOptions(options);
+
+            const row = new ActionRowBuilder().addComponents(selectMenu);
+
+            const response = await interaction.reply({ embeds: [embed], components: [row] });
+
+            const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 60000 });
+
+            collector.on('collect', async i => {
+                if (i.user.id !== interaction.user.id) {
+                    return i.reply({ content: 'Bạn không thể chỉnh sửa bể cá của người khác!', ephemeral: true });
+                }
+
+                if (i.customId === 'aquarium_equip') {
+                    const selectedFishName = i.values[0];
+                    userFishing.equippedFish = selectedFishName;
+                    await userFishing.save();
+
+                    // Update Embed
+                    const newEquippedEmoji = getFishEmoji(selectedFishName, config);
+                    embed.setDescription(`
+                    **Cá Đại Diện:** ${newEquippedEmoji} ${selectedFishName}
+
+                    🌊🌊🌊🌊🌊🌊🌊
+                    🌊  ${row1}  🌊
+                    🌊  ${row2}  🌊
+                    🌊  ${row3}  🌊
+                    🌊🌊🌊🌊🌊🌊🌊
+                    `);
+
+                    await i.update({ embeds: [embed], components: [row] });
+                }
+            });
+        } else {
+            await interaction.reply({ embeds: [embed] });
+        }
     }
 };
