@@ -27,10 +27,11 @@ module.exports = {
             subcommand
                 .setName('plant')
                 .setDescription('🌱 Trồng hạt giống')
-                .addStringOption(option => {
-                    const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    return option.setName('seed').setDescription('🌰 Loại hạt giống bạn muốn trồng').setRequired(true).addChoices(...choices);
-                })
+                .addStringOption(option =>
+                    option.setName('seed')
+                        .setDescription('🌰 Loại hạt giống bạn muốn trồng')
+                        .setRequired(true)
+                        .setAutocomplete(true)) // Enable Autocomplete
                 .addStringOption(option =>
                     option.setName('quantity')
                         .setDescription('🔢 Số lượng hạt giống (mặc định: 1)')
@@ -39,11 +40,11 @@ module.exports = {
             subcommand
                 .setName('harvest')
                 .setDescription('🚜 Thu hoạch cây trồng')
-                .addStringOption(option => {
-                    const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    choices.push({ name: 'Tất cả', value: 'all' });
-                    return option.setName('plant').setDescription('🌿 Loại cây bạn muốn thu hoạch').setRequired(true).addChoices(...choices);
-                }))
+                .addStringOption(option =>
+                    option.setName('plant')
+                        .setDescription('🌿 Loại cây bạn muốn thu hoạch')
+                        .setRequired(true)
+                        .setAutocomplete(true))) // Enable Autocomplete
         .addSubcommand(subcommand =>
             subcommand
                 .setName('field')
@@ -55,21 +56,24 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('seeds')
-                .setDescription('🎒 Xem kho hạt giống'))
+                .setDescription('🎒 Xem kho hạt giống (Nhanh)'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('inventory')
-                .setDescription('📦 Xem kho nông sản & phân bón'))
+                .setDescription('📦 Xem tất cả kho nông trại (Hạt giống, Nông sản, Phân bón)'))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('phanbon')
                 .setDescription('✨ Sử dụng phân bón cho cây')
                 .addStringOption(option => {
-                    const config = getConfig(); // Ensure config is available
-                    const choices = Object.keys(config.Store['Phân bón']).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
+                    const config = getConfig();
+                    const choices = Object.keys(config.Store['Phân bón'] || {}).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
                     return option.setName('ten_phan_bon').setDescription('🧪 Loại phân bón muốn dùng').setRequired(true).addChoices(...choices);
                 })
                 .addStringOption(option => {
+                    // This could also be autocompleted to show only planted crops, but static choice is okay for now or upgrade later.
+                    // Let's stick to choices for simplicity unless requested, but wait, if huge list, autocomplete is better.
+                    // User mainly asked for inventory/seed vars. Let's keep choices for now to avoid over-engineering in one step.
                     const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
                     return option.setName('ten_cay').setDescription('🌿 Loại cây muốn bón (để trống để bón tất cả)').setRequired(false).addChoices(...choices);
                 }))
@@ -86,10 +90,11 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand.setName('sell')
                 .setDescription('💸 Bán nông sản kiếm lời')
-                .addStringOption(option => {
-                    const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    return option.setName('produce').setDescription('🍎 Loại nông sản muốn bán').setRequired(true).addChoices(...choices);
-                })
+                .addStringOption(option =>
+                    option.setName('produce')
+                        .setDescription('🍎 Loại nông sản muốn bán')
+                        .setRequired(true)
+                        .setAutocomplete(true)) // Enable Autocomplete
                 .addStringOption(option =>
                     option.setName('quantity')
                         .setDescription('🔢 Số lượng muốn bán (hoặc "all")')
@@ -98,28 +103,100 @@ module.exports = {
 
     async autocomplete(interaction) {
         const focusedOption = interaction.options.getFocused(true);
-        if (focusedOption.name === 'quantity') {
-            const produceName = interaction.options.getString('produce');
-            if (!produceName) return;
+        const userId = interaction.user.id;
+        const userFarm = await getUserFarm(userId);
 
-            const userId = interaction.user.id;
-            const seed = seeds[produceName];
-            if (!seed) return;
-            
-            const userFarm = await getUserFarm(userId);
-            const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
+        // 1. Plant (Seed Selection)
+        if (focusedOption.name === 'seed') {
+            const seedItems = userFarm.items.filter(i => i.type === 'seed' && i.quantity > 0);
+            // Map to choices
+            let choices = seedItems.map(item => {
+                const seedInfo = Object.values(seeds).find(s => s.name === item.name);
+                return {
+                    name: `${item.name} (Có: ${item.quantity})`,
+                    value: Object.keys(seeds).find(k => seeds[k].name === item.name) || item.name // Value should be keys in 'seeds' object ideally
+                };
+            });
 
-            const choices = [];
-            if (item && item.quantity > 0) {
-                choices.push({ name: `Tất cả (${item.quantity})`, value: 'all' });
-                choices.push({ name: `${item.quantity}`, value: `${item.quantity}` });
+            // Filter by typing
+            const filtered = choices.filter(c => c.name.toLowerCase().includes(focusedOption.value.toLowerCase()));
+            // Limit 25
+            await interaction.respond(filtered.slice(0, 25));
+        }
+
+        // 2. Harvest (Plant Selection)
+        else if (focusedOption.name === 'plant') {
+            const planted = await plantSchema.find({ userId });
+            const uniquePlants = [...new Set(planted.map(p => p.plant))];
+
+            let choices = uniquePlants.map(plantKey => {
+                const seedInfo = seeds[plantKey];
+                const count = planted.filter(p => p.plant === plantKey).reduce((a, b) => a + b.quantity, 0);
+                // Calculate ready count
+                const ready = planted.filter(p => {
+                    if (p.plant !== plantKey) return false;
+                    const timeSincePlanted = Date.now() - new Date(p.plantedAt).getTime();
+                    return (seedInfo.growthTime - timeSincePlanted) <= 1000;
+                }).reduce((a, b) => a + b.quantity, 0);
+
+                return {
+                    name: `${seedInfo.name} (Trồng: ${count} | Sẵn sàng: ${ready})`,
+                    value: plantKey
+                };
+            });
+
+            // Add "Harvest All" choice
+            if (planted.length > 0) {
+                choices.unshift({ name: 'Thu hoạch tất cả', value: 'all' });
+            } else {
+                choices.push({ name: 'Chưa có cây trồng nào', value: 'none' });
             }
-            await interaction.respond(choices);
+
+            const filtered = choices.filter(c => c.name.toLowerCase().includes(focusedOption.value.toLowerCase()));
+            await interaction.respond(filtered.slice(0, 25));
+        }
+
+        // 3. Sell (Produce Selection)
+        else if (focusedOption.name === 'produce') {
+            const produceItems = userFarm.items.filter(i => i.type === 'produce' && i.quantity > 0);
+            let choices = produceItems.map(item => {
+                const seedInfo = Object.values(seeds).find(s => s.name === item.name);
+                return {
+                    name: `${item.name} (Có: ${item.quantity})`,
+                    value: Object.keys(seeds).find(k => seeds[k].name === item.name) || item.name
+                };
+            });
+            const filtered = choices.filter(c => c.name.toLowerCase().includes(focusedOption.value.toLowerCase()));
+            await interaction.respond(filtered.slice(0, 25));
+        }
+
+        // 4. Quantity (Generic)
+        else if (focusedOption.name === 'quantity') {
+            const produceValue = interaction.options.getString('produce');
+            // If selling produce
+            if (produceValue) {
+                const seed = seeds[produceValue];
+                if (seed) {
+                    const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
+                    if (item && item.quantity > 0) {
+                        await interaction.respond([
+                            { name: `Tất cả (${item.quantity})`, value: 'all' },
+                            { name: '1', value: '1' },
+                            { name: '5', value: '5' },
+                            { name: '10', value: '10' }
+                        ]);
+                    }
+                }
+            }
         }
     },
 
     async execute(interaction, lang) {
         const client = interaction.client;
+
+        // Handle Autocomplete interactions handled separately, but this is main execute
+        if (interaction.isAutocomplete && interaction.isAutocomplete()) return; // Should be handled by handler, but safety check
+
         await interaction.deferReply();
         const subcommand = interaction.options.getSubcommand();
         const userId = interaction.user.id;
@@ -131,6 +208,8 @@ module.exports = {
             const seedName = interaction.options.getString('seed');
             const quantityInput = interaction.options.getString('quantity') || '1';
             const seed = seeds[seedName];
+
+            if (!seed) return interaction.editReply({ content: '❌ Loại hạt giống không hợp lệ.' });
 
             const userFarm = await getUserFarm(userId);
             const seedItem = userFarm.items.find(i => i.name === seed.name && i.type === 'seed');
@@ -195,6 +274,7 @@ module.exports = {
 
         } else if (subcommand === 'harvest') {
             const plantName = interaction.options.getString('plant');
+            if (plantName === 'none') return interaction.editReply('Bạn chưa có cây trồng nào.');
 
             let plantsToHarvest = [];
             if (plantName === 'all') {
@@ -398,46 +478,58 @@ module.exports = {
             const userFarm = await getUserFarm(userId);
             const produceItems = userFarm.items.filter(item => item.type === 'produce');
             const fertilizerItems = userFarm.items.filter(item => item.type === 'Fertilizer');
+            const seedItems = userFarm.items.filter(item => item.type === 'seed'); // FETCH SEEDS
 
             const embed = new EmbedBuilder()
-                .setColor('#00ff00')
-                .setTitle(farmingLang.UI.InventoryTitle);
+                .setColor('#2b2d31') // Darker color for modern look
+                .setTitle('📦 Kho Nông Trại')
+                .setThumbnail(interaction.user.displayAvatarURL())
+                .setTimestamp();
 
-            if (produceItems.length === 0 && fertilizerItems.length === 0) {
-                embed.setDescription(farmingLang.Errors.NoProduce);
-                return interaction.editReply({ embeds: [embed] });
+            // 1. Seeds Field
+            let seedsDesc = "";
+            if (seedItems.length > 0) {
+                seedItems.forEach(item => {
+                    const seedData = Object.values(seeds).find(s => s.name === item.name);
+                    seedsDesc += `${seedData?.emoji || '🌰'} **${item.name}**: ${item.quantity}\n`;
+                });
             } else {
-                let description = farmingLang.UI.InventoryProduce;
-                if (produceItems.length > 0) {
-                    for (const item of produceItems) {
-                        const seed = Object.values(seeds).find(s => s.name === item.name);
-                        if (seed) {
-                            description += `${seed.emoji} ${item.name}: ${item.quantity}\n`;
-                        }
-                    }
-                } else {
-                    description += `${farmingLang.UI.None}\n`;
-                }
-
-                description += farmingLang.UI.InventoryFertilizer;
-                if (fertilizerItems.length > 0) {
-                    for (const item of fertilizerItems) {
-                        description += `🌱 ${item.name}: ${item.quantity}\n`;
-                    }
-                } else {
-                    description += `${farmingLang.UI.None}\n`;
-                }
-
-                embed.setDescription(description);
+                seedsDesc = "Không có hạt giống nào.";
             }
+            embed.addFields({ name: '🌱 Hạt Giống', value: seedsDesc, inline: true });
+
+            // 2. Produce Field
+            let produceDesc = "";
+            if (produceItems.length > 0) {
+                produceItems.forEach(item => {
+                    const seedData = Object.values(seeds).find(s => s.name === item.name);
+                    produceDesc += `${seedData?.emoji || '🍎'} **${item.name}**: ${item.quantity}\n`;
+                });
+            } else {
+                produceDesc = "Không có nông sản.";
+            }
+            embed.addFields({ name: '🥒 Nông Sản', value: produceDesc, inline: true });
+
+            // 3. Fertilizer Field (Full width)
+            let fertDesc = "";
+            if (fertilizerItems.length > 0) {
+                fertilizerItems.forEach(item => {
+                    fertDesc += `🧪 **${item.name}**: ${item.quantity}\n`;
+                });
+            } else {
+                fertDesc = "Không có phân bón.";
+            }
+            embed.addFields({ name: '🧪 Phân Bón', value: fertDesc, inline: false });
+
 
             const selectMenu = new StringSelectMenuBuilder()
                 .setCustomId('quick_sell_produce')
-                .setPlaceholder(farmingLang.UI.QuickSellPlaceholder)
+                .setPlaceholder(farmingLang.UI.QuickSellPlaceholder || 'Chọn nông sản để bán nhanh')
                 .addOptions(produceItems.length > 0 ? produceItems.map(item => ({
-                    label: item.name,
+                    label: `${item.name} (Có: ${item.quantity})`, // Added quantity to label
                     value: item.name.replace(/ /g, '-'),
-                })) : [{ label: 'Empty', value: 'none' }]);
+                    description: `Bán tất cả ${item.name}`
+                })) : [{ label: 'Trống', value: 'none', description: 'Bạn không có nông sản để bán' }]);
 
             const row = new ActionRowBuilder().addComponents(selectMenu);
             if (produceItems.length === 0) row.components[0].setDisabled(true);
@@ -495,47 +587,49 @@ module.exports = {
             }
 
             await interaction.editReply({ content: farmingLang.UI.FertilizeSuccess.replace('{fertilizer}', fertilizer.Name).replace('{plant}', plantName ? seeds[plantName].name : 'all plants') });
-        
+
         } else if (subcommand === 'deposit' || subcommand === 'balance') { // Handle Savings Group
-             const currency = config.Currency || '💰';
-             if (subcommand === 'deposit') {
-                 const amount = interaction.options.getInteger('amount');
-                 if (amount <= 0) return interaction.editReply({ content: 'Số tiền gửi phải là số dương.' });
+            const currency = config.Currency || '💰';
+            if (subcommand === 'deposit') {
+                const amount = interaction.options.getInteger('amount');
+                if (amount <= 0) return interaction.editReply({ content: 'Số tiền gửi phải là số dương.' });
 
-                 let economyData = await EconomyUserData.findOne({ userId });
-                 if (!economyData || economyData.balance < amount) return interaction.editReply({ content: 'Bạn không đủ tiền để gửi.' });
+                let economyData = await EconomyUserData.findOne({ userId });
+                if (!economyData || economyData.balance < amount) return interaction.editReply({ content: 'Bạn không đủ tiền để gửi.' });
 
-                 economyData.balance -= amount;
-                 await economyData.save();
+                economyData.balance -= amount;
+                await economyData.save();
 
-                 let savingsData = await bankSchema.findOne({ userId });
-                 if (!savingsData) savingsData = await bankSchema.create({ userId, balance: 0 });
-                 savingsData.balance += amount;
-                 await savingsData.save();
+                let savingsData = await bankSchema.findOne({ userId });
+                if (!savingsData) savingsData = await bankSchema.create({ userId, balance: 0 });
+                savingsData.balance += amount;
+                await savingsData.save();
 
-                 const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Gửi Tiết Kiệm Thành Công')
+                const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Gửi Tiết Kiệm Thành Công')
                     .setDescription(`Bạn đã gửi thành công **${amount.toLocaleString()} ${currency}** vào tài khoản tiết kiệm của mình.`)
                     .addFields({ name: 'Số dư tiết kiệm mới', value: `${savingsData.balance.toLocaleString()} ${currency}` });
-                 await interaction.editReply({ embeds: [embed] });
+                await interaction.editReply({ embeds: [embed] });
 
-             } else if (subcommand === 'balance') {
-                 let savingsData = await bankSchema.findOne({ userId });
-                 const balance = savingsData ? savingsData.balance : 0;
-                 const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Số Dư Tài Khoản Tiết Kiệm')
+            } else if (subcommand === 'balance') {
+                let savingsData = await bankSchema.findOne({ userId });
+                const balance = savingsData ? savingsData.balance : 0;
+                const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Số Dư Tài Khoản Tiết Kiệm')
                     .setDescription(`Số dư tiết kiệm của bạn là: **${balance.toLocaleString()} ${currency}**`);
-                 await interaction.editReply({ embeds: [embed] });
-             }
+                await interaction.editReply({ embeds: [embed] });
+            }
 
         } else if (subcommand === 'sell') {
             const produceName = interaction.options.getString('produce');
             const quantityInput = interaction.options.getString('quantity');
             const seed = seeds[produceName];
-            
+
+            if (!seed) return interaction.editReply({ content: '❌ Loại nông sản không hợp lệ.' });
+
             const userFarm = await getUserFarm(userId);
             const item = userFarm.items.find(i => i.name === seed.name && i.type === 'produce');
 
             if (!item || item.quantity === 0) return interaction.editReply({ content: `Bạn không có ${seed.name} để bán.` });
-            
+
             let quantity;
             if (quantityInput.toLowerCase() === 'all') quantity = item.quantity;
             else {
