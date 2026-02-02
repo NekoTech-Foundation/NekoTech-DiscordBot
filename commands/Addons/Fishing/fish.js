@@ -355,61 +355,78 @@ async function handleFish(interaction, config, fishingLang) {
     let usedBaitKey = userFishing.equippedBait;
     const availableBaits = userFishing.baits.filter(b => b.quantity > 0);
 
+    // Always use Select Menu if there are baits, for consistency and capacity
     if (availableBaits.length > 0) {
-        const baitButtons = availableBaits.slice(0, 4).map(baitInInventory => {
+        // Prepare options for Select Menu
+        const baitOptions = availableBaits.slice(0, 25).map(baitInInventory => {
             const baitDetails = getBaitConfigByName(baitInInventory.name);
             if (!baitDetails) return null;
-            return new ButtonBuilder()
-                .setCustomId(`use_bait_${baitDetails.key}`)
-                .setLabel(`${baitInInventory.name} (${baitInInventory.quantity})`)
-                .setStyle(ButtonStyle.Secondary)
-                .setEmoji('🪱');
+            const isEquipped = baitDetails.key === usedBaitKey;
+            return {
+                label: `${baitInInventory.name} (${baitInInventory.quantity})`,
+                description: isEquipped ? 'Đang trang bị' : 'Chọn để sử dụng',
+                value: baitDetails.key,
+                emoji: '🪱',
+                default: isEquipped
+            };
         }).filter(b => b);
 
-        const noBaitButton = new ButtonBuilder()
-            .setCustomId('no_bait')
-            .setLabel(fishingLang.UI.NoBaitButton)
-            .setStyle(ButtonStyle.Primary)
-            .setEmoji('❌');
-
-        const row = new ActionRowBuilder().addComponents(...baitButtons, noBaitButton);
-
-        const baitEmbed = new EmbedBuilder()
-            .setColor('#3498DB')
-            .setTitle(fishingLang.UI.SelectBaitTitle)
-            .setDescription(fishingLang.UI.SelectBaitDesc)
-            .setFooter({ text: fishingLang.UI.SelectBaitFooter });
-
-        const baitMessage = await interaction.editReply({
-            embeds: [baitEmbed],
-            components: [row],
-            fetchReply: true
-        });
-
-        try {
-            const buttonInteraction = await baitMessage.awaitMessageComponent({
-                filter: i => i.user.id === userId,
-                componentType: ComponentType.Button,
-                time: 30000
+        if (baitOptions.length > 0) {
+            // Add "No Bait" option
+            baitOptions.unshift({
+                label: fishingLang.UI.NoBaitButton || 'Không dùng mồi',
+                description: 'Câu cá không cần mồi',
+                value: 'no_bait',
+                emoji: '❌'
             });
 
-            if (buttonInteraction.customId.startsWith('use_bait_')) {
-                usedBaitKey = buttonInteraction.customId.replace('use_bait_', '');
-            } else {
-                usedBaitKey = null;
+            const selectMenu = new StringSelectMenuBuilder()
+                .setCustomId('select_bait_action')
+                .setPlaceholder('Chọn mồi câu...')
+                .addOptions(baitOptions);
+
+            const row = new ActionRowBuilder().addComponents(selectMenu);
+
+            const baitEmbed = new EmbedBuilder()
+                .setColor('#3498DB')
+                .setTitle(fishingLang.UI.SelectBaitTitle)
+                .setDescription(fishingLang.UI.SelectBaitDesc)
+                .setFooter({ text: fishingLang.UI.SelectBaitFooter });
+
+            const baitMessage = await interaction.editReply({
+                embeds: [baitEmbed],
+                components: [row],
+                fetchReply: true
+            });
+
+            try {
+                const selectionInteraction = await baitMessage.awaitMessageComponent({
+                    filter: i => i.user.id === userId,
+                    componentType: ComponentType.StringSelect,
+                    time: 30000
+                });
+
+                const selectedValue = selectionInteraction.values[0];
+                if (selectedValue === 'no_bait') {
+                    usedBaitKey = null;
+                } else {
+                    usedBaitKey = selectedValue;
+                }
+
+                const fishingEmbed = new EmbedBuilder()
+                    .setColor('#2ECC71')
+                    .setDescription(fishingLang.UI.CastingLine);
+
+                await selectionInteraction.update({ embeds: [fishingEmbed], components: [] });
+            } catch (error) {
+                // Timeout or error
+                const timeoutEmbed = new EmbedBuilder()
+                    .setColor('#95A5A6')
+                    .setDescription(fishingLang.UI.Timeout.replace('{bait}', usedBaitKey ? (config.baits[usedBaitKey]?.name || 'Không có') : 'Không có'));
+
+                // If timed out, proceed with currently equipped/default bait
+                await interaction.editReply({ embeds: [timeoutEmbed], components: [] });
             }
-
-            const fishingEmbed = new EmbedBuilder()
-                .setColor('#2ECC71')
-                .setDescription(fishingLang.UI.CastingLine);
-
-            await buttonInteraction.update({ embeds: [fishingEmbed], components: [] });
-        } catch (error) {
-            const timeoutEmbed = new EmbedBuilder()
-                .setColor('#95A5A6')
-                .setDescription(fishingLang.UI.Timeout.replace('{bait}', usedBaitKey ? config.baits[usedBaitKey].name : 'Không có'));
-
-            await interaction.editReply({ embeds: [timeoutEmbed], components: [] });
         }
     }
 
