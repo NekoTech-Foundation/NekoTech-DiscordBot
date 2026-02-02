@@ -445,6 +445,9 @@ module.exports = async (client, message) => {
                         getSubcommand: function () {
                             return subcommandName;
                         },
+                        getSubcommandGroup: function () {
+                            return null;
+                        },
                         getString: function (name) {
                             return this._parsed[name] || null;
                         },
