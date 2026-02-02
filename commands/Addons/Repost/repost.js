@@ -14,17 +14,26 @@ function formatNumber(num) {
 }
 
 async function handleTikTok(interaction, url) {
+    // Basic validation
+    const tiktokRegex = /^https?:\/\/((?:www|vm|vt)\.)?tiktok\.com\//i;
+    if (!tiktokRegex.test(url)) {
+        return interaction.reply({
+            content: '❌ Link không hợp lệ! Vui lòng cung cấp link TikTok đúng định dạng (vd: https://www.tiktok.com/@user/video/...)',
+            ephemeral: true
+        });
+    }
+
     await interaction.deferReply();
 
     try {
         // Thử v1 trước
         let downloaderResponse = await tiktok.Downloader(url, { version: "v1" });
-        
+
         // Nếu v1 fail, thử v2
         if (downloaderResponse.status === 'error') {
             downloaderResponse = await tiktok.Downloader(url, { version: "v2" });
         }
-        
+
         // Nếu v2 fail, thử v3
         if (downloaderResponse.status === 'error') {
             downloaderResponse = await tiktok.Downloader(url, { version: "v3" });
@@ -35,7 +44,7 @@ async function handleTikTok(interaction, url) {
         }
 
         const videoData = downloaderResponse.result;
-        
+
         // Lấy video URL
         let videoUrl;
         if (videoData.video) {
@@ -57,19 +66,19 @@ async function handleTikTok(interaction, url) {
         });
 
         const videoBuffer = Buffer.from(videoResponse.data);
-        
+
         // Kiểm tra kích thước file
         const fileSizeMB = videoBuffer.length / (1024 * 1024);
-        
+
         if (fileSizeMB > 25) {
             // File quá lớn
             const authorName = videoData.author?.nickname || 'Unknown';
             const authorUsername = videoData.author?.uniqueId || videoData.author?.username || 'unknown';
             const description = videoData.desc || 'No description';
-            
+
             const embed = new EmbedBuilder()
                 .setColor('#ff0000')
-                .setAuthor({ 
+                .setAuthor({
                     name: `${authorName} (@${authorUsername})`,
                     iconURL: videoData.author?.avatarThumb?.[0]
                 })
@@ -98,7 +107,7 @@ async function handleTikTok(interaction, url) {
         const authorName = videoData.author?.nickname || 'Unknown';
         const authorUsername = videoData.author?.uniqueId || videoData.author?.username || 'unknown';
         const description = videoData.desc || 'No description';
-        
+
         // Lấy statistics
         const stats = videoData.statistics || {};
         const likes = formatNumber(stats.likeCount || 0);
@@ -108,7 +117,7 @@ async function handleTikTok(interaction, url) {
 
         const embed = new EmbedBuilder()
             .setColor('#000000')
-            .setAuthor({ 
+            .setAuthor({
                 name: `${authorName} (@${authorUsername})`,
                 iconURL: videoData.author?.avatarThumb?.[0],
                 url: videoData.author?.url || `https://www.tiktok.com/@${authorUsername}`
@@ -117,10 +126,13 @@ async function handleTikTok(interaction, url) {
             .setFooter({ text: `❤️ ${likes} • 👁️ ${views} • 🗨️ ${comments} • 🔄 ${shares}` })
             .setTimestamp(new Date(videoData.createTime * 1000));
 
+        const urlObj = new URL(url);
+        const urlPath = urlObj.pathname;
+
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId(`repost-info-${encodeURIComponent(url)}`)
+                    .setCustomId(`repost-info-${encodeURIComponent(urlPath)}`)
                     .setLabel('Info')
                     .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
@@ -141,18 +153,6 @@ async function handleTikTok(interaction, url) {
     }
 }
 
-async function handleYouTube(interaction, url) {
-    await interaction.deferReply();
-
-    try {
-        await interaction.editReply(`Reposting YouTube video:\n${url}`);
-    } catch (error) {
-        console.error('Lỗi khi xử lý video YouTube:', error);
-        await interaction.editReply('Đã có lỗi xảy ra khi đang xử lý video YouTube.');
-    }
-}
-
 module.exports = {
     handleTikTok,
-    handleYouTube,
 };

@@ -253,7 +253,11 @@ async function handleButtonInteraction(client, interaction) {
 
             if (subAction === 'info') {
                 await interaction.deferReply({ ephemeral: true });
-                const originalUrl = decodeURIComponent(parts.slice(2).join('-')); // Reconstruct the URL from parts
+                let originalUrl = decodeURIComponent(parts.slice(2).join('-')); // Reconstruct the URL from parts
+
+                if (originalUrl && !originalUrl.startsWith('http')) {
+                    originalUrl = `https://www.tiktok.com${originalUrl}`;
+                }
 
                 if (!originalUrl) {
                     return interaction.editReply('Không thể tìm thấy URL gốc để lấy thông tin.');

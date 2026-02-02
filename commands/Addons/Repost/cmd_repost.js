@@ -14,15 +14,6 @@ module.exports = {
                     option.setName('url')
                         .setDescription('Link video TikTok.')
                         .setRequired(true))
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('youtube')
-                .setDescription('Repost một video từ YouTube.')
-                .addStringOption(option =>
-                    option.setName('url')
-                        .setDescription('Link video YouTube.')
-                        .setRequired(true))
         ),
     async execute(interaction) {
         const enabledCommands = getCommands();
@@ -34,9 +25,6 @@ module.exports = {
         if (subcommand === 'tiktok') {
             const url = interaction.options.getString('url');
             await repost.handleTikTok(interaction, url);
-        } else if (subcommand === 'youtube') {
-            const url = interaction.options.getString('url');
-            await repost.handleYouTube(interaction, url);
         }
     },
 };
