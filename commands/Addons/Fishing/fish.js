@@ -293,10 +293,36 @@ async function handleFish(interaction, config, fishingLang) {
     await interaction.deferReply();
 
     let locationKey = interaction.options.getString('location');
+    let location;
+
     if (!locationKey) {
         locationKey = Object.keys(config.locations)[0];
+        location = config.locations[locationKey];
+    } else {
+        // 1. Try Key
+        location = config.locations[locationKey];
+
+        // 2. Try Name (Case insensitive)
+        if (!location) {
+            const lowerKey = locationKey.toLowerCase();
+            location = Object.values(config.locations).find(loc => loc.name.toLowerCase() === lowerKey);
+        }
+
+        // 3. Try Partial Name matching (for cases like "Dai Duong" vs "Đại Dương" or just "Dai")
+        if (!location) {
+            const lowerKey = locationKey.toLowerCase();
+            location = Object.values(config.locations).find(loc => loc.name.toLowerCase().includes(lowerKey));
+        }
     }
-    const location = config.locations[locationKey];
+
+    if (!location) {
+        return interaction.editReply({
+            embeds: [new EmbedBuilder()
+                .setColor('#E74C3C')
+                .setDescription(`❌ Không tìm thấy địa điểm **${locationKey}**. Vui lòng chọn địa điểm hợp lệ.`)
+            ]
+        });
+    }
 
     const userFishing = await getUserFishing(userId);
     const equippedRodKey = userFishing.equippedRod;
