@@ -196,11 +196,12 @@ client.commands = new Map();
 
 require("./utils.js")(client);
 // Start SePay Webhook Server
-const { startWebhookServer } = require('./utils/sepayWebhook');
+// Start SePay Webhook Server
+// const { startWebhookServer } = require('./utils/sepayWebhook');
 // Use configured port or default to 3000
 // Whitelabel instances will have their own port set in config
-const webhookPort = global.config.SePay && global.config.SePay.Port ? global.config.SePay.Port : 3000;
-startWebhookServer(client, webhookPort);
+// const webhookPort = global.config.SePay && global.config.SePay.Port ? global.config.SePay.Port : 3000;
+// startWebhookServer(client, webhookPort);
 
 // Whitelabel Expiry Check (Only Main Bot needs to run this)
 if (!global.config.IsWhitelabel) {

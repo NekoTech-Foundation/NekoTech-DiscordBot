@@ -99,7 +99,7 @@ module.exports = {
 async function getStickyConfig(guildId, channelId) {
     let config = await StickyMessage.findOne({ guildId, channelId });
     if (!config) {
-        config = new StickyMessage({ guildId, channelId, content: '' });
+        config = await StickyMessage.create({ guildId, channelId, content: '' });
     }
     return config;
 }

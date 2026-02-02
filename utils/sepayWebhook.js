@@ -60,6 +60,10 @@ const startWebhookServer = (client, port = 3000) => {
         const data = req.body;
         console.log('[SePay Webhook] Received data:', data);
 
+        if (!data || typeof data !== 'object') {
+            return res.status(400).send('Invalid Body');
+        }
+
         const accNum = data.accountNumber;
         if (!accNum) {
             return res.status(400).send('Missing accountNumber');

@@ -20,7 +20,7 @@ class StickyManager {
         // Let's ignore self (client.user.id) mostly. But to be safe, ignore bots for now.
         if (message.author.bot) return;
 
-        const config = await StickyMessage.findOne({ channelId: message.channel.id });
+        const config = await StickyMessage.findOne({ guildId: message.guild.id, channelId: message.channel.id });
         if (!config) return;
 
         // Clear existing timer if any (for ChatInactive mode)
