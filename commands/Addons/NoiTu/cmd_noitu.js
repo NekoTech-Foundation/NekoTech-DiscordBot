@@ -4,6 +4,8 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 const { checkWord } = require('./vocabApi');
+const WordChainSession = require('../../../models/WordChainSession');
+const WordChainStats = require('../../../models/WordChainStats');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -179,29 +181,49 @@ async function handleSetup(interaction, config, client) {
         } else if (i.customId === 'noitu_confirm') {
             if (!client.noiTuGames) client.noiTuGames = new Map();
 
-            client.noiTuGames.set(setupData.channelId, {
-                guildId: guildId,
-                channelId: setupData.channelId,
-                currentWord: null,
-                lastLetter: null,
-                lastUserId: null,
-                lastUsername: null,
-                usedWords: new Set(),
-                totalWords: 0,
-                startedAt: Date.now()
-            });
+            // Persistence: Create/Update Session in DB
+            try {
+                let session = await WordChainSession.findOne({ guildId, channelId: setupData.channelId });
+                if (!session) {
+                    session = await WordChainSession.create({
+                        guildId: guildId,
+                        channelId: setupData.channelId,
+                        usedWords: [] // Init with empty array
+                    });
+                }
 
-            const successEmbed = new EmbedBuilder()
-                .setColor('#2ecc71')
-                .setTitle('✅ Thiết Lập Thành Công!')
-                .setDescription(
-                    `**Kênh:** <#${setupData.channelId}>\n\n` +
-                    `Người chơi có thể bắt đầu bằng cách gửi bất kỳ từ nào vào kênh!`
-                )
-                .setFooter({ text: 'Chúc chơi game vui vẻ!' });
+                // Set in Memory with Set for logic
+                const usedWordsSet = new Set(session.usedWords || []);
+                const gameObj = {
+                    ...session,
+                    usedWords: session.usedWords || [],
+                    usedWordsSet: usedWordsSet,
+                    save: session.save,
+                    currentWord: session.currentWord || null,
+                    lastLetter: session.lastLetter || null,
+                    lastUserId: session.lastUserId || null,
+                    lastUsername: session.lastUsername || null,
+                    totalWords: session.totalWords || 0,
+                    startedAt: session.startedAt || Date.now()
+                };
 
-            await i.update({ embeds: [successEmbed], components: [] });
-            collector.stop();
+                client.noiTuGames.set(setupData.channelId, gameObj);
+
+                const successEmbed = new EmbedBuilder()
+                    .setColor('#2ecc71')
+                    .setTitle('✅ Thiết Lập Thành Công!')
+                    .setDescription(
+                        `**Kênh:** <#${setupData.channelId}>\n\n` +
+                        `Người chơi có thể bắt đầu bằng cách gửi bất kỳ từ nào vào kênh!`
+                    )
+                    .setFooter({ text: 'Chúc chơi game vui vẻ!' });
+
+                await i.update({ embeds: [successEmbed], components: [] });
+                collector.stop();
+            } catch (err) {
+                console.error('[NoiTu] Setup DB Error:', err);
+                await i.update({ content: '❌ Lỗi khi lưu cấu hình vào cơ sở dữ liệu.', embeds: [], components: [] });
+            }
 
         } else if (i.customId === 'noitu_cancel') {
             const cancelEmbed = new EmbedBuilder()
@@ -215,7 +237,7 @@ async function handleSetup(interaction, config, client) {
     });
 
     collector.on('end', () => {
-        message.edit({ components: [] }).catch(() => {});
+        message.edit({ components: [] }).catch(() => { });
     });
 }
 
@@ -229,6 +251,8 @@ async function handleStop(interaction, client) {
         });
     }
 
+    // Persistence: Delete from DB
+    await WordChainSession.deleteOne({ guildId: interaction.guild.id, channelId: interaction.channel.id });
     client.noiTuGames.delete(interaction.channel.id);
 
     const embed = new EmbedBuilder()
@@ -254,13 +278,30 @@ async function handleReset(interaction, client) {
         });
     }
 
-    const oldCount = game.usedWords.size;
-    game.usedWords.clear();
+    const oldCount = game.usedWordsSet ? game.usedWordsSet.size : (game.usedWords ? game.usedWords.length : 0);
+
+    // Memory Reset
+    if (game.usedWordsSet) game.usedWordsSet.clear();
+    game.usedWords = [];
     game.currentWord = null;
     game.lastLetter = null;
     game.lastUserId = null;
     game.lastUsername = null;
     game.totalWords = 0;
+
+    // DB Sync
+    if (game.save) {
+        await game.save();
+    } else {
+        // Fallback update
+        await WordChainSession.findOneAndUpdate(
+            { guildId: interaction.guild.id, channelId: interaction.channel.id },
+            {
+                usedWords: [], currentWord: null, lastLetter: null,
+                lastUserId: null, lastUsername: null, totalWords: 0
+            }
+        );
+    }
 
     const embed = new EmbedBuilder()
         .setColor('#f39c12')
@@ -275,16 +316,11 @@ async function handleReset(interaction, client) {
 
 // Stats command
 async function handleStats(interaction, client) {
-    const channelStats = client.noiTuStats?.get(interaction.channel.id);
-    if (!channelStats || channelStats.size === 0) {
-        return interaction.reply({
-            content: '📊 Chưa có thống kê nào trong kênh này!',
-            ephemeral: true
-        });
-    }
+    const channelId = interaction.channel.id;
+    const userId = interaction.user.id; // Corrected: was checking user in cache, now DB.
 
-    const userId = interaction.user.id;
-    const userStats = channelStats.get(userId);
+    // Fetch directly from DB
+    const userStats = await WordChainStats.findOne({ guildId: interaction.guild.id, channelId, userId });
 
     if (!userStats) {
         return interaction.reply({
@@ -298,7 +334,7 @@ async function handleStats(interaction, client) {
 
     const embed = new EmbedBuilder()
         .setColor('#3498db')
-        .setTitle(`📊 Thống Kê Của ${userStats.username}`)
+        .setTitle(`📊 Thống Kê Của ${userStats.username || 'User'}`)
         .addFields(
             { name: '✅ Từ đúng', value: `${userStats.correctWords}`, inline: true },
             { name: '❌ Từ sai', value: `${userStats.wrongWords}`, inline: true },
@@ -312,22 +348,24 @@ async function handleStats(interaction, client) {
 
 // Leaderboard command
 async function handleLeaderboard(interaction, client) {
-    const channelStats = client.noiTuStats?.get(interaction.channel.id);
-    if (!channelStats || channelStats.size === 0) {
+    // Fetch directly from DB
+    const channelStats = await WordChainStats.find({ guildId: interaction.guild.id, channelId: interaction.channel.id });
+
+    if (!channelStats || channelStats.length === 0) {
         return interaction.reply({
             content: '📊 Chưa có dữ liệu để xếp hạng!',
             ephemeral: true
         });
     }
 
-    const rankings = Array.from(channelStats.entries())
-        .map(([userId, stats]) => ({
-            userId,
+    const rankings = channelStats
+        .map(stats => ({
+            userId: stats.userId,
             username: stats.username,
             correctWords: stats.correctWords,
             wrongWords: stats.wrongWords,
             total: stats.correctWords + stats.wrongWords,
-            accuracy: stats.correctWords + stats.wrongWords > 0 
+            accuracy: (stats.correctWords + stats.wrongWords) > 0
                 ? ((stats.correctWords / (stats.correctWords + stats.wrongWords)) * 100).toFixed(1)
                 : 0
         }))
@@ -338,7 +376,7 @@ async function handleLeaderboard(interaction, client) {
     const leaderboardText = rankings
         .map((player, index) => {
             const medal = medals[index] || `${index + 1}.`;
-            return `${medal} **${player.username}** - ${player.correctWords} từ đúng (${player.accuracy}%)`;
+            return `${medal} **${player.username || `<@${player.userId}>`}** - ${player.correctWords} từ đúng (${player.accuracy}%)`;
         })
         .join('\n');
 
@@ -400,7 +438,7 @@ async function handleHint(interaction, client) {
         .setTitle('💡 Gợi Ý')
         .setDescription(
             `**Chữ cái bắt đầu:** ${game.lastLetter.toUpperCase()}\n\n` +
-            (unusedHints.length > 0 
+            (unusedHints.length > 0
                 ? `**Một số từ gợi ý:** ${unusedHints.slice(0, 3).join(', ')}`
                 : `**Gợi ý:** Tìm từ bắt đầu bằng "${game.lastLetter.toUpperCase()}"`)
         );
