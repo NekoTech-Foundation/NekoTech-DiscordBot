@@ -278,10 +278,13 @@ async function handleVoiceGreetings(oldState, newState) {
     // Helper to replace placeholders
     const replaceMsg = (msg, member, channel) => {
         const userName = config.pingUser !== false ? `<@${member.id}>` : `**${member.user.displayName}**`;
+        const channelName = channel ? channel.name : 'Unknown Channel';
+        const guildName = member.guild ? member.guild.name : 'Unknown Server';
+
         return msg
             .replace(/{user}/g, userName)
-            .replace(/{channel}/g, channel.name)
-            .replace(/{guildName}/g, member.guild.name);
+            .replace(/{channel}/g, channelName)
+            .replace(/{guildName}/g, guildName);
     };
 
     // User Joined
@@ -389,7 +392,7 @@ async function restoreVoiceSessions(client) {
                         if (!activeVoiceSessions.has(memberId)) {
                             activeVoiceSessions.set(memberId, now);
                         }
-                        
+
                         // Restore XP Timer
                         if (!voiceXpTimers.has(memberId)) {
                             const timer = setInterval(() => handleVoiceXP(client, member), interval);

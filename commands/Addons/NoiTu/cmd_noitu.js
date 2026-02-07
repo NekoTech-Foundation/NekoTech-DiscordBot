@@ -50,7 +50,12 @@ module.exports = {
 
         // Admin commands
         if (['setup', 'stop', 'reset'].includes(subcommand)) {
-            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+            const hasAdmin = interaction.member &&
+                interaction.member.permissions &&
+                typeof interaction.member.permissions.has === 'function' &&
+                interaction.member.permissions.has(PermissionFlagsBits.Administrator);
+
+            if (!hasAdmin) {
                 return interaction.reply({
                     content: '❌ Bạn cần quyền Administrator để sử dụng lệnh này!',
                     ephemeral: true
