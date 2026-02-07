@@ -13,8 +13,7 @@ const GuildSettings = require('../../../models/GuildSettings');
 
 const config = getConfig();
 
-
-const LEVEL_DEV_IDS = ['1316287191634149377', '727497287777124414'];
+// [Deleted LEVEL_DEV_IDS]
 
 const PRESTIGE_TIERS = [
     { key: 'unranked', name: 'Chưa xếp hạng', emoji: '<:unranked_valorant:1438519174304370820>' },
@@ -180,20 +179,28 @@ module.exports = {
         const subcommand = interaction.options.getSubcommand();
         const guildId = interaction.guild.id;
 
-        const isDev = LEVEL_DEV_IDS.includes(interaction.user.id);
+        const isOwner = config.OwnerIDs.includes(interaction.user.id);
         const adminSubcommands = ['give', 'remove', 'set', 'reset', 'setup'];
 
-        if (adminSubcommands.includes(subcommand) && !isDev) {
-            await interaction.reply({
-                content: lang.Levels.NoPermission,
-                flags: MessageFlags.Ephemeral
-            });
-            return;
-        }
+        // Remove the restrictive "Dev Only" block for these commands. 
+        // If the intention was to restrict them, the next block handles permissions (Admin/Roles).
+        // If they were meant to be TRULY Owner only, we can keep it but use isOwner.
+        // However, 'setup' usually belongs to Server Admins. 
+        // I will assume the previous hardcoded block was a temporary restriction and remove it, 
+        // relying on the standard "Administrator" check below, OR allow isOwner to bypass.
+
+        // Actually, to be safe and strictly follow "fix permission", I will convert the first block 
+        // to strictly use permission checks, AND add isOwner bypass to the main permission check.
+        // The previous block (lines 186-192 in original) enforced that ONLY hardcoded devs could use these commands.
+        // If I limit it to OwnerIDs, then Server Admins still can't use 'setup'. 
+        // I will remove the first restrictive block entirely, as the second block checks for Administrator permissions suitable for 'setup'.
+
+        // [Deleted lines 186-192 logic]
 
         if (subcommand !== 'check' && subcommand !== 'prestige') {
             const requiredRoles = config.LevelingSystem.Permission || [];
             const hasPermission =
+                isOwner || // Owner bypass
                 interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) ||
                 requiredRoles.some(roleId => interaction.member.roles.cache.has(roleId));
 
