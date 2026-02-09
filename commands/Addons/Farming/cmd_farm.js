@@ -19,6 +19,13 @@ function formatEffect(effect) {
     return parts.join(', ');
 }
 
+// Helper for random quotes
+function getRandomQuote(farmingLang) {
+    if (!farmingLang.Quotes || !Array.isArray(farmingLang.Quotes)) return "";
+    const quotes = farmingLang.Quotes;
+    return quotes[Math.floor(Math.random() * quotes.length)];
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('farm')
@@ -280,9 +287,15 @@ module.exports = {
 
             let reply = farmingLang.UI.PlantSuccess.replace('{quantity}', quantity).replace('{emoji}', seed.emoji).replace('{name}', seed.name);
             if (mutation) {
-                // Use format?
-                reply += `\n✨ **Đột biến**: ${mutation.emoji} ${mutation.name} (Do thời tiết ${currentWeather.emoji} ${currentWeather.name})`;
+                reply += farmingLang.UI.PlantMutation
+                    .replace('{emoji}', mutation.emoji)
+                    .replace('{name}', mutation.name)
+                    .replace('{weatherEmoji}', currentWeather.emoji)
+                    .replace('{weatherName}', currentWeather.name);
             }
+            // Append random quote
+            reply += `\n\n> *"${getRandomQuote(farmingLang)}"*`;
+
             await interaction.editReply({ content: reply });
 
         } else if (subcommand === 'harvest') {
@@ -354,7 +367,18 @@ module.exports = {
                 harvestReport.push(`- ${fmtName}`);
             }
 
-            let replyContent = farmingLang.UI.HarvestSuccess + '\n' + harvestReport.join('\n');
+            let replyContent = farmingLang.UI.HarvestSuccess;
+            harvestReport.forEach(line => { replyContent += `${line}\n`; });
+
+            if (totalBonusMoney > 0) {
+                replyContent += farmingLang.UI.HarvestBonus.replace('{mutations}', mutationDetails.join(', ')).replace('{amount}', totalBonusMoney.toLocaleString());
+            } else if (mutationDetails.length > 0) {
+                replyContent += farmingLang.UI.HarvestMutationOnly.replace('{mutations}', mutationDetails.join(', '));
+            }
+
+            // Append random quote
+            replyContent += `\n\n> *"${getRandomQuote(farmingLang)}"*`;
+
             const sellAllButton = new ButtonBuilder()
                 .setCustomId('sell_all_harvested')
                 .setLabel(farmingLang.UI.SellAllButton)
@@ -367,7 +391,9 @@ module.exports = {
         } else if (subcommand === 'field') {
             // (Field logic mostly cosmetic, ensuring display uses new mutations if stored on plant)
             const userPlants = await plantSchema.find({ userId });
-            const embed = new EmbedBuilder().setColor('#00ff00').setTitle(farmingLang.UI.FieldTitle);
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle(farmingLang.UI.FieldTitle.replace('{user}', interaction.user.username));
 
             if (userPlants.length === 0) {
                 embed.setDescription(farmingLang.UI.FieldEmpty);
