@@ -59,9 +59,9 @@ async function handleVoiceTracking(oldState, newState) {
     // Let's check BOTH.
 
     // Check if user WAS active
-    const wasActive = oldState.channelId && !isIgnored(oldState) && !oldState.selfMute && !oldState.serverMute;
+    const wasActive = oldState.channelId && !isIgnored(oldState);
     // Check if user IS active
-    const isActive = newState.channelId && !isIgnored(newState) && !newState.selfMute && !newState.serverMute;
+    const isActive = newState.channelId && !isIgnored(newState);
 
     // SCENARIO 1: Session End (Left, or became inactive)
     if (wasActive && (!isActive || oldState.channelId !== newState.channelId)) {
