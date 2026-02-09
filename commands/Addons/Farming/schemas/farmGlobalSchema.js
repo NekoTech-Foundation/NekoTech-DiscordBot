@@ -5,7 +5,9 @@ const defaultData = (query) => ({
     currentWeather: null,
     weatherStartTime: Date.now(),
     weatherEndTime: Date.now() + 3600000,
-    activeMutationRate: 0
+    activeMutationRate: 0,
+    storeNextRestock: 0,
+    currentStockLimits: {}
 });
 
 module.exports = new SQLiteModel('farming_global', 'identifier', defaultData);

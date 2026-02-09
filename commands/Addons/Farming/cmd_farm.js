@@ -77,13 +77,11 @@ module.exports = {
                     const choices = Object.keys(config.Store['Phân bón'] || {}).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
                     return option.setName('ten_phan_bon').setDescription('🧪 Loại phân bón muốn dùng').setRequired(true).addChoices(...choices);
                 })
-                .addStringOption(option => {
-                    // This could also be autocompleted to show only planted crops, but static choice is okay for now or upgrade later.
-                    // Let's stick to choices for simplicity unless requested, but wait, if huge list, autocomplete is better.
-                    // User mainly asked for inventory/seed vars. Let's keep choices for now to avoid over-engineering in one step.
-                    const choices = Object.keys(seeds).map(seed => ({ name: seeds[seed].name, value: seed }));
-                    return option.setName('ten_cay').setDescription('🌿 Loại cây muốn bón (để trống để bón tất cả)').setRequired(false).addChoices(...choices);
-                }))
+                .addStringOption(option =>
+                    option.setName('ten_cay')
+                        .setDescription('🌿 Loại cây muốn bón (để trống để bón tất cả)')
+                        .setRequired(false)
+                        .setAutocomplete(true)))
         .addSubcommandGroup(group =>
             group.setName('savings')
                 .setDescription('💰 Ngân hàng tiết kiệm')
@@ -203,6 +201,32 @@ module.exports = {
                     }
                 }
             }
+        }
+
+        // 5. Fertilizer (Plant Selection)
+        else if (focusedOption.name === 'ten_cay') {
+            const planted = await plantSchema.find({ userId });
+            const uniquePlants = [...new Set(planted.map(p => p.plant))];
+
+            let choices = uniquePlants.map(plantKey => {
+                const seedInfo = seeds[plantKey] || Object.values(seeds).find(s => s.name === plantKey);
+                const count = planted.filter(p => p.plant === plantKey).reduce((a, b) => a + b.quantity, 0);
+
+                return {
+                    name: `${seedInfo ? seedInfo.name : plantKey} (Đang trồng: ${count})`,
+                    value: plantKey
+                };
+            });
+
+            // Add "All" option (value empty string to trigger 'fetch all' logic)
+            if (planted.length > 0) {
+                choices.unshift({ name: '🌱 Bón cho tất cả cây trồng', value: '' });
+            } else {
+                choices.push({ name: 'Chưa có cây trồng nào', value: 'none' });
+            }
+
+            const filtered = choices.filter(c => c.name.toLowerCase().includes(focusedOption.value.toLowerCase()));
+            await interaction.respond(filtered.slice(0, 25));
         }
     },
 
@@ -631,14 +655,19 @@ module.exports = {
             const hasProduce = await removeFromFarm(userId, produceName, quantity, 'produce', item.mutation);
             if (!hasProduce) return interaction.editReply({ content: 'Lỗi khi trừ vật phẩm.' });
 
-            let sellPrice = Math.floor(seedData.price * 0.8);
+            // Use sellPrice from seed data
+            let sellPrice = seedData.sellPrice || Math.floor(seedData.price * 0.5);
 
             // Apply Mutation Price Multiplier
             if (item.mutation && item.mutation.effect && item.mutation.effect.price) {
                 sellPrice = Math.floor(sellPrice * item.mutation.effect.price);
             }
 
-            const totalGain = sellPrice * quantity;
+            const grossGain = sellPrice * quantity;
+            // Apply 5% transaction tax
+            const taxRate = 0.05;
+            const taxAmount = Math.floor(grossGain * taxRate);
+            const totalGain = grossGain - taxAmount;
 
             let economyData = await EconomyUserData.findOne({ userId });
             if (!economyData) economyData = await EconomyUserData.create({ userId });
@@ -646,7 +675,7 @@ module.exports = {
             await economyData.save();
 
             const embed = new EmbedBuilder().setColor('#00ff00').setTitle('Bán Nông Sản Thành Công')
-                .setDescription(`Bạn đã bán thành công ${formatPlantName(produceName, item.mutation, quantity)} với giá ${totalGain.toLocaleString()} 💰.`);
+                .setDescription(`Bạn đã bán thành công ${formatPlantName(produceName, item.mutation, quantity)}.\n💰 Tổng: **${grossGain.toLocaleString()}** xu\n📊 Thuế (5%): **-${taxAmount.toLocaleString()}** xu\n✅ Nhận: **${totalGain.toLocaleString()}** xu`);
             await interaction.editReply({ embeds: [embed] });
         }
     }

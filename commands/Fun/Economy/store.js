@@ -9,7 +9,7 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
 const { getUserFishing, loadConfig: loadFishingConfig } = require('../../Addons/Fishing/fishingUtils.js');
-const { getUserFarm } = require('../../Addons/Farming/farmUtils.js');
+const { getUserFarm, checkStoreRestock, seeds } = require('../../Addons/Farming/farmUtils.js');
 
 
 // Import vé số addon nếu có
@@ -62,7 +62,22 @@ module.exports = {
                 return;
             }
 
-            const items = Object.values(config.Store[category]);
+            let items = [];
+            if (category === 'Hạt Giống') {
+                items = Object.entries(seeds)
+                    .filter(([key, seed]) => seed.restockChance > 0)
+                    .map(([key, seed]) => ({
+                        Name: seed.name,
+                        Price: seed.price,
+                        Key: key,
+                        Type: 'Seed',
+                        Description: `Độ hiếm: ${seed.rarity}`,
+                        GrowthTime: seed.growthTime,
+                        Stock: undefined
+                    }));
+            } else {
+                items = Object.values(config.Store[category] || {});
+            }
             items.sort((a, b) => a.Price - b.Price);
 
             if (!items || items.length === 0) {
@@ -136,11 +151,27 @@ module.exports = {
                 let userData = await EconomyUserData.findOne({ userId: interaction.user.id });
                 const userBalance = userData ? userData.balance : 0;
 
-                embed.setDescription(`💳 **Số dư của bạn:** ${userBalance.toLocaleString()} xu\n\nChào mừng đến với cửa hàng! Hãy chọn vật phẩm bạn muốn mua.`);
+                // Fetch Global Restock State
+                const globalState = await checkStoreRestock();
+                const nextRestockTime = globalState.storeNextRestock;
+                const now = Date.now();
+                const timeRemaining = nextRestockTime - now;
+                const minutes = Math.floor(timeRemaining / 60000);
+                const seconds = Math.floor((timeRemaining % 60000) / 1000);
+                const timeString = timeRemaining > 0 ? `${minutes}m ${seconds}s` : 'Đang Restock...';
+
+                embed.setDescription(`💳 **Số dư của bạn:** ${userBalance.toLocaleString()} xu\n⏳ **Restock sau:** ${timeString}\n\nChào mừng đến với cửa hàng! Hãy chọn vật phẩm bạn muốn mua.`);
 
                 const start = currentPage * itemsPerPage;
                 const end = start + itemsPerPage;
                 const currentItems = items.slice(start, end);
+
+                // Fetch User Farm Data for Personal Stock
+                const userFarm = await getUserFarm(interaction.user.id);
+                // Synchronize cycle if needed (visual only, actual sync happens on purchase)
+                if (userFarm.storeCycleId !== globalState.storeNextRestock) {
+                    // For display purposes, we assume 0 bought if cycle mismatch
+                }
 
                 currentItems.forEach((item, index) => {
                     const globalIndex = start + index + 1;
@@ -155,15 +186,57 @@ module.exports = {
                     }
 
                     let stockInfo = "";
-                    if (item.Stock !== undefined) {
+                    if (item.Type === 'Seed') {
+                        // Find seed key
+                        const seedEntries = Object.entries(seeds);
+                        const seedEntry = seedEntries.find(([k, v]) => v.name === item.Name);
+
+                        if (seedEntry) {
+                            const seedKey = seedEntry[0];
+                            const globalLimit = globalState.currentStockLimits[seedKey] || 0;
+
+                            let userBought = 0;
+                            if (userFarm.storeCycleId === globalState.storeNextRestock) {
+                                userBought = userFarm.seedPurchases[seedKey] || 0;
+                            }
+
+                            const available = Math.max(0, globalLimit - userBought);
+                            const maxLimit = seedEntries.find(([k]) => k === seedKey)[1].stockLimit;
+
+                            if (globalLimit <= 0) {
+                                stockInfo = `| 🚫 **Hết hàng (0/${maxLimit})**`;
+                            } else if (available <= 0) {
+                                stockInfo = `| 🚫 **Bạn đã mua hết (${userBought}/${globalLimit})**`;
+                            } else {
+                                stockInfo = `| 📦 Kho: **${available}/${maxLimit}**`;
+                                // User requested "14/50" style where 14 is current available, 50 is max possible.
+                                // Actually, if globalLimit is 14, and maxLimit is 50.
+                                // Display: `${available}/${maxLimit}`.
+                                // If I bought 1, available is 13. Display `13/50`.
+                            }
+                        } else {
+                            stockInfo = `| ❓ Lỗi Data`;
+                        }
+
+                    } else if (item.Stock !== undefined) {
                         stockInfo = item.Stock > 0 ? `| 📦 Kho: ${item.Stock}` : `| 🚫 **HẾT HÀNG**`;
                     }
 
                     const priceDisplay = item.Price ? `${item.Price.toLocaleString()} xu` : 'Miễn phí';
 
+                    // Add Sell Price display if available (for Seeds)
+                    let sellPriceDisplay = "";
+                    if (item.Type === 'Seed') {
+                        // Find seed again (inefficient but safe)
+                        const seedEntry = Object.entries(seeds).find(([k, v]) => v.name === item.Name);
+                        if (seedEntry && seedEntry[1].sellPrice) {
+                            sellPriceDisplay = `\n💰 Giá bán: **${seedEntry[1].sellPrice.toLocaleString()} xu**`;
+                        }
+                    }
+
                     embed.addFields({
                         name: `#${globalIndex} ${localizedItemName}`,
-                        value: `💰 Giá: **${priceDisplay}** ${stockInfo}\n📝 ${descriptionText}`,
+                        value: `💰 Giá mua: **${priceDisplay}**${sellPriceDisplay} ${stockInfo}\n📝 ${descriptionText}`,
                         inline: false
                     });
                 });
@@ -678,25 +751,20 @@ module.exports = {
                                 console.error('Bait purchase failed:', err);
                             }
                         } else if (item.Type === 'Seed') {
-                            if (item.Stock !== undefined && item.Stock <= 0) {
-                                await i.reply({
-                                    content: '🚫 Vật phẩm này đã hết hàng! Vui lòng chờ đợt hàng sau.',
-                                    flags: MessageFlags.Ephemeral
-                                });
-                                return;
-                            }
+                            // Modal always available, validation logic is in farmStore.js
+
 
                             const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder: ModalActionRow } = require('discord.js');
 
                             const modal = new ModalBuilder()
-                                .setCustomId(`seed_buy_${item.Name.replace(/ /g, '-')}_${i.user.id}`)
+                                .setCustomId(`seed_buy_${item.Key}_${i.user.id}`)
                                 .setTitle(`Mua ${item.Name}`);
 
                             const quantityInput = new TextInputBuilder()
                                 .setCustomId('seed_quantity')
-                                .setLabel(`Nhập số lượng (Kho: ${item.Stock})`)
+                                .setLabel(`Nhập số lượng`)
                                 .setStyle(TextInputStyle.Short)
-                                .setPlaceholder(`Tối đa: ${item.Stock}`)
+                                .setPlaceholder(`Nhập số lượng muốn mua`)
                                 .setRequired(true);
 
                             const actionRow = new ModalActionRow().addComponents(quantityInput);
