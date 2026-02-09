@@ -201,19 +201,42 @@ module.exports = {
             } else {
                 // User Stats (My or User)
                 const userSessions = await VoiceSession.find({ guildId, userId: targetUser.id });
-                const totalTime = userSessions.reduce((acc, s) => acc + s.duration, 0);
+                const totalTimeStored = userSessions.reduce((acc, s) => acc + s.duration, 0);
 
-                // Get cached total from UserData (fallback/check)
+                // Check active session
+                let currentSessionTime = 0;
+                try {
+                    const voiceHandler = require('../../../events/voiceStateUpdate');
+                    if (voiceHandler.activeVoiceSessions && voiceHandler.activeVoiceSessions.has(targetUser.id)) {
+                        const startTime = voiceHandler.activeVoiceSessions.get(targetUser.id);
+                        currentSessionTime = Math.floor((Date.now() - startTime) / 1000);
+                    }
+                } catch (e) {
+                    console.error('Error fetching active session for voicetrack:', e);
+                }
+
+                const totalTime = totalTimeStored + currentSessionTime;
+
+                // Get cached total from UserData (fallback/check) - redundant if we sum sessions, but standardizing
+                // Note: UserData.voiceTime is a cache. If we use sessions sum, it's accurate. 
+                // If we use UserData, we should also add currentSessionTime.
+                // Let's stick to calculated sum from sessions + current for precision, 
+                // OR use UserData + current. UserData is faster.
                 const userData = await UserData.findOne({ userId: targetUser.id, guildId });
-                const cachedTime = userData?.voiceTime || 0;
+                const cachedTime = (userData?.voiceTime || 0) + currentSessionTime;
+
+                // Prefer cachedTime as it matches leaderboard
+                const finalTime = cachedTime > totalTime ? cachedTime : totalTime;
 
                 const embed = new EmbedBuilder()
                     .setTitle(`📊 Thống Kê Voice: ${targetUser.username}`)
                     .setThumbnail(targetUser.displayAvatarURL())
                     .setColor('#0099ff')
                     .addFields(
-                        { name: 'Tổng thời gian voice', value: formatTime(totalTime || cachedTime), inline: true },
-                        { name: 'Tổng số lần join', value: `${userSessions.length}`, inline: true }
+                        { name: 'Tổng thời gian voice', value: formatTime(finalTime), inline: true },
+                        { name: 'Tổng số lần join', value: `${userSessions.length + (currentSessionTime > 0 ? 1 : 0)}`, inline: true }, // +1 if active? sessions length usually implies finished sessions in DB?
+                        // activeVoiceSessions is definitely "current". DB sessions are "past". 
+                        { name: 'Trạng thái', value: currentSessionTime > 0 ? '🟢 Đang hoạt động' : '🔴 Offline/Deafened', inline: true }
                     );
                 return interaction.editReply({ embeds: [embed] });
             }

@@ -414,4 +414,5 @@ async function restoreVoiceSessions(client) {
 }
 
 handleVoiceStateUpdate.restoreVoiceSessions = restoreVoiceSessions;
+handleVoiceStateUpdate.activeVoiceSessions = activeVoiceSessions;
 module.exports = handleVoiceStateUpdate;

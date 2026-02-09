@@ -267,7 +267,38 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
         }
         case 'voice': {
             const allVoiceData = await UserData.find({ guildId: guild.id });
-            data = allVoiceData
+
+            // Real-time update: Add current session time
+            // We need to require the map safely
+            let activeSessions = new Map();
+            try {
+                // Adjust path as needed. event handler is in events/voiceStateUpdate.js
+                // Leaderboard is in commands/General/Leveling/leaderboard.js
+                // Relative path: ../../../events/voiceStateUpdate
+                const voiceHandler = require('../../../events/voiceStateUpdate');
+                if (voiceHandler.activeVoiceSessions) {
+                    activeSessions = voiceHandler.activeVoiceSessions;
+                }
+            } catch (e) {
+                console.error('Failed to load active voice sessions for leaderboard:', e);
+            }
+
+            const now = Date.now();
+
+            // Map data to include current session
+            const enrichedData = allVoiceData.map(doc => {
+                let extraTime = 0;
+                if (activeSessions.has(doc.userId)) {
+                    const startTime = activeSessions.get(doc.userId);
+                    extraTime = Math.floor((now - startTime) / 1000);
+                }
+                return {
+                    ...doc, // spread to avoid mutating original object in cache if it's cached
+                    voiceTime: (doc.voiceTime || 0) + extraTime
+                };
+            });
+
+            data = enrichedData
                 .filter(doc => (doc.voiceTime || 0) > 0)
                 .sort((a, b) => (b.voiceTime || 0) - (a.voiceTime || 0));
             break;
