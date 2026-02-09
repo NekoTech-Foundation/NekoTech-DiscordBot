@@ -27,8 +27,8 @@ async function getGlobalWeather() {
         // Only if the event supports increased mutations (or just randomly for any event?)
         // User request: "khi diễn ra sự kiện đột biến" (when mutation event happens)
         if (newEvent.effect && newEvent.effect.mutationChance > 1) {
-            // Random between 0.05 (5%) and 0.45 (45%)
-            const rate = Math.random() * (0.45 - 0.05) + 0.05;
+            // Random between 0.15 (15%) and 0.60 (60%)
+            const rate = Math.random() * (0.60 - 0.15) + 0.15;
             globalState.activeMutationRate = rate;
         } else {
             globalState.activeMutationRate = 0.0; // or null, but 0.0 is safe

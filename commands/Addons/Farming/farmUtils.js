@@ -82,14 +82,14 @@ const seeds = {
     romanesco: { name: 'Súp lơ san hô', emoji: '🥦', growthTime: 172800000, price: 800000, sellPrice: 600000, rarity: 'Prismatic', restockChance: 0.005, stockLimit: 1 },
 
     // --- LEGACY (Off-sale) ---
-    rice: { name: 'Lúa', emoji: '🌾', growthTime: 1800000, price: 250, sellPrice: 125, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    corn: { name: 'Ngô', emoji: '🌽', growthTime: 3600000, price: 400, sellPrice: 200, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    cassava: { name: 'Khoai Mì', emoji: '🍠', growthTime: 7200000, price: 800, sellPrice: 400, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    sugarcane: { name: 'Mía', emoji: '🌱', growthTime: 7200000, price: 750, sellPrice: 375, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    potato: { name: 'Khoai Tây', emoji: '🥔', growthTime: 14400000, price: 1500, sellPrice: 750, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    melon: { name: 'Dưa Gang', emoji: '🍈', growthTime: 14400000, price: 1600, sellPrice: 800, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    cabbage: { name: 'Cải Ngọt', emoji: '🥬', growthTime: 21600000, price: 2500, sellPrice: 1250, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
-    jackfruit: { name: 'Mít', emoji: '🍈', growthTime: 64800000, price: 8000, sellPrice: 4000, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    rice: { name: 'Lúa', emoji: '🌾', growthTime: 1, price: 250, sellPrice: 125, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    corn: { name: 'Ngô', emoji: '🌽', growthTime: 3, price: 400, sellPrice: 200, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    cassava: { name: 'Khoai Mì', emoji: '🍠', growthTime: 7, price: 800, sellPrice: 400, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    sugarcane: { name: 'Mía', emoji: '🌱', growthTime: 7, price: 750, sellPrice: 375, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    potato: { name: 'Khoai Tây', emoji: '🥔', growthTime: 14, price: 1500, sellPrice: 750, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    melon: { name: 'Dưa Gang', emoji: '🍈', growthTime: 14, price: 1600, sellPrice: 800, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    cabbage: { name: 'Cải Ngọt', emoji: '🥬', growthTime: 21, price: 2500, sellPrice: 1250, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
+    jackfruit: { name: 'Mít', emoji: '🍈', growthTime: 6, price: 8000, sellPrice: 4000, rarity: 'Legacy', restockChance: 0, stockLimit: 0 },
 };
 
 // Helper to check if mutations match (considering null/undefined)

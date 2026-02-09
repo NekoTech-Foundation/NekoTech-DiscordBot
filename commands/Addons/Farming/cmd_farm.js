@@ -413,8 +413,27 @@ module.exports = {
             await interaction.editReply({ content: replyContent, components: [row] });
 
         } else if (subcommand === 'field') {
-            // (Field logic mostly cosmetic, ensuring display uses new mutations if stored on plant)
             const userPlants = await plantSchema.find({ userId });
+            const globalWeather = await getGlobalWeather();
+            const currentWeather = globalWeather.currentWeather;
+
+            // Apply mutations to existing plants during active mutation events
+            let mutationsApplied = [];
+            if (globalWeather.activeMutationRate && globalWeather.activeMutationRate > 0) {
+                for (const p of userPlants) {
+                    // Apply mutation to plants WITHOUT existing mutation (don't overwrite)
+                    if (!p.mutation) {
+                        const newMutation = getRandomMutation(currentWeather, globalWeather.activeMutationRate);
+                        if (newMutation) {
+                            p.mutation = newMutation;
+                            await p.save();
+                            let plant = seeds[p.plant] || Object.values(seeds).find(s => s.name === p.plant);
+                            mutationsApplied.push(`${newMutation.emoji} ${plant?.name || p.plant}`);
+                        }
+                    }
+                }
+            }
+
             const embed = new EmbedBuilder()
                 .setColor('#00ff00')
                 .setTitle(farmingLang.UI.FieldTitle.replace('{user}', interaction.user.username));
@@ -433,19 +452,20 @@ module.exports = {
                         const minutes = Math.floor((timeRemaining % 3600000) / 60000);
                         const progress = Math.min(100, (timeSincePlanted / plant.growthTime) * 100);
 
-                        // Use formatPlantName? It expects quantity/mutation
-                        // Format: "Tomoto [Mutation]: 50%"
                         let line = `${plant.emoji} ${plant.name} (x${p.quantity})`;
                         if (p.mutation) {
-                            line = `**[${p.mutation.emoji} ${p.mutation.name}] ${line}**`;
+                            line = `**[${p.mutation.emoji} ${p.mutation.name}]** ${line}`;
                         }
 
                         description += `${line}: ${progress.toFixed(2)}% - Còn lại: ${hours}h ${minutes}m\n`;
                     }
                 }
-                // ... (Weather info logic same as before)
-                const globalWeather = await getGlobalWeather();
-                const currentWeather = globalWeather.currentWeather;
+
+                // Show new mutations if any were applied this check
+                if (mutationsApplied.length > 0) {
+                    description = `✨ **ĐỘT BIẾN MỚI!** ${mutationsApplied.join(', ')}\n\n` + description;
+                }
+                // Weather info (already fetched at top)
                 const endTime = Math.floor(globalWeather.weatherEndTime / 1000);
                 embed.setDescription(farmingLang.UI.WeatherCurrent
                     .replace('{emoji}', currentWeather.emoji)

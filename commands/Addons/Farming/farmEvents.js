@@ -54,8 +54,8 @@ function getRandomEvent() {
 }
 
 function getRandomMutation(weatherEvent, activeMutationRate) {
-    // Base mutation chance is low (e.g., 5%)
-    let mutationChance = 0.05;
+    // Base mutation chance (increased from 5% to 15%)
+    let mutationChance = 0.36;
 
     // Use specific rate if provided (from global random event logic)
     if (activeMutationRate && activeMutationRate > 0) {
