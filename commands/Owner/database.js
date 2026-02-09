@@ -55,10 +55,10 @@ module.exports = {
     },
 
     async execute(interaction) {
-        // Check Owner/Admin - defaulting to PermissionFlagsBits.Administrator from builder, 
-        // but can add specific ID check if needed.
-        if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-            return interaction.reply({ content: '❌ Bạn không có quyền sử dụng lệnh này.', ephemeral: true });
+        // Check Owner IDs from config
+        const ownerIDs = config.OwnerIDs || [];
+        if (!ownerIDs.includes(interaction.user.id)) {
+            return interaction.reply({ content: '❌ Bạn không có quyền sử dụng lệnh này (Owner Only).', ephemeral: true });
         }
 
         const sub = interaction.options.getSubcommand();
