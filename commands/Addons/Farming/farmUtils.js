@@ -19,6 +19,13 @@ const seeds = {
     grapes: { name: 'Nho', emoji: '🍇', growthTime: 43200000, price: 14000 },
 };
 
+// Helper to check if mutations match (considering null/undefined)
+function isMutationEqual(m1, m2) {
+    if (!m1 && !m2) return true;
+    if (!m1 || !m2) return false;
+    return m1.name === m2.name;
+}
+
 async function getUserFarm(userId) {
     let userFarm = await farmSchema.findOne({ userId });
     if (!userFarm) {
@@ -27,32 +34,44 @@ async function getUserFarm(userId) {
     return userFarm;
 }
 
-async function addToFarm(userId, itemName, quantity, itemType) {
+async function addToFarm(userId, itemName, quantity, itemType, mutation = null) {
     const userFarm = await getUserFarm(userId);
-    const item = userFarm.items.find(i => i.name === itemName && i.type === itemType);
+    // Find existing item with same name, type, and mutation
+    const item = userFarm.items.find(i =>
+        i.name === itemName &&
+        i.type === itemType &&
+        isMutationEqual(i.mutation, mutation)
+    );
 
     if (item) {
         item.quantity += quantity;
     } else {
-        userFarm.items.push({ name: itemName, quantity, type: itemType });
+        userFarm.items.push({
+            name: itemName,
+            quantity,
+            type: itemType,
+            mutation
+        });
     }
 
     await userFarm.save();
 }
 
-async function removeFromFarm(userId, itemName, quantity, itemType) {
+async function removeFromFarm(userId, itemName, quantity, itemType, mutation = null) {
     const userFarm = await getUserFarm(userId);
-    // If itemType is provided, find by name AND type.
-    // If not provided (backward compatibility or loose check), find by name only (though this is what we want to avoid).
-    // For this fix, we will assume itemType is passed or we default to finding the first match if strictly needed,
-    // but the goal is to be strict.
 
     let item;
     if (itemType) {
-        item = userFarm.items.find(i => i.name === itemName && i.type === itemType);
+        item = userFarm.items.find(i =>
+            i.name === itemName &&
+            i.type === itemType &&
+            isMutationEqual(i.mutation, mutation)
+        );
     } else {
-        // Fallback for calls that haven't been updated yet, though we plan to update all.
+        // Fallback (try to match name, ignore mutation safety if not provided? No, strict is better now)
+        // If no ItemType provided, we assume mutation is possibly null or we search all
         item = userFarm.items.find(i => i.name === itemName);
+        // This fallback is risky with mutations. Let's assume strict usage from now on.
     }
 
     if (!item || item.quantity < quantity) {
@@ -62,16 +81,24 @@ async function removeFromFarm(userId, itemName, quantity, itemType) {
     item.quantity -= quantity;
 
     if (item.quantity <= 0) {
-        // Only remove the specific item entry
-        if (itemType) {
-            userFarm.items = userFarm.items.filter(i => !(i.name === itemName && i.type === itemType));
-        } else {
-            userFarm.items = userFarm.items.filter(i => i.name !== itemName);
-        }
+        // Remove specific entry
+        userFarm.items = userFarm.items.filter(i => i !== item);
     }
 
     await userFarm.save();
     return true;
 }
 
-module.exports = { seeds, getUserFarm, addToFarm, removeFromFarm };
+function formatPlantName(name, mutation, quantity) {
+    const qtyStr = quantity ? `[${quantity}] ` : ''; // Or [4kg] as requested
+    // Request: [Mutation List] [KG] Cây trồng
+    // Example: [✨ Neon] [5kg] Cà Chua
+    const kgStr = quantity ? `[${quantity}kg]` : '';
+
+    if (mutation) {
+        return `[${mutation.emoji} ${mutation.name}] ${kgStr} ${name}`;
+    }
+    return `${kgStr} ${name}`; // Standard item
+}
+
+module.exports = { seeds, getUserFarm, addToFarm, removeFromFarm, formatPlantName };

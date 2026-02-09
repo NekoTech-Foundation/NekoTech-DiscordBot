@@ -14,11 +14,26 @@ async function getGlobalWeather() {
 
     // Check if weather expired
     if (Date.now() > globalState.weatherEndTime) {
-        globalState.currentWeather = getRandomEvent();
+        const newEvent = getRandomEvent();
+        globalState.currentWeather = newEvent;
         globalState.weatherStartTime = Date.now();
-        // Random duration between 30 mins and 2 hours
-        const duration = Math.floor(Math.random() * (7200000 - 1800000 + 1)) + 1800000;
+
+        // Random duration between 30 mins and 4 hours
+        // 30m = 1800000, 4h = 14400000
+        const duration = Math.floor(Math.random() * (14400000 - 1800000 + 1)) + 1800000;
         globalState.weatherEndTime = Date.now() + duration;
+
+        // Randomize mutation chance for this event execution (User Request: 5-45%)
+        // Only if the event supports increased mutations (or just randomly for any event?)
+        // User request: "khi diễn ra sự kiện đột biến" (when mutation event happens)
+        if (newEvent.effect && newEvent.effect.mutationChance > 1) {
+            // Random between 0.05 (5%) and 0.45 (45%)
+            const rate = Math.random() * (0.45 - 0.05) + 0.05;
+            globalState.activeMutationRate = rate;
+        } else {
+            globalState.activeMutationRate = 0.0; // or null, but 0.0 is safe
+        }
+
         await globalState.save();
     }
 

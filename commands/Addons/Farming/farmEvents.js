@@ -10,12 +10,36 @@ const events = {
         { name: 'Phù Phép', type: 'weather', rarity: 'mythical', chance: 1, emoji: '✨', description: 'Năng lượng ma thuật bao trùm.', effect: { growthSpeed: 2.0, yield: 2.0, mutationChance: 5.0 } }
     ],
     mutations: [
-        { name: 'Tí Hon', type: 'mutation', rarity: 'common', chance: 30, emoji: '🤏', description: 'Nhỏ bé nhưng dễ thương.', effect: { yield: 0.8, price: 0.9 } },
-        { name: 'Khổng Lồ', type: 'mutation', rarity: 'uncommon', chance: 25, emoji: '🐘', description: 'To lớn vượt trội.', effect: { yield: 1.5, price: 1.2 } },
-        { name: 'Đỏ Thẫm', type: 'mutation', rarity: 'rare', chance: 20, emoji: '🔴', description: 'Màu sắc rực rỡ.', effect: { price: 2.0 } },
-        { name: 'Vàng', type: 'mutation', rarity: 'epic', chance: 15, emoji: '👑', description: 'Lấp lánh như vàng.', effect: { price: 5.0 } },
-        { name: 'Cầu Vồng', type: 'mutation', rarity: 'legendary', chance: 8, emoji: '🌈', description: 'Đủ màu sắc tuyệt đẹp.', effect: { price: 10.0 } },
-        { name: 'Hoàn Hảo', type: 'mutation', rarity: 'mythical', chance: 2, emoji: '💠', description: 'Sự kết tinh hoàn hảo.', effect: { yield: 3.0, price: 20.0 } }
+        // Common (Total: 40%)
+        { name: 'Tí Hon', type: 'mutation', rarity: 'common', chance: 20, emoji: '🤏', description: 'Nhỏ bé nhưng dễ thương.', effect: { yield: 0.8, price: 1.2 } },
+        { name: 'Khổng Lồ', type: 'mutation', rarity: 'common', chance: 20, emoji: '🐘', description: 'To lớn vượt trội.', effect: { yield: 1.5, price: 1.2 } },
+
+        // Uncommon (Total: 30%)
+        { name: 'Đỏ Thẫm', type: 'mutation', rarity: 'uncommon', chance: 15, emoji: '🔴', description: 'Màu sắc rực rỡ.', effect: { price: 1.5 } },
+        { name: 'Xanh Lá', type: 'mutation', rarity: 'uncommon', chance: 15, emoji: '🟢', description: 'Tươi tốt lạ thường.', effect: { yield: 1.2, price: 1.3 } },
+
+        // Rare (Total: 15%)
+        { name: 'Frozen', type: 'mutation', rarity: 'rare', chance: 5, emoji: '❄️', description: 'Đóng băng vĩnh cửu.', effect: { price: 3.0 } },
+        { name: 'Burning', type: 'mutation', rarity: 'rare', chance: 5, emoji: '🔥', description: 'Rực cháy mãnh liệt.', effect: { price: 3.0 } },
+        { name: 'Neon', type: 'mutation', rarity: 'rare', chance: 5, emoji: '✨', description: 'Phát sáng trong đêm.', effect: { price: 3.5 } },
+
+        // Epic (Total: 10%)
+        { name: 'Vàng', type: 'mutation', rarity: 'epic', chance: 3, emoji: '👑', description: 'Lấp lánh như vàng.', effect: { price: 5.0 } },
+        { name: 'Crystal', type: 'mutation', rarity: 'epic', chance: 3, emoji: '💎', description: 'Kết tinh trong suốt.', effect: { price: 6.0 } },
+        { name: 'Radioactive', type: 'mutation', rarity: 'epic', chance: 2, emoji: '☢️', description: 'Phát xạ năng lượng.', effect: { yield: 2.0, price: 4.0 } },
+        { name: 'Pixel', type: 'mutation', rarity: 'epic', chance: 2, emoji: '👾', description: 'Lỗi hiển thị?', effect: { price: 7.0 } },
+
+        // Legendary (Total: 4%)
+        { name: 'Ghost', type: 'mutation', rarity: 'legendary', chance: 1.5, emoji: '👻', description: 'Thoắt ẩn thoắt hiện.', effect: { price: 10.0 } },
+        { name: 'Cầu Vồng', type: 'mutation', rarity: 'legendary', chance: 1.5, emoji: '🌈', description: 'Đủ màu sắc tuyệt đẹp.', effect: { price: 12.0 } },
+        { name: 'Glitch', type: 'mutation', rarity: 'legendary', chance: 1.0, emoji: '📺', description: 'Sự cố hệ thống.', effect: { yield: 0.5, price: 15.0 } },
+
+        // Mythical (Total: 1%)
+        { name: 'Void', type: 'mutation', rarity: 'mythical', chance: 0.4, emoji: '⚫', description: 'Vực thẳm vô tận.', effect: { price: 25.0 } },
+        { name: 'Celestial', type: 'mutation', rarity: 'mythical', chance: 0.3, emoji: '🌟', description: 'Tinh tú hội tụ.', effect: { price: 30.0 } },
+        { name: 'Quantum', type: 'mutation', rarity: 'mythical', chance: 0.2, emoji: '⚛️', description: 'Tồn tại ở mọi trạng thái.', effect: { yield: 5.0, price: 20.0 } },
+        { name: 'Cosmic', type: 'mutation', rarity: 'mythical', chance: 0.1, emoji: '🌌', description: 'Chứa đựng cả vũ trụ.', effect: { price: 50.0 } },
+        { name: 'Hoàn Hảo', type: 'mutation', rarity: 'mythical', chance: 0.05, emoji: '💠', description: 'Sự kết tinh hoàn hảo.', effect: { yield: 3.0, price: 40.0 } }
     ]
 };
 
@@ -29,11 +53,15 @@ function getRandomEvent() {
     return events.weather[0];
 }
 
-function getRandomMutation(weatherEvent) {
+function getRandomMutation(weatherEvent, activeMutationRate) {
     // Base mutation chance is low (e.g., 5%)
     let mutationChance = 0.05;
 
-    if (weatherEvent && weatherEvent.effect && weatherEvent.effect.mutationChance) {
+    // Use specific rate if provided (from global random event logic)
+    if (activeMutationRate && activeMutationRate > 0) {
+        mutationChance = activeMutationRate;
+    } else if (weatherEvent && weatherEvent.effect && weatherEvent.effect.mutationChance) {
+        // Fallback or legacy multiplier
         mutationChance *= weatherEvent.effect.mutationChance;
     }
 
