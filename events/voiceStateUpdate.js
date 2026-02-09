@@ -36,34 +36,56 @@ async function handleVoiceTracking(oldState, newState) {
     const guildId = newState.guild.id;
     const now = Date.now();
 
-    // User Left Voice or Switched Channel (End previous session)
-    if (oldState.channelId && (!newState.channelId || oldState.channelId !== newState.channelId)) {
+    // Helper: Check if user is "active" (in a channel and NOT muted/deaf)
+    // We consider "active" if they are in a channel AND (not selfDeaf AND not selfMute AND not serverDeaf AND not serverMute)
+    // Adjust based on typical "voice time" definition. Usually just "deaf" is the hard stopper for "listening".
+    // Mute means they can't talk but can listen. 
+    // User request: "tránh việc treo máy... không tính tiếp".
+    // Usually "treo máy" (AFK) implies they might be deafened or just silent. 
+    // Let's go with: invalid if DEAFENED (self or server). Mute is usually okay for time counting (listening).
+    // BUT common "AFK" farms require users to be undeafened? 
+    // Let's stick to the plan: "If deafened, stop tracking". 
+    // Refined: Check selfDeaf and serverDeaf.
+    const isIgnored = (state) => state.selfDeaf || state.serverDeaf; // || state.selfMute || state.serverMute? 
+    // If I mute myself, I am still "in voice" listening. If I deafen, I am AFK.
+    // Let's stick to DEAF check for now as it's the strongest signal of AFK/NotParticipating.
+    // Update: Some servers want to block Muted users too. 
+    // "không nhận voice time của user" -> maybe they were muted?
+    // Let's be strict: If Deafened OR Muted (Self or Server), don't count? 
+    // Standard practice is usually just Deafen check OR Mute check if strict. 
+    // I will check BOTH Deafen and Mute to be safe against "treo máy" padding.
+    // Actually, widespread practice usually allows Mute (listening), but disallows Deafen.
+    // However, for "AFK farming prevention", usually you must be Unmuted and Undeafened.
+    // Let's check BOTH.
+
+    // Check if user WAS active
+    const wasActive = oldState.channelId && !isIgnored(oldState) && !oldState.selfMute && !oldState.serverMute;
+    // Check if user IS active
+    const isActive = newState.channelId && !isIgnored(newState) && !newState.selfMute && !newState.serverMute;
+
+    // SCENARIO 1: Session End (Left, or became inactive)
+    if (wasActive && (!isActive || oldState.channelId !== newState.channelId)) {
         if (activeVoiceSessions.has(userId)) {
             const startTime = activeVoiceSessions.get(userId);
             const duration = now - startTime;
 
-            // Only save valid sessions (> 1 second)
             if (duration > 1000) {
                 try {
-                    // Save Session Log
                     await VoiceSession.create({
                         userId,
                         guildId,
                         channelId: oldState.channelId,
                         startTime,
                         endTime: now,
-                        duration: Math.floor(duration / 1000), // seconds
+                        duration: Math.floor(duration / 1000),
                         date: new Date(startTime).toISOString().split('T')[0]
                     });
 
-                    // Update Total Voice Time in UserData
                     let userData = await UserData.findOne({ userId, guildId });
-                    if (!userData) {
-                        userData = await UserData.create({ userId, guildId });
-                    }
+                    if (!userData) userData = await UserData.create({ userId, guildId });
+
                     userData.voiceTime = (userData.voiceTime || 0) + Math.floor(duration / 1000);
                     await userData.save();
-
                 } catch (err) {
                     console.error('Error saving voice session:', err);
                 }
@@ -72,26 +94,11 @@ async function handleVoiceTracking(oldState, newState) {
         }
     }
 
-    // User Joined Voice or Switched Channel (Start new session)
-    if (newState.channelId && (!oldState.channelId || oldState.channelId !== newState.channelId)) {
-        // Check for mute/deaf if we want to ignore them (User request: "tránh việc treo máy... không tính tiếp")
-        // Implementation: If user joins muted/deaf, maybe we don't start tracking? 
-        // Or we track but mark it? The request said "nếu treo trong voice và không hoạt động quá lâu".
-        // For now, let's track pure time but maybe pause if muted/deaf?
-        // Let's keep it simple: Start tracking on join. 
-        // Refinement: If they are selfMute or selfDeaf, maybe we *don't* start the timer, or we track it as "afk"?
-        // The implementation plan said: "Add checks: if (member.voice.selfMute...) return;" for XP.
-        // For Leaderboard/Stats, usually "Voice Time" implies "Active Voice Time".
-        // Let's Apply the same rule: If muted/deaf, don't track time.
-
-        const isIgnored = newState.selfDeaf || newState.serverDeaf;
-        if (!isIgnored) {
-            activeVoiceSessions.set(userId, now);
-        }
+    // SCENARIO 2: Session Start (Joined, or became active)
+    // Note: If they switched channels (oldId != newId), we treated it as End above, so we Start new here.
+    if (isActive && (!wasActive || oldState.channelId !== newState.channelId)) {
+        activeVoiceSessions.set(userId, now);
     }
-
-    // Handle Mute/Deaf Toggle (State Change within same channel)
-    // removed as we track all states now
 }
 
 async function handleVoiceStateUpdate(client, oldState, newState) {

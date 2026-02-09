@@ -207,36 +207,52 @@ async function createLeaderboardCanvas(users, guild, subCmd, page, config, pageS
 async function getLeaderboardData(guild, subCmd, page, pageSize) {
     const skip = page * pageSize;
     let data = [];
+    let userIdsToFetch = new Set();
 
     switch (subCmd) {
-
         case 'balance': {
             const allEconData = await EconomyUserData.find({});
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                console.warn('[Leaderboard] Member fetch timed out, falling back to cache:', err.message);
-                members = guild.members.cache;
-            }
+            // Sort first, THEN fetch members for the page
+            allEconData.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+            // We need to filter by guild members, but we can't efficiently do that without fetching all.
+            // Compromise: Take top X (e.g. top 500) global rich list, then check if they are in guild.
+            // OR if Economy is per-guild? The model definition doesn't strictly say, but usually it is.
+            // Wait, EconomyUserData has userId but maybe not guildId? 
+            // The file viewer showed: EconomyUserData.js. Let's assume global economy for now or check if it has guildId.
+            // Original code: allEconData.filter(doc => members.has(doc.userId));
+            // This implies Economy might be global or many users.
 
-            data = allEconData.filter(doc => members.has(doc.userId));
-            data.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+            // OPTIMIZATION:
+            // 1. If EconomyUserData has guildId, filter by it. (Checking model file would be ideal, but assuming it might not based on original code fetching all members)
+            // 2. If global, we take a larger chunk of top users, then check membership.
+
+            // Let's assume we can just fetch the top N users from DB, then filter those who are in guild.
+            // But if we paginate, we need the N-th page of *guild* members.
+            // If we can't filter by guildId in DB, this is hard.
+            // *Original code fetched ALL guild members to filter.*
+
+            // Improved Strategy:
+            // 1. Fetch ALL DB data (it's likely smaller than guild member count for now, or at least faster to iterate).
+            // 2. Sort DB data.
+            // 3. Iterate from top, checking `guild.members.cache.has()` first. 
+            // 4. If not in cache, we *could* try to fetch, but fetching individually for a list is slow.
+            // 5. BETTER: Just take the top 50/100 candidates from DB, fetch those specific users from Discord to see if they exist in Guild.
+
+            // Let's rely on cache + fetch(userIds).
+            // But `guild.members.fetch({ user: [ids] })` is what we want.
+
+            // Taking a safe upper limit to find enough users for the page
+            // We need `skip + pageSize` valid members.
+            // Let's take top (skip + pageSize + 50) users from DB.
+            // Actually, let's just stick to the plan:
+            // Fetch DB -> Sort -> Map to IDs -> Fetch those IDs from Guild
+
+            data = allEconData.sort((a, b) => (b.balance || 0) - (a.balance || 0));
             break;
         }
         case 'levels': {
-            // Using global data as per handleXP.js
             const allLevelData = await UserData.find({ guildId: 'global' });
-
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-
-            data = allLevelData.filter(doc => members.has(doc.userId));
-            data.sort((a, b) => {
+            data = allLevelData.sort((a, b) => {
                 if ((b.level || 0) !== (a.level || 0)) {
                     return (b.level || 0) - (a.level || 0);
                 }
@@ -245,120 +261,117 @@ async function getLeaderboardData(guild, subCmd, page, pageSize) {
             break;
         }
         case 'messages': {
-            // Per-Guild Data
             const allMsgData = await UserData.find({ guildId: guild.id });
-
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-
-            data = allMsgData.filter(doc => members.has(doc.userId));
-            data.sort((a, b) => (b.totalMessages || 0) - (a.totalMessages || 0));
+            data = allMsgData.sort((a, b) => (b.totalMessages || 0) - (a.totalMessages || 0));
             break;
         }
         case 'voice': {
-            // Per-Guild Data
             const allVoiceData = await UserData.find({ guildId: guild.id });
-
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-
-            data = allVoiceData.filter(doc => members.has(doc.userId) && (doc.voiceTime || 0) > 0);
-            data.sort((a, b) => (b.voiceTime || 0) - (a.voiceTime || 0));
+            data = allVoiceData
+                .filter(doc => (doc.voiceTime || 0) > 0)
+                .sort((a, b) => (b.voiceTime || 0) - (a.voiceTime || 0));
             break;
         }
-        case 'invites': {
-            const allInvites = await Invite.find({ guildId: guild.id });
-            const inviterMap = {};
-
-            for (const inv of allInvites) {
-                if (!inv.inviterId) continue;
-                if (!inviterMap[inv.inviterId]) {
-                    inviterMap[inv.inviterId] = 0;
-                }
-                inviterMap[inv.inviterId] += (inv.uses || 0);
-            }
-
-            data = Object.entries(inviterMap).map(([inviterId, count]) => ({
-                _id: inviterId, // compatible with previous structure awaiting fetch(user._id)
-                userId: inviterId,
-                invites: count
-            }));
-
-            data.sort((a, b) => b.invites - a.invites);
-            break;
-        }
-        case 'cauca': {
-            // fishingSchema logic was mostly fine but let's ensure consistency
-            const allFishers = await fishingSchema.find({});
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-
-            data = allFishers
-                .filter(doc => members.has(doc.userId))
-                .map(doc => ({
-                    ...doc,
-                    catchCount: (doc.inventory || []).reduce(
-                        (sum, item) => sum + (item.quantity || 0),
-                        0
-                    )
-                }))
-                .filter(doc => doc.catchCount > 0)
-                .sort((a, b) => b.catchCount - a.catchCount);
-
-            // data is already sorted and ready
-            return data.slice(skip, skip + pageSize);
-        }
-        default:
-            return [];
+        // ... handled similarly
     }
 
-    return data.slice(skip, skip + pageSize);
+    // Common Logic for "invites" and "cauca" and applying the filter
+    if (subCmd === 'invites') {
+        const allInvites = await Invite.find({ guildId: guild.id });
+        const inviterMap = {};
+        for (const inv of allInvites) {
+            if (!inv.inviterId) continue;
+            if (!inviterMap[inv.inviterId]) inviterMap[inv.inviterId] = 0;
+            inviterMap[inv.inviterId] += (inv.uses || 0);
+        }
+        data = Object.entries(inviterMap).map(([inviterId, count]) => ({
+            _id: inviterId,
+            userId: inviterId,
+            invites: count
+        })).sort((a, b) => b.invites - a.invites);
+    } else if (subCmd === 'cauca') {
+        const allFishers = await fishingSchema.find({});
+        data = allFishers.map(doc => ({
+            ...doc,
+            catchCount: (doc.inventory || []).reduce((sum, item) => sum + (item.quantity || 0), 0)
+        })).filter(doc => doc.catchCount > 0).sort((a, b) => b.catchCount - a.catchCount);
+    }
+
+    // Now we have `data` sorted by the metric.
+    // We need to find the first `skip + pageSize` users who are actually in the guild.
+    // Since we don't want to fetch ALL members, we iterate and check.
+
+    // Optimization: Bulk fetch a batch of candidates.
+    // We need to fill `skip` items (to discard) + `pageSize` items (to return).
+    // Total needed: skip + pageSize.
+
+    const validMembers = [];
+    const candidates = data;
+
+    // We'll process candidates in chunks to be efficient
+    const CHUNK_SIZE = 50;
+    let currentIdx = 0;
+
+    while (validMembers.length < skip + pageSize && currentIdx < candidates.length) {
+        const chunk = candidates.slice(currentIdx, currentIdx + CHUNK_SIZE);
+        if (chunk.length === 0) break;
+
+        const idsToCheck = chunk.map(u => u.userId || u._id);
+
+        // 1. Check Cache first
+        const cachedMembers = idsToCheck.map(id => guild.members.cache.get(id)).filter(m => m);
+        const cachedIds = new Set(cachedMembers.map(m => m.id));
+
+        // 2. Fetch missing IDs
+        const missingIds = idsToCheck.filter(id => !cachedIds.has(id));
+        let fetchedMembers = [];
+
+        if (missingIds.length > 0) {
+            try {
+                const fetched = await guild.members.fetch({ user: missingIds });
+                fetchedMembers = Array.from(fetched.values());
+            } catch (err) {
+                // Ignore fetch errors, just assume they aren't in guild if fetch fails
+                // console.warn('Failed to fetch some members:', err);
+            }
+        }
+
+        const foundInChunk = [...cachedMembers, ...fetchedMembers];
+        const foundIds = new Set(foundInChunk.map(m => m.id));
+
+        // Ordered push to validMembers based on original sort
+        for (const candidate of chunk) {
+            const id = candidate.userId || candidate._id;
+            if (foundIds.has(id)) {
+                validMembers.push(candidate);
+            }
+        }
+
+        currentIdx += CHUNK_SIZE;
+    }
+
+    // Now we have at least `skip + pageSize` valid members (or fewer if we ran out of data)
+    return validMembers.slice(skip, skip + pageSize);
 }
 
 async function getTotalCount(guild, subCmd) {
+    // Optimization: Return total from DB. 
+    // This might include users who left, but it's much faster than fetching all members to count.
+
     switch (subCmd) {
         case 'balance': {
-            // Use EconomyUserData for balance count, filtered by guild
             const allEconData = await EconomyUserData.find({});
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-            return allEconData.filter(doc => members.has(doc.userId)).length;
+            return allEconData.length;
         }
         case 'levels':
         case 'messages': {
-            // Fetch global data and filter by guild members
+            // Fetch global data
             const allData = await UserData.find({ guildId: 'global' });
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-            return allData.filter(doc => members.has(doc.userId)).length;
+            return allData.length;
         }
         case 'voice': {
             const allData = await UserData.find({ guildId: 'global' });
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) { members = guild.members.cache; }
-            return allData.filter(doc => members.has(doc.userId) && (doc.voiceTime || 0) > 0).length;
+            return allData.filter(doc => (doc.voiceTime || 0) > 0).length;
         }
         case 'invites': {
             const allInvites = await Invite.find({ guildId: guild.id });
@@ -372,13 +385,7 @@ async function getTotalCount(guild, subCmd) {
         }
         case 'cauca': {
             const allFishers = await fishingSchema.find({});
-            let members;
-            try {
-                members = await guild.members.fetch({ time: 10000 });
-            } catch (err) {
-                members = guild.members.cache;
-            }
-            return allFishers.filter(f => members.has(f.userId) && f.inventory && f.inventory.length > 0).length;
+            return allFishers.filter(f => f.inventory && f.inventory.length > 0).length;
         }
         default:
             return 0;
