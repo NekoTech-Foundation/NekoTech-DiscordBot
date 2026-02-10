@@ -159,18 +159,20 @@ module.exports = {
         else if (focusedOption.name === 'produce') {
             const produceItems = userFarm.items.filter(i => i.type === 'produce' && i.quantity > 0);
 
-            let choices = produceItems.map(item => {
+            let choices = [];
+            // Add "Sell All" option at the top
+            if (produceItems.length > 0) {
+                const totalItems = produceItems.reduce((sum, i) => sum + i.quantity, 0);
+                choices.push({ name: `💰 Bán tất cả nông sản (${totalItems} items)`, value: '__ALL__' });
+            }
+
+            choices.push(...produceItems.map(item => {
                 const seedInfo = Object.values(seeds).find(s => s.name === item.name);
-                // Unique Value: Name::MutationName (or 'null')
                 const mutName = item.mutation ? item.mutation.name : 'null';
                 const value = `${item.name}::${mutName}`;
-
                 const displayName = formatPlantName(item.name, item.mutation, item.quantity);
-                return {
-                    name: displayName,
-                    value: value
-                };
-            });
+                return { name: displayName, value: value };
+            }));
 
             const filtered = choices.filter(c => c.name.toLowerCase().includes(focusedOption.value.toLowerCase()));
             await interaction.respond(filtered.slice(0, 25));
@@ -355,6 +357,8 @@ module.exports = {
 
             let harvestReport = []; // Stores strings for final output
             let totalHarvestedItems = [];
+            let totalBonusMoney = 0;
+            let mutationDetails = [];
 
             for (const { planted, plant } of plantsToHarvest) {
                 await plantSchema.deleteOne({ _id: planted._id });
@@ -385,10 +389,15 @@ module.exports = {
 
                 // Add to report
                 const fmtName = formatPlantName(plant.name, planted.mutation, harvestedQuantity);
-
-                // Grouping for report?
-                // "You harvested: [Mutation] [5kg] Tomato"
                 harvestReport.push(`- ${fmtName}`);
+
+                // Track mutation details for bonus report
+                if (planted.mutation) {
+                    mutationDetails.push(`${planted.mutation.emoji} ${planted.mutation.name}`);
+                    if (planted.mutation.effect && planted.mutation.effect.price) {
+                        totalBonusMoney += Math.floor(seeds[planted.plant]?.sellPrice || 0) * harvestedQuantity;
+                    }
+                }
             }
 
             let replyContent = farmingLang.UI.HarvestSuccess;
@@ -633,22 +642,61 @@ module.exports = {
 
         } else if (subcommand === 'sell') {
             const produceValue = interaction.options.getString('produce');
-            // Parse Name::Mutation
+            const quantityInput = interaction.options.getString('quantity');
+
+            // === SELL ALL MODE ===
+            if (produceValue === '__ALL__') {
+                const userFarm = await getUserFarm(userId);
+                const produceItems = userFarm.items.filter(i => i.type === 'produce' && i.quantity > 0);
+
+                if (produceItems.length === 0) return interaction.editReply({ content: '❌ Bạn không có nông sản nào để bán.' });
+
+                let totalGross = 0;
+                let totalTax = 0;
+                let totalNet = 0;
+                let sellReport = [];
+
+                for (const item of produceItems) {
+                    const seedData = Object.values(seeds).find(s => s.name === item.name);
+                    if (!seedData) continue;
+
+                    let sellPrice = seedData.sellPrice || Math.floor(seedData.price * 0.5);
+                    if (item.mutation && item.mutation.effect && item.mutation.effect.price) {
+                        sellPrice = Math.floor(sellPrice * item.mutation.effect.price);
+                    }
+
+                    const gross = sellPrice * item.quantity;
+                    const tax = Math.floor(gross * 0.05);
+                    const net = gross - tax;
+
+                    totalGross += gross;
+                    totalTax += tax;
+                    totalNet += net;
+
+                    const displayName = formatPlantName(item.name, item.mutation, item.quantity);
+                    sellReport.push(`- ${displayName}: **${net.toLocaleString()}** xu`);
+
+                    await removeFromFarm(userId, item.name, item.quantity, 'produce', item.mutation);
+                }
+
+                let economyData = await EconomyUserData.findOne({ userId });
+                if (!economyData) economyData = await EconomyUserData.create({ userId });
+                economyData.balance += totalNet;
+                await economyData.save();
+
+                const embed = new EmbedBuilder().setColor('#00ff00').setTitle('💰 Bán Tất Cả Nông Sản')
+                    .setDescription(sellReport.join('\n') + `\n\n💰 Tổng: **${totalGross.toLocaleString()}** xu\n📊 Thuế (5%): **-${totalTax.toLocaleString()}** xu\n✅ Nhận: **${totalNet.toLocaleString()}** xu`);
+                return interaction.editReply({ embeds: [embed] });
+            }
+
+            // === SELL SINGLE ITEM ===
             let produceName = produceValue;
             let produceMutation = 'null';
-
             if (produceValue.includes('::')) {
                 [produceName, produceMutation] = produceValue.split('::');
             }
 
-            const quantityInput = interaction.options.getString('quantity');
-            const seed = seeds[produceName]; // Works if key matches name? 
-            // Warning: seeds keys are like 'chili', name is 'Ớt'.
-            // Autocomplete sends VALUE.
-            // Our autocomplete for 'produce' sent: `${item.name}::${mutName}`.
-            // item.name is likely 'Ớt'.
             var seedData = Object.values(seeds).find(s => s.name === produceName);
-
             if (!seedData) return interaction.editReply({ content: '❌ Loại nông sản không hợp lệ.' });
 
             const userFarm = await getUserFarm(userId);
@@ -659,7 +707,6 @@ module.exports = {
             );
 
             const displayItemName = formatPlantName(produceName, item ? item.mutation : null, 0).replace('[0kg]', '').trim();
-
             if (!item || item.quantity === 0) return interaction.editReply({ content: `Bạn không có ${displayItemName} để bán.` });
 
             let quantity;
@@ -671,22 +718,16 @@ module.exports = {
 
             if (quantity > item.quantity) return interaction.editReply({ content: `Bạn chỉ có ${item.quantity} ${displayItemName} để bán.` });
 
-            // Pass mutation to removeFromFarm
             const hasProduce = await removeFromFarm(userId, produceName, quantity, 'produce', item.mutation);
             if (!hasProduce) return interaction.editReply({ content: 'Lỗi khi trừ vật phẩm.' });
 
-            // Use sellPrice from seed data
             let sellPrice = seedData.sellPrice || Math.floor(seedData.price * 0.5);
-
-            // Apply Mutation Price Multiplier
             if (item.mutation && item.mutation.effect && item.mutation.effect.price) {
                 sellPrice = Math.floor(sellPrice * item.mutation.effect.price);
             }
 
             const grossGain = sellPrice * quantity;
-            // Apply 5% transaction tax
-            const taxRate = 0.05;
-            const taxAmount = Math.floor(grossGain * taxRate);
+            const taxAmount = Math.floor(grossGain * 0.05);
             const totalGain = grossGain - taxAmount;
 
             let economyData = await EconomyUserData.findOne({ userId });

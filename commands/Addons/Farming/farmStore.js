@@ -10,8 +10,10 @@ module.exports.run = async (client) => {
 
         console.log(`[FarmStore] Received interaction: ${interaction.customId}`);
         const parts = interaction.customId.split('_');
-        let seedKey = parts[2]; // Key directly (let for re-assignment)
-        const expectedUserId = parts[3];
+        // Format: seed_buy_{seedKey}_{userId} — but seedKey itself may contain underscores!
+        // userId is always the LAST segment (a numeric Discord ID)
+        const expectedUserId = parts[parts.length - 1];
+        let seedKey = parts.slice(2, parts.length - 1).join('_'); // Everything between 'buy_' and userId
 
         console.log(`[FarmStore] Parsed seedKey: ${seedKey}, expectedUserId: ${expectedUserId}`);
 

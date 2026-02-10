@@ -92,6 +92,29 @@ module.exports = {
             let page = 0;
             const totalPages = Math.ceil(items.length / itemsPerPage);
 
+            // Build rarity filter data (only for seeds)
+            const rarityOrder = [
+                { key: 'Common', emoji: '🌱', label: 'C' },
+                { key: 'Uncommon', emoji: '🔵', label: 'UC' },
+                { key: 'Rare', emoji: '🟢', label: 'R' },
+                { key: 'Legendary', emoji: '🟡', label: 'L' },
+                { key: 'Mythical', emoji: '🟣', label: 'M' },
+                { key: 'Divine', emoji: '🔴', label: 'D' },
+                { key: 'Prismatic', emoji: '💎', label: 'P' }
+            ];
+            const rarityItemsMap = {}; // rarity -> filtered items with original indices
+            if (category === 'Hạt Giống') {
+                for (const r of rarityOrder) {
+                    const filtered = items
+                        .map((item, idx) => ({ ...item, _originalIdx: idx }))
+                        .filter(i => i.Description && i.Description.includes(r.key));
+                    if (filtered.length > 0) {
+                        rarityItemsMap[r.key] = filtered;
+                    }
+                }
+            }
+            let activeRarityFilter = null; // null = normal paginated view
+
             const getItemList = (currentPage) => {
                 const start = currentPage * itemsPerPage;
                 const end = start + itemsPerPage;
@@ -297,18 +320,135 @@ module.exports = {
                             .setDisabled(currentPage === totalPages - 1)
                     );
 
-                return [
+                const rows = [
                     new ActionRowBuilder().addComponents(selectMenu),
                     navigationRow
                 ];
+
+                // Add rarity filter buttons for seed stores (max 5 per row)
+                if (Object.keys(rarityItemsMap).length > 0) {
+                    const rarityButtons = rarityOrder
+                        .filter(r => rarityItemsMap[r.key])
+                        .map(r =>
+                            new ButtonBuilder()
+                                .setCustomId(`rarity_${r.key}`)
+                                .setLabel(r.label)
+                                .setEmoji(r.emoji)
+                                .setStyle(ButtonStyle.Secondary)
+                        );
+                    for (let i = 0; i < rarityButtons.length; i += 5) {
+                        if (rows.length < 5) {
+                            rows.push(new ActionRowBuilder().addComponents(rarityButtons.slice(i, i + 5)));
+                        }
+                    }
+                }
+
+                return rows;
+            };
+
+            // === Rarity Filter View (plain text) ===
+            const createRarityContent = async (rarity) => {
+                const filteredItems = rarityItemsMap[rarity] || [];
+                const rarityInfo = rarityOrder.find(r => r.key === rarity);
+                const globalState = await checkStoreRestock();
+                const userFarm = await getUserFarm(interaction.user.id);
+                let userData = await EconomyUserData.findOne({ userId: interaction.user.id });
+                const userBalance = userData ? userData.balance : 0;
+
+                let text = `${rarityInfo.emoji} **─── ${rarity.toUpperCase()} ───** ${rarityInfo.emoji}\n`;
+                text += `💳 Số dư: **${userBalance.toLocaleString()} xu**\n\n`;
+
+                for (const item of filteredItems) {
+                    const seedEntry = Object.entries(seeds).find(([k, v]) => v.name === item.Name);
+                    let stockInfo = '';
+                    if (seedEntry) {
+                        const seedKey = seedEntry[0];
+                        const globalLimit = globalState.currentStockLimits[seedKey] || 0;
+                        let userBought = 0;
+                        if (userFarm.storeCycleId === globalState.storeNextRestock) {
+                            userBought = userFarm.seedPurchases[seedKey] || 0;
+                        }
+                        const available = Math.max(0, globalLimit - userBought);
+                        const maxLimit = seedEntry[1].stockLimit;
+                        if (globalLimit <= 0) stockInfo = '🚫 Hết hàng';
+                        else if (available <= 0) stockInfo = `🚫 Đã mua hết (${userBought}/${globalLimit})`;
+                        else stockInfo = `📦 ${available}/${maxLimit}`;
+                    }
+
+                    const sellPrice = seedEntry ? (seedEntry[1].sellPrice || 0) : 0;
+                    const growthMin = item.GrowthTime ? Math.floor(item.GrowthTime / 60000) : '?';
+
+                    text += `• **${item.Name}** — 💰 ${item.Price.toLocaleString()} xu | 💵 ${sellPrice.toLocaleString()} xu`;
+                    text += ` | ${stockInfo} | ⏱️ ${growthMin} phút\n`;
+                }
+
+                return text;
+            };
+
+            const createRarityComponents = (rarity) => {
+                const filteredItems = rarityItemsMap[rarity] || [];
+
+                const rows = [];
+
+                // Select menu for buying (if items exist)
+                if (filteredItems.length > 0) {
+                    const selectMenu = new StringSelectMenuBuilder()
+                        .setCustomId('buy')
+                        .setPlaceholder('Chọn hạt giống để mua')
+                        .addOptions(filteredItems.map((item) => ({
+                            label: item.Name,
+                            description: `${item.Price.toLocaleString()} xu`,
+                            value: `${item._originalIdx}`
+                        })));
+                    rows.push(new ActionRowBuilder().addComponents(selectMenu));
+                }
+
+                // Rarity buttons with active highlight + "All" back button
+                const allButton = new ButtonBuilder()
+                    .setCustomId('rarity_all')
+                    .setLabel('Tất cả')
+                    .setEmoji('📜')
+                    .setStyle(ButtonStyle.Primary);
+
+                const rarityButtons = rarityOrder
+                    .filter(r => rarityItemsMap[r.key])
+                    .map(r =>
+                        new ButtonBuilder()
+                            .setCustomId(`rarity_${r.key}`)
+                            .setLabel(r.label)
+                            .setEmoji(r.emoji)
+                            .setStyle(r.key === rarity ? ButtonStyle.Success : ButtonStyle.Secondary)
+                            .setDisabled(r.key === rarity)
+                    );
+
+                // Combine: [All] + rarity buttons, split into rows of 5
+                const allBtns = [allButton, ...rarityButtons];
+                for (let i = 0; i < allBtns.length; i += 5) {
+                    if (rows.length < 5) {
+                        rows.push(new ActionRowBuilder().addComponents(allBtns.slice(i, i + 5)));
+                    }
+                }
+
+                return rows;
             };
 
             const updateMessage = async (i) => {
                 try {
-                    await i.update({
-                        embeds: [await createEmbed(page)],
-                        components: createComponents(page)
-                    });
+                    if (activeRarityFilter) {
+                        // Rarity filter mode: plain text
+                        await i.update({
+                            content: await createRarityContent(activeRarityFilter),
+                            embeds: [],
+                            components: createRarityComponents(activeRarityFilter)
+                        });
+                    } else {
+                        // Normal paginated embed mode
+                        await i.update({
+                            content: '',
+                            embeds: [await createEmbed(page)],
+                            components: createComponents(page)
+                        });
+                    }
                 } catch (error) {
                     console.error('Error updating message:', error);
                 }
@@ -687,10 +827,21 @@ module.exports = {
                 try {
                     if (i.customId === 'back') {
                         page--;
+                        activeRarityFilter = null;
                         await updateMessage(i);
                     } else if (i.customId === 'forward') {
                         page++;
+                        activeRarityFilter = null;
                         await updateMessage(i);
+                    } else if (i.customId === 'rarity_all') {
+                        activeRarityFilter = null;
+                        await updateMessage(i);
+                    } else if (i.customId.startsWith('rarity_')) {
+                        const rarity = i.customId.replace('rarity_', '');
+                        if (rarityItemsMap[rarity]) {
+                            activeRarityFilter = rarity;
+                            await updateMessage(i);
+                        }
                     } else if (i.customId === 'buy') {
                         const itemIndex = parseInt(i.values[0]);
                         const item = items[itemIndex];
