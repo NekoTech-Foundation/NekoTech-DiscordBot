@@ -64,4 +64,6 @@ async function migrate() {
     }
 }
 
-migrate();
+migrate().catch(err => {
+    console.error('[NoiTu] ❌ Migration failed:', err.message);
+});

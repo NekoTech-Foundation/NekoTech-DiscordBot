@@ -528,44 +528,6 @@ Giveaways:
     ShowEntrants: "Danh sách tham gia"
     Entries: "Lượt tham gia"
 
-  # ===========================================================================
-# TIN NHẮN KENTA SCRATCH
-# ===========================================================================
-KentaScratch:
-  Errors:
-    ParsingOptions: "Lỗi khi phân tích các tùy chọn (Options)"
-  WinMessage: "Chúc mừng những người chiến thắng trong giveaway **{prize}**! {winners}" # biến giữ chỗ {winners}
-  WinRerollMessage: "Giveaway đã được quay lại! Chúc mừng những người chiến thắng mới của giveaway **{prize}**! {winners}" # biến giữ chỗ {winners}
-  WinnerDirectMessage: "Chúc mừng, bạn đã thắng giveaway **{prize}**! Vui lòng mở một phiếu hỗ trợ trong máy chủ **{serverName}**. {channel}"
-  NoParticipationMessage: "Không có người chiến thắng, không ai tham gia giveaway {prize}."
-  IncorrectRoleMessage: "Bạn không có vai trò cần thiết để tham gia giveaway {prize}!"
-  IncorrectMinimumAccountAgeMessage: "Tài khoản của bạn chưa đủ tuổi để tham gia giveaway {prize}!"
-  IncorrectMinimumServerJoinDateMessage: "Bạn chưa ở trong máy chủ discord {serverName} đủ lâu để tham gia giveaway {prize}!"
-  AlreadyEnteredMessage: "Bạn đã tham gia giveaway {prize} rồi!"
-  IncorrectInviteCountMessage: "Bạn cần ít nhất {minInvites} lượt mời để tham gia giveaway này."
-  IncorrectMessageCountMessage: "Bạn cần {required} tin nhắn để tham gia giveaway này. Bạn hiện có {current} tin nhắn."
-  chanceMessage: "{user}, bạn có **{winChance}%** cơ hội thắng giveaway này. ({userEntries} lượt tham gia: 1 cơ bản + {extraEntries} thưởng)"
-  ExtraEntriesMessage: "Bạn có **{extraEntries}** lượt tham gia thêm từ vai trò của mình! Sử dụng nút `Cơ hội` để xem tỷ lệ thắng của bạn."
-
-  NotJoinedGiveaway: "Bạn chưa tham gia giveaway này!"
-  CalculationError: "Có lỗi xảy ra khi tính toán tỷ lệ."
-
-  Embeds:
-    ActiveGiveaway:
-      Title: "🎉 QUÀ TẶNG 🎉"
-      Prize: "## Giveaway {prize} x{winnerCount}!"
-      HostedByField: "Tổ chức bởi:"
-      EndsInField: "Kết thúc sau:"
-      EntriesField: "Lượt tham gia:"
-      WhitelistRoleField: "Ai có thể tham gia"
-      BlacklistRoleField: "Ai không thể tham gia"
-      MinimumSeverJoinDateField: "Ngày tham gia máy chủ tối thiểu"
-      MinimumAccountAgeField: "Tuổi tài khoản tối thiểu"
-
-    EndedGiveaway:
-      Title: "## Giveaway {prize} đã kết thúc!"
-      WinnersField: "Người chiến thắng:"
-      EntriesField: "Lượt tham gia:"
 
 # ===========================================================================
 # TIN NHẮN LỆNH AFK

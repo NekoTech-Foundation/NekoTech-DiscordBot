@@ -1,5 +1,4 @@
 const AutoResponse = require('../../../models/autoResponse');
-const Layout = require('../../../models/Layout');
 const EmbedTemplate = require('../../../models/EmbedTemplate');
 const { parsePlaceholders } = require('./placeholderParser');
 const { parseFunctions, executeChecks, executeActions } = require('./functionParser');
@@ -39,22 +38,8 @@ module.exports = {
                     let finalContent = await parsePlaceholders(responseContent, message);
                     const messagePayload = {};
 
-                    // 1. Process {layout:Name}
-                    const layoutRegex = /{layout:([^}]+)}/;
-                    const layoutMatch = finalContent.match(layoutRegex);
-                    if (layoutMatch) {
-                        const layoutName = layoutMatch[1];
-                        finalContent = finalContent.replace(layoutMatch[0], '');
-
-                        try {
-                            const layout = await Layout.findOne({ guildId, name: layoutName });
-                            if (layout && layout.json_data) {
-                                messagePayload.components = JSON.parse(layout.json_data);
-                            }
-                        } catch (e) {
-                            console.error('[AutoResponder] Failed to load layout:', e);
-                        }
-                    }
+                    // Strip any leftover {layout:Name} tags (Layout feature removed)
+                    finalContent = finalContent.replace(/{layout:[^}]+}/g, '');
 
                     // 2. Process {embed:Name}
                     const embedRegex = /{embed:([^}]+)}/;
@@ -98,6 +83,6 @@ module.exports = {
                 }
             }
         });
-        console.log('Autoresponder addon loaded with Layout & Embed support.');
+        console.log('Autoresponder addon loaded with Embed support.');
     }
 };

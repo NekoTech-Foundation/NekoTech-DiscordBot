@@ -1,5 +1,4 @@
 const StickyMessage = require('../models/StickyMessage');
-const KentaScratch = require('./kentaScratch');
 const { EmbedBuilder, WebhookClient } = require('discord.js');
 
 class StickyManager {
@@ -70,25 +69,13 @@ class StickyManager {
                 }
             }
 
-            // 2. Parse Content
-            // Need context. Dummy interaction/user for now? Or just channel/guild context.
-            // If triggered by inactivity, there is no specific user.
-            const context = {
-                guild: channel.guild,
-                channel: channel,
-                user: null, // No specific user for sticky
-                member: null
-            };
-
-            const parsed = await KentaScratch.parse(config.content, context);
-
-            // Check allowed mentions
+            // Send content directly without parsing
             const allowedMentions = config.allowMentions ? undefined : { parse: [] };
 
             const payload = {
-                content: parsed.content || null,
-                embeds: parsed.embeds,
-                components: parsed.components,
+                content: config.content || null,
+                embeds: [],
+                components: [],
                 allowedMentions: allowedMentions
             };
 

@@ -111,11 +111,6 @@ module.exports = async (client, interaction) => {
     }
     try {
         if (interaction.isButton()) {
-            if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
-                const handler = require('../utils/kentaInteractionManager');
-                await handler.handleInteraction(interaction, client);
-                return;
-            }
             if (interaction.customId === 'check_percent' || interaction.customId === 'show_entrants') {
                 await giveawayActions.handleButtonInteraction(interaction);
                 return;
@@ -173,11 +168,6 @@ module.exports = async (client, interaction) => {
 
             await handleButtonInteraction(client, interaction);
         } else if (interaction.isStringSelectMenu()) {
-            if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
-                const handler = require('../utils/kentaInteractionManager');
-                await handler.handleInteraction(interaction, client);
-                return;
-            }
             // Music Select Handler (if any - based on index.js logic which checked button OR select for music_)
             if (interaction.customId.startsWith('music_') ||
                 interaction.customId.startsWith('search_') ||
@@ -189,11 +179,6 @@ module.exports = async (client, interaction) => {
 
             await handleSelectMenuInteraction(client, interaction);
         } else if (interaction.isModalSubmit()) {
-            if (interaction.customId.startsWith('kb_') || interaction.customId.startsWith('kenta_')) {
-                const handler = require('../utils/kentaInteractionManager');
-                await handler.handleInteraction(interaction, client);
-                return;
-            }
             // Music Modal Handler
             if (interaction.customId === 'volume_modal') {
                 await musicModalHandler.execute(interaction);

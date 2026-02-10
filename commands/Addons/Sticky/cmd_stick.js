@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, WebhookClient } = require('discord.js');
 const StickyMessage = require('../../../models/StickyMessage');
-const KentaScratch = require('../../../utils/kentaScratch');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,7 +13,7 @@ module.exports = {
         )
         .addSubcommand(sub =>
             sub.setName('message')
-                .setDescription('Đặt nội dung tin nhắn cố định (Hỗ trợ KentaScratch)')
+                .setDescription('Đặt nội dung tin nhắn cố định')
                 .addChannelOption(opt => opt.setName('channel').setDescription('Chọn kênh').setRequired(true))
         )
         .addSubcommand(sub =>
@@ -137,9 +136,9 @@ async function handleMessage(interaction, channel) {
 
     const contentInput = new TextInputBuilder()
         .setCustomId('content')
-        .setLabel('Nhập nội dung (KentaScratch)')
+        .setLabel('Nhập nội dung')
         .setStyle(TextInputStyle.Paragraph)
-        .setPlaceholder('Nhập text hoặc {layout:...}')
+        .setPlaceholder('Nhập text cho tin nhắn cố định')
         .setRequired(true)
         .setValue(config.content || '');
 

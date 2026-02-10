@@ -485,46 +485,6 @@ Giveaways:
   chanceMessage: "{user}, you have a **{winChance}%** chance of winning. ({userEntries} entries: 1 base + {extraEntries} bonus)"
   NotJoinedGiveaway: "You have not joined this giveaway!"
   CalculationError: "An error occurred whilst calculating your chance."
-# ===========================================================================
-# KENTA SCRATCH MESSAGES
-# ===========================================================================
-KentaScratch:
-  Errors:
-    ParsingOptions: "Error parsing options"
-  NotJoinedGiveaway: "You have not joined this giveaway!"
-  CalculationError: "An error occurred whilst calculating your chance."
-  GiveawayNotFound: "Giveaway not found or may have been deleted...."
-  GiveawayAlreadyEnded: "Giveaway has already ended."
-  GiveawayHasntEnded: "Giveaway hasn't ended yet."
-  WinMessage: "Congratulations to the winners of **{prize}**! {winners}"
-  WinRerollMessage: "Giveaway rerolled! Congratulations to the new winners of **{prize}**! {winners}"
-  WinnerDirectMessage: "Congratulations, you won the giveaway for **{prize}**! Please open a ticket in **{serverName}** to claim. {channel}"
-  NoParticipationMessage: "No winner, nobody participated in the giveaway for {prize}."
-  IncorrectRoleMessage: "You do not have the required role to enter the giveaway for {prize}!"
-  IncorrectMinimumAccountAgeMessage: "Your account is not old enough to enter the giveaway for {prize}!"
-  IncorrectMinimumServerJoinDateMessage: "You haven't been in the server {serverName} long enough to enter the giveaway for {prize}!"
-  AlreadyEnteredMessage: "You have already entered the giveaway for {prize}!"
-  IncorrectInviteCountMessage: "You need at least {minInvites} invites to enter this giveaway."
-  IncorrectMessageCountMessage: "You need {required} messages to enter this giveaway. You currently have {current}."
-  chanceMessage: "{user}, you have a **{winChance}%** chance of winning. ({userEntries} entries: 1 base + {extraEntries} bonus)"
-  ExtraEntriesMessage: "You have **{extraEntries}** extra entries from your roles! Use the `Chance` button to check your win rate."
-
-  Embeds:
-    ActiveGiveaway:
-      Title: "🎉 GIVEAWAY 🎉"
-      Prize: "## Giveaway {prize} x{winnerCount}!"
-      HostedByField: "Hosted by:"
-      EndsInField: "Ends in:"
-      EntriesField: "Entries:"
-      WhitelistRoleField: "Who can enter"
-      BlacklistRoleField: "Who cannot enter"
-      MinimumSeverJoinDateField: "Min Server Join Date"
-      MinimumAccountAgeField: "Min Account Age"
-
-    EndedGiveaway:
-      Title: "## Giveaway {prize} Ended!"
-      WinnersField: "Winners:"
-      EntriesField: "Entries:"
 
 # ===========================================================================
 # AFK COMMAND

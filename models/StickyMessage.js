@@ -3,7 +3,7 @@ const SQLiteModel = require('../utils/sqliteModel');
 const defaultData = (query) => ({
     guildId: query.guildId,
     channelId: query.channelId,
-    content: '', // KentaScratch format
+    content: '', // Message content
     mode: 'ChatInactive', // Enum: 'ChatInactive', 'MessageThreshold'
     delay: 15, // Seconds
     threshold: 50, // Message count
