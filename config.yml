@@ -8,11 +8,28 @@ BotClientId: "1459705671959449714"
 
 # Cài đặt Cơ bản
 GuildID: "1388889326309605488"
-BotName: "NekoBuckets"
+BotName: "KentaBuckets"
 LogCommands: false
 Statistics: true
 Timezone: "Asia/Ho_Chi_Minh"
 DashboardUrl: "http://localhost:5173"
+
+# Bot Mention Reply (phản hồi khi @bot)
+BotMention:
+  Enabled: true
+  TriggerKeywords:
+    - "help"
+    - "info"
+    - "prefix"
+    - "ping"
+    - "about"
+    - "giúp"
+    - "thông tin"
+    - "hướng dẫn"
+    - "lệnh"
+    - "bot"
+  MaxCleanContentLength: 30
+  Cooldown: "5s"
 
 # Quyền hạn Admin/Owner
 OwnerIDs:

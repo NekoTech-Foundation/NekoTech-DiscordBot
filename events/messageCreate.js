@@ -55,6 +55,124 @@ function findBestMatch(term, targets) {
 }
 
 let spamData = new Map();
+let botMentionCooldown = new Map();
+
+// Parse duration string (e.g. '5s', '1m') to ms
+function parseCooldownDuration(str) {
+    if (!str) return 5000;
+    const match = str.match(/(\d+)\s*(s|m|h)/i);
+    if (!match) return 5000;
+    const val = parseInt(match[1]);
+    switch (match[2].toLowerCase()) {
+        case 's': return val * 1000;
+        case 'm': return val * 60000;
+        case 'h': return val * 3600000;
+        default: return 5000;
+    }
+}
+
+/**
+ * Handle bot mention reply
+ * Distinguishes between simple @bot ping (reply with info) and casual chat mentioning bot (ignore)
+ */
+async function handleBotMention(client, message) {
+    const mentionConfig = config.BotMention;
+    if (!mentionConfig || !mentionConfig.Enabled) return false;
+
+    // Check if bot is mentioned
+    if (!message.mentions.has(client.user)) return false;
+
+    // Remove all bot mention patterns from content
+    const botMentionRegex = new RegExp(`<@!?${client.user.id}>`, 'g');
+    const cleanContent = message.content.replace(botMentionRegex, '').trim();
+
+    // --- Smart detection logic ---
+
+    // If message mentions other users/roles besides the bot → casual chat, ignore
+    const otherUserMentions = message.mentions.users.filter(u => u.id !== client.user.id);
+    if (otherUserMentions.size > 0 || message.mentions.roles.size > 0) return false;
+
+    const maxLen = mentionConfig.MaxCleanContentLength || 30;
+    const triggerKeywords = (mentionConfig.TriggerKeywords || []).map(k => k.toLowerCase());
+
+    let shouldReply = false;
+
+    if (cleanContent.length === 0) {
+        // Pure ping with no extra text → reply
+        shouldReply = true;
+    } else if (cleanContent.length <= maxLen) {
+        // Short text: check if it matches a trigger keyword
+        const lowerClean = cleanContent.toLowerCase();
+        shouldReply = triggerKeywords.some(kw => lowerClean === kw || lowerClean.startsWith(kw + ' ') || lowerClean.endsWith(' ' + kw));
+    }
+    // Long text (> maxLen) → casual chat, ignore
+
+    if (!shouldReply) return false;
+
+    // --- Cooldown check ---
+    const cooldownMs = parseCooldownDuration(mentionConfig.Cooldown);
+    const cooldownKey = `${message.author.id}-${message.guild.id}`;
+    const now = Date.now();
+    const lastUsed = botMentionCooldown.get(cooldownKey);
+    if (lastUsed && (now - lastUsed) < cooldownMs) return true; // silently ignore, but return true to stop further processing
+    botMentionCooldown.set(cooldownKey, now);
+
+    // --- Gather info and reply ---
+    try {
+        const guildSettings = await GuildSettings.findOne({ guildId: message.guild.id });
+        const prefix = guildSettings?.prefix || config.CommandsPrefix || 'K';
+        const guildData = await GuildData.findOne({ guildID: message.guild.id });
+        const totalMessages = guildData?.totalMessages || 0;
+
+        // Uptime calculation
+        const uptimeMs = client.uptime || 0;
+        const days = Math.floor(uptimeMs / 86400000);
+        const hours = Math.floor((uptimeMs % 86400000) / 3600000);
+        const minutes = Math.floor((uptimeMs % 3600000) / 60000);
+        let uptimeStr = '';
+        if (days > 0) uptimeStr += `${days} ngày `;
+        if (hours > 0) uptimeStr += `${hours} giờ `;
+        uptimeStr += `${minutes} phút`;
+
+        // Ping
+        const wsPing = client.ws.ping;
+        const msgPing = Date.now() - message.createdTimestamp;
+
+        // Member count
+        const memberCount = message.guild.memberCount.toLocaleString('vi-VN');
+
+        // Bot version
+        const packageFile = require('../package.json');
+        const version = packageFile.version || config.Version || '???';
+
+        // Channel & Role count
+        const channelCount = message.guild.channels.cache.size;
+        const roleCount = message.guild.roles.cache.size;
+
+        // Boost count
+        const boostCount = message.guild.premiumSubscriptionCount || 0;
+        const boostTier = message.guild.premiumTier || 0;
+
+        const dashboardUrl = config.DashboardUrl || null;
+        const botName = config.BotName || client.user.username;
+
+        let replyText = '';
+        replyText += `◆ **${botName}** v${version}\n`;
+        replyText += `┃ ⏱ **Uptime:** ${uptimeStr}\n`;
+        replyText += `┃ 📡 **Ping:** ${msgPing}ms / API: ${wsPing}ms\n`;
+        replyText += `┃ 👥 **Thành viên:** ${memberCount}\n`;
+        replyText += `┃ 💎 **Boost:** ${boostCount} (Tier ${boostTier})\n`;
+        replyText += `┃ 🔧 **Prefix:** \`${prefix}\`\n`;
+        replyText += `┃\n`;
+        replyText += `┃ 📖 Sử dụng \`/help\` hoặc \`${prefix}help\` để xem lệnh, /botinfo để xem thêm.`;
+
+        await message.reply({ content: replyText, allowedMentions: { repliedUser: false } });
+    } catch (error) {
+        console.error('[BotMention] Error handling bot mention reply:', error);
+    }
+
+    return true;
+}
 
 const convertPatternToRegex = (pattern) => {
     if (pattern.startsWith('regex:')) {
@@ -228,7 +346,13 @@ module.exports = async (client, message) => {
         console.error('Sticky Manager Error:', e);
     }
 
-
+    // Bot Mention Reply Handler
+    try {
+        const mentionHandled = await handleBotMention(client, message);
+        if (mentionHandled) return;
+    } catch (e) {
+        console.error('[BotMention] Error:', e);
+    }
 
     let dmSent = false;
 

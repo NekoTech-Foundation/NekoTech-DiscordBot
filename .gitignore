@@ -7,6 +7,4 @@ logs.txt
 /KentaBuckets-Landing
 whitelabel_instances/
 *.sqlite-shm
-database.sqlite
-database.sqlite-shm
-database.sqlite-wal
+commands/Addons/Fishing/current_hourly.json
