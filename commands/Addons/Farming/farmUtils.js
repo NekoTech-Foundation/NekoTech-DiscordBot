@@ -205,4 +205,51 @@ async function checkStoreRestock() {
     return globalState;
 }
 
-module.exports = { seeds, getUserFarm, addToFarm, removeFromFarm, formatPlantName, checkStoreRestock };
+const fertilizers = {
+    // --- CƠ BẢN (Basic) ---
+    organic: {
+        name: 'Phân Hữu Cơ', emoji: '🌿', tier: 'basic', tierEmoji: '🟢',
+        price: 500, description: 'Tăng tốc độ phát triển 15%',
+        effects: { growthSpeed: 0.15, yieldBonus: 0, priceBonus: 0, mutationBonus: 0 }
+    },
+    phosphate: {
+        name: 'Phân Lân', emoji: '🦴', tier: 'basic', tierEmoji: '🟢',
+        price: 800, description: 'Tăng sản lượng 15%',
+        effects: { growthSpeed: 0, yieldBonus: 0.15, priceBonus: 0, mutationBonus: 0 }
+    },
+    // --- NÂNG CAO (Advanced) ---
+    npk: {
+        name: 'Phân NPK', emoji: '⚗️', tier: 'advanced', tierEmoji: '🔵',
+        price: 2500, description: 'Tăng tốc độ phát triển 30%',
+        effects: { growthSpeed: 0.30, yieldBonus: 0, priceBonus: 0, mutationBonus: 0 }
+    },
+    microbe: {
+        name: 'Phân Vi Sinh', emoji: '🦠', tier: 'advanced', tierEmoji: '🔵',
+        price: 3000, description: 'Tăng sản lượng 30%',
+        effects: { growthSpeed: 0, yieldBonus: 0.30, priceBonus: 0, mutationBonus: 0 }
+    },
+    potassium: {
+        name: 'Phân Kali', emoji: '💎', tier: 'advanced', tierEmoji: '🔵',
+        price: 2800, description: 'Tăng giá bán 20%',
+        effects: { growthSpeed: 0, yieldBonus: 0, priceBonus: 0.20, mutationBonus: 0 }
+    },
+    // --- CAO CẤP (Premium) ---
+    nano: {
+        name: 'Phân Nano', emoji: '⚡', tier: 'premium', tierEmoji: '🟡',
+        price: 8000, description: 'Tăng tốc 50% + Sản lượng 15%',
+        effects: { growthSpeed: 0.50, yieldBonus: 0.15, priceBonus: 0, mutationBonus: 0 }
+    },
+    biotech: {
+        name: 'Phân Sinh Học', emoji: '🧬', tier: 'premium', tierEmoji: '🟡',
+        price: 10000, description: 'Sản lượng 50% + Đột biến 10%',
+        effects: { growthSpeed: 0, yieldBonus: 0.50, priceBonus: 0, mutationBonus: 0.10 }
+    },
+    // --- THẦN THOẠI (Mythical) ---
+    divine: {
+        name: 'Phân Thần Nông', emoji: '🌟', tier: 'mythical', tierEmoji: '🔴',
+        price: 50000, description: 'Tốc 70% + Sản lượng 40% + Đột biến 15%',
+        effects: { growthSpeed: 0.70, yieldBonus: 0.40, priceBonus: 0, mutationBonus: 0.15 }
+    }
+};
+
+module.exports = { seeds, fertilizers, getUserFarm, addToFarm, removeFromFarm, formatPlantName, checkStoreRestock };

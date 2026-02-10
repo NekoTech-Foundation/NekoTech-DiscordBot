@@ -9,7 +9,7 @@ const EconomyUserData = require('../../../models/EconomyUserData');
 const parseDuration = require('./Utility/parseDuration');
 const { replacePlaceholders } = require('./Utility/helpers');
 const { getUserFishing, loadConfig: loadFishingConfig } = require('../../Addons/Fishing/fishingUtils.js');
-const { getUserFarm, checkStoreRestock, seeds } = require('../../Addons/Farming/farmUtils.js');
+const { getUserFarm, checkStoreRestock, seeds, fertilizers } = require('../../Addons/Farming/farmUtils.js');
 
 
 // Import vé số addon nếu có
@@ -75,6 +75,15 @@ module.exports = {
                         GrowthTime: seed.growthTime,
                         Stock: undefined
                     }));
+            } else if (category === 'Phân bón') {
+                items = Object.entries(fertilizers).map(([key, f]) => ({
+                    Name: f.name,
+                    Price: f.price,
+                    Key: key,
+                    Type: 'Fertilizer',
+                    Description: `${f.tierEmoji} ${f.tier.toUpperCase()} — ${f.description}`,
+                    Stock: undefined
+                }));
             } else {
                 items = Object.values(config.Store[category] || {});
             }

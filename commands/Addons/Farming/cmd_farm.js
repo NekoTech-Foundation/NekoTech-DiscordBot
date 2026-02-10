@@ -1,7 +1,7 @@
 const { EmbedBuilder, SlashCommandBuilder, StringSelectMenuBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const plantSchema = require('./schemas/plantSchema');
 const bankSchema = require('./schemas/bankSchema');
-const { seeds, getUserFarm, addToFarm, removeFromFarm, formatPlantName } = require('./farmUtils');
+const { seeds, fertilizers, getUserFarm, addToFarm, removeFromFarm, formatPlantName } = require('./farmUtils');
 const { events, getRandomMutation } = require('./farmEvents');
 const { getGlobalWeather } = require('./farmWeather');
 const EconomyUserData = require('../../../models/EconomyUserData');
@@ -73,14 +73,13 @@ module.exports = {
                 .setName('phanbon')
                 .setDescription('✨ Sử dụng phân bón cho cây')
                 .addStringOption(option => {
-                    const config = getConfig();
-                    const choices = Object.keys(config.Store['Phân bón'] || {}).map(key => ({ name: config.Store['Phân bón'][key].Name, value: key }));
+                    const choices = Object.entries(fertilizers).map(([key, f]) => ({ name: `${f.emoji} ${f.name}`, value: key }));
                     return option.setName('ten_phan_bon').setDescription('🧪 Loại phân bón muốn dùng').setRequired(true).addChoices(...choices);
                 })
                 .addStringOption(option =>
                     option.setName('ten_cay')
-                        .setDescription('🌿 Loại cây muốn bón (để trống để bón tất cả)')
-                        .setRequired(false)
+                        .setDescription('🌿 Loại cây muốn bón (bắt buộc chọn 1 cây)')
+                        .setRequired(true)
                         .setAutocomplete(true)))
         .addSubcommandGroup(group =>
             group.setName('savings')
@@ -364,12 +363,18 @@ module.exports = {
                 await plantSchema.deleteOne({ _id: planted._id });
                 let harvestedQuantity = (Math.floor(Math.random() * 3) + 2) * planted.quantity;
 
-                // Yield Multipliers
-                if (planted.fertilizer && planted.fertilizer.effect === 'yield_increase') {
-                    if (planted.fertilizer.key === 'bumper_harvest_fertilizer') harvestedQuantity *= 1.5;
-                    else if (planted.fertilizer.key === 'all_purpose_fertilizer') harvestedQuantity *= 1.25;
+                // Yield Multipliers from fertilizers (new stacking system)
+                const plantFertilizers = Array.isArray(planted.fertilizers) ? planted.fertilizers : (planted.fertilizer ? [planted.fertilizer] : []);
+                let totalYieldBonus = 0;
+                let totalPriceBonus = 0;
+                for (const f of plantFertilizers) {
+                    const fertData = fertilizers[f.key];
+                    if (fertData) {
+                        totalYieldBonus += fertData.effects.yieldBonus || 0;
+                        totalPriceBonus += fertData.effects.priceBonus || 0;
+                    }
                 }
-                if (planted.fertilizer && planted.fertilizer.qualityReduced) harvestedQuantity *= 0.5;
+                if (totalYieldBonus > 0) harvestedQuantity *= (1 + totalYieldBonus);
 
                 const globalWeather = await getGlobalWeather();
                 const currentWeather = globalWeather.currentWeather;
@@ -465,8 +470,15 @@ module.exports = {
                         if (p.mutation) {
                             line = `**[${p.mutation.emoji} ${p.mutation.name}]** ${line}`;
                         }
+                        // Show fertilizers applied to this plant
+                        const pFerts = Array.isArray(p.fertilizers) ? p.fertilizers : (p.fertilizer ? [p.fertilizer] : []);
+                        const fertIcons = pFerts.map(f => {
+                            const fd = fertilizers[f.key];
+                            return fd ? fd.emoji : '🧪';
+                        }).join('');
+                        const fertSuffix = fertIcons ? ` ${fertIcons}` : '';
 
-                        description += `${line}: ${progress.toFixed(2)}% - Còn lại: ${hours}h ${minutes}m\n`;
+                        description += `${line}: ${progress.toFixed(2)}% - Còn lại: ${hours}h ${minutes}m${fertSuffix}\n`;
                     }
                 }
 
@@ -565,7 +577,12 @@ module.exports = {
             }
             embed.addFields({ name: '🥒 Nông Sản', value: produceDesc, inline: true });
 
-            let fertDesc = fertilizerItems.length > 0 ? fertilizerItems.map(i => `🧪 **${i.name}**: ${i.quantity}`).join('\n') : "Không có phân bón.";
+            let fertDesc = fertilizerItems.length > 0 ? fertilizerItems.map(i => {
+                const fd = Object.values(fertilizers).find(f => f.name === i.name);
+                const emoji = fd?.emoji || '🧪';
+                const tier = fd?.tierEmoji || '';
+                return `${emoji} **${i.name}**: ${i.quantity} ${tier}`;
+            }).join('\n') : "Không có phân bón.";
             embed.addFields({ name: '🧪 Phân Bón', value: fertDesc, inline: false });
 
             // Select Menu for Quick Sell (Updated for composite values)
@@ -590,35 +607,67 @@ module.exports = {
             await interaction.editReply({ embeds: [embed], components: [row] });
 
         } else if (subcommand === 'phanbon') {
-            // (Unchanged logic for brevity, assuming it works fine)
             const fertilizerKey = interaction.options.getString('ten_phan_bon');
             const plantName = interaction.options.getString('ten_cay');
-            const config = getConfig(); // Need to re-get since it was in original scope? Yes.
-            const fertilizer = config.Store['Phân bón'][fertilizerKey];
-            // ... [Logic identical to original] ...
+
+            const fertData = fertilizers[fertilizerKey];
+            if (!fertData) return interaction.editReply({ content: '❌ Phân bón không hợp lệ.' });
+
+            // Check user has this fertilizer in inventory
             const userFarm = await getUserFarm(userId);
-            const fertilizerItem = userFarm.items.find(i => i.name === fertilizer.Name && i.type === 'Fertilizer');
-            if (!fertilizerItem || fertilizerItem.quantity < 1) return interaction.editReply({ content: farmingLang.Errors.NoFertilizer.replace('{fertilizer}', fertilizer.Name) });
-
-            const hasFertilizer = await removeFromFarm(userId, fertilizer.Name, 1, 'Fertilizer');
-            if (!hasFertilizer) return interaction.editReply({ content: farmingLang.Errors.NoFertilizer.replace('{fertilizer}', fertilizer.Name) });
-
-            const plantsToFertilize = plantName ? await plantSchema.find({ userId, plant: plantName }) : await plantSchema.find({ userId });
-            if (plantsToFertilize.length === 0) return interaction.editReply({ content: farmingLang.Errors.NoPlantsToFertilize });
-
-            for (const plant of plantsToFertilize) {
-                let seedData = seeds[plant.plant];
-                if (!seedData) seedData = Object.values(seeds).find(s => s.name === plant.plant);
-                if (!seedData) continue;
-                switch (fertilizer.Key) {
-                    case 'growth_fertilizer': plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - (seedData.growthTime * 0.25)); break;
-                    case 'super_speed_fertilizer': plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - seedData.growthTime); plant.fertilizer = { key: fertilizer.Key, effect: 'yield_reduce', qualityReduced: true }; break;
-                    case 'bumper_harvest_fertilizer': plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' }; break;
-                    case 'all_purpose_fertilizer': plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - (seedData.growthTime * 0.5)); plant.fertilizer = { key: fertilizer.Key, effect: 'yield_increase' }; break;
-                }
-                await plant.save();
+            const fertilizerItem = userFarm.items.find(i => i.name === fertData.name && i.type === 'Fertilizer');
+            if (!fertilizerItem || fertilizerItem.quantity < 1) {
+                return interaction.editReply({ content: `❌ Bạn không có **${fertData.emoji} ${fertData.name}** trong kho!` });
             }
-            await interaction.editReply({ content: farmingLang.UI.FertilizeSuccess.replace('{fertilizer}', fertilizer.Name).replace('{plant}', plantName ? seeds[plantName].name : 'all plants') });
+
+            // Find the target plant
+            const plantsToFertilize = await plantSchema.find({ userId, plant: plantName });
+            if (plantsToFertilize.length === 0) {
+                return interaction.editReply({ content: farmingLang.Errors.NoPlantsToFertilize || '❌ Không tìm thấy cây để bón phân.' });
+            }
+
+            const plant = plantsToFertilize[0]; // Pick the first matching plant
+            const plantFertilizers = Array.isArray(plant.fertilizers) ? plant.fertilizers : (plant.fertilizer ? [plant.fertilizer] : []);
+
+            // Check stacking limit (max 2)
+            if (plantFertilizers.length >= 2) {
+                return interaction.editReply({ content: `❌ Cây **${seeds[plant.plant]?.name || plant.plant}** đã có tối đa 2 phân bón! Không thể thêm nữa.` });
+            }
+
+            // Check duplicate
+            if (plantFertilizers.some(f => f.key === fertilizerKey)) {
+                return interaction.editReply({ content: `❌ Cây này đã được bón **${fertData.emoji} ${fertData.name}** rồi! Hãy dùng loại khác.` });
+            }
+
+            // Remove fertilizer from inventory
+            const removed = await removeFromFarm(userId, fertData.name, 1, 'Fertilizer');
+            if (!removed) return interaction.editReply({ content: `❌ Không thể sử dụng phân bón. Vui lòng thử lại.` });
+
+            // Apply fertilizer effects
+            let seedData = seeds[plant.plant];
+            if (!seedData) seedData = Object.values(seeds).find(s => s.name === plant.plant);
+
+            // Growth speed: reduce remaining time
+            if (fertData.effects.growthSpeed > 0 && seedData) {
+                const timeReduction = seedData.growthTime * fertData.effects.growthSpeed;
+                plant.plantedAt = new Date(new Date(plant.plantedAt).getTime() - timeReduction);
+            }
+
+            // Store fertilizer in plant's array
+            plantFertilizers.push({ key: fertilizerKey });
+            plant.fertilizers = plantFertilizers;
+
+            await plant.save();
+
+            const plantDisplayName = seedData?.name || plant.plant;
+            const effectList = [];
+            if (fertData.effects.growthSpeed > 0) effectList.push(`⚡ Tốc độ +${(fertData.effects.growthSpeed * 100).toFixed(0)}%`);
+            if (fertData.effects.yieldBonus > 0) effectList.push(`📈 Sản lượng +${(fertData.effects.yieldBonus * 100).toFixed(0)}%`);
+            if (fertData.effects.priceBonus > 0) effectList.push(`💰 Giá bán +${(fertData.effects.priceBonus * 100).toFixed(0)}%`);
+            if (fertData.effects.mutationBonus > 0) effectList.push(`🧬 Đột biến +${(fertData.effects.mutationBonus * 100).toFixed(0)}%`);
+
+            const fertCount = plantFertilizers.length;
+            await interaction.editReply({ content: `✅ Đã bón **${fertData.emoji} ${fertData.name}** cho **${plantDisplayName}**!\n${effectList.join(' | ')}\n🧪 Phân bón trên cây: ${fertCount}/2` });
 
         } else if (subcommand === 'deposit' || subcommand === 'balance') {
             // ... [Savings Logic Unchanged] ...

@@ -5,7 +5,7 @@ const defaultData = (query) => ({
     plant: query.plant,
     plantedAt: Date.now(),
     quantity: 1,
-    fertilizer: null,
+    fertilizers: [],
     event: null,
     mutation: null,
     lastEventCheck: Date.now()

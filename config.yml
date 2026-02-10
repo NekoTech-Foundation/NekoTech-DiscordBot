@@ -277,28 +277,7 @@ Store:
       Name: "Thẻ Đổi Tên"
       Price: 5000
       Description: "Dùng để đổi tên tài khoản bot."
-  Phân bón:
-    growth_fertilizer:
-      Name: "Growth Fertilizer"
-      Key: "growth_fertilizer"
-      Price: 100
-      Description: "Speeds up growth by 25%"
-    super_speed_fertilizer:
-      Name: "Super Speed Fertilizer"
-      Key: "super_speed_fertilizer"
-      Price: 500
-      Description: "Instantly grows plant, reduces yield"
-    bumper_harvest_fertilizer:
-      Name: "Bumper Harvest Fertilizer"
-      Key: "bumper_harvest_fertilizer"
-      Price: 300
-      Description: "Increases yield"
-    all_purpose_fertilizer:
-      Name: "All Purpose Fertilizer"
-      Key: "all_purpose_fertilizer"
-      Price: 400
-      Description: "Speeds up growth and increases yield"
-
+  Phân bón: {}
   "Vé Số":
     Ticket50:
       Name: "Vé Số (50 xu)"
