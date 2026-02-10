@@ -204,79 +204,152 @@ Store:
     # Dynamic content handled by seedShop.js
 
   "Cần Câu":
+    # --- 🟢 STARTER ---
     TapSu:
       Name: "Cần câu tập sự"
       Key: "tap_su"
       Price: 350
-      Description: "Cần câu cho người mới bắt đầu."
-    Go:
-      Name: "Cần Câu Gỗ"
-      Key: "go"
-      Price: 450
-      Description: "Cần câu làm từ gỗ chắc chắn."
-    Meo:
-      Name: "Cần Câu Mèo"
-      Key: "meo"
-      Price: 750
-      Description: "Cần câu dễ thương hình mèo."
+      Description: "🟢 Cần câu cho người mới bắt đầu."
+    # --- 🟢 BASIC ---
+    Truc:
+      Name: "Cần Câu Trúc"
+      Key: "truc"
+      Price: 1500
+      Description: "🟢 Cần câu trúc bền bỉ, tăng cơ hội uncommon."
+    # --- 🔵 MID ---
     BoTui:
       Name: "Cần Câu Bỏ Túi"
       Key: "bo_tui"
-      Price: 1500
-      Description: "Nhỏ gọn, tiện lợi để mang đi."
-    Vit:
-      Name: "Cần Câu Vịt"
-      Key: "vit"
-      Price: 2250
-      Description: "Quack quack! Cần câu hình vịt."
+      Price: 3000
+      Description: "🔵 Nhỏ gọn, tiện lợi, hút cá uncommon mạnh."
     NghiepDu:
       Name: "Cần Câu Nghiệp Dư"
       Key: "nghiep_du"
-      Price: 3000
-      Description: "Dành cho những người đã quen tay."
+      Price: 5000
+      Description: "🔵 Dành cho người đã quen tay, mở rare."
+    # --- 🟡 PRO ---
+    KiemHuyenThoai:
+      Name: "Cần Câu Kiếm Huyền Thoại"
+      Key: "kiem_huyen_thoai"
+      Price: 12000
+      Description: "🟡 Kiếm phép thuật, tăng rare và epic."
     PhepThuat:
       Name: "Cần Câu Phép Thuật"
       Key: "phep_thuat"
-      Price: 20000
-      Description: "Toả sáng lấp lánh với phép thuật."
+      Price: 25000
+      Description: "🟡 Toả sáng lấp lánh, mở cửa epic/legendary."
+    # --- 🔴 ELITE/MASTER ---
     ChuyenNghiep:
       Name: "Cần câu chuyên nghiệp"
       Key: "chuyen_nghiep"
-      Price: 15000
-      Description: "Dành cho các cần thủ lão luyện."
+      Price: 50000
+      Description: "🔴 Dành cho cần thủ lão luyện, epic/legendary mạnh."
     QuyenTruongPhep:
       Name: "Cần Câu Quyền Trượng Phép"
       Key: "quyen_truong_phep"
-      Price: 120000
-      Description: "Sức mạnh tối thượng của đại dương."
+      Price: 150000
+      Description: "🔴 Sức mạnh tối thượng, legendary rate cao nhất."
 
   "Mồi Câu":
+    # --- 🟢 CƠ BẢN ---
     Giun:
       Name: "Mồi câu giun"
       Key: "giun"
       Price: 50
-      Description: "Mồi câu cơ bản, cá nào cũng ăn."
+      Description: "🟢 Mồi câu cơ bản, cá nào cũng ăn."
+    Com:
+      Name: "Mồi cơm"
+      Key: "com"
+      Price: 100
+      Description: "🟢 Mồi phổ thông, hút cá thường."
+    # --- 🔵 TRUNG CẤP ---
+    TrungKien:
+      Name: "Mồi trứng kiến"
+      Key: "trung_kien"
+      Price: 250
+      Description: "🔵 Thu hút cá uncommon và rare."
+    Go:
+      Name: "Mồi câu gỗ"
+      Key: "go"
+      Price: 300
+      Description: "🔵 Mồi tự nhiên, hút cá rare."
     Xa:
       Name: "Mồi câu xả"
       Key: "xa"
-      Price: 200
-      Description: "Thu hút cá hiếm hơn một chút."
+      Price: 350
+      Description: "🔵 Mùi thơm thu hút cá rare và epic."
+    # --- 🟡 CAO CẤP ---
     Tom:
       Name: "Mồi tôm"
       Key: "tom"
       Price: 600
-      Description: "Món khoái khẩu của cá lớn."
+      Description: "🟡 Món khoái khẩu của cá lớn."
+    Chay:
+      Name: "Mồi câu chay"
+      Key: "chay"
+      Price: 800
+      Description: "🟡 Thu hút cá epic và legendary."
+    # --- 🔴 QUÝ HIẾM ---
+    DacBiet:
+      Name: "Mồi câu đặc biệt"
+      Key: "dac_biet"
+      Price: 1200
+      Description: "🔴 Mồi cao cấp cho cá epic/legendary."
+    TongHop:
+      Name: "Mồi câu tổng hợp"
+      Key: "tong_hop"
+      Price: 1500
+      Description: "🔴 Tổng hợp tinh hoa, cá hiếm sẽ đến."
     ThuocBac:
       Name: "Mồi thuốc bắc"
       Key: "thuoc_bac"
-      Price: 1200
-      Description: "Mùi hương đặc biệt thu hút cá huyền thoại."
+      Price: 2000
+      Description: "🔴 Mùi hương tối thượng, chỉ hút cá legendary."
 
-  "Other":
-    RenameCard:
-      Name: "Thẻ Đổi Tên"
+  "Lưới Chài":
+    LuoiTre:
+      Name: "Lưới Tre"
+      Key: "luoi_tre"
+      Price: 2000
+      Description: "🟢 Lưới cơ bản, chài tối đa 10 phút."
+    LuoiNylon:
+      Name: "Lưới Nylon"
+      Key: "luoi_nylon"
+      Price: 8000
+      Description: "🔵 Lưới bền, chài 20 phút, tăng rare."
+    LuoiThep:
+      Name: "Lưới Thép"
+      Key: "luoi_thep"
+      Price: 25000
+      Description: "🟡 Lưới chắc, chài 30 phút, tăng rare/epic."
+    LuoiVang:
+      Name: "Lưới Vàng"
+      Key: "luoi_vang"
+      Price: 80000
+      Description: "🔴 Lưới tối thượng, chài 45 phút, tăng tất cả."
+
+  "Bẫy Cá":
+    BayTre:
+      Name: "Bẫy Tre"
+      Key: "bay_tre"
       Price: 5000
-      Description: "Dùng để đổi tên tài khoản bot."
+      Description: "🟢 Bẫy cơ bản, chứa 50 cá."
+    BaySat:
+      Name: "Bẫy Sắt"
+      Key: "bay_sat"
+      Price: 20000
+      Description: "🔵 Bẫy bền, chứa 100 cá."
+    BayInox:
+      Name: "Bẫy Inox"
+      Key: "bay_inox"
+      Price: 60000
+      Description: "🟡 Bẫy chắc, chứa 200 cá."
+    BayVang:
+      Name: "Bẫy Vàng"
+      Key: "bay_vang"
+      Price: 150000
+      Description: "🔴 Bẫy tối thượng, chứa 500 cá."
+
   Phân bón: {}
   "Vé Số":
     Ticket50:

@@ -142,16 +142,21 @@ function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
     const rarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
     let chances = { ...config.rarity_chances };
 
-    // Get bait luck
+    // Get bait config
     let baitLuck = 0;
+    let baitInfo = null;
     if (usedBaitKey && config.baits[usedBaitKey]) {
-        baitLuck = config.baits[usedBaitKey].luck || 0;
+        baitInfo = config.baits[usedBaitKey];
+        baitLuck = baitInfo.luck || 0;
     }
 
-    // Calculate total luck
-    const totalLuck = rodLuck + baitLuck;
+    // Total luck (capped at 0.5 for sanity)
+    const totalLuck = Math.min(rodLuck + baitLuck, 0.5);
 
-    // 1. Apply Rod Effects (Specific Rarity Multipliers)
+    // === UNIFIED FORMULA ===
+    // For each rarity: finalChance = base × (1 + rodEffect) × (1 + locationMod) × (1 + baitBonus) + luckFlat
+
+    // 1. Rod Effects (specific rarity multipliers)
     if (rodEffects) {
         for (const rarity in rodEffects) {
             if (chances[rarity]) {
@@ -160,75 +165,36 @@ function getCatch(location, config, usedBaitKey, rodLuck = 0, rodEffects = {}) {
         }
     }
 
-    // 2. Apply Direct Luck Boost (Flat % for Rare+)
-    // User requested 1-10% boost for Rare/Epic/Legendary based on gear
-    if (totalLuck > 0) {
-        // Example: Luck 2.0 -> 0.06 (6%) boost per tier
-        const boostPerTier = Math.min(totalLuck * 0.03, 0.12);
-
-        chances.legendary += boostPerTier;
-        chances.epic += boostPerTier;
-        chances.rare += boostPerTier;
-
-        // Reduce Common/Uncommon to maintain probability sum
-        const lowerTiers = chances.common + chances.uncommon;
-        const totalBoost = boostPerTier * 3;
-
-        if (lowerTiers > totalBoost) {
-            chances.common -= (chances.common / lowerTiers) * totalBoost;
-            chances.uncommon -= (chances.uncommon / lowerTiers) * totalBoost;
-        } else {
-            // Edge case: if boost is huge, crush common/uncommon
-            chances.common = 0;
-            chances.uncommon = 0;
+    // 2. Location Modifiers
+    const locationMod = location.rarity_modifier || {};
+    for (const rarity in locationMod) {
+        if (chances[rarity]) {
+            chances[rarity] *= (1 + locationMod[rarity]);
+            chances[rarity] = Math.max(0, chances[rarity]);
         }
     }
 
-    // Normalize
+    // 3. Bait Attract Bonus (targeted rarity boost)
+    if (baitInfo && baitInfo.attracts) {
+        const bonus = Math.random() * (baitInfo.bonus[1] - baitInfo.bonus[0]) + baitInfo.bonus[0];
+        baitInfo.attracts.forEach(r => {
+            if (chances[r]) chances[r] *= (1 + bonus);
+        });
+    }
+
+    // 4. Flat Luck Boost for rare+ (capped at 5% total shift)
+    if (totalLuck > 0) {
+        const boostPerTier = Math.min(totalLuck * 0.03, 0.05);
+        chances.legendary += boostPerTier;
+        chances.epic += boostPerTier;
+        chances.rare += boostPerTier;
+    }
+
+    // 5. Single Normalization
     let totalChance = Object.values(chances).reduce((a, b) => a + b, 0);
     if (totalChance > 0) {
         for (const rarity in chances) {
             chances[rarity] /= totalChance;
-        }
-    }
-
-    // 3. Apply Bait Attracts (Targeted Rarity Shift)
-    if (usedBaitKey && config.baits[usedBaitKey]) {
-        const baitInfo = config.baits[usedBaitKey];
-
-        if (baitInfo.attracts) {
-            const bonus = Math.random() * (baitInfo.bonus[1] - baitInfo.bonus[0]) + baitInfo.bonus[0];
-            let totalAttractedChance = 0;
-            baitInfo.attracts.forEach(r => {
-                if (chances[r]) totalAttractedChance += chances[r];
-            });
-
-            if (totalAttractedChance > 0) {
-                // Boost attracted rarities
-                baitInfo.attracts.forEach(r => {
-                    if (chances[r]) chances[r] += (chances[r] / totalAttractedChance) * bonus;
-                });
-
-                // Reduce others
-                const nonAttractedRarities = Object.keys(chances).filter(r => !baitInfo.attracts.includes(r));
-                let totalNonAttractedChance = 0;
-                nonAttractedRarities.forEach(r => totalNonAttractedChance += chances[r]);
-
-                if (totalNonAttractedChance > 0) {
-                    nonAttractedRarities.forEach(r => {
-                        const decrease = (chances[r] / totalNonAttractedChance) * bonus;
-                        chances[r] = Math.max(0, chances[r] - decrease);
-                    });
-                }
-            }
-        }
-
-        // Re-normalize after bait
-        totalChance = Object.values(chances).reduce((a, b) => a + b, 0);
-        if (totalChance > 0) {
-            for (const rarity in chances) {
-                chances[rarity] /= totalChance;
-            }
         }
     }
 
@@ -453,7 +419,44 @@ async function handleFish(interaction, config, fishingLang) {
     const snapChance = 0.005;
     const isSnapped = Math.random() < snapChance;
 
-    const caughtFishInfo = getCatch(location, config, usedBaitKey, rodLuck, rodEffects);
+    const caughtFishInfoRaw = getCatch(location, config, usedBaitKey, rodLuck, rodEffects);
+
+    // === HIDDEN PITY SYSTEM ===
+    // Track consecutive casts without hitting guaranteed rarity
+    const rarityRank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 };
+    const pityConfig = rodConfig?.pity;
+    let caughtFishInfo = caughtFishInfoRaw;
+
+    if (pityConfig && caughtFishInfo) {
+        const minRank = rarityRank[pityConfig.min_rarity] || 0;
+        const catchRank = rarityRank[caughtFishInfo.rarity] || 0;
+
+        // Initialize pity counter if not present
+        if (typeof equippedRod.pityCounter !== 'number') {
+            equippedRod.pityCounter = 0;
+        }
+
+        if (catchRank >= minRank) {
+            // Got a good catch — reset counter
+            equippedRod.pityCounter = 0;
+        } else {
+            equippedRod.pityCounter += 1;
+
+            // Threshold reached — force guaranteed rarity
+            if (equippedRod.pityCounter >= pityConfig.threshold) {
+                const forcedRarity = pityConfig.min_rarity;
+                const forcedPool = config.fish_pools[forcedRarity]?.filter(fish =>
+                    location.fish.includes(fish.name)
+                ) || [];
+
+                if (forcedPool.length > 0) {
+                    const forcedFish = forcedPool[Math.floor(Math.random() * forcedPool.length)];
+                    caughtFishInfo = { ...forcedFish, rarity: forcedRarity };
+                }
+                equippedRod.pityCounter = 0;
+            }
+        }
+    }
 
     // Animation frames generator
     const createFishingEmbed = (title, desc, color) => new EmbedBuilder()
@@ -574,9 +577,9 @@ async function handleFish(interaction, config, fishingLang) {
 
 
     // Add fish to inventory
-    // Enforce minimum weight of 0.7kg
-    let minWeight = Math.max(0.7, caughtFishInfo.min_weight);
-    let maxWeight = Math.max(minWeight, caughtFishInfo.max_weight); // Ensure max >= min
+    // Use actual weight from config (no hardcoded minimum)
+    let minWeight = caughtFishInfo.min_weight;
+    let maxWeight = Math.max(minWeight, caughtFishInfo.max_weight);
 
     const weight = Math.random() * (maxWeight - minWeight) + minWeight;
 
@@ -999,6 +1002,561 @@ async function handleHelp(interaction) {
 
 
 // ============================================
+// NET FISHING (ĐÁNH CHÀI) HANDLER
+// ============================================
+async function handleChai(interaction, config) {
+    const userFishing = await getUserFishing(interaction.user.id);
+
+    if (!userFishing.nets || userFishing.nets.length === 0) {
+        return interaction.reply({ content: '❌ Bạn chưa có lưới chài! Hãy mua tại `/store`.', ephemeral: true });
+    }
+
+    // Find equipped net
+    const equippedNetKey = userFishing.equippedNet || (userFishing.nets[0] && userFishing.nets[0].key);
+    const equippedNet = userFishing.nets.find(n => n.key === equippedNetKey);
+
+    if (!equippedNet || equippedNet.durability <= 0) {
+        return interaction.reply({ content: '❌ Lưới chài đã hỏng! Hãy mua lưới mới tại `/store`.', ephemeral: true });
+    }
+
+    const netConfig = config.nets[equippedNetKey];
+    if (!netConfig) {
+        return interaction.reply({ content: '❌ Không tìm thấy config lưới chài.', ephemeral: true });
+    }
+
+    // === HARVEST MODE: If there's an active session ===
+    if (userFishing.netSession) {
+        const session = userFishing.netSession;
+        const now = Date.now();
+        const elapsed = Math.floor((now - session.startTime) / 1000);
+        const sessionNetConfig = config.nets[session.netKey];
+        const maxDuration = sessionNetConfig ? sessionNetConfig.max_duration : 600;
+        const speed = sessionNetConfig ? sessionNetConfig.speed : 30;
+        const effectiveElapsed = Math.min(elapsed, maxDuration);
+        const fishCount = Math.floor(effectiveElapsed / speed);
+
+        if (fishCount <= 0) {
+            const remaining = speed - elapsed;
+            return interaction.reply({ content: `⏳ Lưới vừa thả! Chờ thêm **${remaining}s** nữa để có cá đầu tiên.`, ephemeral: true });
+        }
+
+        await interaction.deferReply();
+
+        // Determine location
+        const location = config.locations[session.location];
+        const netRarityBoost = sessionNetConfig?.rarity_boost || {};
+
+        // Calculate average bait luck from baits used
+        let avgBaitLuck = 0;
+        let avgBaitKey = null;
+        if (session.baitsUsed && session.baitsUsed.length > 0) {
+            const totalLuck = session.baitsUsed.reduce((sum, b) => {
+                const baitConfig = config.baits[b.key];
+                return sum + (baitConfig ? baitConfig.luck * b.count : 0);
+            }, 0);
+            const totalCount = session.baitsUsed.reduce((sum, b) => sum + b.count, 0);
+            avgBaitLuck = totalCount > 0 ? totalLuck / totalCount : 0;
+            // Use the most-used bait for attract calculation
+            const mostUsed = session.baitsUsed.reduce((a, b) => a.count > b.count ? a : b);
+            avgBaitKey = mostUsed.key;
+        }
+
+        // Generate catches
+        const catches = [];
+        const catchCounts = {};
+        for (let i = 0; i < fishCount; i++) {
+            const fish = getCatch(location, config, avgBaitKey, avgBaitLuck, netRarityBoost);
+            if (fish) {
+                const key = `${fish.name}|${fish.rarity}`;
+                if (!catchCounts[key]) catchCounts[key] = { ...fish, count: 0 };
+                catchCounts[key].count++;
+            }
+        }
+
+        // Add to inventory
+        for (const key of Object.keys(catchCounts)) {
+            const fish = catchCounts[key];
+            const minW = fish.min_weight || 0.1;
+            const maxW = Math.max(minW, fish.max_weight || 1);
+            const totalWeight = Array.from({ length: fish.count }, () =>
+                parseFloat((minW + Math.random() * (maxW - minW)).toFixed(2))
+            ).reduce((a, b) => a + b, 0);
+            const avgWeight = parseFloat((totalWeight / fish.count).toFixed(2));
+
+            const existing = userFishing.inventory.find(f => f.name === fish.name && f.rarity === fish.rarity);
+            if (existing) {
+                existing.quantity += fish.count;
+                existing.weight = parseFloat(((existing.weight * (existing.quantity - fish.count) + totalWeight) / existing.quantity).toFixed(2));
+            } else {
+                userFishing.inventory.push({
+                    name: fish.name,
+                    rarity: fish.rarity,
+                    weight: avgWeight,
+                    quantity: fish.count
+                });
+            }
+        }
+
+        // Decrease net durability
+        equippedNet.durability -= 1;
+
+        // Clear session
+        userFishing.netSession = null;
+        await userFishing.save();
+
+        // Build result embed
+        const catchList = Object.values(catchCounts)
+            .sort((a, b) => (RARITY_ORDER[b.rarity] || 0) - (RARITY_ORDER[a.rarity] || 0))
+            .map(f => `${RARITY_EMOJIS[f.rarity] || '⬜'} **${f.name}** ×${f.count}`)
+            .join('\n');
+
+        const durationStr = effectiveElapsed >= 60 ? `${Math.floor(effectiveElapsed / 60)}m ${effectiveElapsed % 60}s` : `${effectiveElapsed}s`;
+
+        const embed = new EmbedBuilder()
+            .setColor('#1ABC9C')
+            .setTitle('🪤 Thu Hoạch Lưới Chài!')
+            .setDescription(`Sau **${durationStr}**, bạn thu được **${fishCount} con cá**!\n\n${catchList}`)
+            .setFooter({ text: `${equippedNet.name} | Độ bền: ${equippedNet.durability}/${netConfig.durability}` })
+            .setTimestamp();
+
+        return interaction.editReply({ embeds: [embed] });
+    }
+
+    // === DEPLOY MODE: Start new session ===
+    const locationKey = interaction.options.getString('location');
+    if (!locationKey || !config.locations[locationKey]) {
+        return interaction.reply({ content: '❌ Bạn cần chọn địa điểm để thả lưới!\nDùng: `/fish chai <location>`', ephemeral: true });
+    }
+
+    // Check bait — need at least 5 total
+    if (!userFishing.baits || userFishing.baits.length === 0) {
+        return interaction.reply({ content: '❌ Bạn cần ít nhất **5 mồi câu** để đánh chài!', ephemeral: true });
+    }
+
+    const totalBaits = userFishing.baits.reduce((sum, b) => sum + (b.quantity || 0), 0);
+    if (totalBaits < 5) {
+        return interaction.reply({ content: `❌ Bạn cần ít nhất **5 mồi câu** để đánh chài! Hiện có: **${totalBaits}**.`, ephemeral: true });
+    }
+
+    // Consume 5 random baits
+    let baitsToConsume = 5;
+    const baitsUsed = [];
+    const shuffledBaits = [...userFishing.baits].sort(() => Math.random() - 0.5);
+
+    for (const bait of shuffledBaits) {
+        if (baitsToConsume <= 0) break;
+        const baitConfig = Object.entries(config.baits).find(([k, v]) => v.name === bait.name);
+        const baitKey = baitConfig ? baitConfig[0] : null;
+        const consume = Math.min(bait.quantity, baitsToConsume);
+        bait.quantity -= consume;
+        baitsToConsume -= consume;
+        if (baitKey) baitsUsed.push({ key: baitKey, count: consume });
+    }
+
+    // Remove empty baits
+    userFishing.baits = userFishing.baits.filter(b => b.quantity > 0);
+
+    // Create session
+    userFishing.netSession = {
+        location: locationKey,
+        startTime: Date.now(),
+        baitsUsed: baitsUsed,
+        netKey: equippedNetKey
+    };
+
+    await userFishing.save();
+
+    const maxMin = Math.floor(netConfig.max_duration / 60);
+    const baitsUsedStr = baitsUsed.map(b => {
+        const baitConfig = config.baits[b.key];
+        return `${baitConfig ? baitConfig.name : b.key} ×${b.count}`;
+    }).join(', ');
+
+    const embed = new EmbedBuilder()
+        .setColor('#3498DB')
+        .setTitle('🪤 Thả Lưới Chài!')
+        .setDescription(
+            `Bạn đã thả **${equippedNet.name}** tại **${config.locations[locationKey].name}**!\n\n` +
+            `🎣 **Mồi đã dùng:** ${baitsUsedStr}\n` +
+            `⏰ **Thời gian chài:** Tối đa **${maxMin} phút**\n` +
+            `🐟 **Tốc độ:** 1 cá mỗi **${netConfig.speed}s**\n\n` +
+            `Quay lại dùng \`/fish chai\` bất kỳ lúc nào để thu hoạch!`
+        )
+        .setTimestamp();
+
+    return interaction.reply({ embeds: [embed] });
+}
+
+
+// ============================================
+// FISH TRAP (BẪY CÁ) HANDLERS
+// ============================================
+const RARITY_ORDER = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 };
+
+async function handleBay(interaction, config, subAction) {
+    switch (subAction) {
+        case 'dat': return handleBayDat(interaction, config);
+        case 'xem': return handleBayXem(interaction, config);
+        case 'thu': return handleBayThu(interaction, config);
+        case 'tiepte': return handleBayTiepTe(interaction, config);
+        case 'go': return handleBayGo(interaction, config);
+        default:
+            return interaction.reply({ content: '❌ Hành động không hợp lệ.', ephemeral: true });
+    }
+}
+
+// --- Place Trap ---
+async function handleBayDat(interaction, config) {
+    const userFishing = await getUserFishing(interaction.user.id);
+
+    if (!userFishing.traps || userFishing.traps.length === 0) {
+        return interaction.reply({ content: '❌ Bạn chưa có bẫy cá! Hãy mua tại `/store`.', ephemeral: true });
+    }
+
+    if (!userFishing.activeTraps) userFishing.activeTraps = [];
+
+    if (userFishing.activeTraps.length >= 5) {
+        return interaction.reply({ content: '❌ Bạn đã đặt tối đa **5 bẫy**! Gỡ bớt bằng `/fish bay go`.', ephemeral: true });
+    }
+
+    const locationKey = interaction.options.getString('location');
+    if (!locationKey || !config.locations[locationKey]) {
+        return interaction.reply({ content: '❌ Bạn cần chọn địa điểm!\nDùng: `/fish bay dat <location>`', ephemeral: true });
+    }
+
+    // Find first available trap
+    const trap = userFishing.traps.find(t => t.durability > 0);
+    if (!trap) {
+        return interaction.reply({ content: '❌ Tất cả bẫy đã hỏng! Hãy mua bẫy mới.', ephemeral: true });
+    }
+
+    const trapConfig = config.traps[trap.key];
+    if (!trapConfig) {
+        return interaction.reply({ content: '❌ Không tìm thấy config bẫy cá.', ephemeral: true });
+    }
+
+    // Check bait
+    const totalBaits = (userFishing.baits || []).reduce((sum, b) => sum + (b.quantity || 0), 0);
+    if (totalBaits < trapConfig.bait_cost) {
+        return interaction.reply({ content: `❌ Cần **${trapConfig.bait_cost} mồi** để đặt ${trap.name}! Hiện có: **${totalBaits}**.`, ephemeral: true });
+    }
+
+    // Consume baits
+    let baitsToConsume = trapConfig.bait_cost;
+    const shuffledBaits = [...userFishing.baits].sort(() => Math.random() - 0.5);
+    for (const bait of shuffledBaits) {
+        if (baitsToConsume <= 0) break;
+        const consume = Math.min(bait.quantity, baitsToConsume);
+        bait.quantity -= consume;
+        baitsToConsume -= consume;
+    }
+    userFishing.baits = userFishing.baits.filter(b => b.quantity > 0);
+
+    // Decrease trap durability
+    trap.durability -= 1;
+
+    // Remove trap from inventory if durability 0
+    if (trap.durability <= 0) {
+        userFishing.traps = userFishing.traps.filter(t => t !== trap);
+    }
+
+    // Create active trap
+    const activeTrap = {
+        id: Date.now().toString(36),
+        trapKey: trap.key,
+        trapName: trap.name,
+        location: locationKey,
+        placedAt: Date.now(),
+        baitRemaining: trapConfig.bait_cost,
+        fish: [],
+        capacity: trapConfig.capacity
+    };
+
+    userFishing.activeTraps.push(activeTrap);
+    await userFishing.save();
+
+    const embed = new EmbedBuilder()
+        .setColor('#2ECC71')
+        .setTitle('🗑️ Đặt Bẫy Cá Thành Công!')
+        .setDescription(
+            `**${trap.name}** đã được đặt tại **${config.locations[locationKey].name}**!\n\n` +
+            `🎣 Mồi trong bẫy: **${trapConfig.bait_cost}**\n` +
+            `📦 Sức chứa: **${trapConfig.capacity} cá**\n` +
+            `⏰ Tốc độ: 1 cá / **${trapConfig.speed}s**\n` +
+            `🐟 Cá/mồi: **${trapConfig.fish_per_bait}**\n\n` +
+            `Dùng \`/fish bay xem\` để kiểm tra, \`/fish bay thu\` để thu hoạch!`
+        )
+        .setFooter({ text: `ID bẫy: ${activeTrap.id} | Bẫy đang dùng: ${userFishing.activeTraps.length}/5` })
+        .setTimestamp();
+
+    return interaction.reply({ embeds: [embed] });
+}
+
+// --- View Traps ---
+async function handleBayXem(interaction, config) {
+    const userFishing = await getUserFishing(interaction.user.id);
+
+    if (!userFishing.activeTraps || userFishing.activeTraps.length === 0) {
+        return interaction.reply({ content: '📭 Bạn chưa đặt bẫy nào! Dùng `/fish bay dat` để bắt đầu.', ephemeral: true });
+    }
+
+    const trapLines = userFishing.activeTraps.map((trap, idx) => {
+        const trapConfig = config.traps[trap.trapKey];
+        const now = Date.now();
+        const elapsed = Math.floor((now - trap.placedAt) / 1000);
+        const speed = trapConfig ? trapConfig.speed : 60;
+        const fishPerBait = trapConfig ? trapConfig.fish_per_bait : 5;
+        const maxFishFromBait = trap.baitRemaining * fishPerBait;
+        const maxFish = Math.min(maxFishFromBait, trap.capacity - (trap.fish ? trap.fish.length : 0));
+        const newFish = Math.min(Math.floor(elapsed / speed), maxFish);
+        const totalFish = (trap.fish ? trap.fish.length : 0) + newFish;
+        const baitUsedForFish = Math.ceil(newFish / fishPerBait);
+        const baitLeft = Math.max(0, trap.baitRemaining - baitUsedForFish);
+        const locationName = config.locations[trap.location] ? config.locations[trap.location].name : trap.location;
+
+        let status = '🟢 Hoạt động';
+        if (totalFish >= trap.capacity) status = '📦 Đầy';
+        else if (baitLeft <= 0) status = '⚠️ Hết mồi';
+
+        return `**#${idx + 1}** ${trap.trapName} — ${locationName}\n` +
+            `   ${status} | 🐟 ${totalFish}/${trap.capacity} | 🎣 Mồi: ${baitLeft} | ID: \`${trap.id}\``;
+    });
+
+    const embed = new EmbedBuilder()
+        .setColor('#9B59B6')
+        .setTitle('🗑️ Bẫy Cá Của Bạn')
+        .setDescription(trapLines.join('\n\n'))
+        .setFooter({ text: `${userFishing.activeTraps.length}/5 bẫy đang hoạt động` })
+        .setTimestamp();
+
+    return interaction.reply({ embeds: [embed] });
+}
+
+// --- Harvest Trap ---
+async function handleBayThu(interaction, config) {
+    const userFishing = await getUserFishing(interaction.user.id);
+    const trapId = interaction.options.getString('trap_id');
+
+    if (!userFishing.activeTraps || userFishing.activeTraps.length === 0) {
+        return interaction.reply({ content: '📭 Bạn chưa đặt bẫy nào!', ephemeral: true });
+    }
+
+    const trapIndex = userFishing.activeTraps.findIndex(t => t.id === trapId);
+    if (trapIndex === -1) {
+        return interaction.reply({ content: `❌ Không tìm thấy bẫy với ID \`${trapId}\`! Dùng \`/fish bay xem\` để xem danh sách.`, ephemeral: true });
+    }
+
+    await interaction.deferReply();
+
+    const trap = userFishing.activeTraps[trapIndex];
+    const trapConfig = config.traps[trap.trapKey];
+    const location = config.locations[trap.location];
+    const now = Date.now();
+    const elapsed = Math.floor((now - trap.placedAt) / 1000);
+    const speed = trapConfig ? trapConfig.speed : 60;
+    const fishPerBait = trapConfig ? trapConfig.fish_per_bait : 5;
+    const maxFishFromBait = trap.baitRemaining * fishPerBait;
+    const maxFish = Math.min(maxFishFromBait, trap.capacity - (trap.fish ? trap.fish.length : 0));
+    const newFishCount = Math.min(Math.floor(elapsed / speed), maxFish);
+
+    // Generate new fish
+    const catchCounts = {};
+    for (let i = 0; i < newFishCount; i++) {
+        const fish = getCatch(location, config, null, 0, {});
+        if (fish) {
+            const key = `${fish.name}|${fish.rarity}`;
+            if (!catchCounts[key]) catchCounts[key] = { ...fish, count: 0 };
+            catchCounts[key].count++;
+        }
+    }
+
+    // Calculate existing trap fish
+    const existingFish = trap.fish || [];
+
+    // Add new fish to inventory
+    let totalHarvested = existingFish.length + newFishCount;
+    for (const ef of existingFish) {
+        const existing = userFishing.inventory.find(f => f.name === ef.name && f.rarity === ef.rarity);
+        if (existing) {
+            existing.quantity += ef.count;
+        } else {
+            userFishing.inventory.push({ name: ef.name, rarity: ef.rarity, weight: ef.weight || 0.5, quantity: ef.count });
+        }
+    }
+
+    for (const key of Object.keys(catchCounts)) {
+        const fish = catchCounts[key];
+        const minW = fish.min_weight || 0.1;
+        const maxW = Math.max(minW, fish.max_weight || 1);
+        const avgWeight = parseFloat(((minW + maxW) / 2).toFixed(2));
+
+        const existing = userFishing.inventory.find(f => f.name === fish.name && f.rarity === fish.rarity);
+        if (existing) {
+            existing.quantity += fish.count;
+        } else {
+            userFishing.inventory.push({ name: fish.name, rarity: fish.rarity, weight: avgWeight, quantity: fish.count });
+        }
+    }
+
+    // Remove trap
+    userFishing.activeTraps.splice(trapIndex, 1);
+    await userFishing.save();
+
+    // Build embed
+    const allCatches = [...existingFish.map(f => `${RARITY_EMOJIS[f.rarity] || '⬜'} **${f.name}** ×${f.count}`)];
+    for (const fish of Object.values(catchCounts)) {
+        allCatches.push(`${RARITY_EMOJIS[fish.rarity] || '⬜'} **${fish.name}** ×${fish.count}`);
+    }
+
+    const embed = new EmbedBuilder()
+        .setColor('#F39C12')
+        .setTitle('🗑️ Thu Hoạch Bẫy Cá!')
+        .setDescription(
+            `Thu hoạch từ **${trap.trapName}** tại **${location ? location.name : trap.location}**!\n` +
+            `Tổng: **${totalHarvested} cá** 🐟\n\n` +
+            (allCatches.length > 0 ? allCatches.slice(0, 20).join('\n') : 'Không có cá nào!') +
+            (allCatches.length > 20 ? `\n... và ${allCatches.length - 20} loại khác` : '')
+        )
+        .setFooter({ text: `Bẫy còn lại: ${userFishing.activeTraps.length}/5` })
+        .setTimestamp();
+
+    return interaction.editReply({ embeds: [embed] });
+}
+
+// --- Resupply Trap ---
+async function handleBayTiepTe(interaction, config) {
+    const userFishing = await getUserFishing(interaction.user.id);
+    const trapId = interaction.options.getString('trap_id');
+
+    if (!userFishing.activeTraps || userFishing.activeTraps.length === 0) {
+        return interaction.reply({ content: '📭 Bạn chưa đặt bẫy nào!', ephemeral: true });
+    }
+
+    const trap = userFishing.activeTraps.find(t => t.id === trapId);
+    if (!trap) {
+        return interaction.reply({ content: `❌ Không tìm thấy bẫy với ID \`${trapId}\`!`, ephemeral: true });
+    }
+
+    const trapConfig = config.traps[trap.trapKey];
+    const resupplyAmount = trapConfig ? trapConfig.bait_cost : 10;
+
+    // First, calculate and bank any fish caught so far
+    const now = Date.now();
+    const elapsed = Math.floor((now - trap.placedAt) / 1000);
+    const speed = trapConfig ? trapConfig.speed : 60;
+    const fishPerBait = trapConfig ? trapConfig.fish_per_bait : 5;
+    const maxFishFromBait = trap.baitRemaining * fishPerBait;
+    const maxFish = Math.min(maxFishFromBait, trap.capacity - (trap.fish ? trap.fish.length : 0));
+    const newFishCount = Math.min(Math.floor(elapsed / speed), maxFish);
+
+    // Generate and bank fish
+    const location = config.locations[trap.location];
+    if (!trap.fish) trap.fish = [];
+    const catchCounts = {};
+    for (let i = 0; i < newFishCount; i++) {
+        const fish = getCatch(location, config, null, 0, {});
+        if (fish) {
+            const key = `${fish.name}|${fish.rarity}`;
+            if (!catchCounts[key]) catchCounts[key] = { ...fish, count: 0 };
+            catchCounts[key].count++;
+        }
+    }
+    for (const fish of Object.values(catchCounts)) {
+        const existing = trap.fish.find(f => f.name === fish.name && f.rarity === fish.rarity);
+        if (existing) {
+            existing.count += fish.count;
+        } else {
+            trap.fish.push({ name: fish.name, rarity: fish.rarity, count: fish.count, weight: ((fish.min_weight || 0.1) + (fish.max_weight || 1)) / 2 });
+        }
+    }
+
+    // Deduct bait used
+    const baitUsedForFish = Math.ceil(newFishCount / fishPerBait);
+    trap.baitRemaining = Math.max(0, trap.baitRemaining - baitUsedForFish);
+
+    // Check user has enough bait to resupply
+    const totalBaits = (userFishing.baits || []).reduce((sum, b) => sum + (b.quantity || 0), 0);
+    if (totalBaits < resupplyAmount) {
+        return interaction.reply({ content: `❌ Cần **${resupplyAmount} mồi** để tiếp tế! Hiện có: **${totalBaits}**.`, ephemeral: true });
+    }
+
+    // Consume baits
+    let baitsToConsume = resupplyAmount;
+    for (const bait of userFishing.baits) {
+        if (baitsToConsume <= 0) break;
+        const consume = Math.min(bait.quantity, baitsToConsume);
+        bait.quantity -= consume;
+        baitsToConsume -= consume;
+    }
+    userFishing.baits = userFishing.baits.filter(b => b.quantity > 0);
+
+    // Add resupply
+    trap.baitRemaining += resupplyAmount;
+    trap.placedAt = Date.now(); // Reset timer
+
+    await userFishing.save();
+
+    const embed = new EmbedBuilder()
+        .setColor('#2ECC71')
+        .setTitle('🔄 Tiếp Tế Bẫy Thành Công!')
+        .setDescription(
+            `**${trap.trapName}** tại **${location ? location.name : trap.location}**\n\n` +
+            `🐟 Cá đang chờ: **${trap.fish.reduce((s, f) => s + f.count, 0)}/${trap.capacity}**\n` +
+            `🎣 Mồi hiện tại: **${trap.baitRemaining}**\n` +
+            `⏰ Timer đã reset!`
+        )
+        .setTimestamp();
+
+    return interaction.reply({ embeds: [embed] });
+}
+
+// --- Remove Trap ---
+async function handleBayGo(interaction, config) {
+    const userFishing = await getUserFishing(interaction.user.id);
+    const trapId = interaction.options.getString('trap_id');
+
+    if (!userFishing.activeTraps || userFishing.activeTraps.length === 0) {
+        return interaction.reply({ content: '📭 Bạn chưa đặt bẫy nào!', ephemeral: true });
+    }
+
+    const trapIndex = userFishing.activeTraps.findIndex(t => t.id === trapId);
+    if (trapIndex === -1) {
+        return interaction.reply({ content: `❌ Không tìm thấy bẫy với ID \`${trapId}\`!`, ephemeral: true });
+    }
+
+    const trap = userFishing.activeTraps[trapIndex];
+
+    // Bank any remaining fish to inventory before removing
+    if (trap.fish && trap.fish.length > 0) {
+        for (const f of trap.fish) {
+            const existing = userFishing.inventory.find(inv => inv.name === f.name && inv.rarity === f.rarity);
+            if (existing) {
+                existing.quantity += f.count;
+            } else {
+                userFishing.inventory.push({ name: f.name, rarity: f.rarity, weight: f.weight || 0.5, quantity: f.count });
+            }
+        }
+    }
+
+    const bankedCount = trap.fish ? trap.fish.reduce((s, f) => s + f.count, 0) : 0;
+    userFishing.activeTraps.splice(trapIndex, 1);
+    await userFishing.save();
+
+    const embed = new EmbedBuilder()
+        .setColor('#E74C3C')
+        .setTitle('🗑️ Gỡ Bẫy Cá')
+        .setDescription(
+            `Đã gỡ **${trap.trapName}** tại **${config.locations[trap.location] ? config.locations[trap.location].name : trap.location}**.\n` +
+            (bankedCount > 0 ? `\n🐟 Đã chuyển **${bankedCount} cá** vào kho.` : '')
+        )
+        .setFooter({ text: `Bẫy còn lại: ${userFishing.activeTraps.length}/5` })
+        .setTimestamp();
+
+    return interaction.reply({ embeds: [embed] });
+}
+
+
+// ============================================
 // MAIN COMMAND EXPORT
 // ============================================
 
@@ -1062,6 +1620,55 @@ module.exports = {
             sub.setName('aquarium')
                 .setDescription('Xem bể cá của bạn')
                 .addUserOption(o => o.setName('user').setDescription('Người dùng')))
+        .addSubcommand(sub =>
+            sub.setName('chai')
+                .setDescription('Đánh chài (thả lưới / thu hoạch)')
+                .addStringOption(option => {
+                    const config = loadFishingConfig();
+                    const choices = Object.keys(config.locations).map(loc => ({
+                        name: config.locations[loc].name,
+                        value: loc
+                    }));
+                    return option
+                        .setName('location')
+                        .setDescription('Địa điểm thả lưới.')
+                        .setRequired(false)
+                        .addChoices(...choices);
+                }))
+        .addSubcommandGroup(group =>
+            group.setName('bay')
+                .setDescription('Hệ thống bẫy cá')
+                .addSubcommand(sub =>
+                    sub.setName('dat')
+                        .setDescription('Đặt bẫy cá tại địa điểm')
+                        .addStringOption(option => {
+                            const config = loadFishingConfig();
+                            const choices = Object.keys(config.locations).map(loc => ({
+                                name: config.locations[loc].name,
+                                value: loc
+                            }));
+                            return option
+                                .setName('location')
+                                .setDescription('Địa điểm đặt bẫy.')
+                                .setRequired(true)
+                                .addChoices(...choices);
+                        }))
+                .addSubcommand(sub =>
+                    sub.setName('xem')
+                        .setDescription('Xem trạng thái bẫy cá'))
+                .addSubcommand(sub =>
+                    sub.setName('thu')
+                        .setDescription('Thu hoạch cá từ bẫy')
+                        .addStringOption(o => o.setName('trap_id').setDescription('ID bẫy cần thu').setRequired(true)))
+                .addSubcommand(sub =>
+                    sub.setName('tiepte')
+                        .setDescription('Tiếp tế mồi cho bẫy')
+                        .addStringOption(o => o.setName('trap_id').setDescription('ID bẫy cần tiếp tế').setRequired(true)))
+                .addSubcommand(sub =>
+                    sub.setName('go')
+                        .setDescription('Gỡ bẫy cá')
+                        .addStringOption(o => o.setName('trap_id').setDescription('ID bẫy cần gỡ').setRequired(true)))
+        )
         .addSubcommandGroup(group =>
             group.setName('tournament')
                 .setDescription('Hệ thống giải đấu')
@@ -1110,6 +1717,12 @@ module.exports = {
             return;
         }
 
+        if (group === 'bay') {
+            const config = loadFishingConfig();
+            await handleBay(interaction, config, subcommand);
+            return;
+        }
+
         const config = loadFishingConfig();
         const fishingLang = lang.Addons.Fishing;
 
@@ -1132,6 +1745,9 @@ module.exports = {
                     break;
                 case 'aquarium':
                     await require('./aquarium').execute(interaction);
+                    break;
+                case 'chai':
+                    await handleChai(interaction, config);
                     break;
                 default:
                     await interaction.reply({

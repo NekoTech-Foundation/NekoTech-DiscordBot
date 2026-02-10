@@ -7,7 +7,12 @@ const defaultData = (query) => ({
     equippedFish: null,
     rods: [],
     inventory: [],
-    baits: []
+    baits: [],
+    nets: [],
+    equippedNet: null,
+    netSession: null,
+    traps: [],
+    activeTraps: []
 });
 
 module.exports = new SQLiteModel('fishing_user', 'userId', defaultData);

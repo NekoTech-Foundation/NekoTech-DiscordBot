@@ -201,7 +201,6 @@ module.exports = {
             } else {
                 // User Stats (My or User)
                 const userSessions = await VoiceSession.find({ guildId, userId: targetUser.id });
-                const totalTimeStored = userSessions.reduce((acc, s) => acc + s.duration, 0);
 
                 // Check active session
                 let currentSessionTime = 0;
@@ -215,27 +214,17 @@ module.exports = {
                     console.error('Error fetching active session for voicetrack:', e);
                 }
 
-                const totalTime = totalTimeStored + currentSessionTime;
-
-                // Get cached total from UserData (fallback/check) - redundant if we sum sessions, but standardizing
-                // Note: UserData.voiceTime is a cache. If we use sessions sum, it's accurate. 
-                // If we use UserData, we should also add currentSessionTime.
-                // Let's stick to calculated sum from sessions + current for precision, 
-                // OR use UserData + current. UserData is faster.
+                // Use UserData.voiceTime (cached completed sessions) + current active session
                 const userData = await UserData.findOne({ userId: targetUser.id, guildId });
-                const cachedTime = (userData?.voiceTime || 0) + currentSessionTime;
-
-                // Prefer cachedTime as it matches leaderboard
-                const finalTime = cachedTime > totalTime ? cachedTime : totalTime;
+                const totalTime = (userData?.voiceTime || 0) + currentSessionTime;
 
                 const embed = new EmbedBuilder()
                     .setTitle(`📊 Thống Kê Voice: ${targetUser.username}`)
                     .setThumbnail(targetUser.displayAvatarURL())
                     .setColor('#0099ff')
                     .addFields(
-                        { name: 'Tổng thời gian voice', value: formatTime(finalTime), inline: true },
-                        { name: 'Tổng số lần join', value: `${userSessions.length + (currentSessionTime > 0 ? 1 : 0)}`, inline: true }, // +1 if active? sessions length usually implies finished sessions in DB?
-                        // activeVoiceSessions is definitely "current". DB sessions are "past". 
+                        { name: 'Tổng thời gian voice', value: formatTime(totalTime), inline: true },
+                        { name: 'Tổng số lần join', value: `${userSessions.length + (currentSessionTime > 0 ? 1 : 0)}`, inline: true },
                         { name: 'Trạng thái', value: currentSessionTime > 0 ? '🟢 Đang hoạt động' : '🔴 Offline/Deafened', inline: true }
                     );
                 return interaction.editReply({ embeds: [embed] });
@@ -283,17 +272,33 @@ module.exports = {
         // --- RANKING LOGIC ---
         else if ((group === 'ranking' && sub === 'voice') || (group === 'channel' && sub === 'ranking')) {
             if (sub === 'voice') {
-                // User Ranking (Use UserData for speed or VoiceSession Aggregation)
-                // Use UserData.voiceTime which we cache
+                // User Ranking (Use UserData for speed + add active session time)
                 const allData = await UserData.find({ guildId: interaction.guild.id });
-                // Need to filter members in guild? Yes.
                 const members = await interaction.guild.members.fetch();
-                const filtered = allData.filter(d => members.has(d.userId) && d.voiceTime > 0)
-                    .sort((a, b) => b.voiceTime - a.voiceTime)
+
+                // Get active sessions to include current session time
+                let voiceHandler;
+                try {
+                    voiceHandler = require('../../../events/voiceStateUpdate');
+                } catch (e) {
+                    console.error('Error loading voiceHandler for ranking:', e);
+                }
+
+                const filtered = allData
+                    .filter(d => members.has(d.userId) && (d.voiceTime > 0 || (voiceHandler?.activeVoiceSessions?.has(d.userId))))
+                    .map(d => {
+                        let currentSessionTime = 0;
+                        if (voiceHandler?.activeVoiceSessions?.has(d.userId)) {
+                            const startTime = voiceHandler.activeVoiceSessions.get(d.userId);
+                            currentSessionTime = Math.floor((Date.now() - startTime) / 1000);
+                        }
+                        return { userId: d.userId, totalTime: (d.voiceTime || 0) + currentSessionTime };
+                    })
+                    .sort((a, b) => b.totalTime - a.totalTime)
                     .slice(0, 10);
 
                 const desc = filtered.map((d, i) => {
-                    return `**${i + 1}.** <@${d.userId}> - ${formatTime(d.voiceTime)}`;
+                    return `**${i + 1}.** <@${d.userId}> - ${formatTime(d.totalTime)}`;
                 }).join('\n');
 
                 const embed = new EmbedBuilder()

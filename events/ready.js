@@ -5,6 +5,7 @@ const colors = require('ansi-colors');
 const packageFile = require('../package.json');
 const GuildData = require('../models/guildDataSchema');
 const Verification = require('../models/verificationSchema');
+const voiceHandler = require('./voiceStateUpdate');
 
 // const { handleVerification } = require('../events/Verification/VerificationEvent');
 const { createUnverifiedRoleIfNeeded } = require('../utils/roleUtils');
@@ -106,6 +107,19 @@ module.exports = async client => {
             await guildData.save();
         }
     });
+
+    // Restore voice tracking sessions after restart
+    try {
+        if (voiceHandler.restoreVoiceSessions) {
+            await voiceHandler.restoreVoiceSessions(client);
+        }
+        // Start periodic flush (every 5 minutes) to prevent data loss on crash/restart
+        if (voiceHandler.startPeriodicFlush) {
+            voiceHandler.startPeriodicFlush(5 * 60 * 1000);
+        }
+    } catch (err) {
+        console.error(colors.red('[ERROR] Failed to restore voice sessions:'), err);
+    }
 
     // Initial update
     updateActivity(client);

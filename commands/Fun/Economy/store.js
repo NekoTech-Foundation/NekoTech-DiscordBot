@@ -526,7 +526,7 @@ module.exports = {
 
                         const existingRodIndex = userFishing.rods.findIndex(r => r.key === item.Key);
 
-                        const newRod = { key: item.Key, name: rodInfo.name, durability: rodInfo.durability };
+                        const newRod = { key: item.Key, name: rodInfo.name, durability: rodInfo.durability, pityCounter: 0 };
 
 
 
@@ -604,6 +604,56 @@ module.exports = {
 
                         return i.reply({ content: `Bạn đã mua thành công 1 ${item.Name}.`, ephemeral: true });
 
+                    }
+
+                    // Handle Net Purchase
+                    if (category === 'Lưới Chài') {
+                        const userFishing = await getUserFishing(i.user.id);
+                        const fishingConfig = loadFishingConfig();
+                        const netInfo = fishingConfig.nets[item.Key];
+                        if (!netInfo) {
+                            return i.reply({ content: 'Lỗi: Không tìm thấy thông tin lưới chài.', ephemeral: true });
+                        }
+
+                        user.balance -= itemPrice;
+
+                        const existingNetIndex = (userFishing.nets || []).findIndex(n => n.key === item.Key);
+                        const newNet = { key: item.Key, name: netInfo.name, durability: netInfo.durability };
+
+                        if (!userFishing.nets) userFishing.nets = [];
+
+                        if (existingNetIndex > -1) {
+                            userFishing.nets[existingNetIndex] = newNet;
+                        } else {
+                            userFishing.nets.push(newNet);
+                        }
+
+                        if (!userFishing.equippedNet) {
+                            userFishing.equippedNet = item.Key;
+                        }
+
+                        await user.save();
+                        await userFishing.save();
+                        return i.reply({ content: `Bạn đã mua thành công ${item.Name}.\nSử dụng lệnh \`/fish chai\` để bắt đầu đánh chài!`, ephemeral: true });
+                    }
+
+                    // Handle Trap Purchase
+                    if (category === 'Bẫy Cá') {
+                        const userFishing = await getUserFishing(i.user.id);
+                        const fishingConfig = loadFishingConfig();
+                        const trapInfo = fishingConfig.traps[item.Key];
+                        if (!trapInfo) {
+                            return i.reply({ content: 'Lỗi: Không tìm thấy thông tin bẫy cá.', ephemeral: true });
+                        }
+
+                        user.balance -= itemPrice;
+
+                        if (!userFishing.traps) userFishing.traps = [];
+                        userFishing.traps.push({ key: item.Key, name: trapInfo.name, durability: trapInfo.durability });
+
+                        await user.save();
+                        await userFishing.save();
+                        return i.reply({ content: `Bạn đã mua thành công ${item.Name}.\nSử dụng lệnh \`/fish bay dat\` để đặt bẫy!`, ephemeral: true });
                     }
 
                     // Handle Fertilizer Purchase

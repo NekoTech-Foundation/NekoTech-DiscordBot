@@ -1579,6 +1579,17 @@ module.exports = async (client) => {
         client.removeAllListeners('warn');
 
         try {
+            // Save active voice sessions before shutdown
+            try {
+                const voiceHandler = require('./events/voiceStateUpdate');
+                if (voiceHandler.saveAllActiveSessions) {
+                    const count = await voiceHandler.saveAllActiveSessions();
+                    console.log(`[Cleanup] Saved ${count} voice sessions before shutdown.`);
+                }
+            } catch (err) {
+                console.error('[Cleanup] Error saving voice sessions:', err);
+            }
+
             if (global.schedulers) {
                 for (const scheduler of global.schedulers) {
                     if (scheduler.intervalId) {

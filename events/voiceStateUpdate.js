@@ -395,6 +395,15 @@ async function restoreVoiceSessions(client) {
             if (channel.type === ChannelType.GuildVoice) {
                 for (const [memberId, member] of channel.members) {
                     if (!member.user.bot) {
+                        // Check if user is actually active (not deafened)
+                        const memberVoice = member.voice;
+                        const ignored = memberVoice.selfDeaf || memberVoice.serverDeaf;
+
+                        if (ignored) {
+                            // Don't restore session for deafened users
+                            continue;
+                        }
+
                         // Restore Active Session
                         if (!activeVoiceSessions.has(memberId)) {
                             activeVoiceSessions.set(memberId, now);
@@ -415,4 +424,80 @@ async function restoreVoiceSessions(client) {
 
 handleVoiceStateUpdate.restoreVoiceSessions = restoreVoiceSessions;
 handleVoiceStateUpdate.activeVoiceSessions = activeVoiceSessions;
+
+// Save all active sessions to DB (for graceful shutdown / periodic flush)
+async function saveAllActiveSessions() {
+    const now = Date.now();
+    const saved = [];
+
+    for (const [userId, startTime] of activeVoiceSessions.entries()) {
+        const duration = now - startTime;
+        if (duration < 1000) continue; // Skip if less than 1 second
+
+        try {
+            // We need guildId - get it from any guild the bot is in
+            // Since we don't store guildId in the map, we need to find the member
+            let guildId = null;
+            let channelId = null;
+
+            for (const [, guild] of global.client.guilds.cache) {
+                const member = guild.members.cache.get(userId);
+                if (member && member.voice.channelId) {
+                    guildId = guild.id;
+                    channelId = member.voice.channelId;
+                    break;
+                }
+            }
+
+            if (!guildId) continue;
+
+            // Save session to DB
+            await VoiceSession.create({
+                userId,
+                guildId,
+                channelId,
+                startTime,
+                endTime: now,
+                duration: Math.floor(duration / 1000),
+                date: new Date(startTime).toISOString().split('T')[0]
+            });
+
+            // Update UserData cache
+            let userData = await UserData.findOne({ userId, guildId });
+            if (!userData) userData = await UserData.create({ userId, guildId });
+            userData.voiceTime = (userData.voiceTime || 0) + Math.floor(duration / 1000);
+            await userData.save();
+
+            // Reset the session start time to now (so we don't double-count)
+            activeVoiceSessions.set(userId, now);
+            saved.push(userId);
+        } catch (err) {
+            console.error(`Error saving active session for ${userId}:`, err);
+        }
+    }
+
+    if (saved.length > 0) {
+        console.log(`[VoiceTrack] Flushed ${saved.length} active sessions to database.`);
+    }
+    return saved.length;
+}
+
+// Periodic flush interval reference
+let flushInterval = null;
+
+function startPeriodicFlush(intervalMs = 5 * 60 * 1000) {
+    if (flushInterval) clearInterval(flushInterval);
+    flushInterval = setInterval(async () => {
+        try {
+            await saveAllActiveSessions();
+        } catch (err) {
+            console.error('[VoiceTrack] Periodic flush error:', err);
+        }
+    }, intervalMs);
+    console.log(`[VoiceTrack] Periodic flush started (every ${intervalMs / 1000}s).`);
+}
+
+handleVoiceStateUpdate.saveAllActiveSessions = saveAllActiveSessions;
+handleVoiceStateUpdate.startPeriodicFlush = startPeriodicFlush;
+
 module.exports = handleVoiceStateUpdate;

@@ -183,6 +183,24 @@ process.on('unhandledRejection', (reason, promise) => {
     });
 });
 
+// Graceful shutdown: save active voice sessions before exit
+async function gracefulShutdown(signal) {
+    console.log(`\n[${signal}] Saving active voice sessions before shutdown...`);
+    try {
+        const voiceHandler = require('./events/voiceStateUpdate');
+        if (voiceHandler.saveAllActiveSessions) {
+            const count = await voiceHandler.saveAllActiveSessions();
+            console.log(`[${signal}] Saved ${count} voice sessions. Exiting...`);
+        }
+    } catch (err) {
+        console.error(`[${signal}] Error saving voice sessions:`, err);
+    }
+    process.exit(0);
+}
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+
 module.exports = client;
 
 // Initialize message commands collection

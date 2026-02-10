@@ -15,164 +15,246 @@
 # bonus: The range of bonus catch rate.
 # attracts: The rarity of fish this bait attracts.
 baits:
+  # --- 🟢 CƠ BẢN (Basic) ---
   giun:
     name: "Mồi câu giun"
     price: 50
-    luck: 0.05
-    bonus: [0.025, 0.05]
+    luck: 0.03
+    bonus: [0.02, 0.04]
     attracts: ["common", "uncommon"]
-  xa:
-    name: "Mồi câu xả"
-    price: 200
-    luck: 0.10
-    bonus: [0.05, 0.10]
-    attracts: ["rare", "epic"]
-  go:
-    name: "Mồi câu gỗ"
-    price: 200
-    luck: 0.36
-    bonus: [0.36, 0.36]
-    attracts: ["rare"]
-  chay:
-    name: "Mồi câu chay"
-    price: 500
-    luck: 0.05
-    bonus: [0.05, 0.05]
-    attracts: ["epic", "legendary"]
-  dac_biet:
-    name: "Mồi câu đặc biệt"
-    price: 800
-    luck: 0.15
-    bonus: [0.10, 0.15]
-    attracts: ["epic", "legendary"]
-  tong_hop:
-    name: "Mồi câu tổng hợp"
-    price: 1000
-    luck: 0.17
-    bonus: [0.16, 0.17]
-    attracts: ["epic", "legendary"]
   com:
     name: "Mồi cơm"
-    price: 150
-    luck: 0.07
-    bonus: [0.05, 0.10]
+    price: 100
+    luck: 0.05
+    bonus: [0.03, 0.06]
     attracts: ["common", "uncommon"]
+  # --- 🔵 TRUNG CẤP (Mid) ---
   trung_kien:
     name: "Mồi trứng kiến"
-    price: 300
-    luck: 0.12
-    bonus: [0.10, 0.15]
+    price: 250
+    luck: 0.08
+    bonus: [0.15, 0.30]
     attracts: ["uncommon", "rare"]
+  go:
+    name: "Mồi câu gỗ"
+    price: 300
+    luck: 0.10
+    bonus: [0.20, 0.40]
+    attracts: ["rare"]
+  xa:
+    name: "Mồi câu xả"
+    price: 350
+    luck: 0.10
+    bonus: [0.20, 0.40]
+    attracts: ["rare", "epic"]
+  # --- 🟡 CAO CẤP (High) ---
   tom:
     name: "Mồi tôm"
     price: 600
-    luck: 0.20
-    bonus: [0.15, 0.25]
+    luck: 0.15
+    bonus: [0.40, 0.70]
     attracts: ["rare", "epic"]
+  chay:
+    name: "Mồi câu chay"
+    price: 800
+    luck: 0.18
+    bonus: [0.50, 0.80]
+    attracts: ["epic", "legendary"]
+  # --- 🔴 QUÝ HIẾM (Premium) ---
+  dac_biet:
+    name: "Mồi câu đặc biệt"
+    price: 1200
+    luck: 0.22
+    bonus: [0.60, 1.0]
+    attracts: ["epic", "legendary"]
+  tong_hop:
+    name: "Mồi câu tổng hợp"
+    price: 1500
+    luck: 0.25
+    bonus: [0.80, 1.2]
+    attracts: ["epic", "legendary"]
   thuoc_bac:
     name: "Mồi thuốc bắc"
-    price: 1200
-    luck: 0.25
-    bonus: [0.20, 0.30]
-    attracts: ["epic", "legendary"]
+    price: 2000
+    luck: 0.30
+    bonus: [1.5, 2.5]
+    attracts: ["legendary"]
+
 
 rods:
+  # --- 🟢 STARTER ---
   tap_su:
     name: "Cần câu tập sự"
     price: 350
     durability: 100
-    luck: 0.1
-  go:
-    name: "Cần Câu Gỗ"
-    price: 450
-    durability: 150
-    luck: 0
-    effects:
-      uncommon: 0.0
-  meo:
-    name: "Cần Câu Mèo"
-    price: 750
-    durability: 200
-    luck: 0
-    effects:
-      uncommon: 0.5
-  bo_tui:
-    name: "Cần Câu Bỏ Túi"
-    price: 1500
-    durability: 300
-    luck: 0.2
-    effects:
-      uncommon: 0.75
-  vit:
-    name: "Cần Câu Vịt"
-    price: 2250
-    durability: 350
-    luck: 0.15
-    effects:
-      uncommon: 1.0
-  nghiep_du:
-    name: "Cần Câu Nghiệp Dư"
-    price: 3000
-    durability: 400
-    luck: 0.2
-    effects:
-      rare: 0.5
-      uncommon: 1.0
-  phep_thuat:
-    name: "Cần Câu Phép Thuật"
-    price: 20000
-    durability: 500
-    luck: 0.5
-    effects:
-      rare: 0.6
-      uncommon: 1.0
-  chuyen_nghiep:
-    name: "Cần câu chuyên nghiệp"
-    price: 15000
-    durability: 5000
-    luck: 0.8
-    effects:
-      rare: 0.4
-      uncommon: 1.0
-  quyen_truong_phep:
-    name: "Cần Câu Quyền Trượng Phép"
-    price: 120000
-    durability: 1000
-    luck: 2.0
-    effects:
-      legendary: 0.7
-      rare: 0.6
-  kiem_huyen_thoai:
-    name: "Cần Câu Kiếm Huyền Thoại"
-    price: 7500
-    durability: 600
-    luck: 0.4
-    effects:
-      rare: 0.5
-      uncommon: 1.0
-  xiec_su_tu:
-    name: "Cần Câu Xiếc Sư Tử"
-    price: 7000
-    durability: 600
-    luck: 0.4
-    effects:
-      rare: 0.5
-      uncommon: 1.0
-  bap_ngo:
-    name: "Cần Câu Bắp Ngô"
-    price: 7500
-    durability: 600
-    luck: 0.4
-    effects:
-      rare: 0.5
-      uncommon: 1.0
+    luck: 0.05
+    pity:
+      min_rarity: "uncommon"
+      threshold: 15
+  # --- 🟢 BASIC ---
   truc:
     name: "Cần Câu Trúc"
     price: 1500
-    durability: 500
-    luck: 0.2
+    durability: 300
+    luck: 0.08
+    effects:
+      uncommon: 0.5
+    pity:
+      min_rarity: "uncommon"
+      threshold: 10
+  # --- 🔵 MID ---
+  bo_tui:
+    name: "Cần Câu Bỏ Túi"
+    price: 3000
+    durability: 400
+    luck: 0.12
     effects:
       uncommon: 0.8
+    pity:
+      min_rarity: "rare"
+      threshold: 18
+  nghiep_du:
+    name: "Cần Câu Nghiệp Dư"
+    price: 5000
+    durability: 500
+    luck: 0.15
+    effects:
+      rare: 0.3
+      uncommon: 1.0
+    pity:
+      min_rarity: "rare"
+      threshold: 14
+  # --- 🟡 PRO ---
+  kiem_huyen_thoai:
+    name: "Cần Câu Kiếm Huyền Thoại"
+    price: 12000
+    durability: 600
+    luck: 0.20
+    effects:
+      rare: 0.5
+      epic: 0.2
+      uncommon: 1.0
+    pity:
+      min_rarity: "rare"
+      threshold: 10
+  phep_thuat:
+    name: "Cần Câu Phép Thuật"
+    price: 25000
+    durability: 700
+    luck: 0.25
+    effects:
+      rare: 0.6
+      epic: 0.5
+      legendary: 0.15
+    pity:
+      min_rarity: "epic"
+      threshold: 20
+  # --- 🔴 ELITE ---
+  chuyen_nghiep:
+    name: "Cần câu chuyên nghiệp"
+    price: 50000
+    durability: 800
+    luck: 0.35
+    effects:
+      rare: 0.5
+      epic: 0.6
+      legendary: 0.3
+    pity:
+      min_rarity: "epic"
+      threshold: 15
+  # --- 🔴 MASTER ---
+  quyen_truong_phep:
+    name: "Cần Câu Quyền Trượng Phép"
+    price: 150000
+    durability: 500
+    luck: 0.45
+    effects:
+      legendary: 0.8
+      epic: 0.6
+      rare: 0.3
+    pity:
+      min_rarity: "epic"
+      threshold: 10
+
+# -- Nets (Lưới Chài) --
+nets:
+  # --- 🟢 BASIC ---
+  luoi_tre:
+    name: "Lưới Tre"
+    price: 2000
+    durability: 30
+    max_duration: 600
+    speed: 30
+    rarity_boost: {}
+  # --- 🔵 MID ---
+  luoi_nylon:
+    name: "Lưới Nylon"
+    price: 8000
+    durability: 50
+    max_duration: 1200
+    speed: 25
+    rarity_boost:
+      rare: 0.2
+  # --- 🟡 PRO ---
+  luoi_thep:
+    name: "Lưới Thép"
+    price: 25000
+    durability: 80
+    max_duration: 1800
+    speed: 20
+    rarity_boost:
+      rare: 0.3
+      epic: 0.15
+  # --- 🔴 MASTER ---
+  luoi_vang:
+    name: "Lưới Vàng"
+    price: 80000
+    durability: 40
+    max_duration: 2700
+    speed: 15
+    rarity_boost:
+      rare: 0.4
+      epic: 0.3
+      legendary: 0.1
+
+# -- Traps (Bẫy Cá) --
+traps:
+  # --- 🟢 BASIC ---
+  bay_tre:
+    name: "Bẫy Tre"
+    price: 5000
+    durability: 20
+    bait_cost: 10
+    capacity: 50
+    speed: 60
+    fish_per_bait: 5
+  # --- 🔵 MID ---
+  bay_sat:
+    name: "Bẫy Sắt"
+    price: 20000
+    durability: 35
+    bait_cost: 15
+    capacity: 100
+    speed: 45
+    fish_per_bait: 7
+  # --- 🟡 PRO ---
+  bay_inox:
+    name: "Bẫy Inox"
+    price: 60000
+    durability: 50
+    bait_cost: 20
+    capacity: 200
+    speed: 30
+    fish_per_bait: 10
+  # --- 🔴 MASTER ---
+  bay_vang:
+    name: "Bẫy Vàng"
+    price: 150000
+    durability: 30
+    bait_cost: 25
+    capacity: 500
+    speed: 20
+    fish_per_bait: 15
 
 rarity_chances:
   common: 0.41
@@ -204,6 +286,7 @@ xp_per_rarity:
 locations:
   song:
     name: "Sông"
+    rarity_modifier: { rare: 0, epic: -0.2, legendary: -0.5 }
     fish:
       - "Cá rô vàng"
       - "Cá vược"
@@ -226,6 +309,7 @@ locations:
       - "Lươn vây dài"
   ho:
     name: "Hồ"
+    rarity_modifier: { rare: 0.1, epic: 0, legendary: -0.3 }
     fish:
       - "Cá rô vàng"
       - "Cá vược"
@@ -248,6 +332,7 @@ locations:
       - "Lươn vây dài"
   bien:
     name: "Biển"
+    rarity_modifier: { rare: 0.15, epic: 0.1, legendary: 0 }
     fish:
       - "Cá chim Đại Tây Dương"
       - "Cá bò"
@@ -291,6 +376,7 @@ locations:
       - "Cá rô phi hổ"
   dai_duong:
     name: "Đại Dương"
+    rarity_modifier: { rare: 0.2, epic: 0.2, legendary: 0.3 }
     fish:
       - "Cá voi xanh"
       - "Cá mặt trăng"
