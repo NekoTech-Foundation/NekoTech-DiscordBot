@@ -310,45 +310,45 @@ Store:
     LuoiTre:
       Name: "Lưới Tre"
       Key: "luoi_tre"
-      Price: 2000
-      Description: "🟢 Lưới cơ bản, chài tối đa 10 phút."
+      Price: 8000
+      Description: "🟢 Lưới cơ bản, chài tối đa 10 phút. 1 cá/90s."
     LuoiNylon:
       Name: "Lưới Nylon"
       Key: "luoi_nylon"
-      Price: 8000
-      Description: "🔵 Lưới bền, chài 20 phút, tăng rare."
+      Price: 30000
+      Description: "🔵 Lưới bền, chài 20 phút, nhẹ tăng rare. 1 cá/75s."
     LuoiThep:
       Name: "Lưới Thép"
       Key: "luoi_thep"
-      Price: 25000
-      Description: "🟡 Lưới chắc, chài 30 phút, tăng rare/epic."
+      Price: 80000
+      Description: "🟡 Lưới chắc, chài 30 phút, tăng rare/epic. 1 cá/60s."
     LuoiVang:
       Name: "Lưới Vàng"
       Key: "luoi_vang"
-      Price: 80000
-      Description: "🔴 Lưới tối thượng, chài 45 phút, tăng tất cả."
+      Price: 250000
+      Description: "🔴 Lưới tối thượng, chài 45 phút. 1 cá/45s."
 
   "Bẫy Cá":
     BayTre:
       Name: "Bẫy Tre"
       Key: "bay_tre"
-      Price: 5000
-      Description: "🟢 Bẫy cơ bản, chứa 50 cá."
+      Price: 15000
+      Description: "🟢 Bẫy cơ bản, chứa 20 cá. 1 cá/5 phút."
     BaySat:
       Name: "Bẫy Sắt"
       Key: "bay_sat"
-      Price: 20000
-      Description: "🔵 Bẫy bền, chứa 100 cá."
+      Price: 50000
+      Description: "🔵 Bẫy bền, chứa 40 cá. 1 cá/4 phút."
     BayInox:
       Name: "Bẫy Inox"
       Key: "bay_inox"
-      Price: 60000
-      Description: "🟡 Bẫy chắc, chứa 200 cá."
+      Price: 150000
+      Description: "🟡 Bẫy chắc, chứa 80 cá. 1 cá/3 phút."
     BayVang:
       Name: "Bẫy Vàng"
       Key: "bay_vang"
-      Price: 150000
-      Description: "🔴 Bẫy tối thượng, chứa 500 cá."
+      Price: 400000
+      Description: "🔴 Bẫy tối thượng, chứa 150 cá. 1 cá/2 phút."
 
   Phân bón: {}
   "Vé Số":

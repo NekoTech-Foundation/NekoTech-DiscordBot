@@ -1095,14 +1095,13 @@ async function handleChai(interaction, config) {
 
         const durationStr = effectiveElapsed >= 60 ? `${Math.floor(effectiveElapsed / 60)}m ${effectiveElapsed % 60}s` : `${effectiveElapsed}s`;
 
-        const embed = new EmbedBuilder()
-            .setColor('#1ABC9C')
-            .setTitle('🪤 Thu Hoạch Lưới Chài!')
-            .setDescription(`Sau **${durationStr}**, bạn thu được **${fishCount} con cá**!\n\n${catchList}`)
-            .setFooter({ text: `${equippedNet.name} | Độ bền: ${equippedNet.durability}/${netConfig.durability}` })
-            .setTimestamp();
+        let lines = [];
+        lines.push('🪤 **Thu Hoạch Lưới Chài!**');
+        lines.push(`Sau **${durationStr}**, bạn thu được **${fishCount} con cá**!\n`);
+        lines.push(catchList);
+        lines.push(`\n🔧 ${equippedNet.name} | Độ bền: **${equippedNet.durability}/${netConfig.durability}**`);
 
-        return interaction.editReply({ embeds: [embed] });
+        return interaction.editReply({ content: lines.join('\n') });
     }
 
     // === DEPLOY MODE: Start new session ===
@@ -1155,19 +1154,15 @@ async function handleChai(interaction, config) {
         return `${baitConfig ? baitConfig.name : b.key} ×${b.count}`;
     }).join(', ');
 
-    const embed = new EmbedBuilder()
-        .setColor('#3498DB')
-        .setTitle('🪤 Thả Lưới Chài!')
-        .setDescription(
-            `Bạn đã thả **${equippedNet.name}** tại **${config.locations[locationKey].name}**!\n\n` +
-            `🎣 **Mồi đã dùng:** ${baitsUsedStr}\n` +
-            `⏰ **Thời gian chài:** Tối đa **${maxMin} phút**\n` +
-            `🐟 **Tốc độ:** 1 cá mỗi **${netConfig.speed}s**\n\n` +
-            `Quay lại dùng \`/fish chai\` bất kỳ lúc nào để thu hoạch!`
-        )
-        .setTimestamp();
+    let lines = [];
+    lines.push('🪤 **Thả Lưới Chài!**');
+    lines.push(`Bạn đã thả **${equippedNet.name}** tại **${config.locations[locationKey].name}**!\n`);
+    lines.push(`🎣 Mồi đã dùng: ${baitsUsedStr}`);
+    lines.push(`⏰ Thời gian chài: Tối đa **${maxMin} phút**`);
+    lines.push(`🐟 Tốc độ: 1 cá mỗi **${netConfig.speed}s**`);
+    lines.push(`\nQuay lại dùng \`/fish chai\` bất kỳ lúc nào để thu hoạch!`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.reply({ content: lines.join('\n') });
 }
 
 
@@ -1258,21 +1253,17 @@ async function handleBayDat(interaction, config) {
     userFishing.activeTraps.push(activeTrap);
     await userFishing.save();
 
-    const embed = new EmbedBuilder()
-        .setColor('#2ECC71')
-        .setTitle('🗑️ Đặt Bẫy Cá Thành Công!')
-        .setDescription(
-            `**${trap.name}** đã được đặt tại **${config.locations[locationKey].name}**!\n\n` +
-            `🎣 Mồi trong bẫy: **${trapConfig.bait_cost}**\n` +
-            `📦 Sức chứa: **${trapConfig.capacity} cá**\n` +
-            `⏰ Tốc độ: 1 cá / **${trapConfig.speed}s**\n` +
-            `🐟 Cá/mồi: **${trapConfig.fish_per_bait}**\n\n` +
-            `Dùng \`/fish bay xem\` để kiểm tra, \`/fish bay thu\` để thu hoạch!`
-        )
-        .setFooter({ text: `ID bẫy: ${activeTrap.id} | Bẫy đang dùng: ${userFishing.activeTraps.length}/5` })
-        .setTimestamp();
+    let lines = [];
+    lines.push('🗑️ **Đặt Bẫy Cá Thành Công!**');
+    lines.push(`**${trap.name}** đã được đặt tại **${config.locations[locationKey].name}**!\n`);
+    lines.push(`🎣 Mồi trong bẫy: **${trapConfig.bait_cost}**`);
+    lines.push(`📦 Sức chứa: **${trapConfig.capacity} cá**`);
+    lines.push(`⏰ Tốc độ: 1 cá / **${trapConfig.speed}s**`);
+    lines.push(`🐟 Cá/mồi: **${trapConfig.fish_per_bait}**`);
+    lines.push(`\nDùng \`/fish bay xem\` để kiểm tra, \`/fish bay thu\` để thu hoạch!`);
+    lines.push(`📋 ID: \`${activeTrap.id}\` | Bẫy: **${userFishing.activeTraps.length}/5**`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.reply({ content: lines.join('\n') });
 }
 
 // --- View Traps ---
@@ -1305,14 +1296,12 @@ async function handleBayXem(interaction, config) {
             `   ${status} | 🐟 ${totalFish}/${trap.capacity} | 🎣 Mồi: ${baitLeft} | ID: \`${trap.id}\``;
     });
 
-    const embed = new EmbedBuilder()
-        .setColor('#9B59B6')
-        .setTitle('🗑️ Bẫy Cá Của Bạn')
-        .setDescription(trapLines.join('\n\n'))
-        .setFooter({ text: `${userFishing.activeTraps.length}/5 bẫy đang hoạt động` })
-        .setTimestamp();
+    let lines = [];
+    lines.push('🗑️ **Bẫy Cá Của Bạn**\n');
+    lines.push(trapLines.join('\n\n'));
+    lines.push(`\n📋 ${userFishing.activeTraps.length}/5 bẫy đang hoạt động`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.reply({ content: lines.join('\n') });
 }
 
 // --- Harvest Trap ---
@@ -1387,25 +1376,21 @@ async function handleBayThu(interaction, config) {
     userFishing.activeTraps.splice(trapIndex, 1);
     await userFishing.save();
 
-    // Build embed
-    const allCatches = [...existingFish.map(f => `${RARITY_EMOJIS[f.rarity] || '⬜'} **${f.name}** ×${f.count}`)];
+    // Build plain text
+    const allCatches = [...existingFish.map(f => `${RARITY_EMOJIS[f.rarity] || '⬜'} ${f.name} ×**${f.count}**`)];
     for (const fish of Object.values(catchCounts)) {
-        allCatches.push(`${RARITY_EMOJIS[fish.rarity] || '⬜'} **${fish.name}** ×${fish.count}`);
+        allCatches.push(`${RARITY_EMOJIS[fish.rarity] || '⬜'} ${fish.name} ×**${fish.count}**`);
     }
 
-    const embed = new EmbedBuilder()
-        .setColor('#F39C12')
-        .setTitle('🗑️ Thu Hoạch Bẫy Cá!')
-        .setDescription(
-            `Thu hoạch từ **${trap.trapName}** tại **${location ? location.name : trap.location}**!\n` +
-            `Tổng: **${totalHarvested} cá** 🐟\n\n` +
-            (allCatches.length > 0 ? allCatches.slice(0, 20).join('\n') : 'Không có cá nào!') +
-            (allCatches.length > 20 ? `\n... và ${allCatches.length - 20} loại khác` : '')
-        )
-        .setFooter({ text: `Bẫy còn lại: ${userFishing.activeTraps.length}/5` })
-        .setTimestamp();
+    let lines = [];
+    lines.push('🗑️ **Thu Hoạch Bẫy Cá!**');
+    lines.push(`Thu hoạch từ **${trap.trapName}** tại **${location ? location.name : trap.location}**`);
+    lines.push(`Tổng: **${totalHarvested} cá** 🐟\n`);
+    lines.push(allCatches.length > 0 ? allCatches.slice(0, 20).join('\n') : 'Không có cá nào!');
+    if (allCatches.length > 20) lines.push(`... và ${allCatches.length - 20} loại khác`);
+    lines.push(`\n📋 Bẫy còn lại: **${userFishing.activeTraps.length}/5**`);
 
-    return interaction.editReply({ embeds: [embed] });
+    return interaction.editReply({ content: lines.join('\n') });
 }
 
 // --- Resupply Trap ---
@@ -1481,18 +1466,14 @@ async function handleBayTiepTe(interaction, config) {
 
     await userFishing.save();
 
-    const embed = new EmbedBuilder()
-        .setColor('#2ECC71')
-        .setTitle('🔄 Tiếp Tế Bẫy Thành Công!')
-        .setDescription(
-            `**${trap.trapName}** tại **${location ? location.name : trap.location}**\n\n` +
-            `🐟 Cá đang chờ: **${trap.fish.reduce((s, f) => s + f.count, 0)}/${trap.capacity}**\n` +
-            `🎣 Mồi hiện tại: **${trap.baitRemaining}**\n` +
-            `⏰ Timer đã reset!`
-        )
-        .setTimestamp();
+    let lines = [];
+    lines.push('🔄 **Tiếp Tế Bẫy Thành Công!**');
+    lines.push(`**${trap.trapName}** tại **${location ? location.name : trap.location}**\n`);
+    lines.push(`🐟 Cá đang chờ: **${trap.fish.reduce((s, f) => s + f.count, 0)}/${trap.capacity}**`);
+    lines.push(`🎣 Mồi hiện tại: **${trap.baitRemaining}**`);
+    lines.push(`⏰ Timer đã reset!`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.reply({ content: lines.join('\n') });
 }
 
 // --- Remove Trap ---
@@ -1528,17 +1509,13 @@ async function handleBayGo(interaction, config) {
     userFishing.activeTraps.splice(trapIndex, 1);
     await userFishing.save();
 
-    const embed = new EmbedBuilder()
-        .setColor('#E74C3C')
-        .setTitle('🗑️ Gỡ Bẫy Cá')
-        .setDescription(
-            `Đã gỡ **${trap.trapName}** tại **${config.locations[trap.location] ? config.locations[trap.location].name : trap.location}**.\n` +
-            (bankedCount > 0 ? `\n🐟 Đã chuyển **${bankedCount} cá** vào kho.` : '')
-        )
-        .setFooter({ text: `Bẫy còn lại: ${userFishing.activeTraps.length}/5` })
-        .setTimestamp();
+    let lines = [];
+    lines.push('🗑️ **Gỡ Bẫy Cá**');
+    lines.push(`Đã gỡ **${trap.trapName}** tại **${config.locations[trap.location] ? config.locations[trap.location].name : trap.location}**.`);
+    if (bankedCount > 0) lines.push(`🐟 Đã chuyển **${bankedCount} cá** vào kho.`);
+    lines.push(`📋 Bẫy còn lại: **${userFishing.activeTraps.length}/5**`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.reply({ content: lines.join('\n') });
 }
 
 

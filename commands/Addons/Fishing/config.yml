@@ -181,80 +181,80 @@ nets:
   # --- 🟢 BASIC ---
   luoi_tre:
     name: "Lưới Tre"
-    price: 2000
-    durability: 30
+    price: 8000
+    durability: 15
     max_duration: 600
-    speed: 30
+    speed: 90
     rarity_boost: {}
   # --- 🔵 MID ---
   luoi_nylon:
     name: "Lưới Nylon"
-    price: 8000
-    durability: 50
+    price: 30000
+    durability: 25
     max_duration: 1200
-    speed: 25
+    speed: 75
     rarity_boost:
-      rare: 0.2
+      rare: 0.05
   # --- 🟡 PRO ---
   luoi_thep:
     name: "Lưới Thép"
-    price: 25000
-    durability: 80
+    price: 80000
+    durability: 40
     max_duration: 1800
-    speed: 20
+    speed: 60
     rarity_boost:
-      rare: 0.3
-      epic: 0.15
+      rare: 0.1
+      epic: 0.03
   # --- 🔴 MASTER ---
   luoi_vang:
     name: "Lưới Vàng"
-    price: 80000
-    durability: 40
+    price: 250000
+    durability: 20
     max_duration: 2700
-    speed: 15
+    speed: 45
     rarity_boost:
-      rare: 0.4
-      epic: 0.3
-      legendary: 0.1
+      rare: 0.15
+      epic: 0.05
+      legendary: 0.01
 
 # -- Traps (Bẫy Cá) --
 traps:
   # --- 🟢 BASIC ---
   bay_tre:
     name: "Bẫy Tre"
-    price: 5000
-    durability: 20
-    bait_cost: 10
-    capacity: 50
-    speed: 60
-    fish_per_bait: 5
+    price: 15000
+    durability: 10
+    bait_cost: 20
+    capacity: 20
+    speed: 300
+    fish_per_bait: 2
   # --- 🔵 MID ---
   bay_sat:
     name: "Bẫy Sắt"
-    price: 20000
-    durability: 35
-    bait_cost: 15
-    capacity: 100
-    speed: 45
-    fish_per_bait: 7
+    price: 50000
+    durability: 18
+    bait_cost: 30
+    capacity: 40
+    speed: 240
+    fish_per_bait: 3
   # --- 🟡 PRO ---
   bay_inox:
     name: "Bẫy Inox"
-    price: 60000
-    durability: 50
-    bait_cost: 20
-    capacity: 200
-    speed: 30
-    fish_per_bait: 10
+    price: 150000
+    durability: 25
+    bait_cost: 40
+    capacity: 80
+    speed: 180
+    fish_per_bait: 4
   # --- 🔴 MASTER ---
   bay_vang:
     name: "Bẫy Vàng"
-    price: 150000
-    durability: 30
-    bait_cost: 25
-    capacity: 500
-    speed: 20
-    fish_per_bait: 15
+    price: 400000
+    durability: 15
+    bait_cost: 50
+    capacity: 150
+    speed: 120
+    fish_per_bait: 6
 
 rarity_chances:
   common: 0.41
@@ -269,8 +269,8 @@ rarity_prices_per_kg:
   common: 50
   uncommon: 100
   rare: 300
-  epic: 1000
-  legendary: 5000
+  epic: 600
+  legendary: 1700
 
 xp_per_rarity:
   common: 10
