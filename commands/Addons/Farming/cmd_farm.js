@@ -360,7 +360,7 @@ module.exports = {
             let mutationDetails = [];
 
             for (const { planted, plant } of plantsToHarvest) {
-                await plantSchema.deleteOne({ _id: planted._id });
+                await plantSchema.deleteOne({ userId: planted.userId, plant: planted.plant });
                 let harvestedQuantity = (Math.floor(Math.random() * 3) + 2) * planted.quantity;
 
                 // Yield Multipliers from fertilizers (new stacking system)

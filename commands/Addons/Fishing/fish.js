@@ -709,26 +709,25 @@ async function handleSell(interaction, config) {
     let economyData = await EconomyUserData.findOne({ userId: interaction.user.id });
     if (!economyData) economyData = await EconomyUserData.create({ userId: interaction.user.id, balance: 0 });
 
+    const RARITY_SORT = { legendary: 0, epic: 1, rare: 2, uncommon: 3, common: 4 };
+
     if (fishName.toLowerCase() === 'all') {
         if (!userFishing.inventory || userFishing.inventory.length === 0) {
-            return interaction.reply({
-                embeds: [new EmbedBuilder()
-                    .setColor('#E74C3C')
-                    .setDescription(fishingLang.Errors.NoFishToSell)
-                ],
-                ephemeral: true
-            });
+            return interaction.reply({ content: '❌ Bạn không có cá nào để bán!', ephemeral: true });
         }
 
         let totalGain = 0;
+        let totalFishCount = 0;
         const soldFish = [];
 
         for (const fish of userFishing.inventory) {
             const pricePerKg = config.rarity_prices_per_kg[fish.rarity];
             if (pricePerKg) {
-                const gain = Math.max(5 * fish.quantity, Math.floor(pricePerKg * fish.totalWeight));
+                const weight = fish.totalWeight || 0;
+                const gain = Math.max(5 * fish.quantity, Math.floor(pricePerKg * weight));
                 totalGain += gain;
-                soldFish.push({ ...fish, gain });
+                totalFishCount += fish.quantity;
+                soldFish.push({ name: fish.name, rarity: fish.rarity, quantity: fish.quantity, weight, gain });
             }
         }
 
@@ -738,28 +737,27 @@ async function handleSell(interaction, config) {
         await userFishing.save();
         await economyData.save();
 
-        const embed = new EmbedBuilder()
-            .setColor('#2ECC71')
-            .setTitle(fishingLang.UI.SellSuccessTitle)
-            .setDescription(fishingLang.UI.SellAllDesc)
-            .addFields(
-                { name: fishingLang.UI.TotalIncome, value: formatCurrency(totalGain), inline: true },
-                { name: fishingLang.UI.SpeciesCount, value: `${soldFish.length}`, inline: true },
-                { name: fishingLang.UI.NewBalance, value: formatCurrency(economyData.balance), inline: true }
-            )
-            .setTimestamp();
+        // Sort by rarity (legendary first), then by gain
+        soldFish.sort((a, b) => (RARITY_SORT[a.rarity] ?? 5) - (RARITY_SORT[b.rarity] ?? 5) || b.gain - a.gain);
 
-        return interaction.reply({ embeds: [embed] });
+        // Build plain text
+        let lines = [];
+        lines.push('💰 **Bán Cá Thành Công**');
+        lines.push(`Đã bán **tất cả ${totalFishCount} con cá** trong kho!\n`);
+
+        for (const f of soldFish) {
+            const emoji = RARITY_EMOJIS[f.rarity] || '⬜';
+            lines.push(`${emoji} ${f.name} ×**${f.quantity}** — ${formatWeight(f.weight)} — **${f.gain.toLocaleString()} xu**`);
+        }
+
+        lines.push('');
+        lines.push(`📊 **Tổng thu:** ${totalGain.toLocaleString()} xu | **Số dư:** ${economyData.balance.toLocaleString()} xu`);
+
+        return interaction.reply({ content: lines.join('\n') });
     } else {
         const fishIndex = userFishing.inventory.findIndex(f => f.name === fishName);
         if (fishIndex === -1) {
-            return interaction.reply({
-                embeds: [new EmbedBuilder()
-                    .setColor('#E74C3C')
-                    .setDescription(fishingLang.Errors.NoFishInInventory)
-                ],
-                ephemeral: true
-            });
+            return interaction.reply({ content: '❌ Không tìm thấy cá này trong kho!', ephemeral: true });
         }
 
         const fish = userFishing.inventory[fishIndex];
@@ -768,17 +766,11 @@ async function handleSell(interaction, config) {
             : fish.quantity;
 
         if (quantity <= 0 || quantity > fish.quantity) {
-            return interaction.reply({
-                embeds: [new EmbedBuilder()
-                    .setColor('#E74C3C')
-                    .setDescription(fishingLang.Errors.InvalidQuantity.replace('{quantity}', fish.quantity))
-                ],
-                ephemeral: true
-            });
+            return interaction.reply({ content: `❌ Số lượng không hợp lệ! Bạn có **${fish.quantity}** con.`, ephemeral: true });
         }
 
         const pricePerKg = config.rarity_prices_per_kg[fish.rarity];
-        const weightPerFish = fish.totalWeight / fish.quantity;
+        const weightPerFish = (fish.totalWeight || 0) / fish.quantity;
         const weightToSell = weightPerFish * quantity;
         const totalGain = Math.max(5 * quantity, Math.floor(pricePerKg * weightToSell));
 
@@ -794,22 +786,13 @@ async function handleSell(interaction, config) {
         await userFishing.save();
         await economyData.save();
 
-        const fishDetails = Object.values(config.fish_pools).flat()
-            .find(f => f.name === fishName);
+        const emoji = RARITY_EMOJIS[fish.rarity] || '🐟';
+        let lines = [];
+        lines.push('💰 **Bán Cá Thành Công**');
+        lines.push(`${emoji} **${fishName}** ×${quantity} — ${formatWeight(weightToSell)}`);
+        lines.push(`💵 Thu nhập: **${totalGain.toLocaleString()} xu** | Số dư: **${economyData.balance.toLocaleString()} xu**`);
 
-        const embed = new EmbedBuilder()
-            .setColor('#2ECC71')
-            .setTitle(fishingLang.UI.SellSuccessTitle)
-            .setDescription(`${fishDetails?.emoji || '🐟'} **${fishName}** ${RARITY_EMOJIS[fish.rarity]}`)
-            .addFields(
-                { name: fishingLang.UI.Quantity, value: `${quantity}`, inline: true },
-                { name: fishingLang.UI.TotalWeight, value: formatWeight(weightToSell), inline: true },
-                { name: fishingLang.UI.TotalIncome, value: formatCurrency(totalGain), inline: true },
-                { name: fishingLang.UI.NewBalance, value: formatCurrency(economyData.balance), inline: false }
-            )
-            .setTimestamp();
-
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ content: lines.join('\n') });
     }
 }
 
@@ -1086,12 +1069,12 @@ async function handleChai(interaction, config) {
             const existing = userFishing.inventory.find(f => f.name === fish.name && f.rarity === fish.rarity);
             if (existing) {
                 existing.quantity += fish.count;
-                existing.weight = parseFloat(((existing.weight * (existing.quantity - fish.count) + totalWeight) / existing.quantity).toFixed(2));
+                existing.totalWeight = (existing.totalWeight || 0) + totalWeight;
             } else {
                 userFishing.inventory.push({
                     name: fish.name,
                     rarity: fish.rarity,
-                    weight: avgWeight,
+                    totalWeight: totalWeight,
                     quantity: fish.count
                 });
             }
@@ -1379,8 +1362,9 @@ async function handleBayThu(interaction, config) {
         const existing = userFishing.inventory.find(f => f.name === ef.name && f.rarity === ef.rarity);
         if (existing) {
             existing.quantity += ef.count;
+            existing.totalWeight = (existing.totalWeight || 0) + (ef.weight || 0.5) * ef.count;
         } else {
-            userFishing.inventory.push({ name: ef.name, rarity: ef.rarity, weight: ef.weight || 0.5, quantity: ef.count });
+            userFishing.inventory.push({ name: ef.name, rarity: ef.rarity, totalWeight: (ef.weight || 0.5) * ef.count, quantity: ef.count });
         }
     }
 
@@ -1393,8 +1377,9 @@ async function handleBayThu(interaction, config) {
         const existing = userFishing.inventory.find(f => f.name === fish.name && f.rarity === fish.rarity);
         if (existing) {
             existing.quantity += fish.count;
+            existing.totalWeight = (existing.totalWeight || 0) + avgWeight * fish.count;
         } else {
-            userFishing.inventory.push({ name: fish.name, rarity: fish.rarity, weight: avgWeight, quantity: fish.count });
+            userFishing.inventory.push({ name: fish.name, rarity: fish.rarity, totalWeight: avgWeight * fish.count, quantity: fish.count });
         }
     }
 
@@ -1532,8 +1517,9 @@ async function handleBayGo(interaction, config) {
             const existing = userFishing.inventory.find(inv => inv.name === f.name && inv.rarity === f.rarity);
             if (existing) {
                 existing.quantity += f.count;
+                existing.totalWeight = (existing.totalWeight || 0) + (f.weight || 0.5) * f.count;
             } else {
-                userFishing.inventory.push({ name: f.name, rarity: f.rarity, weight: f.weight || 0.5, quantity: f.count });
+                userFishing.inventory.push({ name: f.name, rarity: f.rarity, totalWeight: (f.weight || 0.5) * f.count, quantity: f.count });
             }
         }
     }
