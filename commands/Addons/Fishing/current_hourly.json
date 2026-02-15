@@ -1,9 +1,9 @@
 {
   "legendary": {
-    "name": "Mực ma cà rồng",
-    "emoji": "<:Fish_vampiresquid:1433393330166693928>",
-    "min_weight": 0.5,
-    "max_weight": 1.5
+    "name": "Mực nang",
+    "emoji": "<:Fish_cuttlefish:1433393275766706206>",
+    "min_weight": 3,
+    "max_weight": 10
   },
   "epic": {
     "name": "Mực zombie",
@@ -11,5 +11,5 @@
     "min_weight": 1,
     "max_weight": 5
   },
-  "updatedAt": "2026-02-14T04:00:00.017Z"
+  "updatedAt": "2026-02-15T02:00:00.013Z"
 }
