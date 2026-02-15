@@ -338,13 +338,7 @@ module.exports = async (client, message) => {
     }
     const lang = await getLang(message.guild.id);
 
-    // Sticky Message Handler
-    try {
-        const StickyManager = require('../utils/StickyManager');
-        await StickyManager.handleMessage(message);
-    } catch (e) {
-        console.error('Sticky Manager Error:', e);
-    }
+
 
     // Bot Mention Reply Handler
     try {
