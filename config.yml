@@ -199,6 +199,7 @@ Economy:
 
   Coinflip:
     cooldown: "5s"
+    winMultiplier: 1.95
 
   Daily:
     baseAmount: 1000
@@ -208,13 +209,17 @@ Economy:
 
   Roll:
     cooldown: "10s"
+    winMultiplier: 1.95
 
   Roulette:
     cooldown: "15s"
+    redBlackMultiplier: 2.0
+    greenMultiplier: 14.0
 
   Slot:
     cooldown: "10s"
-    multiplier: 5.0
+    jackpotMultiplier: 10.0
+    twoMatchMultiplier: 1.5
 
 Store:
   Categories: []

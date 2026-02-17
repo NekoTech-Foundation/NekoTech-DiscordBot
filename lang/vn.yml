@@ -1582,16 +1582,29 @@ Economy:
       WinTitle: "Số Đỏ! 🎲"
       LoseTitle: "Số Đen! 🎲"
       ResultDesc: "Xúc xắc: **{roll}**\nBạn chọn: **{guess}**"
+      Rolling: "Đang lắc xúc xắc..."
       Low: "Xỉu (1-50)"
       High: "Tài (51-100)"
+      Fields:
+        Player: "👤 Người chơi"
+        Bet: "💰 Cược"
+        Result: "💵 Kết quả"
+        Balance: "💳 Số dư"
+        Multiplier: "Tỉ lệ"
 
     Roulette:
       WinTitle: "Roulette Thắng! 🎉"
       LoseTitle: "Roulette Thua! 🥀"
       ResultDesc: "Bóng rơi vào: **{result}**\nBạn chọn: **{color}**"
+      Spinning: "Đang quay bánh xe..."
       Red: "ĐỎ"
       Black: "ĐEN"
       Green: "XANH LÁ"
+      Fields:
+        Player: "👤 Người chơi"
+        Bet: "💰 Cược"
+        Result: "💵 Kết quả"
+        Balance: "💳 Số dư"
 
     Blackjack:
       WinTitle: "Xì Dách Thắng! 🎉"
@@ -1617,12 +1630,29 @@ Economy:
       WinTitle: "Tung Xu Thắng! 🪙"
       LoseTitle: "Tung Xu Thua! 🪙"
       ResultDesc: "Kết quả: **{result}**\nBạn chọn: **{guess}**"
+      Spinning: "Đang tung..."
+      Fields:
+        Player: "👤 Người chơi"
+        Bet: "💰 Cược"
+        Result: "💵 Kết quả"
+        Balance: "💳 Số dư"
+        Multiplier: "Tỉ lệ"
 
     Slot:
       SpinningTitle: "Đang quay... 🎰"
       WinTitle: "Jackpot! 🎉"
+      JackpotTitle: "JACKPOT! 🎰🎉"
+      PartialWinTitle: "Trúng nhỏ! ✨"
       LoseTitle: "Thua rồi... 🎰"
       WinDesc: "**{r}**"
+      Jackpot: "🎉 JACKPOT!"
+      PartialMatch: "✨ 2 trùng khớp!"
+      NoMatch: "💨 Không trùng"
+      Fields:
+        Player: "👤 Người chơi"
+        Bet: "💰 Cược"
+        Result: "💵 Kết quả"
+        Balance: "💳 Số dư"
 
   Games:
     Crime:

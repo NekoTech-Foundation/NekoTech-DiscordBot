@@ -998,24 +998,54 @@ Economy:
       ResultDesc: "結果: **{result}**\nあなたの予想: **{guess}**"
       Heads: "表"
       Tails: "裏"
+      Spinning: "投げています..."
+      Fields:
+        Player: "👤 プレイヤー"
+        Bet: "💰 賭け金"
+        Result: "💵 結果"
+        Balance: "💳 残高"
+        Multiplier: "倍率"
     Roll:
       WinTitle: "ラッキーロール！ 🎲"
       LoseTitle: "アンラッキーロール！ 🎲"
       ResultDesc: "サイコロ: **{roll}**\nあなたの予想: **{guess}**"
+      Rolling: "サイコロを振っています..."
       Low: "低 (1-50)"
       High: "高 (51-100)"
+      Fields:
+        Player: "👤 プレイヤー"
+        Bet: "💰 賭け金"
+        Result: "💵 結果"
+        Balance: "💳 残高"
+        Multiplier: "倍率"
     Roulette:
       WinTitle: "ルーレット勝利！ 🎉"
       LoseTitle: "ルーレット敗北！ 🥀"
       ResultDesc: "ボールは **{result}** に止まりました\nあなたの予想: **{color}**"
+      Spinning: "ルーレットを回しています..."
       Red: "赤"
       Black: "黒"
       Green: "緑"
+      Fields:
+        Player: "👤 プレイヤー"
+        Bet: "💰 賭け金"
+        Result: "💵 結果"
+        Balance: "💳 残高"
     Slot:
       SpinningTitle: "回転中... 🎰"
       WinTitle: "ジャックポット！ 🎰"
+      JackpotTitle: "ジャックポット！ 🎰🎉"
+      PartialWinTitle: "小当たり！ ✨"
       LoseTitle: "次は幸運を..."
       WinDesc: "🎰 | {r} | 🎰"
+      Jackpot: "🎉 ジャックポット!"
+      PartialMatch: "✨ 2つ一致!"
+      NoMatch: "💨 一致なし"
+      Fields:
+        Player: "👤 プレイヤー"
+        Bet: "💰 賭け金"
+        Result: "💵 結果"
+        Balance: "💳 残高"
 
   Games:
     Crime:

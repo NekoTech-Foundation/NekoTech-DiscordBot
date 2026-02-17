@@ -975,24 +975,54 @@ Economy:
       ResultDesc: "Result: **{result}**\nYou picked: **{guess}**"
       Heads: "Heads"
       Tails: "Tails"
+      Spinning: "Flipping..."
+      Fields:
+        Player: "👤 Player"
+        Bet: "💰 Bet"
+        Result: "💵 Result"
+        Balance: "💳 Balance"
+        Multiplier: "Multiplier"
     Roll:
       WinTitle: "Lucky Roll! 🎲"
       LoseTitle: "Unlucky Roll! 🎲"
       ResultDesc: "Roll: **{roll}**\nYou picked: **{guess}**"
+      Rolling: "Rolling the dice..."
       Low: "Low (1-50)"
       High: "High (51-100)"
+      Fields:
+        Player: "👤 Player"
+        Bet: "💰 Bet"
+        Result: "💵 Result"
+        Balance: "💳 Balance"
+        Multiplier: "Multiplier"
     Roulette:
       WinTitle: "Roulette Win! 🎉"
       LoseTitle: "Roulette Lose! 🥀"
       ResultDesc: "Ball landed on: **{result}**\nYou picked: **{color}**"
+      Spinning: "Spinning the wheel..."
       Red: "RED"
       Black: "BLACK"
       Green: "GREEN"
+      Fields:
+        Player: "👤 Player"
+        Bet: "💰 Bet"
+        Result: "💵 Result"
+        Balance: "💳 Balance"
     Slot:
       SpinningTitle: "Spinning... 🎰"
       WinTitle: "JACKPOT! 🎰"
+      JackpotTitle: "JACKPOT! 🎰🎉"
+      PartialWinTitle: "Small Win! ✨"
       LoseTitle: "Better Luck Next Time..."
       WinDesc: "🎰 | {r} | 🎰"
+      Jackpot: "🎉 JACKPOT!"
+      PartialMatch: "✨ 2 Match!"
+      NoMatch: "💨 No Match"
+      Fields:
+        Player: "👤 Player"
+        Bet: "💰 Bet"
+        Result: "💵 Result"
+        Balance: "💳 Balance"
 
   Games:
     Crime:
