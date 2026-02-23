@@ -76,9 +76,9 @@ module.exports = {
 
         const userData = await UserData.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
         if (userData && userData.allowSniping === false && !interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-           // Users who turned of sniping can still use the command, but only if they are admins? 
-           // Implementation plan didn't specify restriction on USING the command, only on having THEIR messages sniped.
-           // So no restriction here needed on usage unless desired. Keeping strictly to plan.
+            // Users who turned of sniping can still use the command, but only if they are admins? 
+            // Implementation plan didn't specify restriction on USING the command, only on having THEIR messages sniped.
+            // So no restriction here needed on usage unless desired. Keeping strictly to plan.
         }
 
         if (subCommand === 'clear') {
@@ -100,8 +100,13 @@ module.exports = {
             return interaction.reply({ content: lang.SnipeNoMsg || "Không có tin nhắn nào để snipe!", flags: MessageFlags.Ephemeral });
         }
 
+        const authorOptions = { name: `${snipeMsg.author}` };
+        if (snipeMsg.member?.user?.displayAvatarURL) {
+            authorOptions.iconURL = snipeMsg.member.user.displayAvatarURL();
+        }
+
         const embed = new EmbedBuilder()
-            .setAuthor({ name: `${snipeMsg.author}`, iconURL: `${snipeMsg.member.user.displayAvatarURL()}` })
+            .setAuthor(authorOptions)
             .setColor(config.EmbedColors?.Default || '#0099ff')
             .setTimestamp(snipeMsg.timestamp);
 
