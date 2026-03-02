@@ -2,9 +2,9 @@
 # CẤU HÌNH BOT (NEKOTECH FRAMEWORK)
 # ===========================================================================
 Version: "1.8.5"
-BotToken: "MTM3MjQyMDYzMjYyODgyMjA1Nw.G8UHp1.CuP68lNxZ0b0Q1yOk7bU6tlKWGePDuO3cJY3jU"
-BotClientSecret: "IGDeMPlXlfBjhXB7RwH4LR3_QZ3hxxv7"
-BotClientId: "1459705671959449714"
+BotToken: ""
+BotClientSecret: ""
+BotClientId: ""
 
 # Cài đặt Cơ bản
 GuildID: "1388889326309605488"
