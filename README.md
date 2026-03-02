@@ -1,7 +1,8 @@
-# NekoTech Discord Bot (Open Source Edition)
+# NekoTech Discord Bot aka KentaBuckets
 
-Một bot Discord đa năng, hoàn chỉnh và mạnh mẽ được phát triển trên nền tảng **Discord.js v14**. Bot được tích hợp sẵn hàng loạt hệ thống từ chơi game, kinh tế, âm nhạc, cho đến quản trị server giúp cộng đồng của bạn trở nên sôi động và dễ quản lý hơn.
+Một bot Discord đa năng, hoàn chỉnh và mạnh mẽ được phát triển trên nền tảng **Discord.js v14**. KentaBuckets hiện đang không còn maintain bởi NekoTech Foundation, sẽ có người đứng ra vá các lỗi critical nếu có báo cáo.
 
+Hãy Star Repo này nếu bạn thấy nó hữu ích
 ---
 
 ## 🚀 Tính Năng Nổi Bật
