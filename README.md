@@ -1,91 +1,124 @@
-# NekoBuckets - Bot Discord Đa Năng
+# NekoTech Discord Bot (Open Source Edition)
 
-NekoBuckets là một bot Discord mạnh mẽ và đầy đủ tính năng, được xây dựng trên nền tảng Discord.js v14. Bot tích hợp nhiều hệ thống giải trí và quản lý server, giúp cộng đồng Discord của bạn trở nên sôi động hơn.
+Một bot Discord đa năng, hoàn chỉnh và mạnh mẽ được phát triển trên nền tảng **Discord.js v14**. Bot được tích hợp sẵn hàng loạt hệ thống từ chơi game, kinh tế, âm nhạc, cho đến quản trị server giúp cộng đồng của bạn trở nên sôi động và dễ quản lý hơn.
+
+---
 
 ## 🚀 Tính Năng Nổi Bật
 
-Dựa trên cấu hình hiện tại, bot hỗ trợ các nhóm tính năng sau:
+- **Hệ Thống Kinh Tế (Economy):**
+  - Trồng trọt, câu cá, điểm danh hằng ngày.
+  - Các minigame cá cược: Blackjack, Coinflip, Slot, Roulette.
+  - Cửa hàng vật phẩm, ngân hàng, chuyển tiền.
+- **Âm Nhạc (Music):**
+  - Phát nhạc chất lượng cao.
+  - Hỗ trợ hàng chờ, danh sách phát, vòng lặp.
+- **Minigames & Giải Trí:**
+  - 2048, TicTacToe, Wordle, Cờ caro.
+  - Các lệnh tương tác: hug, kiss, slap...
+- **Hệ Thống Quản lý & Tiện Ích:**
+  - Quản trị viên (Ban, Kick, Warn, Timeout, Purge).
+  - Tích hợp logging toàn diện (Tin nhắn, Voice, Server).
+  - Leveling (Hệ thống cấp độ), Quản lý Ticket, và Giveaway tự động.
+  - Tích hợp AI (Google Gemini) để trò chuyện trực tiếp (Tùy chọn).
 
-- **Hệ thống Kinh tế (Economy):**
-  - Các lệnh kiếm tiền: `work`, `beg`, `crime`, `daily`, `fishing`, `farming` (trồng trọt).
-  - Trò chơi may rủi: `blackjack`, `roulette`, `slot`, `coinflip`.
-  - Cửa hàng và vật phẩm: `store`, `inventory`, `buy`, `sell`.
-  - Ngân hàng: `deposit`, `withdraw`, `transfer`.
-
-- **Âm nhạc (Music):**
-  - Phát nhạc chất lượng cao từ YouTube, Spotify, SoundCloud.
-  - Hỗ trợ bộ lọc âm thanh, tạo playlist.
-
-- **Minigames & Giải trí:**
-  - Game logic: `2048`, `tictactoe`, `wordle`, `connectfour`.
-  - Lệnh vui: `meme`, `darkjoke`, `8ball`, `fliptext`.
-  - Tương tác: `hug`, `kiss`, `slap`, `marry` (kết hôn).
-
-- **Quản lý (Moderation):**
-  - Công cụ quản trị: `kick`, `ban`, `timeout`, `warn`, `purge` (xóa tin nhắn).
-  - Hệ thống log chi tiết (Message, Voice, Member logs).
-
-- **Tiện ích & Hệ thống:**
-  - **Leveling:** Hệ thống cấp độ và bảng xếp hạng (Rank card).
-  - **AI:** Tích hợp Google Gemini (Chatbot thông minh).
-  - **Anime/Manga:** Tìm kiếm thông tin, xem ảnh Pixiv.
-  - **Ticket & Report:** Hệ thống hỗ trợ thành viên.
-  - **Giveaway:** Tổ chức tặng quà tự động.
+---
 
 ## 🛠️ Yêu Cầu Hệ Thống
 
-Trước khi cài đặt, hãy đảm bảo máy chủ của bạn đã cài đặt:
+Trước khi tiến hành cài đặt, VPS/Máy tính của bạn CẦN CÓ:
 
-- **Node.js:** Phiên bản **18.20.0** trở lên (Khuyến nghị dùng bản LTS mới nhất).
-- **FFmpeg:** Cần thiết để xử lý âm thanh cho tính năng Music.
-- **Python:** (Tùy chọn) Để build một số module native nếu cần.
+1. **Node.js**: Phiên bản **v18.20.0** trở lên (Khuyến nghị bản LTS mới nhất như v20.x).
+2. **Công cụ biên dịch:** (Bắt buộc để cài đặt các thư viện module native như `canvas` và `sqlite3`)
+   - **Windows:** Mở PowerShell bằng quyền Admin và chạy: `npm install -g windows-build-tools` *(hoặc cài đặt Visual Studio Desktop C++ workload)*.
+   - **Linux (Ubuntu/Debian):** Chạy lệnh `sudo apt build-dep
+   - **Python:** Khuyến nghị cài đặt Python 3.x để biên dịch node-gyp.
+3. **FFmpeg**: Yêu cầu bắt buộc nếu bạn sử dụng tính năng Âm nhạc (Music Bot).
 
-## 📥 Hướng Dẫn Cài Đặt
+---
 
-1. **Clone repository:**
+## 📥 Hướng Dẫn Cài Đặt Toàn Tập
+
+### Bước 1: Lấy thông tin Bot từ Discord Developer Portal
+1. Truy cập [Discord Developer Portal](https://discord.com/developers/applications).
+2. Nhấn **New Application** và đặt tên cho Bot của bạn.
+3. Chuyển sang tab **Bot**:
+   - Nhấn **Reset Token** để lấy `BotToken` (Lưu lại chuỗi này, không để lộ cho ai).
+   - Kéo xuống mục **Privileged Gateway Intents**, bật TẤT CẢ 3 tuỳ chọn: `Presence Intent`, `Server Members Intent`, và `Message Content Intent`.
+4. Chuyển sang tab **OAuth2 -> General**:
+   - Lấy `Client ID` và `Client Secret`.
+   - Để mời bot vào server, chuyển sang tab **OAuth2 -> URL Generator**, chọn scope `bot` và `applications.commands`, cấp quyền `Administrator` rồi copy link dán vào trình duyệt để mời.
+
+### Bước 2: Tải Source Code & Cài Đặt Thư Viện
+1. Clone mã nguồn về máy hoặc giải nén file ZIP:
    ```bash
-   git clone <link-repo-cua-ban>
-   cd nekobuckets
+   git clone <link-repo-github>
+   cd NekoTech-DiscordBot
    ```
-
-2. **Cài đặt dependencies:**
+2. Cài đặt toàn bộ thư viện cần thiết:
    ```bash
    npm install
    ```
+   *Lưu ý: Nếu trong quá trình cài đặt gặp lỗi chữ đỏ liên quan đến `node-gyp` hoặc `canvas`, hãy chắc chắn bạn đã cài C++ Build Tools ở phần Yêu cầu hệ thống.* Nếu `canvas` bị lỗi `ERR_DLOPEN_FAILED` khi chạy, hãy thử chạy lệnh: `npm rebuild canvas`.
 
-3. **Cấu hình Bot:**
-   - Tìm file `config.yml` trong thư mục gốc.
-   - Chỉnh sửa các thông tin quan trọng sau:
+### Bước 3: Thiết Lập Cấu Hình (`config.yml`)
+1. Mở file `config.yml` nằm ở thư mục gốc của bot.
+2. Sửa các thông số quan trọng dưới đây để bot nhận diện được server của bạn:
 
-   ```yaml
-   BotToken: "YOUR_DISCORD_BOT_TOKEN"      # Token lấy từ Discord Developer Portal
-   GuildID: "YOUR_SERVER_ID"                # ID Server chính (cho development)
-   OwnerIDs:                                # Danh sách ID của Admin bot
-     - "YOUR_USER_ID"
-   CommandsPrefix: "K"                      # Prefix lệnh (Ví dụ: Khelp)
-   ```
+```yaml
+# Token & ID bảo mật (Thay bằng thông tin bạn lấy ở Bước 1)
+BotToken: "Mục-Bot-Token-Trong-Discord-Developer"
+BotClientSecret: "Mục-Client-Secret"
+BotClientId: "Mục-Client-ID"
 
-   - (Tùy chọn) Điền API Key cho Spotify, Gemini, Pixiv nếu muốn sử dụng các tính năng liên quan.
+# Cài đặt Cơ bản
+GuildID: "ID-SERVER-DISCORD-CỦA-BẠN"     # Bật Developer Mode trong Discord để copy ID
+OwnerIDs: 
+  - "ID-TÀI-KHOẢN-CỦA-BẠN"               # Bổ sung ID của bạn để full quyền lệnh admin
 
-4. **Khởi chạy Bot:**
-   ```bash
-   npm start
-   ```
-   Hoặc:
-   ```bash
-   node index.js
-   ```
+# (Tuỳ chọn) Hệ thống AI (Gemini)
+AI:
+  Gemini:
+    Model: "gemini-2.5-flash"
+    Enabled: true # Chuyển thành true nếu muốn dùng
+    
+API_Keys:
+  Gemini:
+    ApiKey: "API-KEY-TỪ-GOOGLE-STUDIO"
+```
 
-## ⚙️ Cấu Trúc Thư Mục
+*Bạn có thể lướt xuống dưới file `config.yml` để tuỳ chỉnh giá Item, quyền Mod, hệ thống Anti-nuke/Anti-raid và các kênh Log Server (thay "CHANNEL_ID" bằng ID kênh thực tế).*
 
-- `commands/`: Chứa mã nguồn các lệnh.
-- `events/`: Xử lý các sự kiện Discord (ready, messageCreate...).
-- `config.yml`: File cấu hình chính.
-- `commands.yml`: Bật/Tắt từng nhóm lệnh hoặc lệnh cụ thể.
-- `database.sqlite`: Cơ sở dữ liệu lưu trữ (Economy, Level, v.v.).
+### Bước 4: Khởi Chạy Bot
 
-## 🤝 Tác Giả & Đóng Góp
+Sử dụng lệnh sau để chạy bot:
 
-Dự án được phát triển bởi **Heiznerd#1337 & NekoTech**.
+```bash
+npm start
+```
 
-Nếu bạn gặp lỗi hoặc có ý tưởng mới, hãy tạo Issue hoặc gửi Pull Request trên GitHub.
+Hoặc chạy trực tiếp qua node:
+
+```bash
+node index.js
+```
+
+Nếu console in ra dòng chữ `[STARTUP] Attempting to start the bot..` và sau đó báo trạng thái `Ready`, xin chúc mừng, bot của bạn đã online! Vào server Discord và gõ `/help` hoặc lệnh prefix (mặc định là `Khelp`) để bắt đầu.
+
+---
+
+## ⚙️ Cấu Trúc Mã Nguồn
+
+Dành cho các bạn dev muốn phát triển thêm tính năng:
+- **`commands/`**: Chứa toàn bộ câu lệnh Slash (/) và Prefix. Được chia theo từng danh mục khoa học (General, Fun, Admin, Addons).
+- **`events/`**: Chứa các file xử lý event của Discord.js (`messageCreate`, `interactionCreate`, `voiceStateUpdate`...).
+- **`models/`**: Chứa các schema của Mongoose dành cho Database.
+- **`utils/`**: Các script tiện ích như config loaders, helpers, Logger...
+- **`database.sqlite`**: File cơ sở dữ liệu mặc định hệ thống đang sử dụng (Dạng SQLite). Tuỳ theo quy mô, bạn có thể chuyển qua MongoDB nếu cần.
+
+## 🤝 Hỗ Trợ & Đóng Góp
+
+NekoTech Bot ban đầu là một dự án tư nhân thương mại but nay đã được release open-source hoàn toàn cho cộng đồng phát triển.
+Mọi PR (Pull Request) nâng cấp tính năng hoặc fix lỗi đều được hoan nghênh!
+
+Chúc bạn tạo ra một cộng đồng Discord tuyệt vời! 💖

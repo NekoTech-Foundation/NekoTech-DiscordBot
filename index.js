@@ -221,19 +221,7 @@ require("./utils.js")(client);
 // const webhookPort = global.config.SePay && global.config.SePay.Port ? global.config.SePay.Port : 3000;
 // startWebhookServer(client, webhookPort);
 
-// Whitelabel Expiry Check (Only Main Bot needs to run this)
-if (!global.config.IsWhitelabel) {
-    require('./cron/whitelabelExpiry')(client);
 
-    // Auto-start active whitelabel instances
-    const WhitelabelManager = require('./utils/whitelabelManager');
-    client.once('ready', () => {
-        // Wait 5s to ensure DB is fully ready and stable
-        setTimeout(() => {
-            WhitelabelManager.startAllInstances().catch(err => console.error('[Whitelabel] Auto-start failed:', err));
-        }, 5000);
-    });
-}
 
 const filePath = './logs.txt';
 const maxLength = 300;

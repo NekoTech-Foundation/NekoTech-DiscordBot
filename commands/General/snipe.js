@@ -1,20 +1,3 @@
-/*
-  _____                     _         ____          _   
- |  __ \                   | |       |  _ \        | |  
- | |  | |_ __ __ _| | _____   | |_) | ___ | |_ 
- | |  | | '__/ _` | |/ / _ \  |  _ < / _ \| __|
- | |__| | | | (_| |   < (_) | | |_) | (_) | |_ 
- |_____/|_|  \__,_|_|\_\___/  |____/ \___/ \__|
-                                              
-                                              
-  Cảm ơn bạn đã chọn Drako Bot!
-
-  Nếu bạn gặp bất kỳ vấn đề nào, cần hỗ trợ, hoặc có đề xuất để cải thiện bot,
-  chúng tôi mời bạn kết nối với chúng tôi trên máy chủ Discord và tạo một phiếu hỗ trợ: 
-
-  http://discord.drakodevelopment.net
- 
-*/
 
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const fs = require('fs');
@@ -76,9 +59,9 @@ module.exports = {
 
         const userData = await UserData.findOne({ userId: interaction.user.id, guildId: interaction.guild.id });
         if (userData && userData.allowSniping === false && !interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-           // Users who turned of sniping can still use the command, but only if they are admins? 
-           // Implementation plan didn't specify restriction on USING the command, only on having THEIR messages sniped.
-           // So no restriction here needed on usage unless desired. Keeping strictly to plan.
+            // Users who turned of sniping can still use the command, but only if they are admins? 
+            // Implementation plan didn't specify restriction on USING the command, only on having THEIR messages sniped.
+            // So no restriction here needed on usage unless desired. Keeping strictly to plan.
         }
 
         if (subCommand === 'clear') {
