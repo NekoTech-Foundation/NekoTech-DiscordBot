@@ -83,8 +83,13 @@ module.exports = {
             return interaction.reply({ content: lang.SnipeNoMsg || "Không có tin nhắn nào để snipe!", flags: MessageFlags.Ephemeral });
         }
 
+        const authorOptions = { name: `${snipeMsg.author}` };
+        if (snipeMsg.member?.user?.displayAvatarURL) {
+            authorOptions.iconURL = snipeMsg.member.user.displayAvatarURL();
+        }
+
         const embed = new EmbedBuilder()
-            .setAuthor({ name: `${snipeMsg.author}`, iconURL: `${snipeMsg.member.user.displayAvatarURL()}` })
+            .setAuthor(authorOptions)
             .setColor(config.EmbedColors?.Default || '#0099ff')
             .setTimestamp(snipeMsg.timestamp);
 

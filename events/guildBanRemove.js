@@ -1,13 +1,11 @@
 const { EmbedBuilder, AuditLogEvent } = require('discord.js');
-//const fs = require('fs');
-//const yaml = require('js-yaml');
 const moment = require('moment-timezone');
 
 const UserData = require('../models/UserData');
 const GuildData = require('../models/guildDataSchema');
+const GuildSettings = require('../models/GuildSettings');
 const { getConfig } = require('../utils/configLoader.js');
 const config = getConfig();
-
 
 module.exports = async (client, ban) => {
     try {
@@ -19,8 +17,7 @@ module.exports = async (client, ban) => {
         const unbanLog = fetchedLogs.entries.first();
         if (!unbanLog || unbanLog.target.id !== ban.user.id) return;
 
-        const { executor: moderator } = unbanLog;
-        const reason = unbanLog.reason || "No reason provided";
+        const { executor: moderator, reason } = unbanLog;
 
         let guildData = await GuildData.findOneAndUpdate(
             { guildID: ban.guild.id },
@@ -30,31 +27,37 @@ module.exports = async (client, ban) => {
         let caseNumber = guildData ? guildData.cases : 'N/A';
         let currentTime = moment().tz(config.Timezone);
 
-        const unbanEmbed = new EmbedBuilder()
-            .setColor(config.UnbanLogs.Embed.Color || "#00FF00")
-            .setTitle(replacePlaceholders(config.UnbanLogs.Embed.Title, ban, moderator, reason, caseNumber, currentTime))
-            .setDescription(replacePlaceholders(config.UnbanLogs.Embed.Description.join('\n'), ban, moderator, reason, caseNumber, currentTime))
-            .setFooter({ text: replacePlaceholders(config.UnbanLogs.Embed.Footer, ban, moderator, reason, caseNumber, currentTime) });
-
-        let logsChannel = ban.guild.channels.cache.get(config.UnbanLogs.LogsChannelID);
-        if (logsChannel) {
-            logsChannel.send({ embeds: [unbanEmbed] });
-        }
+        logUnban(ban, reason, moderator, caseNumber, currentTime);
     } catch (error) {
         console.error('Error handling unban event:', error);
     }
 };
 
-function replacePlaceholders(text, ban, moderator, reason, caseNumber, currentTime) {
-    return text
-        .replace(/{user}/g, `<@${ban.user.id}>`)
-        .replace(/{userName}/g, ban.user.username)
-        .replace(/{userTag}/g, ban.user.tag)
-        .replace(/{userId}/g, ban.user.id)
-        .replace(/{moderator}/g, `<@${moderator.id}>`)
-        .replace(/{reason}/g, reason)
-        .replace(/{guildName}/g, ban.guild.name)
-        .replace(/{caseNumber}/g, caseNumber)
-        .replace(/{shorttime}/g, currentTime.format("HH:mm"))
-        .replace(/{longtime}/g, currentTime.format('MMMM Do YYYY'));
+async function logUnban(ban, reason, moderator, caseNumber, currentTime) {
+    const guildSettings = await GuildSettings.findOne({ guildId: ban.guild.id });
+    if (!guildSettings) return;
+
+    const logChannelId = guildSettings.moderation?.logChannels?.ban ||
+        (guildSettings.logChannels && guildSettings.logChannels['ban']) ||
+        (guildSettings.logChannels && guildSettings.logChannels['unban']);
+
+    if (!logChannelId) return;
+    const logChannel = ban.guild.channels.cache.get(logChannelId);
+    if (!logChannel) return;
+
+    const logMessageEmbed = new EmbedBuilder()
+        .setColor("#00FF00")
+        .setTitle('Thành viên được bỏ cấm')
+        .setDescription(`${ban.user.tag} đã được bỏ cấm bởi ${moderator.tag}.`)
+        .addFields(
+            { name: 'Lý do', value: reason || 'Không có lý do' },
+            { name: 'Case', value: `#${caseNumber}` }
+        )
+        .setTimestamp();
+
+    try {
+        await logChannel.send({ embeds: [logMessageEmbed] });
+    } catch (error) {
+        console.error(`Failed to log unban in channel: ${error}`);
+    }
 }

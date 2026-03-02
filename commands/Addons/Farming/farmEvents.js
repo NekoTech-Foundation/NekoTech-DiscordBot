@@ -1,13 +1,20 @@
 const events = {
     weather: [
-        { name: 'Nắng Ấm', type: 'weather', rarity: 'common', chance: 60, emoji: '☀️', description: 'Thời tiết đẹp, cây phát triển bình thường.', effect: { growthSpeed: 1.0 } },
-        { name: 'Mưa Rào', type: 'weather', rarity: 'uncommon', chance: 20, emoji: '🌧️', description: 'Mưa giúp cây phát triển nhanh hơn.', effect: { growthSpeed: 1.2 } },
-        { name: 'Sương Mù', type: 'weather', rarity: 'uncommon', chance: 10, emoji: '🌫️', description: 'Sương mù dày đặc, độ ẩm cao.', effect: { growthSpeed: 1.1 } },
-        { name: 'Khô Hạn', type: 'weather', rarity: 'rare', chance: 1, emoji: '🌵', description: 'Nắng gắt, thiếu nước. Cây chậm lớn.', effect: { growthSpeed: 0.5 } },
-        { name: 'Sâu Mọt', type: 'weather', rarity: 'rare', chance: 1, emoji: '🐛', description: 'Sâu bệnh hoành hành. Giảm sản lượng.', effect: { yield: 0.7 } },
+        { name: 'Nắng Ấm', type: 'weather', rarity: 'common', chance: 45, emoji: '☀️', description: 'Thời tiết đẹp, cây phát triển bình thường.', effect: { growthSpeed: 1.0 } },
+        { name: 'Mưa Rào', type: 'weather', rarity: 'uncommon', chance: 15, emoji: '🌧️', description: 'Mưa giúp cây phát triển nhanh hơn.', effect: { growthSpeed: 1.2 } },
+        { name: 'Sương Mù', type: 'weather', rarity: 'uncommon', chance: 8, emoji: '🌫️', description: 'Sương mù dày đặc, độ ẩm cao. Cơ hội đột biến nhỏ.', effect: { growthSpeed: 1.1, mutationChance: 0.5 } },
+        { name: 'Mưa Axit', type: 'weather', rarity: 'uncommon', chance: 5, emoji: '☣️', description: 'Mưa axit kỳ lạ. Gây đột biến nhẹ cho cây trồng.', effect: { growthSpeed: 0.9, mutationChance: 1.2 } },
+        { name: 'Khô Hạn', type: 'weather', rarity: 'rare', chance: 2, emoji: '🌵', description: 'Nắng gắt, thiếu nước. Cây chậm lớn.', effect: { growthSpeed: 0.5 } },
+        { name: 'Sâu Mọt', type: 'weather', rarity: 'rare', chance: 2, emoji: '🐛', description: 'Sâu bệnh hoành hành. Giảm sản lượng.', effect: { yield: 0.7 } },
+        { name: 'Trăng Máu', type: 'weather', rarity: 'rare', chance: 3, emoji: '🌑', description: 'Trăng đỏ chiếu sáng. Năng lượng tối kích thích đột biến.', effect: { mutationChance: 1.8, growthSpeed: 0.8 } },
+        { name: 'Cầu Vồng Đôi', type: 'weather', rarity: 'rare', chance: 2, emoji: '🌈', description: 'Cầu vồng đôi xuất hiện! Sản lượng và đột biến tăng nhẹ.', effect: { yield: 1.3, mutationChance: 1.3 } },
         { name: 'Sấm Sét', type: 'weather', rarity: 'epic', chance: 5, emoji: '⚡', description: 'Sấm sét kích thích sự biến đổi.', effect: { mutationChance: 2.0 } },
-        { name: 'Bão Tố', type: 'weather', rarity: 'legendary', chance: 2, emoji: '🌪️', description: 'Bão lớn! Nguy hiểm nhưng cơ hội đột biến cao.', effect: { mutationChance: 3.0 } },
-        { name: 'Phù Phép', type: 'weather', rarity: 'mythical', chance: 1, emoji: '✨', description: 'Năng lượng ma thuật bao trùm.', effect: { growthSpeed: 2.0, yield: 2.0, mutationChance: 5.0 } }
+        { name: 'Mưa Sao Băng', type: 'weather', rarity: 'epic', chance: 3, emoji: '☄️', description: 'Sao băng rơi xuống ruộng! Năng lượng vũ trụ gây đột biến mạnh.', effect: { mutationChance: 2.5, growthSpeed: 1.3 } },
+        { name: 'Bình Minh Vàng', type: 'weather', rarity: 'epic', chance: 2, emoji: '🌅', description: 'Ánh sáng vàng rực rỡ. Cây phát triển nhanh và có cơ hội đột biến.', effect: { growthSpeed: 1.5, mutationChance: 1.5 } },
+        { name: 'Bão Tố', type: 'weather', rarity: 'legendary', chance: 2, emoji: '🌪️', description: 'Bão lớn! Nguy hiểm nhưng cơ hội đột biến rất cao.', effect: { mutationChance: 3.0 } },
+        { name: 'Nhật Thực', type: 'weather', rarity: 'legendary', chance: 1.5, emoji: '🌘', description: 'Nhật thực toàn phần! Bóng tối kích hoạt đột biến cực mạnh.', effect: { mutationChance: 4.0, growthSpeed: 0.5 } },
+        { name: 'Phù Phép', type: 'weather', rarity: 'mythical', chance: 1, emoji: '✨', description: 'Năng lượng ma thuật bao trùm. Mọi thứ đều biến đổi.', effect: { growthSpeed: 2.0, yield: 2.0, mutationChance: 5.0 } },
+        { name: 'Aurora', type: 'weather', rarity: 'mythical', chance: 0.5, emoji: '🔮', description: 'Cực quang thần bí. Đột biến hiếm có cơ hội cao nhất.', effect: { mutationChance: 7.0, growthSpeed: 1.5 } }
     ],
     mutations: [
         // Common (Total: 40%)

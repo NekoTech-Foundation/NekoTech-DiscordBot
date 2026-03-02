@@ -868,7 +868,7 @@ module.exports = {
         const components = Utils.splitIntoRows(mainButtons);
 
         // Thêm template selector nếu có templates
-        const templates = await EmbedTemplate.find().select('name');
+        const templates = await EmbedTemplate.find();
         if (templates.length > 0) {
             const menu = new StringSelectMenuBuilder()
                 .setCustomId(`loadtemplate_${id}`)

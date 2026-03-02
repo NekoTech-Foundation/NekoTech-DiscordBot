@@ -48,12 +48,17 @@ function getRarityDisplay(rarity) {
     return `${RARITY_EMOJIS[rarity]} **${rarity.toUpperCase()}**`;
 }
 
+function safeNum(val, fallback = 0) {
+    const n = Number(val);
+    return isNaN(n) || !isFinite(n) ? fallback : n;
+}
+
 function formatWeight(weight) {
-    return `${weight.toFixed(2)}kg`;
+    return `${safeNum(weight).toFixed(2)}kg`;
 }
 
 function formatCurrency(amount) {
-    return `${amount.toLocaleString()} xu`;
+    return `${safeNum(amount).toLocaleString()} xu`;
 }
 
 function createProgressBar(current, max, length = 10) {
@@ -578,14 +583,14 @@ async function handleFish(interaction, config, fishingLang) {
 
     // Add fish to inventory
     // Use actual weight from config (no hardcoded minimum)
-    let minWeight = caughtFishInfo.min_weight;
-    let maxWeight = Math.max(minWeight, caughtFishInfo.max_weight);
+    let minWeight = safeNum(caughtFishInfo.min_weight, 0.1);
+    let maxWeight = Math.max(minWeight, safeNum(caughtFishInfo.max_weight, minWeight));
 
     const weight = Math.random() * (maxWeight - minWeight) + minWeight;
 
-    const existingFish = userFishing.inventory.find(f => f.name === caughtFishInfo.name);
+    const existingFish = userFishing.inventory.find(f => f.name === caughtFishInfo.name && f.rarity === caughtFishInfo.rarity);
     if (existingFish) {
-        existingFish.totalWeight += weight;
+        existingFish.totalWeight = safeNum(existingFish.totalWeight) + weight;
         existingFish.quantity += 1;
     } else {
         userFishing.inventory.push({
@@ -708,6 +713,7 @@ async function handleSell(interaction, config) {
 
     let economyData = await EconomyUserData.findOne({ userId: interaction.user.id });
     if (!economyData) economyData = await EconomyUserData.create({ userId: interaction.user.id, balance: 0 });
+    economyData.balance = safeNum(economyData.balance);
 
     const RARITY_SORT = { legendary: 0, epic: 1, rare: 2, uncommon: 3, common: 4 };
 
@@ -723,8 +729,8 @@ async function handleSell(interaction, config) {
         for (const fish of userFishing.inventory) {
             const pricePerKg = config.rarity_prices_per_kg[fish.rarity];
             if (pricePerKg) {
-                const weight = fish.totalWeight || 0;
-                const gain = Math.max(5 * fish.quantity, Math.floor(pricePerKg * weight));
+                const weight = safeNum(fish.totalWeight);
+                const gain = Math.max(5 * fish.quantity, Math.floor(safeNum(pricePerKg) * weight));
                 totalGain += gain;
                 totalFishCount += fish.quantity;
                 soldFish.push({ name: fish.name, rarity: fish.rarity, quantity: fish.quantity, weight, gain });
@@ -770,7 +776,7 @@ async function handleSell(interaction, config) {
         }
 
         const pricePerKg = config.rarity_prices_per_kg[fish.rarity];
-        const weightPerFish = (fish.totalWeight || 0) / fish.quantity;
+        const weightPerFish = fish.quantity > 0 ? safeNum(fish.totalWeight) / fish.quantity : 0;
         const weightToSell = weightPerFish * quantity;
         const totalGain = Math.max(5 * quantity, Math.floor(pricePerKg * weightToSell));
 
@@ -1059,17 +1065,17 @@ async function handleChai(interaction, config) {
         // Add to inventory
         for (const key of Object.keys(catchCounts)) {
             const fish = catchCounts[key];
-            const minW = fish.min_weight || 0.1;
-            const maxW = Math.max(minW, fish.max_weight || 1);
-            const totalWeight = Array.from({ length: fish.count }, () =>
+            const minW = safeNum(fish.min_weight, 0.1);
+            const maxW = Math.max(minW, safeNum(fish.max_weight, 1));
+            const totalWeight = safeNum(Array.from({ length: fish.count }, () =>
                 parseFloat((minW + Math.random() * (maxW - minW)).toFixed(2))
-            ).reduce((a, b) => a + b, 0);
+            ).reduce((a, b) => a + b, 0));
             const avgWeight = parseFloat((totalWeight / fish.count).toFixed(2));
 
             const existing = userFishing.inventory.find(f => f.name === fish.name && f.rarity === fish.rarity);
             if (existing) {
                 existing.quantity += fish.count;
-                existing.totalWeight = (existing.totalWeight || 0) + totalWeight;
+                existing.totalWeight = safeNum(existing.totalWeight) + totalWeight;
             } else {
                 userFishing.inventory.push({
                     name: fish.name,
@@ -1351,22 +1357,22 @@ async function handleBayThu(interaction, config) {
         const existing = userFishing.inventory.find(f => f.name === ef.name && f.rarity === ef.rarity);
         if (existing) {
             existing.quantity += ef.count;
-            existing.totalWeight = (existing.totalWeight || 0) + (ef.weight || 0.5) * ef.count;
+            existing.totalWeight = safeNum(existing.totalWeight) + safeNum(ef.weight, 0.5) * ef.count;
         } else {
-            userFishing.inventory.push({ name: ef.name, rarity: ef.rarity, totalWeight: (ef.weight || 0.5) * ef.count, quantity: ef.count });
+            userFishing.inventory.push({ name: ef.name, rarity: ef.rarity, totalWeight: safeNum(ef.weight, 0.5) * ef.count, quantity: ef.count });
         }
     }
 
     for (const key of Object.keys(catchCounts)) {
         const fish = catchCounts[key];
-        const minW = fish.min_weight || 0.1;
-        const maxW = Math.max(minW, fish.max_weight || 1);
+        const minW = safeNum(fish.min_weight, 0.1);
+        const maxW = Math.max(minW, safeNum(fish.max_weight, 1));
         const avgWeight = parseFloat(((minW + maxW) / 2).toFixed(2));
 
         const existing = userFishing.inventory.find(f => f.name === fish.name && f.rarity === fish.rarity);
         if (existing) {
             existing.quantity += fish.count;
-            existing.totalWeight = (existing.totalWeight || 0) + avgWeight * fish.count;
+            existing.totalWeight = safeNum(existing.totalWeight) + avgWeight * fish.count;
         } else {
             userFishing.inventory.push({ name: fish.name, rarity: fish.rarity, totalWeight: avgWeight * fish.count, quantity: fish.count });
         }
@@ -1498,9 +1504,9 @@ async function handleBayGo(interaction, config) {
             const existing = userFishing.inventory.find(inv => inv.name === f.name && inv.rarity === f.rarity);
             if (existing) {
                 existing.quantity += f.count;
-                existing.totalWeight = (existing.totalWeight || 0) + (f.weight || 0.5) * f.count;
+                existing.totalWeight = safeNum(existing.totalWeight) + safeNum(f.weight, 0.5) * f.count;
             } else {
-                userFishing.inventory.push({ name: f.name, rarity: f.rarity, totalWeight: (f.weight || 0.5) * f.count, quantity: f.count });
+                userFishing.inventory.push({ name: f.name, rarity: f.rarity, totalWeight: safeNum(f.weight, 0.5) * f.count, quantity: f.count });
             }
         }
     }

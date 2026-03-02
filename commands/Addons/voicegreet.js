@@ -67,6 +67,19 @@ module.exports = {
                             option.setName('index')
                                 .setDescription('Số thứ tự tin nhắn muốn xóa (xem lệnh /voicegreet list)')
                                 .setRequired(true)))
+                .addSubcommand(subcommand =>
+                    subcommand
+                        .setName('clearall')
+                        .setDescription('Xóa toàn bộ tin nhắn theo loại.')
+                        .addStringOption(option =>
+                            option.setName('type')
+                                .setDescription('Loại tin nhắn cần xóa')
+                                .setRequired(true)
+                                .addChoices(
+                                    { name: 'Welcome (Chào mừng)', value: 'welcome' },
+                                    { name: 'Goodbye (Tạm biệt)', value: 'goodbye' },
+                                    { name: 'Tất cả', value: 'all' }
+                                )))
         ),
     category: 'Addons',
     async execute(interaction) {
@@ -189,6 +202,18 @@ module.exports = {
 
                 await config.save();
                 return interaction.reply({ content: `🗑️ Đã xóa tin nhắn ${type}: "${removedMsg}"`, ephemeral: true });
+            }
+
+            if (subcommand === 'clearall') {
+                if (type === 'welcome' || type === 'all') {
+                    config.welcomeMessages = JSON.stringify([]);
+                }
+                if (type === 'goodbye' || type === 'all') {
+                    config.goodbyeMessages = JSON.stringify([]);
+                }
+                await config.save();
+                const label = type === 'all' ? 'welcome và goodbye' : type;
+                return interaction.reply({ content: `🗑️ Đã xóa toàn bộ tin nhắn ${label}. Dùng /voicegreet config add để thêm tin nhắn mới hoặc /voicegreet reset để khôi phục mặc định.`, ephemeral: true });
             }
         }
     }
