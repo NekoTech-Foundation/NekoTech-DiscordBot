@@ -1,7 +1,7 @@
 {
-    "name": "nekobuckets",
-    "version": "1.8.5",
-    "description": "NekoBuckets Bot",
+    "name": "KentaBuckets",
+    "version": "1.8.6",
+    "description": "KentaBuckets Bot",
     "main": "index.js",
     "engines": {
         "node": ">=18.20.0"

@@ -1,0 +1,851 @@
+Giveaways:
+  EndMessage: ❌ Giveaway đã kết thúc!
+Verify:
+  NoRole: Vai trò chưa xác minh được cấu hình trong máy chủ không tồn tại. Vui lòng liên hệ quản trị viên máy chủ.
+  EnterCaptcha: Chọn hình
+  CaptchaInputLabel: Chọn hình
+  CaptchaInputPlaceholder: Nhấp vào các nút được đánh số có chứa hình dạng
+  SetupTitle: Cài đặt xác minh thành công
+  SetupDescription: Hệ thống xác minh đã được cập nhật.
+  FieldChannel: Kênh
+  FieldRole: Vai trò xác minh
+  FieldMode: Chế độ
+  FieldUnverifiedRole: Vai trò chưa xác minh
+  None: Không có
+  SetupRequired: Vui lòng chạy `/verification setup` trước!
+  ChannelNotFound: Không tìm thấy kênh cấu hình. Vui lòng chạy setup lại.
+  PanelTitle: Xác minh máy chủ
+  PanelDescription: Nhấn vào nút bên dưới để xác minh và truy cập máy chủ.
+  ButtonLabel: Xác minh
+  PanelUpdated: Đã cập nhật bảng xác minh.
+  PanelSent: Đã gửi bảng xác minh.
+  PanelError: Không thể gửi bảng xác minh. Vui lòng kiểm tra quyền bot.
+  SettingsTitle: Cài đặt xác minh
+Tickets:
+  WorkingHours: |-
+    Phiếu hỗ trợ này được tạo ngoài giờ làm việc. Vui lòng đợi đến giờ làm việc của chúng tôi để tiếp tục.
+    Giờ làm việc của chúng tôi là từ {workinghours_start} đến {workinghours_end}.
+  Deleting: Phiếu hỗ trợ này đang được xóa.
+  Deletion: Phiếu hỗ trợ sẽ bị xóa ngay bây giờ.
+  DeleteCountDown: Phiếu hỗ trợ này sẽ bị xóa sau {time} giây.
+  Archive: Phiếu hỗ trợ này đang được lưu trữ.
+  Closed: Phiếu hỗ trợ này đã được đóng.
+  TicketTypePlaceholder: Chọn một loại phiếu hỗ trợ
+  AlreadyOpen: Bạn đã có một phiếu hỗ trợ đang mở! Hãy đóng nó trước khi mở một phiếu khác.
+  CloseTicketButton: Đóng phiếu hỗ trợ
+  ReviewAlreadySubmitted: Bạn đã gửi đánh giá cho phiếu hỗ trợ này rồi.
+  ReviewTitle: Phản hồi đánh giá
+  ReviewPlaceholder: 'Vui lòng cho chúng tôi biết tại sao bạn đưa ra đánh giá này:'
+  ReviewNoRating: Chưa có đánh giá
+  ReviewComplete: Cảm ơn phản hồi của bạn!
+  TicketReopenTitle: Phiếu hỗ trợ đã được mở lại
+  TicketReopenDescription: Phiếu hỗ trợ đã được mở lại bởi <@{userId}>.
+  TicketReopen: Phiếu hỗ trợ đã được mở lại!
+  TranscriptTitle: Bản ghi đã được tạo
+  TranscriptDescription: Bản ghi cho phiếu hỗ trợ ID {ticketId} đã được tạo bởi <@{userId}>.
+  TranscriptReady: 'Đây là bản ghi cho phiếu hỗ trợ của bạn:'
+  TranscriptNotEnough: Không đủ tin nhắn để tạo bản ghi.
+  TicketCreated:
+    LinkText: Đến phiếu hỗ trợ
+    Embed:
+      Title: Phiếu hỗ trợ đã được tạo
+      Description:
+        - Phiếu hỗ trợ của bạn đã được tạo. {link}
+      Footer:
+        Text: ''
+        Icon: ''
+      Author:
+        Text: ''
+        Icon: ''
+      Color: '#00FF00'
+      Image: ''
+      Thumbnail: ''
+    Button:
+      Text: Đến phiếu hỗ trợ
+      Emoji: 🟢
+  Blacklisted:
+    Embed:
+      Title: 🚫 Bị cấm mở phiếu hỗ trợ
+      Description:
+        - Bạn bị cấm mở phiếu hỗ trợ.
+        - Liên hệ với quản trị viên nếu bạn muốn kháng cáo lệnh cấm.
+        - ' '
+        - '> **Cấm bởi:** {user}'
+        - '> **Lý do:** {reason}'
+        - '> **Bị cấm lúc:** {time}'
+      Footer:
+        Text: Liên hệ quản trị viên nếu bạn tin rằng đây là một sai lầm.
+        Icon: https://e7.pngegg.com/pngimages/1003/312/png-clipart-hammer-game-pension-review-internet-crouton-hammer-technic-discord-thumbnail.png
+      Author:
+        Text: ''
+        Icon: ''
+      Color: '#FF0000'
+      Image: ''
+      Thumbnail: ''
+  Claim:
+    AlreadyClaimed: Phiếu hỗ trợ này đã được {claimer} nhận.
+    NoPermission: Bạn không có quyền nhận phiếu hỗ trợ.
+    Success: Bạn đã nhận thành công phiếu hỗ trợ này.
+    Unclaimed: Bạn đã bỏ nhận phiếu hỗ trợ này.
+    NotClaimable: Việc nhận phiếu hỗ trợ không được bật cho loại phiếu này.
+    Announcements:
+      Claimed: 🔒 {user} đã nhận phiếu hỗ trợ này và sẽ hỗ trợ bạn.
+      Unclaimed: 🔓 {user} đã bỏ nhận phiếu hỗ trợ này. Bất kỳ nhân viên hỗ trợ nào cũng có thể trả lời.
+Reactions:
+  RolesUpdated: Vai trò của bạn đã được cập nhật!
+ModerationEmbedTitle: Hành động quản lý
+ModerationEmbedAction: 'Hành động:'
+ModerationEmbedDetails: 'Chi tiết:'
+ClearChannel:
+  ClearChannelPrompt: Bạn có chắc muốn xóa kênh này không?
+  ClearChannelCleared: Kênh này đã được {user} xóa.
+  ClearChannelGif: https://media1.tenor.com/images/e275783c9a40b4551481a75a542cdc79/tenor.gif?itemid=3429833
+  CancelClear: Việc xóa kênh đã bị hủy.
+  ClearTimeout: Việc xóa kênh đã hết thời gian.
+Nickname:
+  Description: Thay đổi biệt danh của một người dùng.
+  UserOptionDescription: Người dùng bạn muốn thay đổi biệt danh.
+  NicknameOptionDescription: Biệt danh mới cho người dùng.
+  NoPermsMessage: Bạn không có quyền thay đổi biệt danh.
+  UserNotFound: Không tìm thấy người dùng được chỉ định trong máy chủ.
+  NicknameChangeSuccess: Đã thay đổi thành công biệt danh của {user} thành {nickname}.
+  NicknameChangeFailure: Không thể thay đổi biệt danh của người dùng. Vui lòng thử lại sau.
+Ban:
+  UserNotFound: Không thể tìm thấy người dùng được chỉ định.
+  UserFailedDM: Người dùng đã bị cấm nhưng tôi không thể gửi tin nhắn riêng cho họ vì họ đã tắt.
+  CantBanSelf: Bạn không thể tự cấm mình.
+  CantBanUser: Tôi không thể cấm người dùng này. Họ có thể có vai trò cao hơn tôi hoặc vai trò tương đương tôi.
+  Success: Đã cấm thành công {userTag} vì {reason}.
+  Error: Đã có lỗi khi cố gắng cấm người dùng này.
+WaitCooldown: Vui lòng đợi {time} giây trước khi sử dụng lại lệnh này.
+UnknownCommand: Lệnh không tồn tại.
+SelectOption: 'Vui lòng chọn một tùy chọn bên dưới để tiếp tục:'
+Example: Ví dụ
+Usage: Cách dùng đúng
+Choices: Lựa chọn cho
+MissingParams: Thiếu tham số bắt buộc
+DidYouMean: Có phải ý bạn là
+Command: Lệnh
+Commands:
+  gamble:
+    Subcommands:
+      blackjack: Chơi một ván Xì Dách
+      coinflip: Tung đồng xu thử vận may
+      roll: Cược xúc xắc Thấp hoặc Cao
+      roulette: Quay Roulette
+      slot: Chơi máy xèng (Slots)
+  farm:
+    Subcommands:
+      plant: Trồng cây mới
+      harvest: Thu hoạch cây trồng
+      field: Xem trạng thái nông trại
+      events: Xem sự kiện nông trại
+      inventory: Xem kho hạt giống/nông sản
+      fertilize: Bón phân cho cây
+      shop: Cửa hàng hạt giống
+      sell: Bán nông sản
+      savings: Gửi tiết kiệm
+TempBan:
+  NoPermsMessage: Bạn không có quyền cần thiết để sử dụng lệnh này.
+  UserNotFound: Không tìm thấy người dùng được chỉ định. Vui lòng kiểm tra lại.
+  InvalidDuration: Định dạng thời gian không hợp lệ. Vui lòng sử dụng định dạng hợp lệ như '1d 2h 15m'.
+  CantBanUser: Không thể cấm người dùng này. Họ có thể có vai trò cao hơn hoặc quyền đặc biệt.
+  Success: 'Đã cấm tạm thời thành công {userTag} trong {duration}. Lý do: {reason}.'
+  Error: Đã xảy ra lỗi khi cố gắng cấm tạm thời người dùng. Vui lòng thử lại sau.
+Unban:
+  UnbanUserNotBanned: Người dùng này hiện không bị cấm.
+  UnbanMsg: Đã bỏ cấm {user} thành công.
+  UnbanError: Đã xảy ra lỗi khi xử lý việc bỏ cấm.
+Kick:
+  UserNotFoundInGuild: Không tìm thấy người dùng trong máy chủ này.
+  CannotKickSelf: Bạn không thể tự trục xuất mình.
+  CannotKickUser: Không thể trục xuất người dùng này.
+  DMFailed: Không thể gửi tin nhắn riêng.
+  KickSuccess: 'Đã trục xuất thành công {userTag} vì: {reason}'
+  KickError: Đã có lỗi khi cố gắng trục xuất người dùng này.
+Timeout:
+  NoPermsMessage: Bạn không có quyền sử dụng lệnh này.
+  UserNotFound: Không tìm thấy người dùng.
+  InvalidTime: Thời gian không hợp lệ. Thời gian phải ít nhất 10 giây hoặc 'perm' để cấm chat vĩnh viễn.
+  Success: 'Đã cấm chat thành công {user} trong {time}. Lý do: {reason}'
+  LongMuteSuccess: 'Đã cấm chat thành công {user} trong {time}. Lý do: {reason}'
+  PermanentMuteSuccess: 'Đã cấm chat vĩnh viễn thành công {user}. Lý do: {reason}'
+  Error: Đã xảy ra lỗi khi cố gắng cấm chat/tắt tiếng người dùng.
+ClearTimeout:
+  NoPermsMessage: Bạn không có quyền sử dụng lệnh này.
+  UserNotFound: Không tìm thấy người dùng.
+  TimeoutRemoved: Đã xóa cấm chat cho {user}.
+  MuteRemoved: Đã xóa cấm chat cho {user}.
+  Error: Đã xảy ra lỗi khi cố gắng xóa cấm chat/tắt tiếng.
+Removerole:
+  Self: Bạn không thể tự xóa vai trò của mình.
+  NoRole: '{user} không có vai trò {role}.'
+  AddroleHighestRole: Bạn không thể sửa đổi một vai trò cao hơn hoặc bằng vai trò cao nhất của bạn.
+  Error: Đã xảy ra lỗi khi xóa vai trò.
+  UserMsg: Bạn đã bị xóa khỏi vai trò **{role}** trong {guild-name}
+  EmbedTitle: Đã xóa vai trò
+  EmbedRemovedBy: 'Xóa bởi:'
+  EmbedRemovedFrom: 'Xóa khỏi:'
+  EmbedIconURL: https://i.imgur.com/MdiCK2c.png
+  RemoveroleNoRole: '{user} không có vai trò {role}'
+  HigherRoleError: Bạn không thể xóa một vai trò cao hơn hoặc bằng vai trò cao nhất của bạn.
+SetNote:
+  NoteLongerThan250: Ghi chú không thể dài hơn 250 ký tự!
+  NoteCantAddBot: Bạn không thể thêm ghi chú cho một bot!
+  NoteSuccess: Đã thêm ghi chú thành công cho **{user}**
+  NoteError: Đã có lỗi khi đặt ghi chú.
+AddroleSuccess: Đã thêm vai trò {role} cho {user}.
+AddroleError: Đã xảy ra lỗi khi thêm vai trò.
+EightBallTitle: 🔮 Quả cầu ma thuật
+EightBallQuestion: Câu hỏi
+EightBallAnswer: Câu trả lời
+EightBallFooter: Quả cầu ma thuật
+EightBallReplies:
+  - Không bao giờ
+  - Chắc chắn rồi
+  - Chắc chắn, Bạn cũng nên đi mua một ít cổ phiếu
+  - Không còn nghi ngờ gì nữa
+  - Có, chắc chắn
+  - Chắc chắn là vậy
+  - Không chắc lắm
+  - Bạn nói cho tôi biết đi
+  - Không rõ, hỏi lại đi
+  - Có thể, nhưng không chắc
+  - Có
+  - Câu trả lời của tôi là có
+  - Chắc chắn
+  - Có thể là vậy
+  - Phủ định
+  - Rất có thể
+  - Theo tôi thấy, có
+  - Không
+  - Câu trả lời của tôi là không
+  - Tôi thấy những điều tốt đẹp đang xảy ra
+  - Hoàn toàn không
+  - Tốt hơn là không nói cho bạn bây giờ
+  - Các dấu hiệu đều chỉ đến 'có'
+  - Chắc chắn là như vậy
+Suggestion:
+  SuggestionCreated: Gợi ý đã được tạo thành công.
+  Error: Đã xảy ra lỗi. Vui lòng liên hệ hỗ trợ.
+  SuggestionNotFound: Không tìm thấy gợi ý.
+  AlreadyVoted: Bạn đã bỏ phiếu cho gợi ý này rồi.
+  Upvoted: Bạn đã ủng hộ gợi ý này!
+  Downvoted: Bạn đã phản đối gợi ý này!
+  AlreadyProcessed: Gợi ý này đã được xử lý.
+  SuggestionAccepted: Bạn đã chấp nhận gợi ý này.
+  SuggestionDenied: Bạn đã từ chối gợi ý này.
+  ModalTitle: Đăng gợi ý của bạn!
+  ModalQuestion: Gợi ý của bạn là gì?
+  SuggestionsDisabled: Gợi ý hiện đang bị tắt.
+  BlacklistMessage: Bạn đang trong danh sách đen và không thể tạo gợi ý.
+  Reason: Không có lý do được cung cấp
+  ReasonModalTitle: Phản hồi gợi ý
+  ModalTimeout: Bạn đã mất quá nhiều thời gian để cung cấp lý do. Vui lòng thử lại.
+  DirectMessage:
+    Accepted: Gợi ý của bạn đã được chấp nhận!
+    Denied: Gợi ý của bạn đã bị từ chối!
+  Embed:
+    Button:
+      Discuss: Thảo luận
+Profile:
+  Embed:
+    Title: ''
+    Description:
+      - '**🔍 Chi tiết thành viên**'
+      - '> **📅 Đã tham gia:** {joinDate}'
+      - '> **🏅 Vai trò cao nhất:** {role}'
+      - '> **🔖 Biệt danh:** {nickname}'
+      - ' '
+      - '**👤 Chi tiết người dùng**'
+      - '> **🆔 ID người dùng:** {userID}'
+      - '> **💻 Tên người dùng:** {user}'
+      - '> **📆 Tài khoản được tạo:** {creationDate} ({creationDays})'
+      - '> **🎖️ Huy hiệu:** {badges}'
+      - ' '
+      - '**📊 Thống kê người dùng**'
+      - '> **🔢 Cấp độ:** {level}'
+      - '> **🌟 XP:** {xp}'
+      - '> **💬 Tổng số tin nhắn:** {totalMessages}'
+      - '> **🔥 Chuỗi hàng ngày:** {dailyStreak}'
+      - ' '
+      - '**💰 Chi tiết tài chính**'
+      - '> **💵 Số dư:** {balance}'
+      - '> **🏦 Ngân hàng:** {bank}'
+      - ' '
+      - '**🎒 Kho đồ**'
+      - '> **📦 Vật phẩm:** {inventoryItems}'
+    Footer:
+      Text: Fujiwara Shin 藤原 真 | Thông tin hồ sơ
+      Icon: '{guildIcon}'
+    Author:
+      Text: Hồ sơ của {nickname}
+      Icon: '{userIcon}'
+    Color: '#1e8fff'
+    Image: ''
+    Thumbnail: '{userIcon}'
+ServerInfo:
+  Embed:
+    Title: 📊 Thông tin máy chủ
+    Description: |-
+      {description}
+
+      **📈 Thống kê**
+      > 👥 **Thành viên:** {memberCount}
+      > 🤖 **Bot:** {botCount}
+      > 📝 **Vai trò:** {roleCount}
+    Color: '#1769FF'
+    Footer:
+      Text: Yêu cầu bởi {user}
+    Fields:
+      Channels:
+        Name: 📺 Kênh
+        Value: |-
+          > 💬 Văn bản: **{textChannels}**
+          > 🔊 Thoại: **{voiceChannels}**
+          > 🔧 Khác: **{otherChannels}**
+      ServerDetails:
+        Name: ⚙️ Chi tiết máy chủ
+        Value: |-
+          > 👑 Chủ sở hữu: {owner}
+          > 🆔 ID máy chủ: `{serverId}`
+          > 🌍 Ngôn ngữ: `{language}`
+          > ⭐ Tăng tốc: **{boostCount}**
+          > 📅 Được tạo: {createdAt}
+      ServerIcon:
+        Name: 🖼️ Biểu tượng máy chủ
+        Value: '{iconLinks}'
+  NoIcon: Không có biểu tượng
+  IconLinks: '[png]({iconPng}) | [jpg]({iconJpg}) | [gif]({iconGif})'
+BotInfo:
+  Embed:
+    Title: Thông tin Bot
+    Color: '#0099ff'
+    Footer:
+      Text: Yêu cầu bởi {user}
+    Fields:
+      BotDetails:
+        Name: 🤖 Chi tiết Bot
+        Value: |-
+          **Tên:** {name}
+          **ID:** {id}
+          **Phiên bản:** {version}
+          **Được tạo:** {createdAt}
+          **Tham gia máy chủ:** {joinedAt}
+          **Số lần khởi động:** {starts}
+      Statistics:
+        Name: 📊 Thống kê
+        Value: |-
+          **Người dùng:** {users}
+          **Kênh:** {channels}
+          **Lệnh:** {commands}
+          **Trực tuyến từ:** {uptime}
+      Technical:
+        Name: 🔧 Kỹ thuật
+        Value: |-
+          **Discord.js:** v{discordVersion}
+          **CPU:** {cpuModel}
+          **Lõi CPU:** {cpuCores}
+      Performance:
+        Name: 📶 Hiệu suất
+        Value: |-
+          **Bộ nhớ Bot:** {botMemory}
+          **Bộ nhớ hệ thống:** {systemMemory}
+          **Ping:** {ping}ms
+  ErrorMessage: Xin lỗi, đã có lỗi khi lấy thông tin bot.
+RoleAddLogs:
+  Embed:
+    Title: ':arrow_up_down: Phát hiện thay đổi vai trò'
+    Description:
+      - '**👤 Thành viên:** {user}'
+      - '**🆕 Vai trò đã thêm:** {addedRoleNames}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🛡️ Hành động cập nhật vai trò | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#1E90FF'
+    Image: ''
+    Thumbnail: ''
+RoleRemoveLogs:
+  Embed:
+    Title: ':arrow_down: Phát hiện xóa vai trò'
+    Description:
+      - '**👤 Thành viên:** {user}'
+      - '**❌ Vai trò đã xóa:** {removedRoleNames}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🛡️ Hành động cập nhật vai trò | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#FF4500'
+    Image: ''
+    Thumbnail: ''
+ChannelCreatedLogs:
+  Embed:
+    Title: ':white_check_mark: Kênh mới được tạo'
+    Description:
+      - '**👤 Người thực hiện:** {executor}'
+      - '**📺 Tên kênh:** {channelName}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Hành động quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#00FF00'
+    Image: ''
+    Thumbnail: ''
+ChannelDeletedLogs:
+  Embed:
+    Title: ':no_entry: Kênh đã bị xóa'
+    Description:
+      - '**👤 Người thực hiện:** {executor}'
+      - '**📺 Tên kênh:** {channelName}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Hành động quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#FF0000'
+    Image: ''
+    Thumbnail: ''
+UserUpdateLogs:
+  Embed:
+    Title: 👥 Biệt danh đã thay đổi
+    Description:
+      - '**👤 Người dùng:** {userTag}'
+      - '**🔵 Biệt danh cũ:** `{oldNickname}`'
+      - '**🟢 Biệt danh mới:** `{newNickname}`'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Hành động quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#00FF00'
+    Image: ''
+    Thumbnail: ''
+TimeoutLogs:
+  Embed:
+    Title: '🚫 Hành động cấm chat | Người dùng: {userName}'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**🛠️ Người quản lý:** {moderator}'
+      - '**⏰ Thời gian:** {duration}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Hành động quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#FFA500'
+    Image: ''
+    Thumbnail: ''
+UntimeLogs:
+  Embed:
+    Title: '✅ Đã xóa cấm chat | Người dùng: {userName}'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**🛠️ Người quản lý:** {moderator}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Hành động quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#4CAF50'
+    Image: ''
+    Thumbnail: ''
+WarnLogs:
+  Embed:
+    Title: '🚫 Hành động cảnh cáo | Người dùng: {userName}'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**🛠️ Người quản lý:** {moderator}'
+      - '**📅 Lý do:** {reason}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Hành động quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#FFA500'
+    Image: ''
+    Thumbnail: ''
+WarnList:
+  Embed:
+    Title: Cảnh cáo cho {userName}
+    Color: '#FFA500'
+    Footer: 'Tổng số cảnh cáo: {totalWarnings}'
+    Thumbnail: true
+    EntryFormat:
+      - '**{index}.** Lý do: {reason}'
+      - 'Ngày: {longtime} lúc {shorttime}'
+      - 'Người quản lý: <@{moderatorId}>'
+  NoWarnings: '{userName} không có cảnh cáo nào.'
+  Error: Đã xảy ra lỗi khi lấy cảnh cáo.
+GuildUpdateLogs:
+  Embed:
+    Title: ':pencil: Tên máy chủ đã thay đổi'
+    Description:
+      - '**🔵 Tên cũ:** `{oldGuildName}`'
+      - '**🟢 Tên mới:** `{newGuildName}`'
+      - '**👤 Cập nhật bởi:** {executor}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#00E676'
+    Image: ''
+    Thumbnail: true
+MessageDeleteLogs:
+  Embed:
+    Title: ':wastebasket: Tin nhắn đã bị xóa'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**💬 Tin nhắn:** `{deletedmessage}`'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#DD2C00'
+    Image: ''
+    Thumbnail: true
+  Attachments: '**Tệp đính kèm**'
+MessageUpdateLogs:
+  Embed:
+    Title: ':pencil: Tin nhắn đã được chỉnh sửa'
+    Description:
+      - '**👤 Người chỉnh sửa:** {user}'
+      - '**📺 Kênh:** {channel}'
+      - 🔵 **Tin nhắn gốc:** `{oldmessage}`
+      - 🟢 **Tin nhắn đã cập nhật:** `{newmessage}`
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#FF9800'
+    Image: ''
+    Thumbnail: true
+InviteCreateLogs:
+  Embed:
+    Title: 🔗 Lời mời đã được tạo
+    Description:
+      - '**👤 Người tạo:** {creator}'
+      - '**🔗 Mã mời:** {inviteCode}'
+      - '**⏰ Thời gian:** {expiresAt}'
+      - '**🎯 Lượt sử dụng tối đa:** {maxUses}'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký lời mời | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#4CAF50'
+    Image: ''
+    Thumbnail: true
+InviteDeleteLogs:
+  Embed:
+    Title: ❌ Lời mời đã bị xóa
+    Description:
+      - '**👤 Người tạo:** {creator}'
+      - '**🔗 Mã mời:** {inviteCode}'
+      - '**📊 Lượt sử dụng:** {uses}'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký lời mời | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#E57373'
+    Image: ''
+    Thumbnail: true
+InviteJoinLogs:
+  Embed:
+    Title: ✨ Người dùng đã tham gia qua lời mời
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**🔗 Mời bởi:** {inviter}'
+      - '**📊 Tổng số lời mời của người mời:** {inviterCount}'
+      - '**🔗 Mã mời:** {inviteCode}'
+      - '**📺 Kênh mời:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký lời mời | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#8A2BE2'
+    Image: ''
+    Thumbnail: true
+VoiceChannelStreamStart:
+  Embed:
+    Title: ':red_circle: Bắt đầu livestream'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#9C27B0'
+    Image: ''
+    Thumbnail: true
+VoiceChannelStreamStop:
+  Embed:
+    Title: ':stop_button: Luồng đã kết thúc'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#D50000'
+    Image: ''
+    Thumbnail: true
+VoiceChannelJoin:
+  Embed:
+    Title: ':loud_sound: Đã tham gia kênh thoại'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#2196F3'
+    Image: ''
+    Thumbnail: true
+VoiceChannelLeave:
+  Embed:
+    Title: ':mute: Đã rời khỏi kênh thoại'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - '**📺 Kênh:** {channel}'
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#FF6D00'
+    Image: ''
+    Thumbnail: true
+VoiceChannelSwitch:
+  Embed:
+    Title: ':left_right_arrow: Chuyển kênh thoại'
+    Description:
+      - '**👤 Người dùng:** {user}'
+      - 🔵 **Kênh cũ:** {oldChannel}
+      - 🟢 **Kênh mới:** {newChannel}
+      - '**📅 Ngày:** {longtime}, {shorttime}'
+    Footer:
+      Text: 🔒 Nhật ký quản lý | Fujiwara Shin 藤原 真
+      Icon: ''
+    Author:
+      Text: ''
+      Icon: ''
+    Color: '#3D5AFE'
+    Image: ''
+    Thumbnail: true
+Economy:
+  Bank:
+    footer: 'Số dư: {balance} 🪙'
+    transactionLog: Nhật ký giao dịch của {user}
+    gained: Tổng nhận được
+    lost: Tổng đã mất
+    guess: Đoán
+    result: Kết quả
+    win: Thắng
+    lose: Thua
+    rollResult: Kết quả tung xúc xắc
+    outcome: Kết quả
+    bet: Cược của bạn
+    inventoryCategory: Chọn một danh mục
+    catch: Bắt được
+    reward: Phần thưởng
+    location: Địa điểm
+    rodBroke: Ôi không! Cần câu của bạn đã bị gãy. Bạn sẽ cần mua một cái mới từ cửa hàng.
+    NewBalance: Số dư mới
+  Activities:
+    Fishing:
+      Title: 🎣 Kết quả câu cá
+      Messages:
+        - '{user} đã quăng {rod} của họ xuống {location} và bắt được một con {fish}! Họ kiếm được {reward} xu.'
+        - Sử dụng {rod} của mình, {user} đã kéo lên một con {fish} từ {location}! Nó trị giá {reward} xu.
+      noRod: Tay không
+      rodUsed: Cần câu đã dùng
+      catchBonus: Thưởng bắt cá
+      luckBonus: Thưởng may mắn
+      cooldownReduction: Giảm thời gian chờ
+  Actions:
+    Beg:
+      Title: 🙇‍♂️ Ăn xin!
+      Messages:
+        - Bạn đã ăn xin và nhận được **{balance}** 🪙. Tích tiểu thành đại!
+        - '{user}, ăn xin là chân ái! Bạn đã kiếm được **{balance}** 🪙.'
+        - '{user}, việc ăn xin của bạn đã có kết quả! Bạn nhận được **{balance}** 🪙.'
+        - Những tâm hồn hào phóng đã cho bạn **{balance}** 🪙, {user}. Cứ tiếp tục nhé!
+    Work:
+      Title: 💼 Làm việc - Công việc hoàn thành!
+      Messages:
+        - '{user}, bạn đã nhận được **{balance}** 🪙 từ một ngày làm việc chăm chỉ! Làm tốt lắm!'
+        - Làm tốt công việc hôm nay, {user}! Đây là **{balance}** 🪙.
+        - Chăm chỉ sẽ được đền đáp! {user}, bạn đã kiếm được **{balance}** 🪙.
+        - '{user}, bạn đã hoàn thành công việc và nhận được **{balance}** 🪙.'
+  Other:
+    Boosters:
+      title: 🚀 Vật phẩm tăng cường đang hoạt động của bạn
+      description: '**Vật phẩm tăng cường {type}** (Hệ số: **{multiplier}**, Hết hạn: <t:{endTime}:R>)'
+    Fishing:
+      pond: Ao
+      lake: Hồ
+      ocean: Đại dương
+      rodEquipped: Bạn đang sử dụng {rod}
+      noBait: Bạn không có mồi câu. Cơ hội bắt cá của bạn sẽ thấp hơn.
+      usingBait: Bạn đang sử dụng {bait}. Cơ hội bắt cá của bạn đã được tăng lên!
+    Inventory:
+      empty: 🚫 Kho đồ của bạn trống. Đã đến lúc đi mua sắm!
+      noItems: 🚫 Không có vật phẩm nào để hiển thị.
+      redeem: '🎁 Bạn đã đổi: **{item}**'
+      Embed:
+        Title: Kho đồ {category}
+        Description:
+          - '{itemNum}. **{item}** (x{amount})'
+        Footer:
+          Text: Trang {pageCurrent} trên {pageMax}
+        Color: '#1769FF'
+    Store:
+      Items:
+        organic: Phân Hữu Cơ
+        phosphate: Phân Lân
+        npk: Phân NPK
+        microbe: Phân Vi Sinh
+        potassium: Phân Kali
+        nano: Phân Nano
+        biotech: Phân Sinh Học
+        divine: Phân Thần Nông
+Addons:
+  Farming:
+    Quotes:
+      - Người nông dân kiên nhẫn sẽ được đền đáp bằng trái ngọt.
+      - Mỗi hạt giống là một niềm hy vọng được gieo vào lòng đất.
+      - Đất đai không bao giờ phản bội người chăm sóc nó.
+      - Mây đen hôm nay là cơn mưa vàng ngày mai.
+      - Chăm sóc cây cối cũng như chăm sóc tâm hồn mình vậy.
+      - Mùa màng bội thu bắt đầu từ những giọt mồ hôi trên đồng ruộng.
+      - Hãy lắng nghe tiếng thì thầm của gió qua những tán lá.
+      - Một khu vườn đẹp là tác phẩm của trái tim.
+      - Thiên nhiên luôn có cách ban thưởng cho những người cần cù.
+      - Hạnh phúc nảy mầm từ những điều nhỏ bé nhất.
+      - Đừng chỉ trông chờ vào phép màu, hãy tự tay gieo trồng nó.
+      - Cây cối biết lắng nghe, hãy trò chuyện với chúng.
+      - Dưới ánh trăng, những điều kỳ diệu lặng lẽ sinh sôi.
+  AFK:
+    Errors:
+      NoPermission: Bạn không có quyền sử dụng lệnh này
+      InvalidDuration: '⚠️ Sai định dạng thời gian! Ví dụ: 1h, 30m, 1h 30m'
+      AlreadyAFK: Bạn đã đang ở trạng thái AFK rồi!
+      NotAFK: Bạn hiện không ở trạng thái AFK!
+    UI:
+      SetAFKSuccessTitle: ⌛ Trạng Thái Treo Máy (Bật)
+      SetAFKSuccessDesc: '**💤 Trạng thái AFK đã được kích hoạt**'
+      Reason: 📝 Lí do
+      StartTime: ⏰ Thời gian bắt đầu
+      ReturnTime: 🔙 Quay lại sau
+      Footer: Bot sẽ thông báo khi bạn trở lại
+      WelcomeBackTitle: 👋 Chào Mừng Trở Lại!
+      WelcomeBackDesc: |-
+        **👋 Chào mừng trở lại!**
+
+        *Bạn đã rời máy trong {duration}*
+      WelcomeBackFallback: 👋 Chào mừng trở lại **{username}**! Bạn đã AFK trong {duration}
+      AFKDuration: ⏱️ Thời gian AFK
+      ReasonField: 📝 Lí do trước đó
+      WelcomeBackFooter: Trạng thái AFK đã được tự động xóa
+      UserAFKTitle: '{username} đang AFK'
+      UserAFKDesc: '**💤 Người dùng này hiện đang rời máy**'
+      UserAFKFooter: Họ sẽ nhận được tin nhắn của bạn khi quay lại
+  Chatbot:
+    Errors:
+      Config: |-
+        ⚠️ Thiếu **GEMINI_API_KEY**.
+
+        Vui lòng cấu hình API key.
+      API: 🔧 **Model không hợp lệ hoặc API đã thay đổi**
+      Auth: 🔑 **API key không hợp lệ hoặc không có quyền**
+      Unknown: ⚠️ **Đã xảy ra lỗi không xác định**
+      Timeout: ⏱️ **Yêu cầu đã hết thời gian chờ**
+      OwnerOnly: ❌ Chỉ chủ bot mới có thể sử dụng chatbot!
+    UI:
+      ThinkingTitle: 🤖 AI đang suy nghĩ...
+      ThinkingDesc: |-
+        **Câu hỏi của bạn:**
+        > {prompt}
+      ThinkingFooter: ⏳ Đang xử lý yêu cầu...
+      ResponseTitle: 💬 Câu trả lời
+      ResponseFooter: 'Model: {model} • Thời gian: {time}s • Độ dài: {chars} ký tự'
+      Disabled: Lệnh này đang bị tắt.
+  Autoresponder:
+    Errors:
+      AlreadyExists: Một auto-responder với trigger `{trigger}` đã tồn tại.
+      NotFound: Không tìm thấy auto-responder với trigger này.
+      InvalidEdit: Bạn phải cung cấp ít nhất một tùy chọn để chỉnh sửa.
+      ConflictError: Bạn không thể vừa thêm tệp đính kèm mới vừa xóa tệp hiện có.
+    UI:
+      AddSuccess: 'Đã tạo auto-responder cho trigger: `{trigger}`'
+      EditSuccess: 'Đã cập nhật auto-responder cho trigger: `{trigger}`'
+      DeleteSuccess: 'Đã xóa auto-responder cho trigger: `{trigger}`'
+      ListTitle: Danh sách Auto-responder
+      ListEmpty: Không có auto-responder nào trên máy chủ này.
+      ViewTitle: 'Auto-responder: {trigger}'
+      ViewMode: Mode
+      ViewIgnoreCase: Ignore Case
+      ViewAttachment: Attachment URL
+      ModeUpdateSuccess: Đã cập nhật mode cho trigger `{trigger}` thành `{mode}`.
+      PlaceholdersTitle: Placeholders & Functions
+      PlaceholdersDesc: Đây là danh sách các placeholders và functions bạn có thể sử dụng.
+Music:
+  Fields:
+    PermissionDenied: ❌ Bạn không có quyền điều khiển nhạc!
+  Queue:
+    Title: Danh sách phát
+    Empty: Hàng đợi trống!
