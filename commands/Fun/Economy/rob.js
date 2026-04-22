@@ -4,7 +4,7 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
-const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
+const { checkActiveBooster, replacePlaceholders, getOutcomeLabel } = require('./Utility/helpers');
 const parseDuration = require('./Utility/parseDuration');
 
 module.exports = {
@@ -55,7 +55,7 @@ module.exports = {
             balance: amount,
         };
 
-        const robTitle = replacePlaceholders(lang.Economy.Games.Rob.Title, { result: success ? lang.Economy.Messages.win : lang.Economy.Messages.lose });
+        const robTitle = replacePlaceholders(lang.Economy.Games.Rob.Title, { result: getOutcomeLabel(lang, success) });
 
         if (success) {
             const multiplier = checkActiveBooster(user, 'Money');

@@ -4,7 +4,7 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const { getConfig, getLang, getCommands } = require('../../../utils/configLoader.js');
 const config = getConfig();
-const { checkActiveBooster, replacePlaceholders } = require('./Utility/helpers');
+const { checkActiveBooster, replacePlaceholders, getOutcomeLabel } = require('./Utility/helpers');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -67,7 +67,7 @@ module.exports = {
                 balance: Math.abs(amount)
             };
 
-            const crimeTitle = replacePlaceholders(lang.Economy.Games.Crime.Title, { result: success ? lang.Economy.Messages.win : lang.Economy.Messages.lose });
+            const crimeTitle = replacePlaceholders(lang.Economy.Games.Crime.Title, { result: getOutcomeLabel(lang, success) });
             const description = success
                 ? replacePlaceholders(lang.Economy.Games.Crime.Win[Math.floor(Math.random() * lang.Economy.Games.Crime.Win.length)], placeholders)
                 : replacePlaceholders(lang.Economy.Games.Crime.Lose[Math.floor(Math.random() * lang.Economy.Games.Crime.Lose.length)], placeholders);

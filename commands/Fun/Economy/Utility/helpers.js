@@ -13,7 +13,30 @@ const replacePlaceholders = (text, placeholders) => {
     });
 };
 
+const getOutcomeLabel = (lang, didWin) => {
+    const winLabel =
+        lang?.Economy?.Messages?.win ??
+        lang?.Economy?.Messages?.Win ??
+        lang?.Economy?.Other?.win ??
+        lang?.Economy?.Other?.Win ??
+        lang?.Economy?.Bank?.win ??
+        lang?.Economy?.Bank?.Win ??
+        'Win';
+
+    const loseLabel =
+        lang?.Economy?.Messages?.lose ??
+        lang?.Economy?.Messages?.Lose ??
+        lang?.Economy?.Other?.lose ??
+        lang?.Economy?.Other?.Lose ??
+        lang?.Economy?.Bank?.lose ??
+        lang?.Economy?.Bank?.Lose ??
+        'Lose';
+
+    return didWin ? winLabel : loseLabel;
+};
+
 module.exports = {
     checkActiveBooster,
     replacePlaceholders,
+    getOutcomeLabel,
 };

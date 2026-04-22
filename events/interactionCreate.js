@@ -1,4 +1,4 @@
-﻿const {
+const {
     ActionRowBuilder,
     EmbedBuilder,
     ButtonBuilder,
@@ -64,15 +64,19 @@ module.exports = async (client, interaction) => {
         try {
             await command.execute(interaction, lang);
         } catch (error) {
-            // Ignore Unknown Interaction errors (timeout/expiry)
-            if (error.code === 10062 || (error.rawError && error.rawError.code === 10062)) return;
+            // Ignore interaction lifecycle errors (timeout/expiry or already acknowledged)
+            if (
+                error.code === 10062 ||
+                error.code === 40060 ||
+                (error.rawError && (error.rawError.code === 10062 || error.rawError.code === 40060))
+            ) return;
 
             // Handle Missing Permissions (50013)
             if (error.code === 50013 || (error.rawError && error.rawError.code === 50013)) {
                 const errEmbed = new EmbedBuilder()
                     .setColor('Red')
                     .setTitle('❌ Thiếu Quyền Hạn!')
-                    .setDescription('Bot không thể thực hiện lệnh này do thiếu quyền hạn (Missing Permissions).\n\n**Giải pháp:**\n1. Cấp quyền `Administrator` cho bot.\n2. Hoặc tạo role `KentaBuckets` với quyền Admin và gán cho bot.')
+                    .setDescription('Bot không thể thực hiện lệnh này do thiếu quyền hạn (Missing Permissions).\n\n**Giải pháp:**\n1. Cấp quyền `Administrator` cho bot.\n2. Hoặc tạo role `Fujiwara Shin 藤原 真` với quyền Admin và gán cho bot.')
                     .setFooter({ text: 'Re-invite bot với quyền Admin để tự động cấu hình.' });
 
                 try {
@@ -87,24 +91,15 @@ module.exports = async (client, interaction) => {
 
             console.error(`[ERROR] Failed to execute command ${command.id || command.name}:`, error);
 
-            // Try to send error message, but handle expired interactions gracefully
             try {
-                if (!interaction.replied && !interaction.deferred) {
-                    await interaction.reply({
-                        content: 'There was an error while executing this command!',
-                        flags: MessageFlags.Ephemeral
-                    });
-                } else if (interaction.deferred) {
-                    await interaction.editReply({
-                        content: 'There was an error while executing this command!'
-                    });
-                }
+                const { handleError } = require('../utils/errorHandler.js');
+                await handleError(error, interaction, lang);
             } catch (replyError) {
-                // Only log if it's not an expired interaction error
-                if (replyError.code !== 10062) {
+                // Only log if it is not an interaction lifecycle error
+                if (replyError.code !== 10062 && replyError.code !== 40060) {
                     console.error('[ERROR] Failed to send error message:', replyError);
                 }
-                // If interaction expired (10062), silently ignore
+                // If interaction lifecycle ended (10062/40060), silently ignore
             }
         }
         return;
@@ -166,6 +161,12 @@ module.exports = async (client, interaction) => {
                 return;
             }
 
+            // Ticket System Handler
+            if (interaction.customId.startsWith('tk_')) {
+                const { handleInteraction } = require('./Ticket/ticketInteraction');
+                return handleInteraction(client, interaction);
+            }
+
             await handleButtonInteraction(client, interaction);
         } else if (interaction.isStringSelectMenu()) {
             // Music Select Handler (if any - based on index.js logic which checked button OR select for music_)
@@ -177,12 +178,24 @@ module.exports = async (client, interaction) => {
                 return;
             }
 
+            // Ticket System Handler
+            if (interaction.customId.startsWith('tk_')) {
+                const { handleInteraction } = require('./Ticket/ticketInteraction');
+                return handleInteraction(client, interaction);
+            }
+
             await handleSelectMenuInteraction(client, interaction);
         } else if (interaction.isModalSubmit()) {
             // Music Modal Handler
             if (interaction.customId === 'volume_modal') {
                 await musicModalHandler.execute(interaction);
                 return;
+            }
+
+            // Ticket System Handler
+            if (interaction.customId.startsWith('tk_')) {
+                const { handleInteraction } = require('./Ticket/ticketInteraction');
+                return handleInteraction(client, interaction);
             }
 
             await handleModalSubmitInteraction(client, interaction);
@@ -207,10 +220,11 @@ module.exports = async (client, interaction) => {
         }
     } catch (error) {
         console.error('Error handling interaction:', error);
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'An error occurred while processing your interaction. Please try again later.', flags: MessageFlags.Ephemeral }).catch(console.error);
-        } else {
-            await interaction.reply({ content: 'An error occurred while processing your interaction. Please try again later.', flags: MessageFlags.Ephemeral }).catch(console.error);
+        try {
+            const { handleError } = require('../utils/errorHandler.js');
+            await handleError(error, interaction, lang);
+        } catch (e) {
+            console.error('Secondary error inside catch block:', e);
         }
     }
 };

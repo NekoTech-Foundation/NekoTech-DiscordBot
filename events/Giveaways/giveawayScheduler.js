@@ -1,5 +1,4 @@
 const Giveaway = require('../../models/Giveaway.js');
-const giveawayActions = require("../../events/Giveaways/giveawayActions.js");
 
 const fs = require("fs");
 const yaml = require("js-yaml");
@@ -22,7 +21,12 @@ async function checkGiveaways() {
                 }
 
                 if (now > giveaway.endAt) {
-                    await giveawayActions.endGiveaway(giveaway.giveawayId);
+                    // Resolve actions lazily to avoid startup circular dependency.
+                    const { endGiveaway } = require('./giveawayActions.js');
+                    if (typeof endGiveaway !== 'function') {
+                        throw new TypeError('giveawayActions.endGiveaway is not a function');
+                    }
+                    await endGiveaway(giveaway.giveawayId);
                 }
             } catch (error) {
                 console.error(`Error processing giveaway ${giveaway.giveawayId}:`, error);
