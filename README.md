@@ -54,7 +54,7 @@ Trước khi tiến hành cài đặt, VPS/Máy tính của bạn CẦN CÓ:
 ### Bước 2: Tải Source Code & Cài Đặt Thư Viện
 1. Clone mã nguồn về máy hoặc giải nén file ZIP:
    ```bash
-   git clone <link-repo-github>
+   git clone https://github.com/NekoTech-Foundation/NekoTech-DiscordBot/
    cd NekoTech-DiscordBot
    ```
 2. Cài đặt toàn bộ thư viện cần thiết:
