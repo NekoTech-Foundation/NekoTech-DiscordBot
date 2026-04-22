@@ -1,6 +1,7 @@
 # NekoTech Discord Bot aka KentaBuckets
 
 Một bot Discord đa năng, hoàn chỉnh và mạnh mẽ được phát triển trên nền tảng **Discord.js v14**. KentaBuckets hiện đang không còn maintain bởi NekoTech Foundation, sẽ có người đứng ra vá các lỗi critical nếu có báo cáo.
+Sản phẩm này có sự hỗ trợ coding bởi AI-Coding Agent (Claude Sonnet 4.6-Gemini 3.1/3.0 Pro)
 
 Hãy Star Repo này nếu bạn thấy nó hữu ích
 ---
